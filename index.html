@@ -10,72 +10,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <header class="header">
-        <h1>Aprenda Tráfego Pago com os Melhores!</h1>
-        <p>Transforme seu negócio com estratégias de tráfego pago.</p>
-        <a href="#cursos" class="cta-button">Ver Cursos</a>
-    </header>
-
-    <section id="slide-show" class="slide-show">
-        <div class="slideshow-container">
-            <div class="mySlides fade">
-                <img src="image1.jpg" style="width:100%">
-            </div>
-            <div class="mySlides fade">
-                <img src="image2.jpg" style="width:100%">
-            </div>
-            <div class="mySlides fade">
-                <img src="image3.jpg" style="width:100%">
-            </div>
-        </div>
-        <br>
-        <div style="text-align:center">
-            <span class="dot"></span> 
-            <span class="dot"></span> 
-            <span class="dot"></span> 
-        </div>
-    </section>
-
-    <section id="cursos" class="cursos">
-        <h2>Nossos Cursos</h2>
-        <div class="curso" id="curso1">
-            <h3>Curso Básico de Tráfego Pago</h3>
-            <img src="curso1.jpg" alt="Curso Básico de Tráfego Pago">
-            <p>Introdução às estratégias de tráfego pago.</p>
-            <button class="details-button" onclick="mostrarDetalhes('curso1')">Detalhes</button>
-            <div class="detalhes">
-                <p>Conteúdo detalhado do curso...</p>
-                <button class="close-button" onclick="esconderDetalhes('curso1')">Fechar</button>
-            </div>
-        </div>
-        <div class="curso" id="curso2">
-            <h3>Curso Avançado de Tráfego Pago</h3>
-            <img src="curso2.jpg" alt="Curso Avançado de Tráfego Pago">
-            <p>Aprenda técnicas avançadas para maximizar seus resultados.</p>
-            <button class="details-button" onclick="mostrarDetalhes('curso2')">Detalhes</button>
-            <div class="detalhes">
-                <p>Conteúdo detalhado do curso...</p>
-                <button class="close-button" onclick="esconderDetalhes('curso2')">Fechar</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="videos" class="videos">
-        <h2>Vídeos de Depoimentos</h2>
-        <div class="video-container">
-            <video controls>
-                <source src="video1.mp4" type="video/mp4">
-                Seu navegador não suporta o elemento de vídeo.
-            </video>
-        </div>
-        <div class="video-container">
-            <video controls>
-                <source src="video2.mp4" type="video/mp4">
-                Seu navegador não suporta o elemento de vídeo.
-            </video>
-        </div>
-    </section>
     
 <!-- Barra de Navegação -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -93,6 +27,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#contact">Contato</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#cursos">Cursos</a>
             </li>
         </ul>
     </div>
@@ -153,16 +90,79 @@
     </div>
 </section>
 
-<!-- Seção Contato -->
+<!-- Seção Cursos -->
+<header class="header">
+    <h1>Aprenda Tráfego Pago com os Melhores!</h1>
+    <p>Transforme seu negócio com estratégias de tráfego pago.</p>
+    <a href="#cursos" class="cta-button">Ver Cursos</a>
+</header>
 
-    
+<section id="slide-show" class="slide-show">
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="image1.jpg" style="width:100%">
+        </div>
+        <div class="mySlides fade">
+            <img src="image2.jpg" style="width:100%">
+        </div>
+        <div class="mySlides fade">
+            <img src="image3.jpg" style="width:100%">
+        </div>
+    </div>
+    <br>
+    <div style="text-align:center">
+        <span class="dot"></span> 
+        <span class="dot"></span> 
+        <span class="dot"></span> 
+    </div>
+</section>
+
+<section id="cursos" class="cursos">
+    <h2>Nossos Cursos</h2>
+    <div class="curso" id="curso1">
+        <h3>Curso Básico de Tráfego Pago</h3>
+        <img src="curso1.jpg" alt="Curso Básico de Tráfego Pago">
+        <p>Introdução às estratégias de tráfego pago.</p>
+        <button class="details-button" onclick="mostrarDetalhes('curso1')">Detalhes</button>
+        <div class="detalhes">
+            <p>Conteúdo detalhado do curso...</p>
+            <button class="close-button" onclick="esconderDetalhes('curso1')">Fechar</button>
+        </div>
+    </div>
+    <div class="curso" id="curso2">
+        <h3>Curso Avançado de Tráfego Pago</h3>
+        <img src="curso2.jpg" alt="Curso Avançado de Tráfego Pago">
+        <p>Aprenda técnicas avançadas para maximizar seus resultados.</p>
+        <button class="details-button" onclick="mostrarDetalhes('curso2')">Detalhes</button>
+        <div class="detalhes">
+            <p>Conteúdo detalhado do curso...</p>
+            <button class="close-button" onclick="esconderDetalhes('curso2')">Fechar</button>
+        </div>
+    </div>
+</section>
+
+<!-- Seção Vídeos -->
+<section id="videos" class="videos">
+    <h2>Vídeos de Depoimentos</h2>
+    <div class="video-container">
+        <video controls>
+            <source src="video1.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
+    <div class="video-container">
+        <video controls>
+            <source src="video2.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
+</section>
+
+<!-- Seção Contato -->
 <section id="contact" class="py-5 mt-5">
     <div class="container">
         <h2>Entre em Contato</h2>
         <div class="row">
-            
-                        
-            
             <div class="col-md-6 mt-5">
                 <address>
                     <strong>Advogado Jorge Correia</strong><br>
@@ -178,36 +178,48 @@
                 
             <div class="col-md-6 mt-5">
                 <!-- Mapa do Google Maps -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.5665280101957!2d-48.46608832664738!3d-1.4352863985511835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92a48c0c2b11fd11%3A0x50def96aa793922!2sTv.%20Mariz%20e%20Barros%2C%202321%20-%20Marco%2C%20Bel%C3%A9m%20-%20PA%2C%2066080-471!5e0!3m2!1spt-BR!2sbr!4v1694184421516!5m2!1spt-BR!2sbr" width="300" height="225" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-             </div>   
-
-             <div class="col-lg-6 mt-5">
-                <br>
-                <!-- google form -->
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://docs.google.com/forms/d/e/1FAIpQLSdGiWhDYBBD5Hs7H93A9HKDz_ElpUsuQssUeGWu2skv3iX1Cw/viewform?embedded=true" height="400" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.5665280101957!2d-48.46608832664738!3d-1.4352863985511835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92a48c0c2b11fd11%3A0x50def96aa793922!2sTv.%20Mariz%20e%20Barros%2C%202321%20-%20Marco%2C%20Bel%C3%A9m%20-%20PA%2C%2066033-200%2C%20Brasil!5e0!3m2!1spt-BR!2sus!4v1623449297401!5m2!1spt-BR!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
-            </div>
-
-            
         </div>
     </div>
 </section>
 
-<!-- Rodapé -->
-<footer class="bg-dark text-white text-center py-3">
-    <div class="container">
-        &copy; 2023 Advogado Jorge Correia. Todos os direitos reservados.
-    </div>
-</footer>
-
-<!-- Adicione os links para os arquivos JavaScript do Bootstrap e do jQuery aqui -->
+<!-- Adicione os links para os arquivos JavaScript do Bootstrap e seu script customizado aqui -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="scripts.js"></script>
-    
-https://link.clashroyale.com/invite/friend/pt?tag=PJLL2GGQR&token=k8kcar9a&platform=android
 
+<!-- Script do slideshow -->
+<script>
+    let slideIndex = 0;
+    showSlides();
+    
+    function showSlides() {
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}    
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";  
+        dots[slideIndex-1].className += " active";
+        setTimeout(showSlides, 2000); // Muda a imagem a cada 2 segundos
+    }
+
+    function mostrarDetalhes(cursoId) {
+        const curso = document.getElementById(cursoId);
+        curso.querySelector('.detalhes').style.display = 'block';
+    }
+
+    function esconderDetalhes(cursoId) {
+        const curso = document.getElementById(cursoId);
+        curso.querySelector('.detalhes').style.display = 'none';
+    }
+</script>
 </body>
 </html>
