@@ -26,7 +26,7 @@
 /* Estilo para ajustar a imagem aristides.jpg */
 #about img {
     width: 150px; /* Ajuste o valor conforme a necessidade */
-    height: auto; /* Mantém a proporção da imagem */
+    height: 150px; /* autura/ auto -Mantém a proporção da imagem */
     border-radius: 50%; /* Mantém a borda arredondada */
 }
 
