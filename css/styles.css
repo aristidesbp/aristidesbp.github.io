@@ -1,8 +1,8 @@
 /* Estilos customizados para o portfólio */
 
-/* Navbar */
+/* Navbar - menu */
 #navbar {
-    background-color: #4C4C6B;
+    background-color: black; /* Cor preta para a navbar */
 }
 
 #navbar h1 {
