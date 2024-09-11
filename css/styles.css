@@ -1,6 +1,10 @@
 /* Estilos customizados para o portfólio */
 
-/* Navbar - menu */
+
+
+
+
+/* Navbar */
 #navbar {
     background-color: black; /* Cor preta para a navbar */
 }
@@ -13,6 +17,19 @@
     color: white;
     margin-left: 10px;
 }
+
+
+
+
+
+
+/* Estilo para ajustar a imagem aristides.jpg */
+#about img {
+    width: 150px; /* Ajuste o valor conforme a necessidade */
+    height: auto; /* Mantém a proporção da imagem */
+    border-radius: 50%; /* Mantém a borda arredondada */
+}
+
 
 /* Seção Sobre */
 #about img {
