@@ -1,0 +1,64 @@
+/* Estilos customizados para o portfólio */
+
+
+
+
+
+/* Navbar */
+#navbar {
+    background-color: black; /* Cor preta para a navbar */
+}
+
+#navbar h1 {
+    color: white;
+}
+
+#navbar .nav-link {
+    color: white;
+    margin-left: 10px;
+}
+
+
+
+
+
+
+/* Estilo para ajustar a imagem aristides.jpg */
+#about img {
+    width: 50px; /* Ajuste o valor conforme a necessidade */
+    height: 50px; /* autura/ auto -Mantém a proporção da imagem */
+    border-radius: 50%; /* Mantém a borda arredondada */
+}
+
+
+/* Seção Sobre */
+#about img {
+    border: 5px solid #4C4C6B;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: #4C4C6B;
+    border-color: #4C4C6B;
+}
+
+.btn-primary:hover {
+    background-color: #333357;
+    border-color: #333357;
+}
+
+/* Seção de Projetos */
+#projects .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Estilos para Depoimentos */
+blockquote {
+    font-size: 1.2rem;
+}
+
+footer.blockquote-footer {
+    font-size: 1rem;
+    color: #555;
+}
