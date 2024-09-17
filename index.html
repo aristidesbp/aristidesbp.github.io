@@ -1,168 +1,120 @@
-  
-    <!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <meta name="facebook-domain-verification" content="3mgwx5lhpzrjs0qc2gvs1x9zg05kxx" />
-    <title>Portfólio - Aristides BP</title>
-     
-    <!-- Estilos do Bootstrap e CSS customizado -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+<html lang="pt-br">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aristidesbp</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Arquivo style.css  -->
+<style>
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Barra de navegação responsiva */
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+/* FIM Barra de navegação responsiva  */
+
+</style>
+<!-- Fim  do Arquivo style.css  -->
+
 </head>
 <body>
 
-<!-- Barra de Navegação -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
-    <a class="navbar-brand" href="#"><h1>Aristides BP</h1></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#about">Sobre Mim</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#services">Serviços</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#projects">Projetos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#testimonials">Depoimentos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#contact">Contato</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!-- Barra de navegação responsiva  -->
+<div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<!-- Barra de navegação responsiva -->
 
-<!-- Seção Sobre -->
-<section id="about" class="py-5 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <img src="imagens/aristides.jpg" alt="Aristides BP" class="img-fluid rounded-circle">
-            </div>
-            <div class="col-lg-6">
-                <h2>Aristides BP</h2>
-                <p>Sou especialista em Marketing Digital, Programação Web Front-End e Gestão de Tráfego Pago...</p>
-                <a href="#contact" class="btn btn-primary">Entre em Contato</a>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Seção Serviços -->
-<section id="services" class="bg-light py-5 mt-5">
-    <div class="container">
-        <h2>Serviços</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Marketing Digital</h5>
-                        <p class="card-text">Desenvolvo estratégias personalizadas para promover seu negócio online...</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Programação Web Front-End</h5>
-                        <p class="card-text">Criação de sites responsivos com foco em UX...</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestão de Tráfego Pago</h5>
-                        <p class="card-text">Especialista em campanhas de anúncios pagos...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div style="padding-left:16px">
+  <h2>Responsive Topnav Example</h2>
+  <p>Resize the browser window to see how it works.</p>
+</div>
 
-<!-- Seção Projetos -->
-<section id="projects" class="py-5">
-    <div class="container">
-        <h2>Meus Projetos</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="imagens/projeto1.jpg" class="card-img-top" alt="Projeto 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Projeto Coworking</h5>
-                        <p class="card-text">Desenvolvi uma campanha de anúncios e landing pages que aumentaram a ocupação de coworking em 40%.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="imagens/projeto2.jpg" class="card-img-top" alt="Projeto 2">
-                    <div class="card-body">
-                        <h5 class="card-title">App de Gestão de Tarefas</h5>
-                        <p class="card-text">Criação de um aplicativo mobile para organização de tarefas...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Seção Depoimentos -->
-<section id="testimonials" class="bg-light py-5">
-    <div class="container">
-        <h2>Depoimentos</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <blockquote class="blockquote">
-                    <p>"Aristides transformou nosso marketing digital. Aumentou nossas vendas em 50%!"</p>
-                    <footer class="blockquote-footer">José Viana, Edifício Comercial</footer>
-                </blockquote>
-            </div>
-            <div class="col-md-6">
-                <blockquote class="blockquote">
-                    <p>"O trabalho de programação web de Aristides superou nossas expectativas. O site ficou moderno e fácil de usar."</p>
-                    <footer class="blockquote-footer">Maria Souza, Empreendedora</footer>
-                </blockquote>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Seção Contato -->
-<section id="contact" class="py-5 mt-5">
-    <div class="container">
-        <h2>Contato</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <address>
-                    <strong>Aristides BP</strong><br>
-                    Cidade, Estado<br>
-                    Telefone: (91) 99242-0981<br>
-                    Email: aristidesbp@gmail.com
-                </address>
-                <a href="https://wa.me/5591992420981?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços." class="btn btn-success">WhatsApp</a>
-            </div>
-            <div class="col-md-6">
-                <!-- Mapa do Google Maps -->
-                <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="250" style="border:0;" allowfullscreen=""></iframe>
-            </div>
-        </div>
-    </div>
-</section>
+<script>
+/* Barra de navegação responsiva  */
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+/* FIM Barra de navegação responsiva  */
+</script>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="js/scripts.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+   
