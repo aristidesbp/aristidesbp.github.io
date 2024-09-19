@@ -130,9 +130,12 @@
 
             slideBtn.classList.add("hidden");
 
-            // Use click event to redirect to home.html
+            // Adiciona o evento de clique ao botão
             slideBtn.addEventListener("click", () => {
-                window.location.href = "home.html"; // Redireciona para a página home.html
+                // Após clicar, espera 2 segundos antes de redirecionar para home.html
+                setTimeout(() => {
+                    window.location.href = "home.html"; // Redireciona para home.html
+                }, 2000); // 2 segundos de espera
             });
         });
     </script>
