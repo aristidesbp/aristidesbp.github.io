@@ -121,7 +121,7 @@
         <h1>Welcome to My Website!</h1>
         <p>Explore and get to know more about our amazing content.</p>
         <div id="extraBox">Discover More!</div>
-        <button id="slideBtn">clique aqui!</button>
+        <button id="slideBtn">Click Me!</button>
     </div>
 
     <script>
@@ -130,14 +130,9 @@
 
             slideBtn.classList.add("hidden");
 
+            // Use click event to redirect to home.html
             slideBtn.addEventListener("click", () => {
-                slideBtn.classList.toggle("slid");
-            });
-
-            // Event listener to detect dragging
-            slideBtn.addEventListener("dragstart", (e) => {
-                // Redirect to the home.html page when dragging starts
-                window.location.href = "home.html";
+                window.location.href = "home.html"; // Redireciona para a página home.html
             });
         });
     </script>
