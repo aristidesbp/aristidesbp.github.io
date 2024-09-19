@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Web Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #333;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1, p, button {
+            opacity: 0;
+            position: relative;
+        }
+
+        h1 {
+            animation: slideInLeft 2s forwards;
+        }
+
+        p {
+            animation: slideInRight 2s forwards 0.5s;
+        }
+
+        button {
+            animation: slideInUp 2s forwards 1s;
+        }
+
+        #extraBox {
+            width: 200px;
+            height: 50px;
+            margin: 20px auto;
+            background-color: #ff6347;
+            color: white;
+            line-height: 50px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            animation: slideInDown 2s forwards 1.5s;
+        }
+
+        button:hover {
+            background-color: #2ecc71;
+        }
+
+        /* Slide-in animations */
+        @keyframes slideInLeft {
+            from {
+                left: -100%;
+                opacity: 0;
+            }
+            to {
+                left: 0;
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                right: -100%;
+                opacity: 0;
+            }
+            to {
+                right: 0;
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                top: 100%;
+                opacity: 0;
+            }
+            to {
+                top: 0;
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                bottom: 100%;
+                opacity: 0;
+            }
+            to {
+                bottom: 0;
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            position: relative;
+            left: -200px;
+            transition: left 1s;
+        }
+
+        .slid {
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Animated Page</h1>
+        <p>Explore smooth animations with CSS and JavaScript.</p>
+        <div id="extraBox">Extra Content</div>
+        <button id="slideBtn">Slide Me!</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const slideBtn = document.getElementById("slideBtn");
+
+            slideBtn.classList.add("hidden");
+
+            slideBtn.addEventListener("click", () => {
+                slideBtn.classList.toggle("slid");
+            });
+        });
+    </script>
+</body>
+</html>
