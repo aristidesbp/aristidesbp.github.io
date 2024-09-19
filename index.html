@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Web Page</title>
+    <title>Explore My Website</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,9 +11,10 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #000; /* Fundo preto */
             margin: 0;
             overflow: hidden;
+            color: white;
         }
 
         .container {
@@ -27,6 +28,7 @@
         h1, p, button {
             opacity: 0;
             position: relative;
+            color: #000;
         }
 
         h1 {
@@ -116,10 +118,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to My Animated Page</h1>
-        <p>Explore smooth animations with CSS and JavaScript.</p>
-        <div id="extraBox">Extra Content</div>
-        <button id="slideBtn">Slide Me!</button>
+        <h1>Welcome to My Website!</h1>
+        <p>Explore and get to know more about our amazing content.</p>
+        <div id="extraBox">Discover More!</div>
+        <button id="slideBtn">Drag Me!</button>
     </div>
 
     <script>
@@ -130,6 +132,12 @@
 
             slideBtn.addEventListener("click", () => {
                 slideBtn.classList.toggle("slid");
+            });
+
+            // Event listener to detect dragging
+            slideBtn.addEventListener("dragstart", (e) => {
+                // Redirect to the home.html page when dragging starts
+                window.location.href = "home.html";
             });
         });
     </script>
