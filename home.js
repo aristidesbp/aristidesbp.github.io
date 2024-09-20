@@ -22,18 +22,3 @@ window.onload = function() {
     const card = document.getElementById('aboutCard'); // Seleciona o card pelo ID
     card.classList.add('visible'); // Adiciona a classe 'visible' para iniciar a animação
 };
-
-/* Estilo do código e do botão de copiar */
-pre {
-    background-color: #2d2d2d;
-    color: #f8f8f2;
-    padding: 15px;
-    border-radius: 5px;
-    white-space: pre-wrap;
-}
-
-button {
-    margin-top: 10px;
-}
-
-/* Resto dos estilos permanecem iguais */
