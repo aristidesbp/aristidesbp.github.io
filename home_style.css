@@ -1,0 +1,54 @@
+/* Estilo geral do corpo da página */
+body {
+    background-color: black; /* Fundo preto */
+    color: white;
+    overflow: auto;
+    padding-top: 70px; /* Espaço para o menu fixo */
+}
+
+/* Estilo das imagens falsas (placeholders) */
+.fakeimg {
+    background-color: rgba(170, 170, 170, 0.7);
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.fakeimg:hover {
+    transform: scale(1.05);
+}
+
+/* Estilo dos blocos de cartão (cardboard) */
+.cardboard {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.cardboard:hover {
+    transform: scale(1.02);
+}
+
+/* Animação de fade-in para o cabeçalho */
+header {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Ajustes da barra de navegação para ficar fixa no topo */
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Garante que a barra fique acima de outros elementos */
+}
