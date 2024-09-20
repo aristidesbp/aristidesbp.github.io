@@ -27,35 +27,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#contato">Contato</a>
                 </li>
-
-                <!-- Redes Sociais -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Redes Sociais
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Facebook</a>
-                        <a class="dropdown-item" href="#">Instagram</a>
-                        <a class="dropdown-item" href="#">LinkedIn</a>
-                    </div>
-                </li>
-                <!-- Fim Redes Sociais -->
-
-                <!-- Aulas -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Aulas
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="w3scools/aula_layout">aula_layout</a>
-                    </div>
-                </li>
-                <!-- Fim Aulas -->
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Pesquisar</button>
-            </form>
         </div>
     </nav>
 
@@ -68,35 +40,54 @@
 
         <div class="row">
             <div class="col-md-8">
+                <!-- Projeto 1 -->
                 <div class="cardboard" id="projeto1">
-                    <h2>Projeto 1</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 1">Imagem do Projeto 1</div>
-                    <p>Descrição do projeto 1, abordando as tecnologias utilizadas e os resultados obtidos.</p>
+                    <h2>Projeto 1 - index.html</h2>
+                    <pre><code id="code1">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Projeto 1&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Bem-vindo ao Projeto 1&lt;/h1&gt;
+    &lt;p&gt;Este é o código HTML do Projeto 1&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+                    </code></pre>
+                    <button class="btn btn-primary" onclick="copyCode('code1')">Copiar Código</button>
                 </div>
 
+                <!-- Projeto 2 -->
                 <div class="cardboard" id="projeto2">
-                    <h2>Projeto 2</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 2">Imagem do Projeto 2</div>
-                    <p>Descrição do projeto 2, destacando as principais funcionalidades e desafios superados.</p>
+                    <h2>Projeto 2 - index_style.css</h2>
+                    <pre><code id="code2">
+body {
+    background-color: lightgray;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: darkblue;
+}
+
+p {
+    font-size: 18px;
+    color: black;
+}
+                    </code></pre>
+                    <button class="btn btn-primary" onclick="copyCode('code2')">Copiar Código</button>
                 </div>
 
+                <!-- Projeto 3 -->
                 <div class="cardboard" id="projeto3">
-                    <h2>Projeto 3</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 3">Imagem do Projeto 3</div>
-                    <p>Descrição do projeto 3, com foco na inovação e impacto positivo.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="cardboard" id="sobre">
-                    <h2>Sobre Mim</h2>
-                    <p>Texto sobre Aristides, incluindo suas habilidades e experiências profissionais.</p>
-                </div>
-
-                <div class="cardboard" id="contato">
-                    <h3>Contatos</h3>
-                    <p>Email: aristides@example.com</p>
-                    <p>Telefone: (91) 99999-9999</p>
+                    <h2>Projeto 3 - index_script.js</h2>
+                    <pre><code id="code3">
+document.addEventListener('DOMContentLoaded', function() {
+    alert("Projeto 3 JavaScript carregado!");
+});
+                    </code></pre>
+                    <button class="btn btn-primary" onclick="copyCode('code3')">Copiar Código</button>
                 </div>
             </div>
         </div>
