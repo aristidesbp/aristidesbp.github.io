@@ -10,20 +10,22 @@
         body {
             background-color: black; /* Fundo preto */
             color: white;
+            overflow: auto;
             padding-top: 70px; /* Espaço para o menu fixo */
         }
-        .fakeimg {
-            background-color: rgba(170, 170, 170, 0.7);
-            width: 100%;
-            height: 200px;
-            margin-bottom: 20px;
-        }
-        .cardboard {
-            padding: 20px;
+        .card {
             background-color: rgba(255, 255, 255, 0.1);
+            color: #f8f9fa; /* Cor do texto do código */
+            margin-bottom: 20px;
+            border: none;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #333; /* Fundo para o código */
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto; /* Para rolagem se necessário */
         }
         .copy-btn {
             margin-top: 10px;
@@ -68,10 +70,12 @@
         <h1>Códigos JavaScript para Interação</h1>
     </header>
 
-    <section>
-        <div class="cardboard">
-            <h3>layout_navigation.js</h3>
-            <pre><code>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card" id="layout_navigation">
+                <div class="card-body">
+                    <h3>layout_navigation.js</h3>
+                    <pre><code>
 /* layout_navigation.js */
 document.querySelectorAll('.topnav a').forEach(function (link) {
   link.addEventListener('mouseover', function () {
@@ -84,8 +88,8 @@ document.querySelectorAll('.topnav a').forEach(function (link) {
     this.style.color = '#f2f2f2';
   });
 });
-            </code></pre>
-            <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
+                    </code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
 document.querySelectorAll('.topnav a').forEach(function (link) {
   link.addEventListener('mouseover', function () {
     this.style.backgroundColor = '#ddd';
@@ -97,54 +101,79 @@ document.querySelectorAll('.topnav a').forEach(function (link) {
     this.style.color = '#f2f2f2';
   });
 });`)">Copiar Código</button>
-        </div>
+                </div>
+            </div>
 
-        <div class="cardboard">
-            <h3>layout_interaction.js</h3>
-            <pre><code>
+            <div class="card" id="layout_interaction">
+                <div class="card-body">
+                    <h3>layout_interaction.js</h3>
+                    <pre><code>
 /* layout_interaction.js */
 document.querySelectorAll('.card').forEach(function (card) {
   card.addEventListener('click', function () {
     alert('Você clicou em um artigo!');
   });
 });
-            </code></pre>
-            <button class="copy-btn" onclick="copyToClipboard(`/* layout_interaction.js */
+                    </code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard(`/* layout_interaction.js */
 document.querySelectorAll('.card').forEach(function (card) {
   card.addEventListener('click', function () {
     alert('Você clicou em um artigo!');
   });
 });`)">Copiar Código</button>
-        </div>
+                </div>
+            </div>
 
-        <div class="cardboard">
-            <h3>layout_footer.js</h3>
-            <pre><code>
+            <div class="card" id="layout_footer">
+                <div class="card-body">
+                    <h3>layout_footer.js</h3>
+                    <pre><code>
 /* layout_footer.js */
 document.querySelector('.footer h2').addEventListener('click', function () {
   alert('Este é o rodapé!');
 });
-            </code></pre>
-            <button class="copy-btn" onclick="copyToClipboard(`/* layout_footer.js */
+                    </code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard(`/* layout_footer.js */
 document.querySelector('.footer h2').addEventListener('click', function () {
   alert('Este é o rodapé!');
 });`)">Copiar Código</button>
-        </div>
+                </div>
+            </div>
 
-        <div class="cardboard">
-            <p>Referencie os arquivos no seu HTML como mostrado abaixo:</p>
-            <pre><code>
+            <div class="card" id="referencias">
+                <div class="card-body">
+                    <p>Referencie os arquivos no seu HTML como mostrado abaixo:</p>
+                    <pre><code>
 <!-- Referências JS no arquivo layout.html -->
 <script src="layout_navigation.js"></script>
 <script src="layout_interaction.js"></script>
 <script src="layout_footer.js"></script>
-            </code></pre>
-            <button class="copy-btn" onclick="copyToClipboard(`<!-- Referências JS no arquivo layout.html -->
+                    </code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard(`<!-- Referências JS no arquivo layout.html -->
 <script src="layout_navigation.js"></script>
 <script src="layout_interaction.js"></script>
 <script src="layout_footer.js"></script>`)">Copiar Código</button>
+                </div>
+            </div>
         </div>
-    </section>
+
+        <div class="col-md-4">
+            <div class="card cardboard">
+                <div class="card-body">
+                    <h2>Sobre Mim</h2>
+                    <p>Texto sobre Aristides, incluindo suas habilidades e experiências profissionais.</p>
+                </div>
+            </div>
+
+            <div class="card cardboard" id="contato">
+                <div class="card-body">
+                    <h3>Contatos</h3>
+                    <p>Email: aristides@example.com</p>
+                    <p>Telefone: (91) 99999-9999</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <h2>Footer</h2>
