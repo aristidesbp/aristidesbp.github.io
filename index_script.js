@@ -1,12 +1,10 @@
-/* Script para animação do card e confete */
-
-// Função executada quando a página é carregada
+// Script para animação do card
 window.onload = function() {
   const card = document.getElementById('aboutCard'); // Seleciona o card pelo ID
   card.classList.add('visible'); // Adiciona a classe 'visible' para iniciar a animação
 };
 
-// Adiciona um evento de clique ao botão de confete
+// Script para disparo de confete e animação de encolhimento da página
 document.getElementById('confettiButton').onclick = function() {
   const button = this; // Referência ao botão clicado
   const rect = button.getBoundingClientRect(); // Obtém a posição do botão na tela
@@ -17,64 +15,32 @@ document.getElementById('confettiButton').onclick = function() {
   const startX = rect.left + rect.width / 2; // Define a posição inicial X (horizontal) do confete
   const startY = rect.top + rect.height; // Define a posição inicial Y (vertical) do confete
 
-  // Laço para disparar confetes em várias direções
+  // Exibe confete
   for (let i = 0; i < count; i++) {
-    const x = Math.random() * spread - spread / 2 + startX; // Calcula a posição X aleatória do confete
-    const y = Math.random() * spread - spread / 2 + startY; // Calcula a posição Y aleatória do confete
+    const x = Math.random() * spread - spread / 2 + startX; // Posição X aleatória
+    const y = Math.random() * spread - spread / 2 + startY; // Posição Y aleatória
     confetti({
-      particleCount: 1, // Número de partículas disparadas por vez
-      startVelocity: 30, // Velocidade inicial do confete
-      spread: 360, // Direção de espalhamento do confete (em graus)
+      particleCount: 1, // Número de partículas por vez
+      startVelocity: 30, // Velocidade inicial
+      spread: 360, // Espalhamento do confete
       origin: {
-        x: x / window.innerWidth, // Posição X inicial relativa à largura da tela
-        y: y / window.innerHeight // Posição Y inicial relativa à altura da tela
+        x: x / window.innerWidth, // Posição X relativa à tela
+        y: y / window.innerHeight // Posição Y relativa à tela
       }
     });
   }
 
-  // Reproduz o som do confete quando o botão é clicado
+  // Reproduz o som do confete
   document.getElementById('confettiSound').play();
 
-  // Redireciona para a página "home.html" após um pequeno atraso
+  // Atraso para exibir o confete antes da animação de encolhimento
   setTimeout(function() {
-    window.location.href = "home.html"; // Atraso de 3 segundos para visualizar a animação
-  }, 3000);
-};
+    // Adiciona a classe para iniciar a animação de encolhimento
+    document.body.classList.add('shrink-and-move');
 
-/* fim do Script para animação do card e confete */
-
-document.getElementById('confettiButton').onclick = function() {
-  const button = this; // Referência ao botão clicado
-  const rect = button.getBoundingClientRect(); // Obtém a posição do botão na tela
-
-  // (Código para o confete permanece inalterado)
-
-  // Reproduz o som do confete quando o botão é clicado
-  document.getElementById('confettiSound').play();
-
-  // Adiciona a classe de animação à body ou container principal
-  document.body.classList.add('shrink-and-move'); // Adiciona a classe para a animação
-
-  // Redireciona para a página "home.html" após a animação
-  setTimeout(function() {
-    window.location.href = "home.html"; // Atraso de 3 segundos para visualizar a animação
-  }, 500); // Atraso igual à duração da animação
-};
-
-document.getElementById('confettiButton').onclick = function() {
-  const button = this; // Referência ao botão clicado
-  const rect = button.getBoundingClientRect(); // Obtém a posição do botão na tela
-
-  // (Código para o confete permanece inalterado)
-
-  // Reproduz o som do confete quando o botão é clicado
-  document.getElementById('confettiSound').play();
-
-  // Adiciona a classe de animação à body ou container principal
-  document.body.classList.add('shrink-and-move'); // Adiciona a classe para a animação
-
-  // Redireciona para a página "home.html" após a animação
-  setTimeout(function() {
-    window.location.href = "home.html"; // Atraso de 3 segundos para visualizar a animação
-  }, 500); // Atraso igual à duração da animação
+    // Redireciona após a animação de encolhimento
+    setTimeout(function() {
+      window.location.href = "home.html"; // Redireciona após 0.8s da animação
+    }, 800); // Tempo da animação de encolhimento
+  }, 2000); // Atraso de 2 segundos para exibir o confete antes da animação
 };
