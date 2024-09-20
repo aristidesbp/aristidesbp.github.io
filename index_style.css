@@ -1,3 +1,18 @@
+/* Estilos internos para animação do card */
+    .card {
+      opacity: 0; /* O card começa invisível */
+      transform: translateY(20px); /* Move o card 20px para baixo no início */
+      transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave para visibilidade e posição */
+    }
+    .card.visible {
+      opacity: 1; /* O card torna-se visível */
+      transform: translateY(0); /* Retorna à posição original */
+    }
+/* fim dos Estilos internos para animação do card */
+
+
+
+
 /* Estilo da página */
 body {
   background-color: black;
