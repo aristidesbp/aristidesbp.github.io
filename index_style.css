@@ -1,66 +1,63 @@
 /* Estilos internos para animação do card */
-    .card {
-      opacity: 0; /* O card começa invisível */
-      transform: translateY(20px); /* Move o card 20px para baixo no início */
-      transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave para visibilidade e posição */
-    }
-    .card.visible {
-      opacity: 1; /* O card torna-se visível */
-      transform: translateY(0); /* Retorna à posição original */
-    }
+.card {
+  opacity: 0; /* O card começa invisível */
+  transform: translateY(20px); /* Move o card 20px para baixo no início */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave para visibilidade e posição */
+}
+.card.visible {
+  opacity: 1; /* O card torna-se visível */
+  transform: translateY(0); /* Retorna à posição original */
+}
 /* fim dos Estilos internos para animação do card */
-
-
-
 
 /* Estilo da página */
 body {
-  background-color: black;
-  color: white;
+  background-color: black; /* Define a cor de fundo da página como preto */
+  color: white; /* Define a cor do texto como branco */
 }
 
 .btn {
-  margin: 20px;
+  margin: 20px; /* Adiciona uma margem de 20px ao redor dos botões */
 }
 
 .container {
-  margin-top: 50px;
-  text-align: center;
+  margin-top: 50px; /* Adiciona uma margem superior de 50px ao container */
+  text-align: center; /* Centraliza o texto dentro do container */
 }
 
 /* Animação dos elementos */
 @keyframes slideInFromLeft {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(0); }
+  0% { transform: translateX(-100%); } /* Começa fora da tela à esquerda */
+  100% { transform: translateX(0); } /* Move para a posição original */
 }
 
 @keyframes slideInFromRight {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(0); }
+  0% { transform: translateX(100%); } /* Começa fora da tela à direita */
+  100% { transform: translateX(0); } /* Move para a posição original */
 }
 
 @keyframes slideInFromTop {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(0); }
+  0% { transform: translateY(-100%); } /* Começa fora da tela acima */
+  100% { transform: translateY(0); } /* Move para a posição original */
 }
 
 @keyframes slideInFromBottom {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(0); }
+  0% { transform: translateY(100%); } /* Começa fora da tela abaixo */
+  100% { transform: translateY(0); } /* Move para a posição original */
 }
 
 .slide-left {
-  animation: slideInFromLeft 1s ease-out;
+  animation: slideInFromLeft 1s ease-out; /* Animação deslizante da esquerda para a posição original */
 }
 
 .slide-right {
-  animation: slideInFromRight 1s ease-out;
+  animation: slideInFromRight 1s ease-out; /* Animação deslizante da direita para a posição original */
 }
 
 .slide-top {
-  animation: slideInFromTop 1s ease-out;
+  animation: slideInFromTop 1s ease-out; /* Animação deslizante de cima para a posição original */
 }
 
 .slide-bottom {
-  animation: slideInFromBottom 1s ease-out;
+  animation: slideInFromBottom 1s ease-out; /* Animação deslizante de baixo para a posição original */
 }
