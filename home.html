@@ -8,21 +8,45 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background: #f1f1f1;
+            background: url('background.jpg') no-repeat center center fixed; /* Altere para a imagem desejada */
+            background-size: cover;
+            color: white;
+            overflow: hidden;
         }
         .fakeimg {
-            background-color: #aaa;
+            background-color: rgba(170, 170, 170, 0.7);
             width: 100%;
             height: 200px;
             margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .fakeimg:hover {
+            transform: scale(1.05);
         }
         .cardboard {
             padding: 20px;
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .cardboard:hover {
+            transform: scale(1.02);
+        }
+        header {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        /* Efeito de neve (opcional) */
+        @keyframes snow {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
@@ -37,10 +61,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Sobre</a>
+                <a class="nav-link" href="#sobre">Sobre</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Contato</a>
+                <a class="nav-link" href="#contato">Contato</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,19 +92,19 @@
 
     <div class="row">
         <div class="col-md-8">
-            <div class="cardboard">
+            <div class="cardboard" id="projeto1">
                 <h2>Projeto 1</h2>
                 <div class="fakeimg">Imagem do Projeto 1</div>
                 <p>Descrição do projeto 1, abordando as tecnologias utilizadas e os resultados obtidos.</p>
             </div>
 
-            <div class="cardboard">
+            <div class="cardboard" id="projeto2">
                 <h2>Projeto 2</h2>
                 <div class="fakeimg">Imagem do Projeto 2</div>
                 <p>Descrição do projeto 2, destacando as principais funcionalidades e desafios superados.</p>
             </div>
 
-            <div class="cardboard">
+            <div class="cardboard" id="projeto3">
                 <h2>Projeto 3</h2>
                 <div class="fakeimg">Imagem do Projeto 3</div>
                 <p>Descrição do projeto 3, com foco na inovação e impacto positivo.</p>
@@ -88,12 +112,12 @@
         </div>
         
         <div class="col-md-4">
-            <div class="cardboard">
+            <div class="cardboard" id="sobre">
                 <h2>Sobre Mim</h2>
                 <p>Texto sobre Aristides, incluindo suas habilidades e experiências profissionais.</p>
             </div>
 
-            <div class="cardboard">
+            <div class="cardboard" id="contato">
                 <h3>Contatos</h3>
                 <p>Email: aristides@example.com</p>
                 <p>Telefone: (91) 99999-9999</p>
