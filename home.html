@@ -101,6 +101,43 @@
             </div>
         </div>
 
+<!-- card com código -->
+<div class="card" id="layout_navigation">
+    <div class="card-body">
+        <h3>layout_navigation.js</h3>
+        <pre><code>
+/* layout_navigation.js */
+document.querySelectorAll('.topnav a').forEach(function (link) {
+  link.addEventListener('mouseover', function () {
+    this.style.backgroundColor = '#ddd';
+    this.style.color = 'black';
+  });
+
+  link.addEventListener('mouseout', function () {
+    this.style.backgroundColor = '#333';
+    this.style.color = '#f2f2f2';
+  });
+});
+        </code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
+document.querySelectorAll('.topnav a').forEach(function (link) {
+  link.addEventListener('mouseover', function () {
+    this.style.backgroundColor = '#ddd';
+    this.style.color = 'black';
+  });
+
+  link.addEventListener('mouseout', function () {
+    this.style.backgroundColor = '#333';
+    this.style.color = '#f2f2f2';
+  });
+});`)">Copiar Código</button>
+    </div>
+</div>
+<!-- fim do card com código -->
+        
+
+        
+
         <!-- Rodapé -->
         <footer class="text-center bg-light py-4">
             <h2>Footer</h2>
