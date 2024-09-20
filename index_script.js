@@ -42,3 +42,39 @@ document.getElementById('confettiButton').onclick = function() {
 };
 
 /* fim do Script para animação do card e confete */
+
+document.getElementById('confettiButton').onclick = function() {
+  const button = this; // Referência ao botão clicado
+  const rect = button.getBoundingClientRect(); // Obtém a posição do botão na tela
+
+  // (Código para o confete permanece inalterado)
+
+  // Reproduz o som do confete quando o botão é clicado
+  document.getElementById('confettiSound').play();
+
+  // Adiciona a classe de animação à body ou container principal
+  document.body.classList.add('shrink-and-move'); // Adiciona a classe para a animação
+
+  // Redireciona para a página "home.html" após a animação
+  setTimeout(function() {
+    window.location.href = "home.html"; // Atraso de 3 segundos para visualizar a animação
+  }, 500); // Atraso igual à duração da animação
+};
+
+document.getElementById('confettiButton').onclick = function() {
+  const button = this; // Referência ao botão clicado
+  const rect = button.getBoundingClientRect(); // Obtém a posição do botão na tela
+
+  // (Código para o confete permanece inalterado)
+
+  // Reproduz o som do confete quando o botão é clicado
+  document.getElementById('confettiSound').play();
+
+  // Adiciona a classe de animação à body ou container principal
+  document.body.classList.add('shrink-and-move'); // Adiciona a classe para a animação
+
+  // Redireciona para a página "home.html" após a animação
+  setTimeout(function() {
+    window.location.href = "home.html"; // Atraso de 3 segundos para visualizar a animação
+  }, 500); // Atraso igual à duração da animação
+};
