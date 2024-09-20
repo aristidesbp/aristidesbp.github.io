@@ -22,3 +22,14 @@ window.onload = function() {
     const card = document.getElementById('aboutCard'); // Seleciona o card pelo ID
     card.classList.add('visible'); // Adiciona a classe 'visible' para iniciar a animação
 };
+
+/*FUNÇÃO COPIAR CÓDIGO*/
+function copyToClipboard(text) {
+    const tempInput = document.createElement('input'); // Cria um campo de entrada temporário
+    tempInput.value = text; // Define o valor como o texto a ser copiado
+    document.body.appendChild(tempInput); // Adiciona o campo ao corpo do documento
+    tempInput.select(); // Seleciona o texto
+    document.execCommand('copy'); // Executa o comando de copiar
+    document.body.removeChild(tempInput); // Remove o campo temporário
+    alert('Código copiado!'); // Alerta ao usuário que o código foi copiado
+}
