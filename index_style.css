@@ -12,68 +12,69 @@
 
 /* Estilo da página */
 body {
-  background-color: black; /* Define a cor de fundo da página como preto */
-  color: white; /* Define a cor do texto como branco */
+  background-color: black;
+  color: white;
+  overflow: hidden; /* Impede a rolagem durante a animação */
 }
 
 .btn {
-  margin: 20px; /* Adiciona uma margem de 20px ao redor dos botões */
+  margin: 20px;
 }
 
 .container {
-  margin-top: 50px; /* Adiciona uma margem superior de 50px ao container */
-  text-align: center; /* Centraliza o texto dentro do container */
+  margin-top: 50px;
+  text-align: center;
 }
 
 /* Animação dos elementos */
 @keyframes slideInFromLeft {
-  0% { transform: translateX(-100%); } /* Começa fora da tela à esquerda */
-  100% { transform: translateX(0); } /* Move para a posição original */
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
 }
 
 @keyframes slideInFromRight {
-  0% { transform: translateX(100%); } /* Começa fora da tela à direita */
-  100% { transform: translateX(0); } /* Move para a posição original */
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
 }
 
 @keyframes slideInFromTop {
-  0% { transform: translateY(-100%); } /* Começa fora da tela acima */
-  100% { transform: translateY(0); } /* Move para a posição original */
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(0); }
 }
 
 @keyframes slideInFromBottom {
-  0% { transform: translateY(100%); } /* Começa fora da tela abaixo */
-  100% { transform: translateY(0); } /* Move para a posição original */
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
 }
 
 .slide-left {
-  animation: slideInFromLeft 1s ease-out; /* Animação deslizante da esquerda para a posição original */
+  animation: slideInFromLeft 1s ease-out;
 }
 
 .slide-right {
-  animation: slideInFromRight 1s ease-out; /* Animação deslizante da direita para a posição original */
+  animation: slideInFromRight 1s ease-out;
 }
 
 .slide-top {
-  animation: slideInFromTop 1s ease-out; /* Animação deslizante de cima para a posição original */
+  animation: slideInFromTop 1s ease-out;
 }
 
 .slide-bottom {
-  animation: slideInFromBottom 1s ease-out; /* Animação deslizante de baixo para a posição original */
+  animation: slideInFromBottom 1s ease-out;
 }
 
 /* Classe para a animação de encolhimento e movimento */
 .shrink-and-move {
-  animation: shrinkAndMove 0.5s forwards; /* Aplica a animação */
+  animation: shrinkAndMove 0.8s forwards; /* Duração de 0.8s */
 }
 
 @keyframes shrinkAndMove {
   0% {
-    transform: scale(1) translate(0, 0); /* Posição inicial */
+    transform: scale(1) translate(0, 0); /* Estado original */
     opacity: 1; /* Totalmente visível */
   }
   100% {
-    transform: scale(0.1) translate(100vw, -100vh); /* Encolhe e move para o canto superior direito */
+    transform: scale(0.1) translate(50vw, -100vh); /* Encolhe e sobe para o topo direito */
     opacity: 0; /* Desaparece */
   }
 }
