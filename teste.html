@@ -75,6 +75,15 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <audio id="confettiSound" src="confetti-pop.mp3" preload="auto"></audio> <!-- Adicione seu arquivo de som aqui -->
 
+
+  // Load sound effect
+            const audio = new Audio('https://www.fesliyanstudios.com/play-mp3/6418'); // Som de clique
+
+            // Adiciona o evento de clique ao botão
+            slideBtn.addEventListener("click", () => {
+                // Play sound on click
+                audio.play();
+  
   <script>
     document.getElementById('confettiButton').addEventListener('click', function() {
       // Animação de confete
