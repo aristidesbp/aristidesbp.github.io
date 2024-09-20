@@ -1,0 +1,60 @@
+/* Estilo básico para o corpo da página */
+body {
+    background-color: black; /* Cor de fundo */
+    color: white; /* Cor do texto */
+}
+
+/* Estilo dos botões */
+.btn {
+    margin: 20px; /* Espaçamento em torno do botão */
+}
+
+/* Centralizar o container na tela */
+.container {
+    margin-top: 50px;
+    text-align: center; /* Centraliza o texto no container */
+}
+
+/* Animações para entrada dos elementos */
+@keyframes slideInFromLeft {
+    0% { transform: translateX(-100%); } /* Início fora da tela à esquerda */
+    100% { transform: translateX(0); } /* Entra totalmente na tela */
+}
+
+@keyframes slideInFromRight {
+    0% { transform: translateX(100%); } /* Início fora da tela à direita */
+    100% { transform: translateX(0); } /* Entra totalmente na tela */
+}
+
+@keyframes slideInFromTop {
+    0% { transform: translateY(-100%); } /* Início fora da tela, no topo */
+    100% { transform: translateY(0); } /* Entra totalmente na tela */
+}
+
+@keyframes slideInFromBottom {
+    0% { transform: translateY(100%); } /* Início fora da tela, no rodapé */
+    100% { transform: translateY(0); } /* Entra totalmente na tela */
+}
+
+/* Adiciona animação às classes específicas */
+.slide-left {
+    animation: slideInFromLeft 1s ease-out; /* Animação vinda da esquerda */
+}
+
+.slide-right {
+    animation: slideInFromRight 1s ease-out; /* Animação vinda da direita */
+}
+
+.slide-top {
+    animation: slideInFromTop 1s ease-out; /* Animação vinda do topo */
+}
+
+.slide-bottom {
+    animation: slideInFromBottom 1s ease-out; /* Animação vinda de baixo */
+}
+
+/* Animação de desaparecimento */
+.fade-out {
+    opacity: 0; /* Torna o elemento invisível */
+    transition: opacity 1s ease-in-out; /* Transição suave de opacidade */
+}
