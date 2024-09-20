@@ -22,7 +22,7 @@
   <!-- Conteúdo principal -->
   <div class="container">
     <h1 class="slide-left">Welcome to My Website</h1>
-    <p class="slide-right">Explore the site and get to know nossos serviços!</p>
+    <p class="slide-right">Explore o site e conheça nossos serviços!</p>
     
     <!-- Botão com animação de confete -->
     <button id="confettiButton" class="btn btn-primary slide-bottom">
@@ -31,7 +31,7 @@
 
     <!-- Card para imagem -->
     <div class="card mt-4" id="aboutCard">
-      <img src="imagens/eu_index.jpg" class="card-img-top" alt="Minha Imagem">
+      <img src="imag/aqui.jpg" class="card-img-top" alt="Minha Imagem">
       <div class="card-body">
         <h5 class="card-title">Aristides B. Pontes</h5>
         <p class="card-text">Sou especialista em marketing digital e desenvolvimento web. Meu objetivo é ajudar negócios a crescerem por meio de estratégias eficazes e criativas. Explore meu portfólio e descubra como posso ajudar você!</p>
@@ -46,11 +46,39 @@
   
   <script src="index_script.js"></script> <!-- Vinculando o arquivo JS -->
   
-  <!-- Script para animação do card -->
+  <!-- Script para animação do card e confete -->
   <script>
     window.onload = function() {
       const card = document.getElementById('aboutCard');
       card.classList.add('visible'); // Adiciona a classe para animar o card
+    };
+
+    document.getElementById('confettiButton').onclick = function() {
+      const button = this;
+      const rect = button.getBoundingClientRect(); // Posição do botão
+
+      // Dispara confete a partir da posição do botão
+      const count = 200;
+      const spread = 70;
+      const startX = rect.left + rect.width / 2; // Centro do botão
+      const startY = rect.top + rect.height; // Abaixo do botão
+
+      for (let i = 0; i < count; i++) {
+        const x = Math.random() * spread - spread / 2 + startX;
+        const y = Math.random() * spread - spread / 2 + startY;
+        confetti({
+          particleCount: 1,
+          startVelocity: 30,
+          spread: 360,
+          origin: {
+            x: x / window.innerWidth,
+            y: y / window.innerHeight
+          }
+        });
+      }
+
+      // Reproduz o som do confete
+      document.getElementById('confettiSound').play();
     };
   </script>
   
