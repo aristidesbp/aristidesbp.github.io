@@ -61,3 +61,19 @@ body {
 .slide-bottom {
   animation: slideInFromBottom 1s ease-out; /* Animação deslizante de baixo para a posição original */
 }
+
+/* Classe para a animação de encolhimento e movimento */
+.shrink-and-move {
+  animation: shrinkAndMove 0.5s forwards; /* Aplica a animação */
+}
+
+@keyframes shrinkAndMove {
+  0% {
+    transform: scale(1) translate(0, 0); /* Posição inicial */
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    transform: scale(0.1) translate(100vw, -100vh); /* Encolhe e move para o canto superior direito */
+    opacity: 0; /* Desaparece */
+  }
+}
