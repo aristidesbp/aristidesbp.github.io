@@ -1,0 +1,51 @@
+/* Estilo da página */
+body {
+  background-color: black;
+  color: white;
+}
+
+.btn {
+  margin: 20px;
+}
+
+.container {
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* Animação dos elementos */
+@keyframes slideInFromLeft {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slideInFromRight {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slideInFromTop {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes slideInFromBottom {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+.slide-left {
+  animation: slideInFromLeft 1s ease-out;
+}
+
+.slide-right {
+  animation: slideInFromRight 1s ease-out;
+}
+
+.slide-top {
+  animation: slideInFromTop 1s ease-out;
+}
+
+.slide-bottom {
+  animation: slideInFromBottom 1s ease-out;
+}
