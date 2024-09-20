@@ -52,17 +52,3 @@ header {
     top: 0;
     z-index: 1000; /* Garante que a barra fique acima de outros elementos */
 }
-/* Estilo do código e do botão de copiar */
-pre {
-    background-color: #2d2d2d;
-    color: #f8f8f2;
-    padding: 15px;
-    border-radius: 5px;
-    white-space: pre-wrap;
-}
-
-button {
-    margin-top: 10px;
-}
-
-/* Resto dos estilos permanecem iguais */
