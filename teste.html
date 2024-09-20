@@ -57,12 +57,6 @@
     .slide-bottom {
       animation: slideInFromBottom 1s ease-out;
     }
-
-    /* Fade out animation */
-    .fade-out {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
   </style>
 </head>
 <body>
@@ -79,38 +73,28 @@
 
   <!-- Efeito de confete e som -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <audio id="confettiSound" src="confetti-pop.mp3" preload="auto"></audio> <!-- Adicione seu arquivo de som aqui -->
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const confettiButton = document.getElementById('confettiButton');
-      const container = document.querySelector('.container');
-
-      // Carregar som de confete ou clique
-      const audio = new Audio('https://www.fesliyanstudios.com/play-mp3/6418'); // Som de clique
-
-      // Adiciona o evento de clique ao botão
-      confettiButton.addEventListener("click", () => {
-        // Tocar o som
-        audio.play();
-
-        // Animação de confete
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-
-        // Adicionar classe de fade-out
-        container.classList.add('fade-out');
-
-        // Após 1 segundo, redirecionar para home.html
-        setTimeout(() => {
-          window.location.href = "home.html";
-        }, 1000); // 1 segundo de espera para transição
+    document.getElementById('confettiButton').addEventListener('click', function() {
+      // Animação de confete
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
       });
+      
+      // Reproduz o som do confete
+      var audio = document.getElementById('confettiSound');
+      audio.play();
+      
+      // Redireciona para a página "home.html" após um pequeno atraso
+      setTimeout(function() {
+        window.location.href = "home.html";
+      }, 3000); // Atraso de 3 segundos para visualizar a animação
     });
   </script>
-
+  
   <!-- Bootstrap JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
