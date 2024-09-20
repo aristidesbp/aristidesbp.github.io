@@ -1,253 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aula 1 - Conversa e Códigos</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #000; /* Fundo preto */
-      color: #fff; /* Texto branco */
-    }
-    h1, h2 {
-      color: #fff;
-    }
-    pre {
-      background-color: #222;
-      border-left: 5px solid #fff;
-      padding: 10px;
-      overflow-x: auto;
-    }
-    code {
-      font-family: Consolas, monospace;
-      color: #d63384;
-    }
-    .section {
-      margin-bottom: 40px;
-    }
-    .navbar {
-      background-color: #333;
-      padding: 10px;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-    }
-    .navbar a {
-      color: #f2f2f2;
-      padding: 14px 20px;
-      text-decoration: none;
-      float: left;
-    }
-    .navbar a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-    .content {
-      padding-top: 60px; /* Para dar espaço para a barra de navegação */
-    }
-    .copy-btn {
-      background-color: #d63384;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-  </style>
-  <script>
-    function copyToClipboard(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      alert('Código copiado!');
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Código</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            background-color: #333;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="navbar">
-    <a href="home.html">Voltar para Home</a>
-  </div>
+<div class="container">
+    <h1>Códigos JavaScript para Interação</h1>
 
-  <div class="content">
-    <header>
-      <h1>Aula 1 - Salvando a Conversa e Códigos</h1>
-      <p>Esta página contém a conversa que tivemos e os códigos que você pode copiar e usar em seus projetos.</p>
-    </header>
-
-    <section class="section">
-      <h2>1. Separando o CSS em arquivos</h2>
-      <p>Abaixo está o código para separar o CSS em diferentes arquivos, como discutimos:</p>
-      <pre><code>
-<!-- Arquivo layout.html -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="layout_colunas.css">
-  <link rel="stylesheet" type="text/css" href="layout_topnav.css">
-  <link rel="stylesheet" type="text/css" href="layout_header.css">
-  <link rel="stylesheet" type="text/css" href="layout_responsividade.css">
-  <title>My Website</title>
-</head>
-<body>
-  <!-- Conteúdo da página aqui -->
-</body>
-</html>
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`<!-- Arquivo layout.html -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="layout_colunas.css">
-  <link rel="stylesheet" type="text/css" href="layout_topnav.css">
-  <link rel="stylesheet" type="text/css" href="layout_header.css">
-  <link rel="stylesheet" type="text/css" href="layout_responsividade.css">
-  <title>My Website</title>
-</head>
-<body>
-  <!-- Conteúdo da página aqui -->
-</body>
-</html>`)">Copiar Código</button>
-
-      <p>Crie os seguintes arquivos CSS:</p>
-      <h3>layout_colunas.css</h3>
-      <pre><code>
-/* layout_colunas.css */
-.leftcolumn {   
-  float: left;
-  width: 75%;
-}
-
-.rightcolumn {
-  float: left;
-  width: 25%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_colunas.css */
-.leftcolumn {   
-  float: left;
-  width: 75%;
-}
-
-.rightcolumn {
-  float: left;
-  width: 25%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-}`)">Copiar Código</button>
-
-      <h3>layout_topnav.css</h3>
-      <pre><code>
-/* layout_topnav.css */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_topnav.css */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}`)">Copiar Código</button>
-
-      <h3>layout_header.css</h3>
-      <pre><code>
-/* layout_header.css */
-.header {
-  padding: 30px;
-  text-align: center;
-  background: white;
-}
-
-.header h1 {
-  font-size: 50px;
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_header.css */
-.header {
-  padding: 30px;
-  text-align: center;
-  background: white;
-}
-
-.header h1 {
-  font-size: 50px;
-}`)">Copiar Código</button>
-
-      <h3>layout_responsividade.css</h3>
-      <pre><code>
-/* layout_responsividade.css */
-@media screen and (max-width: 800px) {
-  .leftcolumn, .rightcolumn {   
-    width: 100%;
-    padding: 0;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_responsividade.css */
-@media screen and (max-width: 800px) {
-  .leftcolumn, .rightcolumn {   
-    width: 100%;
-    padding: 0;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
-}`)">Copiar Código</button>
-    </section>
-
-    <section class="section">
-      <h2>2. Separando o JavaScript em arquivos</h2>
-      <p>Agora, veja como separar o JavaScript em arquivos distintos:</p>
-
-      <h3>layout_navigation.js</h3>
-      <pre><code>
+    <section>
+        <h3>layout_navigation.js</h3>
+        <pre><code>
 /* layout_navigation.js */
 document.querySelectorAll('.topnav a').forEach(function (link) {
   link.addEventListener('mouseover', function () {
@@ -260,8 +53,8 @@ document.querySelectorAll('.topnav a').forEach(function (link) {
     this.style.color = '#f2f2f2';
   });
 });
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
+        </code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
 document.querySelectorAll('.topnav a').forEach(function (link) {
   link.addEventListener('mouseover', function () {
     this.style.backgroundColor = '#ddd';
@@ -274,53 +67,64 @@ document.querySelectorAll('.topnav a').forEach(function (link) {
   });
 });`)">Copiar Código</button>
 
-      <h3>layout_interaction.js</h3>
-      <pre><code>
+        <h3>layout_interaction.js</h3>
+        <pre><code>
 /* layout_interaction.js */
 document.querySelectorAll('.card').forEach(function (card) {
   card.addEventListener('click', function () {
     alert('Você clicou em um artigo!');
   });
 });
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_interaction.js */
+        </code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(`/* layout_interaction.js */
 document.querySelectorAll('.card').forEach(function (card) {
   card.addEventListener('click', function () {
     alert('Você clicou em um artigo!');
   });
-});
-      `)">Copiar Código</button>
+});`)">Copiar Código</button>
 
-      <h3>layout_footer.js</h3>
-      <pre><code>
+        <h3>layout_footer.js</h3>
+        <pre><code>
 /* layout_footer.js */
 document.querySelector('.footer h2').addEventListener('click', function () {
   alert('Este é o rodapé!');
 });
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`/* layout_footer.js */
+        </code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(`/* layout_footer.js */
 document.querySelector('.footer h2').addEventListener('click', function () {
   alert('Este é o rodapé!');
 });`)">Copiar Código</button>
 
-      <p>Referencie os arquivos no seu HTML como mostrado abaixo:</p>
-      <pre><code>
+        <p>Referencie os arquivos no seu HTML como mostrado abaixo:</p>
+        <pre><code>
 <!-- Referências JS no arquivo layout.html -->
 <script src="layout_navigation.js"></script>
 <script src="layout_interaction.js"></script>
 <script src="layout_footer.js"></script>
-      </code></pre>
-      <button class="copy-btn" onclick="copyToClipboard(`<!-- Referências JS no arquivo layout.html -->
+        </code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(`<!-- Referências JS no arquivo layout.html -->
 <script src="layout_navigation.js"></script>
 <script src="layout_interaction.js"></script>
 <script src="layout_footer.js"></script>`)">Copiar Código</button>
     </section>
 
     <footer>
-      <h2>Footer</h2>
-      <p>Esta página foi criada para organizar e salvar nossa conversa.</p>
+        <h2>Footer</h2>
+        <p>Esta página foi criada para organizar e salvar nossa conversa.</p>
     </footer>
-  </div>
+</div>
+
+<script>
+    function copyToClipboard(text) {
+        const tempInput = document.createElement('input'); // Cria um campo de entrada temporário
+        tempInput.value = text; // Define o valor como o texto a ser copiado
+        document.body.appendChild(tempInput); // Adiciona o campo ao corpo do documento
+        tempInput.select(); // Seleciona o texto
+        document.execCommand('copy'); // Executa o comando de copiar
+        document.body.removeChild(tempInput); // Remove o campo temporário
+        alert('Código copiado!'); // Alerta ao usuário que o código foi copiado
+    }
+</script>
 
 </body>
 </html>
