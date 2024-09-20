@@ -21,47 +21,93 @@
       text-align: center;
     }
     
-    /* Animação de fade-out */
+    /* Animação dos elementos */
+    @keyframes slideInFromLeft {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes slideInFromRight {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes slideInFromTop {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes slideInFromBottom {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(0); }
+    }
+
+    .slide-left {
+      animation: slideInFromLeft 1s ease-out;
+    }
+
+    .slide-right {
+      animation: slideInFromRight 1s ease-out;
+    }
+
+    .slide-top {
+      animation: slideInFromTop 1s ease-out;
+    }
+
+    .slide-bottom {
+      animation: slideInFromBottom 1s ease-out;
+    }
+
+    /* Fade out animation */
     .fade-out {
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1s ease-in-out;
     }
   </style>
 </head>
 <body>
   <!-- Conteúdo principal -->
   <div class="container">
-    <h1>Welcome to My Website</h1>
-    <p>Explore the site and get to know our services!</p>
+    <h1 class="slide-left">Welcome to My Website</h1>
+    <p class="slide-right">Explore the site and get to know our services!</p>
     
-    <!-- Botão com som e animação -->
-    <button id="slideBtn" class="btn btn-primary">
+    <!-- Botão com animação de confete -->
+    <button id="confettiButton" class="btn btn-primary slide-bottom">
       Ligue em mim
     </button>
   </div>
 
-  <!-- JavaScript para animação e som -->
+  <!-- Efeito de confete e som -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const slideBtn = document.getElementById("slideBtn");
-        const container = document.querySelector(".container");
+      const confettiButton = document.getElementById('confettiButton');
+      const container = document.querySelector('.container');
 
-        // Som de clique
-        const audio = new Audio('https://www.fesliyanstudios.com/play-mp3/6418'); // Som de clique (modifique para outro som se necessário)
+      // Carregar som de confete ou clique
+      const audio = new Audio('https://www.fesliyanstudios.com/play-mp3/6418'); // Som de clique
 
-        // Evento de clique no botão
-        slideBtn.addEventListener("click", () => {
-            // Tocar som ao clicar
-            audio.play();
+      // Adiciona o evento de clique ao botão
+      confettiButton.addEventListener("click", () => {
+        // Tocar o som
+        audio.play();
 
-            // Fade out do container com atraso de 1 segundo
-            container.classList.add('fade-out');
-
-            // Redireciona para "home.html" após 1 segundo
-            setTimeout(() => {
-                window.location.href = "home.html";
-            }, 1000); // 1 segundo de espera
+        // Animação de confete
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
         });
+
+        // Adicionar classe de fade-out
+        container.classList.add('fade-out');
+
+        // Após 1 segundo, redirecionar para home.html
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1000); // 1 segundo de espera para transição
+      });
     });
   </script>
 
