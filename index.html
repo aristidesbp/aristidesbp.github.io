@@ -17,7 +17,7 @@
             overflow: hidden; /* Oculta barras de rolagem */
         }
 
-        /* Background animado com bolhas */
+        /* Background animado com bolhas coloridas */
         .background {
             position: fixed;
             top: 0;
@@ -32,9 +32,8 @@
         .bubble {
             position: absolute;
             bottom: -150px;
-            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            opacity: 0.7;
+            opacity: 0.8;
             animation: rise 20s infinite ease-in-out;
         }
 
@@ -43,6 +42,7 @@
             width: 80px;
             height: 80px;
             left: 10%;
+            background-color: rgba(255, 99, 132, 0.6); /* Rosa claro */
             animation-duration: 18s;
         }
 
@@ -50,6 +50,7 @@
             width: 100px;
             height: 100px;
             left: 30%;
+            background-color: rgba(54, 162, 235, 0.6); /* Azul claro */
             animation-duration: 25s;
         }
 
@@ -57,6 +58,7 @@
             width: 60px;
             height: 60px;
             left: 50%;
+            background-color: rgba(255, 206, 86, 0.6); /* Amarelo claro */
             animation-duration: 12s;
         }
 
@@ -64,6 +66,7 @@
             width: 120px;
             height: 120px;
             left: 70%;
+            background-color: rgba(75, 192, 192, 0.6); /* Verde água */
             animation-duration: 30s;
         }
 
@@ -71,6 +74,7 @@
             width: 90px;
             height: 90px;
             left: 90%;
+            background-color: rgba(153, 102, 255, 0.6); /* Roxo claro */
             animation-duration: 22s;
         }
 
@@ -82,7 +86,7 @@
                 transform: translateX(0);
             }
             50% {
-                opacity: 0.5;
+                opacity: 0.7;
             }
             100% {
                 bottom: 100%;
