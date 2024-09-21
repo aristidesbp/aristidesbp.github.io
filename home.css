@@ -53,6 +53,12 @@ header {
     z-index: 1000; /* Garante que a barra fique acima de outros elementos */
 }
 
+
+
+
+
+
+/*carro de código*/
 .card {
     background-color: rgba(255, 255, 255, 0.1);
     color: #f8f9fa; /* Cor do texto do código */
@@ -63,7 +69,7 @@ header {
 }
 
 pre {
-    background-color: #222; /* Fundo para o código */
+    background-color: #111; /* Fundo para o código */
     color: #f8f9fa; /* Cor do texto */
     padding: 10px;
     border-radius: 5px;
@@ -73,7 +79,7 @@ pre {
 
 .copy-btn {
     margin-top: 10px;
-    background-color: #007bff;
+    background-color:#222;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -83,3 +89,9 @@ pre {
 .copy-btn:hover {
     background-color: #0056b3;
 }
+
+
+
+
+
+
