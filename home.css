@@ -61,7 +61,7 @@ header {
 /*carro de código*/
 .card {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #f8f9fa; /* Cor do texto do código */
+    color:white; /* Cor do texto do código */
     margin-bottom: 20px;
     border: none;
     border-radius: 8px;
@@ -69,7 +69,7 @@ header {
 }
 
 pre {
-    background-color: #111; /* Fundo para o código */
+    background-color: white; /* Fundo para o código */
     color: #f8f9fa; /* Cor do texto */
     padding: 10px;
     border-radius: 5px;
