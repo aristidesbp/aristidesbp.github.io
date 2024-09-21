@@ -4,71 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Página Inicial</title>
+    <title>Página Inicial Aprimorada</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Animate.css para animações -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <!-- AOS (Animate on Scroll) CSS para animação ao rolar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
     <style>
         /* Estilo geral do corpo da página */
         body {
-            background-color: black; /* Fundo preto */
-            color: white;
-            overflow: auto;
-            padding-top: 70px; /* Espaço para o menu fixo */
-            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f0f0f0;
+            padding-top: 70px; /* Espaço para a navbar */
+            font-family: 'Arial', sans-serif;
         }
 
-        /* Estilo das imagens falsas (placeholders) */
-        .fakeimg {
-            background-color: rgba(170, 170, 170, 0.7);
-            width: 100%;
-            height: 200px;
-            margin-bottom: 20px;
-            transition: transform 0.3s;
-        }
-
-        .fakeimg:hover {
+        /* Efeitos de hover nos cards */
+        .card:hover {
             transform: scale(1.05);
+            transition: all 0.3s ease;
         }
 
-        /* Estilo dos blocos de cartão (cardboard) */
-        .cardboard {
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+        /* Estilo do cabeçalho */
+        header h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffc107;
+        }
+
+        /* Estilo dos cards */
+        .card {
+            background-color: #242424;
+            color: white;
+            border: none;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-            transition: transform 0.3s;
+            border-radius: 10px;
+            margin-bottom: 30px;
         }
 
-        .cardboard:hover {
-            transform: scale(1.02);
-        }
-
-        /* Animação de fade-in para o cabeçalho */
-        header {
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Ajustes da barra de navegação para ficar fixa no topo */
+        /* Barra de navegação */
         .navbar {
             position: fixed;
             width: 100%;
             top: 0;
-            z-index: 1000; /* Garante que a barra fique acima de outros elementos */
+            z-index: 1000;
             background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
         }
 
         .navbar a {
             color: white;
-            padding: 14px 20px;
+            padding: 15px 20px;
             text-decoration: none;
             display: inline-block;
         }
@@ -77,95 +68,125 @@
             background-color: #575757;
         }
 
-        /*carro de código*/
-        .card {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white; /* Cor do texto do código */
-            margin-bottom: 20px;
+        /* Botão de confete */
+        #confettiButton {
+            background-color: #ffc107;
+            color: black;
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        pre {
-            background-color: #222; /* Fundo para o código */
-            color: #f8f9fa; /* Cor do texto */
-            padding: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
             border-radius: 5px;
-            overflow: auto; /* Para rolagem se necessário */
-            white-space: pre-wrap; /* Para quebra de linha */
+            margin-top: 20px;
         }
 
+        #confettiButton:hover {
+            background-color: #e0a800;
+        }
+
+        /* Estilo do bloco de código */
+        pre {
+            background-color: #1c1c1c;
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Botão copiar código */
         .copy-btn {
-            margin-top: 10px;
-            background-color: #0056b3;
+            background-color: #007bff;
             color: white;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            margin-top: 10px;
         }
 
         .copy-btn:hover {
-            background-color: #003d82;
+            background-color: #0056b3;
         }
 
-        /* Animação de fade-in para os elementos da página */
-        .visible {
-            opacity: 0;
-            animation: fadeInElement 1s forwards;
-        }
-
-        @keyframes fadeInElement {
-            to {
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Barra de navegação fixa -->
-    <div class="navbar">
-        <a href="#home">Início</a>
-        <a href="#about">Sobre</a>
-        <a href="#contact">Contato</a>
-    </div>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Minha Página</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#home">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Cabeçalho com fade-in -->
-    <header id="home">
+    <!-- Cabeçalho animado -->
+    <header id="home" class="container text-center py-5 animate__animated animate__fadeInDown">
         <h1>Bem-vindo à Página Inicial</h1>
     </header>
 
-    <!-- Conteúdo com card e imagem de exemplo -->
-    <div class="cardboard">
-        <h2>Seção Sobre</h2>
-        <div class="fakeimg"></div>
-        <div id="aboutCard" class="card">
-            <h3>Informações</h3>
-            <p>Este é um exemplo de uma página com animações e interações dinâmicas.</p>
+    <!-- Seção Sobre -->
+    <section id="about" class="container" data-aos="fade-up">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card p-4">
+                    <h3 class="card-title">Sobre Nós</h3>
+                    <p class="card-text">Este é um exemplo de uma página construída com Bootstrap, animações CSS e JavaScript.</p>
+                    <button id="confettiButton">Clique para Confete 🎉</button>
+                    <audio id="confettiSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/500x300" alt="Imagem Exemplo" class="img-fluid rounded">
+            </div>
         </div>
-        <button id="confettiButton">Clique para Confete 🎉</button>
-        <audio id="confettiSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio> <!-- Link para o som de confete -->
-    </div>
+    </section>
 
-    <!-- Exemplo de código com botão copiar -->
-    <div class="card">
-        <h2>Código Exemplo</h2>
-        <pre id="codeBlock">
+    <!-- Seção de código com botão copiar -->
+    <section class="container my-5" data-aos="fade-right">
+        <div class="card p-4">
+            <h2>Código Exemplo</h2>
+            <pre id="codeBlock">
 const greet = () => {
     console.log("Hello, World!");
 };
 greet();
-        </pre>
-        <button class="copy-btn" onclick="copyToClipboard(document.getElementById('codeBlock').innerText)">Copiar Código</button>
-    </div>
+            </pre>
+            <button class="copy-btn" onclick="copyToClipboard(document.getElementById('codeBlock').innerText)">Copiar Código</button>
+        </div>
+    </section>
 
+    <!-- Contato (exemplo) -->
+    <section id="contact" class="container my-5 text-center" data-aos="fade-up">
+        <h2>Contato</h2>
+        <p>Entre em contato conosco por email: <strong>contato@empresa.com</strong></p>
+    </section>
+
+    <!-- JS: Confete, Bootstrap e AOS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        // Script para animação de confete ao clicar no botão (exemplo de interação dinâmica)
-        document.getElementById('confettiButton').addEventListener('click', function () {
-            // Desabilita o botão durante o atraso
+        // Inicializa a biblioteca AOS (animação ao rolar)
+        AOS.init();
+
+        // Animação de confete ao clicar no botão
+        document.getElementById('confettiButton').addEventListener('click', function() {
+            // Desabilita o botão temporariamente
             this.disabled = true;
 
             // Animação de confete
@@ -175,37 +196,25 @@ greet();
                 origin: { y: 0.6 }
             });
 
-            // Reproduz o som do confete
+            // Reproduz o som de confete
             var audio = document.getElementById('confettiSound');
-            audio.currentTime = 0; // Reinicia o áudio desde o início
+            audio.currentTime = 0;
             audio.play();
 
-            // Redireciona para a página "home.html" após um pequeno atraso
-            setTimeout(function () {
-                window.location.href = "home.html";
-            }, 3000); // Atraso de 3 segundos para visualizar a animação
+            // Reabilita o botão após 3 segundos
+            setTimeout(() => {
+                this.disabled = false;
+            }, 3000);
         });
 
-        // Exemplo de animação de fade-in para elementos da página
-        window.onload = function () {
-            const cards = document.querySelectorAll('.card'); // Seleciona todos os elementos com a classe 'card'
-            cards.forEach(card => {
-                card.classList.add('visible'); // Adiciona a classe 'visible' para iniciar a animação
-            });
-        };
-
-        /*FUNÇÃO COPIAR CÓDIGO*/
+        // Função copiar código
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function () {
                 alert('Código copiado com sucesso!');
             }, function (err) {
-                console.error('Falha ao copiar: ', err);
+                console.error('Erro ao copiar o código: ', err);
             });
         }
     </script>
-
-    <!-- Biblioteca de confetes -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
 </body>
 </html>
