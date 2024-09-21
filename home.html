@@ -3,154 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio de Aristides</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Página Inicial</title>
+    <style>
+        /* Estilo geral do corpo da página */
+        body {
+            background-color: black; /* Fundo preto */
+            color: white;
+            overflow: auto;
+            padding-top: 70px; /* Espaço para o menu fixo */
+            font-family: Arial, sans-serif;
+        }
 
-    <!-- Importando o arquivo CSS externo -->
-    <link rel="stylesheet" href="home.css">
+        /* Estilo das imagens falsas (placeholders) */
+        .fakeimg {
+            background-color: rgba(170, 170, 170, 0.7);
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        .fakeimg:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estilo dos blocos de cartão (cardboard) */
+        .cardboard {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .cardboard:hover {
+            transform: scale(1.02);
+        }
+
+        /* Animação de fade-in para o cabeçalho */
+        header {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Ajustes da barra de navegação para ficar fixa no topo */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000; /* Garante que a barra fique acima de outros elementos */
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        /*carro de código*/
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white; /* Cor do texto do código */
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        pre {
+            background-color: #222; /* Fundo para o código */
+            color: #f8f9fa; /* Cor do texto */
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto; /* Para rolagem se necessário */
+            white-space: pre-wrap; /* Para quebra de linha */
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #003d82;
+        }
+
+        /* Animação de fade-in para os elementos da página */
+        .visible {
+            opacity: 0;
+            animation: fadeInElement 1s forwards;
+        }
+
+        @keyframes fadeInElement {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Barra de Navegação -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Portfólio Aristides</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#sobre">Sobre</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contato">Contato</a>
-                </li>
-
-                <!-- Redes Sociais -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Redes Sociais
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Facebook</a>
-                        <a class="dropdown-item" href="#">Instagram</a>
-                        <a class="dropdown-item" href="#">LinkedIn</a>
-                    </div>
-                </li>
-                <!-- Fim Redes Sociais -->
-
-                <!-- Aulas -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Aulas
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="w3scools/aula_layout">aula_layout</a>
-                    </div>
-                </li>
-                <!-- Fim Aulas -->
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Pesquisar</button>
-            </form>
-        </div>
-    </nav>
-
-    <!-- Conteúdo Principal -->
-    <div class="container mt-4">
-        <header class="text-center my-4">
-            <h1>Bem-vindo ao Meu Portfólio</h1>
-            <p>Aqui você encontrará meus projetos e experiências.</p>
-        </header>
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="cardboard" id="projeto1">
-                    <h2>Projeto 1</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 1">Imagem do Projeto 1</div>
-                    <p>Descrição do projeto 1, abordando as tecnologias utilizadas e os resultados obtidos.</p>
-                </div>
-
-                <div class="cardboard" id="projeto2">
-                    <h2>Projeto 2</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 2">Imagem do Projeto 2</div>
-                    <p>Descrição do projeto 2, destacando as principais funcionalidades e desafios superados.</p>
-                </div>
-
-                <div class="cardboard" id="projeto3">
-                    <h2>Projeto 3</h2>
-                    <div class="fakeimg" alt="Imagem do Projeto 3">Imagem do Projeto 3</div>
-                    <p>Descrição do projeto 3, com foco na inovação e impacto positivo.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="cardboard" id="sobre">
-                    <h2>Sobre Mim</h2>
-                    <p>Texto sobre Aristides, incluindo suas habilidades e experiências profissionais.</p>
-                </div>
-
-                <div class="cardboard" id="contato">
-                    <h3>Contatos</h3>
-                    <p>Email: aristides@example.com</p>
-                    <p>Telefone: (91) 99999-9999</p>
-                </div>
-            </div>
-        </div>
-
-<!-- card com código -->
-<div class="card" id="layout_navigation">
-    <div class="card-body">
-        <h3>layout_navigation.js</h3>
-        <pre><code>
-/* layout_navigation.js */
-document.querySelectorAll('.topnav a').forEach(function (link) {
-  link.addEventListener('mouseover', function () {
-    this.style.backgroundColor = '#ddd';
-    this.style.color = 'black';
-  });
-
-  link.addEventListener('mouseout', function () {
-    this.style.backgroundColor = '#333';
-    this.style.color = '#f2f2f2';
-  });
-});
-        </code></pre>
-        <button class="copy-btn" onclick="copyToClipboard(`/* layout_navigation.js */
-document.querySelectorAll('.topnav a').forEach(function (link) {
-  link.addEventListener('mouseover', function () {
-    this.style.backgroundColor = '#ddd';
-    this.style.color = 'black';
-  });
-
-  link.addEventListener('mouseout', function () {
-    this.style.backgroundColor = '#333';
-    this.style.color = '#f2f2f2';
-  });
-});`)">Copiar Código</button>
-    </div>
-</div>
-<!-- fim do card com código -->
-        
-
-        
-
-        <!-- Rodapé -->
-        <footer class="text-center bg-light py-4">
-            <h2>Footer</h2>
-            <p>&copy; 2024 Aristides. Todos os direitos reservados.</p>
-        </footer>
+    <!-- Barra de navegação fixa -->
+    <div class="navbar">
+        <a href="#home">Início</a>
+        <a href="#about">Sobre</a>
+        <a href="#contact">Contato</a>
     </div>
 
-    <!-- Bootstrap JS e dependências -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Cabeçalho com fade-in -->
+    <header id="home">
+        <h1>Bem-vindo à Página Inicial</h1>
+    </header>
 
-    <!-- Importando o arquivo JavaScript externo -->
-    <script src="home.js"></script>
+    <!-- Conteúdo com card e imagem de exemplo -->
+    <div class="cardboard">
+        <h2>Seção Sobre</h2>
+        <div class="fakeimg"></div>
+        <div id="aboutCard" class="card">
+            <h3>Informações</h3>
+            <p>Este é um exemplo de uma página com animações e interações dinâmicas.</p>
+        </div>
+        <button id="confettiButton">Clique para Confete 🎉</button>
+        <audio id="confettiSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio> <!-- Link para o som de confete -->
+    </div>
+
+    <!-- Exemplo de código com botão copiar -->
+    <div class="card">
+        <h2>Código Exemplo</h2>
+        <pre id="codeBlock">
+const greet = () => {
+    console.log("Hello, World!");
+};
+greet();
+        </pre>
+        <button class="copy-btn" onclick="copyToClipboard(document.getElementById('codeBlock').innerText)">Copiar Código</button>
+    </div>
+
+    <script>
+        // Script para animação de confete ao clicar no botão (exemplo de interação dinâmica)
+        document.getElementById('confettiButton').addEventListener('click', function () {
+            // Desabilita o botão durante o atraso
+            this.disabled = true;
+
+            // Animação de confete
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Reproduz o som do confete
+            var audio = document.getElementById('confettiSound');
+            audio.currentTime = 0; // Reinicia o áudio desde o início
+            audio.play();
+
+            // Redireciona para a página "home.html" após um pequeno atraso
+            setTimeout(function () {
+                window.location.href = "home.html";
+            }, 3000); // Atraso de 3 segundos para visualizar a animação
+        });
+
+        // Exemplo de animação de fade-in para elementos da página
+        window.onload = function () {
+            const cards = document.querySelectorAll('.card'); // Seleciona todos os elementos com a classe 'card'
+            cards.forEach(card => {
+                card.classList.add('visible'); // Adiciona a classe 'visible' para iniciar a animação
+            });
+        };
+
+        /*FUNÇÃO COPIAR CÓDIGO*/
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function () {
+                alert('Código copiado com sucesso!');
+            }, function (err) {
+                console.error('Falha ao copiar: ', err);
+            });
+        }
+    </script>
+
+    <!-- Biblioteca de confetes -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
 </body>
 </html>
