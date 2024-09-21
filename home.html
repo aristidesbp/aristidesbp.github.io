@@ -41,10 +41,10 @@
         /* Animação dos pontos se movendo */
         @keyframes moveParticles {
             from {
-                transform: translateY(0);
+                transform: translateY(100vh) translateX(0);
             }
             to {
-                transform: translateY(-2000px);
+                transform: translateY(-100vh) translateX(50px);
             }
         }
 
@@ -53,25 +53,45 @@
             width: 4px;
             height: 4px;
             left: 20%;
-            animation-duration: 10s;
+            animation-duration: 8s;
+            animation-delay: 0s;
         }
         .particle:nth-child(2) {
             width: 6px;
             height: 6px;
             left: 40%;
-            animation-duration: 12s;
+            animation-duration: 10s;
+            animation-delay: 1s;
         }
         .particle:nth-child(3) {
             width: 3px;
             height: 3px;
             left: 60%;
-            animation-duration: 8s;
+            animation-duration: 12s;
+            animation-delay: 2s;
         }
         .particle:nth-child(4) {
             width: 5px;
             height: 5px;
             left: 80%;
             animation-duration: 15s;
+            animation-delay: 3s;
+        }
+
+        /* Animação do texto */
+        h1 {
+            font-size: 2.5rem;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        /* Animação do texto se movendo suavemente */
+        @keyframes moveText {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
         }
 
         /* Navbar personalizada */
