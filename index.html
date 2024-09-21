@@ -9,164 +9,163 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Animação de texto e elementos com CSS -->
-    
-    
     <style>
-    /* Estilo para remover margens e preencher a tela inteira com o fundo */
-    body {
-        margin: 0;
-        padding: 0;
-        background: #0d0d0d; /* Cor de fundo principal, preto */
-        overflow: hidden; /* Oculta qualquer conteúdo que ultrapasse a altura da tela */
-        height: 100vh; /* Define a altura para 100% da viewport */
-        color: white; /* Define a cor do texto como branco */
-    }
-
-    /* Estilos para o fundo animado com partículas */
-    .particles {
-        position: absolute; /* Coloca o fundo em posição absoluta para preencher a tela */
-        width: 100%; /* Preenche 100% da largura da tela */
-        height: 100%; /* Preenche 100% da altura da tela */
-        top: 0; /* Inicia no topo da tela */
-        left: 0; /* Alinha à esquerda */
-        z-index: -1; /* Fica atrás do conteúdo principal */
-        background: radial-gradient(circle, #343a40, #000); /* Cria um gradiente radial de cinza escuro para preto */
-        overflow: hidden; /* Oculta qualquer conteúdo que ultrapasse os limites do elemento */
-    }
-
-    /* Estilo para as partículas (pontos brancos) */
-    .particle {
-        position: absolute; /* Posicionamento absoluto para cada partícula */
-        background-color: rgba(255, 255, 255, 0.7); /* Cor branca com opacidade de 70% */
-        border-radius: 50%; /* Torna as partículas circulares */
-        animation: moveParticles 10s linear infinite; /* Animação linear infinita com duração padrão de 10 segundos */
-    }
-
-    /* Animação das partículas movendo-se verticalmente */
-    @keyframes moveParticles {
-        from {
-            transform: translateY(0); /* Inicia na posição original */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Oculta barras de rolagem */
         }
-        to {
-            transform: translateY(-2000px); /* Move a partícula para cima (fora da tela) */
+
+        /* Background animado com bolhas coloridas */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            overflow: hidden;
+            z-index: -1;
         }
-    }
 
-    /* Definição do tamanho e velocidade para a primeira partícula */
-    .particle:nth-child(1) {
-        width: 4px;
-        height: 4px;
-        left: 20%; /* Posição horizontal da partícula (20% da largura) */
-        animation-duration: 10s; /* Duração da animação em 10 segundos */
-    }
-
-    /* Definição do tamanho e velocidade para a segunda partícula */
-    .particle:nth-child(2) {
-        width: 6px;
-        height: 6px;
-        left: 40%; /* Posição horizontal da partícula (40% da largura) */
-        animation-duration: 12s; /* Duração da animação em 12 segundos */
-    }
-
-    /* Definição do tamanho e velocidade para a terceira partícula */
-    .particle:nth-child(3) {
-        width: 3px;
-        height: 3px;
-        left: 60%; /* Posição horizontal da partícula (60% da largura) */
-        animation-duration: 8s; /* Duração da animação em 8 segundos */
-    }
-
-    /* Definição do tamanho e velocidade para a quarta partícula */
-    .particle:nth-child(4) {
-        width: 5px;
-        height: 5px;
-        left: 80%; /* Posição horizontal da partícula (80% da largura) */
-        animation-duration: 15s; /* Duração da animação em 15 segundos */
-    }
-
-    /* Estilo da barra de navegação */
-    .navbar {
-        background-color: #343a40; /* Cor de fundo escura da navbar */
-    }
-
-    /* Cor branca para o texto da navbar, incluindo a marca e links */
-    .navbar-brand, .nav-link, .dropdown-item {
-        color: #ffffff !important;
-    }
-
-    /* Efeito hover: muda a cor dos itens da navbar para amarelo (#ffc107) ao passar o mouse */
-    .navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
-        color: #ffc107 !important;
-    }
-
-    /* Define a largura dos campos de formulário da navbar */
-    .form-control {
-        width: 300px; /* Largura fixa de 300px */
-    }
-
-    /* Botão de Call to Action (CTA) */
-    .cta-btn {
-        padding: 15px 30px; /* Define o espaçamento interno do botão (15px no topo/baixo, 30px nas laterais) */
-        background-color: #007bff; /* Cor de fundo azul padrão do botão */
-        color: white; /* Texto em branco */
-        border-radius: 8px; /* Bordas arredondadas com raio de 8px */
-        text-align: center; /* Centraliza o texto dentro do botão */
-        font-size: 1.2rem; /* Define o tamanho da fonte para 1.2 vezes o tamanho padrão da root */
-        transition: background-color 0.3s; /* Transição suave de 0.3s na mudança de cor do fundo ao passar o mouse */
-        opacity: 0; /* Define a opacidade inicial como invisível */
-        animation: fadeInFromRight 4s forwards; /* Aplica a animação para o botão aparecer da direita para a esquerda ao longo de 4 segundos */
-    }
-
-    /* Efeito hover no botão CTA */
-    .cta-btn:hover {
-        background-color: #0056b3; /* Muda a cor do fundo para um azul mais escuro ao passar o mouse */
-        text-decoration: none; /* Remove o sublinhado do texto do botão ao passar o mouse */
-    }
-
-    /* Animação de fade-in (aparecimento gradual) da direita para a esquerda */
-    @keyframes fadeInFromRight {
-        from {
-            opacity: 0; /* Começa invisível */
-            transform: translateX(100%); /* Começa fora da tela, à direita */
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: rise 20s infinite ease-in-out;
         }
-        to {
-            opacity: 1; /* Torna-se totalmente visível */
-            transform: translateX(0); /* Volta para a posição original (dentro da tela) */
+
+        /* Diferentes tamanhos de bolhas */
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            background-color: rgba(255, 99, 132, 0.6); /* Rosa claro */
+            animation-duration: 18s;
         }
-    }
 
-    /* Animação de fade-in (aparecimento gradual) da esquerda para a direita */
-    @keyframes fadeInFromLeft {
-        from {
-            opacity: 0; /* Começa invisível */
-            transform: translateX(-100%); /* Começa fora da tela, à esquerda */
+        .bubble:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            left: 30%;
+            background-color: rgba(54, 162, 235, 0.6); /* Azul claro */
+            animation-duration: 25s;
         }
-        to {
-            opacity: 1; /* Torna-se totalmente visível */
-            transform: translateX(0); /* Volta para a posição original (dentro da tela) */
+
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            background-color: rgba(255, 206, 86, 0.6); /* Amarelo claro */
+            animation-duration: 12s;
         }
-    }
 
-    /* Confete */
-    .confetti {
-        position: fixed; /* O confete fica fixo em relação à tela, sempre visível */
-        top: 0; /* Começa no topo da tela */
-        left: 0; /* Alinhado à esquerda */
-        width: 100%; /* Preenche a largura da tela */
-        height: 100%; /* Preenche a altura da tela */
-        pointer-events: none; /* O confete não interfere na interação com outros elementos da página */
-        z-index: 9999; /* Garante que o confete fique na frente de todos os outros elementos */
-    }
-</style>
-    
-    
+        .bubble:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            left: 70%;
+            background-color: rgba(75, 192, 192, 0.6); /* Verde água */
+            animation-duration: 30s;
+        }
 
+        .bubble:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            left: 90%;
+            background-color: rgba(153, 102, 255, 0.6); /* Roxo claro */
+            animation-duration: 22s;
+        }
 
+        /* Animação de subida */
+        @keyframes rise {
+            0% {
+                bottom: -150px;
+                opacity: 0;
+                transform: translateX(0);
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: translateX(50px); /* Movimento horizontal */
+            }
+        }
 
+        /* Animação de texto e botões */
+        .animated-text {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 100px;
+            color: white;
+            opacity: 0;
+            animation: fadeInFromRight 2s forwards;
+        }
 
+        p {
+            text-align: center;
+            color: white;
+            opacity: 0;
+            animation: fadeInFromLeft 3s forwards;
+        }
 
+        .cta-btn {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+            opacity: 0;
+            animation: fadeInFromRight 4s forwards;
+        }
 
-                
+        .cta-btn:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+
+        /* Animações de entrada alternada */
+        @keyframes fadeInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Confete */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
 
