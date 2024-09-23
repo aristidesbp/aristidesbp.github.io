@@ -1,4 +1,4 @@
-<script>
+
         // Função de animação do confete
         function startConfetti() {
             const confettiSound = document.getElementById('confettiSound');
@@ -36,4 +36,3 @@
                 window.location.href = 'home.html';
             }, 5000); // Espera 5 segundos antes de redirecionar
         });
-    </script>
