@@ -12,10 +12,6 @@
         
         <p class="message" id="gameMessage">Prepare-se para o jogo!</p>
 
-
-        
-
-        
         <!-- Caixa de dados -->
         <div class="dice-box">
             <p>Jogador <span id="currentPlayer"></span>, é sua vez!</p>
@@ -30,7 +26,12 @@
         <!-- Alerta de resultado final -->
         <div id="winner" class="winner"></div>
     </div>
-    
+
+    <!-- Adicionando o som do tambor -->
+    <audio id="drumSound">
+        <source src="drum.mp3" type="audio/mp3">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
 
     <script src="js/script.js"></script>
 </body>
