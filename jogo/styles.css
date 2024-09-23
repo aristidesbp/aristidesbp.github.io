@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2C3E50;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    background-color: #34495E;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+}
+
+h1 {
+    font-size: 3rem;
+    color: gold;
+}
+
+.dice-box {
+    margin: 20px 0;
+}
+
+.dice {
+    font-size: 2rem;
+    background-color: white;
+    color: black;
+    padding: 15px;
+    margin: 5px;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: gold;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #F39C12;
+}
+
+.scoreboard {
+    margin-top: 20px;
+}
+
+.winner {
+    font-size: 2rem;
+    color: lime;
+    margin-top: 20px;
+}
