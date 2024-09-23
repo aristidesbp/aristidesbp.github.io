@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumanji Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1 id="game-title">Jumanji</h1>
+        <p id="game-message">Prepare-se para enfrentar os desafios da selva. Quantos jogadores irão arriscar suas vidas?</p>
+
+        <div class="config-container">
+            <label for="player-count">Quantos jogadores?</label>
+            <select id="player-count">
+                <option value="2">2 Jogadores</option>
+                <option value="3">3 Jogadores</option>
+                <option value="4">4 Jogadores</option>
+            </select>
+
+            <button id="start-game">Iniciar</button>
+        </div>
+    </div>
+
+    <!-- Carregar o som -->
+    <audio id="drum-sound" src="drum_sound.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
