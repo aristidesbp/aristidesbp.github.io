@@ -4,149 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jumanji Board Game</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-image: url('https://i.imgur.com/wfZ5J5E.jpg'); /* Imagem da selva ou madeira */
-            background-size: cover;
-            background-position: center;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Filtro escuro para melhor contraste */
-            z-index: 0;
-        }
-
-        .container {
-            text-align: center;
-            background-color: rgba(44, 62, 80, 0.9); /* Fundo com mais opacidade */
-            padding: 20px;
-            border-radius: 10px;
-            width: 450px;
-            border: 3px solid #8b4513; /* Moldura com cor de madeira */
-            box-shadow: 0 0 20px black;
-            z-index: 1; /* Para garantir que está acima do filtro escuro */
-            position: relative;
-        }
-
-        h1 {
-            font-size: 3rem;
-            color: #DAA520; /* Cor dourada */
-            font-family: 'IM Fell English SC', serif; /* Fonte estilo antiga ou aventureira */
-            text-shadow: 3px 3px 0px black;
-            margin-bottom: 15px;
-        }
-
-        .message {
-            font-size: 1.2rem;
-            font-style: italic;
-            color: #FFD700; /* Dourado para mistério */
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px black;
-        }
-
-        .dice-box {
-            margin: 20px 0;
-            background-color: #2c3e50;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8b4513; /* Moldura com cor de madeira */
-            position: relative;
-        }
-
-        .dice {
-            font-size: 2rem;
-            background-color: #fffacd; /* Amarelo pálido */
-            color: #2c3e50;
-            padding: 15px;
-            margin: 10px;
-            display: inline-block;
-            border-radius: 10px;
-            border: 2px solid #8b4513;
-            width: 60px;
-            height: 60px;
-            text-align: center;
-            transition: transform 0.2s; /* Animação suave */
-        }
-
-        .dice:hover {
-            transform: rotate(10deg); /* Gira levemente ao passar o mouse */
-        }
-
-        button {
-            padding: 12px 25px;
-            font-size: 1.2rem;
-            background-color: #8b4513; /* Cor de madeira */
-            border: none;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-            box-shadow: 0 5px 0px #5c3317;
-            margin-top: 20px;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        button:hover {
-            background-color: #a0522d; /* Cor mais clara ao passar o mouse */
-        }
-
-        button:active {
-            box-shadow: none;
-            transform: translateY(4px); /* Efeito de clique */
-        }
-
-        .scoreboard {
-            margin-top: 20px;
-            font-size: 1.1rem;
-            color: #fffacd; /* Cor dourada suave */
-        }
-
-        .winner {
-            font-size: 2rem;
-            color: limegreen;
-            margin-top: 20px;
-            text-shadow: 2px 2px 0px black;
-        }
-
-        /* Animação dos dados rolando */
-        .dice-rolling {
-            animation: roll 0.8s ease-in-out;
-        }
-
-        @keyframes roll {
-            0% { transform: rotate(0); }
-            25% { transform: rotate(90deg); }
-            50% { transform: rotate(180deg); }
-            75% { transform: rotate(270deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="styles2.css">
 </head>
 <body>
     <div class="container">
         <h1>Jumanji</h1>
         <p class="message" id="gameMessage">Prepare-se para o jogo!</p>
 
+
+        
+
+        
         <!-- Caixa de dados -->
         <div class="dice-box">
             <p>Jogador <span id="currentPlayer"></span>, é sua vez!</p>
@@ -161,78 +29,8 @@
         <!-- Alerta de resultado final -->
         <div id="winner" class="winner"></div>
     </div>
+    
 
-    <script>
-        // Perguntar quantos jogadores
-        let numPlayers = parseInt(prompt("Quantos jogadores irão participar?"));
-        while (isNaN(numPlayers) || numPlayers <= 0) {
-            numPlayers = parseInt(prompt("Insira um número válido de jogadores."));
-        }
-
-        // Inicializando variáveis
-        let players = [];
-        let scores = new Array(numPlayers).fill(0);
-        let currentPlayer = 0;
-        let gameEnded = false;
-
-        // Definir o jogador atual no início do jogo
-        document.getElementById("currentPlayer").innerText = currentPlayer + 1;
-
-        // Gerador de desafios estilo Jumanji
-        const challenges = [
-            "Macacos estão te rondando! Emita um leão para assustá-los.",
-            "Você encontrou um rio! Pule três vezes para atravessar.",
-            "Um leão se aproxima! Finja que está dormindo para escapar.",
-            "Serpentes cruzam seu caminho! Dê um passo para trás e avance novamente.",
-            "Um tigre está te perseguindo! Corra até a próxima sala e volte.",
-            "A selva está escura! Feche os olhos por 10 segundos para ajustar sua visão.",
-            "Os tambores estão batendo! Bata na mesa três vezes."
-        ];
-
-        // Função para rolar os dados
-        function rollDice() {
-            if (gameEnded) return;
-            
-            let dice1 = Math.floor(Math.random() * 6) + 1;
-            let dice2 = Math.floor(Math.random() * 6) + 1;
-
-            document.getElementById("dice1").innerText = dice1;
-            document.getElementById("dice2").innerText = dice2;
-
-            // Somar pontos
-            let totalPoints = dice1 + dice2;
-            scores[currentPlayer] += totalPoints;
-            document.getElementById("gameMessage").innerText = challenges[Math.floor(Math.random() * challenges.length)];
-            
-            updateScoreboard();
-            
-            if (scores[currentPlayer] >= 300) {
-                endGame();
-            } else {
-                // Alternar para o próximo jogador
-                currentPlayer = (currentPlayer + 1) % numPlayers;
-                document.getElementById("currentPlayer").innerText = currentPlayer + 1;
-            }
-        }
-
-        // Atualizar o placar
-        function updateScoreboard() {
-            let scoreboard = document.getElementById("scoreboard");
-            scoreboard.innerHTML = "";
-            for (let i = 0; i < numPlayers; i++) {
-                scoreboard.innerHTML += `<p>Jogador ${i + 1}: ${scores[i]} pontos</p>`;
-            }
-        }
-
-        // Terminar o jogo
-        function endGame() {
-            gameEnded = true;
-            document.getElementById("winner").innerText = `Jogador ${currentPlayer + 1} venceu! JUMANJI!`;
-            document.getElementById("rollDiceBtn").disabled = true;
-        }
-
-        // Evento de rolar dados
-        document.getElementById("rollDiceBtn").addEventListener("click", rollDice);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
