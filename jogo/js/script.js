@@ -1,3 +1,17 @@
+// Função para terminar o jogo e exibir o vídeo
+function endGame() {
+    gameEnded = true;
+    
+    // Ocultar a mensagem e desativar o botão
+    document.getElementById("rollDiceBtn").disabled = true;
+    document.getElementById("winner").innerText = "";  // Limpar mensagem anterior
+
+    // Exibir o vídeo no lugar da mensagem de Jumanji
+    const videoElement = document.getElementById("jumanjiVideo");
+    videoElement.style.display = "block";  // Tornar o vídeo visível
+    videoElement.play();  // Reproduzir o vídeo
+}
+
 // Perguntar quantos jogadores
 let numPlayers = parseInt(prompt("Quantos jogadores irão participar?"));
 while (isNaN(numPlayers) || numPlayers <= 0) {
