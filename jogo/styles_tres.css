@@ -1,0 +1,134 @@
+/* Remove espaçamentos padrão e ajusta o box model para todos os elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral do corpo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('https://i.imgur.com/wfZ5J5E.jpg'); /* Fundo com textura de selva ou madeira */
+    background-size: cover; /* Faz com que a imagem de fundo cubra toda a tela */
+    background-position: center; /* Centraliza a imagem de fundo */
+    color: white; /* Cor do texto padrão */
+    display: flex; /* Usado para centralizar os elementos */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Faz com que a altura da página seja 100% da tela */
+    overflow: hidden; /* Esconde barras de rolagem, caso apareçam */
+}
+
+/* Estilo da caixa principal que contém o conteúdo do jogo */
+.container {
+    text-align: center; /* Centraliza o conteúdo dentro da caixa */
+    background-color: rgba(44, 62, 80, 0.8); /* Fundo transparente para destacar o conteúdo sobre a imagem */
+    padding: 20px; /* Espaçamento interno da caixa */
+    border-radius: 10px; /* Arredonda os cantos da caixa */
+    width: 450px; /* Largura fixa da caixa */
+    border: 3px solid #8b4513; /* Borda com cor de madeira */
+    box-shadow: 0 0 20px black; /* Efeito de sombra ao redor da caixa */
+}
+
+/* Estilo do título principal (Jumanji) */
+h1 {
+    font-size: 3rem; /* Tamanho da fonte grande */
+    color: #DAA520; /* Cor dourada */
+    font-family: 'Impact', sans-serif; /* Fonte com estilo pesado, como no tema do jogo */
+    text-shadow: 2px 2px 0px black; /* Sombra preta para destacar o texto */
+    margin-bottom: 15px; /* Espaçamento inferior */
+}
+
+/* Estilo da mensagem inicial do jogo */
+.message {
+    font-size: 1.2rem; /* Tamanho da fonte menor */
+    font-style: italic; /* Estilo itálico para o texto */
+    color: #FFD700; /* Cor dourada que traz sensação de mistério */
+    margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+/* Caixa que contém os dados */
+.dice-box {
+    margin: 20px 0; /* Espaçamento vertical */
+    background-color: #2c3e50; /* Fundo azul escuro */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 10px; /* Arredonda os cantos da caixa */
+    border: 2px solid #8b4513; /* Borda com cor de madeira */
+}
+
+/* Estilo de cada dado */
+.dice {
+    font-size: 2rem; /* Tamanho grande para os números dos dados */
+    background-color: #fffacd; /* Amarelo pálido para o fundo */
+    color: #2c3e50; /* Texto azul escuro */
+    padding: 15px; /* Espaçamento interno */
+    margin: 10px; /* Espaçamento entre os dados */
+    display: inline-block; /* Coloca os dados lado a lado */
+    border-radius: 10px; /* Arredonda os cantos dos dados */
+    border: 2px solid #8b4513; /* Borda com cor de madeira */
+    width: 60px; /* Largura fixa para os dados */
+    height: 60px; /* Altura fixa para os dados */
+    text-align: center; /* Centraliza o número dentro do dado */
+}
+
+/* Estilo do botão de ação (lançar os dados) */
+button {
+    padding: 12px 25px; /* Tamanho e espaçamento do botão */
+    font-size: 1.2rem; /* Tamanho da fonte */
+    background-color: #8b4513; /* Cor de madeira para o botão */
+    border: none; /* Remove a borda padrão */
+    cursor: pointer; /* Muda o cursor para indicar que o botão é clicável */
+    color: white; /* Cor do texto do botão */
+    font-weight: bold; /* Texto em negrito */
+    border-radius: 5px; /* Arredonda os cantos do botão */
+    box-shadow: 0 5px 0px #5c3317; /* Sombra inferior que dá impressão de relevo */
+    margin-top: 20px; /* Espaçamento superior */
+}
+
+/* Estilo do botão ao passar o mouse */
+button:hover {
+    background-color: #a0522d; /* Cor mais clara quando o mouse está sobre o botão */
+}
+
+/* Estilo do botão ao ser pressionado */
+button:active {
+    box-shadow: none; /* Remove a sombra quando o botão é pressionado */
+    transform: translateY(4px); /* Move o botão levemente para baixo simulando um clique */
+}
+
+/* Estilo do placar que exibe as pontuações dos jogadores */
+.scoreboard {
+    margin-top: 20px; /* Espaçamento superior */
+    font-size: 1.1rem; /* Tamanho da fonte */
+    color: #fffacd; /* Cor dourada suave */
+}
+
+/* Estilo especial para quando há um vencedor */
+.winner {
+    font-size: 2rem; /* Tamanho grande para destacar o vencedor */
+    color: limegreen; /* Cor verde para o texto do vencedor */
+    margin-top: 20px; /* Espaçamento superior */
+    text-shadow: 2px 2px 0px black; /* Sombra preta para destacar o texto */
+}
+
+/* Animação para o título Jumanji balançar */
+@keyframes titleBounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+/* Efeito para o título Jumanji, que aplica a animação */
+#game-title {
+    animation: titleBounce 1s infinite alternate; /* Faz o título balançar continuamente */
+}
+
+/* Animação para o texto aparecer gradualmente */
+@keyframes fadeInText {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Efeito de fade-in para o texto da mensagem */
+#game-message {
+    animation: fadeInText 3s ease-in-out forwards; /* Aplica o efeito de aparecer aos poucos */
+}
