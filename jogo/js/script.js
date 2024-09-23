@@ -1,17 +1,3 @@
-// Função para terminar o jogo e exibir o vídeo
-function endGame() {
-    gameEnded = true;
-    
-    // Ocultar a mensagem e desativar o botão
-    document.getElementById("rollDiceBtn").disabled = true;
-    document.getElementById("winner").innerText = "";  // Limpar mensagem anterior
-
-    // Exibir o vídeo no lugar da mensagem de Jumanji
-    const videoElement = document.getElementById("jumanjiVideo");
-    videoElement.style.display = "block";  // Tornar o vídeo visível
-    videoElement.play();  // Reproduzir o vídeo
-}
-
 // Perguntar quantos jogadores
 let numPlayers = parseInt(prompt("Quantos jogadores irão participar?"));
 while (isNaN(numPlayers) || numPlayers <= 0) {
@@ -20,43 +6,49 @@ while (isNaN(numPlayers) || numPlayers <= 0) {
 
 // Inicializando variáveis
 let players = [];
-let scores = new Array(numPlayers).fill(100); // Jogadores começam com 100 pontos
+let scores = new Array(numPlayers).fill(100); // Cada jogador começa com 100 pontos
+let penalizedPlayers = new Array(numPlayers).fill(false); // Penalização de jogadores
 let currentPlayer = 0;
 let gameEnded = false;
 
-// Definir o jogador atual no início do jogo
+// Atualizar o jogador atual no início do jogo
 document.getElementById("currentPlayer").innerText = currentPlayer + 1;
 
-// Gerador de desafios estilo Jumanji
+// Gerador de prendas com rimas
 const challenges = [
-    // Prendas
-    "Macacos estão te rondando! Emita um leão para assustá-los.",
-    "Você encontrou um rio! Pule três vezes para atravessar.",
-    "Um leão se aproxima! Finja que está dormindo para escapar.",
-    "Serpentes cruzam seu caminho! Dê um passo para trás e avance novamente.",
-    "Um tigre está te perseguindo! Corra até a próxima sala e volte.",
-    "A selva está escura! Feche os olhos por 10 segundos para ajustar sua visão.",
-    "Os tambores estão batendo! Bata na mesa três vezes.",
-    "Você precisa beber um copo d'água!",
-    "Fique de uma perna só até o próximo turno!",
-    "Você está congelado até o próximo turno!",
-    "Sua mão está amarrada acima da cabeça!",
-    "Sua boca está dormente, fique com a língua para fora até achar um antídoto.",
-    
-    // Desafios adicionais
-    "Você encontrou um antídoto! Elimine uma penalidade.",
-    "Você encontrou um atalho! Avance 20 pontos.",
-    "Você achou uma armadilha! Perde 10 pontos.",
-    
-    // Itens para atrapalhar outros jogadores
-    "Você achou uma poção envenenada! Escolha um jogador para perder 20 pontos.",
-    "Você encontrou um laço! Escolha um jogador para pular o próximo turno.",
-    "Você encontrou uma maldição! Escolha um jogador para perder 10 pontos e ficar parado até o próximo turno."
+    "Macacos ao redor começam a bramar, imite um leão para os assustar!",
+    "Um rio apareceu à sua frente, pule três vezes para passar de repente!",
+    "Um leão está te encarando, finja dormir para ele ir se afastando.",
+    "Cuidado com a cobra que vem rastejando, dê um passo para trás e siga avançando.",
+    "Um tigre te persegue com muita pressão, corra até a sala e volte sem hesitação.",
+    "A selva está escura e cheia de tensão, feche os olhos por 10 segundos em concentração.",
+    "Os tambores soam alto e batem sem parar, bata na mesa três vezes para ajudar!"
 ];
+
+// Itens de ajuda e de punição
+const items = [
+    "Você encontrou um antídoto! Agora está imune à próxima prenda.",
+    "Você pode pular o próximo turno e descansar!",
+    "Você precisa beber um copo d'água e o próximo jogador perde a vez!",
+    "Fique congelado no lugar, até que outro jogador rolar!",
+    "Sua boca está dormente, com a língua de fora fique até a próxima volta ardente!",
+    "Com sua mão amarrada, até o próximo turno ela estará levantada!",
+    "Escolha um jogador para penalizar, ele perderá a vez sem reclamar!"
+];
+
+// Função para tocar o som de tambor
+function playDrumSound() {
+    const drumSound = document.getElementById("drumSound");
+    drumSound.play();
+}
 
 // Função para rolar os dados
 function rollDice() {
-    if (gameEnded) return;
+    if (gameEnded || penalizedPlayers[currentPlayer]) {
+        penalizedPlayers[currentPlayer] = false; // Reseta penalização após pular a vez
+        nextPlayer();
+        return;
+    }
     
     let dice1 = Math.floor(Math.random() * 6) + 1;
     let dice2 = Math.floor(Math.random() * 6) + 1;
@@ -68,41 +60,34 @@ function rollDice() {
     let totalPoints = dice1 + dice2;
     scores[currentPlayer] += totalPoints;
 
-    // Sorteia um desafio ou item
-    let challenge = challenges[Math.floor(Math.random() * challenges.length)];
-    document.getElementById("gameMessage").innerText = challenge;
+    // Tocar som de tambor antes da prenda aparecer
+    playDrumSound();
 
-    // Se o desafio envolve penalizar outro jogador
-    if (challenge.includes("Escolha um jogador")) {
-        penalizeOtherPlayer(challenge);
+    // Desafio ou item
+    let event = Math.random() < 0.7 ? challenges[Math.floor(Math.random() * challenges.length)] : items[Math.floor(Math.random() * items.length)];
+
+    // Se o evento penalizar outro jogador
+    if (event.includes("Escolha um jogador")) {
+        let penalizedPlayer = parseInt(prompt("Escolha o número do jogador que será penalizado (1 a " + numPlayers + "):")) - 1;
+        if (!isNaN(penalizedPlayer) && penalizedPlayer >= 0 && penalizedPlayer < numPlayers) {
+            penalizedPlayers[penalizedPlayer] = true; // Penaliza o jogador selecionado
+        }
     }
-    
+
+    document.getElementById("gameMessage").innerText = event;
     updateScoreboard();
     
     if (scores[currentPlayer] >= 300) {
         endGame();
     } else {
-        // Alternar para o próximo jogador
-        currentPlayer = (currentPlayer + 1) % numPlayers;
-        document.getElementById("currentPlayer").innerText = currentPlayer + 1;
+        nextPlayer();
     }
 }
 
-// Penalizar outro jogador
-function penalizeOtherPlayer(challenge) {
-    let playerToPenalize = parseInt(prompt(`Qual jogador você deseja penalizar? (1 a ${numPlayers})`)) - 1;
-    while (isNaN(playerToPenalize) || playerToPenalize < 0 || playerToPenalize >= numPlayers) {
-        playerToPenalize = parseInt(prompt(`Insira um número válido de jogador para penalizar. (1 a ${numPlayers})`)) - 1;
-    }
-
-    if (challenge.includes("perder 20 pontos")) {
-        scores[playerToPenalize] -= 20;
-    } else if (challenge.includes("pular o próximo turno")) {
-        // Implementar lógica para pular o turno do jogador
-        alert(`Jogador ${playerToPenalize + 1} perderá o próximo turno!`);
-    } else if (challenge.includes("perder 10 pontos")) {
-        scores[playerToPenalize] -= 10;
-    }
+// Alternar para o próximo jogador
+function nextPlayer() {
+    currentPlayer = (currentPlayer + 1) % numPlayers;
+    document.getElementById("currentPlayer").innerText = currentPlayer + 1;
 }
 
 // Atualizar o placar
@@ -117,8 +102,7 @@ function updateScoreboard() {
 // Terminar o jogo
 function endGame() {
     gameEnded = true;
-    document.getElementById("winner").innerText = `Jogador ${currentPlayer + 1} venceu! JUMANJI!`;
-    document.getElementById("rollDiceBtn").disabled = true;
+    document.getElementById("winner").innerText = `Jogador ${currentPlayer + 1} venceu!`;
 }
 
 // Evento de rolar dados
