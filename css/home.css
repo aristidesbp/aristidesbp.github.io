@@ -1,0 +1,101 @@
+/* Estilo para o background animado */
+body {
+    margin: 0;
+    padding: 0;
+    background: #0d0d0d; /* Cor de fundo */
+    overflow: hidden; /* Oculta barras de rolagem */
+    height: 100vh;
+    color: white; /* Cor do texto */
+}
+
+/* Estilos para o background animado com partículas */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Fica atrás do conteúdo */
+    background: radial-gradient(circle, #343a40, #000); /* Gradiente de fundo */
+    overflow: hidden; /* Oculta partes que saem do container */
+}
+
+.particle {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7); /* Cor das partículas */
+    border-radius: 50%; /* Formato redondo */
+    animation: moveParticles 10s linear infinite; /* Animação contínua */
+}
+
+/* Animação dos pontos se movendo */
+@keyframes moveParticles {
+    from {
+        transform: translateY(100vh) translateX(0); /* Começa fora da tela */
+    }
+    to {
+        transform: translateY(-100vh) translateX(50px); /* Move-se para cima */
+    }
+}
+
+/* Tamanho aleatório das partículas */
+.particle:nth-child(1) {
+    width: 4px;
+    height: 4px;
+    left: 20%;
+    animation-duration: 8s;
+    animation-delay: 0s;
+}
+.particle:nth-child(2) {
+    width: 6px;
+    height: 6px;
+    left: 40%;
+    animation-duration: 10s;
+    animation-delay: 1s;
+}
+.particle:nth-child(3) {
+    width: 3px;
+    height: 3px;
+    left: 60%;
+    animation-duration: 12s;
+    animation-delay: 2s;
+}
+.particle:nth-child(4) {
+    width: 5px;
+    height: 5px;
+    left: 80%;
+    animation-duration: 15s;
+    animation-delay: 3s;
+}
+
+/* Animação do texto */
+h1 {
+    font-size: 2.5rem; /* Tamanho do texto */
+    animation: moveText 3s ease-in-out infinite alternate; /* Animação de movimento */
+}
+
+/* Animação do texto se movendo suavemente */
+@keyframes moveText {
+    0% {
+        transform: translateY(0); /* Posição inicial */
+    }
+    100% {
+        transform: translateY(-20px); /* Movimenta para cima */
+    }
+}
+
+/* Navbar personalizada */
+.navbar {
+    background-color: #343a40; /* Cor escura da navbar */
+}
+
+.navbar-brand, .nav-link, .dropdown-item {
+    color: #ffffff !important; /* Cor do texto da navbar */
+}
+
+.navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
+    color: #ffc107 !important; /* Cor ao passar o mouse */
+}
+
+.form-control {
+    width: 300px; /* Largura do campo de pesquisa */
+}
