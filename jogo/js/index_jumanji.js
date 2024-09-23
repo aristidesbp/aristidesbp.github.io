@@ -1,3 +1,4 @@
+
 // Perguntar quantos jogadores
 let numPlayers = parseInt(prompt("Quantos jogadores irão participar?"));
 // Valida a entrada do número de jogadores, garantindo que seja um número válido e maior que 0
