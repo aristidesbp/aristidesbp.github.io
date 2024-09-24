@@ -7,8 +7,20 @@
     <link rel="stylesheet" href="index_jumanji.css">
 </head>
 <body>
-    <!-- Carregar o video jumanji.mp4-->
-    <!-- apos o video va para pagina jumanji.html-->
-  
+    <!-- tarefa1:  Carregar o video jumanji.mp4-->
+    <video id="jumanjiVideo" width="100%" height="auto" controls>
+        <source src="jumanji.mp4" type="video/mp4">
+        Seu navegador não suporta o elemento de vídeo.
+    </video>
+
+    <script>
+        // tarefa2:  após o vídeo, vá para a página jumanji.html
+        const video = document.getElementById('jumanjiVideo');
+
+        video.addEventListener('ended', function() {
+            window.location.href = 'jumanji.html';
+        });
+    </script>
 </body>
 </html>
+
