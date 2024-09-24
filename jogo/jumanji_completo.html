@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jumanji Game</title>
     <style>
-        /* Mesmos estilos anteriores */
         * {
             margin: 0;
             padding: 0;
@@ -27,18 +26,18 @@
 
         .container {
             text-align: center;
-            background-color: rgba(44, 62, 80, 0.8);
+            background-color: rgba(44, 62, 80, 0.8); /* Fundo transparente para dar efeito sobre a imagem */
             padding: 20px;
             border-radius: 10px;
             width: 450px;
-            border: 3px solid #8b4513;
+            border: 3px solid #8b4513; /* Moldura com cor de madeira */
             box-shadow: 0 0 20px black;
         }
 
         h1 {
             font-size: 3rem;
-            color: #DAA520;
-            font-family: 'Impact', sans-serif;
+            color: #DAA520; /* Cor dourada */
+            font-family: 'Impact', sans-serif; /* Fonte mais pesada */
             text-shadow: 2px 2px 0px black;
             margin-bottom: 15px;
         }
@@ -46,7 +45,7 @@
         .message {
             font-size: 1.2rem;
             font-style: italic;
-            color: #FFD700;
+            color: #FFD700; /* Dourado para dar sensação de mistério */
             margin-bottom: 20px;
         }
 
@@ -55,12 +54,12 @@
             background-color: #2c3e50;
             padding: 20px;
             border-radius: 10px;
-            border: 2px solid #8b4513;
+            border: 2px solid #8b4513; /* Moldura com cor de madeira */
         }
 
         .dice {
             font-size: 2rem;
-            background-color: #fffacd;
+            background-color: #fffacd; /* Amarelo pálido */
             color: #2c3e50;
             padding: 15px;
             margin: 10px;
@@ -75,7 +74,7 @@
         button {
             padding: 12px 25px;
             font-size: 1.2rem;
-            background-color: #8b4513;
+            background-color: #8b4513; /* Cor de madeira */
             border: none;
             cursor: pointer;
             color: white;
@@ -86,18 +85,18 @@
         }
 
         button:hover {
-            background-color: #a0522d;
+            background-color: #a0522d; /* Cor mais clara ao passar o mouse */
         }
 
         button:active {
             box-shadow: none;
-            transform: translateY(4px);
+            transform: translateY(4px); /* Efeito de clique */
         }
 
         .scoreboard {
             margin-top: 20px;
             font-size: 1.1rem;
-            color: #fffacd;
+            color: #fffacd; /* Cor dourada suave */
         }
 
         .winner {
@@ -141,8 +140,8 @@
         <div id="winner" class="winner"></div>
     </div>
 
-    <!-- Adicionando o vídeo com som ativado -->
-    <video id="video" autoplay>
+    <!-- Adicionando o vídeo -->
+    <video id="video" autoplay muted>
         <source src="jumanji.mp4" type="video/mp4">
         Seu navegador não suporta o elemento de vídeo.
     </video>
