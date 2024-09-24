@@ -17,11 +17,13 @@ document.getElementById("currentPlayer").innerText = currentPlayer + 1;
 const challenges = [
     "Macacos estão te rondando! Emita um leão para assustá-los.",
     "Você encontrou um rio! Pule três vezes para atravessar.",
-    "Um leão se aproxima! Finja que está dormindo para escapar.",
-    "Serpentes cruzam seu caminho! Dê um passo para trás e avance novamente.",
-    "Um tigre está te perseguindo! Corra até a próxima sala e volte.",
-    "A selva está escura! Feche os olhos por 10 segundos para ajustar sua visão.",
-    "Os tambores estão batendo! Bata na mesa três vezes."
+    "Um leão se aproxima! Finjir que  dormindo está, ate a proxima rodada se quizer escapar para escapar.",
+    "Serpentes cruzam seu caminho! picada venenoza levara, e com a linga para fora ate a proma rodada ficara!",
+    "Um tigre está te perseguindo! Corra para longi e voute sorinndo!",
+    "A selva escura está ! de olhos pfeichados ate a proxima rodad vc deve ficar",
+    "Os tambores estão batendo! suba em um lugar correndo!."
+    "um hipootamo esta vindo para ca ! entao congelado voce deve ficar"
+    
 ];
 
 // Função para rolar os dados
