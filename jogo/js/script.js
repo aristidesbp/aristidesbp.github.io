@@ -5,9 +5,9 @@ while (isNaN(numPlayers) || numPlayers <= 0) {
 }
 
 // Perguntar a pontuação necessária para ganhar
-let winningScore = parseInt(prompt("Quantos pontos um jogador deve alcançar para vencer?"));
+let winningScore = parseInt(prompt("Quantos pontos um jogador deve alcançar para ganhar?"));
 while (isNaN(winningScore) || winningScore <= 0) {
-    winningScore = parseInt(prompt("Insira um número válido de pontos para vencer."));
+    winningScore = parseInt(prompt("Insira um número válido de pontos para ganhar."));
 }
 
 // Inicializando variáveis
@@ -24,11 +24,11 @@ const challenges = [
     "Macacos estão te rondando! Emita um leão para assustá-los.",
     "Você encontrou um rio! Pule três vezes para atravessar.",
     "Um leão se aproxima! Finjir que dormindo está, até a próxima rodada se quiser escapar.",
-    "Serpentes cruzam seu caminho! picada venenosa levará, e com a língua para fora até a próxima rodada ficará!",
+    "Serpentes cruzam seu caminho! picada venenoza levara, e com a língua para fora até a próxima rodada ficará!",
     "Um tigre está te perseguindo! Corra para longe e volte sorrindo!",
     "A selva escura está! De olhos fechados até a próxima rodada você deve ficar.",
     "Os tambores estão batendo! Suba em um lugar correndo!",
-    "Um hipopótamo está vindo para cá! Então congelado você deve ficar."
+    "Um hipopótamo está vindo para cá! Então congelado você deve ficar!"
 ];
 
 // Função para rolar os dados
@@ -49,12 +49,18 @@ function rollDice() {
     updateScoreboard();
     
     if (scores[currentPlayer] >= winningScore) {
-        endGame();
+        showFinalChallenge();
     } else {
         // Alternar para o próximo jogador
         currentPlayer = (currentPlayer + 1) % numPlayers;
         document.getElementById("currentPlayer").innerText = currentPlayer + 1;
     }
+}
+
+// Mostrar o desafio final
+function showFinalChallenge() {
+    document.getElementById("gameMessage").innerText = "Após todos os pontos alcançar, para vencer o jogo seu nome deve gritar!";
+    gameEnded = true; // Apenas para impedir rolagens futuras
 }
 
 // Atualizar o placar
@@ -68,9 +74,7 @@ function updateScoreboard() {
 
 // Terminar o jogo
 function endGame() {
-    gameEnded = true;
     document.getElementById("winner").innerText = `Jogador ${currentPlayer + 1} venceu! JUMANJI!`;
-    document.getElementById("gameMessage").innerText = "Após todos os pontos alcançar, para vencer o jogo seu nome deve gritar!";
     document.getElementById("rollDiceBtn").disabled = true;
 }
 
