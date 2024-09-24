@@ -136,7 +136,239 @@
 
     <!-- Video para criar suspense -->
     <video id="video" controls>
+        <source src="<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumanji Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://i.imgur.com/wfZ5J5E.jpg'); /* Textura de madeira ou selva */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(44, 62, 80, 0.8); /* Fundo transparente */
+            padding: 20px;
+            border-radius: 10px;
+            width: 450px;
+            border: 3px solid #8b4513; /* Moldura com cor de madeira */
+            box-shadow: 0 0 20px black;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #DAA520; /* Cor dourada */
+            font-family: 'Impact', sans-serif;
+            text-shadow: 2px 2px 0px black;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #FFD700; /* Dourado */
+            margin-bottom: 20px;
+        }
+
+        .dice-box {
+            margin: 20px 0;
+            background-color: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8b4513;
+        }
+
+        .dice {
+            font-size: 2rem;
+            background-color: #fffacd; /* Amarelo pálido */
+            color: #2c3e50;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 10px;
+            border: 2px solid #8b4513;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            background-color: #8b4513; /* Cor de madeira */
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 5px 0px #5c3317;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #a0522d; /* Cor mais clara */
+        }
+
+        button:active {
+            box-shadow: none;
+            transform: translateY(4px); /* Efeito de clique */
+        }
+
+        .scoreboard {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #fffacd; /* Cor dourada suave */
+        }
+
+        .winner {
+            font-size: 2rem;
+            color: limegreen;
+            margin-top: 20px;
+            text-shadow: 2px 2px 0px black;
+        }
+
+        video {
+            display: none; /* Inicialmente o vídeo não aparece */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Jumanji</h1>
+        <p class="message" id="gameMessage">Prepare-se para o jogo!</p>
+
+        <div class="dice-box">
+            <p>Jogador <span id="currentPlayer"></span>, é sua vez!</p>
+            <div id="dice1" class="dice">0</div>
+            <div id="dice2" class="dice">0</div>
+            <button id="rollDiceBtn">Rolar Dados</button>
+        </div>
+
+        <div id="scoreboard" class="scoreboard"></div>
+        <div id="winner" class="winner"></div>
+    </div>
+
+    <!-- Video para criar suspense -->
+    <video id="video" controls>
         <source src="jumanji.mp4" type="video/mp4">
+        Seu navegador não suporta o elemento de vídeo.
+    </video>
+
+    <script>
+        // Perguntar quantos jogadores
+        let numPlayers = parseInt(prompt("Quantos jogadores irão participar?"));
+        while (isNaN(numPlayers) || numPlayers <= 0) {
+            numPlayers = parseInt(prompt("Insira um número válido de jogadores."));
+        }
+
+        // Perguntar quantos pontos para vencer
+        let winningScore = parseInt(prompt("Quantos pontos são necessários para vencer?"));
+        while (isNaN(winningScore) || winningScore <= 0) {
+            winningScore = parseInt(prompt("Insira um número válido de pontos para vencer."));
+        }
+
+        // Inicializando variáveis
+        let players = [];
+        let scores = new Array(numPlayers).fill(0);
+        let currentPlayer = 0;
+        let gameEnded = false;
+
+        document.getElementById("currentPlayer").innerText = currentPlayer + 1;
+
+        // Desafios estilo Jumanji
+        const challenges = [
+            "Macacos estão te rondando! Emita um leão para assustá-los.",
+            "Você encontrou um rio! Pule três vezes para atravessar.",
+            "Um leão se aproxima! Finja que está dormindo até a próxima rodada para escapar.",
+            "Serpentes cruzam seu caminho! Fique com a língua para fora até a próxima rodada!",
+            "Um tigre está te perseguindo! Corra e volte sorrindo!",
+            "A selva está escura! Fique de olhos fechados até a próxima rodada.",
+            "Os tambores estão batendo! Suba em um lugar alto correndo.",
+            "Um hipopótamo está vindo! Fique congelado para se salvar."
+        ];
+
+        // Função para rolar os dados
+        function rollDice() {
+            if (gameEnded) return;
+
+            // Rodar o vídeo com som
+            const video = document.getElementById("video");
+            video.style.display = "block";
+            video.play();
+
+            video.onended = () => {
+                video.style.display = "none";
+
+                // Rolar os dados após o vídeo terminar
+                let dice1 = Math.floor(Math.random() * 6) + 1;
+                let dice2 = Math.floor(Math.random() * 6) + 1;
+
+                document.getElementById("dice1").innerText = dice1;
+                document.getElementById("dice2").innerText = dice2;
+
+                // Somar pontos
+                let totalPoints = dice1 + dice2;
+                scores[currentPlayer] += totalPoints;
+                document.getElementById("gameMessage").innerText = challenges[Math.floor(Math.random() * challenges.length)];
+
+                updateScoreboard();
+
+                if (scores[currentPlayer] >= winningScore) {
+                    document.getElementById("gameMessage").innerText = 
+                        "Atingiu os pontos necessários! Para vencer o jogo, grite seu nome!";
+                    endGame();
+                } else {
+                    currentPlayer = (currentPlayer + 1) % numPlayers;
+                    document.getElementById("currentPlayer").innerText = currentPlayer + 1;
+                }
+            };
+        }
+
+        // Atualizar o placar
+        function updateScoreboard() {
+            let scoreboard = document.getElementById("scoreboard");
+            scoreboard.innerHTML = "";
+            for (let i = 0; i < numPlayers; i++) {
+                scoreboard.innerHTML += `<p>Jogador ${i + 1}: ${scores[i]} pontos</p>`;
+            }
+        }
+
+        // Terminar o jogo
+        function endGame() {
+            gameEnded = true;
+            document.getElementById("winner").innerText = `Jogador ${currentPlayer + 1} venceu! JUMANJI!`;
+            document.getElementById("rollDiceBtn").disabled = true;
+        }
+
+        // Evento de rolar dados
+        document.getElementById("rollDiceBtn").addEventListener("click", rollDice);
+    </script>
+</body>
+</html>" type="video/mp4">
         Seu navegador não suporta o elemento de vídeo.
     </video>
 
