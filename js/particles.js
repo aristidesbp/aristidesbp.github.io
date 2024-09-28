@@ -1,10 +1,17 @@
-// js/particles.js
+
+// particles.js [ vc fez esse ]
 document.addEventListener("DOMContentLoaded", function () {
-    // Carregar a particles do arquivo particles.html e inserir no contêiner
-    fetch("particles.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("particles-container").innerHTML = data;
+    fetch('particles.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
         })
-        .catch(error => console.error('Erro ao carregar a particles:', error));
+        .then(data => {
+            document.getElementById('particles').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
 });
