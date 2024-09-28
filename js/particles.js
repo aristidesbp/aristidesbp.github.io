@@ -1,5 +1,6 @@
 
 // particles.js [ vc fez esse ]
+
 document.addEventListener("DOMContentLoaded", function () {
     fetch('particles.html')
         .then(response => {
