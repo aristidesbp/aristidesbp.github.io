@@ -19,10 +19,10 @@
 
 /* Animação dos pontos se movendo */
 @keyframes moveParticles {
-    from {
+    0% {
         transform: translateY(100vh) translateX(0); /* Começa fora da tela */
     }
-    to {
+    100% {
         transform: translateY(-100vh) translateX(50px); /* Move-se para cima */
     }
 }
