@@ -1,0 +1,18 @@
+/* Estilos para o background animado com partículas */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Fica atrás do conteúdo */
+    background: radial-gradient(circle, #343a40, #000); /* Gradiente de fundo */
+    overflow: hidden; /* Oculta partes que saem do container */
+}
+
+.particle {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7); /* Cor das partículas */
+    border-radius: 50%; /* Formato redondo */
+    animation: moveParticles 10s linear infinite; /* Animação contínua */
+}
