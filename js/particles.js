@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         particle.style.left = `${Math.random() * 100}vw`; // Posição aleatória em X
 
         // Definir duração e atraso aleatórios para a animação
-        const duration = Math.random() * 5 + 5; // Duração entre 5s e 10s
+        const duration = Math.random() * 10 + 10; // velocidade,Duração entre 5s e 10s
         const delay = Math.random() * 5; // Atraso entre 0s e 5s
         particle.style.animationDuration = `${duration}s`;
         particle.style.animationDelay = `${delay}s`;
