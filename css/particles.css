@@ -17,6 +17,8 @@
     animation: moveParticles 10s linear infinite; /* Animação contínua */
 }
 
+
+
 /* Animação dos pontos se movendo */
 @keyframes moveParticles {
     0% {
@@ -26,6 +28,19 @@
         transform: translateY(-100vh) translateX(50px); /* Move-se para cima */
     }
 }
+
+/* Estilo para as partículas */
+.particle {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7); /* Cor das partículas */
+    border-radius: 50%; /* Formato redondo */
+    animation: moveParticles 20s linear infinite; /* Aumente o tempo de animação */
+}
+
+
+
+
+
 
 /* Tamanho aleatório das partículas */
 .particle:nth-child(1) {
@@ -56,3 +71,6 @@
     animation-duration: 15s;
     animation-delay: 3s;
 }
+
+
+
