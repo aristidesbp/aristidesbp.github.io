@@ -8,3 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error('Erro ao carregar a navbar:', error));
 });
+
+/* ADICIONE O CODIGO ABAIXAO NO CODIGO QUE DEJA IMPLEMENTAR O MENU:
+
+  <!-- Contêiner para a navbar carregada dinamicamente -->
+    <div id="navbar-container"></div>
+*/
