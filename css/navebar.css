@@ -14,3 +14,19 @@
 .form-control {
     width: 300px; /* Largura do campo de pesquisa */
 }
+
+
+
+/* Estilos específicos para o menu suspenso */
+.dropdown-menu {
+    background-color: #343a40; /* Cor de fundo do menu suspenso */
+}
+
+.dropdown-item {
+    color: #ffffff !important; /* Cor do texto do menu suspenso */
+}
+
+.dropdown-item:hover {
+    background-color: #495057; /* Cor de fundo ao passar o mouse */
+    color: #ffc107 !important; /* Cor do texto ao passar o mouse */
+}
