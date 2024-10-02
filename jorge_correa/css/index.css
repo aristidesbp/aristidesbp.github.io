@@ -1,0 +1,26 @@
+/* index.css */
+/* Estilo para o background */
+body {
+    margin: 0;
+    padding: 0;
+    background: #0d0d0d; /* Cor de fundo */
+    overflow: hidden; /* Oculta barras de rolagem */
+    height: 100vh;
+    color: white; /* Cor do texto */
+}
+
+/* Animação do texto */
+h1 {
+    font-size: 2.5rem; /* Tamanho do texto */
+    animation: moveText 3s ease-in-out infinite alternate; /* Animação de movimento */
+}
+
+/* Animação do texto se movendo suavemente */
+@keyframes moveText {
+    0% {
+        transform: translateY(0); /* Posição inicial */
+    }
+    100% {
+        transform: translateY(-20px); /* Movimenta para cima */
+    }
+}
