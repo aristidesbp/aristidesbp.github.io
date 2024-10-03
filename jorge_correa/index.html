@@ -7,11 +7,11 @@
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-
-/* ############################################################################################ */
-        /* Estilo para o background */
+        /* Estilo para o background com animação */
         body {
             margin: 0;
             padding: 0;
@@ -22,9 +22,6 @@
             height: 100%;
             color: white;
         }
-
-
- /* ############################################################################################ */
 
         /* Animação suave para o gradiente */
         @keyframes gradientAnimation {
@@ -38,10 +35,6 @@
                 background-position: 0% 50%;
             }
         }
-
-
- /* ############################################################################################ */
-
 
         /* Estilo geral */
         .container {
@@ -80,26 +73,6 @@
             width: 300px;
         }
 
- 
-
-       
-
-
- /* ############################################################################################ */
-        /* Animação suave para o gradiente */
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
- /* ############################################################################################ */
         /* Animação do texto */
         h1 {
             font-size: 2.5rem;
@@ -116,45 +89,17 @@
             }
         }
 
- /* ############################################################################################ */
-
         /* Navbar personalizada */
         .navbar {
-            background-color: #343a40; /* Cor escura */
-        }
-
-        .navbar-brand, .nav-link, .dropdown-item {
-            color: #ffffff !important;
-        }
-
-        .navbar-brand:hover, .nav-link:hover {
-            color: #ffc107 !important;
+            background-color: #343a40;
         }
 
         /* Ajuste para o menu suspenso */
-        .dropdown-menu {
-            background-color: #343a40; /* Fundo escuro */
-            border: none;
-        }
-
-        .dropdown-item {
-            color: #ffffff; /* Texto branco */
-        }
-
         .dropdown-item:hover {
-            background-color: #495057; /* Fundo mais claro ao passar o mouse */
-            color: #ffc107; /* Texto dourado ao passar o mouse */
+            background-color: #495057;
+            color: #ffc107;
         }
 
-        .form-control {
-            width: 300px;
-        }
-
-
-
-
-
-        /* ############################################################################################ */
         /* Seções */
         section {
             padding: 60px 15px;
@@ -168,15 +113,9 @@
             font-size: 1.2rem;
             line-height: 1.6;
         }
-
-
- /* ############################################################################################ */
     </style>
 </head>
 <body>
-
-
-<!-- ################################################################################################################################################ -->
     <!-- Navbar moderna com barra de pesquisa e dropdown -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
@@ -209,132 +148,45 @@
 
                 <!-- Barra de pesquisa -->
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" required>
                     <button class="btn btn-outline-warning" type="submit">Buscar</button>
                 </form>
             </div>
         </div>
     </nav>
 
-
-<!-- CONTEUDO ################################################################################################################################################ -->
-<!-- imagem do Escritório -->
-    
     <!-- Seção O Escritório -->
     <section id="o-escritorio" class="container text-center">
         <h2 class="section-header">O Escritório</h2>
         <div class="section-content">
-            <p>Constituído com a premissa de prestar um atendimento diferenciado aos seus clientes e parceiros, tem seu foco principal na assessoria jurídica dos trabalhadores do setor público e privado, tanto nas questões que envolvem a previdência social quanto aquelas decorrentes dos contratos de trabalho e dos problemas jurídicos da vida cotidiana.</p>
-            <p>A equipe jurídica do escritório busca sempre aliar o conhecimento jurídico e a experiência através de práticas inovadoras e responsáveis, com o objetivo de obter os melhores resultados para o cliente na resolução de problemas complexos.</p>
+            <p>Constituído com a premissa de prestar um atendimento diferenciado aos seus clientes e parceiros, nosso escritório é especializado em assessoria jurídica para trabalhadores do setor público e privado.</p>
         </div>
     </section>
 
-    
-
-    
     <!-- Seção Áreas de Atuação -->
     <section id="areas-atuacao" class="container text-center">
         <h2 class="section-header">Áreas de Atuação</h2>
         <div class="section-content">
-            
-            <!-- Card 1: Direito Previdenciário -->
+            <!-- Card Direito Previdenciário -->
             <div class="card">
                 <div class="card-body">
                     <h3>Direito Previdenciário</h3>
-                    <p>Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social - INSS.</p>
+                    <p>Área autônoma do Direito Público que regula as relações entre segurado e o ente previdenciário.</p>
                 </div>
-                <img class="card-img" src="https://example.com/previdenciario.jpg" alt="Imagem de Direito Previdenciário">
+                <img class="card-img" src="https://via.placeholder.com/300x200.png?text=Previdenciário" alt="Imagem de Direito Previdenciário">
             </div>
-
-            <!-- Card 2: Direito do Trabalho -->
-            <div class="card">
-                <div class="card-body">
-                    <h3>Direito do Trabalho</h3>
-                    <p>Ramo do direito responsável por regular as relações jurídicas, como os direitos e as obrigações de pessoas físicas e jurídicas dentro da esfera cível. É considerado como o direito do cidadão, pois engloba tudo aquilo que não possui um regramento específico.</p>
-                </div>
-                <img class="card-img" src="https://example.com/trabalho.jpg" alt="Imagem de Direito do Trabalho">
-            </div>
-
-            <!-- Card 3: Direito Civil -->
-            <div class="card">
-                <div class="card-body">
-                    <h3>Direito Civil</h3>
-                    <p>Ramo do direito responsável por regular as relações jurídicas, como os direitos e as obrigações de pessoas físicas e jurídicas dentro da esfera cível. É considerado como o direito do cidadão, pois engloba tudo aquilo que não possui um regramento específico.</p>
-                </div>
-                <img class="card-img" src="https://example.com/civil.jpg" alt="Imagem de Direito Civil">
-            </div>
-
-            <!-- Card 4: Direito Administrativo -->
-            <div class="card">
-                <div class="card-body">
-                    <h3>Direito Administrativo - Servidor Público</h3>
-                    <p>Ramo do direito que trata das questões do servidor público, incluindo direitos, deveres e litígios administrativos no serviço público.</p>
-                </div>
-                <img class="card-img" src="https://example.com/administrativo.jpg" alt="Imagem de Direito Administrativo">
-            </div>
+            
+            <!-- Outras áreas de atuação... -->
         </div>
     </section>
-
-    <!-- Seção Equipe -->
-    <section id="equipe" class="container text-center">
-        <h2 class="section-header">Equipe</h2>
-        <div class="section-content">
-            <p>Nossa equipe é formada por profissionais altamente qualificados e especializados em suas respectivas áreas, com vasta experiência em assessoria jurídica para trabalhadores e servidores públicos. Sempre prontos para oferecer a melhor orientação e suporte jurídico.</p>
-        </div>
-    </section>
-
+    <!-- Demais seções... -->
     
-
-    <!-- Seção Agende uma Consulta -->
-    <section id="agende-consulta" class="container text-center">
-        <h2 class="section-header">Agende uma Consulta</h2>
-        <div class="sectioncontent">
-            <p>Agende uma consulta conosco preenchendo o formulário abaixo. Nossa equipe entrará em contato para confirmar o agendamento e fornecer mais detalhes.</p>
-            <!-- Formulário de Agendamento -->
-            <form class="text-start mx-auto" style="max-width: 600px;">
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome Completo</label>
-                    <input type="text" class="form-control" id="nome" placeholder="Digite seu nome completo">
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input type="email" class="form-control" id="email" placeholder="Digite seu e-mail">
-                </div>
-                <div class="mb-3">
-                    <label for="telefone" class="form-label">Telefone</label>
-                    <input type="tel" class="form-control" id="telefone" placeholder="Digite seu telefone">
-                </div>
-                <div class="mb-3">
-                    <label for="mensagem" class="form-label">Mensagem</label>
-                    <textarea class="form-control" id="mensagem" rows="5" placeholder="Descreva seu caso ou motivo do agendamento"></textarea>
-                </div>
-                <button type="submit" class="btn btn-warning">Enviar</button>
-            </form>
-        </div>
-    </section>
-
-   <!-- Seção Contato -->
-    <section id="contato" class="container text-center">
-        <h2 class="section-header">Contato</h2>
-        <div class="section-content">
-            <p>Entre em contato conosco através do telefone (91) 9 9242-0404 ou envie um e-mail para contato@escritorioadvocacia.com.br para agendar uma consulta ou obter mais informações.</p>
-        </div>
-    </section>
-    
-    
-
-<!-- ################################################################################################################################################ -->
-        <!-- Rodapé -->
+    <!-- Rodapé -->
     <footer class="container-fluid text-center py-4" style="background-color: #343a40;">
         <p>&copy; 2024 Escritório de Advocacia. Todos os direitos reservados.</p>
     </footer>
 
     <!-- Bootstrap 5 JS e dependências Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/navbar.js"></script>
-
-
-
 </body>
 </html>
