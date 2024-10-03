@@ -1,37 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advogado Jorge</title> 
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Moderno com Background Animado</title>
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-    <!-- Link para o CSS separado -->
-    <!-- <link rel="stylesheet" href="css/index.css">  chama estilo para organiza os elementos da página -->
-    <link rel="stylesheet" href="css/nave.css"><!-- chama estilo para, organiza menu -->
-    <link rel="stylesheet" href="css/background_particles.css"><!-- chama estilo para , acrescentar luz no background  -->
-    
+
+    <style>
+        /* Estilo para o background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #426476, #343a40, #426476);
+            background-size: 300% 300%;
+            animation: gradientAnimation 10s ease infinite;
+            overflow: hidden;
+            height: 100vh;
+            color: white;
+        }
+
+        /* Animação suave para o gradiente */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Animação do texto */
+        h1 {
+            font-size: 2.5rem;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        /* Animação do texto se movendo suavemente */
+        @keyframes moveText {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Navbar personalizada */
+        .navbar {
+            background-color: #343a40; /* Cor escura */
+        }
+
+        .navbar-brand, .nav-link, .dropdown-item {
+            color: #ffffff !important;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #ffc107 !important;
+        }
+
+        /* Ajuste para o menu suspenso */
+        .dropdown-menu {
+            background-color: #343a40; /* Fundo escuro */
+            border: none;
+        }
+
+        .dropdown-item {
+            color: #ffffff; /* Texto branco */
+        }
+
+        .dropdown-item:hover {
+            background-color: #495057; /* Fundo mais claro ao passar o mouse */
+            color: #ffc107; /* Texto dourado ao passar o mouse */
+        }
+
+        .form-control {
+            width: 300px;
+        }
+    </style>
 </head>
 <body>
-   
-    <!-- Contêiner para particles carregada dinamicamente -->
-    <div id="particles"></div> 
-    
-    <!-- Contêiner para a navbar carregada dinamicamente -->
-    <div id="nave-container"></div>
+
+    <!-- Navbar moderna com barra de pesquisa e dropdown -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Minha Empresa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="jogo/index_jumanji.html">jumanji</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Mais
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="jogo/jumanji.html">jumanji1</a></li>
+                            <li><a class="dropdown-item" href="#">Opção 2</a></li>
+                            <li><a class="dropdown-item" href="#">Opção 3</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Separador</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Barra de pesquisa -->
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <button class="btn btn-outline-warning" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </nav>
 
     <!-- Conteúdo da página -->
     <div class="container text-center" style="padding-top: 100px;">
-        <h1 class="mt-5">JSeja bem vindo ao meu sites</h1>
+        <h1 class="mt-5">Bem-vindo ao nosso site com fundo animado!</h1>
+        <p>Aqui temos um menu moderno com efeito de luz suave no plano de fundo.</p>
     </div>
 
     <!-- Bootstrap 5 JS e dependências Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script> <!-- Link para o JS separado -->
-    <script src="js/nave.js"></script> <!-- Link para o JS separado -->
-    <script src="js/background_particles.js"></script> <!-- Link para o JS separado -->
-
 </body>
 </html>
