@@ -4,208 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escritório de Advocacia</title>
-
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        /* Estilo para o background */
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #0d0d0d, #426476, #0d0d0d);
-            background-size: 300% 300%;
-            animation: gradientAnimation 10s ease infinite;
-            overflow-x: hidden;
-            color: white;
-        }
-
-        /* Animação suave para o gradiente */
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Estilo geral */
-        .container {
-            padding-top: 100px;
-        }
-
-        .section-title {
-            margin: 50px 0;
-            color: #ffc107;
-        }
-
-        .card {
-            margin-bottom: 30px;
-            background-color: #2c3e50;
-            color: white;
-        }
-
-        .card-img {
-            max-height: 300px;
-            object-fit: cover;
-        }
-
-        .nav-link, .dropdown-item {
-            color: #ffffff !important;
-        }
-
-        .nav-link:hover, .dropdown-item:hover {
-            color: #ffc107 !important;
-        }
-
-        .dropdown-menu {
-            background-color: #343a40;
-        }
-
-        .form-control {
-            width: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="index.css"> <!-- Link para o CSS -->
 </head>
 <body>
+    <!-- Navbar moderna com barra de pesquisa e dropdown -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Escritório de Advocacia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<!-- Navbar moderna com barra de pesquisa e dropdown -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Escritório de Advocacia</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#o-escritorio">O Escritório</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#areas-atuacao">Áreas de Atuação</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#equipe">Equipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contato">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#agende-consulta">Agende uma Consulta</a>
+                    </li>
+                </ul>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">O Escritório</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#areasAtuacao">Áreas de Atuação</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Equipe</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contato</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Agende uma Consulta</a>
-                </li>
-            </ul>
-
-            <!-- Barra de pesquisa -->
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                <button class="btn btn-outline-warning" type="submit">Buscar</button>
-            </form>
-        </div>
-    </div>
-</nav>
-
-<!-- Conteúdo principal -->
-<div class="container text-center">
-    <h1 class="mt-5 section-title">Bem-vindo ao nosso Escritório de Advocacia</h1>
-    <p>Nosso escritório está comprometido em oferecer soluções jurídicas de qualidade para nossos clientes, com foco em diversas áreas do direito.</p>
-</div>
-
-<!-- Seção O Escritório -->
-<div class="container" id="escritorio">
-    <h2 class="section-title">O Escritório</h2>
-    <p>Constituído com a premissa de prestar um atendimento diferenciado aos seus clientes e parceiros, nosso escritório foca na assessoria jurídica de trabalhadores do setor público e privado, tanto nas questões envolvendo a previdência social quanto em contratos de trabalho e problemas jurídicos cotidianos.</p>
-    <p>Nossa equipe jurídica busca sempre aliar conhecimento jurídico e experiência, com práticas inovadoras e responsáveis, para obter os melhores resultados na resolução de problemas complexos.</p>
-</div>
-
-<!-- Seção Áreas de Atuação -->
-<div class="container" id="areasAtuacao">
-    <h2 class="section-title">Áreas de Atuação</h2>
-
-    <!-- Direito Previdenciário -->
-    <div class="card mb-4">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 class="card-title">Direito Previdenciário</h3>
-                    <p class="card-text">Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social (INSS).</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <img src="https://via.placeholder.com/300" class="img-fluid rounded-end card-img" alt="Direito Previdenciário">
+                <!-- Barra de pesquisa -->
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <button class="btn btn-outline-warning" type="submit">Buscar</button>
+                </form>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Direito do Trabalho -->
-    <div class="card mb-4">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 class="card-title">Direito do Trabalho</h3>
-                    <p class="card-text">Ramo do direito responsável por regular as relações jurídicas, como direitos e obrigações de pessoas físicas e jurídicas dentro da esfera civil. Engloba os direitos dos trabalhadores e empregadores.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <img src="https://via.placeholder.com/300" class="img-fluid rounded-end card-img" alt="Direito do Trabalho">
-            </div>
+    <!-- Seções -->
+    <section id="o-escritorio" class="container text-center">
+        <h2 class="section-header">O Escritório</h2>
+        <div class="section-content">
+            <p>Constituído com a premissa de prestar um atendimento diferenciado aos seus clientes e parceiros, tem seu foco principal na assessoria jurídica dos trabalhadores do setor público e privado, tanto nas questões que envolvem a previdência social quanto aquelas decorrentes dos contratos de trabalho e dos problemas jurídicos da vida cotidiana.</p>
+            <p>A equipe jurídica do escritório busca sempre aliar o conhecimento jurídico e a experiência através de práticas inovadoras e responsáveis, com o objetivo de obter os melhores resultados para o cliente na resolução de problemas complexos.</p>
         </div>
-    </div>
+    </section>
 
-    <!-- Direito Civil -->
-    <div class="card mb-4">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 class="card-title">Direito Civil</h3>
-                    <p class="card-text">Ramo do direito responsável por regular as relações jurídicas, como direitos e obrigações de pessoas físicas e jurídicas dentro da esfera civil. Considerado como o direito do cidadão, engloba tudo aquilo que não possui regramento específico.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <img src="https://via.placeholder.com/300" class="img-fluid rounded-end card-img" alt="Direito Civil">
-            </div>
+    <section id="areas-atuacao" class="container text-center">
+        <h2 class="section-header">Áreas de Atuação</h2>
+        <div class="section-content">
+            <h3>Direito Previdenciário</h3>
+            <p>Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social - INSS.</p>
+            <hr>
+            <h3>Direito do Trabalho</h3>
+            <p>Ramo do direito responsável por regular as relações jurídicas, como os direitos e as obrigações de pessoas físicas e jurídicas dentro da esfera cível. É considerado como o direito do cidadão, pois engloba tudo aquilo que não possui um regramento específico.</p>
+            <hr>
+            <h3>Direito Civil</h3>
+            <p>Ramo do direito responsável por regular as relações jurídicas, como os direitos e as obrigações de pessoas físicas e jurídicas dentro da esfera cível. É considerado como o direito do cidadão, pois engloba tudo aquilo que não possui um regramento específico.</p>
+            <hr>
+            <h3>Direito Administrativo - Servidor Público</h3>
+            <p>Ramo do direito que trata das questões do servidor público, incluindo direitos, deveres e litígios administrativos no serviço público.</p>
         </div>
-    </div>
+    </section>
 
-    <!-- Direito Imobiliário -->
-    <div class="card mb-4">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 class="card-title">Direito Imobiliário</h3>
-                    <p class="card-text">Assessoramos nossos clientes em todas as etapas do processo de legalização de imóveis, garantindo segurança jurídica nas transações e no cumprimento das normas aplicáveis ao setor imobiliário.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <img src="https://via.placeholder.com/300" class="img-fluid rounded-end card-img" alt="Direito Imobiliário">
-            </div>
+    <section id="equipe" class="container text-center">
+        <h2 class="section-header">Equipe</h2>
+        <div class="section-content">
+            <p>Nossa equipe é formada por profissionais altamente qualificados e especializados em suas respectivas áreas, com vasta experiência em assessoria jurídica para trabalhadores e servidores públicos. Sempre prontos para oferecer a melhor orientação e suporte jurídico.</p>
         </div>
-    </div>
+    </section>
 
-    <!-- Direito Penal -->
-    <div class="card mb-4">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 class="card-title">Direito Penal</h3>
-                    <p class="card-text">Atuamos em defesa dos direitos de nossos clientes em casos de violência doméstica, como a aplicação da Lei Maria da Penha, bem como na apresentação de queixas-crime e representações necessárias para a defesa penal.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <img src="https://via.placeholder.com/300" class="img-fluid rounded-end card-img" alt="Direito Penal">
-            </div>
+    <section id="contato" class="container text-center">
+        <h2 class="section-header">Contato</h2>
+        <div class="section-content">
+            <p>Entre em contato conosco através do telefone (91) 9 9242-0404 ou envie um e-mail para contato@escritorioadvocacia.com.br para agendar uma consulta ou obter mais informações.</p>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- Bootstrap 5 JS e dependências Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <section id="agende-consulta" class="container text-center">
+        <h2 class="section-header">Agende uma Consulta</h2>
+        <div class="section-content">
+            <p>Para agendar uma consulta com um de nossos advogados especializados, preencha o formulário abaixo ou entre em contato diretamente conosco. Estamos prontos para ajudar a resolver suas questões jurídicas.</p>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 JS e dependências Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="index.js"></script> <!-- Link para o JS -->
 </body>
 </html>
