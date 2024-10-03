@@ -1,4 +1,4 @@
-
+/* ############################################################################################ */
         /* Estilo para o background */
         body {
             margin: 0;
@@ -7,8 +7,12 @@
             background-size: 300% 300%;
             animation: gradientAnimation 10s ease infinite;
             overflow-x: hidden;
+            height: 100%;
             color: white;
         }
+
+
+ /* ############################################################################################ */
 
         /* Animação suave para o gradiente */
         @keyframes gradientAnimation {
@@ -22,6 +26,10 @@
                 background-position: 0% 50%;
             }
         }
+
+
+ /* ############################################################################################ */
+
 
         /* Estilo geral */
         .container {
@@ -60,6 +68,94 @@
             width: 300px;
         }
 
+ 
+
+       
+
+
+ /* ############################################################################################ */
+        /* Animação suave para o gradiente */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+ /* ############################################################################################ */
+        /* Animação do texto */
+        h1 {
+            font-size: 2.5rem;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        /* Animação do texto se movendo suavemente */
+        @keyframes moveText {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+ /* ############################################################################################ */
+
+        /* Navbar personalizada */
+        .navbar {
+            background-color: #343a40; /* Cor escura */
+        }
+
+        .navbar-brand, .nav-link, .dropdown-item {
+            color: #ffffff !important;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #ffc107 !important;
+        }
+
+        /* Ajuste para o menu suspenso */
+        .dropdown-menu {
+            background-color: #343a40; /* Fundo escuro */
+            border: none;
+        }
+
+        .dropdown-item {
+            color: #ffffff; /* Texto branco */
+        }
+
+        .dropdown-item:hover {
+            background-color: #495057; /* Fundo mais claro ao passar o mouse */
+            color: #ffc107; /* Texto dourado ao passar o mouse */
+        }
+
+        .form-control {
+            width: 300px;
+        }
 
 
 
+
+
+        /* ############################################################################################ */
+        /* Seções */
+        section {
+            padding: 60px 15px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+
+ /* ############################################################################################ */
