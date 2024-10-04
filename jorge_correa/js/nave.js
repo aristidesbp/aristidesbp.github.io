@@ -1,3 +1,10 @@
+/* ADICIONE O CODIGO ABAIXAO NO CODIGO QUE DEJA IMPLEMENTAR O MENU:
+
+  <!-- Contêiner para a navbar carregada dinamicamente -->
+    <div id="navbar-container"></div>
+*/
+
+
 // js/nave.js
 document.addEventListener("DOMContentLoaded", function () {
     // Carregar a nave do arquivo nave.html e inserir no contêiner
@@ -9,8 +16,16 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error('Erro ao carregar a navbar:', error));
 });
 
-/* ADICIONE O CODIGO ABAIXAO NO CODIGO QUE DEJA IMPLEMENTAR O MENU:
 
-  <!-- Contêiner para a navbar carregada dinamicamente -->
-    <div id="navbar-container"></div>
-*/
+
+/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+
