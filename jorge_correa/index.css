@@ -1,47 +1,28 @@
 body {
-    background-color: white; /* Fundo para branco */
-    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center; /* Centraliza o texto */
+    background-color: white; /* Fundo branco */
 }
-nav {
-    background-color: #333;
-    padding: 10px;
-    text-align: center;
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os cards se movam para a próxima linha */
+    justify-content: center; /* Centraliza os cards */
 }
-nav a {
-    color: white;
-    padding: 14px 20px;
-    text-decoration: none;
-    display: inline-block;
+
+/* Para centralizar os cards um embaixo do outro em dispositivos móveis */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column; /* Coloca os cards em coluna no modo mobile */
+    }
 }
-nav a:hover {
-    background-color: #ddd;
-    color: black;
+
+/* Mostrar o botão do menu */
+.menu-button {
+    display: block; /* Garante que o botão do menu esteja visível */
 }
-.image-container {
-    text-align: center;
-    margin-top: 20px;
-}
-.content {
-    padding: 20px;
-}
-.card {
-    display: inline-block;
-    width: 30%;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    text-align: center;
-}
-.contact {
-    margin-top: 20px;
-}
-.contact button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-.contact button:hover {
-    background-color: #45a049;
-}
+
+/* Outras regras CSS podem ir aqui */
