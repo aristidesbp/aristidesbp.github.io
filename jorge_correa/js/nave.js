@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("nave.html")
         .then(response => response.text())
         .then(data => {
-            document.getElementById("navbar-container").innerHTML = data;
+            document.getElementById("nave-container").innerHTML = data;
         })
-        .catch(error => console.error('Erro ao carregar a navbar:', error));
+        .catch(error => console.error('Erro ao carregar a nave:', error));
 });
 
 
