@@ -1,7 +1,7 @@
 /* ADICIONE O CODIGO ABAIXAO NO CODIGO QUE DEJA IMPLEMENTAR O MENU:
 
   <!-- Contêiner para a navbar carregada dinamicamente -->
-    <div id="navbar-container"></div>
+    <div id="nave-container"></div>
 */
 
 
