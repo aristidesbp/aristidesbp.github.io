@@ -4,55 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Página</title>
-    <style>
-        body {
-            background-color: white; /* Alteração: Fundo para branco */
-            font-family: Arial, sans-serif;
-        }
-        nav {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .image-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .content {
-            padding: 20px;
-        }
-        .card {
-            display: inline-block;
-            width: 30%;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-            text-align: center;
-        }
-        .contact {
-            margin-top: 20px;
-        }
-        .contact button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .contact button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/style.css"> <!-- Link para o CSS -->
 </head>
 <body>
     <!-- Menu de navegação -->
@@ -62,7 +14,7 @@
         <a href="#contact">Contato</a>
     </nav>
 
-    <!-- Alteração: Imagem abaixo do menu de navegação -->
+    <!-- Imagem abaixo do menu de navegação -->
     <div class="image-container">
         <img src="imag/jorge.jpg" alt="Imagem de Jorge" style="width:50%; height:auto;">
     </div>
@@ -72,7 +24,7 @@
         <h1>Bem-vindo ao Meu Site</h1>
         <p>Este é um exemplo de página web com algumas seções. Abaixo estão os nossos serviços principais:</p>
         
-        <!-- Cards mantidos no conteúdo -->
+        <!-- Cards -->
         <div class="card">
             <h3>Serviço 1</h3>
             <p>Descrição do serviço 1.</p>
@@ -92,10 +44,12 @@
         <h2>Contato</h2>
         <p>Entre em contato conosco pelo telefone ou e-mail abaixo.</p>
         
-        <!-- Alteração: Remover formulário (somente esta parte foi removida) -->
+        <!-- Remover formulário -->
         
-        <!-- Alteração: Adicionar botão abaixo de Contato -->
-        <button>Enviar Mensagem</button>
+        <!-- Botão abaixo de Contato -->
+        <button id="sendMessage">Enviar Mensagem</button>
     </div>
+
+    <script src="scripts/script.js"></script> <!-- Link para o JavaScript -->
 </body>
 </html>
