@@ -1,4 +1,30 @@
+.card {
+  /* Estilização básica para os cards */
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 15px;
+  color: #ffffff;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
 
+/* Card 1 com degradê em tons de azul */
+.card-blue {
+  background: linear-gradient(45deg, #3a7bd5, #00d2ff); /* Degradê de azul escuro para azul claro */
+}
+
+/* Card 2 com degradê em tons de verde */
+.card-green {
+  background: linear-gradient(45deg, #11998e, #38ef7d); /* Degradê de verde escuro para verde claro */
+}
+
+/* Card 3 com degradê em tons de cinza */
+.card-gray {
+  background: linear-gradient(45deg, #bdc3c7, #2c3e50); /* Degradê de cinza claro para cinza escuro */
+}
 
  /* ############################################################################################ */
 
