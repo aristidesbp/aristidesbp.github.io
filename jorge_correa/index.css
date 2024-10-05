@@ -1,3 +1,41 @@
+/* Estilos para o menu de navegação */
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Estilos para a seção de contato */
+#contact {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+#contact h2 {
+    color: #333;
+}
+
+#contact p {
+    color: #666;
+}
+
 /* Reset padrão */
 * {
     margin: 0;
