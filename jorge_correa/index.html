@@ -3,136 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Site sobre diversas áreas do Direito. Informações detalhadas sobre Direito Previdenciário, Direito do Trabalho, Direito Civil e Direito Administrativo.">
-    <title>Áreas do Direito</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Estilos básicos para a estrutura */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            margin: 0;
-        }
-
-        /* Estilo dos cards */
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 20px;
-        }
-
-        .card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 15px;
-            width: 300px;
-            text-align: center;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-
-        .card-body h3 {
-            margin-top: 0;
-            font-size: 1.2em;
-            color: #333;
-        }
-
-        .card-body p {
-            color: #666;
-            font-size: 0.95em;
-            line-height: 1.4;
-        }
-
-        /* Estilo do rodapé */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <meta name="description" content="Página de Direito com várias áreas como Direito Previdenciário, Trabalho, Civil e Administrativo.">
+    <meta name="author" content="Seu Nome">
+    <meta name="keywords" content="Direito, Direito Previdenciário, Direito do Trabalho, Direito Civil, Direito Administrativo">
+    <title>Página de Direito</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- Cabeçalho da página -->
     <header>
-        <h1>Áreas do Direito</h1>
-        <p>Conheça as principais áreas do Direito e suas aplicações no dia a dia.</p>
+        <h1>Áreas de Atuação no Direito</h1>
     </header>
+    <main>
+        <div class="card-container">
+            <!-- Card 1: Direito Previdenciário -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Direito Previdenciário</h3>
+                    <p>Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social - INSS.</p>
+                </div>
+                <img class="card-img" src="imag/previdenciario.jpg" alt="Imagem de Direito Previdenciário">
+            </div>
 
-    <!-- Conteúdo dos cards -->
-    <div class="container">
-        <!-- Card 1: Direito Previdenciário -->
-        <div class="card">
-            <img src="imag/previdenciario.jpg" alt="Imagem de Direito Previdenciário">
-            <div class="card-body">
-                <h3>Direito Previdenciário</h3>
-                <p>Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social - INSS.</p>
+            <!-- Card 2: Direito do Trabalho -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Direito do Trabalho</h3>
+                    <p>Ramo do direito responsável por regular as relações jurídicas entre trabalhadores e empregadores, garantindo direitos e deveres para ambas as partes.</p>
+                </div>
+                <img class="card-img" src="imag/trabalho.jpg" alt="Imagem de Direito do Trabalho">
+            </div>
+
+            <!-- Card 3: Direito Civil -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Direito Civil</h3>
+                    <p>Regula as relações jurídicas entre pessoas e entidades, envolvendo direitos e obrigações na esfera privada e cível.</p>
+                </div>
+                <img class="card-img" src="imag/civil.jpg" alt="Imagem de Direito Civil">
+            </div>
+
+            <!-- Card 4: Direito Administrativo -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Direito Administrativo</h3>
+                    <p>Trata das questões relacionadas ao servidor público e à administração pública, regulando direitos, deveres e responsabilidades no serviço público.</p>
+                </div>
+                <img class="card-img" src="imag/administrativo.jpg" alt="Imagem de Direito Administrativo">
             </div>
         </div>
-
-        <!-- Card 2: Direito do Trabalho -->
-        <div class="card">
-            <img src="imag/trabalho.jpg" alt="Imagem de Direito do Trabalho">
-            <div class="card-body">
-                <h3>Direito do Trabalho</h3>
-                <p>Ramo do direito responsável por regular as relações jurídicas entre empregadores e empregados, assegurando direitos e deveres de ambos no ambiente de trabalho.</p>
-            </div>
-        </div>
-
-        <!-- Card 3: Direito Civil -->
-        <div class="card">
-            <img src="imag/civil.jpg" alt="Imagem de Direito Civil">
-            <div class="card-body">
-                <h3>Direito Civil</h3>
-                <p>Ramo do direito que regula as relações jurídicas entre pessoas físicas e jurídicas, abrangendo questões como contratos, obrigações, direitos de propriedade e de família.</p>
-            </div>
-        </div>
-
-        <!-- Card 4: Direito Administrativo -->
-        <div class="card">
-            <img src="imag/administrativo.jpg" alt="Imagem de Direito Administrativo">
-            <div class="card-body">
-                <h3>Direito Administrativo - Servidor Público</h3>
-                <p>Ramo do direito que trata das questões do servidor público, incluindo direitos, deveres e litígios administrativos no serviço público.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Rodapé da página -->
+    </main>
     <footer>
-        <p>&copy; 2024 Áreas do Direito. Todos os direitos reservados.</p>
+        <p>© 2024 - Seu Nome. Todos os direitos reservados.</p>
     </footer>
+    <script src="index.js"></script>
 </body>
 </html>
