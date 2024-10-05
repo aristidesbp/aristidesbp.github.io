@@ -1,90 +1,138 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escritório de Advocacia</title>
+    <meta name="description" content="Site sobre diversas áreas do Direito. Informações detalhadas sobre Direito Previdenciário, Direito do Trabalho, Direito Civil e Direito Administrativo.">
+    <title>Áreas do Direito</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos básicos para a estrutura */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Arquivo CSS externo -->
-    <link rel="stylesheet" href="index.css">
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        /* Estilo dos cards */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            width: 300px;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-body h3 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .card-body p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        /* Estilo do rodapé */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Escritório de Advocacia</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#o-escritorio">O Escritório</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#areas-atuacao">Áreas de Atuação</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#equipe">Equipe</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#agende-consulta">Agende uma Consulta</a></li>
-                </ul>
-                <!-- Barra de pesquisa -->
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                    <button class="btn btn-outline-warning" type="submit">Buscar</button>
-                </form>
+    <!-- Cabeçalho da página -->
+    <header>
+        <h1>Áreas do Direito</h1>
+        <p>Conheça as principais áreas do Direito e suas aplicações no dia a dia.</p>
+    </header>
+
+    <!-- Conteúdo dos cards -->
+    <div class="container">
+        <!-- Card 1: Direito Previdenciário -->
+        <div class="card">
+            <img src="imag/previdenciario.jpg" alt="Imagem de Direito Previdenciário">
+            <div class="card-body">
+                <h3>Direito Previdenciário</h3>
+                <p>Área autônoma do Direito Público que garante que a Seguridade Social seja respeitada, regulando as relações entre segurado e o ente previdenciário, no caso do Brasil, o Instituto Nacional de Seguridade Social - INSS.</p>
             </div>
         </div>
-    </nav>
 
-    <!-- Seções -->
-    <section id="o-escritorio" class="container text-center">
-        <h2 class="section-header">O Escritório</h2>
-        <div class="section-content">
-            <p>Constituído com a premissa de prestar um atendimento diferenciado aos seus clientes e parceiros, tem seu foco principal na assessoria jurídica dos trabalhadores do setor público e privado...</p>
+        <!-- Card 2: Direito do Trabalho -->
+        <div class="card">
+            <img src="imag/trabalho.jpg" alt="Imagem de Direito do Trabalho">
+            <div class="card-body">
+                <h3>Direito do Trabalho</h3>
+                <p>Ramo do direito responsável por regular as relações jurídicas entre empregadores e empregados, assegurando direitos e deveres de ambos no ambiente de trabalho.</p>
+            </div>
         </div>
-    </section>
 
-    <section id="areas-atuacao" class="container text-center">
-        <h2 class="section-header">Áreas de Atuação</h2>
-        <div class="section-content">
-            <div class="card"><div class="card-body"><h3>Direito Previdenciário</h3><p>Área autônoma do Direito Público...</p></div><img class="card-img" src="https://example.com/previdenciario.jpg" alt="Imagem de Direito Previdenciário"></div>
-            <div class="card"><div class="card-body"><h3>Direito do Trabalho</h3><p>Ramo do direito responsável...</p></div><img class="card-img" src="https://example.com/trabalho.jpg" alt="Imagem de Direito do Trabalho"></div>
+        <!-- Card 3: Direito Civil -->
+        <div class="card">
+            <img src="imag/civil.jpg" alt="Imagem de Direito Civil">
+            <div class="card-body">
+                <h3>Direito Civil</h3>
+                <p>Ramo do direito que regula as relações jurídicas entre pessoas físicas e jurídicas, abrangendo questões como contratos, obrigações, direitos de propriedade e de família.</p>
+            </div>
         </div>
-    </section>
 
-    <section id="equipe" class="container text-center">
-        <h2 class="section-header">Equipe</h2>
-        <div class="section-content">
-            <p>Nossa equipe é formada por profissionais altamente qualificados e especializados...</p>
+        <!-- Card 4: Direito Administrativo -->
+        <div class="card">
+            <img src="imag/administrativo.jpg" alt="Imagem de Direito Administrativo">
+            <div class="card-body">
+                <h3>Direito Administrativo - Servidor Público</h3>
+                <p>Ramo do direito que trata das questões do servidor público, incluindo direitos, deveres e litígios administrativos no serviço público.</p>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <section id="agende-consulta" class="container text-center">
-        <h2 class="section-header">Agende uma Consulta</h2>
-        <form class="text-start mx-auto" style="max-width: 600px;">
-            <div class="mb-3"><label for="nome" class="form-label">Nome Completo</label><input type="text" class="form-control" id="nome" placeholder="Digite seu nome completo"></div>
-            <div class="mb-3"><label for="email" class="form-label">E-mail</label><input type="email" class="form-control" id="email" placeholder="Digite seu e-mail"></div>
-            <div class="mb-3"><label for="telefone" class="form-label">Telefone</label><input type="tel" class="form-control" id="telefone" placeholder="Digite seu telefone"></div>
-            <div class="mb-3"><label for="mensagem" class="form-label">Mensagem</label><textarea class="form-control" id="mensagem" rows="5" placeholder="Descreva seu caso ou motivo do agendamento"></textarea></div>
-            <button type="submit" class="btn btn-warning">Enviar</button>
-        </form>
-    </section>
-
-    <section id="contato" class="container text-center">
-        <h2 class="section-header">Contato</h2>
-        <div class="section-content">
-            <p>Entre em contato conosco através do telefone (91) 9 9242-0404...</p>
-        </div>
-    </section>
-
-    <!-- Rodapé -->
-    <footer class="container-fluid text-center py-4" style="background-color: #343a40;">
-        <p>&copy; 2024 Escritório de Advocacia. Todos os direitos reservados.</p>
+    <!-- Rodapé da página -->
+    <footer>
+        <p>&copy; 2024 Áreas do Direito. Todos os direitos reservados.</p>
     </footer>
-
-    <!-- Bootstrap 5 JS e dependências -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Arquivo JS externo -->
-    <script src="index.js"></script>
 </body>
 </html>
