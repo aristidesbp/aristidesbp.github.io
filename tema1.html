@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Criar uma Página Web</title>
+    <style>
+        /* Define o estilo básico do corpo da página */
+        body {
+            margin: 0; /* Remove a margem padrão da página */
+            font-family: Arial, sans-serif; /* Define a fonte padrão */
+            line-height: 1.6; /* Ajusta a altura da linha para melhorar a legibilidade */
+            padding-top: 80px; /* Adiciona um preenchimento ao topo do corpo para que o conteúdo não fique atrás do cabeçalho fixo */
+        }
+
+        /* Estiliza o cabeçalho */
+        header {
+            background: #333; /* Define a cor de fundo do cabeçalho como cinza escuro */
+            color: #fff; /* Define a cor do texto como branco */
+            padding: 10px 0; /* Adiciona espaçamento acima e abaixo do cabeçalho */
+            text-align: center; /* Centraliza o conteúdo do cabeçalho */
+            position: fixed; /* Mantém o cabeçalho fixo no topo da página */
+            top: 0; /* Fixa o cabeçalho no topo da janela */
+            width: 100%; /* Faz com que o cabeçalho ocupe toda a largura da janela */
+            z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+        }
+
+        /* Remove o estilo de lista padrão do menu de navegação */
+        nav ul {
+            list-style: none; /* Remove marcadores da lista */
+            padding: 0; /* Remove o preenchimento da lista */
+            margin: 0; /* Remove a margem da lista */
+        }
+
+        /* Estiliza os itens da lista do menu de navegação */
+        nav ul li {
+            display: inline; /* Coloca os itens da lista em linha */
+            margin: 0 10px; /* Adiciona espaço entre os itens da lista */
+        }
+
+        /* Estiliza os links de navegação */
+        nav a {
+            color: #fff; /* Define a cor do texto dos links como branco */
+            text-decoration: none; /* Remove o sublinhado dos links */
+            font-weight: bold; /* Adiciona negrito ao texto dos links */
+        }
+
+        /* Estiliza as seções da página */
+        section {
+            padding: 20px; /* Adiciona espaçamento interno nas seções */
+            margin: 80px 20px; /* Adiciona espaçamento externo nas seções e espaço extra no topo para evitar sobreposição do menu fixo */
+            background: #f4f4f4; /* Define a cor de fundo das seções como cinza claro */
+            border-radius: 5px; /* Adiciona cantos arredondados às seções */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Adiciona uma sombra sutil às seções */
+            opacity: 0; /* Inicialmente torna as seções invisíveis */
+            transform: translateY(20px); /* Move as seções 20px para baixo antes da animação */
+            transition: all 0.5s ease; /* Define uma transição suave de meio segundo para opacidade e posição */
+        }
+
+        /* Classe aplicada às seções que aparecerão com animação */
+        .fade-in {
+            opacity: 1; /* Torna as seções visíveis */
+            transform: translateY(0); /* Move as seções para sua posição original */
+        }
+
+        /* Estiliza o rodapé da página */
+        footer {
+            text-align: center; /* Centraliza o texto do rodapé */
+            padding: 10px 0; /* Adiciona espaçamento acima e abaixo do rodapé */
+            background: #333; /* Define a cor de fundo do rodapé como cinza escuro */
+            color: #fff; /* Define a cor do texto do rodapé como branco */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Como Criar uma Página Web</h1>
+        <nav>
+            <ul>
+                <li><a href="#introducao">Introdução</a></li>
+                <li><a href="#html">HTML</a></li>
+                <li><a href="#css">CSS</a></li>
+                <li><a href="#js">JavaScript</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="introducao" class="fade-in">
+        <h2>Introdução</h2>
+        <p>Este tutorial irá guiá-lo na criação de uma página web simples usando HTML, CSS e JavaScript.</p>
+    </section>
+
+    <section id="html" class="fade-in">
+        <h2>HTML</h2>
+        <p>HTML (HyperText Markup Language) é a linguagem de marcação padrão para criar páginas web.</p>
+        <code>
+            &lt;!DOCTYPE html&gt;<br>
+            &lt;html lang="pt-BR"&gt;<br>
+            &lt;head&gt;<br>
+            &nbsp;&nbsp;&lt;title&gt;Minha Página&lt;/title&gt;<br>
+            &lt;/head&gt;<br>
+            &lt;body&gt;<br>
+            &nbsp;&nbsp;&lt;h1&gt;Olá, Mundo!&lt;/h1&gt;<br>
+            &lt;/body&gt;<br>
+            &lt;/html&gt;
+        </code>
+    </section>
+
+    <section id="css" class="fade-in">
+        <h2>CSS</h2>
+        <p>CSS (Cascading Style Sheets) é utilizado para estilizar a página web.</p>
+        <code>
+            body {<br>
+            &nbsp;&nbsp;background-color: lightblue;<br>
+            &nbsp;&nbsp;font-family: Arial, sans-serif;<br>
+            }<br>
+            h1 {<br>
+            &nbsp;&nbsp;color: navy;<br>
+            &nbsp;&nbsp;text-align: center;<br>
+            }
+        </code>
+    </section>
+
+    <section id="js" class="fade-in">
+        <h2>JavaScript</h2>
+        <p>JavaScript é uma linguagem de programação que permite adicionar interatividade à sua página web.</p>
+        <code>
+            function saudacao() {<br>
+            &nbsp;&nbsp;alert("Olá, Bem-vindo à minha página!");<br>
+            }<br>
+            saudacao();
+        </code>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Tutorial de Criar Página Web</p>
+    </footer>
+
+    <script>
+        // Aguarda 1 segundo para começar a mostrar as seções
+        window.onload = function() {
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('fade-in');
+                }, index * 1000); // 1 segundo entre cada seção
+            });
+        };
+    </script>
+</body>
+</html>

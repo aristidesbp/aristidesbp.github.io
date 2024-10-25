@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Criar uma Página Web</title>
+    <style>
+        /* #################################### */
+        /* ######### Estilo geral ############# */
+        /* #################################### */
+        .container {
+            padding-top: 100px; 
+        }
+
+        .section-title {
+            margin: 50px 0; 
+            color: #ffc107;
+        }
+
+        .form-control {
+            width: 300px;
+        }
+
+        /* ####################################### */
+        /* ###### Estilo para o background ####### */
+        /* ####################################### */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0d0d0d, #426476, #0d0d0d);
+            background-size: 300% 300%;
+            animation: gradientAnimation 10s ease infinite;
+            overflow-x: hidden;
+            height: 100%;
+            color: white;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveText {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Navbar personalizada */
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .nav-link, .dropdown-item {
+            color: #ffffff !important;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #ffc107 !important;
+        }
+
+        .dropdown-menu {
+            background-color: #343a40;
+            border: none;
+        }
+
+        .dropdown-item {
+            color: #ffffff;
+        }
+
+        .dropdown-item:hover {
+            background-color: #495057;
+            color: #ffc107;
+        }
+
+        section {
+            padding: 60px 15px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Animação de texto e botões */
+        .animated-text {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 100px;
+            color: white;
+            opacity: 0;
+            animation: fadeInFromRight 2s forwards;
+        }
+
+        p {
+            text-align: center;
+            color: white;
+            opacity: 0;
+            animation: fadeInFromLeft 3s forwards;
+        }
+
+        .cta-btn {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+            opacity: 0;
+            animation: fadeInFromRight 4s forwards;
+        }
+
+        .cta-btn:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes fadeInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Como Criar uma Página Web</h1>
+        <nav>
+            <ul class="navbar">
+                <li><a href="#introducao" class="nav-link">Introdução</a></li>
+                <li><a href="#html" class="nav-link">HTML</a></li>
+                <li><a href="#css" class="nav-link">CSS</a></li>
+                <li><a href="#js" class="nav-link">JavaScript</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="introducao" class="animated-text">
+        <h2>Introdução</h2>
+        <p>Este tutorial irá guiá-lo na criação de uma página web simples usando HTML, CSS e JavaScript.</p>
+    </section>
+
+    <section id="html" class="fade-in">
+        <h2>HTML</h2>
+        <p>HTML (HyperText Markup Language) é a linguagem de marcação padrão para criar páginas web.</p>
+        <code>
+            &lt;!DOCTYPE html&gt;<br>
+            &lt;html lang="pt-BR"&gt;<br>
+            &lt;head&gt;<br>
+            &nbsp;&nbsp;&lt;title&gt;Minha Página&lt;/title&gt;<br>
+            &lt;/head&gt;<br>
+            &lt;body&gt;<br>
+            &nbsp;&nbsp;&lt;h1&gt;Olá, Mundo!&lt;/h1&gt;<br>
+            &lt;/body&gt;<br>
+            &lt;/html&gt;
+        </code>
+    </section>
+
+    <section id="css" class="fade-in">
+        <h2>CSS</h2>
+        <p>CSS (Cascading Style Sheets) é utilizado para estilizar a página web.</p>
+        <code>
+            body {<br>
+            &nbsp;&nbsp;background-color: lightblue;<br>
+            &nbsp;&nbsp;font-family: Arial, sans-serif;<br>
+            }<br>
+            h1 {<br>
+            &nbsp;&nbsp;color: navy;<br>
+            &nbsp;&nbsp;text-align: center;<br>
+            }
+        </code>
+    </section>
+
+    <section id="js" class="fade-in">
+        <h2>JavaScript</h2>
+        <p>JavaScript é uma linguagem de programação que permite adicionar interatividade à sua página web.</p>
+        <code>
+            function saudacao() {<br>
+            &nbsp;&nbsp;alert("Olá, Bem-vindo à minha página!");<br>
+            }<br>
+            saudacao();
+        </code>
+    </section>
+
+    <button id="cta-btn" class="cta-btn">Clique aqui para mais!</button>
+
+    <footer>
+        <p>&copy; 2024 Tutorial de Criar Página Web</p>
+    </footer>
+
+    <audio id="confettiSound" src="confetti.mp3"></audio>
+    
+    <script>
+        // Função de animação do confete
+        function startConfetti() {
+            const confettiSound = document.getElementById('confettiSound'); // Obtém o som de confete
+            confettiSound.play(); // Reproduz o som
+
+            var duration = 5 * 1000; // Duração da animação
+            var end = Date.now() + duration; // Tempo de término
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame); // Chama a função repetidamente
+                }
+            }());
+        }
+
+        // Ação do botão
+        document.getElementById('cta-btn').addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            startConfetti(); // Inicia a animação do confete
+
+            setTimeout(function() {
+                window.location.href = 'passo_ii/home.html'; // Redireciona após 5 segundos
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

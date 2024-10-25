@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Web Moderna</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* #################################### */
+        /* ####### Estilos Gerais ########### */
+        /* #################################### */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #0d0d0d;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Background Canvas */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* ########## Menu Responsivo ########## */
+        nav {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 400;
+            font-size: 18px;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        /* ######### Seções e Títulos ########## */
+        section {
+            text-align: center;
+            margin-top: 120px;
+            padding: 60px 20px;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffc107;
+        }
+
+        section p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            display: block;
+            color: #ffc107;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+
+        /* ######## Botão de Ação ######### */
+        .cta-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .cta-btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animações de Fade */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas para fundo animado -->
+    <canvas></canvas>
+
+    <!-- Menu -->
+    <nav>
+        <ul>
+            <li><a href="#introducao">Introdução</a></li>
+            <li><a href="#html">HTML</a></li>
+            <li><a href="#css">CSS</a></li>
+            <li><a href="#js">JavaScript</a></li>
+        </ul>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <section id="introducao" class="fade-in">
+        <h2>Introdução</h2>
+        <p>Este tutorial irá guiá-lo na criação de uma página web simples usando HTML, CSS e JavaScript.</p>
+    </section>
+
+    <section id="html" class="fade-in">
+        <h2>HTML</h2>
+        <p>HTML (HyperText Markup Language) é a linguagem de marcação padrão para criar páginas web.</p>
+        <code>
+            &lt;!DOCTYPE html&gt;<br>
+            &lt;html lang="pt-BR"&gt;<br>
+            &lt;head&gt;<br>
+            &nbsp;&nbsp;&lt;title&gt;Minha Página&lt;/title&gt;<br>
+            &lt;/head&gt;<br>
+            &lt;body&gt;<br>
+            &nbsp;&nbsp;&lt;h1&gt;Olá, Mundo!&lt;/h1&gt;<br>
+            &lt;/body&gt;<br>
+            &lt;/html&gt;
+        </code>
+    </section>
+
+    <section id="css" class="fade-in">
+        <h2>CSS</h2>
+        <p>CSS (Cascading Style Sheets) é utilizado para estilizar a página web.</p>
+        <code>
+            body {<br>
+            &nbsp;&nbsp;background-color: lightblue;<br>
+            &nbsp;&nbsp;font-family: Arial, sans-serif;<br>
+            }<br>
+            h1 {<br>
+            &nbsp;&nbsp;color: navy;<br>
+            &nbsp;&nbsp;text-align: center;<br>
+            }
+        </code>
+    </section>
+
+    <section id="js" class="fade-in">
+        <h2>JavaScript</h2>
+        <p>JavaScript é uma linguagem de programação que permite adicionar interatividade à sua página web.</p>
+        <code>
+            function saudacao() {<br>
+            &nbsp;&nbsp;alert("Olá, Bem-vindo à minha página!");<br>
+            }<br>
+            saudacao();
+        </code>
+    </section>
+
+    <button id="cta-btn" class="cta-btn">Clique aqui para mais!</button>
+
+    <footer>
+        <p>&copy; 2024 Tutorial de Criar Página Web</p>
+    </footer>
+
+    <!-- Script para o canvas animado -->
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Partículas
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x + this.size > canvas.width || this.x - this.size < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y + this.size > canvas.height || this.y - this.size < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        // Inicializar Partículas
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < 100; i++) {
+                let size = Math.random() * 5;
+                let x = Math.random() * (canvas.width - size * 2) + size;
+                let y = Math.random() * (canvas.height - size * 2) + size;
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#ffffff';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Animação das Partículas
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0,canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+
+        // Redimensionar canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init(); // Reinicia as partículas após redimensionar
+        });
+
+        // Iniciar animação
+        init();
+        animate();
+
+        // Função de animação do confete
+        function startConfetti() {
+            const confettiSound = document.getElementById('confettiSound'); // Obtém o som de confete
+            confettiSound.play(); // Reproduz o som
+
+            var duration = 5 * 1000; // Duração da animação
+            var end = Date.now() + duration; // Tempo de término
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame); // Chama a função repetidamente
+                }
+            }());
+        }
+
+        // Ação do botão
+        document.getElementById('cta-btn').addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            startConfetti(); // Inicia a animação do confete
+
+            setTimeout(function() {
+                window.location.href = 'passo_ii/home.html'; // Redireciona após 5 segundos
+            }, 5000);
+        });
+    </script>
+    <audio id="confettiSound" src="caminho/para/o/som_do_confete.mp3"></audio>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Aristides</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            margin: 20px 0;
+        }
+
+        section {
+            margin: 40px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .project {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form input, 
+        .contact-form textarea {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .contact-form button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Portfólio de Aristides</h1>
+    <p>Desenvolvedor Web e Gestor de Tráfego Pago</p>
+</header>
+
+<div class="container">
+
+    <section id="sobre-mim">
+        <h2>Sobre Mim</h2>
+        <p>Sou formado em Análise e Desenvolvimento de Sistemas, com experiência em desenvolvimento web e marketing digital. Meu foco é entender as necessidades do cliente e criar soluções eficazes.</p>
+    </section>
+
+    <section id="projetos">
+        <h2>Projetos</h2>
+        <div class="project">
+            <h3>Projeto 1: Aplicativo de Tarefas</h3>
+            <p>Descrição breve do projeto e tecnologias usadas.</p>
+            <a href="link-para-o-projeto">Veja o Projeto</a>
+        </div>
+        <div class="project">
+            <h3>Projeto 2: Website de Vendas</h3>
+            <p>Descrição breve do projeto e tecnologias usadas.</p>
+            <a href="link-para-o-projeto">Veja o Projeto</a>
+        </div>
+    </section>
+
+    <section id="servicos">
+        <h2>Serviços</h2>
+        <p>Ofereço serviços de desenvolvimento web, gestão de tráfego pago e marketing digital.</p>
+    </section>
+
+    <section id="depoimentos">
+        <h2>Depoimentos</h2>
+        <p>"Aristides é um profissional excepcional e sempre entrega projetos de alta qualidade." - Cliente Satisfeito</p>
+    </section>
+
+    <section id="contato">
+        <h2>Contato</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Seu Nome" required>
+            <input type="email" placeholder="Seu Email" required>
+            <textarea rows="5" placeholder="Sua Mensagem" required></textarea>
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+    </section>
+
+</div>
+
+</body>
+</html>

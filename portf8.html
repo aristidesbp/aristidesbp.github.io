@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Aristides - Estilizado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eaeaea;
+            color: #333;
+        }
+
+        header {
+            background: #3f51b5;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            animation: slideIn 1s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            margin: 20px 0;
+        }
+
+        section {
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        .project {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            transition: transform 0.3s;
+        }
+
+        .project img {
+            width: 200px;
+            height: 150px;
+            border-radius: 5px;
+            margin-right: 20px;
+            transition: transform 0.3s;
+        }
+
+        .project:hover img {
+            transform: scale(1.1);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #3f51b5;
+            border-radius: 5px;
+        }
+
+        .contact-form button {
+            padding: 10px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #303f9f;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Portfólio de Aristides</h1>
+    <p>Desenvolvedor Web e Gestor de Tráfego Pago</p>
+</header>
+
+<div class="container">
+
+    <section id="sobre-mim">
+        <h2>Sobre Mim</h2>
+        
+
+<p>Sou formado em Análise e Desenvolvimento de Sistemas, com experiência em desenvolvimento web e marketing digital. Meu foco é entender as necessidades do cliente e criar soluções eficazes.</p>
+    </section>
+
+    <section id="projetos">
+        <h2>Projetos</h2>
+        <div class="project">
+            <img src="imagens/04.jpg" alt="Projeto 4">
+            <div>
+                <h3>Projeto 4: Aplicativo de Gestão</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+                <a href="link-para-o-projeto">Veja o Projeto</a>
+            </div>
+        </div>
+        <div class="project">
+            <img src="imagens/05.jpg" alt="Projeto 5">
+            <div>
+                <h3>Projeto 5: Plataforma de Ensino</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+                <a href="link-para-o-projeto">Veja o Projeto</a>
+            </div>
+        </div>
+        <div class="project">
+            <img src="imagens/06.jpg" alt="Projeto 6">
+            <div>
+                <h3>Projeto 6: Blog Pessoal</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+                <a href="link-para-o-projeto">Veja o Projeto</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos">
+        <h2>Serviços</h2>
+        <p>Ofereço serviços de desenvolvimento web, gestão de tráfego pago e marketing digital.</p>
+    </section>
+
+    <section id="depoimentos">
+        <h2>Depoimentos</h2>
+        <p>"Aristides é um profissional excepcional e sempre entrega projetos de alta qualidade." - Cliente Satisfeito</p>
+    </section>
+
+    <section id="contato">
+        <h2>Contato</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Seu Nome" required>
+            <input type="email" placeholder="Seu Email" required>
+            <textarea rows="5" placeholder="Sua Mensagem" required></textarea>
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+    </section>
+
+</div>
+
+</body>
+</html>

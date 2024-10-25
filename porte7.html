@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio - Animação Inicial</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0d0d0d;
+            color: #fff;
+            overflow: hidden; /* Impede a rolagem durante a animação */
+        }
+
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff3e00, #ffcc00);
+        }
+
+        .content {
+            display: none; /* Esconde o conteúdo inicialmente */
+            padding: 20px;
+        }
+
+        .project {
+            margin: 20px 0;
+        }
+
+        .project img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, textarea {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+</head>
+<body>
+    <div class="animation-container" id="animation-container">
+        <h1>Bem-vindo ao meu Portfólio</h1>
+    </div>
+
+    <div class="content" id="content">
+        <section id="sobre">
+            <h2>Sobre Mim</h2>
+            <p>Sou um desenvolvedor web apaixonado por criar soluções inovadoras e impactantes.</p>
+        </section>
+        
+        <section id="projetos">
+            <h2>Projetos</h2>
+            <div class="project">
+                <img src="imagens/01.jpg" alt="Projeto 1">
+                <h3>Projeto 1</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+            </div>
+            <div class="project">
+                <img src="imagens/02.jpg" alt="Projeto 2">
+                <h3>Projeto 2</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+            </div>
+            <div class="project">
+                <img src="imagens/03.jpg" alt="Projeto 3">
+                <h3>Projeto 3</h3>
+                <p>Descrição breve do projeto e tecnologias usadas.</p>
+            </div>
+            <!-- Adicione mais projetos conforme necessário -->
+        </section>
+        
+        <section id="contato">
+            <h2>Contato</h2>
+            <form>
+                <input type="text" placeholder="Seu Nome" required>
+                <input type="email" placeholder="Seu Email" required>
+                <textarea placeholder="Sua Mensagem" required></textarea>
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        // Animação inicial
+        gsap.from("#animation-container h1", {
+            scale: 0,
+            duration: 2,
+            ease: "bounce.out",
+        });
+
+        // Após 10 segundos, esconde a animação e mostra o conteúdo
+        setTimeout(() => {
+            gsap.to("#animation-container", {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    document.getElementById("animation-container").style.display = 'none'; // Esconde o contêiner da animação
+                    document.getElementById("content").style.display = 'block'; // Mostra o conteúdo
+                    gsap.from("#content", {
+                        opacity: 0,
+                        duration: 1,
+                        delay: 0.5
+                    });
+                }
+            });
+        }, 10000);
+    </script>
+</body>
+</html>
