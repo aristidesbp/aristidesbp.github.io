@@ -3,66 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AristidesBP</title>
-<link rel="stylesheet" href="assets/css/index.css">
+<title>Portfólio de Cursos - Aristides Barbosa Pontes</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  background: #f1f1f1;
+  margin: 0;
+}
+
+/* Header/Blog Title */
+.header {
+  padding: 30px;
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+.header p {
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Responsive columns */
+.leftcolumn, .rightcolumn {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Two-column layout */
+@media (min-width: 800px) {
+  .leftcolumn {   
+    float: left;
+    width: 75%;
+  }
+  .rightcolumn {
+    float: left;
+    width: 25%;
+  }
+}
+
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+/* Make top navigation responsive */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+}
+</style>
 </head>
 <body>
 
 <div class="header">
-  <h1>Meu Site</h1>
-  <p>Redimensione a janela do navegador para ver o efeito.</p>
+  <h1>Portfólio de Cursos</h1>
+  <p>Bem-vindo ao portfólio de Aristides Barbosa Pontes</p>
 </div>
 
 <div class="topnav">
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#" style="float:right">Link</a>
+  <a href="#">Início</a>
+  <a href="#">Sobre Mim</a>
+  <a href="#">Cursos</a>
+  <a href="#">Contato</a>
 </div>
 
 <div class="row">
   <div class="leftcolumn">
     <div class="card">
-      <h2>TÍTULO</h2>
-      <h5>Descrição do título, 7 de dezembro de 2017</h5>
-      <div class="fakeimg" style="height:200px;">Imagem</div>
-      <p>Algum texto...</p>
-      <p>Não há culpa em quem realiza um trabalho sem propósito malicioso, animado por tarefas e atividades.</p>
+      <h2>Aristides Barbosa Pontes</h2>
+      <h5>Desenvolvedor e Educador em Tecnologia</h5>
+      <div class="fakeimg" style="height:200px;">Imagem do Aristides</div>
+      <p>Sou Aristides Barbosa Pontes, especialista em Desenvolvimento Web, Mobile e Gestão de Tráfego Pago. Aqui você encontra meu portfólio de cursos, projetos e soluções para ajudar você a dominar o mundo da tecnologia.</p>
     </div>
     <div class="card">
-      <h2>TÍTULO</h2>
-      <h5>Descrição do título, 2 de setembro de 2017</h5>
-      <div class="fakeimg" style="height:200px;">Imagem</div>
-      <p>Algum texto...</p>
-      <p>Não há culpa em quem realiza um trabalho sem propósito malicioso, animado por tarefas e atividades.</p>
+      <h2>Cursos em Destaque</h2>
+      <h5>Aprenda e cresça com os cursos mais procurados</h5>
+      <div class="fakeimg" style="height:200px;">Imagem do Curso</div>
+      <h3>Desenvolvimento Web para Iniciantes</h3>
+      <p>Um curso completo para quem deseja entrar no mundo do desenvolvimento web, cobrindo HTML, CSS, e JavaScript.</p>
+      <div class="fakeimg" style="height:200px;">Imagem do Curso</div>
+      <h3>Programação Mobile com Android</h3>
+      <p>Aprenda a criar aplicativos Android usando o AndroidIDE. Ideal para quem quer iniciar no desenvolvimento mobile.</p>
+      <div class="fakeimg" style="height:200px;">Imagem do Curso</div>
+      <h3>Marketing e Tráfego Pago</h3>
+      <p>Curso especializado para dominar estratégias de tráfego pago e atrair mais clientes para o seu negócio.</p>
     </div>
   </div>
+  
   <div class="rightcolumn">
     <div class="card">
       <h2>Sobre Mim</h2>
       <div class="fakeimg" style="height:100px;">Imagem</div>
-      <p>Algum texto sobre mim, sem culpa por oferecer um serviço animado...</p>
+      <p>Sou apaixonado por tecnologia e educação, com anos de experiência em desenvolvimento de software e marketing digital. Meu objetivo é capacitar pessoas a alcançarem o sucesso com o uso das melhores ferramentas e estratégias.</p>
     </div>
     <div class="card">
-      <h3>Postagem Popular</h3>
-      <div class="fakeimg"><p>Imagem</p></div>
-      <div class="fakeimg"><p>Imagem</p></div>
-      <div class="fakeimg"><p>Imagem</p></div>
+      <h3>Cursos Populares</h3>
+      <div class="fakeimg"><p>Desenvolvimento Web</p></div>
+      <div class="fakeimg"><p>Gestão de Tráfego</p></div>
+      <div class="fakeimg"><p>Programação Mobile</p></div>
     </div>
     <div class="card">
-      <h3>Siga-me</h3>
-      <p>Algum texto...</p>
+      <h3>Contato</h3>
+      <p>Entre em contato para mais informações sobre os cursos ou para discutir projetos e parcerias:</p>
+      <p>Email: aristides@example.com</p>
+      <p>Telefone: (91) 99999-9999</p>
+      <p>Redes Sociais:</p>
+      <p><a href="#">LinkedIn</a> | <a href="#">Instagram</a> | <a href="#">YouTube</a></p>
     </div>
   </div>
 </div>
 
 <div class="footer">
   <h2>Rodapé</h2>
+  <p>Aristides Barbosa Pontes © 2024. Todos os direitos reservados.</p>
 </div>
-
-</body>
-</html>
-
 
 </body>
 </html>
