@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo Minado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #282c34;
+            color: white;
+        }
+
+        #game-container {
+            display: grid;
+            grid-template-columns: repeat(10, 40px);
+            grid-gap: 2px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px solid #555;
+            cursor: pointer;
+            color: white;
+        }
+
+        .cell.revealed {
+            background-color: #888;
+            cursor: default;
+        }
+
+        .cell.mine {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <script>
+        // Configurações do jogo
+        const rows = 10;
+        const cols = 10;
+        const minesCount = 20;
+
+        const gameContainer = document.getElementById('game-container');
+        let grid = [];
+        let gameOver = false;
+
+        // Inicializa o tabuleiro
+        function initGame() {
+            grid = Array(rows).fill().map(() => Array(cols).fill({ revealed: false, mine: false, count: 0 }));
+            placeMines();
+            calculateNumbers();
+            renderGrid();
+        }
+
+        // Posiciona minas aleatoriamente no tabuleiro
+        function placeMines() {
+            let placedMines = 0;
+            while (placedMines < minesCount) {
+                const r = Math.floor(Math.random() * rows);
+                const c = Math.floor(Math.random() * cols);
+                if (!grid[r][c].mine) {
+                    grid[r][c].mine = true;
+                    placedMines++;
+                }
+            }
+        }
+
+        // Calcula números ao redor das minas
+        function calculateNumbers() {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (grid[r][c].mine) continue;
+
+                    let count = 0;
+                    for (let dr of [-1, 0, 1]) {
+                        for (let dc of [-1, 0, 1]) {
+                            const nr = r + dr;
+                            const nc = c + dc;
+                            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc].mine) {
+                                count++;
+                            }
+                        }
+                    }
+                    grid[r][c].count = count;
+                }
+            }
+        }
+
+        // Renderiza o tabuleiro no DOM
+        function renderGrid() {
+            gameContainer.innerHTML = '';
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+
+                    if (grid[r][c].revealed) {
+                        cell.classList.add('revealed');
+                        if (grid[r][c].mine) {
+                            cell.classList.add('mine');
+                            cell.textContent = '💣';
+                        } else if (grid[r][c].count > 0) {
+                            cell.textContent = grid[r][c].count;
+                        }
+                    }
+
+                    cell.addEventListener('click', onCellClick);
+                    gameContainer.appendChild(cell);
+                }
+            }
+        }
+
+        // Evento de clique em uma célula
+        function onCellClick(e) {
+            if (gameOver) return;
+
+            const row = parseInt(e.target.dataset.row, 10);
+            const col = parseInt(e.target.dataset.col, 10);
+
+            if (grid[row][col].revealed) return;
+
+            grid[row][col].revealed = true;
+
+            if (grid[row][col].mine) {
+                gameOver = true;
+                revealAll();
+                alert('Você perdeu! 💣');
+            } else if (grid[row][col].count === 0) {
+                revealEmptyCells(row, col);
+            }
+
+            renderGrid();
+        }
+
+        // Revela células vazias recursivamente
+        function revealEmptyCells(row, col) {
+            for (let dr of [-1, 0, 1]) {
+                for (let dc of [-1, 0, 1]) {
+                    const nr = row + dr;
+                    const nc = col + dc;
+                    if (
+                        nr >= 0 &&
+                        nr < rows &&
+                        nc >= 0 &&
+                        nc < cols &&
+                        !grid[nr][nc].revealed &&
+                        !grid[nr][nc].mine
+                    ) {
+                        grid[nr][nc].revealed = true;
+                        if (grid[nr][nc].count === 0) {
+                            revealEmptyCells(nr, nc);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Revela todas as células (fim de jogo)
+        function revealAll() {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    grid[r][c].revealed = true;
+                }
+            }
+            renderGrid();
+        }
+
+        // Inicializa o jogo
+        initGame();
+    </script>
+</body>
+</html>
