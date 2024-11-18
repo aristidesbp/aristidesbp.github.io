@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advocacia de Resultados - Jorge Corrêa Filho</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet"> 
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .hero {
+            background-image: url('assets/imagens/hero-advocacia.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero .btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+
+        .services-section {
+            padding: 50px 20px;
+            background-color: #02133e;
+            color: white;
+        }
+
+        .services-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #ffc107;
+        }
+
+        .card {
+            background-color: white;
+            color: #02133e;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body h5 {
+            color: #ffc107;
+        }
+
+        footer {
+            background-color: #02133e;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+
+    
+
+<!-- navbar.css -->
+    <style>
+        /* Estilo da barra de navegação fixa no topo */
+        .navbar {
+            background-color: #333; /* Fundo escuro */
+            color: white; /* Texto branco */
+            padding: 10px 20px; /* Espaçamento interno */
+            display: flex; /* Uso de flexbox para organizar os itens */
+            align-items: center; /* Alinha os itens verticalmente */
+            position: fixed; /* Fixa no topo da página */
+            top: 0; /* Alinhamento no topo */
+            width: 100%; /* Ocupa a largura total da página */
+            z-index: 1000; /* Garante que fique sobre outros elementos */
+        }
+
+        /* Contêiner para o botão e título na navbar */
+        .navbar-left {
+            display: flex; /* Alinha botão e título lado a lado */
+            align-items: center; /* Centraliza verticalmente */
+        }
+
+        /* Estilo do botão de menu (☰) */
+        .menu-btn {
+            font-size: 30px; /* Tamanho grande do ícone */
+            background: none; /* Remove fundo do botão */
+            border: none; /* Remove borda */
+            color: white; /* Ícone branco */
+            cursor: pointer; /* Mostra o cursor de interação */
+            margin-right: 10px; /* Espaço entre o botão e o título */
+        }
+
+        /* Estilo do título da página */
+        .navbar-title {
+            font-size: 24px; /* Tamanho do texto do título */
+        }
+
+        /* Estilo do menu lateral (sidebar) */
+        .sidebar {
+            height: 100%; /* Altura total da página */
+            width: 250px; /* Largura do menu lateral */
+            position: fixed; /* Fixa na lateral esquerda */
+            top: 0; /* Inicia do topo */
+            left: -250px; /* Esconde o menu fora da tela inicialmente */
+            background-color: #111; /* Fundo escuro */
+            padding-top: 60px; /* Espaço no topo para evitar sobreposição com a navbar */
+            transition: left 0.3s ease; /* Animação suave ao abrir/fechar o menu */
+            z-index: 999; /* Garante que fique acima do conteúdo */
+        }
+
+        /* Classe que torna o menu visível */
+        .sidebar.active {
+            left: 0; /* Move o menu para dentro da tela */
+        }
+
+        /* Estilo dos links no menu lateral */
+        .sidebar a {
+            padding: 10px 20px; /* Espaçamento interno */
+            text-decoration: none; /* Remove sublinhado */
+            font-size: 20px; /* Tamanho da fonte */
+            color: white; /* Texto branco */
+            display: block; /* Cada link ocupa uma linha */
+            transition: background-color 0.3s; /* Animação de hover */
+        }
+
+        /* Estilo do hover nos links */
+        .sidebar a:hover {
+            background-color: #575757; /* Fundo cinza ao passar o mouse */
+        }
+
+        /* Botão para fechar o menu lateral */
+        .sidebar .close-btn {
+            position: absolute; /* Fixa o botão dentro do menu */
+            top: 15px; /* Margem superior */
+            right: 20px; /* Margem direita */
+            font-size: 36px; /* Tamanho grande do ícone */
+            color: white; /* Ícone branco */
+            cursor: pointer; /* Cursor de interação */
+        }
+
+        /* Estilo do conteúdo principal */
+        #main-content {
+            margin-top: 60px; /* Evita sobreposição com a navbar */
+            padding: 20px; /* Espaçamento interno */
+            transition: margin-left 0.3s ease; /* Animação suave ao mover conteúdo */
+        }
+
+        /* Classe para mover o conteúdo ao abrir o menu */
+        #main-content.overlay {
+            margin-left: 250px; /* Move o conteúdo para direita */
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px; /* Reduz largura do menu lateral */
+            }
+
+            #main-content.overlay {
+                margin-left: 200px; /* Ajusta movimento do conteúdo */
+            }
+        }
+    </style>
+
+<!-- /navbar.css -->
+
+
+
+
+
+
+<!-- navbar.html -->
+    <!-- Barra de Navegação -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <!-- Botão de menu lateral -->
+            <button class="menu-btn" aria-label="Abrir Menu Lateral" onclick="toggleMenu()">☰</button>
+            <!-- Título da página -->
+            <div class="navbar-title">Minha Página</div>
+        </div>
+    </div>
+
+    <!-- Menu Lateral -->
+    <div id="menu" class="sidebar" role="navigation" aria-hidden="true">
+        <!-- Botão para fechar o menu -->
+        <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+        <!-- Links do menu -->
+        <a href="#">Página Inicial</a>
+        <a href="#">Sobre</a>
+        <a href="#">Serviços</a>
+        <a href="#">Contato</a>
+    </div>
+
+<!-- /navbar.html -->
+ 
+
+
+
+<!-- navbar.js -->
+    <script>
+        // Referências aos elementos do DOM
+        const menu = document.getElementById('menu');
+        const mainContent = document.getElementById('main-content');
+
+        // Alterna o estado do menu lateral
+        function toggleMenu() {
+            const isOpen = menu.classList.contains('active');
+            if (isOpen) {
+                closeMenu(); // Fecha o menu se estiver aberto
+            } else {
+                openMenu(); // Abre o menu se estiver fechado
+            }
+        }
+
+        // Abre o menu lateral
+        function openMenu() {
+            menu.classList.add('active'); // Adiciona classe para exibir o menu
+            menu.setAttribute('aria-hidden', 'false'); // Atualiza atributo de acessibilidade
+            mainContent.classList.add('overlay'); // Move o conteúdo principal
+        }
+
+        // Fecha o menu lateral
+        function closeMenu() {
+            menu.classList.remove('active'); // Remove classe para esconder o menu
+            menu.setAttribute('aria-hidden', 'true'); // Atualiza atributo de acessibilidade
+            mainContent.classList.remove('overlay'); // Restaura posição do conteúdo principal
+        }
+
+        // Fecha o menu ao clicar fora dele
+        window.addEventListener('click', function (event) {
+            if (!menu.contains(event.target) && !event.target.closest('.menu-btn')) {
+                closeMenu();
+            }
+        });
+
+        // Fecha o menu ao pressionar a tecla ESC
+        window.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+    </script>
+<!-- /navbar.js -->
+
+
+
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>Soluções Jurídicas Que Fazem a Diferença</h1>
+        <p>Transformamos desafios legais em conquistas. Confiança, segurança e resultados comprovados!</p>
+        <a href="https://wa.me/5591982420404?text=Quero%20uma%20consulta%20jurídica" class="btn btn-warning btn-lg">Agende Sua Consulta Agora</a>
+    </header>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <h2>Nossos Serviços</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="assets/imagens/trabalho.jpg" class="card-img-top" alt="Direito do Trabalho">
+                        <div class="card-body">
+                            <h5>Direito do Trabalho</h5>
+                            <p>Protegemos seus direitos trabalhistas com uma abordagem eficiente e humanizada.</p>
+                            <a href="https://wa.me/5591982420404" class="btn btn-outline-primary">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="assets/imagens/civil.jpg" class="card-img-top" alt="Direito Civil">
+                        <div class="card-body">
+                            <h5>Direito Civil</h5>
+                            <p>Soluções jurídicas personalizadas para sua vida e negócios.</p>
+                            <a href="https://wa.me/5591982420404" class="btn btn-outline-primary">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="assets/imagens/imobiliario.jpg" class="card-img-top" alt="Direito Imobiliário">
+                        <div class="card-body">
+                            <h5>Direito Imobiliário</h5>
+                            <p>Segurança e transparência em todas as transações imobiliárias.</p>
+                            <a href="https://wa.me/5591982420404" class="btn btn-outline-primary">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="text-center py-5" style="background-color: #ffc107; color: #02133e;">
+        <div class="container">
+            <h2>Precisa de Ajuda Jurídica?</h2>
+            <p>Entre em contato com nossos especialistas e receba a orientação que você precisa!</p>
+            <a href="https://wa.me/5591982420404" class="btn btn-dark btn-lg">Fale Conosco Agora</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Jorge Corrêa Filho Advocacia. Todos os direitos reservados.</p>
+        <p>
+            <a href="#" style="color: #ffc107;">Política de Privacidade</a> | 
+            <a href="#" style="color: #ffc107;">Termos de Uso</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
