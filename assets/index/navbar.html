@@ -1,73 +1,51 @@
 <!-- ######################################## -->
 <!-- ############# NAVBAR /MENU ############# -->
 <!-- ######################################## -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-<div class="container">
-<a class="navbar-brand" href="#">Aristides Barbosa Pontes</a>
-      
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-<span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNav">
-<ul class="navbar-nav ms-auto">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Aristides Barbosa Pontes</a>
 
-           
-<!-- ######################################## -->
-<!-- ############## LINKS MENU    ########### -->
-<!-- ######################################## -->
-<li  class="nav-item"><a class="nav-link" href="index.html"> Início
-</a></li>
-<li class="nav-item"><a class="nav-link" href="#contact">Contato
-</a></li>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <!-- LINKS MENU -->
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Início</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">Contato</a>
+        </li>
+        
+        <!-- DROPDOWN MENU -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Minhas Aulas</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="aula1.html">Aula 1</a></li>
+            <li><a class="dropdown-item" href="campo_minado.html">Campo Minado</a></li>
+            <li><a class="dropdown-item" href="aula3.html">Aula 3</a></li>
+            <li><a class="dropdown-item" href="aula4.html">Aula 4</a></li>
+          </ul>
+        </li>
+      </ul>
 
-      
-
-<!-- ######################################## -->
-<!-- ############ minhas aulas ########### -->
-<!-- ######################################## -->
- <li class="nav-item dropdown">           
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">minhas aulas</a>
-<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-<!-- ######################################## -->
-
-              
-<li><a class="dropdown-item" href="aula1.html">aula1
-</a></li>          
-<li><a class="dropdown-item" href="campo_minado.html">campo_minado
-</a></li>   
-<li><a class="dropdown-item" href="aula3.html">aula3
-</a></li>             
-<li><a class="dropdown-item" href="aula4.html">aula4
-</a></li>
-
-
-<!-- ######################################## -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Minha Navbar</a>
-    <form id="search-form" class="d-flex" onsubmit="return false;">
-      <input 
-        id="file-input" 
-        class="form-control me-2" 
-        type="text" 
-        placeholder="Digite o nome do arquivo" 
-        aria-label="Search" />
-      <button 
-        class="btn btn-outline-success" 
-        type="button" 
-        onclick="carregarArquivo()">
-        Abrir
-      </button>
-    </form>
-  </div></nav>
-
-
-
-
-      
-</ul></li></ul></div></div></nav>
-<br><br>
-
-
-
-
+      <!-- CAMPO DE BUSCA -->
+      <form id="search-form" class="d-flex ms-3" onsubmit="return false;">
+        <input 
+          id="file-input" 
+          class="form-control me-2" 
+          type="text" 
+          placeholder="Digite o nome do arquivo" 
+          aria-label="Search" />
+        <button 
+          class="btn btn-outline-success" 
+          type="button" 
+          onclick="carregarArquivo()">
+          Abrir
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
