@@ -44,7 +44,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 // Função para carregar a NAVBAR:  
-fetch('assets/index/navbar.html') 
+fetch('assets/view/navbar.html') 
 /*Faz o carregamento navbar.html*/
 .then(response => {
             if (!response.ok) {
@@ -62,7 +62,7 @@ fetch('assets/index/navbar.html')
 
 
 
-fetch('assets/index/footer.html') 
+fetch('assets/view/footer.html') 
 // Faz o carregamento do arquivo footer.html
         .then(response => {
             if (!response.ok) {
@@ -81,7 +81,7 @@ fetch('assets/index/footer.html')
 
 
 // Função para carregar a CONTEUDO DA PÁGINA: 
-fetch('assets/index/conteudo.html') 
+fetch('assets/view/conteudo.html') 
 //  ######### Faz o carregamento do arquivo conteudo.html ########
         .then(response => {
             if (!response.ok) {
