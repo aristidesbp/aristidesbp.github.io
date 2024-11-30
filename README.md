@@ -15,10 +15,10 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<!-- Arquivo CSS personalizado -->
-<link rel="stylesheet" href="styles.css">
+
 <!-- ###### CSS DA PÁGINA ####### -->  
-<link rel="stylesheet" href="index/index.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/index.css">
     
 <!-- ###### TÍTULO DO SITE ####### -->  
 <title> index.html do Site Aristidesbp </title>
@@ -26,7 +26,80 @@
 <body>
     
 <!-- ###### CONTEÚDO DO SITE ####### -->  
-<br>
+<!-- Contêiner navbar -->
+<div id="navbar-container"></div>
+
+<!-- Contêiner conteúdo -->
+<div id="conteudo-container"></div>
+
+<!-- Contêiner footer -->
+<div id="footer-container"></div>
+
+
+
+
+
+<!-- ##### código JS para chamar conteúdos DA PÁGINA ####### -->  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+// Função para carregar a NAVBAR:  
+fetch('assets/index/navbar.html') 
+/*Faz o carregamento navbar.html*/
+.then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo navbar.html');
+            }
+            return response.text(); // Retorna o conteúdo do arquivo como texto
+        })
+        .then(data => {
+            // Insere o conteúdo da navbar no contêiner #navbar-container
+            document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Erro:', error); // Exibe erros, caso haja algum
+        });
+
+
+
+fetch('assets/index/footer.html') 
+// Faz o carregamento do arquivo footer.html
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo footer.html');
+            }
+            return response.text(); // Retorna o conteúdo do arquivo como texto
+        })
+        .then(data => {
+            // Insere o conteúdo do footer no contêiner #footer-container
+            document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Erro:', error); // Exibe erros, caso haja algum
+        });
+});
+
+
+// Função para carregar a CONTEUDO DA PÁGINA: 
+fetch('assets/index/conteudo.html') 
+//  ######### Faz o carregamento do arquivo conteudo.html ########
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo conteudo.html');
+            }
+            return response.text(); // Retorna o conteúdo do arquivo como texto
+        })
+        .then(data => {
+            // Insere o conteúdo da página no contêiner #conteudo-container
+            document.getElementById('conteudo-container').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Erro:', error); // Exibe erros, caso haja algum
+        });
+
+    
+</script>
+
 <!-- ###### FIM DO CONTEÚDO DO SITE ####### -->  
     
 <!-- jQuery -->
@@ -37,7 +110,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Arquivo JS personalizado -->
 <script src="scripts.js"></script>
-<!-- ###### TÍTULO DO SITE ####### -->  
+<!-- ##### ARQUIVO JS DA PÁGINA ####### -->  
 <script src="index/index.js"></script>
 </body>
 </html>
