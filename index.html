@@ -107,110 +107,13 @@
   </style>
 </head>
 <body>
-<!-- ----------- navbar ---------------- -->
-<style>
-  body {
-    font-family: 'Lato', sans-serif;
-  }
 
-  /* Estilo da sobreposição do menu */
-  .overlay {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro com transparência */
-    overflow-x: hidden;
-    transition: 0.5s;
-  }
 
-  .overlay-content {
-    position: relative;
-    top: 25%;
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-  }
 
-  /* Estilo dos links do menu */
-  .overlay a {
-    padding: 8px;
-    text-decoration: none;
-    font-size: 36px;
-    color: #fff; /* Cor do texto clara para boa visibilidade */
-    display: block;
-    transition: 0.3s;
-  }
 
-  /* Efeito ao passar o mouse sobre os links */
-  .overlay a:hover, .overlay a:focus {
-    color: #f1f1f1;
-  }
 
-  /* Estilo do botão de fechar */
-  .overlay .closebtn {
-    position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 60px;
-    color: #fff;
-  }
 
-  /* Responsividade para telas pequenas */
-  @media screen and (max-height: 450px) {
-    .overlay a { font-size: 20px; }
-    .overlay .closebtn {
-      font-size: 40px;
-      top: 15px;
-      right: 35px;
-    }
-  }
-</style>
 
-<!-- Botão para abrir o menu -->
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
-
-<!-- Menu sobreposto -->
-<div id="myNav" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <div class="overlay-content">
-    <a href="#">Sobre</a>
-    <a href="#">Serviços</a>
-    <a href="#">Clientes</a>
-    <a href="#">Contato</a>
-  </div>
-</div>
-
-<script>
-  // Função para abrir o menu
-  function openNav() {
-    document.getElementById("myNav").style.width = "100%";  /* Abre a sobreposição */
-  }
-
-  // Função para fechar o menu
-  function closeNav() {
-    document.getElementById("myNav").style.width = "0%";  /* Fecha a sobreposição */
-  }
-</script>
-
-  <!-- Navbar (Fixada no topo) -->
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">SB Serviços</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
-          <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
 
   <!-- Hero Section -->
   <div class="hero">
