@@ -314,7 +314,7 @@ Levando em consideração as orientações anteriores e o fato de que a empresa 
 
 ● A [persona] que você representa; 
 ● O [formato] da saída;
-● Um [Exemplo];
+
 
 [persona] 
 que você representa é a  do [meu cliente];
@@ -324,13 +324,6 @@ que você representa é a  do [meu cliente];
 [Formato] 
 Crie uma lista com as 30 palavras-chave positivas e outra lista com as 30 palavras-chave negativas. Ordene as palavras-chave por ordem de relevância focando em pessoas com alta intenção de adquirir o produtodo do [meu cliente];
 Depois disso, crie uma lista de outras 30 palavras-chave positivas que não falem especificamente sobre o meu produto, mas que sejam pesquisas que demonstram o interesse do público no  produto do [meu cliente];
-
-[exemplo]
-
-“espaço coworking” 
-“espaço coworking em Belém” 
-“o melhor coworking em Belém”
-
 
 
 
@@ -367,23 +360,62 @@ Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Dep
 
 
 # [TAREFA 6]
-cite ferramentas úteis usadas para descobrir quais palavras-chave que  podem ser usadas no seu anúncio. cite estas ferramentas e sites. se possivel faça a buscas para 5 palavras-chaves (Adicione a correspondência de palavras-chave ampla, frase e exata);
+Com base nos textos abaixo , faça uma landpage para [meu cliente],recontruindo o codigo fornecido com as alterações nescessarias em um unico arquivo.
 
 
-[indicação]
-● site:https://answerthepublic.com/ 
-●site:https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=BR&media_type=all
+[TEXTOS]
+1 - Como aparecer no topo da pesquisa do Google com anúncios online
+
+A minha equipe me disse que muita gente perguntou ontem no chat sobre bloqueios, então, eu
+vou compartilhar com vocês no final da aula alguns links que eu tenho salvos no meu
+computador, os quais eu uso quando eu preciso entrar em contato com o suporte do Facebook
+(principalmente quando eu sofro bloqueios). Pra entrar em contato com o suporte do Google, o
+telefone é 0800 727 0278, das 09h às 19h.
+
+Todo mundo vai ser bloqueado um dia, e o que é possível fazer pra ser desbloqueado é encher o
+saco, ou seja, se colocar numa posição de querer entender o que fez de errado pra nunca mais
+fazer o mesmo. Você não pode ser agressivo, porque tem uma pessoa do outro lado te
+atendendo. Se você não conseguir desbloquear a sua conta, você só terá a opção de criar um
+novo perfil e começar do zero.
 
 
+2 - As três redes do Google Ads e por onde começar
+
+ - Rede de pesquisa do Google:
+Quando você faz uma pesquisa no
+Google e aparece um anúncio. 90%
+das pesquisas são feitas no Google
+
+ - Anúncios do Youtube:
+Anúncios no meio dos vídeos do
+YouTube. O YouTube é a maior
+ferramenta de vídeos e a segunda
+maior ferramenta de pesquisa do
+mundo.
+
+ - Sites parceiros do Google (Display):
+90% dos sites da internet são parceiros do Google. O que acontece é que
+esses sites vendem espaços publicitários pro Google, e o Google coloca os
+anúncios lá, e, assim, o dono do site ganha dinheiro com isso e os
+anunciantes conseguem anunciar em todos os sites.
+
+3 - Como aparecer no topo da pesquisa dov Google
+Vocês já sabem que anunciar online é sobre ganhar leilões. Então, pra aparecer no topo de
+pesquisa do Google, você precisa ganhar leilões, e, pra ganhar leilões, você deve cuidar os
+lances, a qualidade do anúncio e a taxa de ação estimada.
+
+Se você entender a lógica do Google, é impossível você não ter resultados. A lógica do Google é
+extremamente simples: 
+
+Então, a gente tem 3 pontos pra conectar:
+
+1- termo de pesquisa (o que a pessoa pesquisou),
+2- resultado da pesquisa (o anúncio), 
+3-  site (landing page). 
 
 
+[codigo] 
 
-
-
-
-
-
-# criando um HTML básico completo e replicável
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
