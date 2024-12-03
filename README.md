@@ -231,16 +231,14 @@ abaixo vou te passar 6  TAREFAS:
 obs: nao use caixa de texto para respostas.
 obs 2: faça com acalma.
 
-# comando 2 ()
-[TAREFA 1]
-Se torne (incorpore) o [meu cliente], e faça um texto se apresentando para o [meu cliente], através de uma mensagem de whatsapp, [oferecendo seus serviços do meu cliente ]explicando as vantagens.
+
+# [TAREFA 2]
+[meu cliente]= 
 
 
-[TAREFA 2]
-
-Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para <persona(cliente)>.
+Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para [meu cliente]
 Levante as principais dificuldades, os medos, desejos e as objeções deste determinado público. 	
-A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do nosso <persona(cliente)> , Abaixo eu vou informar como vc deve fazer:
+A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do [meu cliente] , Abaixo eu vou informar como vc deve fazer:
 
 ● Uma [ação] para você executar:
 ● A [persona] que você representa; 
@@ -249,12 +247,11 @@ A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produ
 ● O [contexto] da situação; 
 ● O [formato] da saída.
 
-
 [Ação]
-Quero que você crie uma pesquisa detalhada sobre as pessoas que querem ,tem interesse  ou necessidade do produto do <persona(cliente)>;
+Quero que você crie uma pesquisa detalhada sobre as pessoas que querem ,tem interesse  ou necessidade do produto do [meu cliente];
 
 [Persona] 
-Você é <persona(aristides)> , incorpore ela para fazer a tarefa;
+Você é [meu cliente] , incorpore ela para fazer a tarefa;
 
 
 [Passos] 
@@ -288,7 +285,7 @@ Levando em consideração a pesquisa que fizemos acima sobre o publico interessa
 ● Um [Exemplo];
 
 [persona] 
-que você representa é a  <persona(aristides)>;
+que você representa é a  [meu cliente];
 
 
 [Formato]
@@ -313,21 +310,20 @@ que você representa é a  <persona(aristides)>;
 
 
 [TAREFA 4]
-Levando em consideração as orientações anteriores e o fato de que a empresa oferece o produto da <persona(cliente)> , vamos criar uma lista de 20 palavras-chave para utilizá-las como segmentação no Google Ads. Além disso, vamos criar uma lista de 20 palavras-chave negativas para utilizar nessa campanha. Importante: eu atendo na cidade do <persona(cliente)>, focados no produto do cliente, para que o mesmo filtre o público e consiga comercializar seu produto;Abaixo eu vou informar como de ser feito:
+Levando em consideração as orientações anteriores e o fato de que a empresa oferece o produto do [meu cliente] , vamos criar uma lista de 20 palavras-chave para utilizá-las como segmentação no Google Ads. Além disso, vamos criar uma lista de 20 palavras-chave negativas para utilizar nessa campanha. Importante: eu atendo na cidade do do [meu cliente], focados no produto do cliente, para que o mesmo filtre o público e consiga comercializar seu produto;Abaixo eu vou informar como de ser feito:
 
 ● A [persona] que você representa; 
 ● O [formato] da saída;
 ● Um [Exemplo];
 
 [persona] 
-que você representa é a  <persona(aristides)>;
+que você representa é a  do [meu cliente];
 
 
 
 [Formato] 
-Crie uma lista com as 30 palavras-chave positivas e outra lista com as 30 palavras-chave negativas. Ordene as palavras-chave por ordem de relevância focando em pessoas com alta intenção de adquirir o produto da <persona(cliente)>;
-
-Depois disso, crie uma lista de outras 30 palavras-chave positivas que não falem especificamente sobre o meu produto, mas que sejam pesquisas que demonstram o interesse do público no  produto da <persona(cliente)>;
+Crie uma lista com as 30 palavras-chave positivas e outra lista com as 30 palavras-chave negativas. Ordene as palavras-chave por ordem de relevância focando em pessoas com alta intenção de adquirir o produtodo do [meu cliente];
+Depois disso, crie uma lista de outras 30 palavras-chave positivas que não falem especificamente sobre o meu produto, mas que sejam pesquisas que demonstram o interesse do público no  produto do [meu cliente];
 
 [exemplo]
 
@@ -349,7 +345,7 @@ Esses títulos devem, obrigatoriamente, repetir as palavras-chave e devem ser ch
 
 ● 3 títulos devem focar nos benefícios do produto; 
 ● 3 títulos devem focar nas vantagens do produto; 
-● 2 títulos devem falar o nome do produto da <persona(cliente)>;
+● 2 títulos devem falar o nome do produto do [meu cliente];
 ● 2 títulos devem conter um call to action claro;
  
 Os outros títulos devem conter as 5 PALAVRA-CHAVE mais relevantes para o produto da <persona(cliente)>; Busque incluir na maioria dos títulos palavras como: 
@@ -377,6 +373,13 @@ cite ferramentas úteis usadas para descobrir quais palavras-chave que  podem se
 [indicação]
 ● site:https://answerthepublic.com/ 
 ●site:https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=BR&media_type=all
+
+
+
+
+
+
+
 
 
 
