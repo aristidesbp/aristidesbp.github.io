@@ -360,7 +360,8 @@ Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Dep
 
 
 # [TAREFA 6]
-Com base nos textos abaixo , faça uma landpage para [meu cliente],recontruindo o codigo fornecido com as alterações nescessarias em um unico arquivo.
+Abaixo vou te passa um texto que explica oque uma landpage deve ter para ficar no topo de pesquiza do google, depois um codigo com a estrutura basica para vc criar um landinpage para [meu cliente] citado acima. faça um index.html moderno e elegante para [meu cliente] Sb serviços
+
 
 
 [TEXTOS]
