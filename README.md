@@ -224,53 +224,16 @@ você faz isso com a letra “b”, com a letra “c”, “d”, “e”, etc.,
 # ##########################################
 # COMO ANUNCIAR PARA VENDER O QUE QUISER
 # ##########################################
+# pronpts para chatgpt
 
-RESPONDA AS 6  TAREFAS:
+# comando 1
+abaixo vou te passar 6  TAREFAS:
 obs: nao use caixa de texto para respostas.
 obs 2: faça com acalma.
 
-[REFERENCIAS] 
-Aprenda minha formatação nos Prompts: 
-
-No contexto de criação de prompts, não existe um padrão universal ou nativo de marcação específico como as tags <HTML> ou declarações de variáveis em linguagens de programação. No entanto, vamos adotar algumas convenções para estruturar melhor esses prompts, e tornando-os mais claros e organizados!Usaremos Tags Personalizadas assim como no html, a partir de agora irei criar tags para organizar e destacar diferentes partes do prompt.
-
-EXEMPLO:
-Prompt: <persona(edjacy)> esposa do Aristides </persona (edjacy)>
-pergunta: Quem é <persona(edjacy)>?
-resposta: É a esposa do Aristides
-
-
-memorize meus personas:
-
-<persona(aristides)> 
-Meu nome é Aristides Barbosa Pontes, tenho 36 anos, sou casado, moro em Belém do Pará, sou formado em Análise De Sistemas pela Faculdade Unopar. um profissional com vasto conhecimento em cuidar de “tráfego pago” ! meu  telefone de contato :  (91)9 9242-0981
-<Meus dados>
-● Tenho vasto conhecimento nas áreas de desenvolvimento Web, podendo desenvolver sites e sistemas.
-● Tenho vasto conhecimento nas áreas de desenvolvimento Mobile 
-●Tenho vasto conhecimento em marketing Digital 
-● Tenho vasto conhecimento em publicidade.
-●  telefone de contato =  (91)9 9242-0981 
-● Sou um grande especialista em pesquisas sobre audiências, com o objetivo de criar perfis de clientes que têm o maior potencial de compra de determinados segmentos de negócios. Você é metódico e extremamente detalhista para encontrar todas as nuances de determinadas audiências;
-● sou persuasivo, sou expert em vendas e anuncios.
-</Meus dados></persona(aristides)> 
-
-
-<persona(cliente)> 
-Meu cliente se chama José, ele tem um prédio comercial, e trabalha com a locação espaço de coworking.
-<dados do cliente> 
-● razão social = Edifício Comercial José Viana 
-● endereço = Tv Estrela, 2321, Marco, Belém, Pará, Brasil 
-● telefones =  (91)9 9242-0981 / (91)9 9242-0404  
-●  tipo de negócio =   físico/ local na região  
-●  valor do produto =  R$400,00 (mensal)
-●  produto =  espaço coworking  compartilhado, com estações de trabalho privativos, endereço fiscal, cameras de vigilancia, água, ar condicionado, internet rapida, e sala de reunião para atendimento individual
-</dados do cliente></persona(cliente-jose)> 
-
-
-
-
+# comando 2 ()
 [TAREFA 1]
-Se torne (incorpore) o <persona(aristides)>, e faça um texto se apresentando para o <persona(cliente)>, através de uma mensagem de whatsapp, oferecendo seus serviços de tráfego pago, explicando as vantagens.
+Se torne (incorpore) o [meu cliente], e faça um texto se apresentando para o [meu cliente], através de uma mensagem de whatsapp, [oferecendo seus serviços do meu cliente ]explicando as vantagens.
 
 
 [TAREFA 2]
