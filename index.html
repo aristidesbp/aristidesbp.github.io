@@ -15,6 +15,7 @@
     body {
       font-family: 'Roboto', sans-serif;
       line-height: 1.6;
+      margin-top: 80px; /* Ajuste para compensar o menu fixo */
     }
     .navbar {
       background-color: #004d40;
@@ -22,18 +23,22 @@
     .navbar-brand, .navbar-nav .nav-link {
       color: #fff !important;
     }
+    .navbar-nav .nav-link {
+      padding: 10px 15px;
+    }
     .hero {
-      background: url('floresta.jpg') no-repeat center center/cover; /* Corrigir o caminho da imagem */
+      background: url('floresta.jpg') no-repeat center center/cover;
       color: #fff;
       text-align: center;
       padding: 100px 0;
     }
     .hero h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
     }
     .hero p {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
+      margin-top: 20px;
     }
     .features {
       background-color: #f8f9fa;
@@ -70,8 +75,8 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
+  <!-- Navbar (Fixada no topo) -->
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">SB Serviços</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,8 +95,8 @@
   <!-- Hero Section -->
   <div class="hero">
     <div class="container">
-      <h1>Exportação Simples e Segura</h1>
-      <p>Especialistas em conectar o Pará ao mercado global</p>
+      <h1>Exportação de Matérias-Primas do Pará</h1>
+      <p>Conectamos o Pará ao mercado global com processos rápidos, seguros e sustentáveis.</p>
       <a href="#contato" class="btn btn-lg btn-success mt-4">Entre em Contato</a>
     </div>
   </div>
@@ -133,7 +138,7 @@
   <section class="contact-form" id="contato">
     <div class="container">
       <h2 class="text-center">Entre em Contato</h2>
-      <a href="https://wa.me/91992420981" class="btn-whatsapp">Fale conosco no WhatsApp</a> <!-- Link do WhatsApp -->
+      <a href="https://wa.me/91992420981" class="btn-whatsapp">Fale conosco no WhatsApp</a>
     </div>
   </section>
 
