@@ -414,7 +414,7 @@ Então, a gente tem 3 pontos pra conectar:
 2- resultado da pesquisa (o anúncio), 
 3-  site (landing page). 
 
-
+# html basico
 [codigo] 
 
 <!DOCTYPE html>
