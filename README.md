@@ -455,14 +455,6 @@ Então, a gente tem 3 pontos pra conectar:
 # navbar
 <!-- ################# MENU DE NAVEGAÇÃO ################################## -->
 <style>
-/* Estilo para o corpo da página */
-body {
-    margin: 0;
-    padding: 0;
-    background-color: white;
-    color: black;
-}
-
 /* Barra de navegação fixa no topo */
 .navbar {
     background-color: #004D40;
