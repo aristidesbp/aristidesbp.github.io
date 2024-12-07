@@ -3,6 +3,28 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
+            
+// Função para carregar a CONTEUDO DA PÁGINA: 
+fetch('assets/index.html') 
+//  ######### Faz o carregamento do arquivo conteudo.html ########
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo conteudo.html');
+            }
+            return response.text(); // Retorna o conteúdo do arquivo como texto
+        })
+        .then(data => {
+            // Insere o conteúdo da página no contêiner #conteudo-container
+            document.getElementById('conteudo-container').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Erro:', error); // Exibe erros, caso haja algum
+        });
+
+
+
+            
+
 // Função para carregar a NAVBAR:  
 fetch('assets/public/navbar.html') 
 /*Faz o carregamento navbar.html*/
@@ -40,21 +62,5 @@ fetch('assets/public/footer.html')
 });
 
 
-// Função para carregar a CONTEUDO DA PÁGINA: 
-fetch('assets/index.html') 
-//  ######### Faz o carregamento do arquivo conteudo.html ########
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao carregar o arquivo conteudo.html');
-            }
-            return response.text(); // Retorna o conteúdo do arquivo como texto
-        })
-        .then(data => {
-            // Insere o conteúdo da página no contêiner #conteudo-container
-            document.getElementById('conteudo-container').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Erro:', error); // Exibe erros, caso haja algum
-        });
 
     
