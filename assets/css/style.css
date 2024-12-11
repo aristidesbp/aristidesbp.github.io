@@ -1,18 +1,4 @@
-/* Resetando margens e padding para todos os elementos */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* Garante que padding e border sejam incluídos nas dimensões dos elementos */
-}
 
-/* Estilos globais */
-body {
-    font-family: 'Arial', sans-serif; /* Define a fonte padrão */
-    background-color: #f4f4f9; /* Cor de fundo clara para o corpo */
-    color: #333; /* Cor do texto principal */
-    max-width: 100%; /* Evita que o conteúdo ultrapasse a largura da tela */
-    overflow-x: hidden; /* Remove a rolagem horizontal */
-}
 
 /* Navbar */
 .navbar, nav {
