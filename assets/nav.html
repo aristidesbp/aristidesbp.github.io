@@ -1,0 +1,88 @@
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Estilo do menu lateral */
+    #menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #111;
+      color: #fff;
+      overflow-y: auto;
+      transition: left 0.3s;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    #menu.active {
+      left: 0;
+    }
+
+    #menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #menu ul li {
+      padding: 15px 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    #menu ul li a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+    }
+
+    #menu ul li a:hover {
+      background-color: #575757;
+    }
+
+    /* Botão do menu */
+    .menu-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background-color: #111;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      z-index: 1100;
+      transition: background-color 0.3s;
+    }
+
+    .menu-btn:hover {
+      background-color: #575757;
+    }
+  </style>
+
+  <!-- Botão para abrir o menu -->
+  <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+
+  <!-- Menu lateral -->
+  <nav id="menu">
+    <ul>
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    const menu = document.getElementById('menu');
+
+    // Alterna o estado do menu lateral
+    function toggleMenu() {
+      menu.classList.toggle('active');
+    }
+  </script>
