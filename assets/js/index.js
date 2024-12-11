@@ -26,7 +26,7 @@ fetch('assets/index.html')
             
 
 // Função para carregar a NAVBAR:  
-fetch('assets/navbar.html') 
+fetch('assets/nav_jorge.html') 
 /*Faz o carregamento navbar.html*/
 .then(response => {
             if (!response.ok) {
