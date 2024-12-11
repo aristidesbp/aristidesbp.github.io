@@ -1,0 +1,28 @@
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #4A90E2, #9013FE);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .navbar {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px 0;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+</style>
+
+
+
