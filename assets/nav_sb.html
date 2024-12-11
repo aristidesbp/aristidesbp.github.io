@@ -1,0 +1,141 @@
+<style>
+background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Menu lateral (sidebar) */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #004D40;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+/* Torna o menu visível */
+.sidebar.active {
+    left: 0;
+}
+
+/* Links no menu lateral */
+.sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+}
+
+/* Estilo do hover nos links */
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botão para fechar o menu lateral */
+.sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Estilo do conteúdo principal */
+#main-content {
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Classe para mover o conteúdo ao abrir o menu */
+#main-content.overlay {
+    margin-left: 250px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    #main-content.overlay {
+        margin-left: 200px;
+    }
+}
+
+
+</style>
+<!-- ################# MENU DE NAVEGAÇÃO ################################## -->
+
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="navbar-left">
+        <!-- Botão de menu lateral -->
+        <button class="menu-btn" aria-label="Abrir Menu Lateral" onclick="toggleMenu()">☰</button>
+        <!-- Título da página -->
+        <div class="navbar-title"><b>SB-SERVIÇOS</b></div>
+    </div>
+</div>
+
+<!-- Menu lateral -->
+<div id="menu" class="sidebar" role="navigation" aria-hidden="true">
+    <!-- Botão para fechar o menu -->
+    <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+    <!-- Links do menu -->
+    <a href="index.html"><b>INÍCIO</b></a>
+    <a href="#sobre"><b>SOBRE</b></a>
+    <a href="#servicos"><b>SERVIÇOS</b></a>
+    <a href="#contato"><b>CONTATO</b></a>
+</div>
+
+
+  <!-- Scripts -->
+  <script>
+// Navbar.js
+
+const menu = document.getElementById('menu');
+const mainContent = document.getElementById('main-content');
+
+// Alterna o estado do menu lateral
+function toggleMenu() {
+    const isOpen = menu.classList.contains('active');
+    isOpen ? closeMenu() : openMenu();
+}
+
+// Abre o menu lateral
+function openMenu() {
+    menu.classList.add('active');
+    menu.setAttribute('aria-hidden', 'false');
+    mainContent?.classList.add('overlay');
+}
+
+// Fecha o menu lateral
+function closeMenu() {
+    menu.classList.remove('active');
+    menu.setAttribute('aria-hidden', 'true');
+    mainContent?.classList.remove('overlay');
+}
+
+// Fecha o menu ao clicar fora dele
+window.addEventListener('click', (event) => {
+    if (!menu.contains(event.target) && !event.target.closest('.menu-btn')) {
+        closeMenu();
+    }
+});
+
+// Fecha o menu ao pressionar ESC
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeMenu();
+    }
+});
+  </script>
