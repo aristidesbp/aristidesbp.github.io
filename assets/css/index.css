@@ -5,6 +5,13 @@
       line-height: 1.6;
       margin-top: 80px; /* Ajuste para compensar o menu fixo */
     }
+
+
+
+
+
+
+
     .navbar {
       background-color: #f8f9fa;
     }
@@ -14,6 +21,107 @@
     .navbar-nav .nav-link {
       padding: 10px 15px;
     }
+
+    background-color: #004D40;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Contêiner para o botão e título na navbar */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Botão de menu lateral */
+.menu-btn {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+ /* Menu lateral (sidebar) */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #004D40;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+/* Torna o menu visível */
+.sidebar.active {
+    left: 0;
+}
+
+/* Links no menu lateral */
+.sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+}
+
+/* Estilo do hover nos links */
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botão para fechar o menu lateral */
+.sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+}
+
+
+/* Barra de navegação fixa no topo */
+.navbar {
+
+/* Estilo do conteúdo principal */
+#main-content {
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Classe para mover o conteúdo ao abrir o menu */
+#main-content.overlay {
+    margin-left: 250px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    #main-content.overlay {
+        margin-left: 200px;
+    }
+}
+
+
+
+
+    
+
     .hero {
       background: url('floresta.jpg') no-repeat center center/cover;
       color: #fff;
@@ -105,98 +213,7 @@ body {
     color: black;
 }
 
-/* Barra de navegação fixa no topo */
-.navbar {
-    background-color: #004D40;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
 
-/* Contêiner para o botão e título na navbar */
-.navbar-left {
-    display: flex;
-    align-items: center;
-}
-
-/* Botão de menu lateral */
-.menu-btn {
-    font-size: 30px;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    margin-right: 10px;
-}
- /* Menu lateral (sidebar) */
-.sidebar {
-    height: 100%;
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: -250px;
-    background-color: #004D40;
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-}
-
-/* Torna o menu visível */
-.sidebar.active {
-    left: 0;
-}
-
-/* Links no menu lateral */
-.sidebar a {
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    display: block;
-}
-
-/* Estilo do hover nos links */
-.sidebar a:hover {
-    background-color: #575757;
-}
-
-/* Botão para fechar o menu lateral */
-.sidebar .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 36px;
-    color: white;
-    cursor: pointer;
-}
-
-/* Estilo do conteúdo principal */
-#main-content {
-    margin-top: 60px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-}
-
-/* Classe para mover o conteúdo ao abrir o menu */
-#main-content.overlay {
-    margin-left: 250px;
-}
-
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-    }
-
-    #main-content.overlay {
-        margin-left: 200px;
-    }
-}
 
 
 
