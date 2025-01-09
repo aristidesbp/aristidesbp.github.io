@@ -1,4 +1,4 @@
-// js/index.js  
+// <script src="js/index.js"></script>
 
 
 const menu = document.getElementById('menu');
