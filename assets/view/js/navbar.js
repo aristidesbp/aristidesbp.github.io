@@ -5,6 +5,10 @@
 
 */
 
+
+
+// Navbar.js
+
 const menu = document.getElementById('menu');
 const mainContent = document.getElementById('main-content');
 
