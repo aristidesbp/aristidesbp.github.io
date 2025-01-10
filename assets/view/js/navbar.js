@@ -1,5 +1,9 @@
-// <script src="view/js/navbar.js"></script>
+/* implemente o codiogo abaixo no controller html.
 
+<script src="view/js/navbar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+
+*/
 
 const menu = document.getElementById('menu');
 const mainContent = document.getElementById('main-content');
