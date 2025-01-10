@@ -1,1 +1,151 @@
 
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo do body */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1d3557, #457b9d); /* Fundo azul */
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        /* Partículas de fundo */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; /* Largura total */
+            height: 100vh; /* Altura total */
+            z-index: -1; /* Fica atrás do conteúdo */
+        }
+
+        /* Container principal */
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Conteúdo */
+        .content {
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Título */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            opacity: 0;
+        }
+
+        /* Parágrafo */
+        p {
+            font-size: 1.2em;
+            color: #cccccc;
+            opacity: 0;
+            margin-top: 20px;
+        }
+
+        /* Textos animados */
+        .text-right {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .text-left {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        /* Animação de fade-in */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Ajustes para telas menores */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+        }
+    </style>
+
+
+    <!-- Partículas de fundo -->
+    <div id="particles-js"></div>
+    
+    <!-- Container principal -->
+    <div class="welcome-container">
+        <h1>Aumente sua presença no mundo digital!</h1>
+        <p>Criação de sites e campanhas para aumentar seu faturamento de forma inteligente e inovadora !!</p>
+
+        <div class="content">
+            <div class="text-right">
+                "A propaganda é a alma do negócio!"
+            </div>
+            <div class="text-left">
+                "Transforme sua ideia em resultados!"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Partículas de fundo com particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "size": { "value": 3 },
+                "color": { "value": "#ffffff" },
+                "line_linked": { "enable": true, "color": "#ffffff" },
+                "move": { "speed": 2 }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+            }
+        });
+
+        // Animações com GSAP
+        gsap.fromTo("h1", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 2 });
+        gsap.fromTo("p", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, delay: 1 });
+        gsap.fromTo(".text-right", { x: "100%", opacity: 0 }, { x: "0%", opacity: 1, duration: 2, delay: 3 });
+        gsap.fromTo(".text-left", { x: "-100%", opacity: 0 }, { x: "0%", opacity: 1, duration: 2, delay: 5 });
+
+        // Redirecionar para a página "home.html" após 9 segundos
+        setTimeout(() => {
+            window.location.href = "assets/index.html";
+        }, 9000);
+    </script>
+
+
