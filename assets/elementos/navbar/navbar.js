@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISTIDES B.
-      
-<!-- Script para manipular a abertura e fechamento do menu lateral e alternância de tema -->
-<script>
+
+
+
+    
     // Obtém a referência ao menu lateral
     const menu = document.getElementById('menu');
     const body = document.body;
@@ -62,6 +57,6 @@
             });
         }
     }
-</script>
+
 
  
