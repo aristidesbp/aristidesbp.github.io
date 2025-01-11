@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Marketing Digital</title>
+
+    <style>
+        /* Tema Claro */
+        body.light-theme {
+            background-color: white;
+            color: black;
+        }
+
+        .navbar.light-theme {
+            background-color: black; /* Alterado para preto */
+            color: white;
+        }
+
+        .sidebar.light-theme {
+            background-color: #333; /* Tom de cinza escuro para o fundo do menu lateral */
+        }
+
+        .sidebar a.light-theme {
+            color: white;
+        }
+
+        .sidebar a:hover.light-theme {
+            background-color: #575757;
+        }
+
+        /* Tema Escuro */
+        body.dark-theme {
+            background-color: #121212;
+            color: white;
+        }
+
+        .navbar.dark-theme {
+            background-color: black; /* Alterado para preto */
+            color: white;
+        }
+
+        .sidebar.dark-theme {
+            background-color: #333; /* Tom de cinza escuro para o fundo do menu lateral */
+        }
+
+        .sidebar a.dark-theme {
+            color: white;
+        }
+
+        .sidebar a:hover.dark-theme {
+            background-color: #575757;
+        }
+
+        /* Define o estilo do corpo */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin-top: 80px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Estilo da barra de navegação fixa no topo */
+        .navbar {
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        /* Contêiner para o botão e título na navbar */
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Botão de menu lateral */
+        .menu-btn {
+            font-size: 30px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* Estilo do menu lateral */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333; /* Tom de cinza escuro para o fundo do menu lateral */
+            padding-top: 60px;
+            transition: left 0.3s ease;
+            z-index: 999;
+        }
+
+        /* Torna o menu lateral visível */
+        .sidebar.active {
+            left: 0;
+        }
+
+        /* Links no menu lateral */
+        .sidebar a {
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 20px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        /* Estilo de hover nos links */
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        /* Botão para fechar o menu lateral */
+        .sidebar .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 36px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Ajusta o menu para telas menores */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+        }
+
+        /* Estilo para o título da navbar */
+        .navbar-title {
+            margin-left: 10px; /* Margem adicionada ao título */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="light-theme">
+  
+<div class="navbar light-theme">
+    <div class="navbar-left">
+        <!-- Botão para abrir o menu lateral -->
+        <button class="menu-btn" aria-label="Abrir Menu Lateral" onclick="toggleMenu()">☰</button>    
+  
+        <!-- Botão para alternar entre tema claro e escuro -->
+        <button class="theme-toggle-btn" aria-label="Alternar Tema" onclick="toggleTheme()">🌙</button>
+     
+        <!-- Título da navbar -->
+        <div class="navbar-title"><b>ABP MARKETING DIGITAL</b></div>
+    </div>
+</div>
+
+<!-- Menu lateral -->
+<div id="menu" class="sidebar light-theme" role="navigation" aria-hidden="true">
+    <!-- Botão para fechar o menu -->
+    <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+    <!-- Links do menu -->
+    <a href="index.html" class="light-theme"><b>INÍCIO</b></a>
+    <a href="#servicos" class="light-theme"><b>SERVIÇOS</b></a>
+    <a href="#contato" class="light-theme"><b>CONTATO</b></a>
+    <!-- Links adicionais de exemplo -->
+    <a href="01.html" class="light-theme"><b>01</b></a>
+    <a href="02.html" class="light-theme"><b>02</b></a>
+</div>
+
+<!-- Script para manipular a abertura e fechamento do menu lateral e alternância de tema -->
+<script>
+    // Obtém a referência ao menu lateral
+    const menu = document.getElementById('menu');
+    const body = document.body;
+    const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+    
+    // Alterna o estado do menu lateral
+    function toggleMenu() {
+        menu.classList.toggle('active');
+        menu.setAttribute('aria-hidden', !menu.classList.contains('active'));
+    }
+
+    // Fecha o menu lateral
+    function closeMenu() {
+        menu.classList.remove('active');
+        menu.setAttribute('aria-hidden', 'true');
+    }
+
+    // Fecha o menu ao clicar fora dele
+    window.addEventListener('click', (event) => {
+        if (!menu.contains(event.target) && !event.target.closest('.menu-btn')) {
+            closeMenu();
+        }
+    });
+
+    // Fecha o menu ao pressionar a tecla ESC
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeMenu();
+        }
+    });
+
+    // Alterna entre tema claro e escuro
+    function toggleTheme() {
+        if (body.classList.contains('light-theme')) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            menu.classList.remove('light-theme');
+            menu.classList.add('dark-theme');
+            themeToggleBtn.innerHTML = '🌞'; // Muda o ícone para sol (tema claro)
+            document.querySelectorAll('.sidebar a').forEach((link) => {
+                link.classList.remove('light-theme');
+                link.classList.add('dark-theme');
+            });
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            menu.classList.remove('dark-theme');
+            menu.classList.add('light-theme');
+            themeToggleBtn.innerHTML = '🌙'; // Muda o ícone para lua (tema escuro)
+            document.querySelectorAll('.sidebar a').forEach((link) => {
+                link.classList.remove('dark-theme');
+                link.classList.add('light-theme');
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
