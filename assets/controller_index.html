@@ -24,11 +24,7 @@
 <!-- Contêiner navbar -->
 <div id="navbar-container"></div>
 
-<!-- Contêiner conteúdo -->
-<div id="conteudo-container"></div>
 
-<!-- Contêiner footer -->
-<div id="footer-container"></div>
 
 
 
@@ -36,12 +32,9 @@
 
 <!-- comandos e arquivos JavaScript -->
 <script>
-
-// Função para carregar a navbar, conteúdo e o footer no arquivo index.html
+// Função para carregar a navbar
 document.addEventListener('DOMContentLoaded', function() {
-
-
-    
+  
 fetch('navbar.html') 
 /*Faz o carregamento navbar.html*/
 .then(response => {
@@ -58,43 +51,13 @@ fetch('navbar.html')
             console.error('Erro:', error); // Exibe erros, caso haja algum
         });
 
+}
 
 
 
 
 
-fetch('footer.html')  
-// Faz o carregamento do arquivo footer.html
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao carregar o arquivo footer.html');
-            }
-            return response.text(); // Retorna o conteúdo do arquivo como texto
-        })
-        .then(data => {
-            // Insere o conteúdo do footer no contêiner #footer-container
-            document.getElementById('footer-container').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Erro:', error); // Exibe erros, caso haja algum
-        });
-});
 
-fetch('view/index.html') 
-// Faz o carregamento do arquivo conteudo.html
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao carregar o arquivo conteudo.html');
-            }
-            return response.text(); // Retorna o conteúdo do arquivo como texto
-        })
-        .then(data => {
-            // Insere o conteúdo da página no contêiner #conteudo-container
-            document.getElementById('conteudo-container').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Erro:', error); // Exibe erros, caso haja algum
-        });
 
 
 
