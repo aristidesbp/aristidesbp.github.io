@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Boas-Vindas</title>
+    <title>Bem-Vindo</title>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -16,10 +16,8 @@
             box-sizing: border-box;
         }
 
-        /* Estilo do body */
+        /* Corpo da página */
         body {
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -32,66 +30,69 @@
             text-align: center;
         }
 
-        /* Partículas de fundo */
+        /* Fundo das partículas */
         #particles-js {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw; /* Largura total */
-            height: 100vh; /* Altura total */
-            z-index: -1; /* Fica atrás do conteúdo */
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
         }
 
         /* Container principal */
-        .welcome-container {
+        .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 100%;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             animation: fadeIn 1s ease-in-out;
-        }
-
-        /* Conteúdo */
-        .content {
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 1s ease-out;
         }
 
         /* Título */
         h1 {
-            font-size: 2.5em;
+            font-size: 3em;
+            color: #ffcc00; /* Amarelo destacante */
             margin-bottom: 20px;
-            color: #ffcc00;
-            opacity: 0;
+            animation: fadeInTitle 1.5s ease;
         }
 
         /* Parágrafo */
         p {
             font-size: 1.2em;
-            color: #cccccc;
-            opacity: 0;
+            color: #cccccc; /* Cinza claro */
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Botão de ação */
+        .button {
             margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #1d3557;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        /* Textos animados */
-        .text-right {
-            opacity: 0;
-            transform: translateX(100%);
+        .button:hover {
+            background-color: #e0ac00; /* Tom mais escuro no hover */
         }
 
-        .text-left {
-            opacity: 0;
-            transform: translateX(-100%);
-        }
-
-        /* Animação de fade-in */
+        /* Efeitos de fade-in */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.95);
             }
             to {
                 opacity: 1;
@@ -99,7 +100,18 @@
             }
         }
 
-        /* Ajustes para telas menores */
+        @keyframes fadeInTitle {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ajustes responsivos */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -107,31 +119,26 @@
             p {
                 font-size: 1em;
             }
+            .button {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
-
     <!-- Partículas de fundo -->
     <div id="particles-js"></div>
-    
-    <!-- Container principal -->
-    <div class="welcome-container">
-        <h1>Aumente sua presença no mundo digital!</h1>
-        <p>Criação de sites e campanhas para aumentar seu faturamento de forma inteligente e inovadora !!</p>
 
-        <div class="content">
-            <div class="text-right">
-                "A propaganda é a alma do negócio!"
-            </div>
-            <div class="text-left">
-                "Transforme sua ideia em resultados!"
-            </div>
-        </div>
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <h1>Bem-vindo</h1>
+        <p>Transforme suas ideias em realidade com soluções inovadoras em sites e campanhas digitais. Descubra como alcançar seus objetivos de forma estratégica e eficiente.</p>
+        <p>"A propaganda é a alma do negócio" &bull; "Transforme sua ideia em resultados"</p>
+        <button class="button" onclick="navigateToHome()">Saiba Mais</button>
     </div>
 
     <script>
-        // Partículas de fundo com particles.js
+        // Configuração das partículas
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 80 },
@@ -145,17 +152,10 @@
             }
         });
 
-        // Animações com GSAP
-        gsap.fromTo("h1", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 2 });
-        gsap.fromTo("p", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, delay: 1 });
-        gsap.fromTo(".text-right", { x: "100%", opacity: 0 }, { x: "0%", opacity: 1, duration: 2, delay: 3 });
-        gsap.fromTo(".text-left", { x: "-100%", opacity: 0 }, { x: "0%", opacity: 1, duration: 2, delay: 5 });
-
-        // Redirecionar para a página "home.html" após 9 segundos
-        setTimeout(() => {
-            window.location.href = "assets/navbar.html";
-        }, 11000);
+        // Função para redirecionamento
+        function navigateToHome() {
+            window.location.href = "assets/home.html";
+        }
     </script>
-
 </body>
 </html>
