@@ -1,159 +1,402 @@
+
+            
+
 :root {
-    /* Variáveis de cores para fácil alteração do tema */
-    --bg-light: #f0f8ff; /* Cor de fundo clara */
-    --text-light: #1d3557; /* Cor do texto em tema claro */
-    --bg-dark: #121212; /* Cor de fundo escura */
-    --text-dark: #f0f8ff; /* Cor do texto em tema escuro */
-    --navbar-light: #1d3557; /* Cor da barra de navegação no tema claro */
-    --navbar-dark: #333; /* Cor da barra de navegação no tema escuro */
-    --sidebar-bg: #457b9d; /* Cor de fundo da barra lateral */
-    --sidebar-hover: #1d3557; /* Cor de fundo ao passar o mouse sobre links na barra lateral */
-    --button-bg: #ffcc00; /* Cor de fundo dos botões */
-    --button-hover: #d4a500; /* Cor de fundo dos botões ao passar o mouse */
+    --bg-light: #f0f8ff; /* Azul claro */
+    --text-light: #1d3557; /* Azul escuro */
+    --bg-dark: #121212;
+    --text-dark: #f0f8ff;
+    --navbar-light: #1d3557; /* Azul escuro no tema claro */
+    --navbar-dark: #333;
+    --sidebar-bg: #457b9d; /* Azul médio */
+    --sidebar-hover: #1d3557; /* Azul escuro */
+    --button-bg: #ffcc00; /* Amarelo */
+    --button-hover: #d4a500;
 }
 
+/* Estilos globais */
 body {
-    /* Estilos gerais do corpo da página */
     margin: 0;
-    font-family: 'Roboto', sans-serif; /* Fonte principal */
-    line-height: 1.6; /* Espaçamento entre linhas */
-    margin-top: 80px; /* Espaço para compensar a navbar fixa */
-    background-color: var(--bg-light); /* Cor de fundo no tema claro */
-    color: var(--text-light); /* Cor do texto no tema claro */
-    transition: background-color 0.3s, color 0.3s; /* Transição suave entre temas */
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    margin-top: 80px;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 body.dark-theme {
-    /* Estilos aplicados quando o tema escuro está ativo */
     background-color: var(--bg-dark);
     color: var(--text-dark);
 }
 
+/* Navbar */
 .navbar {
-    /* Estilos da barra de navegação */
-    background-color: var(--navbar-light); /* Cor de fundo */
-    color: white; /* Cor do texto */
-    padding: 10px 20px; /* Espaçamento interno */
-    display: flex; /* Layout flexível */
-    align-items: center; /* Alinhamento vertical central */
-    position: fixed; /* Fixa no topo da página */
+    background-color: var(--navbar-light);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000; /* Prioridade de sobreposição */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .menu-btn, .theme-toggle-btn {
-    /* Estilos para os botões de menu e alternância de tema */
-    font-size: 30px; /* Tamanho do ícone */
-    background: none; /* Sem fundo */
-    border: none; /* Sem borda */
-    color: inherit; /* Usa a cor herdada */
-    cursor: pointer; /* Mostra o cursor de clique */
-    margin-right: 10px; /* Espaço à direita */
-    transition: transform 0.2s; /* Animação de transformação */
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.2s;
 }
 
 .menu-btn:hover, .theme-toggle-btn:hover {
-    /* Efeito de ampliação ao passar o mouse */
     transform: scale(1.1);
 }
 
 .navbar-title {
-    /* Estilo do título na navbar */
-    font-weight: bold; /* Negrito */
+    font-weight: bold;
 }
 
+/* Sidebar */
 .sidebar {
-    /* Estilos para a barra lateral */
-    position: fixed; /* Fixa no lado esquerdo */
+    position: fixed;
     top: 0;
-    left: -250px; /* Inicialmente fora da tela */
-    height: 100%; /* Altura total da tela */
-    width: 250px; /* Largura fixa */
-    background-color: var(--sidebar-bg); /* Cor de fundo */
-    color: var(--text-dark); /* Cor do texto */
-    padding-top: 60px; /* Espaço no topo */
-    transition: left 0.3s ease; /* Animação suave para aparecer/desaparecer */
-    z-index: 1100; /* Prioridade sobre a navbar */
+    left: -250px;
+    height: 100%;
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    color: var(--text-dark);
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 1100;
 }
 
 .sidebar.active {
-    /* Quando a barra lateral está ativa */
-    left: 0; /* Totalmente visível */
+    left: 0;
 }
 
 .sidebar a {
-    /* Links na barra lateral */
-    padding: 10px 20px; /* Espaçamento interno */
-    text-decoration: none; /* Remove sublinhado */
-    font-size: 20px; /* Tamanho da fonte */
-    color: white; /* Cor do texto */
-    display: block; /* Cada link ocupa uma linha */
-    transition: background-color 0.3s; /* Transição suave de cor de fundo */
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: background-color 0.3s;
 }
 
 .sidebar a:hover {
-    /* Cor de fundo ao passar o mouse nos links */
     background-color: var(--sidebar-hover);
 }
 
 .close-btn {
-    /* Botão para fechar a barra lateral */
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 36px; /* Tamanho do ícone */
-    color: white; /* Cor do ícone */
-    cursor: pointer; /* Mostra o cursor de clique */
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
 }
 
+/* Hero Section */
 .hero {
-    /* Seção principal do site */
-    text-align: center; /* Centraliza o texto */
-    padding: 100px 20px; /* Espaçamento interno */
-    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg)); /* Gradiente de cores */
-    color: white; /* Cor do texto */
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Forma personalizada */
+    text-align: center;
+    padding: 100px 20px;
+    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg));
+    color: white;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 
 .hero h1 {
-    /* Estilo para o título principal */
-    font-size: 3em; /* Tamanho grande */
-    margin-bottom: 20px; /* Espaço inferior */
+    font-size: 3em;
+    margin-bottom: 20px;
 }
 
 .hero p {
-    /* Estilo para o parágrafo */
-    font-size: 1.2em; /* Tamanho médio */
-    margin-bottom: 30px; /* Espaço inferior */
+    font-size: 1.2em;
+    margin-bottom: 30px;
 }
 
+/* Buttons */
 .btn {
-    /* Estilos gerais dos botões */
-    background-color: var(--button-bg); /* Cor de fundo */
-    color: white; /* Cor do texto */
-    padding: 10px 20px; /* Espaçamento interno */
-    text-decoration: none; /* Remove sublinhado */
-    font-size: 1em; /* Tamanho da fonte */
-    border-radius: 5px; /* Arredondamento das bordas */
-    transition: background-color 0.3s; /* Transição suave de cor de fundo */
+    background-color: var(--button-bg);
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .btn:hover {
-    /* Cor de fundo ao passar o mouse */
     background-color: var(--button-hover);
 }
 
-.footer {
-    /* Estilos do rodapé */
-    background: #333; /* Cor de fundo */
-    color: #fff; /* Cor do texto */
-    padding: 2rem 1rem; /* Espaçamento interno */
-    text-align: center; /* Texto centralizado */
+/* Contact Section */
+.contact {
+    padding: 50px 20px;
+    text-align: center;
+    background: var(--bg-light);
+    color: var(--text-light);
 }
 
-.footer p {
-    /* Estilos para o parágrafo do rodapé */
-    font-size: 0.9rem; /* Fonte menor */
+body.dark-theme .contact {
+    background: var(--bg-dark);
+    color: var(--text-dark);
 }
+
+.contact h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.contact p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.contact form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact input, .contact textarea, .contact button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--text-light);
+    border-radius: 5px;
+}
+
+body.dark-theme .contact input, 
+body.dark-theme .contact textarea, 
+body.dark-theme .contact button {
+    border: 1px solid var(--text-dark);
+}
+
+.contact button {
+    background-color: var(--button-bg);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact button:hover {
+    background-color: var(--button-hover);
+}
+
+/* Estilo para o Menu Lateral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    width: 250px;
+    background-color: var(--sidebar-bg); /* Cor padrão para o tema claro */
+    color: var(--text-dark);
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 1100;
+}
+
+body.dark-theme .sidebar {
+    background-color: #333; /* Cor cinza escuro para o tema escuro */
+}
+
+/* Quando o menu lateral estiver visível */
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+body.dark-theme .sidebar a {
+    color: white;
+}
+
+.sidebar a:hover {
+    background-color: var(--sidebar-hover);
+}
+
+
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* General Styles */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(45deg, #1e90ff, #00bcd4);
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 4rem 0;
+            background-color: #f9f9f9;
+        }
+
+        .services h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .services .service-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .services .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .services .service-card h3 {
+            color: #1e90ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services .service-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Call to Action Section */
+        .cta {
+            background: linear-gradient(45deg, #ff5722, #ff9800);
+            color: #fff;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta button {
+            background: #fff;
+            color: #ff5722;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta button:hover {
+            background: #ffe0b2;
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            padding: 4rem 0;
+            background-color: #fff;
+        }
+
+        .portfolio h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .portfolio .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .portfolio .portfolio-item img {
+            width: 100%;
+            display: block;
+        }
+
+        .portfolio .portfolio-item .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .portfolio .portfolio-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+        }
+    
+
+    
