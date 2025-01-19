@@ -1,140 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Especialistas em marketing digital e tráfego pago.">
-  <meta name="keywords" content="marketing digital, tráfego pago, estratégias de venda">
-  <meta name="author" content="Aristides Barbosa Pontes">
-  <title>ABP MARKETING DIGITAL</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
-  
-    
-    <style>
-        :root {
-            --bg-light: white;
-            --text-light: black;
-            --bg-dark: #121212;
-            --text-dark: white;
-            --navbar-bg: black;
-            --sidebar-bg: #333;
-            --sidebar-hover: #575757;
-        }
-
-        /* Estilos globais */
-        body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            margin-top: 80px;
-            background-color: var(--bg-light);
-            color: var(--text-light);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        body.dark-theme {
-            background-color: var(--bg-dark);
-            color: var(--text-dark);
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: var(--navbar-bg);
-            color: var(--text-dark);
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .menu-btn, .theme-toggle-btn {
-            font-size: 30px;
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: transform 0.2s;
-        }
-
-        .menu-btn:hover, .theme-toggle-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .navbar-title {
-            font-weight: bold;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            height: 100%;
-            width: 250px;
-            background-color: var(--sidebar-bg);
-            color: var(--text-dark);
-            padding-top: 60px;
-            transition: left 0.3s ease;
-            z-index: 1100;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar a {
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 20px;
-            color: var(--text-dark);
-            display: block;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: var(--sidebar-hover);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 36px;
-            color: var(--text-dark);
-            cursor: pointer;
-        }
-
-        /* Sobreposição do menu */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1050;
-            display: none;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        /* Conteúdo */
-        .content {
-            padding: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISTIDES B. PONTES</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body class="light-theme">
     <div class="navbar">
         <button class="menu-btn" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button>
@@ -142,10 +13,6 @@
         <div class="navbar-title">ARISTIDES B. PONTES</div>
     </div>
 
-    <!-- Overlay -->
-    <div id="overlay" class="overlay" onclick="closeMenu()"></div>
-
-    <!-- Menu lateral -->
     <nav id="menu" class="sidebar" aria-hidden="true">
         <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
         <a href="index.html">INÍCIO</a>
@@ -155,7 +22,12 @@
         <a href="02.html">02</a>
     </nav>
 
-    <!-- Conteúdo principal -->
+    <div class="hero">
+        <h1>Eleve seu negócio a outro nível com fuscack de qualidade!</h1>
+        <p>Transformando ideias em resultados através de tecnologias e estratégias inteligentes.</p>
+        <a href="#contato" class="btn">Entre em Contato</a>
+    </div>
+
     <div class="content">
         <h1>Bem-vindo ao meu site!</h1>
         <h2>Quem eu sou?</h2>
@@ -163,42 +35,12 @@
         
         <h2>O que faço?</h2>
         <p>Eu ajudo empresas a encontrar e impactar seus públicos-alvo através de estratégias de tráfego pago. Além disso, desenvolvo soluções de software, incluindo aplicativos móveis e websites, com foco na experiência do usuário e eficiência.</p>
-        
-        <h2>Projetos criados</h2>
-        <ul>
-            <li>Aplicativo de lista de tarefas com banco de dados embutido.</li>
-            <li>Sistema de gerenciamento financeiro "Contas a Pagar".</li>
-            <li>Campanha de marketing para coworking em Belém/PA.</li>
-            <li>Website para venda de ração com base de dados Glitch.</li>
-        </ul>
     </div>
 
-    <script>
-        const menu = document.getElementById('menu');
-        const overlay = document.getElementById('overlay');
-        const body = document.body;
-        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+    <footer class="footer">
+        <p>© 2025 Aristides B. Pontes. Todos os direitos reservados.</p>
+    </footer>
 
-        // Alterna o menu lateral
-        function toggleMenu() {
-            menu.classList.toggle('active');
-            overlay.classList.toggle('active');
-            menu.setAttribute('aria-hidden', !menu.classList.contains('active'));
-        }
-
-        function closeMenu() {
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
-            menu.setAttribute('aria-hidden', 'true');
-        }
-
-        // Alterna o tema
-        function toggleTheme() {
-            const isLight = body.classList.contains('light-theme');
-            body.classList.toggle('light-theme', !isLight);
-            body.classList.toggle('dark-theme', isLight);
-            themeToggleBtn.innerHTML = isLight ? '🌞' : '🌙';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
