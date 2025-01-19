@@ -1,46 +1,124 @@
 <!DOCTYPE html>
-<html lang="pt-BR"> <!-- Define a linguagem do conteúdo da página como português do Brasil -->
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"> <!-- Define o conjunto de caracteres como UTF-8, permitindo o uso de caracteres especiais -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Garante que a página seja responsiva em dispositivos móveis -->
-    <title>ARISTIDES B. PONTES</title> <!-- Define o título da página que aparece na aba do navegador -->
-    <link rel="stylesheet" href="css/portifolio.css"> <!-- Link para o arquivo de estilo CSS que define o layout e aparência da página -->
+    <!-- Definição da codificação de caracteres para garantir que caracteres especiais sejam exibidos corretamente -->
+    <meta charset="UTF-8">
+    
+    <!-- Define a visualização para dispositivos móveis, garantindo que o site se ajuste ao tamanho da tela -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Título da página que aparece na aba do navegador -->
+    <title>ARISTIDES B. PONTES</title>
 </head>
-<body class="light-theme"> <!-- Define a classe "light-theme" para o corpo da página, aplicando o tema claro por padrão -->
-    <div class="navbar"> <!-- Barra de navegação fixa no topo da página -->
-        <button class="menu-btn" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button> <!-- Botão de menu que, ao ser clicado, executa a função toggleMenu() -->
-        <button class="theme-toggle-btn" aria-label="Alternar Tema" onclick="toggleTheme()">🌙</button> <!-- Botão para alternar entre os temas claro e escuro -->
-        <div class="navbar-title">ARISTIDES B. PONTES</div> <!-- Título principal da barra de navegação -->
+<body class="light-theme">
+    <!-- Barra de navegação com botões de menu e alternância de tema -->
+    <div class="navbar">
+        <!-- Botão para abrir o menu lateral -->
+        <button class="menu-btn" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button>
+        
+        <!-- Botão para alternar entre o tema claro e escuro -->
+        <button class="theme-toggle-btn" aria-label="Alternar Tema" onclick="toggleTheme()">🌙</button>
+        
+        <!-- Título da barra de navegação -->
+        <div class="navbar-title">ARISTIDES B. PONTES</div>
     </div>
 
-    <nav id="menu" class="sidebar" aria-hidden="true"> <!-- Menu lateral (sidebar), inicialmente escondido -->
-        <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span> <!-- Botão de fechar o menu -->
-        <a href="index.html">INÍCIO</a> <!-- Link para a página inicial -->
-        <a href="#servicos">SERVIÇOS</a> <!-- Link para a seção de serviços -->
-        <a href="#contato">CONTATO</a> <!-- Link para a seção de contato -->
-        <a href="01.html">01</a> <!-- Link para uma página adicional -->
-        <a href="02.html">02</a> <!-- Link para outra página adicional -->
+    <!-- Menu lateral oculto inicialmente, que é aberto quando o botão de menu é clicado -->
+    <nav id="menu" class="sidebar" aria-hidden="true">
+        <!-- Botão para fechar o menu lateral -->
+        <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+        
+        <!-- Links do menu -->
+        <a href="index.html">INÍCIO</a>
+        <a href="#servicos">SERVIÇOS</a>
+        <a href="#contato">CONTATO</a>
+        <a href="01.html">01</a>
+        <a href="02.html">02</a>
     </nav>
 
-    <div class="hero"> <!-- Seção hero, geralmente usada para uma introdução chamativa -->
-        <h1>Eleve seu negócio a outro nível com fuscack de qualidade!</h1> <!-- Título da seção hero -->
-        <p>Transformando ideias em resultados através de tecnologias e estratégias inteligentes.</p> <!-- Descrição abaixo do título -->
-        <a href="#contato" class="btn">Entre em Contato</a> <!-- Botão de chamada para ação que leva à seção de contato -->
+    <!-- Seção principal com mensagem de boas-vindas -->
+    <div class="hero">
+        <!-- Título principal -->
+        <h1>Eleve seu negócio a outro nível com fuscack de qualidade!</h1>
+        
+        <!-- Descrição breve -->
+        <p>Transformando ideias em resultados através de tecnologias e estratégias inteligentes.</p>
+        
+        <!-- Botão para entrar em contato -->
+        <a href="#contato" class="btn">Entre em Contato</a>
     </div>
 
-    <div class="content"> <!-- Seção de conteúdo principal da página -->
-        <h1>Bem-vindo ao meu site!</h1> <!-- Título principal da seção de conteúdo -->
-        <h2>Quem eu sou?</h2> <!-- Subtítulo que descreve a pessoa -->
-        <p>Meu nome é Aristides B. Pontes, sou formado em Análise e Desenvolvimento de Sistemas e trabalho como Gestor de Tráfego Pago, Programador Web Front-End e Especialista em Marketing Digital.</p> <!-- Parágrafo explicando quem é Aristides -->
-
-        <h2>O que faço?</h2> <!-- Subtítulo explicando o que Aristides faz -->
-        <p>Eu ajudo empresas a encontrar e impactar seus públicos-alvo através de estratégias de tráfego pago. Além disso, desenvolvo soluções de software, incluindo aplicativos móveis e websites, com foco na experiência do usuário e eficiência.</p> <!-- Parágrafo explicando o que Aristides faz -->
+    <!-- Conteúdo principal da página -->
+    <div class="content">
+        <!-- Título principal da seção -->
+        <h1>Bem-vindo ao meu site!</h1>
+        
+        <!-- Subtítulo e descrição sobre quem é Aristides -->
+        <h2>Quem eu sou?</h2>
+        <p>Meu nome é Aristides B. Pontes, sou formado em Análise e Desenvolvimento de Sistemas e trabalho como Gestor de Tráfego Pago, Programador Web Front-End e Especialista em Marketing Digital.</p>
+        
+        <!-- Subtítulo e descrição sobre os serviços oferecidos -->
+        <h2>O que faço?</h2>
+        <p>Eu ajudo empresas a encontrar e impactar seus públicos-alvo através de estratégias de tráfego pago. Além disso, desenvolvo soluções de software, incluindo aplicativos móveis e websites, com foco na experiência do usuário e eficiência.</p>
     </div>
 
-    <footer class="footer"> <!-- Rodapé da página -->
-        <p>© 2025 Aristides B. Pontes. Todos os direitos reservados.</p> <!-- Texto de direitos autorais -->
+    <!-- Cabeçalho da seção de serviços com estilo personalizado -->
+    <header class="header">
+        <div class="container">
+            <!-- Título da seção -->
+            <h1>Transforme Sua Presença Online</h1>
+            
+            <!-- Descrição breve sobre os serviços -->
+            <p>Oferecemos serviços de publicidade digital sob medida para impulsionar seu negócio.</p>
+        </div>
+    </header>
+
+    <!-- Seção de serviços -->
+    <section class="services">
+        <div class="container">
+            <!-- Título da seção de serviços -->
+            <h2>Nossos Serviços</h2>
+            
+            <!-- Grid para exibir os serviços -->
+            <div class="service-grid">
+                <!-- Card de serviço: Criação de Sites -->
+                <div class="service-card">
+                    <h3>Criação de Sites</h3>
+                    <p>Sites modernos e responsivos, personalizados para suas necessidades.</p>
+                </div>
+                
+                <!-- Card de serviço: Gestão de Tráfego Pago -->
+                <div class="service-card">
+                    <h3>Gestão de Tráfego Pago</h3>
+                    <p>Campanhas de anúncios eficazes para aumentar sua visibilidade e vendas.</p>
+                </div>
+                
+                <!-- Card de serviço: Consultoria em Marketing Digital -->
+                <div class="service-card">
+                    <h3>Consultoria em Marketing Digital</h3>
+                    <p>Orientação estratégica para melhorar sua presença online e alcançar seu público-alvo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção com chamada para ação -->
+    <section class="cta">
+        <!-- Título da seção -->
+        <h2>Pronto para crescer?</h2>
+        
+        <!-- Descrição breve incentivando a ação -->
+        <p>Entre em contato conosco e descubra como podemos ajudar a transformar seu negócio.</p>
+        
+        <!-- Botão chamando para solicitar uma consultoria -->
+        <button onclick="window.location.href='#contato'">Solicite uma Consultoria</button>
+    </section>
+
+    <!-- Rodapé do site -->
+    <footer class="footer">
+        <!-- Texto de copyright -->
+        <p>&copy; 2025 ARISTIDES B. PONTES. Todos os direitos reservados.</p>
     </footer>
 
-    <script src="js/portifolio.js"></script> <!-- Inclusão do script JavaScript que contém funcionalidades interativas da página -->
 </body>
 </html>
