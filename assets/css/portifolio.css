@@ -1,403 +1,401 @@
 
+
 :root {
-    --bg-light: #f0f8ff; /* Azul claro */
-    --text-light: #1d3557; /* Azul escuro */
-    --bg-dark: #121212;
-    --text-dark: #f0f8ff;
-    --navbar-light: #1d3557; /* Azul escuro no tema claro */
-    --navbar-dark: #333;
-    --sidebar-bg: #457b9d; /* Azul médio */
-    --sidebar-hover: #1d3557; /* Azul escuro */
-    --button-bg: #ffcc00; /* Amarelo */
-    --button-hover: #d4a500;
+    --bg-light: #f0f8ff; /* Define a cor de fundo clara como um azul claro */
+    --text-light: #1d3557; /* Define a cor do texto claro como um azul escuro */
+    --bg-dark: #121212; /* Define a cor de fundo escura como um tom de preto */
+    --text-dark: #f0f8ff; /* Define a cor do texto escuro como um azul claro (o oposto do texto claro) */
+    --navbar-light: #1d3557; /* Define a cor da barra de navegação no tema claro como azul escuro */
+    --navbar-dark: #333; /* Define a cor da barra de navegação no tema escuro como cinza escuro */
+    --sidebar-bg: #457b9d; /* Define a cor de fundo da barra lateral como um azul médio */
+    --sidebar-hover: #1d3557; /* Define a cor da barra lateral ao passar o mouse como azul escuro */
+    --button-bg: #ffcc00; /* Define a cor de fundo dos botões como amarelo */
+    --button-hover: #d4a500; /* Define a cor de fundo dos botões ao passar o mouse como um tom mais escuro de amarelo */
 }
+/*###################################################################################################################*/
 
-/* Estilos globais */
+
+
+/* Estilos gerais */
 body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
-    margin-top: 80px;
-    background-color: var(--bg-light);
-    color: var(--text-light);
-    transition: background-color 0.3s, color 0.3s;
+    margin: 0; /* Remove a margem padrão do corpo da página */
+    font-family: 'Roboto', sans-serif; /* Define a fonte padrão como Roboto, com fallback para sans-serif */
+    line-height: 1.6; /* Define o espaçamento entre linhas como 1.6 para melhorar a legibilidade */
+    margin-top: 80px; /* Adiciona uma margem superior de 80px para afastar o conteúdo do topo da página */
+    background-color: var(--bg-light); /* Define a cor de fundo do corpo com a variável de cor clara */
+    color: var(--text-light); /* Define a cor do texto com a variável de cor de texto clara */
+    transition: background-color 0.3s, color 0.3s; /* Adiciona uma transição suave de 0.3s para as mudanças de cor de fundo e cor do texto */
 }
 
+/* Estilo para o tema escuro */
 body.dark-theme {
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
+    background-color: var(--bg-dark); /* Quando o tema escuro é ativado, a cor de fundo muda para a variável de cor escura */
+    color: var(--text-dark); /* Quando o tema escuro é ativado, a cor do texto muda para a variável de cor de texto escura */
 }
+
+
+
+/*###################################################################################################################*/
 
 /* Navbar */
 .navbar {
-    background-color: var(--navbar-light);
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: var(--navbar-light); /* Define o fundo da barra de navegação com a cor do tema claro */
+    color: white; /* Define a cor do texto da barra de navegação como branca */
+    padding: 10px 20px; /* Adiciona 10px de espaçamento nas laterais e 20px no topo e na base da barra */
+    display: flex; /* Usa o layout Flexbox para alinhar os itens na barra de navegação */
+    align-items: center; /* Alinha verticalmente os itens ao centro */
+    position: fixed; /* A barra de navegação ficará fixa no topo da página */
+    top: 0; /* Define que a barra ficará no topo */
+    width: 100%; /* A barra ocupará toda a largura da tela */
+    z-index: 1000; /* Garante que a barra de navegação fique acima de outros elementos */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Aplica uma sombra suave para dar destaque à barra */
 }
 
 .menu-btn, .theme-toggle-btn {
-    font-size: 30px;
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: transform 0.2s;
+    font-size: 30px; /* Define o tamanho da fonte para os botões de menu e de troca de tema */
+    background: none; /* Remove o fundo dos botões */
+    border: none; /* Remove a borda dos botões */
+    color: inherit; /* Herda a cor do texto da navbar */
+    cursor: pointer; /* Define o cursor como ponteiro para indicar que é um botão clicável */
+    margin-right: 10px; /* Adiciona uma margem à direita dos botões */
+    transition: transform 0.2s; /* Define uma transição para o efeito de transformação (escala) */
 }
 
 .menu-btn:hover, .theme-toggle-btn:hover {
-    transform: scale(1.1);
+    transform: scale(1.1); /* Aplica um efeito de aumento (scale) de 10% quando o mouse passa sobre os botões */
 }
 
 .navbar-title {
-    font-weight: bold;
+    font-weight: bold; /* Deixa o título da navbar em negrito */
 }
 
+/*###################################################################################################################*/
 /* Sidebar */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    height: 100%;
-    width: 250px;
-    background-color: var(--sidebar-bg);
-    color: var(--text-dark);
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 1100;
+    position: fixed; /* A sidebar ficará fixa na tela, não se movendo ao rolar a página */
+    top: 0; /* A sidebar começará no topo da tela */
+    left: -250px; /* A sidebar começará fora da tela, à esquerda */
+    height: 100%; /* A sidebar terá altura de 100% da tela */
+    width: 250px; /* A largura da sidebar será de 250px */
+    background-color: var(--sidebar-bg); /* Define a cor de fundo da sidebar utilizando a variável do tema */
+    color: var(--text-dark); /* Define a cor do texto dentro da sidebar */
+    padding-top: 60px; /* Adiciona um espaçamento de 60px no topo da sidebar para que o conteúdo não fique colado à borda superior */
+    transition: left 0.3s ease; /* Define uma animação suave para a mudança do valor da propriedade 'left' quando a sidebar for ativada */
+    z-index: 1100; /* Define o z-index para garantir que a sidebar ficará acima de outros elementos da página */
 }
 
 .sidebar.active {
-    left: 0;
+    left: 0; /* Quando a sidebar estiver ativa, ela se moverá para a posição 0 (visível na tela) */
 }
 
 .sidebar a {
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    display: block;
-    transition: background-color 0.3s;
+    padding: 10px 20px; /* Adiciona 10px de preenchimento acima e abaixo, e 20px à esquerda e à direita de cada link na sidebar */
+    text-decoration: none; /* Remove o sublinhado dos links */
+    font-size: 20px; /* Define o tamanho da fonte dos links */
+    color: white; /* Define a cor do texto dos links como branca */
+    display: block; /* Garante que cada link ocupe uma linha inteira */
+    transition: background-color 0.3s; /* Aplica uma animação suave para a mudança de cor de fundo dos links ao passar o mouse */
 }
 
 .sidebar a:hover {
-    background-color: var(--sidebar-hover);
+    background-color: var(--sidebar-hover); /* Quando o mouse passar sobre o link, a cor de fundo será alterada para a cor definida na variável do tema */
 }
 
 .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 36px;
-    color: white;
-    cursor: pointer;
+    position: absolute; /* A posição do botão de fechar será absoluta em relação à sidebar */
+    top: 15px; /* Posiciona o botão 15px abaixo do topo da sidebar */
+    right: 20px; /* Posiciona o botão 20px à esquerda da borda direita da sidebar */
+    font-size: 36px; /* Define um tamanho grande para o ícone do botão de fechar */
+    color: white; /* A cor do ícone será branca */
+    cursor: pointer; /* O cursor mudará para um ponteiro ao passar sobre o botão, indicando que ele é clicável */
 }
+
+
+/*###################################################################################################################*/
 
 /* Hero Section */
 .hero {
-    text-align: center;
-    padding: 100px 20px;
-    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg));
-    color: white;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    text-align: center; /* Alinha o texto no centro da seção */
+    padding: 100px 20px; /* Adiciona 100px de preenchimento no topo e fundo, e 20px nas laterais */
+    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg)); /* Cria um fundo com gradiente de 135 graus, indo de "navbar-light" para "sidebar-bg" */
+    color: white; /* Define a cor do texto como branca */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Aplica uma forma de polígono à seção, criando uma borda diagonal na parte inferior */
 }
 
 .hero h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
+    font-size: 3em; /* Define o tamanho da fonte do título principal como 3 vezes o tamanho da fonte padrão */
+    margin-bottom: 20px; /* Adiciona um espaço de 20px abaixo do título */
 }
 
 .hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
+    font-size: 1.2em; /* Define o tamanho da fonte do parágrafo como 1.2 vezes o tamanho da fonte padrão */
+    margin-bottom: 30px; /* Adiciona um espaço de 30px abaixo do parágrafo */
 }
 
-/* Buttons */
+/*###################################################################################################################*/
+
+
+/* Botões */
 .btn {
-    background-color: var(--button-bg);
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 1em;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    background-color: var(--button-bg); /* Define a cor de fundo do botão utilizando a variável --button-bg */
+    color: white; /* Define a cor do texto do botão como branca */
+    padding: 10px 20px; /* Adiciona 10px de preenchimento no topo e no fundo, e 20px nas laterais do botão */
+    text-decoration: none; /* Remove qualquer decoração de texto (como sublinhado) no botão */
+    font-size: 1em; /* Define o tamanho da fonte do botão como o tamanho padrão da página */
+    border-radius: 5px; /* Aplica bordas arredondadas ao botão com um raio de 5px */
+    transition: background-color 0.3s; /* Adiciona uma transição suave de 0.3 segundos para a mudança de cor de fundo */
 }
 
 .btn:hover {
-    background-color: var(--button-hover);
+    background-color: var(--button-hover); /* Muda a cor de fundo do botão quando o usuário passa o mouse sobre ele, usando a variável --button-hover */
 }
 
-/* Contact Section */
+/*###################################################################################################################*/
+/* Seção de Contato */
 .contact {
-    padding: 50px 20px;
-    text-align: center;
-    background: var(--bg-light);
-    color: var(--text-light);
+    padding: 50px 20px; /* Define 50px de preenchimento no topo e no fundo e 20px nas laterais da seção de contato */
+    text-align: center; /* Centraliza o texto dentro da seção */
+    background: var(--bg-light); /* Define o fundo da seção com a cor de fundo clara */
+    color: var(--text-light); /* Define a cor do texto como a cor de texto clara */
 }
 
 body.dark-theme .contact {
-    background: var(--bg-dark);
-    color: var(--text-dark);
+    background: var(--bg-dark); /* Muda o fundo para o tema escuro quando a classe 'dark-theme' está ativa no body */
+    color: var(--text-dark); /* Muda a cor do texto para o tema escuro quando a classe 'dark-theme' está ativa */
 }
 
 .contact h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+    font-size: 2.5em; /* Define o tamanho da fonte do título como 2.5 vezes o tamanho padrão */
+    margin-bottom: 20px; /* Adiciona 20px de margem abaixo do título */
 }
 
 .contact p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
+    font-size: 1.2em; /* Define o tamanho da fonte do parágrafo como 1.2 vezes o tamanho padrão */
+    margin-bottom: 30px; /* Adiciona 30px de margem abaixo do parágrafo */
 }
 
 .contact form {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 600px; /* Define a largura máxima do formulário como 600px */
+    margin: 0 auto; /* Centraliza o formulário horizontalmente */
 }
 
 .contact input, .contact textarea, .contact button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid var(--text-light);
-    border-radius: 5px;
+    width: 100%; /* Define a largura dos campos de entrada, textarea e botão como 100% do tamanho do contêiner */
+    padding: 10px; /* Adiciona 10px de preenchimento dentro dos campos */
+    margin-bottom: 20px; /* Adiciona 20px de margem abaixo de cada campo */
+    border: 1px solid var(--text-light); /* Define uma borda de 1px com a cor de texto clara */
+    border-radius: 5px; /* Adiciona bordas arredondadas aos campos com raio de 5px */
 }
 
 body.dark-theme .contact input, 
 body.dark-theme .contact textarea, 
 body.dark-theme .contact button {
-    border: 1px solid var(--text-dark);
+    border: 1px solid var(--text-dark); /* Muda a cor da borda para a cor de texto escura quando o tema escuro está ativo */
 }
 
 .contact button {
-    background-color: var(--button-bg);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    background-color: var(--button-bg); /* Define a cor de fundo do botão com a variável --button-bg (amarelo) */
+    color: white; /* Define a cor do texto do botão como branca */
+    cursor: pointer; /* Aplica um cursor de ponteiro para indicar que o botão é clicável */
+    transition: background-color 0.3s; /* Adiciona uma transição suave de 0.3 segundos para a mudança de cor de fundo */
 }
 
 .contact button:hover {
-    background-color: var(--button-hover);
-}
-
-/* Estilo para o Menu Lateral */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    height: 100%;
-    width: 250px;
-    background-color: var(--sidebar-bg); /* Cor padrão para o tema claro */
-    color: var(--text-dark);
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 1100;
-}
-
-body.dark-theme .sidebar {
-    background-color: #333; /* Cor cinza escuro para o tema escuro */
-}
-
-/* Quando o menu lateral estiver visível */
-.sidebar.active {
-    left: 0;
-}
-
-.sidebar a {
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    display: block;
-    transition: background-color 0.3s;
-}
-
-body.dark-theme .sidebar a {
-    color: white;
-}
-
-.sidebar a:hover {
-    background-color: var(--sidebar-hover);
+    background-color: var(--button-hover); /* Muda a cor de fundo do botão para a variável --button-hover (amarelo escuro) quando o mouse passa por cima */
 }
 
 
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/*###################################################################################################################*/
 
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
+/* Reset CSS */
+* {
+    margin: 0; /* Remove a margem de todos os elementos */
+    padding: 0; /* Remove o preenchimento de todos os elementos */
+    box-sizing: border-box; /* Define que o preenchimento e as bordas sejam incluídos no tamanho total do elemento */
+}
 
-        /* General Styles */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Header Styles */
-        .header {
-            background: linear-gradient(45deg, #1e90ff, #00bcd4);
-            color: #fff;
-            padding: 2rem 1rem;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 4rem 0;
-            background-color: #f9f9f9;
-        }
-
-        .services h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            color: #333;
-        }
-
-        .services .service-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .services .service-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .services .service-card h3 {
-            color: #1e90ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .services .service-grid {
-            display: grid;
-            gap: 2rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        /* Call to Action Section */
-        .cta {
-            background: linear-gradient(45deg, #ff5722, #ff9800);
-            color: #fff;
-            padding: 3rem 1rem;
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .cta button {
-            background: #fff;
-            color: #ff5722;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .cta button:hover {
-            background: #ffe0b2;
-        }
-
-        /* Portfolio Section */
-        .portfolio {
-            padding: 4rem 0;
-            background-color: #fff;
-        }
-
-        .portfolio h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            color: #333;
-        }
-
-        .portfolio .portfolio-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .portfolio .portfolio-item img {
-            width: 100%;
-            display: block;
-        }
-
-        .portfolio .portfolio-item .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .portfolio .portfolio-item:hover .overlay {
-            opacity: 1;
-        }
-
-        .portfolio-grid {
-            display: grid;
-            gap: 2rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        /* Footer */
-        .footer {
-            background: #333;
-            color: #fff;
-            padding: 2rem 1rem;
-            text-align: center;
-        }
-
-        .footer p {
-            font-size: 0.9rem;
-        }
-    
+body {
+    font-family: Arial, sans-serif; /* Define a fonte do corpo da página como Arial, com uma fonte sans-serif como alternativa */
+    line-height: 1.6; /* Define a altura da linha como 1.6 vezes o tamanho da fonte, melhorando a legibilidade */
+}
 
 
 
-    
-            
+/*###################################################################################################################*/
+
+/* Geral */
+.container {
+    width: 90%; /* Define a largura do container como 90% da largura da tela */
+    max-width: 1200px; /* Define a largura máxima do container como 1200px */
+    margin: 0 auto; /* Centraliza o container horizontalmente */
+}
+
+/* Header */
+.header {
+    background: linear-gradient(45deg, #1e90ff, #00bcd4); /* Cria um fundo com um gradiente de azul (#1e90ff) para ciano (#00bcd4) em ângulo de 45 graus */
+    color: #fff; /* Define a cor do texto como branco */
+    padding: 2rem 1rem; /* Aplica 2rem de padding no topo e na parte inferior, e 1rem nas laterais */
+    text-align: center; /* Centraliza o conteúdo do texto */
+}
+
+.header h1 {
+    font-size: 2.5rem; /* Define o tamanho da fonte do título como 2.5rem */
+    margin-bottom: 0.5rem; /* Aplica uma margem inferior de 0.5rem ao título */
+}
+
+.header p {
+    font-size: 1.2rem; /* Define o tamanho da fonte do parágrafo como 1.2rem */
+}
+
+/* Serviços */
+.services {
+    padding: 4rem 0; /* Aplica 4rem de padding no topo e na parte inferior da seção de serviços */
+    background-color: #f9f9f9; /* Define a cor de fundo da seção de serviços como um tom claro de cinza (#f9f9f9) */
+}
+
+
+
+
+
+/* Serviços */
+.services h2 {
+    text-align: center; /* Centraliza o título da seção de serviços */
+    margin-bottom: 2rem; /* Aplica uma margem inferior de 2rem ao título */
+    font-size: 2rem; /* Define o tamanho da fonte do título como 2rem */
+    color: #333; /* Define a cor do título como um tom escuro de cinza */
+}
+
+.services .service-card {
+    background: #fff; /* Define o fundo da carta de serviço como branco */
+    border: 1px solid #ddd; /* Define uma borda fina e cinza clara ao redor da carta */
+    border-radius: 10px; /* Aplica bordas arredondadas com um raio de 10px */
+    padding: 1.5rem; /* Aplica 1.5rem de padding dentro da carta */
+    text-align: center; /* Centraliza o texto dentro da carta */
+    transition: transform 0.3s; /* Aplica uma transição suave de 0.3s para mudanças de transformação */
+}
+
+.services .service-card:hover {
+    transform: translateY(-10px); /* Ao passar o mouse, a carta se desloca 10px para cima */
+}
+
+.services .service-card h3 {
+    color: #1e90ff; /* Define a cor do título dentro da carta como azul */
+    font-size: 1.5rem; /* Define o tamanho da fonte do título como 1.5rem */
+    margin-bottom: 1rem; /* Aplica uma margem inferior de 1rem ao título */
+}
+
+.services .service-grid {
+    display: grid; /* Define o layout como uma grid */
+    gap: 2rem; /* Aplica um espaço de 2rem entre os itens da grid */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cria colunas de tamanho mínimo de 300px e máximo de 1fr (tamanho flexível) */
+}
+
+/* Chamada para Ação (CTA) */
+.cta {
+    background: linear-gradient(45deg, #ff5722, #ff9800); /* Cria um gradiente de fundo indo de laranja escuro (#ff5722) para laranja claro (#ff9800) */
+    color: #fff; /* Define a cor do texto como branco */
+    padding: 3rem 1rem; /* Aplica 3rem de padding no topo e na parte inferior, e 1rem nas laterais */
+    text-align: center; /* Centraliza o texto dentro da seção */
+}
+
+
+
+
+
+/* Chamada para Ação (CTA) */
+.cta h2 {
+    font-size: 2rem; /* Define o tamanho da fonte do título da seção CTA */
+    margin-bottom: 1rem; /* Aplica uma margem inferior de 1rem ao título */
+}
+
+.cta p {
+    font-size: 1.2rem; /* Define o tamanho da fonte do parágrafo na seção CTA */
+    margin-bottom: 2rem; /* Aplica uma margem inferior de 2rem ao parágrafo */
+}
+
+.cta button {
+    background: #fff; /* Define o fundo do botão como branco */
+    color: #ff5722; /* Define a cor do texto do botão como laranja (#ff5722) */
+    border: none; /* Remove a borda do botão */
+    padding: 1rem 2rem; /* Aplica padding de 1rem na parte superior/inferior e 2rem nas laterais */
+    border-radius: 5px; /* Aplica bordas arredondadas de 5px ao botão */
+    cursor: pointer; /* Define o cursor como ponteiro quando passar sobre o botão */
+    transition: background 0.3s; /* Aplica uma transição suave de 0.3s para a mudança de fundo */
+}
+
+.cta button:hover {
+    background: #ffe0b2; /* Altera o fundo do botão para uma cor laranja mais clara (#ffe0b2) quando o mouse passa sobre ele */
+}
+
+/* Portfólio */
+.portfolio {
+    padding: 4rem 0; /* Aplica padding de 4rem na parte superior e inferior da seção Portfólio */
+    background-color: #fff; /* Define o fundo da seção Portfólio como branco */
+}
+
+.portfolio h2 {
+    text-align: center; /* Centraliza o título da seção Portfólio */
+    margin-bottom: 2rem; /* Aplica uma margem inferior de 2rem ao título */
+    font-size: 2rem; /* Define o tamanho da fonte do título como 2rem */
+    color: #333; /* Define a cor do título como um cinza escuro (#333) */
+}
+
+
+
+
+
+
+
+
+
+/* Portfólio */
+.portfolio .portfolio-item {
+    position: relative; /* Define a posição do item como relativa para posicionamento interno */
+    overflow: hidden; /* Garante que elementos dentro do item não ultrapassem os limites do contêiner */
+    border-radius: 10px; /* Aplica bordas arredondadas de 10px aos itens do portfólio */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Aplica uma sombra sutil aos itens do portfólio */
+}
+
+.portfolio .portfolio-item img {
+    width: 100%; /* Define a largura da imagem como 100% do contêiner */
+    display: block; /* Remove o espaçamento inferior da imagem */
+}
+
+.portfolio .portfolio-item .overlay {
+    position: absolute; /* Posiciona o overlay de forma absoluta dentro do item */
+    top: 0; /* Posiciona o overlay no topo do item */
+    left: 0; /* Posiciona o overlay à esquerda do item */
+    width: 100%; /* Define a largura do overlay como 100% do item */
+    height: 100%; /* Define a altura do overlay como 100% do item */
+    background: rgba(0, 0, 0, 0.5); /* Define o fundo do overlay como uma cor preta com opacidade de 0.5 */
+    color: #fff; /* Define a cor do texto do overlay como branco */
+    display: flex; /* Utiliza o Flexbox para centralizar o conteúdo */
+    align-items: center; /* Alinha o conteúdo verticalmente ao centro */
+    justify-content: center; /* Alinha o conteúdo horizontalmente ao centro */
+    opacity: 0; /* Define a opacidade inicial como 0 (invisível) */
+    transition: opacity 0.3s; /* Aplica uma transição suave para a opacidade */
+}
+
+.portfolio .portfolio-item:hover .overlay {
+    opacity: 1; /* Torna o overlay visível quando o item do portfólio é hoverizado */
+}
+
+.portfolio-grid {
+    display: grid; /* Utiliza o CSS Grid para organizar os itens */
+    gap: 2rem; /* Define um espaço de 2rem entre os itens */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cria um layout de colunas que se ajustam automaticamente, com um tamanho mínimo de 300px por coluna */
+}
+
+/* Rodapé (Footer) */
+.footer {
+    background: #333; /* Define o fundo do rodapé como um cinza escuro (#333) */
+    color: #fff; /* Define a cor do texto do rodapé como branco */
+    padding: 2rem 1rem; /* Aplica padding de 2rem na parte superior e inferior e 1rem nas laterais */
+    text-align: center; /* Centraliza o texto do rodapé */
+}
+
+.footer p {
+    font-size: 0.9rem; /* Define o tamanho da fonte do texto do rodapé como 0.9rem */
+}
+
+
