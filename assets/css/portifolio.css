@@ -1,140 +1,159 @@
 :root {
-    --bg-light: #f0f8ff; 
-    --text-light: #1d3557; 
-    --bg-dark: #121212;
-    --text-dark: #f0f8ff;
-    --navbar-light: #1d3557;
-    --navbar-dark: #333;
-    --sidebar-bg: #457b9d;
-    --sidebar-hover: #1d3557;
-    --button-bg: #ffcc00;
-    --button-hover: #d4a500;
+    /* Variáveis de cores para fácil alteração do tema */
+    --bg-light: #f0f8ff; /* Cor de fundo clara */
+    --text-light: #1d3557; /* Cor do texto em tema claro */
+    --bg-dark: #121212; /* Cor de fundo escura */
+    --text-dark: #f0f8ff; /* Cor do texto em tema escuro */
+    --navbar-light: #1d3557; /* Cor da barra de navegação no tema claro */
+    --navbar-dark: #333; /* Cor da barra de navegação no tema escuro */
+    --sidebar-bg: #457b9d; /* Cor de fundo da barra lateral */
+    --sidebar-hover: #1d3557; /* Cor de fundo ao passar o mouse sobre links na barra lateral */
+    --button-bg: #ffcc00; /* Cor de fundo dos botões */
+    --button-hover: #d4a500; /* Cor de fundo dos botões ao passar o mouse */
 }
 
 body {
+    /* Estilos gerais do corpo da página */
     margin: 0;
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
-    margin-top: 80px;
-    background-color: var(--bg-light);
-    color: var(--text-light);
-    transition: background-color 0.3s, color 0.3s;
+    font-family: 'Roboto', sans-serif; /* Fonte principal */
+    line-height: 1.6; /* Espaçamento entre linhas */
+    margin-top: 80px; /* Espaço para compensar a navbar fixa */
+    background-color: var(--bg-light); /* Cor de fundo no tema claro */
+    color: var(--text-light); /* Cor do texto no tema claro */
+    transition: background-color 0.3s, color 0.3s; /* Transição suave entre temas */
 }
 
 body.dark-theme {
+    /* Estilos aplicados quando o tema escuro está ativo */
     background-color: var(--bg-dark);
     color: var(--text-dark);
 }
 
 .navbar {
-    background-color: var(--navbar-light);
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    position: fixed;
+    /* Estilos da barra de navegação */
+    background-color: var(--navbar-light); /* Cor de fundo */
+    color: white; /* Cor do texto */
+    padding: 10px 20px; /* Espaçamento interno */
+    display: flex; /* Layout flexível */
+    align-items: center; /* Alinhamento vertical central */
+    position: fixed; /* Fixa no topo da página */
     top: 0;
     width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Prioridade de sobreposição */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
 }
 
 .menu-btn, .theme-toggle-btn {
-    font-size: 30px;
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: transform 0.2s;
+    /* Estilos para os botões de menu e alternância de tema */
+    font-size: 30px; /* Tamanho do ícone */
+    background: none; /* Sem fundo */
+    border: none; /* Sem borda */
+    color: inherit; /* Usa a cor herdada */
+    cursor: pointer; /* Mostra o cursor de clique */
+    margin-right: 10px; /* Espaço à direita */
+    transition: transform 0.2s; /* Animação de transformação */
 }
 
 .menu-btn:hover, .theme-toggle-btn:hover {
+    /* Efeito de ampliação ao passar o mouse */
     transform: scale(1.1);
 }
 
 .navbar-title {
-    font-weight: bold;
+    /* Estilo do título na navbar */
+    font-weight: bold; /* Negrito */
 }
 
 .sidebar {
-    position: fixed;
+    /* Estilos para a barra lateral */
+    position: fixed; /* Fixa no lado esquerdo */
     top: 0;
-    left: -250px;
-    height: 100%;
-    width: 250px;
-    background-color: var(--sidebar-bg);
-    color: var(--text-dark);
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 1100;
+    left: -250px; /* Inicialmente fora da tela */
+    height: 100%; /* Altura total da tela */
+    width: 250px; /* Largura fixa */
+    background-color: var(--sidebar-bg); /* Cor de fundo */
+    color: var(--text-dark); /* Cor do texto */
+    padding-top: 60px; /* Espaço no topo */
+    transition: left 0.3s ease; /* Animação suave para aparecer/desaparecer */
+    z-index: 1100; /* Prioridade sobre a navbar */
 }
 
 .sidebar.active {
-    left: 0;
+    /* Quando a barra lateral está ativa */
+    left: 0; /* Totalmente visível */
 }
 
 .sidebar a {
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    display: block;
-    transition: background-color 0.3s;
+    /* Links na barra lateral */
+    padding: 10px 20px; /* Espaçamento interno */
+    text-decoration: none; /* Remove sublinhado */
+    font-size: 20px; /* Tamanho da fonte */
+    color: white; /* Cor do texto */
+    display: block; /* Cada link ocupa uma linha */
+    transition: background-color 0.3s; /* Transição suave de cor de fundo */
 }
 
 .sidebar a:hover {
+    /* Cor de fundo ao passar o mouse nos links */
     background-color: var(--sidebar-hover);
 }
 
 .close-btn {
+    /* Botão para fechar a barra lateral */
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 36px;
-    color: white;
-    cursor: pointer;
+    font-size: 36px; /* Tamanho do ícone */
+    color: white; /* Cor do ícone */
+    cursor: pointer; /* Mostra o cursor de clique */
 }
 
 .hero {
-    text-align: center;
-    padding: 100px 20px;
-    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg));
-    color: white;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    /* Seção principal do site */
+    text-align: center; /* Centraliza o texto */
+    padding: 100px 20px; /* Espaçamento interno */
+    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg)); /* Gradiente de cores */
+    color: white; /* Cor do texto */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Forma personalizada */
 }
 
 .hero h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
+    /* Estilo para o título principal */
+    font-size: 3em; /* Tamanho grande */
+    margin-bottom: 20px; /* Espaço inferior */
 }
 
 .hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
+    /* Estilo para o parágrafo */
+    font-size: 1.2em; /* Tamanho médio */
+    margin-bottom: 30px; /* Espaço inferior */
 }
 
 .btn {
-    background-color: var(--button-bg);
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 1em;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    /* Estilos gerais dos botões */
+    background-color: var(--button-bg); /* Cor de fundo */
+    color: white; /* Cor do texto */
+    padding: 10px 20px; /* Espaçamento interno */
+    text-decoration: none; /* Remove sublinhado */
+    font-size: 1em; /* Tamanho da fonte */
+    border-radius: 5px; /* Arredondamento das bordas */
+    transition: background-color 0.3s; /* Transição suave de cor de fundo */
 }
 
 .btn:hover {
+    /* Cor de fundo ao passar o mouse */
     background-color: var(--button-hover);
 }
 
 .footer {
-    background: #333;
-    color: #fff;
-    padding: 2rem 1rem;
-    text-align: center;
+    /* Estilos do rodapé */
+    background: #333; /* Cor de fundo */
+    color: #fff; /* Cor do texto */
+    padding: 2rem 1rem; /* Espaçamento interno */
+    text-align: center; /* Texto centralizado */
 }
 
 .footer p {
-    font-size: 0.9rem;
+    /* Estilos para o parágrafo do rodapé */
+    font-size: 0.9rem; /* Fonte menor */
 }
