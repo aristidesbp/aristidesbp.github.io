@@ -1,140 +1,6 @@
 Para criar um trafego pago de qualidade devemos entender quais seram nossos alvos, abaixo vou te passar algumas [TAREFAS] para você realisar com base na descrição do [meu cliente] com base nos textos acima:
 obs: nao use caixa de texto para respostas.
 obs 2: faça com acalma, faça a primeira e pergunte se ue desejo fazer aulteração na resposta ou continuar.
-
-
-# [TAREFA 1]
-Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para [meu cliente]
-Levante as principais dificuldades, os medos, desejos e as objeções deste determinado público. 	
-A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do [meu cliente] , Abaixo eu vou informar como vc deve fazer:
-
-● Uma [ação] para você executar:
-● A [persona] que você representa; 
-● Os [passos] que você deve seguir para executar a ação e tarefa; 
-● Um conjunto de [dados]; 
-● O [contexto] da situação; 
-● O [formato] da saída.
-
-[Ação]
-Quero que você crie uma pesquisa detalhada sobre as pessoas que querem ,tem interesse  ou necessidade do produto do [meu cliente];
-
-[Persona] 
-Você é [meu cliente] , incorpore ela para fazer a tarefa;
-
-
-[Passos] 
-1. Incorpore a <persona(aristides)> descrita neste passo a passo; 
-2. Faça primeiro a busca pelas principais dificuldades,os medos, desejos e as objeções que essa determinada audiência possui; 
-3. Faça uma pesquisa sobre as principais situações vergonhosas que este público passa; 
-4. Crie uma tabela completa com todas as características do público que estamos desenhando (seja absolutamente detalhista);
-5. Complemente essa tabela com as informações sobre os desejos e as objeções que esse público tem;
- 6. Faça o trabalho com calma. 
-
-
-[Dados] 
-Crie uma tabela sobre a persona e mapeie pelo menos os seguintes pontos: idade, localização geográfica, estado civil, escolaridade, renda familiar, interesses, profissão, comportamento on-line, preferências de consumo, hábitos de compra, principais motivações, desafios/problemas, soluções que consome,  influenciadores que acompanha,  canais do YouTube que assiste,  sites que acessa, aplicativos que tem no celular, estilo de vida, valores pessoais, podcasts que consome, o que acorda e dorme pensando, histórias que conta para si mesmo, pensamentos recorrentes, preocupações cotidianas, falas que escuta das pessoas a sua volta. 
-
-[Contexto]
- Essa pesquisa será utilizada para criarmos toda uma estratégia de anúncios online para <persona(cliente)>;
-
-[Formato]
- Crie a tabela em português brasileiro com 2 colunas: característica e descrição. Preciso que todas essas informações sejam preenchidas com o máximo de detalhes possível. 
-Na coluna sobre características relacionadas à “renda familiar”, por exemplo, além de dizer se é baixa, média ou alta, especifique uma faixa etária de ganho por mês em reais. 
-Na coluna sobre características relacionadas à “influenciadores que acompanha, canais do YouTube que assiste, sites que acessa, aplicativos no celular e podcasts”, coloque exemplos reais desses itens e não só as categorias que a pessoa acessa. 
-Na coluna sobre características relacionadas à “o que acorda e dorme pensando, histórias que conta para si mesmo, pensamentos recorrentes, preocupações cotidianas, falas que escuta das pessoas ao redor”, escreva literalmente o que a pessoa escuta não somente o “tipo” de história, pensamentos e preocupações.
-
-
-
-# [TAREFA 2]
-Levando em consideração a pesquisa que fizemos acima sobre o publico interessado no produto da <persona(cliente)>, Crie uma lista de dificuldades, medos, desejos, objeções, histórias constrangedoras, pensamentos que o público  tem ao deitar a cabeça no travesseiro e comentários de péssimo gosto que esse público ouve no dia a dia. Abaixo eu vou informar como vc deve fazer:
-
-● A [persona] que você representa; 
-● O [formato] da saída;
-● Um [Exemplo];
-
-[persona] 
-que você representa é a  [meu cliente];
-
-
-[Formato]
- Crie uma lista de: 
-● 8 dificuldades que o público que mapeamos possui; 
-● 8 medos que o público que mapeamos possui; 
-● 8 desejos que o público que mapeamos possui; 
-● 8 objeções que o público que mapeamos possui; 
-● 8 histórias constrangedoras que o público que mapeamos já passou; 
-● 8 pensamentos recorrentes que o público que mapeamos tem ao ir dormir; 
-● 8 comentários maldosos que o público que mapeamos já ouviu de parentes/amigos. 
-
-[Exemplo] 
-1. Determinado medo A: descrição detalhada do medo;
-2. Determinado medo B:descrição detalhada do medo;
-3. Determinado medo C: descrição detalhada do medo;
-4. Determinado medo D: descrição detalhada do medo;
-5. Determinado medo E: descrição detalhada do medo;
-6. Determinado medo F: descrição detalhada do medo;
-7. Determinado medo G:descrição detalhada do medo;
-8. Determinado medo H: descrição detalhada do medo;
-
-
-# [TAREFA 3]
-Levando em consideração as orientações anteriores e o fato de que a empresa oferece o produto do [meu cliente] , vamos criar uma lista de 20 palavras-chave para utilizá-las como segmentação no Google Ads. Além disso, vamos criar uma lista de 20 palavras-chave negativas para utilizar nessa campanha. Importante: eu atendo na cidade do do [meu cliente], focados no produto do cliente, para que o mesmo filtre o público e consiga comercializar seu produto;Abaixo eu vou informar como de ser feito:
-
-● A [persona] que você representa; 
-● O [formato] da saída;
-
-
-[persona] 
-que você representa é a  do [meu cliente];
-
-
-
-[Formato] 
-Crie uma lista com as 30 palavras-chave positivas e outra lista com as 30 palavras-chave negativas. Ordene as palavras-chave por ordem de relevância focando em pessoas com alta intenção de adquirir o produtodo do [meu cliente];
-Depois disso, crie uma lista de outras 30 palavras-chave positivas que não falem especificamente sobre o meu produto, mas que sejam pesquisas que demonstram o interesse do público no  produto do [meu cliente];
-
-
-
-
-
-# [TAREFA 4]
-Levando em consideração o desenho do público-alvo que fizemos, as dores, os desejos e medos do público-alvo, a lista de palavras-chave positivas e a lista de palavras-chave negativas, crie para mim 10 títulos de anúncio.
-
-Lembre-se que os títulos devem ter no máximo 30 caracteres cada (essa informação é essencial).
-
-Esses títulos devem, obrigatoriamente, repetir as palavras-chave e devem ser chamativos e persuasivos. Então:
-
-● 3 títulos devem focar nos benefícios do produto; 
-● 3 títulos devem focar nas vantagens do produto; 
-● 2 títulos devem falar o nome do produto do [meu cliente];
-● 2 títulos devem conter um call to action claro;
- 
-Os outros títulos devem conter as 5 PALAVRA-CHAVE mais relevantes para o produto da <persona(cliente)>; Busque incluir na maioria dos títulos palavras como: 
-
-● Comprar 
-● Pedir 
-● Especializado 
-● Especialista 
-● Contratar 
-● Orçamento 
-● Adquirir 
-● Encomendar
-● Obter 
-● Serviço 
-● Agendar
-
-[Formato] 
-Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Depois,crie 8 descrições chamativas, persuasivas que repitam várias das palavras-chave que estamos utilizando nos títulos. As descrições devem conter no máximo 90 caracteres, o nome da cidade em que atendemos e devem conter uma chamada para ação para compra, agendamento ou orçamento do serviço. 
-
-
-# [TAREFA 5]
-Fassa uma landpage de alta converção para meu cliente , deve ser moderna, bonita e empactante  a mesma deve ser entrgue em im unico arquivo htmhl.
-
-
-# ###########################################
-A gora que tudo foi esplicado vou passar alguns textos para ter como referencia depois os dados do [meu cliente]
-
-
 # COMO FUNCIONA TRAFEGO PAGO:
 Imagine que você quer entregar panfletos no semáforo. Você vai gastar R$ 50 pra
 fazer 1000 panfletos, e vai pagar R$ 50 pro seu primo distribuir os panfletos. Então,
@@ -352,6 +218,140 @@ Na ferramenta de buscas do Google, você digita uma palavra-chave, dá um espaç
 e, assim, você vai ver tudo o que o Google vai te dar de preenchimento de pesquisa, porque
 esses preenchimentos de pesquisas são coisas que as pessoas estão pesquisando, e depois
 você faz isso com a letra “b”, com a letra “c”, “d”, “e”, etc., até o “z”:
+
+
+
+# [TAREFA 1]
+Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para [meu cliente]
+Levante as principais dificuldades, os medos, desejos e as objeções deste determinado público. 	
+A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do [meu cliente] , Abaixo eu vou informar como vc deve fazer:
+
+● Uma [ação] para você executar:
+● A [persona] que você representa; 
+● Os [passos] que você deve seguir para executar a ação e tarefa; 
+● Um conjunto de [dados]; 
+● O [contexto] da situação; 
+● O [formato] da saída.
+
+[Ação]
+Quero que você crie uma pesquisa detalhada sobre as pessoas que querem ,tem interesse  ou necessidade do produto do [meu cliente];
+
+[Persona] 
+Você é [meu cliente] , incorpore ela para fazer a tarefa;
+
+
+[Passos] 
+1. Incorpore a <persona(aristides)> descrita neste passo a passo; 
+2. Faça primeiro a busca pelas principais dificuldades,os medos, desejos e as objeções que essa determinada audiência possui; 
+3. Faça uma pesquisa sobre as principais situações vergonhosas que este público passa; 
+4. Crie uma tabela completa com todas as características do público que estamos desenhando (seja absolutamente detalhista);
+5. Complemente essa tabela com as informações sobre os desejos e as objeções que esse público tem;
+ 6. Faça o trabalho com calma. 
+
+
+[Dados] 
+Crie uma tabela sobre a persona e mapeie pelo menos os seguintes pontos: idade, localização geográfica, estado civil, escolaridade, renda familiar, interesses, profissão, comportamento on-line, preferências de consumo, hábitos de compra, principais motivações, desafios/problemas, soluções que consome,  influenciadores que acompanha,  canais do YouTube que assiste,  sites que acessa, aplicativos que tem no celular, estilo de vida, valores pessoais, podcasts que consome, o que acorda e dorme pensando, histórias que conta para si mesmo, pensamentos recorrentes, preocupações cotidianas, falas que escuta das pessoas a sua volta. 
+
+[Contexto]
+ Essa pesquisa será utilizada para criarmos toda uma estratégia de anúncios online para <persona(cliente)>;
+
+[Formato]
+ Crie a tabela em português brasileiro com 2 colunas: característica e descrição. Preciso que todas essas informações sejam preenchidas com o máximo de detalhes possível. 
+Na coluna sobre características relacionadas à “renda familiar”, por exemplo, além de dizer se é baixa, média ou alta, especifique uma faixa etária de ganho por mês em reais. 
+Na coluna sobre características relacionadas à “influenciadores que acompanha, canais do YouTube que assiste, sites que acessa, aplicativos no celular e podcasts”, coloque exemplos reais desses itens e não só as categorias que a pessoa acessa. 
+Na coluna sobre características relacionadas à “o que acorda e dorme pensando, histórias que conta para si mesmo, pensamentos recorrentes, preocupações cotidianas, falas que escuta das pessoas ao redor”, escreva literalmente o que a pessoa escuta não somente o “tipo” de história, pensamentos e preocupações.
+
+
+
+# [TAREFA 2]
+Levando em consideração a pesquisa que fizemos acima sobre o publico interessado no produto da <persona(cliente)>, Crie uma lista de dificuldades, medos, desejos, objeções, histórias constrangedoras, pensamentos que o público  tem ao deitar a cabeça no travesseiro e comentários de péssimo gosto que esse público ouve no dia a dia. Abaixo eu vou informar como vc deve fazer:
+
+● A [persona] que você representa; 
+● O [formato] da saída;
+● Um [Exemplo];
+
+[persona] 
+que você representa é a  [meu cliente];
+
+
+[Formato]
+ Crie uma lista de: 
+● 8 dificuldades que o público que mapeamos possui; 
+● 8 medos que o público que mapeamos possui; 
+● 8 desejos que o público que mapeamos possui; 
+● 8 objeções que o público que mapeamos possui; 
+● 8 histórias constrangedoras que o público que mapeamos já passou; 
+● 8 pensamentos recorrentes que o público que mapeamos tem ao ir dormir; 
+● 8 comentários maldosos que o público que mapeamos já ouviu de parentes/amigos. 
+
+[Exemplo] 
+1. Determinado medo A: descrição detalhada do medo;
+2. Determinado medo B:descrição detalhada do medo;
+3. Determinado medo C: descrição detalhada do medo;
+4. Determinado medo D: descrição detalhada do medo;
+5. Determinado medo E: descrição detalhada do medo;
+6. Determinado medo F: descrição detalhada do medo;
+7. Determinado medo G:descrição detalhada do medo;
+8. Determinado medo H: descrição detalhada do medo;
+
+
+# [TAREFA 3]
+Levando em consideração as orientações anteriores e o fato de que a empresa oferece o produto do [meu cliente] , vamos criar uma lista de 20 palavras-chave para utilizá-las como segmentação no Google Ads. Além disso, vamos criar uma lista de 20 palavras-chave negativas para utilizar nessa campanha. Importante: eu atendo na cidade do do [meu cliente], focados no produto do cliente, para que o mesmo filtre o público e consiga comercializar seu produto;Abaixo eu vou informar como de ser feito:
+
+● A [persona] que você representa; 
+● O [formato] da saída;
+
+
+[persona] 
+que você representa é a  do [meu cliente];
+
+
+
+[Formato] 
+Crie uma lista com as 30 palavras-chave positivas e outra lista com as 30 palavras-chave negativas. Ordene as palavras-chave por ordem de relevância focando em pessoas com alta intenção de adquirir o produtodo do [meu cliente];
+Depois disso, crie uma lista de outras 30 palavras-chave positivas que não falem especificamente sobre o meu produto, mas que sejam pesquisas que demonstram o interesse do público no  produto do [meu cliente];
+
+
+
+
+
+# [TAREFA 4]
+Levando em consideração o desenho do público-alvo que fizemos, as dores, os desejos e medos do público-alvo, a lista de palavras-chave positivas e a lista de palavras-chave negativas, crie para mim 10 títulos de anúncio.
+
+Lembre-se que os títulos devem ter no máximo 30 caracteres cada (essa informação é essencial).
+
+Esses títulos devem, obrigatoriamente, repetir as palavras-chave e devem ser chamativos e persuasivos. Então:
+
+● 3 títulos devem focar nos benefícios do produto; 
+● 3 títulos devem focar nas vantagens do produto; 
+● 2 títulos devem falar o nome do produto do [meu cliente];
+● 2 títulos devem conter um call to action claro;
+ 
+Os outros títulos devem conter as 5 PALAVRA-CHAVE mais relevantes para o produto da <persona(cliente)>; Busque incluir na maioria dos títulos palavras como: 
+
+● Comprar 
+● Pedir 
+● Especializado 
+● Especialista 
+● Contratar 
+● Orçamento 
+● Adquirir 
+● Encomendar
+● Obter 
+● Serviço 
+● Agendar
+
+[Formato] 
+Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Depois,crie 8 descrições chamativas, persuasivas que repitam várias das palavras-chave que estamos utilizando nos títulos. As descrições devem conter no máximo 90 caracteres, o nome da cidade em que atendemos e devem conter uma chamada para ação para compra, agendamento ou orçamento do serviço. 
+
+
+# [TAREFA 5]
+Fassa uma landpage de alta converção para meu cliente , deve ser moderna, bonita e empactante  a mesma deve ser entrgue em im unico arquivo htmhl.
+
+
+# ###########################################
+A gora que tudo foi esplicado vou passar alguns textos para ter como referencia depois os dados do [meu cliente]
+
 
 
 
