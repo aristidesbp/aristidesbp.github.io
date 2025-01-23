@@ -1,8 +1,4 @@
-# ###########################################
-# Comandos para chatgpt:
-
-
-ChatGpt, abaixo vou te passar algumas [TAREFAS] para você realisar com base na descrição do [meu cliente] com base nos textos acima:
+Para criar um trafego pago de qualidade devemos entender quais seram nossos alvos, abaixo vou te passar algumas [TAREFAS] para você realisar com base na descrição do [meu cliente] com base nos textos acima:
 obs: nao use caixa de texto para respostas.
 obs 2: faça com acalma, faça a primeira e pergunte se ue desejo fazer aulteração na resposta ou continuar.
 
