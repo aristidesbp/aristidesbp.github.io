@@ -359,6 +359,11 @@ você faz isso com a letra “b”, com a letra “c”, “d”, “e”, etc.,
 
 
 
+# #######################################################
+entendeu tudo? posso passar os dados do cliente?
+
+
+
 
 
 
