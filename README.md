@@ -1,6 +1,5 @@
-Para criar um trafego pago de qualidade devemos entender quais seram nossos alvos, abaixo vou te passar algumas [TAREFAS] para você realisar com base na descrição do [meu cliente] com base nos textos acima:
-obs: nao use caixa de texto para respostas.
-obs 2: faça com acalma, faça a primeira e pergunte se ue desejo fazer aulteração na resposta ou continuar.
+# aristidesbp.github.io
+
 # COMO FUNCIONA TRAFEGO PAGO:
 Imagine que você quer entregar panfletos no semáforo. Você vai gastar R$ 50 pra
 fazer 1000 panfletos, e vai pagar R$ 50 pro seu primo distribuir os panfletos. Então,
@@ -221,7 +220,22 @@ você faz isso com a letra “b”, com a letra “c”, “d”, “e”, etc.,
 
 
 
+
+# ##########################################
+# COMO ANUNCIAR PARA VENDER O QUE QUISER
+# ##########################################
+# pronpts para chatgpt
+
+# comando 1
+abaixo vou te passar 6  TAREFAS:
+obs: nao use caixa de texto para respostas.
+obs 2: faça com acalma.
+
+
 # [TAREFA 2]
+[meu cliente]= 
+
+
 Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para [meu cliente]
 Levante as principais dificuldades, os medos, desejos e as objeções deste determinado público. 	
 A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do [meu cliente] , Abaixo eu vou informar como vc deve fazer:
@@ -346,17 +360,404 @@ Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Dep
 
 
 # [TAREFA 6]
-Fassa uma landpage de alta converção para meu cliente , deve ser moderna, bonita e empactante  a mesma deve ser entrgue em im unico arquivo htmhl.
+Abaixo vou te passa um texto que explica oque uma landpage deve ter para ficar no topo de pesquiza do google, depois um codigo com a estrutura basica para vc criar um landinpage para [meu cliente] citado acima. faça um index.html moderno e elegante para [meu cliente] Sb serviços
 
 
 
-# [TAREFA 1]
-me diga se vc entendeu ?
-abaixo vou passar os dados do [meu cliente]
+[TEXTOS]
+1 - Como aparecer no topo da pesquisa do Google com anúncios online
+
+A minha equipe me disse que muita gente perguntou ontem no chat sobre bloqueios, então, eu
+vou compartilhar com vocês no final da aula alguns links que eu tenho salvos no meu
+computador, os quais eu uso quando eu preciso entrar em contato com o suporte do Facebook
+(principalmente quando eu sofro bloqueios). Pra entrar em contato com o suporte do Google, o
+telefone é 0800 727 0278, das 09h às 19h.
+
+Todo mundo vai ser bloqueado um dia, e o que é possível fazer pra ser desbloqueado é encher o
+saco, ou seja, se colocar numa posição de querer entender o que fez de errado pra nunca mais
+fazer o mesmo. Você não pode ser agressivo, porque tem uma pessoa do outro lado te
+atendendo. Se você não conseguir desbloquear a sua conta, você só terá a opção de criar um
+novo perfil e começar do zero.
+
+
+2 - As três redes do Google Ads e por onde começar
+
+ - Rede de pesquisa do Google:
+Quando você faz uma pesquisa no
+Google e aparece um anúncio. 90%
+das pesquisas são feitas no Google
+
+ - Anúncios do Youtube:
+Anúncios no meio dos vídeos do
+YouTube. O YouTube é a maior
+ferramenta de vídeos e a segunda
+maior ferramenta de pesquisa do
+mundo.
+
+ - Sites parceiros do Google (Display):
+90% dos sites da internet são parceiros do Google. O que acontece é que
+esses sites vendem espaços publicitários pro Google, e o Google coloca os
+anúncios lá, e, assim, o dono do site ganha dinheiro com isso e os
+anunciantes conseguem anunciar em todos os sites.
+
+3 - Como aparecer no topo da pesquisa dov Google
+Vocês já sabem que anunciar online é sobre ganhar leilões. Então, pra aparecer no topo de
+pesquisa do Google, você precisa ganhar leilões, e, pra ganhar leilões, você deve cuidar os
+lances, a qualidade do anúncio e a taxa de ação estimada.
+
+Se você entender a lógica do Google, é impossível você não ter resultados. A lógica do Google é
+extremamente simples: 
+
+Então, a gente tem 3 pontos pra conectar:
+
+1- termo de pesquisa (o que a pessoa pesquisou),
+2- resultado da pesquisa (o anúncio), 
+3-  site (landing page). 
+
+# html basico
+[codigo] 
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- Bootstrap CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<!-- ###### TÍTULO DO SITE ####### -->  
+<title> index.html do Site Aristidesbp </title>
+</head>
+<body>
+    
+<!-- ###### CONTEÚDO DO SITE ####### -->  
+<!-- Contêiner navbar -->
+<!-- Contêiner conteúdo -->
+<!-- Contêiner footer -->
+<!-- ###### FIM DO CONTEÚDO DO SITE ####### -->  
+    
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
 
 
 
 
+# navbar
+<!-- ################# MENU DE NAVEGAÇÃO ################################## -->
+<style>
+/* Barra de navegação fixa no topo */
+.navbar {
+    background-color: #004D40;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
+/* Contêiner para o botão e título na navbar */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Botão de menu lateral */
+.menu-btn {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Menu lateral (sidebar) */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #02133e;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+/* Torna o menu visível */
+.sidebar.active {
+    left: 0;
+}
+
+/* Links no menu lateral */
+.sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+}
+
+/* Estilo do hover nos links */
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botão para fechar o menu lateral */
+.sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Estilo do conteúdo principal */
+#main-content {
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Classe para mover o conteúdo ao abrir o menu */
+#main-content.overlay {
+    margin-left: 250px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    #main-content.overlay {
+        margin-left: 200px;
+    }
+}
+
+/* Logo abaixo do menu */
+.logo-container {
+    background-color: #02133e;
+    text-align: center;
+    padding: 20px;
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="navbar-left">
+        <!-- Botão de menu lateral -->
+        <button class="menu-btn" aria-label="Abrir Menu Lateral" onclick="toggleMenu()">☰</button>
+        <!-- Título da página -->
+        <div class="navbar-title"><b>HOME</b></div>
+    </div>
+</div>
+
+<!-- Menu lateral -->
+<div id="menu" class="sidebar" role="navigation" aria-hidden="true">
+    <!-- Botão para fechar o menu -->
+    <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+    <!-- Links do menu -->
+    <a href="index.html"><b>INÍCIO</b></a>
+    <a href="#sobre"><b>SOBRE</b></a>
+    <a href="#servicos"><b>SERVIÇOS</b></a>
+    <a href="#contato"><b>CONTATO</b></a>
+</div>
+
+<!-- Logo -->
+<div class="logo-container">
+    <img id="inicio" src="assets/imagens/logodorado.jpg" alt="Logo">
+</div>
+
+<script>
+// Navbar.js
+
+const menu = document.getElementById('menu');
+const mainContent = document.getElementById('main-content');
+
+// Alterna o estado do menu lateral
+function toggleMenu() {
+    const isOpen = menu.classList.contains('active');
+    isOpen ? closeMenu() : openMenu();
+}
+
+// Abre o menu lateral
+function openMenu() {
+    menu.classList.add('active');
+    menu.setAttribute('aria-hidden', 'false');
+    mainContent?.classList.add('overlay');
+}
+
+// Fecha o menu lateral
+function closeMenu() {
+    menu.classList.remove('active');
+    menu.setAttribute('aria-hidden', 'true');
+    mainContent?.classList.remove('overlay');
+}
+
+// Fecha o menu ao clicar fora dele
+window.addEventListener('click', (event) => {
+    if (!menu.contains(event.target) && !event.target.closest('.menu-btn')) {
+        closeMenu();
+    }
+});
+
+// Fecha o menu ao pressionar ESC
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeMenu();
+    }
+});
+</script>
+
+
+# slideshow
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .text {font-size: 11px}
+}
+</style>
+</head>
+<body>
+
+<h2>Automatic Slideshow</h2>
+<p>Change image every 2 seconds:</p>
+
+<div class="slideshow-container">
+
+<div class="mySlides fade">
+  <div class="numbertext">1 / 3</div>
+  <img src="img_nature_wide.jpg" style="width:100%">
+  <div class="text">Caption Text</div>
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">2 / 3</div>
+  <img src="img_snow_wide.jpg" style="width:100%">
+  <div class="text">Caption Two</div>
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">3 / 3</div>
+  <img src="img_mountains_wide.jpg" style="width:100%">
+  <div class="text">Caption Three</div>
+</div>
+
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+</div>
+
+<script>
+let slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  setTimeout(showSlides, 2000); // Change image every 2 seconds
+}
+</script>
+
+</body>
+</html> 
 
 
