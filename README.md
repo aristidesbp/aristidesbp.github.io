@@ -221,7 +221,7 @@ você faz isso com a letra “b”, com a letra “c”, “d”, “e”, etc.,
 
 
 
-# [TAREFA 1]
+# [TAREFA 2]
 Sua tarefa é criar uma tabela com a descrição mais completa possível dos possíveis clientes para [meu cliente]
 Levante as principais dificuldades, os medos, desejos e as objeções deste determinado público. 	
 A pessoa que estamos buscando é aquela que tem o desejo ou necessidade do produto do [meu cliente] , Abaixo eu vou informar como vc deve fazer:
@@ -263,7 +263,7 @@ Na coluna sobre características relacionadas à “o que acorda e dorme pensand
 
 
 
-# [TAREFA 2]
+# [TAREFA 3]
 Levando em consideração a pesquisa que fizemos acima sobre o publico interessado no produto da <persona(cliente)>, Crie uma lista de dificuldades, medos, desejos, objeções, histórias constrangedoras, pensamentos que o público  tem ao deitar a cabeça no travesseiro e comentários de péssimo gosto que esse público ouve no dia a dia. Abaixo eu vou informar como vc deve fazer:
 
 ● A [persona] que você representa; 
@@ -295,7 +295,7 @@ que você representa é a  [meu cliente];
 8. Determinado medo H: descrição detalhada do medo;
 
 
-# [TAREFA 3]
+# [TAREFA 4]
 Levando em consideração as orientações anteriores e o fato de que a empresa oferece o produto do [meu cliente] , vamos criar uma lista de 20 palavras-chave para utilizá-las como segmentação no Google Ads. Além disso, vamos criar uma lista de 20 palavras-chave negativas para utilizar nessa campanha. Importante: eu atendo na cidade do do [meu cliente], focados no produto do cliente, para que o mesmo filtre o público e consiga comercializar seu produto;Abaixo eu vou informar como de ser feito:
 
 ● A [persona] que você representa; 
@@ -315,7 +315,7 @@ Depois disso, crie uma lista de outras 30 palavras-chave positivas que não fale
 
 
 
-# [TAREFA 4]
+# [TAREFA 5]
 Levando em consideração o desenho do público-alvo que fizemos, as dores, os desejos e medos do público-alvo, a lista de palavras-chave positivas e a lista de palavras-chave negativas, crie para mim 10 títulos de anúncio.
 
 Lembre-se que os títulos devem ter no máximo 30 caracteres cada (essa informação é essencial).
@@ -345,19 +345,14 @@ Os outros títulos devem conter as 5 PALAVRA-CHAVE mais relevantes para o produt
 Crie a lista de 20 títulos de anúncio com, no máximo, 30 caracteres cada. Depois,crie 8 descrições chamativas, persuasivas que repitam várias das palavras-chave que estamos utilizando nos títulos. As descrições devem conter no máximo 90 caracteres, o nome da cidade em que atendemos e devem conter uma chamada para ação para compra, agendamento ou orçamento do serviço. 
 
 
-# [TAREFA 5]
+# [TAREFA 6]
 Fassa uma landpage de alta converção para meu cliente , deve ser moderna, bonita e empactante  a mesma deve ser entrgue em im unico arquivo htmhl.
 
 
-# ###########################################
-A gora que tudo foi esplicado vou passar alguns textos para ter como referencia depois os dados do [meu cliente]
 
-
-
-
-# #######################################################
-entendeu tudo? posso passar os dados do cliente?
-
+# [TAREFA 1]
+me diga se vc entendeu ?
+abaixo vou passar os dados do [meu cliente]
 
 
 
