@@ -14,125 +14,7 @@
 
 <body class="light-theme">
  
-    <style>
-    /* Definindo variáveis de cores para o tema claro e escuro */
-    :root {
-        --bg-light: #f0f8ff; /* Cor de fundo do tema claro (azul claro) */
-        --text-light: #1d3557; /* Cor do texto no tema claro (azul escuro) */
-        --bg-dark: #121212; /* Cor de fundo do tema escuro (preto suave) */
-        --text-dark: #f0f8ff; /* Cor do texto no tema escuro (branco) */
-        --navbar-light: #1d3557; /* Cor da navbar no tema claro (azul escuro) */
-        --navbar-dark: #333; /* Cor da navbar no tema escuro (cinza escuro) */
-        --sidebar-bg: #457b9d; /* Cor de fundo da sidebar (azul médio) */
-        --sidebar-hover: #1d3557; /* Cor de fundo dos links da sidebar ao passar o mouse */
-        --button-bg: #ffcc00; /* Cor de fundo do botão */
-        --button-hover: #d4a500; /* Cor de fundo do botão ao passar o mouse */
-    }
-
-    /* Estilos globais */
-    body {
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-        line-height: 1.6;
-        margin-top: 80px;
-        background-color: var(--bg-light); /* Cor de fundo do corpo, usando o tema claro */
-        color: var(--text-light); /* Cor do texto, usando o tema claro */
-        transition: background-color 0.3s, color 0.3s; /* Transição suave para mudar o fundo e cor do texto */
-    }
-
-    /* Quando o tema escuro é ativado, as cores do fundo e texto mudam */
-    body.dark-theme {
-        background-color: var(--bg-dark); /* Cor de fundo no tema escuro */
-        color: var(--text-dark); /* Cor do texto no tema escuro */
-    }
-
-    /* Navbar */
-    .navbar {
-        background-color: var(--navbar-light); /* Cor de fundo da navbar no tema claro */
-        color: white;
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave à navbar */
-    }
-
-    /* Modifica a cor da navbar quando o tema escuro é ativado */
-    .navbar.dark-theme {
-        background-color: #222; /* Cor da navbar no tema escuro (preto suave) */
-    }
-
-    /* Estilos do botão de menu e de alternância de tema */
-    .menu-btn, .theme-toggle-btn {
-        font-size: 30px;
-        background: none;
-        border: none;
-        color: inherit;
-        cursor: pointer;
-        margin-right: 10px;
-        transition: transform 0.2s; /* Adiciona efeito de transição ao clicar */
-    }
-
-    .menu-btn:hover, .theme-toggle-btn:hover {
-        transform: scale(1.1); /* Aumenta o tamanho do botão ao passar o mouse */
-    }
-
-    .navbar-title {
-        font-weight: bold;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -250px; /* A sidebar começa fora da tela */
-        height: 100%;
-        width: 250px;
-        background-color: var(--sidebar-bg); /* Cor de fundo da sidebar */
-        color: var(--text-dark); /* Cor do texto na sidebar */
-        padding-top: 60px;
-        transition: left 0.3s ease; /* Transição suave ao abrir e fechar a sidebar */
-        z-index: 1100; /* Garante que a sidebar fique acima de outros elementos */
-    }
-
-    /* Modifica a cor da sidebar quando o tema escuro é ativado */
-    .sidebar.dark-theme {
-        background-color: #333; /* Cor de fundo da sidebar no tema escuro (cinza escuro) */
-    }
-
-    /* Quando a sidebar estiver ativa, ela vai para a posição esquerda 0 (visível) */
-    .sidebar.active {
-        left: 0;
-    }
-
-    /* Estilos dos links dentro da sidebar */
-    .sidebar a {
-        padding: 10px 20px;
-        text-decoration: none;
-        font-size: 20px;
-        color: white;
-        display: block;
-        transition: background-color 0.3s; /* Transição suave ao passar o mouse */
-    }
-
-    /* Estilo ao passar o mouse sobre os links da sidebar */
-    .sidebar a:hover {
-        background-color: var(--sidebar-hover); /* Altera a cor de fundo ao passar o mouse */
-    }
-
-    /* Estilo do botão de fechar a sidebar */
-    .close-btn {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 36px;
-        color: white;
-        cursor: pointer;
-    }
-    </style>
+    
 
     <!-- Navbar -->
     <div class="navbar">
@@ -156,26 +38,8 @@
         <a href="02.html">02</a>
     </nav>
 
-    <script>
-        // Função para abrir ou fechar a sidebar
-        function toggleMenu() {
-            document.getElementById('menu').classList.toggle('active');
-        }
+    
 
-        // Função para fechar a sidebar
-        function closeMenu() {
-            document.getElementById('menu').classList.remove('active');
-        }
-
-        // Função para alternar entre o tema claro e escuro
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');  // Altera o tema do corpo
-            document.querySelector('.navbar').classList.toggle('dark-theme'); // Altera a navbar
-            document.querySelector('.sidebar').classList.toggle('dark-theme'); // Altera a sidebar
-        }
-    </script>
-
-<!--##########################
 
 <!--###################################### -->
 <!--############. TexArea. ############### -->
@@ -197,14 +61,7 @@
 <button class="copy-button" onclick="copyCode()">Copiar Código</button>
 </div>
 </div>
-<script>
-function copyCode() {
-var textarea = document.getElementById('navbar-code');
-            textarea.select();
-            document.execCommand('copy');
-            alert('Código copiado com sucesso!');
-        }
-</script>   
+
 </body>
 </html>
 
