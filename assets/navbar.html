@@ -119,30 +119,7 @@
         cursor: pointer;
     }
     </style>
-<!-- footer -->
-<style>
-/* Estilo do footer */
-.footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 20px;
-    background-color: var(--navbar-light);
-    color: white;
-    transition: background-color 0.3s, color 0.3s;
-}
 
-.footer p {
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-body.dark-theme .footer {
-    background-color: #222;
-    color: var(--text-dark);
-}
-</style>
     <div class="navbar">
         <button class="menu-btn" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button>
         <button class="theme-toggle-btn" aria-label="Alternar Tema" onclick="toggleTheme()">🌙</button>
@@ -158,13 +135,7 @@ body.dark-theme .footer {
         <a href="02.html">02</a>
     </nav>
 
-  
-<footer class="footer">
-    <div class="footer-content">
-        <p>&copy; 2025 ABP Marketing Digital. Todos os direitos reservados.</p>
-        <p>Desenvolvido por Aristides B. Pontes</p>
-    </div>
-</footer>
+
 
     <script>
         // Função para abrir ou fechar a sidebar
@@ -194,6 +165,76 @@ body.dark-theme .footer {
             }
         });
     </script>
+<!-- footer -->
+<style>
+/* Estilo do footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--navbar-light);
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    z-index: 1000;
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Botão verde */
+.footer .scroll-top-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.footer .scroll-top-btn:hover {
+    background-color: #218838;
+    transform: scale(1.1);
+}
+
+/* Tema escuro */
+body.dark-theme .footer {
+    background-color: #222;
+    color: var(--text-dark);
+}
+</style>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2025 ABP Marketing Digital. Todos os direitos reservados.</p>
+        <p>Desenvolvido por Aristides B. Pontes</p>
+        <button class="scroll-top-btn" aria-label="Voltar ao topo" onclick="scrollToTop()">▲</button>
+    </div>
+</footer>
+
+<script>
+    // Função para rolar até o topo da página
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
 
 
 </body>
