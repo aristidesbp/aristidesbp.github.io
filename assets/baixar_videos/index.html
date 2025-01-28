@@ -177,35 +177,7 @@
             document.querySelector('.sidebar').classList.toggle('dark-theme'); // Altera a sidebar
         }
     </script>
-
-<!--##########################
-
-<!--###################################### -->
-<!--############. TexArea. ############### -->
-<!--###################################### -->
-  
-<div class="section">
-<h2>Código Completo da Navbar</h2>
-<p>OBSERVAÇÃO:cole o mesmo dentro do arquivo HTML , verifica a estrutura para ver onde se encaixa!</p>
-
-<textarea id="navbar-code" rows="10" style="width:100%;">
-
-<!--###################################### -->
-<!--###################################### -->
-
-
-
-
-
-
-
-<!--###################################### -->
-<!--###################################### -->
-</textarea>
-<button class="copy-button" onclick="copyCode()">Copiar Código</button>
-</div>
-</div>
-<script>
+  <script>
 function copyCode() {
 var textarea = document.getElementById('navbar-code');
             textarea.select();
@@ -243,5 +215,124 @@ var textarea = document.getElementById('navbar-code');
         }
     });
 </script>
+
+  <!-- fim da nave bar -->
+
+
+    <style>
+        
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #444;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-left: 5px solid #333;
+            overflow-x: auto;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            margin-top: 20px;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+
+
+
+  
+
+
+<!-- fim da nave bar-->
+
+    <header>
+        <h1>Como Instalar Termux e yt-dlp no Android</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Passo 1: Instalando o Termux</h2>
+            <p>O Termux é um terminal para Android que permite executar comandos de Linux. Para instalá-lo, siga os passos abaixo:</p>
+            <ol>
+                <li>Acesse a <a href="https://f-droid.org/packages/com.termux/" target="_blank">página oficial do Termux no F-Droid</a>.</li>
+                <li>Baixe e instale o aplicativo em seu dispositivo Android.</li>
+                <li>Abra o Termux e execute o seguinte comando para atualizar os pacotes:
+                    <pre>pkg update && pkg upgrade</pre>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>Passo 2: Instalando o yt-dlp</h2>
+            <p>O <strong>yt-dlp</strong> é uma ferramenta para baixar vídeos de plataformas como YouTube. Para instalá-lo no Termux, use os comandos abaixo:</p>
+            <ol>
+                <li>Instale o Python e o pip:
+                    <pre>pkg install python</pre>
+                </li>
+                <li>Instale o yt-dlp usando o pip:
+                    <pre>pip install -U yt-dlp</pre>
+                </li>
+                <li>Verifique se a instalação foi concluída:
+                    <pre>yt-dlp --version</pre>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>Principais Comandos do yt-dlp</h2>
+            <p>Seguem alguns comandos úteis para utilizar o yt-dlp:</p>
+            <ol>
+                <li><strong>Listar arquivos no diretório:</strong>
+                    <pre>
+ ls
+
+                    </pre>
+                </li>
+                <li><strong>Mover arquivos para a pasta de downloads do Android:</strong>
+                    <pre>
+mv ~/downloads/*.mkv ~/storage/downloads/
+                    </pre>
+                </li>
+                <li><strong>Baixar um vídeo ao vivo do YouTube com qualidade máxima de 720p:</strong>
+                    <pre>
+~/downloads $ yt-dlp -f 'bestvideo[height<=720]+bestaudio' -o '~/downloads/%(title)s.%(ext)s' [URL do vídeo]
+                    </pre>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>Dicas Finais</h2>
+            <p>Certifique-se de ter espaço suficiente no armazenamento do dispositivo antes de baixar vídeos grandes. Além disso, sempre execute o comando <code>yt-dlp --update</code> para manter a ferramenta atualizada.</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 Aristides B. Pontes. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
+
+
+  
+
 </body>
 </html>
