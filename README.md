@@ -414,6 +414,10 @@ Então, a gente tem 3 pontos pra conectar:
 2- resultado da pesquisa (o anúncio), 
 3-  site (landing page). 
 
+
+
+
+
 # html basico
 [codigo] 
 
@@ -448,6 +452,8 @@ Então, a gente tem 3 pontos pra conectar:
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
+
+
 
 
 
@@ -630,6 +636,10 @@ window.addEventListener('keydown', (event) => {
 </script>
 
 
+
+
+
+
 # slideshow
 
 <!DOCTYPE html>
@@ -760,4 +770,76 @@ function showSlides() {
 </body>
 </html> 
 
+
+
+
+#BTN WHATSAPP: 
+<!-- footer -->
+<style>
+/* Estilo do footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: var(--navbar-light);
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    z-index: 1000;
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Botão do WhatsApp */
+.footer .whatsapp-btn {
+    background-color: #25d366;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+}
+
+.footer .whatsapp-btn:hover {
+    background-color: #1ebc59;
+    transform: translateY(-3px);
+}
+
+/* Ícone do botão */
+.footer .whatsapp-btn .icon {
+    font-size: 24px;
+}
+
+/* Tema escuro */
+body.dark-theme .footer {
+    background-color: #222;
+    color: var(--text-dark);
+}
+</style>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2025 ABP Marketing Digital. Todos os direitos reservados.</p>
+        <a 
+            class="whatsapp-btn" 
+            href="https://wa.me/5511999999999?text=Olá, gostaria de mais informações!" 
+            target="_blank" 
+            aria-label="Abrir WhatsApp">
+            <span class="icon">📱</span> Fale Conosco
+        </a>
+    </div>
+</footer>
 
