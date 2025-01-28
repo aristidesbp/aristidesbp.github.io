@@ -135,7 +135,88 @@
         color: white;
         cursor: pointer;
     }
+
+
+
+
+
+/* Estilos para o header */
+header {
+    margin: 20px 0; /* Margem superior e inferior */
+    /* background-color: #f0f8ff;  Cor de fundo azul claro */
+    /* color: #1d3557;  Cor do texto azul escuro */
+    font-family: 'Roboto', sans-serif; /* Fonte Roboto */
+    padding: 15px;
+    text-align: center; /* Centraliza o texto */
+}
+
+/* Estilos para o h1 dentro do header */
+header h1 {
+    margin: 10px 0; /* Margem superior e inferior */
+    /* background-color: #1d3557;  Cor de fundo azul escuro */
+    /* color: white;  Cor do texto branco */
+    font-family: 'Arial', sans-serif; /* Fonte Arial */
+    padding: 10px;
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+
+/* Estilos para o elemento pre */
+pre {
+    margin: 10px 0; /* Margem superior e inferior */
+     background-color: #f1faee;/* Cor de fundo cinza claro */
+     color: #333;  /*Cor do texto cinza escuro */
+    font-family: 'Courier New', monospace; /* Fonte Courier New */
+    padding: 10px 15px;
+    border: 1px solid #ddd; /* Borda fina e cinza */
+    border-radius: 5px; /* Bordas arredondadas */
+    white-space: pre-wrap; /* Quebra de linha automática */
+    word-wrap: break-word; /* Quebra de palavras longas */
+    overflow-wrap: break-word; /* Garante quebra de linha em palavras longas */
+    width: 100%; /* Garante que o pre ocupe toda a largura disponível */
+}
+
+
+
+
+
+/* Estilos para o main */
+main {
+    margin: 20px;
+    /* background-color: #ffffff; Cor de fundo branca */
+    /* color: #333;  Cor do texto cinza escuro */
+    font-family: 'Roboto', sans-serif; /* Fonte Roboto */
+    padding: 20px;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilos para as seções dentro do main */
+main section {
+    margin: 20px 0; /* Margem superior e inferior */
+    /* background-color: #f0f8ff;  Cor de fundo azul claro */
+    /* color: #1d3557;  Cor do texto azul escuro */
+    font-family: 'Arial', sans-serif; /* Fonte Arial */
+    padding: 15px;
+    border-left: 5px solid #457b9d; /* Linha de borda à esquerda */
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+/* Estilos para os títulos das seções (h2) */
+main section h2 {
+    font-family: 'Arial', sans-serif; /* Fonte Arial */
+    color: #1d3557; /* Cor do texto azul escuro */
+    margin-bottom: 10px; /* Margem inferior */
+}
+
+ol, ul {
+    margin-left: 5;
+    padding-left: 5;
+}
+
+
     </style>
+
 
     <!-- Navbar -->
     <div class="navbar">
@@ -219,48 +300,7 @@ var textarea = document.getElementById('navbar-code');
   <!-- fim da nave bar -->
 
 
-    <style>
-        
-        header {
-            background: #333;
-            color: #fff;
-            padding: 10px 20px;
-            text-align: center;
-        }
-        main {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            color: #444;
-        }
-        pre {
-            background: #f4f4f4;
-            padding: 10px;
-            border-left: 5px solid #333;
-            overflow-x: auto;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #333;
-            color: #fff;
-            margin-top: 20px;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-
-
+    
 
 
   
@@ -333,6 +373,3 @@ mv ~/downloads/*.mkv ~/storage/downloads/
 
 
   
-
-</body>
-</html>
