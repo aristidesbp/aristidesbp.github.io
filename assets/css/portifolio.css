@@ -1,33 +1,86 @@
-
+/* #################################### */
+/* ##### declarando variáveis ######### */
+/* #################################### */
 
 :root {
-    --bg-light: #f0f8ff; /* Define a cor de fundo clara como um azul claro */
-    --text-light: #1d3557; /* Define a cor do texto claro como um azul escuro */
-    --bg-dark: #121212; /* Define a cor de fundo escura como um tom de preto */
-    --text-dark: #f0f8ff; /* Define a cor do texto escuro como um azul claro (o oposto do texto claro) */
-    --navbar-light: #1d3557; /* Define a cor da barra de navegação no tema claro como azul escuro */
-    --navbar-dark: #333; /* Define a cor da barra de navegação no tema escuro como cinza escuro */
-    --sidebar-bg: #457b9d; /* Define a cor de fundo da barra lateral como um azul médio */
-    --sidebar-hover: #1d3557; /* Define a cor da barra lateral ao passar o mouse como azul escuro */
-    --button-bg: #ffcc00; /* Define a cor de fundo dos botões como amarelo */
-    --button-hover: #d4a500; /* Define a cor de fundo dos botões ao passar o mouse como um tom mais escuro de amarelo */
+--bg-light: #f0f8ff; 
+/* Define a cor de fundo clara como um azul claro */
+
+--text-light: #1d3557; 
+/* Define a cor do texto claro como um azul escuro */
+
+--bg-dark: #121212; 
+/* Define a cor de fundo escura como um tom de preto */
+
+--text-dark: #f0f8ff; 
+/* Define a cor do texto escuro como um azul claro (o oposto do texto claro) */
+
+--navbar-light: #1d3557; 
+/* Define a cor da barra de navegação no tema claro como azul escuro */
+
+--navbar-dark: #333; 
+/* Define a cor da barra de navegação no tema escuro como cinza escuro */
+
+--sidebar-bg: #457b9d; 
+/* Define a cor de fundo da barra lateral como um azul médio */
+
+--sidebar-hover: #1d3557; 
+/* Define a cor da barra lateral ao passar o mouse como azul escuro */
+
+--button-bg: #ffcc00; 
+/* Define a cor de fundo dos botões como amarelo */
+
+--button-hover: #d4a500; 
+/* Define a cor de fundo dos botões ao passar o mouse como um tom mais escuro de amarelo */
 }
-/*###################################################################################################################*/
 
+/* ############################## */
+/* ##### Estilos gerais ######### */
+/* ############################## */
 
+* { 
+box-sizing: border-box;
+}
 
-/* Estilos gerais */
 body {
-    margin: 0; /* Remove a margem padrão do corpo da página */
-    font-family: 'Roboto', sans-serif; /* Define a fonte padrão como Roboto, com fallback para sans-serif */
-    line-height: 1.6; /* Define o espaçamento entre linhas como 1.6 para melhorar a legibilidade */
-    margin-top: 80px; /* Adiciona uma margem superior de 80px para afastar o conteúdo do topo da página */
-    background-color: var(--bg-light); /* Define a cor de fundo do corpo com a variável de cor clara */
-    color: var(--text-light); /* Define a cor do texto com a variável de cor de texto clara */
-    transition: background-color 0.3s, color 0.3s; /* Adiciona uma transição suave de 0.3s para as mudanças de cor de fundo e cor do texto */
+font-family: Roboto; 
+padding: 10px;
+background: #f1f1f1;
 }
 
-/* Estilo para o tema escuro */
+/* ####################################### */
+/* ##### body class="light-theme ######### */
+/* ####################################### */
+
+body.ligth-theme {
+margin: 0;
+/* Remove a margem padrão do corpo da página */
+
+font-family: 'Roboto', sans-serif; 
+/* Define a fonte padrão como Roboto, com fallback para sans-serif */
+
+line-height: 1.6; 
+/* Define o espaçamento entre linhas como 1.6 para melhorar a legibilidade */
+    
+margin-top: 80px; 
+/* Adiciona uma margem superior de 80px para afastar o conteúdo do topo da página */
+    
+background-color: var(--bg-light); 
+/* Define a cor de fundo do corpo com a variável de cor clara */
+    
+color: var(--text-light); 
+/* Define a cor do texto com a variável de cor de texto clara */
+    
+transition: background-color 0.3s, color 0.3s; 
+/* Adiciona uma transição suave de 0.3s para as mudanças de cor de fundo e cor do texto */
+}
+
+
+
+/* ####################################### */
+/* ##### body class="dark-theme ######### */
+/* ####################################### */
+
 body.dark-theme {
     background-color: var(--bg-dark); /* Quando o tema escuro é ativado, a cor de fundo muda para a variável de cor escura */
     color: var(--text-dark); /* Quando o tema escuro é ativado, a cor do texto muda para a variável de cor de texto escura */
@@ -399,3 +452,41 @@ body {
 }
 
 
+
+<style>
+
+
+/* ############################## */
+/* ###### CSS da Header ######### */
+/* ############################## */
+
+.header {
+  padding: 30px;
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* ############################## */
+/* ###### CSS da Navbar ######### */
+/* ############################## */
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
