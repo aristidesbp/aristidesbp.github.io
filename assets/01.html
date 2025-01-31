@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="description" content="Especialistas em marketing digital e tráfego pago.">
+<meta name="keywords" content="marketing digital, tráfego pago, estratégias de venda">
+<meta name="author" content="Aristides Barbosa Pontes">
+<title>ABP MARKETING DIGITAL</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css"> 
+ 
+<style>  
+/* Estilo para o corpo da página */
+body {
+font-family: 'Roboto', sans-serif;
+line-height: 1.6;
+margin-top: 80px; /* Ajuste para compensar o menu fixo */
+margin: 0;
+padding: 0;
+background-color: #f8f9fa;
+color: #333; 
+}
+   
+.navbar {
+      background-color: #004d40;
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #fff !important;
+    }
+    .navbar-nav .nav-link {
+      padding: 10px 15px;
+    }
+   /* Barra de navegação fixa no topo */
+.navbar {
+    background-color: #004D40;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Contêiner para o botão e título na navbar */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+   .menu-btn {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Menu lateral (sidebar) */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #004D40;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+/* Torna o menu visível */
+.sidebar.active {
+    left: 0;
+}
+
+/* Links no menu lateral */
+.sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+}
+
+/* Estilo do hover nos links */
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botão para fechar o menu lateral */
+.sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Estilo do conteúdo principal */
+#main-content {
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Classe para mover o conteúdo ao abrir o menu */
+#main-content.overlay {
+    margin-left: 250px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    #main-content.overlay {
+        margin-left: 200px;
+    }
+}
+
+
+// Navbar.js
+const menu = document.getElementById('menu');
+const mainContent = document.getElementById('main-content');
+
+// Alterna o estado do menu lateral
+function toggleMenu() {
+    const isOpen = menu.classList.contains('active');
+    isOpen ? closeMenu() : openMenu();
+}
+
+// Abre o menu lateral
+function openMenu() {
+    menu.classList.add('active');
+    menu.setAttribute('aria-hidden', 'false');
+    mainContent?.classList.add('overlay');
+}
+
+// Fecha o menu lateral
+function closeMenu() {
+    menu.classList.remove('active');
+    menu.setAttribute('aria-hidden', 'true');
+    mainContent?.classList.remove('overlay');
+}
+
+// Fecha o menu ao clicar fora dele
+window.addEventListener('click', (event) => {
+    if (!menu.contains(event.target) && !event.target.closest('.menu-btn')) {
+        closeMenu();
+    }
+});
+
+// Fecha o menu ao pressionar ESC
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeMenu();
+    }
+});   
+   
+</style>
+
+   
+<!-- Navbar -->
+<div class="navbar">
+    <div class="navbar-left">
+        <!-- Botão de menu lateral -->
+        <button class="menu-btn" aria-label="Abrir Menu Lateral" onclick="toggleMenu()">☰</button>
+        <!-- Título da página -->
+        <div class="navbar-title"><b>ABP MARKETING DIGITAL</b></div>
+    .</div>
+</div>
+
+<!-- Menu lateral -->
+<div id="menu" class="sidebar" role="navigation" aria-hidden="true">
+    <!-- Botão para fechar o menu -->
+    <span class="close-btn" aria-label="Fechar Menu" onclick="closeMenu()">×</span>
+    <!-- Links do menu -->
+    <a href="index.html"><b>INÍCIO</b></a>
+    <a href="#servicos"><b>SERVIÇOS</b></a>
+    <a href="#contato"><b>CONTATO</b></a>
+  
+  <a href="#"><b>Exemplo de outras páginas</b></a>
+  <a href="01.html"><b>01</b></a>
+  <a href="02.html"><b>02</b></a>
+  <a href="03.html"><b>03</b></a>
+  <a href="04.html"><b>04</b></a>
+  <a href="05.html"><b>05</b></a>
+  <a href="06.html"><b>06</b></a>
+  <a href="07.html"><b>07</b></a>
+  <a href="08.html"><b>08</b></a>
+</div>
+
+ <!-- Scripts -->
+ <script>
+
+  </script>
+
+  
+
+
+<!-- ################################################### -->
+<!-- ##################  NAVBAR. ####################### -->
+<!-- ################################################### -->
+  
+
+  
+     <style>
+        .cta-btn {
+            background-color: #e63946;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        .features {
+            padding: 4rem 2rem;
+        }
+        .feature-box {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .feature-box h4 {
+            font-weight: bold;
+            color: #1d3557;
+        }
+        footer {
+            background-color: #1d3557;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+    </style>
+  
+  <style>
+
+ 
+
+    .features {
+      background-color: #f8f9fa;
+      padding: 50px 0;
+    }
+    .feature-box {
+      text-align: center;
+      padding: 20px;
+    }
+    .feature-box i {
+      font-size: 3rem;
+      color: #004d40;
+      margin-bottom: 15px;
+    }
+    .contact-form {
+      padding: 50px 0;
+      text-align: center;
+    }
+    .contact-form .btn-whatsapp {
+      background-color: #25D366;
+      color: white;
+      font-size: 1.25rem;
+      padding: 15px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    footer {
+      background-color: #004d40;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Botão de menu lateral */
+
+
+</style>
+</head>
+<body>
+
+
+
+
+
+
+<!-- ################################################### --> 
+<style>
+     .hero {
+            background: linear-gradient(90deg, #1d3557, #457b9d);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .hero p {
+            font-size: 1.2rem;
+        }
+
+    
+  /* para fundo com degradê*/
+    .hero {
+            background: linear-gradient(90deg, #1d3557, #457b9d);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        } 
+
+    /*para fundo com imagem    
+    .hero {
+      background: url('floresta.jpg') no-repeat center center/cover;
+      color: #fff;
+      text-align: center;
+      padding: 100px 0; 
+    } */
+
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+    }
+
+    .hero h2 {
+      font-size: 3.0rem;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-top: 20px;
+    }
+
+  .hero {
+  background: url('floresta.jpg') no-repeat center center/cover;
+  color: #fff;
+  text-align: center;
+  padding: 100px 0;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com opacidade */
+  z-index: 1; /* Coloca o fundo antes do conteúdo */
+}
+
+.hero h1, .hero h2, .hero p {
+  position: relative;
+  z-index: 2; /* Garante que o texto fique acima da camada escura */
+}
+  
+</style>
+
+  
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="container">
+  <h2>Exportação de Matérias-Primas do Pará</h2>
+      <p>Conectamos o Pará ao mercado global com processos rápidos, seguros e sustentáveis.</p>
+     <p> <a href="#contato" class="btn btn-lg btn-success mt-4">Entre em Contato</a><p>
+    </div>
+  </div>
+
+<!-- ################################################### --> 
+
+  
+  
+  <!-- Sobre Section -->
+  <section class="about" id="sobre">
+    <div class="container text-center">
+      <br>
+    <h1>Sobre a SB Serviços</h1>
+    <p>
+      A <strong>SB Serviços</strong> é especializada na exportação de matérias-primas e produtos de alto valor, conectando o Brasil ao mercado global de maneira eficiente e segura. Nossa missão é proporcionar soluções logísticas e comerciais para nossos clientes, com foco em qualidade, confiança e integridade.
+    </p>
+
+    <h3>Combustível de Energia</h3>
+    
+    <p>
+      <strong>PRODUTOS ENERGÉTICOS</strong> 
+      Facilitamos transações de energia contínuas, transparentes e prósperas em escala global. Contamos com uma rede de associados e parceiros inigualável, oferecendo aos nossos clientes acesso direto a vendedores com potencial de negociação sem igual.
+    </p>
+
+    <h3>Produtos Agrícolas</h3>
+    <p>
+      Trabalhamos diretamente com o Brasil, um dos maiores exportadores de matérias-primas do mundo, com grande influência no mercado de commodities. O país é um grande produtor de açúcar, café, soja, milho, arroz e carne. Nosso compromisso vai além das transações; trata-se de construir relacionamentos duradouros com clientes, baseados em respeito, lealdade e integridade em todas as negociações.
+    </p>
+    
+
+    <h3>Metais Preciosos</h3>
+    <p>
+      <strong>PRODUTOS METÁLICOS </strong>
+      Trabalhamos com vendedores particulares certificados, com selo reconhecido internacionalmente, oferecendo oportunidades únicas para empreendedores, investidores e profissionais da indústria. A SB Serviços proporciona acesso a um setor próspero e com grande potencial de valorização.
+    </p>
+
+    <h3>Serviços Adicionais</h3>
+    <p>
+      Nossa gama de serviços de valor agregado foi projetada para apoiar nossos clientes neste mercado altamente competitivo. A SB Serviços se destaca ao oferecer soluções personalizadas e de qualidade para cada um dos nossos parceiros comerciais, garantindo sucesso nas negociações.
+    </p>
+  </div>
+</section>
+
+
+
+  <!-- Features Section -->
+  <section class="features" id="servicos">
+    <div class="container text-center">
+      <h2>Nossos Serviços</h2>
+      <p class="lead">Excelência em exportação de matérias-primas</p>
+      <div class="row mt-4">
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-globe"></i>
+          <h4>Exportação Global</h4>
+          <p>Conectamos o Pará ao mundo com logística eficiente.</p>
+        </div>
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-leaf"></i>
+          <h4>Sustentabilidade</h4>
+          <p>Valorizamos o meio ambiente em cada etapa do processo.</p>
+        </div>
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-shield-alt"></i>
+          <h4>Segurança Garantida</h4>
+          <p>Processos seguros e confiáveis para sua tranquilidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Contato Section -->
+<section class="contact-form" id="contato">
+  <div class="container text-center">
+    <h2 class="text-center">Entre em Contato</h2>
+    <p>Converse conosco diretamente pelo WhatsApp.</p>
+    <a href="https://wa.me/559192420981" target="_blank" class="btn btn-lg btn-success">
+      <i class="fab fa-whatsapp"></i> Fale Conosco
+    </a>
+    <!-- Adicionando a logo abaixo do botão -->
+    <div class="mt-4">
+      <img src="omagens/logo.jpg" alt="Logo SB Serviços" style="max-width: 200px;">
+    </div>
+  </div>
+</section>
+  
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 ABP MARKETING DIGITAL - Todos os Direitos Reservados</p>
+    <p>Localização: Belém, Pará | Contato: (91) 9 9242-0981</p>
+  </footer>
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

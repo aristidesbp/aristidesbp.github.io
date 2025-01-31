@@ -1,27 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-        
-<!-- ################################################# -->
-<!-- ###### CONFIGURAÇÕES INICIAIS DA PÁGINA ######### -->
-<!-- ################################################# -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible"content="ie=edge">
-
-<!-- LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL -->
-<!-- LLLLLLLLL ÚTIL PARA SEO LLLLLL -->
-<!-- LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL -->
 <title>ARISTIDES B. PONTES</title> 
 <meta name="description" content="Especialistas em marketing digital e tráfego pago.">
 <meta name="keywords" content="marketing digital, tráfego pago, estratégias de venda">
 <meta name="author" content="Aristides Barbosa Pontes">
+<link rel="stylesheet" href="css/portifolios.css">
+<style>
 
-<!-- LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL -->
-<!-- LLLLLLLLL LINK PARA ARQUIVOS EXTERNOS LLLLLL -->
-<!-- LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL -->
-<link rel="stylesheet" href="css/portifolio.css">
+/* Definindo variáveis de cores para o tema claro e escuro */
+    :root {
+        --bg-light: #f0f8ff;
+        --text-light: #1d3557;
+        --bg-dark: #121212;
+        --text-dark: #f0f8ff;
+        --navbar-light: #1d3557;
+        --navbar-dark: #333;
+        --sidebar-bg: #457b9d;
+        --sidebar-hover: #1d3557;
+        --button-bg: #ffcc00;
+        --button-hover: #d4a500;
+    }
 
+    body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.6;
+        margin-top: 80px;
+        background-color: var(--bg-light);
+        color: var(--text-light);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-theme {
+        background-color: var(--bg-dark);
+        color: var(--text-dark);
+    }
+
+
+/* NAVBAR cores para o tema claro e escuro */
+
+   .navbar {
+        background-color: var(--navbar-light);
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar.dark-theme {
+        background-color: #222;
+    }
+
+    .menu-btn, .theme-toggle-btn {
+        font-size: 30px;
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: transform 0.2s;
+    }
+
+    .menu-btn:hover, .theme-toggle-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .navbar-title {
+        font-weight: bold;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100%;
+        width: 250px;
+        background-color: var(--sidebar-bg);
+        color: var(--text-dark);
+        padding-top: 60px;
+        transition: left 0.3s ease;
+        z-index: 1100;
+    }
+
+    .sidebar.dark-theme {
+        background-color: #333;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar a {
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        display: block;
+        transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+        background-color: var(--sidebar-hover);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 36px;
+        color: white;
+        cursor: pointer;
+    }
+
+
+
+/* ###### HERO ###########*/
+
+.hero {
+    text-align: center; /* Alinha o texto no centro da seção */
+    padding: 100px 20px; /* Adiciona 100px de preenchimento no topo e fundo, e 20px nas laterais */
+    background: linear-gradient(135deg, var(--navbar-light), var(--sidebar-bg)); /* Cria um fundo com gradiente de 135 graus, indo de "navbar-light" para "sidebar-bg" */
+    color: white; /* Define a cor do texto como branca */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Aplica uma forma de polígono à seção, criando uma borda diagonal na parte inferior */
+}
+
+.hero h1 {
+    font-size: 3em; /* Define o tamanho da fonte do título principal como 3 vezes o tamanho da fonte padrão */
+    margin-bottom: 20px; /* Adiciona um espaço de 20px abaixo do título */
+}
+
+.hero p {
+    font-size: 1.2em; /* Define o tamanho da fonte do parágrafo como 1.2 vezes o tamanho da fonte padrão */
+    margin-bottom: 30px; /* Adiciona um espaço de 30px abaixo do parágrafo */
+}
+
+
+
+</style>
 
 
 </head><!-- fecha a configurações iniciais -->
@@ -63,18 +187,32 @@
 <!-- ######################## -->
 <section class="slides">
     <div class="slide-container">
+
         <div class="slide fade">
-            <img src="img1.jpg" alt="Imagem 1">
+            <img src="imagens/01.jpg" alt="Imagem 1">
             <div class="text">Imagem 1</div>
         </div>
+
         <div class="slide fade">
-            <img src="img2.jpg" alt="Imagem 2">
+            <img src="imagens/02.jpg" alt="Imagem 2">
             <div class="text">Imagem 2</div>
         </div>
+
         <div class="slide fade">
-            <img src="img3.jpg" alt="Imagem 3">
+            <img src="imagens/03.jpg" alt="Imagem 3">
             <div class="text">Imagem 3</div>
         </div>
+
+        <div class="slide fade">
+            <img src="imagens/04.jpg" alt="Imagem 3">
+            <div class="text">Imagem 3</div>
+        </div>
+  
+        <div class="slide fade">
+            <img src="imagens/05.jpg" alt="Imagem 3">
+            <div class="text">Imagem 3</div>
+        </div>
+
     </div>
     <br>
     <div style="text-align:center">
@@ -266,10 +404,64 @@
 </div>
 
 
-<!-- ################################################# -->
-<!-- ####### CONFIGURAÇÕES FINAIS DA PÁGINA ########## -->
-<!-- ################################################# -->  
-<script src="js/portifolio.js"></script>
+<!-- ############################### -->
+<!-- #######  JAVA SCRIPT ########## -->
+<!-- ############################### -->  
+<script>
+
+        // Função para abrir a sidebar
+        function toggleMenu() {
+            document.getElementById('menu').classList.toggle('active');
+        }
+
+  
+              // Função para fechar a sidebar
+        function closeMenu() {
+            document.getElementById('menu').classList.remove('active');
+        }
+
+
+        // Função para fechar o menu ao clicar fora dele
+        document.addEventListener('click', function(event) {
+            var menu = document.getElementById('menu');
+            var menuBtn = document.querySelector('.menu-btn');
+            
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+                closeMenu();
+            }
+        });
+ 
+        
+        // Função para alternar entre o tema claro e escuro
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            document.querySelector('.navbar').classList.toggle('dark-theme');
+            document.querySelector('.sidebar').classList.toggle('dark-theme');
+        }
+
+
+/*SLIDES FOTOS*/
+// Adicione isso ao seu arquivo portifolio.js
+let slideIndex = 0;
+showSlides();
+
+function showSlides() {
+    let i;
+    let slides = document.getElementsByClassName("slide");
+    let dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}    
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 2000); // Muda a imagem a cada 2 segundos
+}
+</script>
 </body>
 </html>
 

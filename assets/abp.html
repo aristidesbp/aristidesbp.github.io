@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestor de tráfego pago especializado em marketing digital para alavancar suas vendas online.">
+    <meta name="keywords" content="Gestor de Tráfego, Marketing Digital, Google Ads, Tráfego Pago, Consultoria Digital, Aristides Barbosa Pontes">
+    <meta name="author" content="Aristides Barbosa Pontes">
+    <title>Landing Page - AristidesBP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+
+
+        .hero {
+            background: linear-gradient(90deg, #1d3557, #457b9d);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .hero p {
+            font-size: 1.2rem;
+        }
+        .cta-btn {
+            background-color: #e63946;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        .features {
+            padding: 4rem 2rem;
+        }
+        .feature-box {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .feature-box h4 {
+            font-weight: bold;
+            color: #1d3557;
+        }
+        footer {
+            background-color: #1d3557;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- Navbar fixa no topo com funcionalidade de clique fora -->
+<nav class="navbar navbar-expand-lg fixed-top" style="background-color: #1d3557;">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#"> ABP Marketing Digital </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white active" href="assets/abp.html">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/01.html">01</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/02.html">02</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/03.html">03</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/04.html">04</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/05.html">05</a>
+                </li>
+              <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/06.html">06</a>
+                </li>
+
+             <li class="nav-item">
+                    <a class="nav-link text-white" href="assets/07.html">07</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Contato</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Fecha o menu ao clicar fora dele
+    document.addEventListener("click", function (event) {
+        const navBar = document.querySelector("#navbarNav");
+        const isClickInside = navBar.contains(event.target) || event.target.closest(".navbar-toggler");
+
+        if (!isClickInside && navBar.classList.contains("show")) {
+            const navbarToggler = document.querySelector(".navbar-toggler");
+            navbarToggler.click(); // Simula o clique no botão para recolher o menu
+        }
+    });
+</script>
+
+<!-- fim Navbar -->
+
+
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Transforme Suas Vendas com Marketing Digital</h1>
+        <p>Entenda como o  Tráfego Pago irá aumentar exponencialmente as vendas do seu negócio.</p>
+
+        <a href="#contact" class="btn cta-btn"> Saiba Mais</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features container">
+        <div class="row">
+            <div class="col-md-4 feature-box">
+                <h4>Resultados Garantidos</h4>
+                <p>Anúncios otimizados para alcançar o público certo e gerar vendas.</p>
+            </div>
+            <div class="col-md-4 feature-box">
+                <h4>Especialista em Google Ads</h4>
+                <p>Campanhas personalizadas que destacam sua marca.</p>
+            </div>
+            <div class="col-md-4 feature-box">
+                <h4>Consultoria Completa</h4>
+                <p>Acompanhamento dedicado para otimizar seu retorno.</p>
+            </div>
+        </div>
+    </section>
+
+   
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Aristides Barbosa Pontes. Todos os direitos reservados.</p>
+        <p>Telefone: 0800 727 0278 | Email: contato@aristidesbp.com.br</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $("form").on("submit", function (e) {
+            e.preventDefault();
+            Swal.fire("Mensagem Enviada!", "Entraremos em contato em breve.", "success");
+        });
+    </script>
+
+</body>
+</html>
