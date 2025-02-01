@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Page</title>
+    <style>
+        :root {
+            --help-bg-color: #f0f8ff;
+            --card-bg-color: #fff;
+            --card-text-color: #333;
+            --text-primary-color: #000;
+        }
+
+        [data-theme="dark"] {
+            --help-bg-color: #2f2f2f;
+            --card-bg-color: #3d3d3d;
+            --card-text-color: #f0f0f0;
+            --text-primary-color: #fff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .portfolio-section {
+            padding: 4rem 2rem;
+            background-color: var(--help-bg-color);
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .portfolio-section h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary-color);
+        }
+
+        .portfolio-section .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-section .card {
+            background-color: var(--card-bg-color);
+            color: var(--card-text-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: left;
+            opacity: 0;
+            transform: translateX(-100%);
+            animation: fadeIn 1s ease-out forwards;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .portfolio-section .card:nth-child(odd) {
+            animation-name: slideInLeft;
+        }
+
+        .portfolio-section .card:nth-child(even) {
+            animation-name: slideInRight;
+        }
+
+        .portfolio-section .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-section .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="portfolio-section">
+        <h2>Projetos para o Portfólio</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>Site de Restaurante</h3>
+                <p>Desenvolvimento de um site para um restaurante com sistema de pedidos online, cardápio digital e design responsivo.</p>
+            </div>
+            <div class="card">
+                <h3>Aplicativo de Tarefas</h3>
+                <p>Criação de um app mobile para gestão de tarefas, com funcionalidades como notificações e sincronização na nuvem.</p>
+            </div>
+            <div class="card">
+                <h3>E-commerce Completo</h3>
+                <p>Implementação de uma loja virtual com carrinho de compras, sistema de pagamento integrado e painel administrativo.</p>
+            </div>
+            <div class="card">
+                <h3>Dashboard de Controle</h3>
+                <p>Construção de um painel para visualização de métricas e dados em tempo real, utilizando APIs e gráficos interativos.</p>
+            </div>
+            <div class="card">
+                <h3>Blog Pessoal</h3>
+                <p>Criação de um blog moderno e responsivo, com sistema de gerenciamento de conteúdo (CMS) customizado.</p>
+            </div>
+            <div class="card">
+                <h3>Landing Page de Lançamento</h3>
+                <p>Desenvolvimento de uma landing page otimizada para conversão, com formulários integrados e design atraente.</p>
+            </div>
+        </div>
+    </section>
+    <script>
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        document.querySelectorAll('.portfolio-section .card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Toggle dark mode for demonstration
+        let darkMode = false;
+        setInterval(() => {
+            darkMode = !darkMode;
+            document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+        }, 5000); // Switch theme every 5 seconds (for testing purposes)
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!--###################################### -->
+<!--###########  HERO  ################### -->
+<!--###################################### -->
+
+    <style>
+        /* Estilos globais */
+        body {
+            margin: 0; /* Remove a margem padrão do body */
+            font-family: 'Roboto', sans-serif; /* Define a fonte para o texto */
+            line-height: 1.6; /* Define o espaçamento entre as linhas do texto */
+            background-color: #f0f8ff; /* Cor de fundo do corpo da página (azul claro) */
+            color: #1d3557; /* Cor do texto (azul escuro) */
+            transition: background-color 0.3s, color 0.3s; /* Transições suaves para mudanças de cor */
+        }
+
+        /* Para o tema escuro */
+        body.dark-theme {
+            background-color: #121212; /* Fundo escuro no modo dark */
+            color: #f0f8ff; /* Texto claro no modo dark */
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center; /* Centraliza o texto dentro da seção */
+            padding: 100px 20px; /* Adiciona espaço interno (padding) no topo, fundo e laterais */
+            background: linear-gradient(135deg, #1d3557, #457b9d); /* Gradiente de fundo, criando uma transição entre dois tons de azul */
+            color: white; /* Cor do texto na seção hero */
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Define a forma da seção hero usando um polígono (corte angular) */
+        }
+
+        /* Título (h1) da seção hero */
+        .hero h1 {
+            font-size: 3em; /* Tamanho grande para o título */
+            margin-bottom: 20px; /* Espaçamento abaixo do título */
+        }
+
+        /* Texto (p) da seção hero */
+        .hero p {
+            font-size: 1.2em; /* Tamanho do texto do parágrafo */
+            margin-bottom: 30px; /* Espaçamento abaixo do parágrafo */
+        }
+
+        /* Botões */
+        .btn {
+            background-color: #ffcc00; /* Cor de fundo do botão (amarelo) */
+            color: white; /* Cor do texto do botão */
+            padding: 10px 20px; /* Espaçamento interno do botão */
+            text-decoration: none; /* Remove o sublinhado do link */
+            font-size: 1em; /* Tamanho da fonte do botão */
+            border-radius: 5px; /* Bordas arredondadas no botão */
+            transition: background-color 0.3s; /* Transição suave na cor de fundo ao passar o mouse */
+        }
+
+        /* Efeito de hover no botão */
+        .btn:hover {
+            background-color: #d4a500; /* Cor de fundo do botão quando o mouse passa por cima (amarelo escuro) */
+        }
+
+    </style>
+
+    <!-- Seção Hero -->
+    <div class="hero">
+        <h1>Bem-vindo ao meu mundo digital!</h1>
+        <p>Transformando ideias em resultados por meio de tecnologia e estratégias inteligentes.</p>
+        <a href="#contato" class="btn">Entre em Contato</a>
+    </div>
+
+<!--###################################### -->
+<!--###################################### -->

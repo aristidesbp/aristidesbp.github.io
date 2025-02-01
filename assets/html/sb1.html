@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="Especialistas em exportação de matérias-primas do Pará com segurança e eficiência.">
+  <meta name="keywords" content="exportação, Pará, açaí, castanha, logística segura, SB Serviços">
+  <meta name="author" content="SB Serviços">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <title>SB Serviços - Exportação Segura</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      margin-top: 80px; /* Ajuste para compensar o menu fixo */
+    }
+    .navbar {
+      background-color: #004d40;
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #fff !important;
+    }
+    .navbar-nav .nav-link {
+      padding: 10px 15px;
+    }
+    .hero {
+      background: url('floresta.jpg') no-repeat center center/cover;
+      color: #fff;
+      text-align: center;
+      padding: 100px 0;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+    }
+
+    .hero h2 {
+      font-size: 3.5rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-top: 20px;
+    }
+    .features {
+      background-color: #f8f9fa;
+      padding: 50px 0;
+    }
+    .feature-box {
+      text-align: center;
+      padding: 20px;
+    }
+    .feature-box i {
+      font-size: 3rem;
+      color: #004d40;
+      margin-bottom: 15px;
+    }
+    .contact-form {
+      padding: 50px 0;
+      text-align: center;
+    }
+    .contact-form .btn-whatsapp {
+      background-color: #25D366;
+      color: white;
+      font-size: 1.25rem;
+      padding: 15px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    footer {
+      background-color: #004d40;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+
+
+
+.hero {
+  background: url('floresta.jpg') no-repeat center center/cover;
+  color: #fff;
+  text-align: center;
+  padding: 100px 0;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com opacidade */
+  z-index: 1; /* Coloca o fundo antes do conteúdo */
+}
+
+.hero h1, .hero p {
+  position: relative;
+  z-index: 2; /* Garante que o texto fique acima da camada escura */
+}
+  </style>
+</head>
+<body>
+<!-- ----------- navbar ---------------- -->
+<style>
+  body {
+    font-family: 'Lato', sans-serif;
+  }
+
+  /* Estilo da sobreposição do menu */
+  .overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro com transparência */
+    overflow-x: hidden;
+    transition: 0.5s;
+  }
+
+  .overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  /* Estilo dos links do menu */
+  .overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #fff; /* Cor do texto clara para boa visibilidade */
+    display: block;
+    transition: 0.3s;
+  }
+
+  /* Efeito ao passar o mouse sobre os links */
+  .overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+  }
+
+  /* Estilo do botão de fechar */
+  .overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+    color: #fff;
+  }
+
+  /* Responsividade para telas pequenas */
+  @media screen and (max-height: 450px) {
+    .overlay a { font-size: 20px; }
+    .overlay .closebtn {
+      font-size: 40px;
+      top: 15px;
+      right: 35px;
+    }
+  }
+</style>
+
+<!-- Botão para abrir o menu -->
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+<!-- Menu sobreposto -->
+<div id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="overlay-content">
+    <a href="#">Sobre</a>
+    <a href="#">Serviços</a>
+    <a href="#">Clientes</a>
+    <a href="#">Contato</a>
+  </div>
+</div>
+
+<script>
+  // Função para abrir o menu
+  function openNav() {
+    document.getElementById("myNav").style.width = "100%";  /* Abre a sobreposição */
+  }
+
+  // Função para fechar o menu
+  function closeNav() {
+    document.getElementById("myNav").style.width = "0%";  /* Fecha a sobreposição */
+  }
+</script>
+
+  <!-- Navbar (Fixada no topo) -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">SB Serviços</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+          <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="container">
+  <h2>Exportação de Matérias-Primas do Pará</h2>
+      <p>Conectamos o Pará ao mercado global com processos rápidos, seguros e sustentáveis.</p>
+      <a href="#contato" class="btn btn-lg btn-success mt-4">Entre em Contato</a>
+    </div>
+  </div>
+
+  <!-- Sobre Section -->
+  <section class="about" id="sobre">
+    <div class="container text-center">
+      
+    <h2>Sobre a SB Serviços</h2>
+    <p>
+      A <strong>SB Serviços</strong> é especializada na exportação de matérias-primas e produtos de alto valor, conectando o Brasil ao mercado global de maneira eficiente e segura. Nossa missão é proporcionar soluções logísticas e comerciais para nossos clientes, com foco em qualidade, confiança e integridade.
+    </p>
+
+    <h3>Combustível de Energia</h3>
+    
+    <p>
+      <strong>PRODUTOS ENERGÉTICOS</strong> 
+      Facilitamos transações de energia contínuas, transparentes e prósperas em escala global. Contamos com uma rede de associados e parceiros inigualável, oferecendo aos nossos clientes acesso direto a vendedores com potencial de negociação sem igual.
+    </p>
+
+    <h3>Produtos Agrícolas</h3>
+    <p>
+      Trabalhamos diretamente com o Brasil, um dos maiores exportadores de matérias-primas do mundo, com grande influência no mercado de commodities. O país é um grande produtor de açúcar, café, soja, milho, arroz e carne. Nosso compromisso vai além das transações; trata-se de construir relacionamentos duradouros com clientes, baseados em respeito, lealdade e integridade em todas as negociações.
+    </p>
+    
+
+    <h3>Metais Preciosos</h3>
+    <p>
+      <strong>PRODUTOS METÁLICOS </strong>
+      Trabalhamos com vendedores particulares certificados, com selo reconhecido internacionalmente, oferecendo oportunidades únicas para empreendedores, investidores e profissionais da indústria. A SB Serviços proporciona acesso a um setor próspero e com grande potencial de valorização.
+    </p>
+
+    <h3>Serviços Adicionais</h3>
+    <p>
+      Nossa gama de serviços de valor agregado foi projetada para apoiar nossos clientes neste mercado altamente competitivo. A SB Serviços se destaca ao oferecer soluções personalizadas e de qualidade para cada um dos nossos parceiros comerciais, garantindo sucesso nas negociações.
+    </p>
+  </div>
+</section>
+
+
+
+  <!-- Features Section -->
+  <section class="features" id="servicos">
+    <div class="container text-center">
+      <h2>Nossos Serviços</h2>
+      <p class="lead">Excelência em exportação de matérias-primas</p>
+      <div class="row mt-4">
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-globe"></i>
+          <h4>Exportação Global</h4>
+          <p>Conectamos o Pará ao mundo com logística eficiente.</p>
+        </div>
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-leaf"></i>
+          <h4>Sustentabilidade</h4>
+          <p>Valorizamos o meio ambiente em cada etapa do processo.</p>
+        </div>
+        <div class="col-md-4 feature-box">
+          <i class="fas fa-shield-alt"></i>
+          <h4>Segurança Garantida</h4>
+          <p>Processos seguros e confiáveis para sua tranquilidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Contato Section -->
+<section class="contact-form" id="contato">
+  <div class="container text-center">
+    <h2 class="text-center">Entre em Contato</h2>
+    <p>Converse conosco diretamente pelo WhatsApp.</p>
+    <a href="https://wa.me/559192420981" target="_blank" class="btn btn-lg btn-success">
+      <i class="fab fa-whatsapp"></i> Fale Conosco
+    </a>
+    <!-- Adicionando a logo abaixo do botão -->
+    <div class="mt-4">
+      <img src="logo.jpg" alt="Logo SB Serviços" style="max-width: 200px;">
+    </div>
+  </div>
+</section>
+  
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 SB Serviços - Todos os Direitos Reservados</p>
+    <p>Localização: Belém, Pará | Contato: (91) 9 9242-0981</p>
+  </footer>
+
+
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

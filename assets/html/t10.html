@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agência Digital</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* General Styles */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(45deg, #1e90ff, #00bcd4);
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 4rem 0;
+            background-color: #f9f9f9;
+        }
+
+        .services h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .services .service-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .services .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .services .service-card h3 {
+            color: #1e90ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services .service-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Call to Action Section */
+        .cta {
+            background: linear-gradient(45deg, #ff5722, #ff9800);
+            color: #fff;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta button {
+            background: #fff;
+            color: #ff5722;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta button:hover {
+            background: #ffe0b2;
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            padding: 4rem 0;
+            background-color: #fff;
+        }
+
+        .portfolio h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .portfolio .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .portfolio .portfolio-item img {
+            width: 100%;
+            display: block;
+        }
+
+        .portfolio .portfolio-item .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .portfolio .portfolio-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>Transforme Sua Presença Online</h1>
+            <p>Oferecemos serviços de publicidade digital sob medida para impulsionar seu negócio.</p>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <h2>Nossos Serviços</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Criação de Sites</h3>
+                    <p>Sites modernos, responsivos e otimizados para qualquer dispositivo.</p>
+                </div>
+                <div class="service-card">
+                    <h3>SEO Avançado</h3>
+                    <p>Aumente sua visibilidade nos motores de busca com técnicas de SEO.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Gestão de Tráfego Pago</h3>
+                    <p>Campanhas personalizadas para alcançar o público certo no momento certo.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Design Gráfico</h3>
+                    <p>Criação de identidades visuais impactantes e designs atraentes.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Marketing de Conteúdo</h3>
+                    <p>Conteúdos estratégicos que engajam e convertem sua audiência.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Análise de Dados</h3>
+                    <p>Insights valiosos para otimizar a performance das suas campanhas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Pronto para Impulsionar Seu Negócio?</h2>
+            <p>Entre em contato conosco e descubra como podemos ajudar!</p>
+            <button>Fale Conosco</button>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio">
+        <div class="container">
+            <h2>Portfólio</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/300x200" alt="Projeto 1">
+                    <div class="overlay">Projeto 1</div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/300x200" alt="Projeto 2">
+                    <div class="overlay">Projeto 2</div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/300x200" alt="Projeto 3">
+                    <div class="overlay">Projeto 3</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Agência Digital. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
