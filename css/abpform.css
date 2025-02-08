@@ -1,0 +1,63 @@
+/* Estilos gerais do formulário */
+#contact-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Campos de entrada (input e textarea) */
+#contact-form input,
+#contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Efeito ao focar nos campos */
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+}
+
+/* Estilizando o botão de envio */
+#contact-form button {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efeito hover para o botão */
+#contact-form button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Estilizando o textarea */
+#contact-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    #contact-form {
+        width: 90%;
+    }
+}
