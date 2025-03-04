@@ -2,167 +2,211 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Bem-Vindo</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material de Estudo</title>
+    
+    <!-- Estilos CSS -->
     <style>
-        /* Reset básico */
-        * {
+        /* Define o fundo animado */
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Corpo da página */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1d3557, #457b9d); /* Fundo azul */
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             color: white;
             text-align: center;
+            overflow-x: hidden;
         }
 
-        /* Fundo das partículas */
-        #particles-js {
+        /* Canvas para a animação */
+        #background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
+            background: black;
             z-index: -1;
         }
 
-        /* Container principal */
+        /* Estilo do conteúdo */
         .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            max-width: 800px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            padding: 50px;
+            z-index: 2;
         }
 
-        /* Título */
         h1 {
-            font-size: 3em;
-            color: #ffcc00; /* Amarelo destacante */
+            font-size: 2.5em;
             margin-bottom: 20px;
-            animation: fadeInTitle 1.5s ease;
+            background: #2321;
         }
 
-        /* Parágrafo */
-        p {
-            font-size: 1.2em;
-            color: #cccccc; /* Cinza claro */
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
+        ul {
+            list-style: none;
+            padding: 0;
+       background: #174;
+ }
 
-        /* Botão de ação */
-        .button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: #1d3557;
-            background-color: #ffcc00;
+        li {
+            font-size: 1.5em;
+            margin: 15px 0;
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: opacity 1s, transform 1s;
+       background: #2321;
+ }
+
+        /* Botão para controlar o som */
+        #audioControl {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+padding: 10px 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            transition: background 0.3s;
         }
 
-        .button:hover {
-            background-color: #e0ac00; /* Tom mais escuro no hover */
-        }
-
-        /* Efeitos de fade-in */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes fadeInTitle {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Ajustes responsivos */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-            p {
-                font-size: 1em;
-            }
-            .button {
-                font-size: 1em;
-            }
+        #audioControl:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- Partículas de fundo -->
-    <div id="particles-js"></div>
+    <!-- Canvas para o fundo animado -->
+    <canvas id="background"></canvas>
 
     <!-- Conteúdo principal -->
     <div class="container">
-       <h1>Bem-vindo ao meu site!</h1>
-        <h2>Quem eu sou?</h2>
-        <p>Meu nome é Aristides B. Pontes, sou formado em Análise e Desenvolvimento de Sistemas e trabalho como Gestor de Tráfego Pago, Programador Web Front-End e Especialista em Marketing Digital.</p>
-        
-        <h2>O que faço?</h2>
-        <p>Eu ajudo empresas a encontrar e impactar seus públicos-alvo através de estratégias de tráfego pago. Além disso, desenvolvo soluções de software, incluindo aplicativos móveis e websites, com foco na experiência do usuário e eficiência.</p>
-        
-        <p>Transforme suas ideias em realidade com soluções inovadoras em sites e campanhas digitais. Descubra como alcançar seus objetivos de forma estratégica e eficiente.</p>
-        <p>"A propaganda é a alma do negócio" &bull; "Transforme sua ideia em resultados"</p>
-        <button class="button" onclick="navigateToHome()">Acesse minha Ide!</button>
+        <h1>Bem-vindo ao meu Material de Estudo</h1>
+        <p>Aqui você encontra links para projetos e tutoriais</p>
+
+        <ul id="menu">
+            <li>🔹 <a href="#">Meu Portifólio</a></li>
+            <li>🔹 <a href="poker/index.html">Jogar poker</a></li>
+            <li>🔹 <a href="#">Projeto 3</a></li>
+            <li>🔹 <a href="#">Tutorial 1</a></li>
+            <li>🔹 <a href="#">Tutorial 2</a></li>
+        </ul>
     </div>
 
+    <!-- Botão para controlar o áudio -->
+    <button id="audioControl">🎵 Som </button>
+
+    <!-- Áudio de fundo -->
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Script para animação do fundo -->
     <script>
-        // Configuração das partículas
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80 },
-                "size": { "value": 3 },
-                "color": { "value": "#ffffff" },
-                "line_linked": { "enable": true, "color": "#ffffff" },
-                "move": { "speed": 2 }
-            },
-            "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+        const canvas = document.getElementById("background");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+
+        class Particle {
+            constructor(x, y, size, speedX, speedY) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.speedX = speedX;
+                this.speedY = speedY;
             }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.05;
+            }
+
+            draw() {
+                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 100; i++) {
+                let size = Math.random() * 5 + 2;
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                let speedX = Math.random() * 1 - 0.5;
+                let speedY = Math.random() * 1 - 0.5;
+                particlesArray.push(new Particle(x, y, size, speedX, speedY));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+                if (particle.size <= 0.2) {
+                    particlesArray.splice(index, 1);
+                    let size = Math.random() * 5 + 2;
+                    let x = Math.random() * canvas.width;
+                    let y = Math.random() * canvas.height;
+                    let speedX = Math.random() * 1 - 0.5;
+                    let speedY = Math.random() * 1 - 0.5;
+                    particlesArray.push(new Particle(x, y, size, speedX, speedY));
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Ajustar canvas ao redimensionar a tela
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
         });
 
-        // Função para redirecionamento
-        function navigateToHome() {
-            window.location.href = "minha_ide.html";
+        // Animação de entrada dos itens ao rolar a página
+        const items = document.querySelectorAll("li");
+
+        function animateOnScroll() {
+            items.forEach((item, index) => {
+                const itemTop = item.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (itemTop < windowHeight - 50) {
+                    item.style.opacity = 1;
+                    item.style.transform = index % 2 === 0 ? "translateX(0)" : "translateX(0)";
+                }
+            });
         }
+
+        window.addEventListener("scroll", animateOnScroll);
+        animateOnScroll();
+
+        // Controle de áudio
+        const audio = document.getElementById("backgroundMusic");
+        const audioControl = document.getElementById("audioControl");
+
+        audioControl.addEventListener("click", () => {
+            if (audio.paused) {
+                audio.play();
+                audioControl.textContent = "🎵 Pausar Som";
+            } else {
+                audio.pause();
+                audioControl.textContent = "🎵 Tocar Som";
+            }
+        });
     </script>
 </body>
 </html>
