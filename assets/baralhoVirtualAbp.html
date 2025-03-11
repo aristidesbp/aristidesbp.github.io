@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baralho Virtual</title>
+    <style>
+        /* Estilo básico para manter o layout organizado */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .cartas-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .carta {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        .selecionada {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🎴 Baralho Virtual 🎴</h2>
+
+        <!-- Campo para definir o número de jogadores -->
+        <label for="numJogadores">Número de jogadores:</label>
+        <input type="number" id="numJogadores" value="2" min="1">
+
+        <!-- Campo para definir quantas cartas cada jogador recebe no início -->
+        <label for="cartasPorJogador">Cartas por jogador:</label>
+        <input type="number" id="cartasPorJogador" value="2" min="1">
+
+        <!-- Botão para iniciar o jogo e distribuir cartas -->
+        <button onclick="iniciarJogo()">Distribuir Cartas</button>
+
+        <!-- Exibição do deck de cartas restantes -->
+        <h3>Deck de Cartas</h3>
+        <div class="cartas-container" id="deck"></div>
+
+        <!-- Área onde serão exibidas as cartas de cada jogador -->
+        <div id="jogadores"></div>
+    </div>
+
+    <script>
+        // Definição de um baralho completo com 52 cartas
+        let baralho = [
+            "A♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "J♥️", "Q♥️", "K♥️",
+            "A♦️", "2♦️", "3♦️", "4♦️", "5♦️", "6♦️", "7♦️", "8♦️", "9♦️", "10♦️", "J♦️", "Q♦️", "K♦️",
+            "A♠️", "2♠️", "3♠️", "4♠️", "5♠️", "6♠️", "7♠️", "8♠️", "9♠️", "10♠️", "J♠️", "Q♠️", "K♠️",
+            "A♣️", "2♣️", "3♣️", "4♣️", "5♣️", "6♣️", "7♣️", "8♣️", "9♣️", "10♣️", "J♣️", "Q♣️", "K♣️"
+        ];
+
+        // Lista para armazenar as mãos de cada jogador
+        let maosJogadores = [];
+
+        // Função para iniciar o jogo
+        function iniciarJogo() {
+            // Obtém valores dos inputs de jogadores e cartas por jogador
+            const numJogadores = document.getElementById("numJogadores").value;
+            const cartasPorJogador = document.getElementById("cartasPorJogador").value;
+
+            // Resetando o baralho e as mãos dos jogadores
+            let baralhoTemp = [...baralho];
+            maosJogadores = [];
+
+            // Criando as mãos dos jogadores e distribuindo cartas aleatórias
+            for (let i = 0; i < numJogadores; i++) {
+                let mao = [];
+                for (let j = 0; j < cartasPorJogador; j++) {
+                    if (baralhoTemp.length > 0) {
+                        const indice = Math.floor(Math.random() * baralhoTemp.length);
+                        mao.push(baralhoTemp.splice(indice, 1)[0]);
+                    }
+                }
+                maosJogadores.push(mao);
+            }
+
+            // Atualiza a exibição do jogo
+            atualizarJogo(baralhoTemp);
+        }
+
+        // Função para atualizar a exibição do jogo
+        function atualizarJogo(baralhoTemp) {
+            const deckDiv = document.getElementById("deck");
+            const jogadoresDiv = document.getElementById("jogadores");
+
+            // Limpa as áreas antes de atualizar
+            deckDiv.innerHTML = "";
+            jogadoresDiv.innerHTML = "";
+
+            // Exibe as cartas restantes no deck
+            baralhoTemp.forEach(carta => {
+                let div = document.createElement("div");
+                div.classList.add("carta");
+                div.textContent = "🂠"; // Representação do verso da carta
+                deckDiv.appendChild(div);
+            });
+
+            // Exibe as cartas de cada jogador
+            maosJogadores.forEach((mao, index) => {
+                let jogadorDiv = document.createElement("div");
+                jogadorDiv.innerHTML = `<h3>Jogador ${index + 1}</h3>`;
+
+                let cartasContainer = document.createElement("div");
+                cartasContainer.classList.add("cartas-container");
+
+                // Adiciona as cartas do jogador
+                mao.forEach((carta, i) => {
+                    let cartaDiv = document.createElement("div");
+                    cartaDiv.classList.add("carta");
+                    cartaDiv.textContent = carta;
+
+                    // Permite selecionar a carta ao clicar
+                    cartaDiv.onclick = () => selecionarCarta(index, i, cartaDiv);
+                    cartasContainer.appendChild(cartaDiv);
+                });
+
+                // Botão para comprar nova carta
+                let comprarBtn = document.createElement("button");
+                comprarBtn.textContent = "Comprar Carta";
+                comprarBtn.onclick = () => comprarCarta(index);
+
+                // Botão para descartar cartas selecionadas
+                let descartarBtn = document.createElement("button");
+                descartarBtn.textContent = "Descartar Cartas";
+                descartarBtn.onclick = () => descartarCartas(index);
+
+                // Adiciona tudo ao layout
+                jogadorDiv.appendChild(cartasContainer);
+                jogadorDiv.appendChild(comprarBtn);
+                jogadorDiv.appendChild(descartarBtn);
+                jogadoresDiv.appendChild(jogadorDiv);
+            });
+        }
+
+        // Função para selecionar/desselecionar uma carta
+        function selecionarCarta(jogadorIndex, cartaIndex, elemento) {
+            // Alterna a seleção da carta
+            if (maosJogadores[jogadorIndex][cartaIndex].includes("*")) {
+                maosJogadores[jogadorIndex][cartaIndex] = maosJogadores[jogadorIndex][cartaIndex].replace("*", "");
+                elemento.classList.remove("selecionada");
+            } else {
+                maosJogadores[jogadorIndex][cartaIndex] += "*";
+                elemento.classList.add("selecionada");
+            }
+        }
+
+        // Função para comprar uma nova carta
+        function comprarCarta(jogadorIndex) {
+            if (baralho.length > 0) {
+                const indice = Math.floor(Math.random() * baralho.length);
+                const novaCarta = baralho.splice(indice, 1)[0];
+                maosJogadores[jogadorIndex].push(novaCarta);
+                atualizarJogo(baralho);
+            }
+        }
+
+        // Função para descartar cartas selecionadas
+        function descartarCartas(jogadorIndex) {
+            // Mantém apenas as cartas não marcadas com "*"
+            maosJogadores[jogadorIndex] = maosJogadores[jogadorIndex].filter(carta => !carta.includes("*"));
+            atualizarJogo(baralho);
+        }
+    </script>
+
+</body>
+</html>
