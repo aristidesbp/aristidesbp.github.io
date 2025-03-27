@@ -1,3 +1,17 @@
+  
+        body {
+            font-family: Arial, sans-serif; /* Define a fonte da página */
+            text-align: center; /* Alinha o conteúdo ao centro */
+            margin: 20px; /* Adiciona uma margem ao redor da página */
+        }
+        .container {
+            max-width: 600px; /* Define a largura máxima do container */
+            margin: auto; /* Centraliza o container na tela */
+        }
+       
+
+
+
 /*################# MENU DE NAVEGAÇÃO ################################## */
 
 /* Barra de navegação fixa no topo */
