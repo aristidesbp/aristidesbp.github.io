@@ -7,9 +7,9 @@
 - ⚡ Fun fact: Games and Nintendo
 
 <div align="center">
-    <a href="https://github.com/BrunoLeonn">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=BrunoLeonn&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true"/>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=BrunoLeonn&layout=compact&langs_count=7&theme=tokyonight"/>
+    <a href="https://github.com/aristidesbp">
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=aristidesbp&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true"/>
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=aristidesbp&layout=compact&langs_count=7&theme=tokyonight"/>
 </div>
 <div style="display: inline_block"><br>
   <img align="center" alt="Bruno-Python" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg">
@@ -22,10 +22,10 @@
   ##
  
 <div> 
-  <a href="https://www.instagram.com/brunoleonn_" target="_blank"><img src="https://img.shields.io/badge/-Instagram-%23E4405F?style=for-the-badge&logo=instagram&logoColor=white" target="_blank"></a>
+  <a href="https://www.instagram.com/aristidesbp_" target="_blank"><img src="https://img.shields.io/badge/-Instagram-%23E4405F?style=for-the-badge&logo=instagram&logoColor=white" target="_blank"></a>
  <a href="https://discord.gg/5TJSxpdN" target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a> 
-  <a href = "mailto:brunoleonn123@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
-  <a href="https://www.linkedin.com/in/brunoleonn/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
+  <a href = "mailto:aristidesbp123@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+  <a href="https://www.linkedin.com/in/aristidesbp/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
  
 </div>
 
@@ -50,21 +50,16 @@ Sou **Analista de Sistemas** e atuo como **desenvolvedor autônomo**. Apaixonado
 ---
 
 ## 📈 Projetos Destacados  
-📌 **[App de Contas a Pagar](https://github.com/SEU-USUARIO/Contas-a-Pagar)**  
-📌 **[Sistema de Gestão para Coworking](https://github.com/SEU-USUARIO/Gestao-Coworking)**  
-📌 **[Landing Page para Captação de Leads](https://github.com/SEU-USUARIO/Landing-Page)**  
+📌 **[Meu portifolio](https://aristidesbp.github.io)**  
 
 ---
 
 ## 📫 Entre em Contato  
-📩 **E-mail:** seuemail@gmail.com  
-📱 **WhatsApp:** +55 91 XXXXX-XXXX  
+📱 **WhatsApp:** +55 91 99242-0981  
 🌎 **LinkedIn:** [linkedin.com/in/seuusuario](https://linkedin.com/in/seuusuario)  
-🌐 **Portfólio:** [seusite.com](https://seusite.com)  
+🌐 **Portfólio:** [aristidesbp](https://aristidesbp.github.io)  
 
 ---
 🚀 **Desenvolvedor Autônomo | Analista de Sistemas | Entusiasta de Tecnologia**  
-
 📍 **Belém - Pará, Brasil**  
-
 _⭐️ Siga-me no GitHub e acompanhe meus projetos!_
