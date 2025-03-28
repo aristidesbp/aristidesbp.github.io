@@ -1,0 +1,265 @@
+
+/*################################################################################
+🖥️🔹CURSO COMPLETO DE CSS 
+📚🔹Material de estudo: Do básico ao avançado!
+🎯🔹Objetivo: Ensinar os fundamentos e técnicas avançadas do CSS para estilizar páginas web de forma profissional.
+📌🔹Exercicios aplicaveis, use este arquivo como "style.css" do seus projetos!
+##################################################################################
+
+📚 Módulo 1: Introdução ao CSS .O que é CSS?
+🔹CSS (Cascading Style Sheets) é uma linguagem usada para estilizar elementos HTML.
+🔹Ele define cores, tamanhos, posicionamentos e outros aspectos visuais.
+
+
+📚Como adicionar CSS a um site
+🎯CSS Inline (dentro da tag HTML):
+📌 <p style="color: blue; font-size: 20px;">Texto azul e maior</p>
+🎯CSS Interno (dentro da tag <style> no <head>):
+📌<style> p {  color: blue;  font-size: 20px;   }</style>
+🎯CSS Externo (arquivo separado .css):
+📌<link rel="stylesheet" href="style.css">
+
+--------------------------------------------------
+📚 Módulo 2: Seletores CSS (usados referenciar elementos  dentro de arquivos css):
+🔹 1. Seletores Simples 
+🎯 Por Tag:
+📌 p { color: red; }
+🎯Por Classe: 
+📌 .minha-classe { color: green; }
+🎯Por ID: 
+📌 #meu-id { color: blue; }
+🔹2. Seletores Avançados
+🎯 Múltiplos elementos: 
+📌 h1, h2, p { color: purple; }
+🎯Filho direto: 
+📌 div > p { color: orange; }
+🎯Descendentes: 
+📌 div p { color: brown; }
+🎯Irmão próximo: 
+📌 h1 + p { color: teal; }
+🎯Todos os filhos: 
+📌 div * { color: pink; }
+*/
+
+
+
+:root {/*COMANDO PARA DEFINIR VARIAVEIS NO CSS!*/
+/*definindo uma variavel vazia*/
+--vazio:;
+
+/*definindo cores (escrevi os nomes de varias formas para testar!)*/
+--blue: #1e90ff;
+--white: #ffffff;
+--preto:black;
+--pretoSuave: #121212;
+--vermelho:red;
+--suave:#f9f9f9;
+--azul-claro: #f0f8ff;
+--azul_escuro: #1d3557;
+--baranco: #f0f8ff; 
+ 
+
+/* Definindo variáveis de cores para o tema claro e escuro */
+--bg-light: var(--azul-claro); /* Cor de fundo do tema claro = (azul claro) */
+--text-light:var(--azul_escuro); /* Cor do texto no tema claro =(azul escuro) */
+--bg-dark: var(--pretoSuave); /* Cor de fundo do tema escuro =(preto suave) */
+--text-dark: var(--Branco); /* Cor do texto no tema escuro (branco) */
+--navbar-light: #1d3557; /* Cor da navbar no tema claro (azul escuro) */
+--navbar-dark: #333; /* Cor da navbar no tema escuro (cinza escuro) */
+--sidebar-bg: #457b9d; /* Cor de fundo da sidebar (azul médio) */
+--sidebar-hover: #1d3557; /* Cor de fundo dos links da sidebar ao passar o mouse */
+--button-bg: #ffcc00; /* Cor de fundo do botão */
+--button-hover: #d4a500; /* Cor de fundo do botão ao passar o mouse */
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+body { 
+background-color: var(--preto); 
+text-align: center; 
+}
+.class-referencia-atributos-globais{
+background-color:var(--suave); /*Cor de fundo definida por variavel */
+border: 2px solid black; /* Adiciona uma borda ao redor do elemento */
+border-radius: 8px; /* Arredonda as bordas */
+box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra */
+color: blue; /* Define a cor do texto */
+display: inline-block; /* Mantém o elemento ajustado ao conteúdo */
+font-family: Arial, sans-serif; /* Define a fonte da página */
+font-size: 18px; /* Define o tamanho da fonte */
+margin: 20px auto; /* Adiciona uma margem ao redor da página e centraliza */
+max-width: 600px; /* Define a largura máxima do container */
+padding: 10px; /* Adiciona espaçamento interno */
+text-align: center; /* Alinha o conteúdo ao centro */
+}
+.class-referencia-atributos-globais h2{
+color:var(--vermelho);
+}
+.class-referencia-atributos-globais #com-id-unico{
+color:var(--preto);
+}
+
+
+
+
+/*
+🚀 Atributos Globais (Podem ser usados em qualquer elemento)
+Esses atributos são aceitos por todos os elementos HTML.
+
+accesskey →       Define um atalho de teclado para o elemento.
+autocapitalize →  Controla a capitalização automática do texto.
+class →           Atribui uma ou mais classes CSS ao elemento.
+contenteditable → Define se o conteúdo pode ser editado (true ou false).
+dir →             Define a direção do texto (ltr para esquerda ou rtl para direita).
+draggable →       Define se o elemento pode ser arrastado (true ou false).
+enterkeyhint →    Sugere qual tecla Enter deve aparecer no teclado virtual.
+hidden →          Oculta o elemento sem removê-lo do código.
+id →              Define um identificador único para o elemento.
+inert →           Indica que o elemento não deve ser interativo (sem foco ou eventos).
+inputmode →       Especifica o tipo de teclado virtual a ser exibido (text, numeric, etc.).
+is →              Usado para estender elementos personalizados.
+itemid →          Define um identificador global para o elemento.
+itemprop →        Define propriedades personalizadas para o elemento.
+itemref →         Referencia elementos relacionados ao item atual.
+itemscope →       Define que o elemento contém um escopo de metadados.
+itemtype →        Especifica o tipo de item representado pelo elemento.
+lang →            Define o idioma do conteúdo (pt-BR, en-US, etc.).
+nonce →           Usado para validar scripts confiáveis (segurança).
+part →            Define partes do elemento para serem estilizadas via CSS Shadow DOM.
+role →            Define a função do elemento para acessibilidade (exemplo: button, navigation).
+slot →            Especifica um slot para elementos <slot> em Web Components.
+spellcheck →      Define se a verificação ortográfica está ativada (true ou false).
+style →           Adiciona estilos CSS inline ao elemento.
+tabindex →        Define a ordem de tabulação no teclado.
+title →           Adiciona um texto explicativo (tooltip ao passar o mouse).
+translate →       Define se o conteúdo pode ser traduzido (yes ou no).
+*/
+
+
+
+
+
+
+
+/*
+🎨 Atributos Específicos por Elemento
+
+Alguns atributos são exclusivos de determinados elementos HTML.
+📌 Atributos para Elementos de Formulário (<form>, <input>, <textarea>, <select> etc.)
+
+    accept → Define tipos de arquivos aceitos (.jpg, .png, .pdf).
+
+    autocomplete → Sugere preenchimento automático (on, off).
+
+    autofocus → Define o elemento para ser focado automaticamente.
+
+    checked → Marca uma opção em <input type="checkbox"> ou <input type="radio">.
+
+    disabled → Desativa o elemento.
+
+    form → Relaciona o elemento a um <form> específico.
+
+    max → Define um valor máximo permitido.
+
+    maxlength → Define o número máximo de caracteres permitidos.
+
+    min → Define um valor mínimo permitido.
+
+    multiple → Permite múltiplas seleções (<select> ou <input type="file">).
+
+    name → Define o nome do campo no formulário.
+
+    pattern → Define um padrão de entrada para validação com RegEx.
+
+    placeholder → Define um texto temporário dentro do campo.
+
+    readonly → Define um campo como somente leitura.
+
+    required → Define um campo obrigatório.
+
+    step → Define um incremento numérico (1, 0.5, etc.).
+
+    type → Define o tipo do <input> (text, email, password, etc.).
+
+    value → Define o valor padrão do campo.
+
+🖼 Atributos para Elementos de Mídia (<img>, <audio>, <video> etc.)
+
+    alt → Texto alternativo para imagens.
+
+    height → Define a altura da mídia.
+
+    width → Define a largura da mídia.
+
+    src → URL do recurso (imagem, vídeo, áudio).
+
+    controls → Adiciona controles de reprodução (play, pause).
+
+    autoplay → Inicia automaticamente o vídeo/áudio.
+
+    loop → Faz o vídeo/áudio se repetir automaticamente.
+
+    muted → Define o áudio como mudo por padrão.
+
+    poster → Define uma imagem de pré-visualização para <video>.
+
+    preload → Define se o vídeo/áudio deve ser carregado antes (auto, metadata, none).
+
+🔗 Atributos para Links (<a> e <link>)
+
+    href → URL do destino do link.
+
+    target → Define onde abrir o link (_blank, _self, _parent, _top).
+
+    rel → Relacionamento do link (noopener, nofollow, noreferrer).
+
+    download → Indica que o link baixa um arquivo ao invés de abrir.
+
+🏗 Atributos para Tabelas (<table>, <tr>, <td>, <th> etc.)
+
+    colspan → Define quantas colunas uma célula deve ocupar.
+
+    rowspan → Define quantas linhas uma célula deve ocupar.
+
+    headers → Relaciona células de dados às células de cabeçalho.
+
+📜 Atributos para <iframe>
+
+    src → Define a URL do conteúdo embutido.
+
+    sandbox → Restringe ações dentro do iframe.
+
+    allowfullscreen → Permite exibição em tela cheia.
+
+🔥 Atributos de Eventos (JavaScript)
+
+Esses atributos permitem associar eventos JavaScript diretamente no HTML.
+
+    onclick → Executa um script ao clicar.
+
+    onchange → Executa um script quando o valor do campo muda.
+
+    onmouseover → Executa um script quando o mouse passa sobre o elemento.
+
+    onmouseout → Executa um script quando o mouse sai do elemento.
+
+    onkeydown → Executa um script ao pressionar uma tecla.
+
+    onkeyup → Executa um script ao soltar uma tecla.
+
+    onfocus → Executa um script quando o elemento recebe foco.
+
+    onblur → Executa um script quando o elemento perde o foco.
+
+🏆 Conclusão
+Essa lista contém todos os principais atributos que podem ser usados em elementos HTML.*/
