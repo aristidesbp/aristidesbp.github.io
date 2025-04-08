@@ -1,0 +1,7 @@
+/* estilo para o corpo da página */
+body {
+margin: 0;
+padding: 0;
+background-color: white; /* Fundo branco */
+color: black; /* Cor do texto */
+}
