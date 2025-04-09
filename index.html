@@ -19,15 +19,73 @@
 <link href="curso_de.css" rel="stylesheet">
 </head>
 <body> 
-<style>
- /* Estilos gerais */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
 
+
+  
+<!-- ################################################## -->  
+<!-- ##################  ARQUIVO CSS ################## --> 
+<!-- ################################################## -->    
+<style> 
+:root {/*COMANDO PARA DEFINIR VARIAVEIS NO CSS!*/
+/*definindo uma variavel vazia*/
+--vazio:;
+/*definindo cores (escrevi os nomes de varias formas para testar!)*/
+--blue: #1e90ff;
+--white: #ffffff;
+--preto:black;
+--pretoSuave: #121212;
+--vermelho:red;
+--suave:#f9f9f9;
+--azul-claro: #f0f8ff;
+--azul_escuro: #1d3557;
+--baranco: #f0f8ff; 
+/* Definindo variáveis de cores para o tema claro e escuro */
+--bg-light: var(--azul-claro); /* Cor de fundo do tema claro = (azul claro) */
+--text-light:var(--azul_escuro); /* Cor do texto no tema claro =(azul escuro) */
+--bg-dark: var(--pretoSuave); /* Cor de fundo do tema escuro =(preto suave) */
+--text-dark: var(--Branco); /* Cor do texto no tema escuro (branco) */
+--navbar-light: #1d3557; /* Cor da navbar no tema claro (azul escuro) */
+--navbar-dark: #333; /* Cor da navbar no tema escuro (cinza escuro) */
+--sidebar-bg: #457b9d; /* Cor de fundo da sidebar (azul médio) */
+--sidebar-hover: #1d3557; /* Cor de fundo dos links da sidebar ao passar o mouse */
+--button-bg: #ffcc00; /* Cor de fundo do botão */
+--button-hover: #d4a500; /* Cor de fundo do botão ao passar o mouse */    
+}
+
+
+  
+body {
+font-family: Arial, sans-serif;
+//text-align: center;
+margin: 0;
+padding: 0;
+background-color: var(--preto); 
+}
+  
+.class-referencia-atributos-globais{
+background-color:var(--suave); /*Cor de fundo definida por variavel */
+border: 2px solid black; /* Adiciona uma borda ao redor do elemento */
+border-radius: 8px; /* Arredonda as bordas */
+box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra */
+color: blue; /* Define a cor do texto */
+display: inline-block; /* Mantém o elemento ajustado ao conteúdo */
+font-family: Arial, sans-serif; /* Define a fonte da página */
+font-size: 18px; /* Define o tamanho da fonte */
+margin: 20px auto; /* Adiciona uma margem ao redor da página e centraliza */
+max-width: 600px; /* Define a largura máxima do container */
+padding: 10px; /* Adiciona espaçamento interno */
+text-align: center; /* Alinha o conteúdo ao centro */
+}
+.class-referencia-atributos-globais h2{
+color:var(--vermelho);
+}
+.class-referencia-atributos-globais #com-id-unico{
+color:var(--preto);
+}
+
+
+ /* Estilos gerais */
+    
         /* Barra de navegação */
         .navbar {
             display: flex;
