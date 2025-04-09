@@ -16,3 +16,30 @@
 </select>
 </div>
 </div>
+
+
+<!-- Div onde o conteúdo será carregado -->
+<div id="conteudo">Carregando conteúdo...</div>
+
+    
+ <script>
+        // Função para carregar dinamicamente o conteúdo das páginas
+        async function trocarConteudo() {
+            const seletor = document.getElementById("seletorConteudo");
+            const pagina = seletor.value; // Obtém o valor da opção selecionada
+
+            try {
+                const response = await fetch(pagina);
+                if (!response.ok) throw new Error("Erro ao carregar o conteúdo.");
+
+                const html = await response.text();
+                document.getElementById("conteudo").innerHTML = html;
+            } catch (error) {
+                document.getElementById("conteudo").innerHTML = "Erro ao carregar conteúdo.";
+                console.error(error);
+            }
+        }
+
+        // Chamar a função ao carregar a página para exibir o conteúdo inicial
+        trocarConteudo();
+    </script>
