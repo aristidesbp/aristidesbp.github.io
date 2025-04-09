@@ -1,15 +1,38 @@
    
 
 /* ============================ */
-    /* VARIÁVEIS DE CORES           */
-    /* ============================ */
-    :root {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
-      --highlight-color: #f0c040;
-      --nav-color: #1c1c1c;
-      --footer-color: #1a1a1a;
-    }
+/* VARIÁVEIS DE CORES           */
+/* ============================ */     
+:root {/*COMANDO PARA DEFINIR VARIAVEIS NO CSS!*/
+/*definindo uma variavel vazia*/
+--vazio:;
+/*definindo cores (escrevi os nomes de varias formas para testar!)*/
+--blue: #1e90ff;
+--white: #ffffff;
+--preto:black;
+--pretoSuave: #121212;
+--vermelho:red;
+--suave:#f9f9f9;
+--azul-claro: #f0f8ff;
+--azul_escuro: #1d3557;
+--baranco: #f0f8ff; 
+--bg-color: #121212;
+--text-color: #f0f0f0;
+--highlight-color: #f0c040;
+--nav-color: #1c1c1c;
+--footer-color: #1a1a1a;
+/* Definindo variáveis de cores para o tema claro e escuro */
+--bg-light: var(--azul-claro); /* Cor de fundo do tema claro = (azul claro) */
+--text-light:var(--azul_escuro); /* Cor do texto no tema claro =(azul escuro) */
+--bg-dark: var(--pretoSuave); /* Cor de fundo do tema escuro =(preto suave) */
+--text-dark: var(--Branco); /* Cor do texto no tema escuro (branco) */
+--navbar-light: #1d3557; /* Cor da navbar no tema claro (azul escuro) */
+--navbar-dark: #333; /* Cor da navbar no tema escuro (cinza escuro) */
+--sidebar-bg: #457b9d; /* Cor de fundo da sidebar (azul médio) */
+--sidebar-hover: #1d3557; /* Cor de fundo dos links da sidebar ao passar o mouse */
+--button-bg: #ffcc00; /* Cor de fundo do botão */
+--button-hover: #d4a500; /* Cor de fundo do botão ao passar o mouse */  
+ }
 
     body.light {
       --bg-color: #ffffff;
@@ -104,7 +127,7 @@
     /* ============================ */
     /* SEÇÕES                      */
     /* ============================ */
-    section {
+    .section {
       padding: 80px 20px;
       max-width: 900px;
       margin: auto;
@@ -125,4 +148,99 @@
       text-align: center;
       padding: 20px;
     }
-  
+
+
+
+
+.baner{
+max-width: 600px; /* Define a largura máxima do container */
+padding: 10px; /* Adiciona espaçamento interno */
+}
+
+/* =========================== */
+/* ESTILO GERAL DA NAVBAR     */
+/* =========================== */
+.navbar {
+  position: fixed;              /* Fixa a navbar no topo da página */
+  top: 0;                       /* Gruda no topo */
+  left: 0;                      /* Alinha à esquerda */
+  width: 100%;                  /* Ocupa toda a largura da tela */
+  background-color: #1c1c1c;    /* Fundo escuro elegante */
+  color: #fff;                  /* Texto branco */
+  display: flex;                /* Ativa o flexbox */
+  justify-content: space-between; /* Espaço entre os elementos (esquerda e direita) */
+  align-items: center;          /* Alinha os itens verticalmente */
+  padding: 10px 20px;           /* Espaçamento interno */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  z-index: 1000;                /* Garante que fique acima de tudo */
+}
+
+/* =========================== */
+/* ITENS DO LADO ESQUERDO     */
+/* =========================== */
+.navbar-left {
+  display: flex;               /* Itens em linha */
+  gap: 20px;                   /* Espaço entre os elementos */
+  align-items: center;         /* Centraliza verticalmente */
+}
+
+/* =========================== */
+/* LINKS DO MENU              */
+/* =========================== */
+.nav-link {
+  color: #f0c040;              /* Dourado suave */
+  text-decoration: none;       /* Remove sublinhado */
+  font-weight: bold;           /* Texto em negrito */
+  font-size: 16px;
+  transition: color 0.3s;      /* Suaviza mudança de cor */
+}
+
+.nav-link:hover {
+  color: #ffffff;              /* Branco ao passar o mouse */
+}
+
+/* =========================== */
+/* ESTILO DO SELECT (MENU)    */
+/* =========================== */
+#seletorConteudo {
+  background-color: #2c2c2c;   /* Fundo escuro */
+  color: #f0c040;              /* Texto dourado */
+  border: none;                /* Sem borda padrão */
+  padding: 8px 12px;           /* Espaçamento interno */
+  border-radius: 5px;          /* Bordas arredondadas */
+  font-size: 15px;
+  cursor: pointer;             /* Mãozinha ao passar o mouse */
+  transition: background-color 0.3s;
+}
+
+#seletorConteudo:hover {
+  background-color: #3c3c3c;   /* Leve mudança ao passar o mouse */
+}
+
+/* =========================== */
+/* AJUSTE NO CORPO DA PÁGINA  */
+/* =========================== */
+body {
+  padding-top: 60px; /* Adiciona espaço para a navbar não cobrir o conteúdo */
+}
+
+class-referencia-atributos-globais{
+background-color:var(--suave); /*Cor de fundo definida por variavel */
+border: 2px solid black; /* Adiciona uma borda ao redor do elemento */
+border-radius: 8px; /* Arredonda as bordas */
+box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra */
+color: blue; /* Define a cor do texto */
+display: inline-block; /* Mantém o elemento ajustado ao conteúdo */
+font-family: Arial, sans-serif; /* Define a fonte da página */
+font-size: 18px; /* Define o tamanho da fonte */
+margin: 20px auto; /* Adiciona uma margem ao redor da página e centraliza */
+max-width: 600px; /* Define a largura máxima do container */
+padding: 10px; /* Adiciona espaçamento interno */
+text-align: center; /* Alinha o conteúdo ao centro */
+}
+.class-referencia-atributos-globais h2{
+color:var(--vermelho);
+}
+.class-referencia-atributos-globais #com-id-unico{
+color:var(--preto);
+}
