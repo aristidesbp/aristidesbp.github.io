@@ -1,8 +1,8 @@
 /*curso_de.js*/
   
-/*###################################################################*/
-/*🚀 Função para carregar conteúdos HTML em elementos específicos*/
-/*###################################################################*/
+/*#######################################################################*/
+/*🚀 Função para carregar Componentes HTML em elementos específicos*/
+/*#######################################################################*/
 function carregarComponentes() {
 
   // 📌 Carregar o header.html na div com id "meu-header"
@@ -60,7 +60,7 @@ http://localhost:8000
 /*###################################################################*/
 /*📌 Função chama pagina ao mudar a opção do <select> da Navebar*/
 /*###################################################################*/
-function trocarConteudo() {
+function carregaNovaPagina() {
 
   // 🧠 Pegamos o elemento <select> pelo ID
   const seletor = document.getElementById("seletorConteudo");
@@ -71,5 +71,5 @@ function trocarConteudo() {
   // 🔁 Redirecionamos o navegador para a página escolhida
   window.location.href = paginaSelecionada;
 
-} // 🔚 Fim da função trocarConteudo()
+} // 🔚 Fim da função carregaNovaPagina()
 
