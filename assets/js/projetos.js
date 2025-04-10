@@ -11,7 +11,7 @@ section.innerHTML = `<header>
 <img src="./assets/images/projects/portifolio.jpg" alt="Imagem do projeto." />
 <div class="buttons">
 
-<a href="https://github.com/aristidesbp/portifolio" target="_blank" title="Repositório no Github">
+<a href="https://github.com/aristidesbp" target="_blank" title="Repositório no Github">
 <svg xmlns="http://www.w3.org/2000/svg"
 viewBox="0 0 24 24" width="24" height="24">
 <path fill="none" d="M0 0h24v24H0z" />
@@ -20,7 +20,7 @@ viewBox="0 0 24 24" width="24" height="24">
 </svg> 
 </a>
               
-<a href="https://aristidesbp.vercel.app" target="_blank" title="Ver Projeto">
+<a href="https://aristidesbp.github.io" target="_blank" title="Ver Projeto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
