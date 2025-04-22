@@ -1,6 +1,5 @@
 function aboutMe(container) {
-  container.innerHTML = `
-    <section id="about">
+  container.innerHTML = `<section id="about">
       <div class="wrapper">
         <div class="col-a">
           <header>
