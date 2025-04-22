@@ -9,6 +9,7 @@ function showNavOnScroll() {
   }
 }
 
+// Adiciona evento voltar-topo
 function showBackToTopButtonOnScroll() {
   if (scrollY > 550) {
     backToTopButton.classList.add("show");
@@ -30,14 +31,20 @@ const homeContainer = document.querySelector("#home-section");
 home(homeContainer);
 //</Renderiza a home na página>
 
-//<Renderiza a buton-troca-tema na página>
-import { themeToggle } from "./themeToggle.js";
-const themeToggleContainer = document.querySelector("#theme-toggle");
-themeToggle(themeToggleContainer);
-//</Renderiza a buton-troca-tema na página>
+//<Renderiza a contact na página>
+import { contact } from "./contact.js";
+const contactContainer = document.querySelector("#contact-section");
+contact(contactContainer);
+//</Renderiza a contact na página>
 
 //<Renderiza o sobre-mim na página>
 import { aboutMe } from "./aboutMe.js";
 const aboutMeContainer = document.querySelector("#about-section");
 aboutMe(aboutMeContainer);
 //</Renderiza o sobre-mim na página>
+
+//<Renderiza a buton-troca-tema na página>
+import { themeToggle } from "./themeToggle.js";
+const themeToggleContainer = document.querySelector("#theme-toggle");
+themeToggle(themeToggleContainer);
+//</Renderiza a buton-troca-tema na página>
