@@ -1,7 +1,5 @@
-<!-- ######################################## -->
-<!-- #### <section id="Conhecimentos"> ########## -->
-<!-- ######################################## -->
-
+function knowledge(container) {
+  container.innerHTML = `
     <section id="knowledge">
       <div class="wrapper">
         <header>
@@ -11,7 +9,6 @@
           <div class="cards">
             <div class="card">
               <img src="./assets/images/html.png" alt="Ícone do HTML5." />
-
               <h3>HTML5</h3>
               <p>
                 HTML5 é uma linguagem de marcação de hipertexto, que usamos para
@@ -20,7 +17,6 @@
             </div>
             <div class="card">
               <img src="./assets/images/css.png" alt="Ícone do CSS3." />
-
               <h3>CSS3</h3>
               <p>
                 CSS3 é uma linguagem de estilo usada para descrever a
@@ -29,7 +25,6 @@
             </div>
             <div class="card">
               <img src="./assets/images/js.png" alt="Ícone do Javascript." />
-
               <h3>JavaScript</h3>
               <p>
                 JavaScript é uma linguagem de programação interpretada usada no
@@ -41,7 +36,7 @@
         </div>
       </div>
     </section>
+  `;
+}
 
-<!-- ######################################## -->
-<!-- #### </section id="knowledge"> ######### -->
-<!-- ######################################## -->
+export { knowledge };
