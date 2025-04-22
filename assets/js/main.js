@@ -1,9 +1,21 @@
 // arquivo: main.js
 
 // Adiciona evento para detectar rolagem da página
-window.addEventListener("scroll", onScroll);
-// Chama a função onScroll para verificar status inicial
-onScroll();
+function showNavOnScroll() {
+  if (scrollY > 0) {
+    navigation.classList.add("scroll");
+  } else {
+    navigation.classList.remove("scroll");
+  }
+}
+
+function showBackToTopButtonOnScroll() {
+  if (scrollY > 550) {
+    backToTopButton.classList.add("show");
+  } else {
+    backToTopButton.classList.remove("show");
+  }
+}
 
 //<Renderiza a navbar na página>
 import { navbar } from "./navbar.js";
