@@ -44,6 +44,12 @@ aboutMe(aboutMeContainer);
 //</Renderiza o sobre-mim na página>
 
 
+// Renderiza o componente Conhecimentos
+import { knowledge } from "./knowledge.js";
+const knowledgeContainer = document.querySelector("#knowledge-section");
+knowledge(knowledgeContainer);
+
+
 // Renderiza o componente Footer
 import { footer } from "./footer.js";
 const footerContainer = document.querySelector("#footer-section");
