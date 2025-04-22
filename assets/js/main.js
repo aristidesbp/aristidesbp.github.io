@@ -1,4 +1,10 @@
 // arquivo: main.js
+
+// Adiciona evento para detectar rolagem da página
+window.addEventListener("scroll", onScroll);
+// Chama a função onScroll para verificar status inicial
+onScroll();
+
 //<Renderiza a navbar na página>
 import { navbar } from "./navbar.js";
 const navbarSection = document.querySelector("#navbar");
