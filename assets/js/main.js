@@ -11,6 +11,14 @@ const notebook_2 = document.querySelector("#notebook-2");
 const notebook_2_white = document.querySelector("#notebook-2-white");
 const vidro = document.querySelector("#vidro");
 
+
+// <Renderiza a navbar na página>
+import { navbar } from "./navbar.js";
+const navbarSection = document.querySelector("#navbar");
+navbar(navbarSection);
+// </Renderiza a navbar na página>
+
+
 window.addEventListener("load", function begin() {
   projetos(projectsSection);
   const desafioBtn = document.querySelector("#desafio");
