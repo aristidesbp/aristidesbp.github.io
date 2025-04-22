@@ -10,3 +10,9 @@ import { themeToggle } from "./themeToggle.js";
 const themeToggleContainer = document.querySelector("#theme-toggle");
 themeToggle(themeToggleContainer);
 //</Renderiza a buton-troca-tema na página>
+
+//<Renderiza o sobre-mim na página>
+import { aboutMe } from "./aboutMe.js";
+const aboutMeContainer = document.querySelector("#about-section");
+aboutMe(aboutMeContainer);
+//</Renderiza o sobre-mim na página>
