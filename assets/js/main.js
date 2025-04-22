@@ -8,7 +8,7 @@ import { projetos } from "./projetos.js";
 const navigation = document.querySelector("#navigation"); // Menu de navegação
 const backToTopButton = document.querySelector("#backToTopButton"); // Botão "Voltar ao Topo"
 const toggle = document.querySelector("#sw-checkbox"); // Botão de alternância de tema (dark/light mode)
-const projectsSection = document.querySelector("#navebar .wrapper"); // Área onde sera exibido a navebar
+const navbarSection = document.querySelector("#navebar .wrapper"); // Área onde sera exibido a navebar
 const projectsSection = document.querySelector("#projects .wrapper"); // Área onde serão exibidos os projetos
 
 
