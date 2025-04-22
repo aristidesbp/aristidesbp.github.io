@@ -43,6 +43,13 @@ const aboutMeContainer = document.querySelector("#about-section");
 aboutMe(aboutMeContainer);
 //</Renderiza o sobre-mim na página>
 
+
+// Renderiza o componente Footer
+import { footer } from "./footer.js";
+const footerContainer = document.querySelector("#footer-section");
+footer(footerContainer);
+
+
 //<Renderiza a buton-troca-tema na página>
 import { themeToggle } from "./themeToggle.js";
 const themeToggleContainer = document.querySelector("#theme-toggle");
