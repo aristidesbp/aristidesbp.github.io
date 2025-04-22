@@ -1,7 +1,5 @@
-<!-- ######################################## -->
-<!-- #### <section id="contact"> ######### -->
-<!-- ######################################## -->
-
+function contact(container) {
+  container.innerHTML = `
     <section id="contact">
       <div class="wrapper">
         <div class="col-a">
@@ -39,14 +37,14 @@
                 </a>
               </li>
               <li>
-                <a href="tel:+5591992420981" title="Fazer ligação"
-                  ><img
+                <a href="tel:+5591992420981" title="Fazer ligação">
+                  <img
                     src="./assets/icons/celular.svg"
                     alt="Ícone de celular."
                     id="cel"
                   />
-                  +55 91 99242-0981</a
-                >
+                  +55 91 99242-0981
+                </a>
               </li>
             </ul>
 
@@ -78,7 +76,7 @@
         </div>
       </div>
     </section>
+  `;
+}
 
-<!-- ######################################## -->
-<!-- #### </section id="contact"> ########### -->
-<!-- ######################################## -->
+export { contact };
