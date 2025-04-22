@@ -1,20 +1,14 @@
-
-<!-- ######################################## -->
-<!-- #### <footer> ########################## -->
-<!-- ######################################## -->
- 
-
-  <footer>
+function footer(container) {
+  container.innerHTML = `
+    <footer>
       <div class="wrapper">
         <div class="col-a">
           <a class="logo" href="#home"> aristidesbp </a>
-
           <p>
             ©2022 por Aristides B Pontes. <br />
             Todos os direitos reservados.
           </p>
         </div>
-
         <div class="col-b">
           <ul class="social-links">
             <li>
@@ -22,7 +16,8 @@
                 href="https://instagram.com/aristidesbp"
                 title="Instagram"
                 target="_blank"
-                ><svg
+              >
+                <svg
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -58,7 +53,8 @@
                 href="https://github.com/aristidesbp"
                 title="Github"
                 target="_blank"
-                ><svg
+              >
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   width="24"
@@ -77,7 +73,8 @@
                 href="https://linkedin.com/in/aristidesbp"
                 title="LinkedIn"
                 target="_blank"
-                ><svg
+              >
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   width="24"
@@ -96,7 +93,8 @@
                 href="https://twitter.com/aristidesbp"
                 title="Twitter"
                 target="_blank"
-                ><svg
+              >
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   width="24"
@@ -114,7 +112,7 @@
         </div>
       </div>
     </footer>
+  `;
+}
 
-<!-- ######################################## -->
-<!-- #### </footer> ######################### -->
-<!-- ######################################## -->
+export { footer };
