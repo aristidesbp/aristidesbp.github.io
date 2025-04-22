@@ -5,7 +5,7 @@ const navbarSection = document.querySelector("#navbar");
 navbar(navbarSection);
 //</Renderiza a navbar na página>
 
-
+// arquivo: main.js
 // Importando funções de outros arquivos para serem usadas neste script
 import { desafios } from "./desafios.js";
 import { projetos } from "./projetos.js";
@@ -15,6 +15,7 @@ const navigation = document.querySelector("#navigation"); // Menu de navegação
 const backToTopButton = document.querySelector("#backToTopButton"); // Botão "Voltar ao Topo"
 const toggle = document.querySelector("#sw-checkbox"); // Botão de alternância de tema (dark/light mode)
 const projectsSection = document.querySelector("#projects .wrapper"); // Área onde serão exibidos os projetos
+
 
 // Selecionando elementos de animação
 const notebook_1 = document.querySelector("#notebook-1");
@@ -41,6 +42,7 @@ window.addEventListener("load", function begin() {
       .addEventListener("click", begin);
   });
 });
+
 
 // Adiciona evento para detectar rolagem da página
 window.addEventListener("scroll", onScroll);
