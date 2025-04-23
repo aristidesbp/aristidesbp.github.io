@@ -1,7 +1,21 @@
 function navbar(section) {
   section.innerHTML = `
 
+<style>
+/* Esconde o menu por padrão */
+#navigation {
+  display: none;
+  position: absolute;
+  /* Outros estilos para o menu */
+}
 
+/* Exibe o menu quando a classe 'menu-open' é adicionada */
+#navigation.menu-open {
+  display: block;
+  position: fixed;
+  /* Outros estilos para o menu no modo mobile */
+}
+</style>
 <!-- ######################################## -->
 <!-- #### <nav id="navigation"> ############# -->
 <!-- ######################################## -->
@@ -209,3 +223,22 @@ height="24"
 }
 
 export { navbar };
+
+// Seleciona os elementos do DOM
+const openMenuButton = document.querySelector(".open-menu");
+const closeMenuButton = document.querySelector(".close-menu");
+const navigation = document.getElementById("navigation");
+
+// Adiciona o evento de clique para abrir o menu
+openMenuButton.addEventListener("click", () => {
+  navigation.classList.add("menu-open");
+  openMenuButton.setAttribute("aria-expanded", "true");
+  closeMenuButton.setAttribute("aria-expanded", "true");
+});
+
+// Adiciona o evento de clique para fechar o menu
+closeMenuButton.addEventListener("click", () => {
+  navigation.classList.remove("menu-open");
+  openMenuButton.setAttribute("aria-expanded", "false");
+  closeMenuButton.setAttribute("aria-expanded", "false");
+});
