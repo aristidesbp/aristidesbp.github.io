@@ -56,11 +56,11 @@ const knowledgeContainer = document.querySelector("#knowledge-section");
 knowledge(knowledgeContainer);
 
 
-/*##############################################################*/
+/*##############################################################
 // Renderiza o componente Projetos
 import { projects } from "./projects.js";
 const projectsContainer = document.querySelector("#projects-section");
-projects(projectsContainer);
+projects(projectsContainer);*/
 
 /*##############################################################*/
 // Renderiza o componente Footer
@@ -69,12 +69,21 @@ const footerContainer = document.querySelector("#footer-section");
 footer(footerContainer);
 
 
+
+
 /*##############################################################*/
 //<Renderiza a buton-troca-tema na página>
 import { themeToggle } from "./themeToggle.js";
 const themeToggleContainer = document.querySelector("#theme-toggle");
 themeToggle(themeToggleContainer);
 //</Renderiza a buton-troca-tema na página>
+
+
+*##############################################################*/
+//</Renderiza a projetos na página>
+import { projetos } from "./projetos.js";
+const projectsSection = document.querySelector("#projects .wrapper");
+projetos(projectsSection);
 
 
 /*##############################################################*/
