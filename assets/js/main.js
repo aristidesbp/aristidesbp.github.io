@@ -56,11 +56,11 @@ const knowledgeContainer = document.querySelector("#knowledge-section");
 knowledge(knowledgeContainer);
 
 
-/*##############################################################
+/*##############################################################*/
 // Renderiza o componente Projetos
 import { projects } from "./projects.js";
 const projectsContainer = document.querySelector("#projects-section");
-projects(projectsContainer);*/
+projects(projectsContainer);
 
 /*##############################################################*/
 // Renderiza o componente Footer
