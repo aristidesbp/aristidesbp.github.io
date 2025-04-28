@@ -2485,6 +2485,26 @@ toggle.addEventListener("change", () => {
 
 <script>
 </script>
+<script>
+  // Seleciona o botão de troca de tema
+  const themeToggle = document.querySelector('#sw-checkbox');
 
+  // Verifica o estado inicial do tema salvo no localStorage
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggle.checked = true; // Ativa o checkbox
+  }
+
+  // Adiciona um evento ao checkbox para alternar entre temas
+  themeToggle.addEventListener('change', () => {
+    if (themeToggle.checked) {
+      document.body.classList.add('light-mode');
+      localStorage.setItem('theme', 'light'); // Salva o estado
+    } else {
+      document.body.classList.remove('light-mode');
+      localStorage.setItem('theme', 'dark'); // Salva o estado
+    }
+  });
+</script>
   </body>
 </html>
