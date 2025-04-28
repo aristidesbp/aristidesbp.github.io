@@ -11,9 +11,9 @@
 
 
 <!-- ##################################### -->
-<meta name="description" content="Portifólio de Aristides B. Pontes, desenvolvedor full stack, prompt engineering" />
+<meta name="description" content="Portfólio de Aristides B. Pontes, desenvolvedor full stack, prompt engineering" />
 <meta name="author" content="Aristides B. Pontes" />
-<meta property="og:description" content="Portifólio de Aristides B Pontes, desenvolvedor web full stack, prompt engineering" />
+<meta property="og:description" content="Portfólio de Aristides B Pontes, desenvolvedor web full stack, prompt engineering" />
 <meta property="og:image" content="./assets/images/aristidesbp.png" />
 <meta property="og:type" content="website" />
 <meta name="keywords" content="developer, programação, dev, desenvolvedor, programador, html, css, javascript, nodejs, reactjs, react, github, frontend, front-end,ia, chat gpt" />
@@ -25,8 +25,15 @@
 <meta name="robots" content="index" />
 
 <!-- Importa duas fontes do Google Fonts: DM Sans e Gemunu Libre com peso 200 -->
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet"/>
-
+<!-- Antes -->
+<!--link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet"/ -->
+<!-- Depois -->
+<!-- Preload de fontes -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" onload="this.rel='stylesheet'" crossorigin="anonymous"/>
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" crossorigin="anonymous"/>
+  </noscript>
+  
 <!-- Define ícone  na aba do navegador (favicon) -->
 <link rel="shortcut icon" href="./assets/icons/favicon.png" type="image/x-icon" />
 
@@ -49,7 +56,7 @@
 ></script>
 
 <!-- Define o título que aparece na aba do navegador -->
-<title>Aristides // Portifólio</title>
+<title>Aristides // Portfólio</title>
 <!-- Fim das configurações do <head> -->
 
 </head>
@@ -472,7 +479,7 @@ Se você está buscando alguém que una técnica, criatividade e resultados, por
             <a
               class="button"
               title="Me chama no zap!"
-              href="https://api.whatsapp.com/send?phone=5591992420981&text=Fala,%20Aristides!%20Vim%20do%20teu%20portifólio,%20quero%20trabalhar%20contigo!"
+              href="https://api.whatsapp.com/send?phone=5591992420981&text=Fala,%20Aristides!%20Vim%20do%20teu%20Portfólio,%20quero%20trabalhar%20contigo!"
               target="_blank"
             >
               <svg
