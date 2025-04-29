@@ -1,4 +1,4 @@
-<style>
+
 /*===== GERAL ===============================================*/
 
 * {
@@ -1468,9 +1468,9 @@ footer .social-links li:nth-child(4) svg path:nth-child(2) {
     height: 2rem;
   }
 }
-</style>
 
-  <style>
+
+  
   /* Define a cor de fundo da navbar como preta */
 nav {
   background-color: black !important;
@@ -1482,3 +1482,4 @@ nav {
   top: 0;
   z-index: 100;
 }  
+    
