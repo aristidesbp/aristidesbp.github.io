@@ -127,11 +127,11 @@ ScrollReveal({
 toggle.addEventListener("change", () => {
   document.body.classList.toggle("light-mode");
 });
-</script>
 
-<script>
-</script>
-<script>
+
+
+
+
   // Seleciona o botão de troca de tema
   const themeToggle = document.querySelector('#sw-checkbox');
 
@@ -151,21 +151,3 @@ toggle.addEventListener("change", () => {
       localStorage.setItem('theme', 'dark'); // Salva o estado
     }
   });
-</script>
-
-  <script>
-// Seleciona o botão de abrir/fechar o menu e o elemento <body>
-const menuButton = document.querySelector('.open-menu'); // Botão para abrir o menu
-const closeButton = document.querySelector('.close-menu'); // Botão para fechar o menu
-const body = document.body;
-
-// Adiciona o evento de clique para abrir o menu
-menuButton.addEventListener('click', () => {
-  body.classList.add('menu-expanded'); // Adiciona a classe para abrir o menu
-});
-
-// Adiciona o evento de clique para fechar o menu
-closeButton.addEventListener('click', () => {
-  body.classList.remove('menu-expanded'); // Remove a classe para fechar o menu
-});
-  </script>
