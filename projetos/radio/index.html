@@ -4,34 +4,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Player de Mídia - AristidesBP</title>
-  <link rel="stylesheet" href="style.css"> <!-- Link para o CSS externo -->
+  <title>Player Responsivo AristidesBP</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link para CSS externo -->
 </head>
 <body>
+
   <header>
-    <h1>Player de Mídia</h1> <!-- Título principal da página -->
+    <h1>Player de Mídia</h1> <!-- Cabeçalho principal -->
   </header>
 
   <main>
-    <!-- Seção de reprodução de música -->
-    <section id="musicPlayer">
-      <h2>Reprodução de Música</h2>
-      <audio id="audioElement" controls>
-        <source src="musica.mp3" type="audio/mpeg"> <!-- Caminho do áudio -->
-        Seu navegador não suporta o elemento de áudio.
-      </audio>
+    <!-- Seção de MÚSICAS -->
+    <section id="musicSection">
+      <h2>Músicas</h2>
+      <input type="text" id="searchMusic" placeholder="Buscar música..."> <!-- Campo de busca -->
+      <ul id="musicList">
+        <!-- Lista de músicas com nome e botão de play -->
+        <li data-name="Trilha Aventura">
+          Trilha Aventura
+          <button onclick="playMusic('musicas/aventura.mp3')">Play</button>
+        </li>
+        <li data-name="Relaxamento Natureza">
+          Relaxamento Natureza
+          <button onclick="playMusic('musicas/natureza.mp3')">Play</button>
+        </li>
+      </ul>
+      <audio id="audioElement" controls></audio> <!-- Player de áudio -->
     </section>
 
-    <!-- Seção de reprodução de vídeo -->
-    <section id="videoPlayer">
-      <h2>Reprodução de Vídeo</h2>
-      <video id="videoElement" controls width="560" height="315">
-        <source src="video.mp4" type="video/mp4"> <!-- Caminho do vídeo -->
-        Seu navegador não suporta o elemento de vídeo.
-      </video>
+    <!-- Seção de VÍDEOS -->
+    <section id="videoSection">
+      <h2>Vídeos</h2>
+      <input type="text" id="searchVideo" placeholder="Buscar vídeo..."> <!-- Campo de busca -->
+      <ul id="videoList">
+        <!-- Lista de vídeos com nome e botão de play -->
+        <li data-name="Vídeo Motivacional">
+          Vídeo Motivacional
+          <button onclick="playVideo('videos/motivacional.mp4')">Play</button>
+        </li>
+        <li data-name="Tutorial HTML">
+          Tutorial HTML
+          <button onclick="playVideo('videos/tutorial.mp4')">Play</button>
+        </li>
+      </ul>
+      <video id="videoElement" controls></video> <!-- Player de vídeo -->
     </section>
   </main>
 
-  <script src="player.js"></script> <!-- Importa o script JS -->
+  <script src="player.js"></script> <!-- Lógica JS -->
 </body>
 </html>
