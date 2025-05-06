@@ -1,1 +1,206 @@
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Baixar e Instalar o Termux do GitHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .step {
+            margin-bottom: 20px;
+        }
+        .step h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin: 0;
+        }
+        .step p {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .code-container {
+            position: relative;
+            margin: 10px 0;
+        }
+        textarea {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            display: block;
+            min-height: 100px;
+            font-family: monospace;
+            font-size: 16px;
+            resize: vertical;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background-color: #45a049;
+        }
+        .toggle-code-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .toggle-code-btn:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            main {
+                padding: 10px;
+            }
+            header {
+                padding: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Como Baixar e Instalar o Termux do GitHub</h1>
+    </header>
+
+    <main>
+        <section class="step">
+            <h2>Passo 1: Baixar o Termux do GitHub</h2>
+            <p>Para baixar a versão mais recente do Termux diretamente do GitHub, siga os passos abaixo:</p>
+            <ul>
+                <li>Visite a página oficial do Termux no GitHub: <a href="https://github.com/termux/termux-app/releases" target="_blank">Termux no GitHub</a></li>
+                <li>Na página de releases, localize a versão mais recente do Termux para o seu dispositivo Android.</li>
+                <li>Baixe o arquivo APK da versão mais recente.</li>
+                <li>Após o download, abra o arquivo APK para iniciar a instalação.</li>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 2: Permitir a Instalação de Aplicativos de Fontes Desconhecidas</h2>
+            <p>Antes de instalar o Termux, você precisará permitir a instalação de aplicativos de fontes desconhecidas. Siga os passos abaixo:</p>
+            <ul>
+                <li>Abra as configurações do seu dispositivo Android.</li>
+                <li>Vá para <strong>Segurança</strong> ou <strong>Aplicativos</strong> (isso pode variar dependendo do seu dispositivo).</li>
+                <li>Ative a opção <strong>Instalar aplicativos de fontes desconhecidas</strong> para o navegador ou gerenciador de arquivos que você usou para baixar o APK.</li>
+            </ul>
+            <p>Agora você poderá instalar o Termux sem problemas.</p>
+        </section>
+
+        <section class="step">
+            <h2>Passo 3: Instalar o Termux</h2>
+            <p>Depois de baixar o APK e permitir a instalação, siga esses passos:</p>
+            <ul>
+                <li>Abra o arquivo APK que você baixou.</li>
+                <li>Clique em "Instalar" para iniciar o processo de instalação.</li>
+                <li>Aguarde a conclusão da instalação.</li>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 4: Atualizar o Termux</h2>
+            <p>Após a instalação, é importante atualizar os pacotes do Termux para garantir que você tenha a versão mais recente do sistema e dos aplicativos.</p>
+            <button class="toggle-code-btn" onclick="toggleCode('code1')">Mostrar/Ocultar Código</button>
+            <div class="code-container" id="code1" style="display:none;">
+                <textarea id="codeText1">pkg update && pkg upgrade</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('codeText1')">Copiar</button>
+            </div>
+        </section>
+
+        <section class="step">
+            <h2>Passo 5: Permitir Acesso ao Armazenamento (Se Necessário)</h2>
+            <p>Se você deseja acessar arquivos no seu dispositivo, será necessário permitir o acesso ao armazenamento. Siga os seguintes passos:</p>
+            <ul>
+                <li>Execute o comando abaixo no Termux para permitir o acesso ao armazenamento:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code2')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code2" style="display:none;">
+                    <textarea id="codeText2">termux-setup-storage</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText2')">Copiar</button>
+                </div>
+                <li>Após a execução, você poderá acessar a pasta <strong>/storage/emulated/0/</strong> do seu dispositivo.</li>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 6: Configurações Iniciais Adicionais</h2>
+            <p>Você pode querer configurar alguns pacotes e ferramentas adicionais no Termux. Aqui estão algumas sugestões:</p>
+            <ul>
+                <li>Instalar o <strong>git</strong> para clonar repositórios:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code3')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code3" style="display:none;">
+                    <textarea id="codeText3">pkg install git</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText3')">Copiar</button>
+                </div>
+                <li>Instalar o <strong>python</strong> para executar scripts Python:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code4')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code4" style="display:none;">
+                    <textarea id="codeText4">pkg install python</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText4')">Copiar</button>
+                </div>
+                <li>Instalar o <strong>vim</strong> para editar arquivos de texto:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code5')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code5" style="display:none;">
+                    <textarea id="codeText5">pkg install vim</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText5')">Copiar</button>
+                </div>
+            </ul>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleCode(id) {
+            const codeElement = document.getElementById(id);
+            if (codeElement.style.display === "none") {
+                codeElement.style.display = "block";
+            } else {
+                codeElement.style.display = "none";
+            }
+        }
+
+        function copyToClipboard(id) {
+            const textarea = document.getElementById(id);
+            textarea.select();
+            document.execCommand('copy');
+            alert('Comando copiado!');
+        }
+    </script>
+
+</body>
+</html>
