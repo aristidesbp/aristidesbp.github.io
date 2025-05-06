@@ -1,0 +1,30 @@
+/* style.css */
+
+/* Estiliza o corpo da página */
+body {
+  font-family: Arial, sans-serif; /* Define uma fonte legível */
+  background-color: #f4f4f4;       /* Cor de fundo suave */
+  margin: 0;
+  padding: 20px;
+}
+
+/* Estiliza o cabeçalho */
+header {
+  background-color: #222;   /* Fundo escuro */
+  color: #fff;              /* Texto branco */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Seções de player */
+section {
+  margin-top: 30px;
+  background: #fff;         /* Fundo branco para destacar */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+h2 {
+  margin-bottom: 10px;
+}
