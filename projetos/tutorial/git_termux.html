@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Usar Git e GitHub no Termux</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link para CSS externo -->
+</head>
+<body>
+
+    <header>
+        <a href="../../index.html" style="color: white; text-decoration: none; font-size: 24px; font-weight: bold; margin-left: 20px;">Aristidesbp</a>
+    </header>
+
+    <main>
+        <section class="step">
+            <h2>Passo 1: Instalar o Git no Termux</h2>
+            <p>Para começar a usar Git no Termux, siga os passos abaixo:</p>
+            <ul>
+                <li>Abra o Termux no seu dispositivo Android.</li>
+                <li>Atualize os pacotes disponíveis com o comando:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code1')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code1" style="display:none;">
+                    <textarea id="codeText1">pkg update && pkg upgrade</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText1')">Copiar</button>
+                </div>
+                <li>Instale o Git usando o comando abaixo:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code2')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code2" style="display:none;">
+                    <textarea id="codeText2">pkg install git</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText2')">Copiar</button>
+                </div>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 2: Configurar o Git</h2>
+            <p>Antes de usar o Git, você precisa configurá-lo com seu nome e e-mail. Esses dados serão usados para assinar os commits:</p>
+            <ul>
+                <li>Configure seu nome de usuário:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code3')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code3" style="display:none;">
+                    <textarea id="codeText3">git config --global user.name "Seu Nome"</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText3')">Copiar</button>
+                </div>
+                <li>Configure seu e-mail:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code4')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code4" style="display:none;">
+                    <textarea id="codeText4">git config --global user.email "seuemail@example.com"</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText4')">Copiar</button>
+                </div>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 3: Clonar um Repositório do GitHub</h2>
+            <p>Para clonar um repositório do GitHub, siga os passos abaixo:</p>
+            <ul>
+                <li>Certifique-se de que você tenha o URL do repositório que deseja clonar.</li>
+                <li>Use o comando abaixo para clonar o repositório:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code5')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code5" style="display:none;">
+                    <textarea id="codeText5">git clone https://github.com/seuusuario/seurepositorio.git</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText5')">Copiar</button>
+                </div>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 4: Fazer Commit e Enviar Alterações</h2>
+            <p>Depois de fazer alterações no repositório, você pode fazer commit e enviá-las para o GitHub:</p>
+            <ul>
+                <li>Adicione os arquivos alterados ao commit:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code6')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code6" style="display:none;">
+                    <textarea id="codeText6">git add .</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText6')">Copiar</button>
+                </div>
+                <li>Crie um commit com uma mensagem descritiva:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code7')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code7" style="display:none;">
+                    <textarea id="codeText7">git commit -m "Mensagem do commit"</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText7')">Copiar</button>
+                </div>
+                <li>Envie as alterações para o GitHub:</li>
+                <button class="toggle-code-btn" onclick="toggleCode('code8')">Mostrar/Ocultar Código</button>
+                <div class="code-container" id="code8" style="display:none;">
+                    <textarea id="codeText8">git push origin main</textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('codeText8')">Copiar</button>
+                </div>
+            </ul>
+        </section>
+
+        <section class="step">
+            <h2>Passo 5: Atualizar o Repositório Local</h2>
+            <p>Para obter as alterações mais recentes do repositório remoto, use o comando:</p>
+            <button class="toggle-code-btn" onclick="toggleCode('code9')">Mostrar/Ocultar Código</button>
+            <div class="code-container" id="code9" style="display:none;">
+                <textarea id="codeText9">git pull origin main</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('codeText9')">Copiar</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
