@@ -1,0 +1,163 @@
+#CURSO DE PYTHON
+
+📦 Bloco 1: Instalando e Configurando o Ambiente no Termux
+
+# Atualize os pacotes do Termux
+pkg update && pkg upgrade
+
+# Instale o Python
+pkg install python
+
+# Verifique a instalação
+python --version
+
+# Instale o pip (gerenciador de pacotes do Python)
+pkg install python-pip
+
+# Instale um editor de texto (nano)
+pkg install nano
+
+# Instale o git (opcional, para clonar repositórios)
+pkg install git
+
+🐍 Bloco 2: Escrevendo e Executando Seu Primeiro Programa em Python
+
+# Crie um novo arquivo Python
+nano hello.py
+
+# Dentro do nano, escreva o seguinte código:
+print("Olá, mundo!")
+
+# Salve e saia do nano:
+# Pressione CTRL + X, depois Y e Enter
+
+# Execute o programa
+python hello.py
+
+🧮 Bloco 3: Conceitos Básicos de Python
+
+# Variáveis e Tipos de Dados
+nome = "Alice"
+idade = 30
+altura = 1.65
+ativo = True
+
+# Operações Matemáticas
+soma = 10 + 5
+produto = 10 * 5
+divisao = 10 / 5
+resto = 10 % 3
+
+# Entrada de Dados
+nome = input("Digite seu nome: ")
+print("Olá, " + nome)
+
+# Condicionais
+if idade >= 18:
+    print("Maior de idade")
+else:
+    print("Menor de idade")
+
+# Laços de Repetição
+for i in range(5):
+    print(i)
+
+contador = 0
+while contador < 5:
+    print(contador)
+    contador += 1
+
+📚 Bloco 4: Trabalhando com Módulos e Pacotes
+
+# Instale pacotes usando pip
+pip install requests
+pip install beautifulsoup4
+
+# Exemplo de uso do módulo requests
+import requests
+
+resposta = requests.get("https://www.google.com")
+print(resposta.status_code)
+
+
+#🗂️ Bloco 5: Manipulação de Arquivos
+
+ # Escrevendo em um arquivo
+with open("arquivo.txt", "w") as f:
+    f.write("Olá, mundo!")
+
+# Lendo de um arquivo
+with open("arquivo.txt", "r") as f:
+    conteudo = f.read()
+    print(conteudo)
+
+🧰 Bloco 6: Funções e Tratamento de Erros
+
+# Definindo uma função
+def saudacao(nome):
+    print(f"Olá, {nome}!")
+
+saudacao("Alice")
+
+# Tratamento de exceções
+try:
+    numero = int(input("Digite um número: "))
+    print(10 / numero)
+except ValueError:
+    print("Você não digitou um número válido.")
+except ZeroDivisionError:
+    print("Não é possível dividir por zero.")
+
+
+🧪 Bloco 7: Projetos Práticos
+
+# Calculadora Simples
+def calculadora():
+    a = float(input("Digite o primeiro número: "))
+    b = float(input("Digite o segundo número: "))
+    operacao = input("Escolha a operação (+, -, *, /): ")
+
+    if operacao == "+":
+        print(f"Resultado: {a + b}")
+    elif operacao == "-":
+        print(f"Resultado: {a - b}")
+    elif operacao == "*":
+        print(f"Resultado: {a * b}")
+    elif operacao == "/":
+        if b != 0:
+            print(f"Resultado: {a / b}")
+        else:
+            print("Erro: Divisão por zero.")
+    else:
+        print("Operação inválida.")
+
+calculadora()
+
+
+🧠 Bloco 8: Avançando no Python
+
+
+# Programação Orientada a Objetos
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def apresentar(self):
+        print(f"Olá, meu nome é {self.nome} e tenho {self.idade} anos.")
+
+pessoa1 = Pessoa("Alice", 30)
+pessoa1.apresentar()
+
+
+📌 Dicas Finais
+
+Utilize o comando pip list para ver os pacotes instalados.
+
+Mantenha seus pacotes atualizados com pip install --upgrade nome_do_pacote.
+
+Explore bibliotecas como matplotlib, pandas e numpy para análise de dados e visualizações.
+
+Pratique regularmente para consolidar seu aprendizado.
+
+
