@@ -1,0 +1,273 @@
+############################################################
+# GUIA ARISTIDESBP - COMANDOS BÁSICOS DO TERMUX
+# "O código perfeito é o código comentado!"
+############################################################
+
+===============================================================
+## TEMA: Instalar um termômetro virtual usando GitHub e Python ##
+===============================================================
+
+1. Atualize e prepare o Termux:
+
+pkg update && pkg upgrade  
+pkg install git python -y
+
+# Explicação:
+Atualizamos o Termux e instalamos o Git (para clonar projetos do GitHub) e o Python (para rodar o termômetro).
+
+---
+
+2. Clone o projeto do GitHub:
+
+git clone https://github.com/rafaelreis-hot/termometro-digital.git
+
+# Explicação:
+Este comando baixa o repositório “termometro-digital”, que simula leituras de temperatura com Python.
+
+---
+
+3. Acesse a pasta do projeto:
+
+cd termometro-digital
+
+# Explicação:
+Entra na pasta onde o código do termômetro foi baixado.
+
+---
+
+4. Execute o script principal:
+
+python termometro.py
+
+# Explicação:
+Roda o arquivo que simula a leitura de temperatura em tempo real.
+
+---
+
+5. (Opcional) Edite o código para personalizar:
+
+nano termometro.py
+
+# Explicação:
+Você pode editar o script com o Nano e alterar mensagens, intervalo de tempo, limites de alerta etc.
+
+---
+
+# Dica:
+Este projeto é uma simulação. Para conectar com sensores reais como DHT11 ou DS18B20, seria necessário hardware externo (Arduino ou ESP32) conectado via API, e o Termux funcionando como interface de leitura e visualização.
+
+# ATUALIZAR OS PACOTES DO TERMUX
+pkg update           # Atualiza a lista de pacotes disponíveis
+pkg upgrade          # Atualiza os pacotes instalados para a versão mais recente
+
+# INSTALAR PACOTES ESSENCIAIS
+pkg install git      # Instala o Git para clonar repositórios
+pkg install python   # Instala o interpretador Python
+pkg install nano     # Instala o editor de texto Nano
+
+# NAVEGAÇÃO ENTRE DIRETÓRIOS
+ls                   # Lista arquivos e pastas no diretório atual
+cd nome_da_pasta     # Acessa a pasta especificada
+cd ..                # Volta um nível na hierarquia de pastas
+cd                   # Volta para o diretório home do usuário
+
+# CRIAR, MOVER E REMOVER ARQUIVOS E PASTAS
+mkdir nova_pasta         # Cria uma nova pasta
+touch novo_arquivo.txt   # Cria um novo arquivo vazio
+mv arquivo.txt pasta/    # Move o arquivo para a pasta
+rm arquivo.txt           # Deleta o arquivo
+rm -rf pasta/            # Remove uma pasta e todo o seu conteúdo
+
+# EDITOR DE TEXTO
+nano arquivo.txt         # Abre o editor de texto Nano para editar o arquivo
+
+# ACESSO AO GIT
+git clone https://github.com/usuario/repositorio.git   # Clona repositório GitHub
+
+# EXECUTAR SCRIPTS
+python script.py          # Executa um script Python
+bash script.sh            # Executa um script Shell
+chmod +x script.sh        # Dá permissão de execução para o script
+./script.sh               # Executa o script após dar permissão
+
+# INFORMAÇÕES DO SISTEMA
+uname -a              # Mostra informações do sistema
+termux-info           # Mostra informações detalhadas do ambiente Termux
+
+# SAIR DO TERMUX
+exit                  # Fecha a sessão do Termux
+
+############################################################
+# Pronto para automatizar? Crie scripts e otimize seu fluxo!
+############################################################
+
+Atalhos de teclado úteis no Termux:
+
+- Ctrl + C: Encerra o processo atual.
+- Ctrl + D: Encerra a sessão do terminal.
+- Ctrl + L: Limpa a tela (igual ao comando clear).
+- Ctrl + A: Move o cursor para o início da linha.
+- Ctrl + E: Move o cursor para o final da linha.
+
+
+Comandos de rede no Termux:
+
+1. ping google.com
+   Verifica a conexão com a internet.
+
+2. ifconfig
+   Mostra as configurações de rede (requer pacote net-tools).
+
+3. netstat
+   Exibe as conexões de rede.
+
+4. nmap 192.168.0.1
+   Escaneia portas de um IP (requer instalação do nmap).
+
+5. traceroute google.com
+   Mostra o caminho até o destino.
+
+
+==============================
+## TEMA: Editor de texto Nano ##
+==============================
+
+1. pkg install nano
+   Instala o editor de texto Nano no Termux.
+
+2. nano nome_do_arquivo.txt
+   Abre (ou cria) um arquivo de texto para edição.
+
+3. Ctrl + S
+   Salva o conteúdo editado.
+
+4. Ctrl + X
+   Sai do editor.
+
+5. Ctrl + K
+   Corta uma linha.
+
+6. Ctrl + U
+   Cola a linha cortada anteriormente.
+
+# Dica:
+O Nano é ótimo para editar arquivos rapidamente dentro do terminal, especialmente scripts `.sh` ou arquivos `.txt` de estudo.
+
+
+=========================================
+## TEMA: Permissões e acesso ao storage ##
+=========================================
+
+1. termux-setup-storage
+   Solicita acesso ao armazenamento interno e cria o diretório /storage/emulated/0.
+
+2. cd /storage/emulated/0
+   Navega até a raiz do armazenamento interno (equivale a “Meu Arquivo” no Android).
+
+3. ls
+   Lista os arquivos e pastas disponíveis no diretório atual.
+
+# Dica:
+Após conceder acesso, você pode salvar e abrir arquivos do Android direto pelo Termux, como backups, códigos ou anotações.
+
+========================================
+## TEMA: Editor Vim (para avançados) ##
+========================================
+
+1. pkg install vim
+   Instala o editor Vim no Termux.
+
+2. vim nome.txt
+   Abre (ou cria) um arquivo de texto.
+
+3. i
+   Entra no modo de inserção (edição).
+
+4. Esc + :w
+   Salva o arquivo.
+
+5. Esc + :q
+   Sai do editor.
+
+6. Esc + :wq
+   Salva e sai ao mesmo tempo.
+
+# Dica:
+O Vim é um editor poderoso e usado profissionalmente, mas exige prática. Comece pelo Nano se estiver iniciando.
+
+====================================
+## TEMA: Personalizar o Termux ##
+====================================
+
+1. pkg install figlet
+   Instala o Figlet para criar letras grandes com arte ASCII.
+
+2. figlet SeuNome
+   Exibe seu nome em arte ASCII no terminal.
+
+3. pkg install toilet
+   Alternativa ao Figlet com mais opções de formatação.
+
+4. pkg install lolcat
+   Adiciona cores animadas ao terminal.
+
+5. echo "figlet Bem-vindo | lolcat" >> ~/.bashrc
+   Personaliza a mensagem de boas-vindas ao abrir o Termux.
+
+# Dica:
+Esses ajustes tornam seu ambiente de terminal mais visual e divertido, além de reforçarem o domínio do bash.
+
+===============================================
+## TEMA: Pacotes essenciais recomendados ##
+===============================================
+
+1. pkg update && pkg upgrade
+   Atualiza a lista de pacotes e os já instalados (sempre faça isso antes de instalar algo novo).
+
+2. termux-setup-storage
+   Concede acesso ao armazenamento interno do Android.
+
+3. git
+   Ferramenta de controle de versões. Permite clonar repositórios e versionar código.
+
+   Comando: pkg install git
+
+4. curl / wget
+   Ferramentas para baixar arquivos da internet diretamente pelo terminal.
+
+   Comando: pkg install curl wget
+
+5. python
+   Linguagem de programação versátil. Ideal para scripts, automações e aprendizado.
+
+   Comando: pkg install python
+
+6. nodejs
+   Ambiente para rodar JavaScript fora do navegador. Ótimo para desenvolvimento web e bots.
+
+   Comando: pkg install nodejs
+
+7. vim / nano
+   Editores de texto. O Nano é simples e amigável. O Vim é avançado, mas muito poderoso.
+
+   Comando: pkg install nano vim
+
+8. openssh
+   Permite usar o Termux como servidor SSH (ou se conectar a outros servidores via SSH).
+
+   Comando: pkg install openssh
+
+9. neofetch
+   Mostra informações do sistema com visual estilizado (ideal para prints ou personalização).
+
+   Comando: pkg install neofetch
+
+10. tsu ou tsudo
+   Pacotes que liberam permissões root (se o aparelho estiver rooteado).
+
+   Comando: pkg install tsu
+
+# Dica:
+Você pode instalar múltiplos pacotes de uma vez com:
+pkg install git python nano curl
+
