@@ -1,0 +1,56 @@
+Título: Como Baixar Vídeos Usando o Termux
+Fonte: Aristidesbp
+
+============================================================
+PASSO 1: INSTALAR O TERMUX
+============================================================
+Se você ainda não tem o Termux instalado, baixe-o na Google Play Store ou em outros repositórios confiáveis.
+
+============================================================
+PASSO 2: ATUALIZAR O TERMUX
+============================================================
+Abra o Termux e digite o seguinte comando para atualizar os pacotes:
+
+Comando:
+pkg update && pkg upgrade
+
+============================================================
+PASSO 3: INSTALAR O yt-dlp
+============================================================
+Instale o yt-dlp, que é uma versão mais atualizada do youtube-dl e possui mais recursos:
+
+Comando:
+pkg install yt-dlp
+
+Alternativa com youtube-dl:
+
+Comando:
+pkg install python
+pip install youtube-dl
+
+============================================================
+PASSO 4: BAIXAR O VÍDEO
+============================================================
+Depois de instalar o yt-dlp (ou youtube-dl), você pode baixar vídeos de várias plataformas de vídeo.
+
+Comando básico:
+yt-dlp [URL do vídeo]
+
+Exemplo com YouTube:
+yt-dlp https://www.youtube.com/watch?v=EXEMPLO
+
+O vídeo será salvo na pasta padrão do Termux (geralmente ~/home).
+
+============================================================
+PASSO 5: VERIFICAR O DOWNLOAD
+============================================================
+Após o download, use o comando abaixo para listar os arquivos baixados:
+
+Comando:
+ls
+
+============================================================
+
+* Dica: Para copiar os comandos no app, segure o dedo sobre a linha do código até aparecer a opção de copiar.
+
+* Tutorial criado por Aristidesbp
