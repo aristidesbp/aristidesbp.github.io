@@ -1,0 +1,86 @@
+==============================
+14. GIT E GITHUB - USO COMPLETO
+==============================
+# "O código perfeito é o código comentado!"
+
+# 1. Configurar o Git com suas credenciais
+git config --global user.name "Seu Nome"
+# Define seu nome de usuário para registrar os commits
+
+git config --global user.email "seu@email.com"
+# Define seu e-mail associado à conta do GitHub
+
+# 2. Clonar um repositório existente do GitHub
+git clone https://github.com/usuario/repositorio.git
+# Clona o repositório remoto para sua máquina local
+
+cd repositorio
+# Entra na pasta clonada
+
+# 3. Criar um novo repositório local
+mkdir novo_projeto
+cd novo_projeto
+git init
+# Inicializa um novo repositório Git local na pasta
+
+touch README.md
+# Cria um arquivo README.md (pode usar nano para editar)
+
+git add README.md
+# Adiciona o arquivo à área de staging (preparando para commit)
+
+git commit -m "Primeiro commit"
+# Cria o primeiro commit com uma mensagem descritiva
+
+# 4. Conectar ao repositório remoto (ex: GitHub)
+git remote add origin https://github.com/usuario/repositorio.git
+# Define o endereço do repositório remoto
+
+git push -u origin master
+# Envia o commit local para o repositório no GitHub
+
+# 5. Trabalhar com alterações
+nano arquivo.txt
+# Edita ou cria um novo arquivo
+
+git status
+# Mostra os arquivos modificados ou não versionados
+
+git add .
+# Adiciona todas as alterações à área de staging
+
+git commit -m "Descrição das alterações"
+# Registra as alterações com uma mensagem
+
+git push
+# Envia os commits para o GitHub
+
+# 6. Puxar atualizações do GitHub
+git pull
+# Baixa e integra alterações do repositório remoto para o local
+
+# 7. Clonar seu próprio repositório via SSH (opcional)
+# Requer que você adicione uma chave SSH no GitHub
+ssh-keygen -t rsa -b 4096 -C "seu@email.com"
+# Cria uma chave SSH
+
+cat ~/.ssh/id_rsa.pub
+# Exibe a chave pública para copiar e colar no GitHub
+
+# Depois use:
+git clone git@github.com:usuario/repositorio.git
+
+==============================
+DICA FINAL
+==============================
+# Ver histórico de commits
+git log
+
+# Ver arquivos que serão enviados
+git diff
+
+# Reverter para commit anterior (cuidado!)
+git checkout COMMIT_ID
+
+# Remover o repositório remoto
+git remote remove origin
