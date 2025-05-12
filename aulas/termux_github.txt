@@ -1,86 +1,77 @@
-==============================
-14. GIT E GITHUB - USO COMPLETO
-==============================
-# "O código perfeito é o código comentado!"
+#################################
+## GIT E GITHUB - USO COMPLETO ##
+#################################
 
-# 1. Configurar o Git com suas credenciais
-git config --global user.name "Seu Nome"
-# Define seu nome de usuário para registrar os commits
+✅ PASSO 1: Criar repositório no GitHub
+   1- Acesse https://github.com
+   2- Crie um novo repositório clicando em New Repository
+   3- Dê um nome, marque como público ou privado, e clique em Create Repository
 
-git config --global user.email "seu@email.com"
-# Define seu e-mail associado à conta do GitHub
+✅ PASSO 2: Instalar o Git no Terminal (Termux ou Linux)
 
-# 2. Clonar um repositório existente do GitHub
-git clone https://github.com/usuario/repositorio.git
-# Clona o repositório remoto para sua máquina local
+#📌 Terminal no Linux:
+sudo apt update                   # Atualiza a lista de pacotes disponíveis no repositório
+sudo apt install git             # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
 
-cd repositorio
-# Entra na pasta clonada
+# 📌 Terminal no Termux (Android):
+pkg update                       # Atualiza os pacotes do Termux
+pkg install git                  # Instala o Git no ambiente Termux
 
-# 3. Criar um novo repositório local
-mkdir novo_projeto
-cd novo_projeto
-git init
-# Inicializa um novo repositório Git local na pasta
+✅ PASSO 3: Verificar se o Git foi instalado com sucesso
+git --version                    # Mostra a versão atual do Git instalada
 
-touch README.md
-# Cria um arquivo README.md (pode usar nano para editar)
+✅ PASSO 3: Configurar Git com seu nome e e-mail (Obrigatório!)
+git config --global user.name "Seu Nome"            # Define seu nome de usuário global
+git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
 
-git add README.md
-# Adiciona o arquivo à área de staging (preparando para commit)
+✅ PASSO 4: Clonar um repositório existente do site
+git clone https://github.com/usuario/repositorio.git   # Baixa o repositório para sua máquina
 
-git commit -m "Primeiro commit"
-# Cria o primeiro commit com uma mensagem descritiva
+✅ PASSO 5: Criar uma nova pasta no repositório local
+mkdir nome-da-pasta                # Cria uma nova pasta para seu projeto
+cd nome-da-pasta                   # Entra na pasta do projeto
+git init                           # Inicializa um novo repositório Git local (vai criar a pasta oculta .git)
+                              # Envia para o GitHub
 
-# 4. Conectar ao repositório remoto (ex: GitHub)
-git remote add origin https://github.com/usuario/repositorio.git
-# Define o endereço do repositório remoto
+✅ PASSO 6: Adicionar arquivos ao repositório
+touch nome-do-arquivo                 # Cria um arquivo de exemplo (substitua pelo seu arquivo)
+git add nome-do-arquivo               # Adiciona o arquivo ao "stage", pronto para commit
 
-git push -u origin master
-# Envia o commit local para o repositório no GitHub
+#✅ PASSO 7: Realizar o primeiro commit
+git commit -m "Primeiro commit: adicionando index.html"  # Cria um ponto de controle no histórico do projeto
 
-# 5. Trabalhar com alterações
-nano arquivo.txt
-# Edita ou cria um novo arquivo
+✅ PASSO 8: Trabalhando com commits futuros
+git add .                                      # Adiciona todas as alterações feitas nos arquivos
+git commit -m "Descrição do que foi alterado"  # Descreve as mudanças
+git push                                       # Envia os arquivos locais para o GitHub
 
-git status
-# Mostra os arquivos modificados ou não versionados
 
-git add .
-# Adiciona todas as alterações à área de staging
 
-git commit -m "Descrição das alterações"
-# Registra as alterações com uma mensagem
 
-git push
-# Envia os commits para o GitHub
 
-# 6. Puxar atualizações do GitHub
-git pull
-# Baixa e integra alterações do repositório remoto para o local
 
-# 7. Clonar seu próprio repositório via SSH (opcional)
-# Requer que você adicione uma chave SSH no GitHub
-ssh-keygen -t rsa -b 4096 -C "seu@email.com"
-# Cria uma chave SSH
+📝 DICA FINAL:
+    git status  #  Use constantemente para saber o que mudou, o que está pronto para commit, e o que ainda não foi salvo.
+    git diff    # Use para ver diferenças entre arquivos modificados e os últimos commits.
 
-cat ~/.ssh/id_rsa.pub
-# Exibe a chave pública para copiar e colar no GitHub
+✅ PASSO 9: Conectar repositório local ao GitHub
+git remote add origin https://github.com/SeuUsuario/NomeDoRepositorio.git  # Substitua pela URL do seu repositório
+git branch -M main                      # Renomeia o branch padrão para 'main' (caso esteja como master)
+git push -u origin main                 # Envia os arquivos locais para o GitHub
 
-# Depois use:
-git clone git@github.com:usuario/repositorio.git
 
-==============================
-DICA FINAL
-==============================
-# Ver histórico de commits
-git log
+✅ PASSO 10: Ver histórico de commits
+git log                                 # Mostra o histórico detalhado dos commits
 
-# Ver arquivos que serão enviados
-git diff
+✅ PASSO 11: Criar e alternar branches
+git branch nome-da-branch               # Cria uma nova branch (ramificação)
+git checkout nome-da-branch             # Alterna para a nova branch
 
-# Reverter para commit anterior (cuidado!)
-git checkout COMMIT_ID
+✅ PASSO 12: Atualizar o repositório local
+git pull                                # Puxa as alterações do repositório remoto para sua máquina
 
-# Remover o repositório remoto
-git remote remove origin
+✅ PASSO 13: Ignorar arquivos (opcional)
+touch .gitignore                        # Cria o arquivo
+echo "arquivo_secreto.txt" >> .gitignore  # Adiciona o nome do arquivo que não será rastreado pelo Git
+
+
