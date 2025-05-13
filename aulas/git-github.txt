@@ -29,6 +29,10 @@ git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no
 git config --global init.defaltBranch main          # ramificação padrao
 git config --global core.editor nano                # define o editor padrao
 git config --list                                   # lista as configurações
+ssh-keygen -t rsa -b 2048                           # criar uma chave ssh
+ls ~/.ssh/                                          # verifica se foi criada 
+cat ~/.ssh/id_rsa.pub                               # pega o valor da cheve criada
+
 
 📚  Escopo de configuração
 git config core.editor vim                      # escopo do projeto atual
