@@ -1,7 +1,92 @@
-
 ######################################################################################################
 ###########################   📚 GIT E GITHUB - USO COMPLETO    ######################################
 ######################################################################################################
+
+######################################################################################################
+#################################    🔥 Referencias 🔥    #############################################
+######################################################################################################
+✅ Instalação o Git no Terminal (linux e Termux)
+
+#📌 Terminal no Linux:
+sudo apt update                  # Atualiza a lista de pacotes disponíveis no repositório
+sudo apt install git             # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
+
+# 📌 Terminal no Termux (Android):
+pkg update                       # Atualiza os pacotes do Termux
+pkg install git                  # Instala o Git no ambiente Termux
+
+# 📌 Verificar se o Git foi instalado com sucesso
+git --version                    # Mostra a versão atual do Git instalada
+
+######################################################################################################
+✅ Configurando o Git 
+# 📌(Obrigatório!)
+git config --global user.name "Seu Nome"            # Define seu nome de usuário global
+git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
+git config --global init.defaltBranch main          # ramificação padrao
+git cinfig --global core .editor vim                # define o editor padrao
+git config --list                                   # lista as configurações
+
+📚  Escopo de configuração
+git cinfig core .editor vim                     # escopo do projeto atual
+git cinfig --global core .editor vim            # --global (escopo do ususario/global user.name)
+git cinfig --system core .editor vim            # --system  (para todos os usuarios do sistema)
+
+
+######################################################################################################
+✅ Criar um repositório git local
+mkdir nome-da-pasta                # Cria uma nova pasta para seu projeto
+git init                           # Inicializa um novo repositório Git local (vai criar a pasta oculta .git)
+ls -a                              # lista repositorios criados 
+cd nome-da-pasta                   # Entra na pasta do projeto
+
+                             
+
+✅ Clonar um repositório existente do site
+git clone https://github.com/usuario/repositorio.git   # Baixa o repositório para sua máquina
+
+
+
+✅ Adicionar arquivos ao repositório
+touch nome-do-arquivo                 # Cria um arquivo de exemplo (substitua pelo seu arquivo)
+git add nome-do-arquivo               # Adiciona o arquivo ao "stage", pronto para commit
+
+#✅ Realizar o primeiro commit
+git commit -m "Primeiro commit: adicionando index.html"  # Cria um ponto de controle no histórico do projeto
+
+✅ Trabalhando com commits futuros
+git add .                                      # Adiciona todas as alterações feitas nos arquivos
+git commit -m "Descrição do que foi alterado"  # Descreve as mudanças
+git push                                       # Envia os arquivos locais para o GitHub
+
+
+
+📝 DICA:
+    git status  #  Use constantemente para saber o que mudou, o que está pronto para commit, e o que ainda não foi salvo.
+    git diff    # Use para ver diferenças entre arquivos modificados e os últimos commits.
+
+
+✅ Conectar repositório local ao GitHub
+git remote add origin https://github.com/SeuUsuario/NomeDoRepositorio.git  # Substitua pela URL do seu repositório
+git branch -M main                      # Renomeia o branch padrão para 'main' (caso esteja como master)
+git push -u origin main                 # Envia os arquivos locais para o GitHub
+
+
+✅ Ver histórico de commits
+git log                                 # Mostra o histórico detalhado dos commits
+
+✅ Criar e alternar branches
+git branch nome-da-branch               # Cria uma nova branch (ramificação)
+git checkout nome-da-branch             # Alterna para a nova branch
+
+✅ Atualizar o repositório local
+git pull                                # Puxa as alterações do repositório remoto para sua máquina
+
+✅ Ignorar arquivos (opcional)
+touch .gitignore                        # Cria o arquivo
+echo "arquivo_secreto.txt" >> .gitignore  # Adiciona o nome do arquivo que não será rastreado pelo Git
+
+
 
 ######################################################################################################
 ######################### 📚 Módulo 1: Introdução ao Git e GitHub ####################################
@@ -123,7 +208,7 @@ identificar quem fez cada alteração no código.
 ✅ Configurar Git com seu nome e e-mail (Obrigatório!)
 git config --global user.name "Seu Nome"            # Define seu nome de usuário global
 git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
-
+git config --global init.defaltBranch main          # ramificação padrao
 ```
 
 #### Confirmando a configuração:
@@ -1338,82 +1423,5 @@ meu-projeto/
 **Parabéns!** Você chegou ao final do curso. Ao concluir os exercícios e o projeto final, você terá 
 dominado Git e GitHub, incluindo conceitos básicos, fluxos de trabalho e 
 ferramentas avançadas para automação e colaboração. 🎉
-
-######################################################################################################
-#################################    Referencias   ###################################################
-######################################################################################################
-
-
-✅ Criar repositório no GitHub
-   1- Acesse https://github.com
-   2- Crie um novo repositório clicando em New Repository
-   3- Dê um nome, marque como público ou privado, e clique em Create Repository
-
-✅ Instalar o Git no Terminal (Termux ou Linux)
-
-#📌 Terminal no Linux:
-sudo apt update                   # Atualiza a lista de pacotes disponíveis no repositório
-sudo apt install git             # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
-
-# 📌 Terminal no Termux (Android):
-pkg update                       # Atualiza os pacotes do Termux
-pkg install git                  # Instala o Git no ambiente Termux
-
-✅ Verificar se o Git foi instalado com sucesso
-git --version                    # Mostra a versão atual do Git instalada
-
-✅ Configurar Git com seu nome e e-mail (Obrigatório!)
-git config --global user.name "Seu Nome"            # Define seu nome de usuário global
-git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
-
-✅ Clonar um repositório existente do site
-git clone https://github.com/usuario/repositorio.git   # Baixa o repositório para sua máquina
-
-✅ Criar uma nova pasta no repositório local
-mkdir nome-da-pasta                # Cria uma nova pasta para seu projeto
-cd nome-da-pasta                   # Entra na pasta do projeto
-git init                           # Inicializa um novo repositório Git local (vai criar a pasta oculta .git)
-                              # Envia para o GitHub
-
-✅ Adicionar arquivos ao repositório
-touch nome-do-arquivo                 # Cria um arquivo de exemplo (substitua pelo seu arquivo)
-git add nome-do-arquivo               # Adiciona o arquivo ao "stage", pronto para commit
-
-#✅ Realizar o primeiro commit
-git commit -m "Primeiro commit: adicionando index.html"  # Cria um ponto de controle no histórico do projeto
-
-✅ Trabalhando com commits futuros
-git add .                                      # Adiciona todas as alterações feitas nos arquivos
-git commit -m "Descrição do que foi alterado"  # Descreve as mudanças
-git push                                       # Envia os arquivos locais para o GitHub
-
-
-
-📝 DICA:
-    git status  #  Use constantemente para saber o que mudou, o que está pronto para commit, e o que ainda não foi salvo.
-    git diff    # Use para ver diferenças entre arquivos modificados e os últimos commits.
-
-
-✅ Conectar repositório local ao GitHub
-git remote add origin https://github.com/SeuUsuario/NomeDoRepositorio.git  # Substitua pela URL do seu repositório
-git branch -M main                      # Renomeia o branch padrão para 'main' (caso esteja como master)
-git push -u origin main                 # Envia os arquivos locais para o GitHub
-
-
-✅ Ver histórico de commits
-git log                                 # Mostra o histórico detalhado dos commits
-
-✅ Criar e alternar branches
-git branch nome-da-branch               # Cria uma nova branch (ramificação)
-git checkout nome-da-branch             # Alterna para a nova branch
-
-✅ Atualizar o repositório local
-git pull                                # Puxa as alterações do repositório remoto para sua máquina
-
-✅ Ignorar arquivos (opcional)
-touch .gitignore                        # Cria o arquivo
-echo "arquivo_secreto.txt" >> .gitignore  # Adiciona o nome do arquivo que não será rastreado pelo Git
-
-
 
 
