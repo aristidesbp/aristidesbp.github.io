@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Livraria Online</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Livros Disponíveis</h1>
+    <a href="/cadastrar">Cadastrar Novo Livro</a>
+    <ul>
+        {% for livro in livros %}
+        <li>
+            <strong>{{ livro[1] }}</strong> - {{ livro[2] }} - R$ {{ livro[3] }}
+            <a href="/editar/{{ livro[0] }}">Editar</a>
+            <a href="/excluir/{{ livro[0] }}" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

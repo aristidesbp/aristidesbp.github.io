@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, sans-serif; /* Define a fonte do site */
+  background-color: #f0f0f0;     /* Cor de fundo suave */
+  padding: 20px;                 /* Espaçamento interno */
+}
+
+h1 {
+  color: #333;                   /* Cor do título */
+}
+
+ul {
+  list-style-type: none;         /* Remove os marcadores da lista */
+  padding: 0;
+}
+
+li {
+  background-color: #fff;        /* Fundo branco para os itens */
+  margin-bottom: 10px;           /* Espaço entre os itens */
+  padding: 10px;                 /* Espaçamento interno dos itens */
+  border-radius: 5px;            /* Bordas arredondadas */
+}
+
+form input, form button {
+  margin: 10px 0;
+  padding: 5px;
+}
