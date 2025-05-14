@@ -102,7 +102,7 @@ aristidesbp@aristidesbp-V142N-4G:~/Downloads/meu-git$ git branch
   
 #####################################################################################################
 ✅ Clonar um repositório existente do site
-git clone https://github.com/usuario/repositorio.git   # Baixa o repositório para sua máquina
+git clone URL-do-repositorio   # Baixa o repositório para sua máquina
 
 
 ✅ Conectar repositório local ao GitHub
