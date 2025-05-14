@@ -119,8 +119,9 @@ aristidesbp@aristidesbp-V142N-4G:~/Downloads/meu-git$ git branch
 ######################################################################################################
 
 ✅ Para clonar um repositório existente do site
+git clone --depth=1 URL-do-repositorio   # Se NÃO quiser os commits anteriores, você pode usar --depth=1:
 git clone URL-do-repositorio             # Baixa o repositório para sua máquina
-git clone --depth=1 URL-do-repositorio   #Se NÃO quiser os commits anteriores, você pode usar --depth=1:
+
 
 ✅ Atualizar o repositório local
 git pull                                # Puxa as alterações do repositório remoto para sua máquina
@@ -169,7 +170,7 @@ git push -u origin main                        # Envia os arquivos locais para o
 
 
 ######################################################################################################
-#########################       📚 Módulo 1: Introdução ao Git    ####################################
+#########################       📚 Módulo 1: Introdução ao Git-Github   ##############################
 ######################################################################################################
 
 Bem-vindo ao primeiro módulo do curso! Aqui você aprenderá os conceitos básicos sobre Git, 
@@ -193,76 +194,6 @@ ponto no histórico do projeto.
 
 ---
 
-
-
-####################################################################################################
-############## 📚 Módulo 2: Tutorial Primeiros comandos com Git  ###################################
-####################################################################################################
-## 🗂 Criando Repositórios
-
-### Criando um repositório local
-Um repositório local é onde você gerencia seus arquivos com o Git diretamente no seu computador.
-
-1. **Crie uma pasta para o projeto**:
-    ```bash
-    mkdir meu-projeto
-    cd meu-projeto
-    ```
-
-2. **Inicialize o repositório Git**:
-    ```bash
-    git init
-    ```
-    Isso criará uma pasta oculta chamada `.git`, que é onde o Git armazena todas as informações do repositório.
-
-
-## 🔑 Comandos Básicos do Git
-
-### Ver o status do repositório
-O comando `git status` mostra o estado atual do repositório:
-- Quais arquivos foram modificados.
-- Quais arquivos estão prontos para serem commitados.
-
-Exemplo:
-```bash
-git status
-```
-
----
-
-### Adicionando arquivos ao "stage"
-Antes de criar um commit, você precisa adicionar os arquivos ao "stage":
-
-1. **Adicionar um arquivo específico:**
-    ```bash
-    git add nome-do-arquivo.txt
-    ```
-
-2. **Adicionar todos os arquivos modificados:**
-    ```bash
-    git add .
-    ```
-
----
-
-### Criando um commit
-Um commit é uma "foto" do estado atual do projeto. Ele registra as alterações feitas nos arquivos.
-
-1. **Criar um commit com mensagem:**
-    ```bash
-    git commit -m "Descrição das alterações"
-    ```
-
-2. **Exemplo de boa mensagem de commit:**
-    - **Ruim:** "Fix bug"
-    - **Bom:** "Corrige erro na exibição da página inicial"
-
----
-
-
-######################################################################################################
-#########################       📚 Módulo 2: Introdução ao Github    #################################
-######################################################################################################
 ## 🔥 O que é o GitHub?
 
 ### Definição
@@ -302,49 +233,66 @@ link/tutorial: https://pages.github.com/
 ---
 
 
-######################################################################################################
-############################    CLONAR REPOSITORIO GITHUB     #####################################
-######################################################################################################
-## 🌐 Clonando Repositórios
 
-Para colaborar em projetos existentes, você pode clonar repositórios remotos para sua máquina local.
 
-### Clonando um repositório do GitHub
-1. Copie a URL do repositório (disponível no botão verde **Code** no GitHub).
-2. Execute o comando:
-    ```bash
-    git clone https://github.com/usuario/repositorio.git
-    ```
-3. Isso criará uma cópia completa do repositório no seu computador.
 
----
 
-## 🔄 Sincronizando com o GitHub
 
-### Conectando um repositório local a um remoto
-1. Adicione o repositório remoto:
-    ```bash
-    git remote add origin https://github.com/usuario/repositorio.git
-    ```
-2. Nomeie o branch principal como `main` (caso ainda não esteja configurado):
-    ```bash
-    git branch -M main
-    ```
-3. Envie os arquivos para o GitHub:
-    ```bash
-    git push -u origin main
-    ```
 
----
 
-### Atualizando o repositório local com alterações remotas
-Use o comando `git pull` para buscar as alterações feitas no repositório remoto e atualizá-las no 
-repositório local:
-```bash
-git pull
-```
 
----
+####################################################################################################
+##########################    📚 Módulo 2: Tutorial  Git-github  ###################################
+####################################################################################################
+####################################################################################################
+##########################           CONFIGURANDO  GIT           ###################################
+####################################################################################################
+#PASSO 1: INSTALANDO GIT NO LINUX
+#📌 Terminal no Linux:
+sudo apt update          # Atualiza a lista de pacotes disponíveis no repositório
+sudo apt install git     # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
+clear                    # Limpa a tela
+
+#Verificar se o Git foi instalado com sucesso (termux)
+git --version              # Mostra a versão atual do Git instalada
+
+
+#PASSO 2: CONFIGURANDO O AMBIENTE
+# 📌(Obrigatório!)
+git config --global user.name "Seu Nome"            # Define seu nome de usuário global
+git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
+git config --global init.defaltBranch main          # ramificação padrao
+git config --global core.editor nano                # define o editor padrao
+git config --list                                   # lista as configurações
+ssh-keygen -t rsa -b 2048                           # criar uma chave ssh
+ls ~/.ssh/                                          # verifica se foi criada 
+cat ~/.ssh/id_rsa.pub                               # verifica o valor da cheve criada
+
+#PASSO 3: 🗂 CRIANDO A PASTA
+### Criando um repositório local para gerencia seus arquivos com o Git diretamente no seu computador.
+mkdir meu-projeto-git       # cria uma pasta com nome:meu-projeto-git 
+cd meu-projeto-git          # entra dentro da pasta meu-projeto-git 
+
+
+#PASSO 4: Inicialize o repositório Git**:
+git init                  #Isso criará uma pasta oculta chamada `.git`,  onde armazena todas informações 
+ls -a                     # verificar se a pasta git foi criada
+
+
+####################################################################################################
+##########################            CLONAR UM REPOSITORIO           ##############################
+####################################################################################################
+
+# PASSO 5: 🌐 Clonando Repositórios, 
+git clone URL-REPOSITORIO                 # Execute o comando:Isso criará uma cópia completa do repositório no seu computador.
+
+git remote add origin URL-REPOSITORIO     # 🔄 Sincronizando com o GitHub
+git branch -M main                        # Nomeie o branch principal como `main` (caso ainda não esteja configurado):
+                                       
+  
+   
+
+
 
 ## 🚨 Dicas e Boas Práticas
 
