@@ -1,27 +1,44 @@
 ######################################################################################################
-###########################   📚 GIT E GITHUB - USO COMPLETO    ######################################
+###################################  🔥  GIT E GITHUB 🔥    ###########################################
 ######################################################################################################
-
 ######################################################################################################
-#################################    🔥 Referencias 🔥    #############################################
+#############################    🔥 INSTALAÇÃO DO GIT 🔥    ##########################################
 ######################################################################################################
-✅ Instalação o Git no Terminal (linux e Termux)
 
 #📌 Terminal no Linux:
-sudo apt update                  # Atualiza a lista de pacotes disponíveis no repositório
-sudo apt install git             # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
-sudo apt install nano             # instala um editor de codigo
+sudo apt update          # Atualiza a lista de pacotes disponíveis no repositório
+sudo apt install git     # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
 
 # 📌 Terminal no Termux (Android):
-pkg update                       # Atualiza os pacotes do Termux
+pkg update && upgrade            # Atualiza os pacotes do Termux
 pkg install git                  # Instala o Git no ambiente Termux
 
-# 📌 Verificar se o Git foi instalado com sucesso
-git --version                    # Mostra a versão atual do Git instalada
-nano --version                    # Mostra a versão atual do vim instalada
-clear                            # Limpa a tela
+# 📌  No macOS:(Use o Homebrew para instalar:)
+brew install git
+
+# 📌 No Windows:
+1. Acesse o site oficial: [https://git-scm.com/](https://git-scm.com/) e baixe o instalador.
+2. Execute o instalador e siga as instruções na tela.
+3. Durante a instalação, escolha as configurações recomendadas (defaults).
+
+
+✅ Verificar se o Git foi instalado com sucesso (termux)
+git --version              # Mostra a versão atual do Git instalada
+clear                      # Limpa a tela
+
 
 ######################################################################################################
+################################     🔥 CONFIGURAÇÕES GIT 🔥    ######################################
+######################################################################################################
+### Configuração inicial do Git
+Após instalar o Git, você precisa configurá-lo com seu nome e e-mail. Isso é necessário para 
+identificar quem fez cada alteração no código.
+
+📚  Escopo de configuração
+git config  nome-do-elemento                     # escopo do projeto atual
+git config --global nome-do-elemento             # --global (escopo do ususario/global user.name)
+git config --system nome-do-elemento             # --system  (para todos os usuarios do sistema)
+
 ✅ Configurando o Git 
 # 📌(Obrigatório!)
 git config --global user.name "Seu Nome"            # Define seu nome de usuário global
@@ -31,24 +48,14 @@ git config --global core.editor nano                # define o editor padrao
 git config --list                                   # lista as configurações
 ssh-keygen -t rsa -b 2048                           # criar uma chave ssh
 ls ~/.ssh/                                          # verifica se foi criada 
-cat ~/.ssh/id_rsa.pub                               # pega o valor da cheve criada
-
-mv                  # Comando para mover arquivos ou pastas
-~/repsitori-git     # Caminho da pasta atual que será movida (repositório git localizado no diretório home do Termux)
-~/storage/downloads/  # Caminho de destino: pasta 'downloads' dentro do diretório de armazenamento compartilhado do Android
-
-git config --global                # Aplica a configuração para todos os repositórios do usuário atual
---add safe.directory               # Adiciona o diretório como seguro (safe directory)
-/storage/emulated/0/Download/repsitorio-git  # Caminho completo do repositório movido
+cat ~/.ssh/id_rsa.pub                               # verifica o valor da cheve criada
 
 
-📚  Escopo de configuração
-git config core.editor vim                      # escopo do projeto atual
-git config --global core .editor vim            # --global (escopo do ususario/global user.name)
-git config --system core .editor vim            # --system  (para todos os usuarios do sistema)
+**Parabéns!** Agora você já sabe o que é Git, GitHub e como instalar e configurar o Git no seu ambiente. 
+No próximo módulo, vamos explorar os primeiros comandos para começar a trabalhar com repositórios.
 
-
-
+######################################################################################################
+#####################################    🔥 COMANDOS 🔥    ###########################################
 ######################################################################################################
 ✅ Criar um repositório git local
 
@@ -59,12 +66,23 @@ cd nome-da-pasta            # entra na pasta (cd ../  para voltar)
 nano nome-do-arquivo        # Cria um arquivo (contr+s  e contr+x )
 git status                  # verifica o status do repositorio 
 
+mv ~/repsitori-git ~/storage/downloads/   
+# Comando para mover arquivos ou pastas
+# Caminho da pasta atual que será movida (repositório git localizado no diretório home do Termux)
+# Caminho de destino: pasta 'downloads' dentro do diretório de armazenamento compartilhado do Android
+
+git config --global --add safe.directory /storage/emulated/0/Download/repsitorio-git           
+# Aplica a configuração para todos os repositórios do usuário atual
+# Adiciona o diretório como seguro (safe directory)
+# Caminho completo do repositório movido
+
 
 ✅ Adicionar arquivos ao repositório
 git add nome-do-arquivo               # Adiciona o arquivo ao "stage", pronto para commit                     
 git add .                             # Adiciona todos os arquivo ao "stage", pronto para commit 
 git reset                             # remove os add no staged
-git commit -m "comentario"            # Cria um ponto de controle no histórico do projeto
+git commit -m "comentario"            # Cria um ponto de controle no histórico do projeto comentado
+git commit                            # vai para staged esperarar o comentario 
 git log                               # verifica todos commit (Q ... para sair)
 
 
@@ -79,8 +97,6 @@ git checkout "id do commit"           # volta no tempo e mostra como estava
 git checkout main                     # Devolta para o futuro kkkkkk
 git checkout master                   # Devolta para o futuro kkkkkk
 
-
-
 ✅ Criando uma ramificação
 git branch                             # verifica as branch que existem
 git checkout -b feature/nova_branch    # cria uma nova branch se não existem
@@ -94,32 +110,52 @@ aristidesbp@aristidesbp-V142N-4G:~/Downloads/meu-git$ git branch
 
 
 #projeto
-|-- main
-|                        
-|--feature/nova_branch
+|-- main ---------------- gi_meger------- main (com arquivos da branch)
+|                           |  
+|-- feature/nova_branch ----|
 
+######################################################################################################
+################################   🔥 COMANDOS PARA GITHUB 🔥    #####################################
+######################################################################################################
 
-  
-#####################################################################################################
-✅ Clonar um repositório existente do site
-git clone URL-do-repositorio   # Baixa o repositório para sua máquina
+✅ Para clonar um repositório existente do site
+git clone URL-do-repositorio             # Baixa o repositório para sua máquina
+git clone --depth=1 URL-do-repositorio   #Se NÃO quiser os commits anteriores, você pode usar --depth=1:
 
-
-✅ Conectar repositório local ao GitHub
-git remote add origin https://github.com/SeuUsuario/NomeDoRepositorio.git  # Substitua pela URL do seu repositório
-git branch -M main                      # Renomeia o branch padrão para 'main' (caso esteja como master)
-git push -u origin main                 # Envia os arquivos locais para o GitHub
-
+✅ Atualizar o repositório local
+git pull                                # Puxa as alterações do repositório remoto para sua máquina
 
 ✅ Ver histórico de commits
+cd diretorio-do-repositorio             # vai para pasta do repositorio
 git log                                 # Mostra o histórico detalhado dos commits
+git log --oneline                       # todos os commits do seu repositório local, incluindo os novos puxados com git pull.
+git log --graph --all                   # Exibe o gráfico de branches e commits
+git log --oneline --graph --all         # Mostra os commits visualmente
+
+✅ Conectar repositório local ao GitHub
+ssh-keygen -t rsa -b 2048               # criar uma chave ssh
+ls ~/.ssh/                              # verifica se foi criada 
+cat ~/.ssh/id_rsa.pub                   # pega o valor da cheve criada
+git remote -v                           # Verificar o remoto do repositório:
+git remote add origin URL-REPOSITORIO   # Substitua pela URL do seu repositório
+git branch -M main                      # Renomeia o branch padrão para 'main' (caso esteja como master)
+git fetch                               # Buscar commits sem aplicar (só baixar)
+git merge origin/main                   # Aplicar manualmente o que foi buscado:(trocar main por master se nome de branch)
+
+🧠 DICA BÔNUS — MANTER FORK ATUALIZADO (caso tenha feito um fork)
+Se você fez um fork e clonou o seu fork (e não o original), para atualizar com os commits do repositório original
+você precisa fazer isso:
+
+git remote add upstream url-repositorio       # Adicionar o repositório original como remoto:
+git fetch upstream                            # Buscar commits do original
+git merge upstream/main                       # Atualizar sua branch com as mudanças
+
+
 
 ✅ Criar e alternar branches
 git branch nome-da-branch               # Cria uma nova branch (ramificação)
 git checkout nome-da-branch             # Alterna para a nova branch
 
-✅ Atualizar o repositório local
-git pull                                # Puxa as alterações do repositório remoto para sua máquina
 
 ✅ Ignorar arquivos (opcional)
 touch .gitignore                          # Cria o arquivo
@@ -127,19 +163,17 @@ echo "arquivo_secreto.txt" >> .gitignore  # Adiciona o nome do arquivo que não 
 
 ✅ Trabalhando com commits futuros
 git push                                       # Envia os arquivos locais para o GitHub
-
-
-
+git push -u origin main                        # Envia os arquivos locais para o GitHub
 
 
 
 
 ######################################################################################################
-######################### 📚 Módulo 1: Introdução ao Git e GitHub ####################################
+#########################       📚 Módulo 1: Introdução ao Git    ####################################
 ######################################################################################################
 
-Bem-vindo ao primeiro módulo do curso! Aqui você aprenderá os conceitos básicos sobre Git e GitHub, 
-entenderá suas diferenças e como instalá-los e configurá-los no seu ambiente de trabalho.
+Bem-vindo ao primeiro módulo do curso! Aqui você aprenderá os conceitos básicos sobre Git, 
+entenderá como instalar e configurar no seu ambiente de trabalho.
 
 ---
 
@@ -147,7 +181,7 @@ entenderá suas diferenças e como instalá-los e configurá-los no seu ambiente
 
 ### Definição
 O Git é um sistema de controle de versão distribuído. Ele permite que você acompanhe as alterações 
-no código-fonte ao longo do tempo, facilite o trabalho em equipe e possibilite reverter a qualquer 
+no código-fonte ao longo do tempo, facilita o trabalho em equipe e possibilita reverter a qualquer 
 ponto no histórico do projeto.
 
 ### 🔥 Benefícios de usar o Git:
@@ -159,124 +193,11 @@ ponto no histórico do projeto.
 
 ---
 
-## 🔥 O que é o GitHub?
-
-### Definição
-O GitHub é uma plataforma baseada em nuvem que utiliza o Git como sistema de controle de versão.
- Ele adiciona funcionalidades sociais e colaboração, como compartilhamento de projetos, revisão 
-de código e automação de tarefas.
 
 
-### Diferença entre Git e GitHub
-| Git                                    | GitHub                                             |
-|----------------------------------------|----------------------------------------------------|
-| Sistema de controle de versão.         | Plataforma para hospedar e gerenciar projetos Git. |
-| Funciona localmente no seu computador. | Funciona online, permitindo colaboração.           |
-| Não possui interface gráfica.          | Possui interface gráfica e ferramentas adicionais. |
-
-
-### Recursos do GitHub
-- **Issues**: Gerenciamento de tarefas e bugs.
-- **Pull Requests (PRs)**: Solicitações de alteração no código com revisão integrada.
-- **GitHub Actions**: Automação de fluxos de trabalho, como testes e implantações.
-- **GitHub Pages**: Hospedagem gratuita de sites estáticos.
-- **Segurança**: Análises de vulnerabilidades e proteção de branches.
-
-
-✅ Criar uma conta e um repositório no GitHub
-   1- Acesse https://github.com
-   2- Crie uma conta no site!
-   3- Crie um novo repositório clicando na sua foto / your repositositories / new.
-   4- Dê um nome, marque como público ou privado, e clique em Create Repository
-
-obs: caso queira hospedar paginas no github, o nome do repositorio deve ser igual ao nome do seu usuario.
-exemplo:  aristidesbp.github.io , marque como público, adicione licensa e redmi.
-link/tutorial: https://pages.github.com/
-
-
----
-**Parabéns!** Agora você pode começar a trabalhar com repositórios editando arquivos diretamente no site.
----
-
-
-
-✅ Instalar o Git no Terminal (Termux ou Linux)
-
-#📌 Terminal no Linux:
-sudo apt update          # Atualiza a lista de pacotes disponíveis no repositório
-sudo apt install git     # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
-
-# 📌 Terminal no Termux (Android):
-pkg update                       # Atualiza os pacotes do Termux
-pkg install git                  # Instala o Git no ambiente Termux
-
-
-
-## 💻 Instalação e Configuração do Git
-
-### Como instalar o Git
-
-#### No Windows:
-1. Acesse o site oficial: [https://git-scm.com/](https://git-scm.com/) e baixe o instalador.
-2. Execute o instalador e siga as instruções na tela.
-3. Durante a instalação, escolha as configurações recomendadas (defaults).
-
-#### No macOS:
-- Use o Homebrew para instalar:
-  ```bash
-  brew install git
-  ```
-
-#### No Linux (Debian/Ubuntu):
-- Execute os comandos:
-  ```bash
-  sudo apt update
-  sudo apt install git
-  ```
-
-#### No Termux (Android):
-- Execute os comandos:
-  ```bash
-  pkg update
-  pkg install git
-  ```
-
-
-✅ Verificar se o Git foi instalado com sucesso (termux)
-git --version       # Mostra a versão atual do Git instalada
-
-
-
-### Configuração inicial do Git
-Após instalar o Git, você precisa configurá-lo com seu nome e e-mail. Isso é necessário para 
-identificar quem fez cada alteração no código.
-
-✅ Configurar Git com seu nome e e-mail (Obrigatório!)
-git config --global user.name "Seu Nome"            # Define seu nome de usuário global
-git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
-git config --global init.defaltBranch main          # ramificação padrao
-```
-
-#### Confirmando a configuração:
-Verifique se as configurações foram aplicadas corretamente:
-git config --list 
-
-
-**Parabéns!** Agora você já sabe o que é Git, GitHub e como instalar e configurar o Git no seu ambiente. 
-No próximo módulo, vamos explorar os primeiros comandos para começar a trabalhar com repositórios.
-
-
-
-
-######################################################################################################
-######################### 📚 Módulo 2: Primeiros Passos com Git  #####################################
-######################################################################################################
-
-Neste módulo, você aprenderá como criar, clonar e trabalhar com repositórios Git, além de entender os 
-comandos básicos necessários para começar a gerenciar seus projetos.
-
----
-
+####################################################################################################
+############## 📚 Módulo 2: Tutorial Primeiros comandos com Git  ###################################
+####################################################################################################
 ## 🗂 Criando Repositórios
 
 ### Criando um repositório local
@@ -294,15 +215,6 @@ Um repositório local é onde você gerencia seus arquivos com o Git diretamente
     ```
     Isso criará uma pasta oculta chamada `.git`, que é onde o Git armazena todas as informações do repositório.
 
----
-
-### Criando um repositório remoto no GitHub
-1. Acesse [https://github.com](https://github.com).
-2. Clique no botão **New Repository**.
-3. Preencha o nome do repositório, escolha se ele será público ou privado e clique em **Create Repository**.
-4. Você verá instruções para conectar seu repositório local ao remoto.
-
----
 
 ## 🔑 Comandos Básicos do Git
 
@@ -347,6 +259,52 @@ Um commit é uma "foto" do estado atual do projeto. Ele registra as alterações
 
 ---
 
+
+######################################################################################################
+#########################       📚 Módulo 2: Introdução ao Github    #################################
+######################################################################################################
+## 🔥 O que é o GitHub?
+
+### Definição
+O GitHub é uma plataforma baseada em nuvem que utiliza o Git como sistema de controle de versão.
+ Ele adiciona funcionalidades sociais e colaboração, como compartilhamento de projetos, revisão 
+de código e automação de tarefas.
+
+
+### Diferença entre Git e GitHub
+| Git                                    | GitHub                                             |
+|----------------------------------------|----------------------------------------------------|
+| Sistema de controle de versão.         | Plataforma para hospedar e gerenciar projetos Git. |
+| Funciona localmente no seu computador. | Funciona online, permitindo colaboração.           |
+| Não possui interface gráfica.          | Possui interface gráfica e ferramentas adicionais. |
+
+
+### Recursos do GitHub
+- **Issues**: Gerenciamento de tarefas e bugs.
+- **Pull Requests (PRs)**: Solicitações de alteração no código com revisão integrada.
+- **GitHub Actions**: Automação de fluxos de trabalho, como testes e implantações.
+- **GitHub Pages**: Hospedagem gratuita de sites estáticos.
+- **Segurança**: Análises de vulnerabilidades e proteção de branches.
+
+✅ Criar uma conta e um repositório no GitHub
+   1- Acesse https://github.com
+   2- Crie uma conta no site!
+   3- Crie um novo repositório clicando na sua foto / your repositositories / new.
+   4- Dê um nome, marque como público ou privado, e clique em Create Repository
+
+obs: caso queira hospedar paginas no github, o nome do repositorio deve ser igual ao nome do seu usuario.
+exemplo:  aristidesbp.github.io , marque como público, adicione licensa e redmi.
+link/tutorial: https://pages.github.com/
+
+
+---
+**Parabéns!** Agora você pode começar a trabalhar com repositórios editando arquivos diretamente no site.
+---
+
+
+######################################################################################################
+############################    CLONAR REPOSITORIO GITHUB     #####################################
+######################################################################################################
 ## 🌐 Clonando Repositórios
 
 Para colaborar em projetos existentes, você pode clonar repositórios remotos para sua máquina local.
@@ -399,8 +357,6 @@ git pull
 **Parabéns!** Agora você sabe como criar repositórios, usar comandos básicos do Git e sincronizar seu 
 trabalho com o GitHub. No próximo módulo, aprenderemos como gerenciar arquivos e explorar o histórico
 de commits.
-
-
 
 
 
@@ -586,6 +542,7 @@ O arquivo `.gitignore` é usado para informar ao Git quais arquivos ou pastas de
 **Parabéns!** Agora você sabe como gerenciar arquivos, trabalhar com o histórico de commits, 
 reverter alterações e configurar um `.gitignore`. No próximo módulo, exploraremos o uso de 
 branches e fluxos de trabalho no Git.
+
 
 ######################################################################################################
 ######################    🌱 Módulo 4: Branches e Fluxos de Trabalho    ##############################
