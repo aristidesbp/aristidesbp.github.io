@@ -39,23 +39,33 @@ git config  nome-do-elemento                     # escopo do projeto atual
 git config --global nome-do-elemento             # --global (escopo do ususario/global user.name)
 git config --system nome-do-elemento             # --system  (para todos os usuarios do sistema)
 
-✅ Configurando o Git 
-# 📌(Obrigatório!)
+# ✅ verificar 
+# 📌 solução
 
-git status                                           # verifica status da aplicação
-git config --list                                    # verifica lista as configurações
+# ✅ verificar status da aplicação:
+git status   
+
+# 📌 solução caso a verificação falhar, esse comando diz que é seguro operar nesse diretório.
+git config --global --add safe.directory /storage/emulated/0/Download/aristidesbp.github.io-main
+
+# ✅ verificar lista as configurações
+git config --list                                    
+
+# 📌 solução
+git config --global user.name "Seu Nome"            # Define seu nome de usuário global
+git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
+git config --global init.defaltBranch main           # ramificação padrao
+git config --global core.editor nano                 # define o editor padrao
+
+# ✅ verificar se a chave SSH foi criada
 ls ~/.ssh/                                           # verifica se foi criada 
 cat ~/.ssh/id_rsa.pub                                # verifica o valor da cheve criada
 
-
-git config --global user.name "Seu Nome"            # Define seu nome de usuário global
-git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
-
-git config --global init.defaltBranch main           # ramificação padrao
-git config --global core.editor nano                 # define o editor padrao
-git config --global --add safe.directory /storage..  # avisa que a pasta é segura para o git
-
+# 📌 solução
 ssh-keygen -t rsa -b 2048                            # criar uma chave ssh
+
+
+
 
 
 **Parabéns!** Agora você já sabe o que é Git, GitHub e como instalar e configurar o Git no seu ambiente. 
