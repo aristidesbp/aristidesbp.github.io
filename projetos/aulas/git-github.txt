@@ -4,6 +4,12 @@
 ######################################################################################################
 #############################    🔥 INSTALAÇÃO DO GIT 🔥    ##########################################
 ######################################################################################################
+# ✅ verificar 
+# 📌 solução
+
+✅ Verificar se o Git foi instalado com sucesso (termux)
+git --version              # Mostra a versão atual do Git instalada
+clear                      # Limpa a tela
 
 #📌 Terminal no Linux:
 sudo apt update          # Atualiza a lista de pacotes disponíveis no repositório
