@@ -48,6 +48,12 @@ git config --system nome-do-elemento             # --system  (para todos os usua
 # ✅ verificar 
 # 📌 solução
 
+# ✅ verificar você tem a pasta git, usada para guardar as configurações
+ls -a
+
+# 📌 solução caso não tenha você pode criar comando
+git init
+
 # ✅ verificar status da aplicação:
 git status   
 
@@ -71,6 +77,10 @@ cat ~/.ssh/id_rsa.pub                                # verifica o valor da cheve
 ssh-keygen -t rsa -b 2048                            # criar uma chave ssh
 
 
+📝 DICA:
+#  Use "git status" constantemente para saber o que mudou, o que está pronto para commit,
+e o que ainda não foi salvo.
+# Use "git diff" para ver diferenças entre arquivos modificados e os últimos commits.
 
 
 
