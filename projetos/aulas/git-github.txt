@@ -41,14 +41,21 @@ git config --system nome-do-elemento             # --system  (para todos os usua
 
 ✅ Configurando o Git 
 # 📌(Obrigatório!)
+
+git status                                           # verifica status da aplicação
+git config --list                                    # verifica lista as configurações
+ls ~/.ssh/                                           # verifica se foi criada 
+cat ~/.ssh/id_rsa.pub                                # verifica o valor da cheve criada
+
+
 git config --global user.name "Seu Nome"            # Define seu nome de usuário global
 git config --global user.email "email@exemplo.com"  # Define seu e-mail usado no GitHub
-git config --global init.defaltBranch main          # ramificação padrao
-git config --global core.editor nano                # define o editor padrao
-git config --list                                   # lista as configurações
-ssh-keygen -t rsa -b 2048                           # criar uma chave ssh
-ls ~/.ssh/                                          # verifica se foi criada 
-cat ~/.ssh/id_rsa.pub                               # verifica o valor da cheve criada
+
+git config --global init.defaltBranch main           # ramificação padrao
+git config --global core.editor nano                 # define o editor padrao
+git config --global --add safe.directory /storage..  # avisa que a pasta é segura para o git
+
+ssh-keygen -t rsa -b 2048                            # criar uma chave ssh
 
 
 **Parabéns!** Agora você já sabe o que é Git, GitHub e como instalar e configurar o Git no seu ambiente. 
