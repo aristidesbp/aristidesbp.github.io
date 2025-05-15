@@ -90,13 +90,19 @@ No próximo módulo, vamos explorar os primeiros comandos para começar a trabal
 ######################################################################################################
 #####################################    🔥 COMANDOS 🔥    ###########################################
 ######################################################################################################
-✅ Criar um repositório git local
-
-git init                    # Inicializa um novo repositório Git local (vai criar a pasta oculta .git)
+# 📚 Criando uma nova pasta no repositório git local
+# ✅ verificar nome das pastas existentes
 ls -a                       # lista repositorios criados (ate os ocultos)
+# 📌 solução
 mkdir nome-da-pasta         # Cria uma nova pasta para seu projeto
+
+# 📚 Criando um arquivo dentro da nova pasta 
+# ✅ entre na pasta criada 
 cd nome-da-pasta            # entra na pasta (cd ../  para voltar)
+# 📌 solução
 nano nome-do-arquivo        # Cria um arquivo (contr+s  e contr+x )
+
+# ✅ verifique o status da pasta no Git
 git status                  # verifica o status do repositorio 
 
 mv ~/repsitori-git ~/storage/downloads/   
