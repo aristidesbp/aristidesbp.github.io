@@ -5,7 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aristides Barbosa Pontes - Portfólio</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-  <style>
+</head>
+<body>
+ <!-- ############################################## html ######################################################### -->
+  <div class="animated-bg"></div>
+  <!-- MUSIC NAVBAR -->
+  <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <nav id="music-controls-navbar">
+    <div class="music-controls-content">
+      <div class="music-controls-row">
+
+        <!-- Play/Pause e Volume -->
+        <button id="bgMusicBtn" title="Play/Pause">🎵</button>
+        <button id="vol-down" title="Diminuir volume">➖</button>
+        <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
+        <button id="vol-up" title="Aumentar volume">➕</button>
+
+        <!-- Lista suspensa + Tema (lado a lado) -->
+        <select id="music-select" title="Escolha a trilha">
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8</option>
+          <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>
+          <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>
+          <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>
+        </select>
+
+        <!-- Botão TEMA -->
+        <button class="theme-btn music-controls-theme-btn" id="themeSwitch" type="button" aria-label="Alternar tema">
+          <span id="themeIcon">🌞</span>
+        </button>
+
+        <!-- Checkbox repetir -->
+        <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">
+        <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>
+      </div>
+      <div class="music-controls-row" style="margin-top:2px;">
+        <span id="music-current">0:00</span>
+        <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">
+        <span id="music-duration">0:00</span>
+      </div>
+    </div>
+  </nav>
+  <div class="navbar-spacer"></div>
+  <div class="container animated-container">
+      <h1>Bem-vindo ao Meu Portfólio!</h1>
+      <p>Obrigado por visitar meu portfólio. Aqui estão alguns dos meus projetos mais recentes:</p>
+      <h2 class="underline">PROJETOS</h2>
+      <ul class="links">
+          <li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">portifólio/Sobre Aristides</a></li>
+          <li><a href="projetos/tarefas/index.html" target="_blank">App lista de tarefas</a></li>
+          <li><a href="projetos/radio" target="_blank">RadioAbp</a></li>
+          <li><a href="projetos/aulas" target="_blank">Material de estudo .txt</a></li>
+      </ul>
+<div class="footer-links">
+            <a href="https://github.com/aristidesbp" class="github" target="_blank" rel="noopener">
+              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub"> GitHub
+            </a>
+            <a href="https://www.w3schools.com/" class="w3" target="_blank" rel="noopener">
+              <img src="https://www.w3schools.com/favicon.ico" alt="W3Schools"> W3Schools
+            </a>
+            <a href="https://developer.mozilla.org/" class="mdn" target="_blank" rel="noopener">
+              <img src="https://developer.mozilla.org/favicon-48x48.cbbd161b.png" alt="MDN Web Docs"> MDN Web Docs
+            </a>
+            <a href="https://www.freecodecamp.org/" class="fcc" target="_blank" rel="noopener">
+              <img src="https://www.freecodecamp.org/favicon-32x32.png" alt="freeCodeCamp"> freeCodeCamp
+            </a>
+          </div>
+
+      <footer>
+
+          <p>&copy; 2025 - Todos os direitos reservados</p>
+      </footer>
+
+
+  </div>
+ <!-- ############################################ css ########################################################### -->
+<style>
     :root {
       --primary: #007BFF;
       --secondary: #6c757d;
@@ -15,8 +97,6 @@
       --container-dark: #232b3e;
       --text-main-light: #1a202c;
       --text-main-dark: #e2e8f0;
-      --text-secondary-light: #444;
-      --text-secondary-dark: #b0b9c8;
       --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.08);
       --shadow-dark: 0 8px 32px #0006;
       --accent: #e0c3fc;
@@ -57,12 +137,8 @@
     /* MUSIC NAVBAR */
     #music-controls-navbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
+      top: 0; left: 0; right: 0; z-index: 200;
       width: 100vw;
-      min-width: 0;
       background: var(--container-light);
       color: var(--text-main-light);
       box-shadow: 0 2px 16px #0002;
@@ -81,12 +157,18 @@
     .music-controls-content {
       width: 100%;
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 7px;
-      padding: 8px 18px 8px 18px;
+      flex-direction: column;
+      gap: 2px;
+      padding: 6px 8px 5px 8px;
       box-sizing: border-box;
-      justify-content: flex-start;
+      align-items: stretch;
+    }
+    .music-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     /* Botões e Select */
     #music-controls-navbar button, #music-controls-navbar select {
@@ -98,29 +180,37 @@
       color: var(--primary);
       border-radius: 8px;
       font-weight: bold;
-      padding: 7px 14px;
-      margin: 0 2px;
+      padding: 6px 12px;
+      margin: 0 1px;
       cursor: pointer;
       box-shadow: 0 2px 8px #0001;
       transition: background 0.2s, color 0.2s;
-      font-size: 1rem;
-      display: flex; align-items: center; gap: 4px;
+      font-size: 1.1em;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .music-controls-theme-btn {
+      padding: 6px 10px!important;
+      box-shadow: none!important;
+      background: transparent!important;
+      color: var(--primary)!important;
     }
     body.dark #music-controls-navbar button {
       background: #373d4c;
       color: #ffd700;
     }
+    body.dark .music-controls-theme-btn {
+      color: #ffd700!important;
+    }
     #music-controls-navbar select {
       background: #fff7;
       border: 1px solid #bbb;
       border-radius: 8px;
-      padding: 7px 8px;
+      padding: 5px 6px;
       font-weight: bold;
       cursor: pointer;
-      min-width:120px;
-      margin-left: 4px;
-      margin-right: 4px;
-      font-size: 1rem;
+      min-width: 88px;
+      font-size: 0.98em;
+      margin-right: 1px;
     }
     body.dark #music-controls-navbar select {
       background: #232b3e;
@@ -128,75 +218,65 @@
       border: 1px solid #555;
     }
     #music-controls-navbar label {
-      font-size: 13px;
+      font-size: 0.95em;
       margin-right: 2px;
       white-space: nowrap;
+      color: inherit;
     }
     /* Barra de progresso */
     #music-progress[type=range] {
       accent-color: var(--primary);
-      height: 7px;
+      height: 6px;
       background: #e0e7ef;
       border-radius: 7px;
       outline: none;
       margin: 0 2px;
-      min-width: 60px;
-      flex: 1 1 80px;
+      min-width: 40px;
+      flex: 1 1 50px;
+      max-width: 130px;
     }
     #music-progress[type=range]::-webkit-slider-thumb {
       background: var(--primary);
       border-radius: 50%;
-      width: 13px;
-      height: 13px;
+      width: 11px;
+      height: 11px;
       cursor: pointer;
     }
+    #music-current, #music-duration {
+      font-size: 0.93em;
+      width: 30px;
+      text-align: center;
+      color: inherit;
+    }
     /* Responsivo */
-    @media (max-width: 800px) {
-      #music-controls-navbar {
-        font-size: 0.97rem;
-      }
-      .music-controls-content {
-        padding: 6px 2vw 6px 2vw;
-        gap: 5px;
-      }
-      #music-controls-navbar select {
-        min-width: 0;
-        font-size: 0.97rem;
-      }
-      #music-controls-navbar button {
-        font-size: 0.97rem;
-        padding: 7px 10px;
-      }
+    @media (max-width: 700px) {
+      .music-controls-content { padding: 7px 2vw 5px 2vw; gap: 2px; }
     }
     @media (max-width: 600px) {
-      .music-controls-content {
-        flex-wrap: wrap;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 7px;
-      }
-      #music-controls-navbar {
-        border-radius: 0 0 5vw 5vw;
-      }
+      #music-controls-navbar { font-size: 0.97rem; }
+      .music-controls-row { gap: 2px; }
+      #music-controls-navbar select { min-width: 0; }
+      #music-progress[type=range] { min-width: 30px; max-width: 85px; }
+      #music-current, #music-duration { width: 25px; }
     }
-    /* Espaço para o navbar */
+    @media (max-width: 440px) {
+      .music-controls-content { padding: 4px 1vw 3px 1vw; }
+      .music-controls-row { gap: 1px;}
+      #music-progress[type=range] { min-width: 12px; max-width: 55px;}
+      #music-current, #music-duration { width: 18px; font-size:0.88em; }
+    }
     .navbar-spacer {
-      height: 66px;
+      height: 70px;
     }
-    @media (max-width: 800px) {
-      .navbar-spacer { height: 93px; }
-    }
-    @media (max-width: 600px) {
-      .navbar-spacer { height: 140px; }
-    }
-    /* Resto do portfólio */
+    @media (max-width: 700px) { .navbar-spacer{height:97px;} }
+    @media (max-width: 600px) { .navbar-spacer{height:124px;} }
     .container {
       position: relative;
       z-index: 2;
       background: var(--container-light);
       border-radius: 16px;
       box-shadow: var(--shadow-light);
-      padding: 38px 32px 28px 32px;
+      padding: 38px 8vw 28px 8vw;
       width: 90%;
       max-width: 620px;
       margin: 48px auto 24px auto;
@@ -246,15 +326,13 @@
       100% { width: 90px; }
     }
     p {
-      color: var(--text-secondary-light);
+      color: #444;
       font-size: 1.08rem;
       margin-bottom: 28px;
       line-height: 1.5;
       transition: color 0.2s;
     }
-    body.dark p {
-      color: var(--text-secondary-dark);
-    }
+    body.dark p { color: #b0b9c8;}
     .links {
       list-style: none;
       padding: 0;
@@ -263,9 +341,7 @@
       gap: 16px;
       align-items: center;
     }
-    .links li {
-      margin: 0;
-    }
+    .links li { margin: 0; }
     .links a {
       display: inline-block;
       text-decoration: none;
@@ -291,9 +367,7 @@
       transition: left 0.35s;
       z-index: 0;
     }
-    .links a:hover::before {
-      left: 110%;
-    }
+    .links a:hover::before { left: 110%; }
     .links a:hover {
       background: linear-gradient(90deg, var(--primary) 0%, #e0c3fc 100%);
       color: #fff;
@@ -311,110 +385,53 @@
     }
     footer {
       margin-top: 44px;
-      color: var(--text-secondary-light);
+      color: #444;
       font-size: 0.98rem;
       letter-spacing: 1px;
       opacity: 0.85;
       text-shadow: 0 1px 2px #e0c3fc22;
       transition: color 0.2s;
     }
-    body.dark footer {
-      color: var(--text-secondary-dark);
-      text-shadow: 0 1px 2px #232b3e44;
+    body.dark footer { color: #b0b9c8; text-shadow: 0 1px 2px #232b3e44;}
+    /* Footer links */
+    .footer-links {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+    .footer-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+    }
+    .footer-links a.github { color: #007BFF; }
+    .footer-links a.w3 { color: #04AA6D; }
+    .footer-links a.mdn { color: #212121; }
+    .footer-links a.fcc { color: #006400; }
+    .footer-links img {
+      width: 20px; height: 20px; vertical-align:middle;
+      border-radius: 4px;
     }
   </style>
-</head>
-<body>
-  <div class="animated-bg"></div>
-  <!-- MUSIC NAVBAR -->
-  <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
-  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-  <nav id="music-controls-navbar">
-    <div class="music-controls-content">
-      <!-- Play/Pause e Volume -->
-      <button id="bgMusicBtn">🔊 Música</button>
-      <button id="vol-down">➖</button>
-      <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" style="vertical-align:middle;">
-      <button id="vol-up">➕</button>
-      <!-- Lista suspensa + Tema (lado a lado) -->
-      <label for="music-select">Trilha:</label>
-      <select id="music-select">
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7 - SoundHelix</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8 - SoundHelix</option>
-        <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>
-        <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>
-        <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>
-      </select>
-      <!-- Botão TEMA -->
-      <button class="theme-btn" id="themeSwitch" type="button" aria-label="Alternar tema" style="position:static;left:auto;top:auto;box-shadow:none;padding:7px 15px;">
-        <span id="themeIcon">🌞</span>
-        <span id="themeText">Claro</span>
-      </button>
-      <!-- Checkbox repetir -->
-      <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;">
-      <label for="repeatMusic" style="font-size:13px;cursor:pointer;">Repetir</label>
-      <!-- Barra de progresso -->
-      <span id="music-current" style="font-size:11px;width:36px;display:inline-block;text-align:right;">0:00</span>
-      <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01">
-      <span id="music-duration" style="font-size:11px;width:36px;display:inline-block;text-align:left;">0:00</span>
-    </div>
-  </nav>
-  <div class="navbar-spacer"></div>
-
-  <div class="container animated-container">
-      <h1>Bem-vindo ao Meu Portfólio!</h1>
-      <p>Obrigado por visitar meu portfólio. Aqui estão alguns dos meus projetos mais recentes:</p>
-      <h2 class="underline">PROJETOS</h2>
-      <ul class="links">
-          <li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">portifólio/Sobre Aristides</a></li>
-          <li><a href="projetos/tarefas/index.html" target="_blank">App lista de tarefas</a></li>
-          <li><a href="projetos/radio" target="_blank">RadioAbp</a></li>
-        <li><a href="projetos/aulas" target="_blank">Material de estudo .txt</a></li>
-        <li><a href="https://github.com/copilot" target="_blank">Copilot</a></li>
-      
-      </ul>
-
-    <footer>
-          <p>&copy; 2025 - Todos os direitos reservados</p>
-          <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:center;">
-            <a href="https://github.com/aristidesbp" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:#007BFF;font-weight:bold;">
-              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" style="width:20px;height:20px;vertical-align:middle;"> GitHub
-            </a>
-            <a href="https://www.w3schools.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:#04AA6D;font-weight:bold;">
-              <img src="https://www.w3schools.com/favicon.ico" alt="W3Schools" style="width:20px;height:20px;vertical-align:middle;"> W3Schools
-            </a>
-            <a href="https://developer.mozilla.org/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:#212121;font-weight:bold;">
-              <img src="https://developer.mozilla.org/favicon-48x48.cbbd161b.png" alt="MDN Web Docs" style="width:20px;height:20px;vertical-align:middle;"> MDN Web Docs
-            </a>
-            <a href="https://www.freecodecamp.org/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:#006400;font-weight:bold;">
-              <img src="https://www.freecodecamp.org/favicon-32x32.png" alt="freeCodeCamp" style="width:20px;height:20px;vertical-align:middle;"> freeCodeCamp
-            </a>
-          </div>
-      </footer>
-      
-
-  </div>
+ <!-- #########################################  js  ############################################################## -->
   <script>
     // Tema claro/escuro com localStorage
     const themeBtn = document.getElementById('themeSwitch');
     const themeIcon = document.getElementById('themeIcon');
-    const themeText = document.getElementById('themeText');
     function setTheme(dark) {
       if(dark) {
         document.body.classList.add('dark');
         themeIcon.textContent = "🌙";
-        themeText.textContent = "Escuro";
         localStorage.setItem('theme','dark');
       } else {
         document.body.classList.remove('dark');
         themeIcon.textContent = "🌞";
-        themeText.textContent = "Claro";
         localStorage.setItem('theme','light');
       }
     }
@@ -431,7 +448,6 @@
 
     // Painel de música
     document.addEventListener('DOMContentLoaded', function () {
-        // Mostra painel de música ao carregar
         document.getElementById('music-controls-navbar').style.display = 'block';
 
         const bgMusic = document.getElementById('bgMusic');
@@ -449,26 +465,26 @@
 
         bgMusic.volume = parseFloat(volSlider.value);
         bgMusic.loop = false;
-        bgMusicBtn.textContent = '🔊 Música';
+        bgMusicBtn.title = 'Play/Pause';
 
         bgMusicBtn.onclick = function () {
             if (bgMusic.paused) {
                 bgMusic.play().catch(()=>{});
-                bgMusicBtn.textContent = '🔊 Música';
+                bgMusicBtn.textContent = '🔊';
             } else {
                 bgMusic.pause();
-                bgMusicBtn.textContent = '🔈 Música';
+                bgMusicBtn.textContent = '🎵';
             }
         };
         function updateVolumeDisplay() {
             volSlider.value = bgMusic.volume;
         }
         volDown.onclick = function () {
-            bgMusic.volume = Math.max(0, bgMusic.volume - 0.05);
+            bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);
             updateVolumeDisplay();
         };
         volUp.onclick = function () {
-            bgMusic.volume = Math.min(1, bgMusic.volume + 0.05);
+            bgMusic.volume = Math.min(1, bgMusic.volume + 0.08);
             updateVolumeDisplay();
         };
         volSlider.oninput = function () {
@@ -481,9 +497,9 @@
             bgMusic.currentTime = 0;
             if (wasPlaying) {
                 bgMusic.play().catch(()=>{});
-                bgMusicBtn.textContent = '🔊 Música';
+                bgMusicBtn.textContent = '🔊';
             } else {
-                bgMusicBtn.textContent = '🔈 Música';
+                bgMusicBtn.textContent = '🎵';
             }
         };
         // Barra de progresso
@@ -508,7 +524,7 @@
             if (repeatMusic.checked) {
                 bgMusic.currentTime = 0;
                 bgMusic.play().catch(()=>{});
-                bgMusicBtn.textContent = '🔊 Música';
+                bgMusicBtn.textContent = '🔊';
             } else {
                 let idx = musicList.indexOf(musicSelect.value);
                 let next = (idx + 1) % musicList.length;
@@ -516,7 +532,7 @@
                 bgMusic.src = musicList[next];
                 bgMusic.currentTime = 0;
                 bgMusic.play().catch(()=>{});
-                bgMusicBtn.textContent = '🔊 Música';
+                bgMusicBtn.textContent = '🔊';
             }
         });
         musicProgress.addEventListener('input', function() {
@@ -525,7 +541,7 @@
             }
         });
         musicSelect.addEventListener('change', function() {
-            setTimeout(updateProgress, 500);
+            setTimeout(updateProgress, 400);
         });
         repeatMusic.addEventListener('change', function () {
             bgMusic.loop = repeatMusic.checked;
