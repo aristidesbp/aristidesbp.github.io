@@ -5,6 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FICHA DE ANAMINESE PISICOPEDAGÓGICA</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  
+</head>
+<body>
+  <div class="container">
+    <h1>FICHA DE ANAMINESE PISICOPEDAGÓGICA</h1>
+    <div class="descricao">
+      Este formulário tem o objetivo de conhecer melhor a história, o desenvolvimento e as dificuldades enfrentadas pelo(a) paciente atendido(a). As informações aqui registradas são confidenciais e fundamentais para uma avaliação pisicopedagógica cuidadosa e personalizada.
+    </div>
+    <div class="aviso">
+      ATENÇÃO: Todos os dados preenchidos neste formulário serão armazenados apenas no seu próprio navegador (<b>localStorage</b>). Nenhuma informação será enviada ou acessada por terceiros, inclusive por nós desenvolvedores. Se desejar compartilhar, você poderá baixar o arquivo e encaminhar apenas para quem desejar. Mantenha sua privacidade!
+    </div>
+    <form id="ficha-form" autocomplete="off">
+      <div class="section-title">Cadastro de Pessoas</div>
+      <div class="field-group">
+        <div id="pessoas-list"></div>
+        <button type="button" class="add-pessoa-btn" id="add-pessoa-btn">Adicionar Pessoa</button>
+      </div>
+      <button type="submit" id="submit-btn">Salvar ficha</button>
+    </form>
+    <div class="file-actions">
+      <button id="download-btn">Baixar Dados</button>
+      <label for="import-file" style="margin:0;">Importar Dados
+        <input type="file" id="import-file" accept=".json" />
+      </label>
+      <button id="print-btn" type="button" style="background:#ffb300; color:#222;">Imprimir ficha</button>
+    </div>
+    <ul id="ficha-list"></ul>
+  </div>
+
   <style>
     :root {
       --primary: #2e7dff;
@@ -338,33 +367,6 @@
       .file-actions { flex-direction: column; gap: 8px; }
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>FICHA DE ANAMINESE PISICOPEDAGÓGICA</h1>
-    <div class="descricao">
-      Este formulário tem o objetivo de conhecer melhor a história, o desenvolvimento e as dificuldades enfrentadas pelo(a) paciente atendido(a). As informações aqui registradas são confidenciais e fundamentais para uma avaliação pisicopedagógica cuidadosa e personalizada.
-    </div>
-    <div class="aviso">
-      ATENÇÃO: Todos os dados preenchidos neste formulário serão armazenados apenas no seu próprio navegador (<b>localStorage</b>). Nenhuma informação será enviada ou acessada por terceiros, inclusive por nós desenvolvedores. Se desejar compartilhar, você poderá baixar o arquivo e encaminhar apenas para quem desejar. Mantenha sua privacidade!
-    </div>
-    <form id="ficha-form" autocomplete="off">
-      <div class="section-title">Cadastro de Pessoas</div>
-      <div class="field-group">
-        <div id="pessoas-list"></div>
-        <button type="button" class="add-pessoa-btn" id="add-pessoa-btn">Adicionar Pessoa</button>
-      </div>
-      <button type="submit" id="submit-btn">Salvar ficha</button>
-    </form>
-    <div class="file-actions">
-      <button id="download-btn">Baixar Dados</button>
-      <label for="import-file" style="margin:0;">Importar Dados
-        <input type="file" id="import-file" accept=".json" />
-      </label>
-      <button id="print-btn" type="button" style="background:#ffb300; color:#222;">Imprimir ficha</button>
-    </div>
-    <ul id="ficha-list"></ul>
-  </div>
   <script>
     // Definições de campos por classificação
     const CLASSIFICACAO_CAMPOS = {
