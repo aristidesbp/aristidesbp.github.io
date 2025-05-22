@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FICHA DE ANAMINESE PISICOPEDAGÓGICA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2e7dff;
+      --primary-dark: #1756b3;
+      --accent: #ffb300;
+      --bg: #f4f7fa;
+      --card: #fff;
+      --border: #e3e8ee;
+      --text: #283548;
+      --text-light: #5a6c88;
+      --danger: #e53935;
+      --danger-light: #ffeaea;
+      --success: #43a047;
+      --input: #ecf1f8;
+      --radius: 10px;
+      --shadow: 0 3px 16px #0001;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      background: var(--card);
+      margin: 40px auto;
+      max-width: 860px;
+      padding: 40px 32px 32px 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s;
+    }
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+      letter-spacing: 0.01em;
+      font-weight: 700;
+    }
+    .descricao {
+      color: var(--text-light);
+      margin-bottom: 24px;
+      font-size: 1.08em;
+      text-align: justify;
+      background: var(--input);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 18px 12px 18px;
+    }
+    .aviso {
+      color: var(--danger);
+      font-weight: 500;
+      margin-bottom: 22px;
+      font-size: 1em;
+      border-left: 5px solid var(--danger);
+      padding-left: 14px;
+      background: var(--danger-light);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .section-title {
+      font-weight: 700;
+      margin-top: 26px;
+      margin-bottom: 12px;
+      color: var(--primary-dark);
+      font-size: 1.16em;
+      letter-spacing: 0.01em;
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 5px;
+      width: 100%;
+    }
+    .field-inline {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+    }
+    label {
+      font-weight: 500;
+      margin-bottom: 2px;
+      color: var(--text);
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      font-size: 1em;
+      display: block;
+    }
+    input[type="text"], input[type="date"], input[type="number"], input[type="tel"], select {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1em;
+      background: var(--input);
+      color: var(--text);
+      transition: border .2s, background .2s;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+    }
+    input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, input[type="tel"]:focus, select:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+    .radio-group, .checkbox-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+    .radio-group label, .checkbox-group label {
+      display: flex;
+      align-items: center;
+      font-weight: 400;
+      color: var(--text-light);
+      margin: 0;
+      font-size: 1em;
+      white-space: nowrap;
+    }
+    .radio-group input[type="radio"], .checkbox-group input[type="checkbox"] {
+      margin-right: 6px;
+      accent-color: var(--primary);
+    }
+    .pessoas-list-container {
+      margin-bottom: 12px;
+      margin-left: 0;
+      margin-right: 0;
+      padding: 18px 14px 10px 14px;
+      background: #f7faff;
+      border-radius: var(--radius);
+      border: 1px solid #dde3ea;
+      box-shadow: 0 1px 8px #0002;
+      position: relative;
+      transition: box-shadow .2s;
+    }
+    .pessoa-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+    .pessoa-fields > div {
+      min-width: 140px;
+      width: 100%;
+    }
+    .remove-pessoa-btn {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      padding: 5px 11px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.98em;
+      margin-left: 10px;
+      margin-bottom: 4px;
+      transition: background .2s;
+      position: absolute;
+      top: 8px;
+      right: 10px;
+    }
+    .remove-pessoa-btn:hover {
+      background: #b71c1c;
+    }
+    .add-pessoa-btn {
+      background: var(--accent);
+      color: var(--text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 3px;
+      margin-bottom: 8px;
+      transition: background .2s;
+      font-weight: 600;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .add-pessoa-btn:hover {
+      background: #ffa000;
+    }
+    button:not(.remove-pessoa-btn):not(.add-pessoa-btn) {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 11px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1.04em;
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-top: 18px;
+      transition: background .2s, box-shadow .2s;
+      box-shadow: 0 2px 8px #1976d220;
+      outline: none;
+    }
+    button:not(.remove-pessoa-btn):not(.add-pessoa-btn):hover, button:not(.remove-pessoa-btn):not(.add-pessoa-btn):focus {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 16px #1756b350;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      background: var(--input);
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .li-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+    .li-main strong {
+      color: var(--primary-dark);
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .actions {
+      display: flex;
+      gap: 6px;
+    }
+    .actions button {
+      background: var(--danger);
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 1em;
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      color: #fff;
+      font-weight: 500;
+      transition: background .2s;
+    }
+    .actions button.edit {
+      background: var(--accent);
+      color: var(--text);
+    }
+    .actions button.edit:hover {
+      background: #ffa000;
+    }
+    .actions button.delete:hover {
+      background: #b71c1c;
+    }
+    .file-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin: 28px 0 12px 0;
+    }
+    .file-actions button, .file-actions label {
+      background: var(--success);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1em;
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      font-weight: 600;
+      transition: background .2s, box-shadow .2s;
+      box-shadow: 0 2px 8px #43a04720;
+      margin-bottom: 0;
+      display: inline-block;
+      outline: none;
+    }
+    .file-actions button:hover, .file-actions label:hover {
+      background: #2e7031;
+      box-shadow: 0 4px 16px #43a04750;
+    }
+    .file-actions input[type="file"] {
+      display: none;
+    }
+    .contexto-familiar-paciente {
+      margin-top: 8px;
+      margin-bottom: 2px;
+      padding: 12px 18px;
+      background: #f3f6fa;
+      border-radius: var(--radius);
+      border: 1px solid #dde3ea;
+      box-shadow: 0 1px 6px #0001;
+      width: 100%;
+    }
+    .contexto-familiar-title {
+      color: var(--primary-dark);
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      font-size: 1.06em;
+      margin-bottom: 6px;
+    }
+    .contexto-familiar-paciente .field-group,
+    .contexto-familiar-paciente .field-inline {
+      flex-direction: column !important;
+      gap: 8px !important;
+      width: 100%;
+    }
+    .contexto-familiar-paciente label {
+      margin-bottom: 4px;
+    }
+    @media (max-width: 900px) {
+      .container {
+        max-width: 99vw;
+        padding: 14px 2vw;
+      }
+      h1 { font-size: 1.2em; }
+      .section-title { font-size: 1em; }
+    }
+    @media (max-width: 570px) {
+      .container { padding: 5vw 2vw; }
+      form, .field-group, .field-inline, .pessoa-fields { flex-direction: column !important; gap: 8px !important; }
+      .file-actions { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FICHA DE ANAMINESE PISICOPEDAGÓGICA</h1>
+    <div class="descricao">
+      Este formulário tem o objetivo de conhecer melhor a história, o desenvolvimento e as dificuldades enfrentadas pelo(a) paciente atendido(a). As informações aqui registradas são confidenciais e fundamentais para uma avaliação pisicopedagógica cuidadosa e personalizada.
+    </div>
+    <div class="aviso">
+      ATENÇÃO: Todos os dados preenchidos neste formulário serão armazenados apenas no seu próprio navegador (<b>localStorage</b>). Nenhuma informação será enviada ou acessada por terceiros, inclusive por nós desenvolvedores. Se desejar compartilhar, você poderá baixar o arquivo e encaminhar apenas para quem desejar. Mantenha sua privacidade!
+    </div>
+    <form id="ficha-form" autocomplete="off">
+      <div class="section-title">Cadastro de Pessoas</div>
+      <div class="field-group">
+        <div id="pessoas-list"></div>
+        <button type="button" class="add-pessoa-btn" id="add-pessoa-btn">Adicionar Pessoa</button>
+      </div>
+      <button type="submit" id="submit-btn">Salvar ficha</button>
+    </form>
+    <div class="file-actions">
+      <button id="download-btn">Baixar Dados</button>
+      <label for="import-file" style="margin:0;">Importar Dados
+        <input type="file" id="import-file" accept=".json" />
+      </label>
+      <button id="print-btn" type="button" style="background:#ffb300; color:#222;">Imprimir ficha</button>
+    </div>
+    <ul id="ficha-list"></ul>
+  </div>
+  <script>
+    // Definições de campos por classificação
+    const CLASSIFICACAO_CAMPOS = {
+      paciente: [
+        { label: "Nome completo", name: "nome", type: "text", required: true },
+        { label: "Data de Nascimento", name: "datanasc", type: "date", required: true },
+        { label: "Idade", name: "idade", type: "number", min:0, required: true },
+        { label: "Sexo/fenotipo", name: "sexo", type: "select", options: ["Masculino", "Feminino"], required: true },
+        { label: "Telefone de contato", name: "telefone", type: "tel", required: true },
+        { label: "Email", name: "email", type: "text" },
+        { label: "Com quem mora?", name: "moradia", type: "text", required: true }
+      ],
+      pai: [
+        { label: "Nome", name: "nome", type: "text", required: true },
+        { label: "Idade", name: "idade", type: "number", min:0, required: true },
+        { label: "Ocupação Atual", name: "ocupacao", type: "text", required: true },
+        { label: "Escolaridade", name: "escolaridade", type: "text", required: true },
+        { label: "Formação", name: "formacao", type: "text", required: true }
+      ],
+      mae: [
+        { label: "Nome", name: "nome", type: "text", required: true },
+        { label: "Idade", name: "idade", type: "number", min:0, required: true },
+        { label: "Ocupação Atual", name: "ocupacao", type: "text", required: true },
+        { label: "Escolaridade", name: "escolaridade", type: "text", required: true },
+        { label: "Formação", name: "formacao", type: "text", required: true }
+      ],
+      familiar: [
+        { label: "Nome", name: "nome", type: "text", required: true },
+        { label: "Idade", name: "idade", type: "number", min:0, required: true },
+        { label: "Parentesco", name: "parentesco", type: "text", required: true },
+        { label: "Escolaridade", name: "escolaridade", type: "text" }
+      ],
+      preenchedor: [
+        { label: "Nome de quem preencheu", name: "nome", type: "text", required: true },
+        { label: "Telefone de contato", name: "telefone", type: "tel", required: true }
+      ]
+    };
+
+    // Campos de contexto familiar para o paciente
+    function contextoFamiliarHTML(pessoa) {
+      return `
+        <div class="contexto-familiar-paciente">
+          <div class="contexto-familiar-title">Contexto Familiar</div>
+          <div class="field-group">
+            <label>Estado civil dos pais biológicos:</label>
+            <div class="radio-group">
+              <label><input type="radio" name="estadocivil_paciente" value="casados" ${pessoa.estadocivil === "casados" ? "checked":""}/>Casados</label>
+              <label><input type="radio" name="estadocivil_paciente" value="separados" ${pessoa.estadocivil === "separados" ? "checked":""}/>Separados</label>
+              <label><input type="radio" name="estadocivil_paciente" value="divorciados" ${pessoa.estadocivil === "divorciados" ? "checked":""}/>Divorciados</label>
+              <label><input type="radio" name="estadocivil_paciente" value="outros" ${pessoa.estadocivil === "outros" ? "checked":""} id="estado-outros-radio-paciente"/>Outros</label>
+            </div>
+            <input type="text" id="estadocivil-outros-input-paciente" placeholder="Se outros, especifique..." style="display: ${pessoa.estadocivil === "outros" ? "block":"none"};" value="${pessoa.estadociviloutros||""}" />
+          </div>
+          <div class="field-group" id="campo-separacao-paciente" style="display: ${(pessoa.estadocivil === "separados" || pessoa.estadocivil === "divorciados") ? "block":"none"};">
+            <label>Caso separado ou divorciados:</label>
+            <div class="field-inline">
+              <div style="flex:2">
+                <label for="anos-separacao-input-paciente" style="font-weight:normal;">Quantos anos o paciente tinha na época da separação?</label>
+                <input type="number" min="0" id="anos-separacao-input-paciente" value="${pessoa.anosSeparacao||""}"/>
+              </div>
+              <div style="flex:2">
+                <label for="custodia-input-paciente" style="font-weight:normal;">Quem tem a custódia legal do Paciente?</label>
+                <input type="text" id="custodia-input-paciente" value="${pessoa.custodia||""}"/>
+              </div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Se o Paciente não mora com nenhum dos pais biológicos:</label>
+            <div class="radio-group">
+              <label><input type="radio" name="motivo-moradia-paciente" value="pais adotivos" ${pessoa.motivoMoradia === "pais adotivos" ? "checked":""}/>Pais adotivos</label>
+              <label><input type="radio" name="motivo-moradia-paciente" value="pais de criação" ${pessoa.motivoMoradia === "pais de criação" ? "checked":""}/>Pais de criação</label>
+              <label><input type="radio" name="motivo-moradia-paciente" value="outros familiares" ${pessoa.motivoMoradia === "outros familiares" ? "checked":""}/>Outros familiares</label>
+              <label><input type="radio" name="motivo-moradia-paciente" value="abrigo/outros" ${pessoa.motivoMoradia === "abrigo/outros" ? "checked":""}/>Abrigo/Outros</label>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Lista de pessoas cadastradas
+    let pessoas = [];
+    const pessoasListDiv = document.getElementById('pessoas-list');
+
+    // Adiciona pessoa
+    document.getElementById('add-pessoa-btn').onclick = function() {
+      pessoas.push({ classificacao: "familiar" });
+      renderPessoas();
+    };
+
+    // Renderiza todos os cadastros de pessoas
+    function renderPessoas() {
+      pessoasListDiv.innerHTML = "";
+      pessoas.forEach((pessoa, idx) => {
+        const container = document.createElement('div');
+        container.className = 'pessoas-list-container';
+        container.style.position = "relative";
+        // Cabeçalho com seletor de classificação
+        let campos = CLASSIFICACAO_CAMPOS[pessoa.classificacao] || CLASSIFICACAO_CAMPOS['familiar'];
+        container.innerHTML = `
+          <div class="pessoa-fields">
+            <div>
+              <label>Classificação:</label>
+              <select class="pessoa-classificacao">
+                ${Object.keys(CLASSIFICACAO_CAMPOS).map(opt =>
+                  `<option value="${opt}" ${pessoa.classificacao===opt?'selected':''}>${opt.charAt(0).toUpperCase()+opt.slice(1)}</option>`).join('')}
+              </select>
+            </div>
+            ${campos.map(campo => {
+              if (campo.type === 'select') {
+                return `<div>
+                  <label>${campo.label}:</label>
+                  <select class="pessoa-campo" data-name="${campo.name}" ${campo.required?'required':''}>
+                    <option value=""></option>
+                    ${campo.options.map(opt =>
+                      `<option value="${opt}" ${(pessoa[campo.name]||'')===opt?'selected':''}>${opt}</option>`).join('')}
+                  </select>
+                </div>`;
+              }
+              return `<div>
+                <label>${campo.label}:</label>
+                <input type="${campo.type}" 
+                  class="pessoa-campo"
+                  data-name="${campo.name}"
+                  value="${pessoa[campo.name]||''}"
+                  ${campo.type==='number'?'min="'+(campo.min||0)+'"':''}
+                  ${campo.required?'required':''} />
+              </div>`;
+            }).join('')}
+            <button type="button" class="remove-pessoa-btn" data-idx="${idx}">Remover</button>
+          </div>
+          ${pessoa.classificacao === "paciente" ? contextoFamiliarHTML(pessoa) : ""}
+        `;
+        pessoasListDiv.appendChild(container);
+      });
+
+      // Listeners para "remover"
+      document.querySelectorAll('.remove-pessoa-btn').forEach(btn => {
+        btn.onclick = function() {
+          pessoas.splice(Number(btn.getAttribute('data-idx')), 1);
+          renderPessoas();
+        }
+      });
+      // Listeners para classificação
+      document.querySelectorAll('.pessoa-classificacao').forEach((sel, idx) => {
+        sel.onchange = function() {
+          pessoas[idx].classificacao = sel.value;
+          // Limpa campos antigos
+          Object.keys(pessoas[idx]).forEach(k=>{
+            if(k!=="classificacao") delete pessoas[idx][k];
+          });
+          renderPessoas();
+        }
+      });
+      // Atualização dos campos normais
+      document.querySelectorAll('.pessoa-campo').forEach((input, i) => {
+        input.oninput = function() {
+          let pessoaIdx = 0;
+          pessoasListDiv.querySelectorAll('.pessoas-list-container').forEach((div, idx) => {
+            if (div.contains(input)) pessoaIdx = idx;
+          });
+          pessoas[pessoaIdx][input.getAttribute('data-name')] = input.value;
+        };
+      });
+      // Listeners dos campos contexto familiar paciente
+      pessoasListDiv.querySelectorAll('.pessoas-list-container').forEach((container, idx) => {
+        if (pessoas[idx].classificacao !== "paciente") return;
+        // Estado civil radio
+        container.querySelectorAll('input[name="estadocivil_paciente"]').forEach(radio => {
+          radio.onchange = function() {
+            pessoas[idx].estadocivil = radio.value;
+            renderPessoas();
+          }
+        });
+        // Estado civil outros
+        const outrosInput = container.querySelector('#estadocivil-outros-input-paciente');
+        if (outrosInput) {
+          outrosInput.oninput = function() {
+            pessoas[idx].estadociviloutros = outrosInput.value;
+          }
+        }
+        // Separação campos
+        const anosInput = container.querySelector('#anos-separacao-input-paciente');
+        if (anosInput) {
+          anosInput.oninput = function() {
+            pessoas[idx].anosSeparacao = anosInput.value;
+          }
+        }
+        const custodiaInput = container.querySelector('#custodia-input-paciente');
+        if (custodiaInput) {
+          custodiaInput.oninput = function() {
+            pessoas[idx].custodia = custodiaInput.value;
+          }
+        }
+        // Motivo moradia
+        container.querySelectorAll('input[name="motivo-moradia-paciente"]').forEach(radio => {
+          radio.onchange = function() {
+            pessoas[idx].motivoMoradia = radio.value;
+          }
+        });
+      });
+    }
+
+    // Adiciona paciente, pai, mae e preenchedor inicialmente (um de cada)
+    if (!pessoas.length) {
+      pessoas = [
+        { classificacao: "paciente" },
+        { classificacao: "pai" },
+        { classificacao: "mae" },
+        { classificacao: "preenchedor" }
+      ];
+    }
+    renderPessoas();
+
+    // Lista de fichas salvas
+    let fichas = [];
+    const fichaListUl = document.getElementById('ficha-list');
+
+    // Carregar fichas do storage
+    function loadFichas() {
+      return JSON.parse(localStorage.getItem("ficha_anamnese_generico")) || [];
+    }
+    function saveFichas(fichas) {
+      localStorage.setItem("ficha_anamnese_generico", JSON.stringify(fichas));
+    }
+    function renderFichas() {
+      fichaListUl.innerHTML = "";
+      fichas.forEach((ficha, i) => {
+        const li = document.createElement('li');
+        const main = document.createElement('div');
+        main.className = "li-main";
+        main.innerHTML = `
+          <strong>${(ficha.pessoas||[]).find(p=>p.classificacao==="paciente")?.nome || "(Sem paciente)"}</strong>
+          <span>Qtd. pessoas cadastradas: ${(ficha.pessoas||[]).length}</span>
+          <span>Estado civil dos pais: ${(ficha.pessoas||[]).find(p=>p.classificacao==="paciente")?.estadocivil || "-"}</span>
+        `;
+        const actions = document.createElement('div');
+        actions.className = "actions";
+        const editBtn = document.createElement('button');
+        editBtn.textContent = "Editar";
+        editBtn.className = "edit";
+        editBtn.onclick = () => {
+          pessoas = JSON.parse(JSON.stringify(ficha.pessoas));
+          renderPessoas();
+        };
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = "Excluir";
+        deleteBtn.className = "delete";
+        deleteBtn.onclick = () => {
+          fichas.splice(i,1);
+          saveFichas(fichas);
+          renderFichas();
+        };
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+        li.appendChild(main);
+        li.appendChild(actions);
+        fichaListUl.appendChild(li);
+      });
+    }
+    // Inicializa fichas
+    fichas = loadFichas();
+    renderFichas();
+
+    // Salva ficha
+    document.getElementById('ficha-form').onsubmit = function(e) {
+      e.preventDefault();
+      // Valida campos obrigatórios (campos do form HTML já validam required)
+      let valid = true;
+      pessoas.forEach(p => {
+        let campos = CLASSIFICACAO_CAMPOS[p.classificacao] || [];
+        campos.forEach(c=>{
+          if(c.required && !p[c.name]) valid = false;
+        });
+        // Para paciente, valida contexto familiar
+        if (p.classificacao === "paciente") {
+          if (!p.estadocivil) valid = false;
+          if (p.estadocivil === "outros" && !p.estadociviloutros) valid = false;
+          if ((p.estadocivil === "separados" || p.estadocivil === "divorciados") && (!p.anosSeparacao || !p.custodia)) valid = false;
+        }
+      });
+      if (!valid) {
+        alert("Por favor, preencha todos os campos obrigatórios das pessoas.");
+        return;
+      }
+      const ficha = {
+        pessoas: JSON.parse(JSON.stringify(pessoas))
+      };
+      fichas.push(ficha);
+      saveFichas(fichas);
+      renderFichas();
+      alert("Ficha salva!");
+      document.getElementById('ficha-form').reset();
+      pessoas = [
+        { classificacao: "paciente" },
+        { classificacao: "pai" },
+        { classificacao: "mae" },
+        { classificacao: "preenchedor" }
+      ];
+      renderPessoas();
+    };
+
+    // Download
+    document.getElementById('download-btn').onclick = function(e) {
+      e.preventDefault();
+      const data = JSON.stringify(fichas, null, 2);
+      const blob = new Blob([data], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "fichas_anamnese_generico.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // Importação
+    document.getElementById('import-file').addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if(Array.isArray(imported) && imported.every(obj => typeof obj === 'object')) {
+            fichas = imported;
+            saveFichas(fichas);
+            renderFichas();
+            alert('Dados importados com sucesso!');
+          } else {
+            alert('Arquivo inválido.');
+          }
+        } catch (err) {
+          alert('Erro ao importar arquivo.');
+        }
+        e.target.value = "";
+      };
+      reader.readAsText(file);
+    });
+
+    // Impressão
+    document.getElementById('print-btn').onclick = function() {
+      if (!fichas.length) {
+        alert("Nenhuma ficha cadastrada para imprimir.");
+        return;
+      }
+      // Pergunta qual ficha imprimir, se houver mais de uma
+      let idx = 0;
+      if (fichas.length > 1) {
+        let nomes = fichas.map((f, i) => `${i+1}: ${(f.pessoas||[]).find(p=>p.classificacao==="paciente")?.nome || "(Sem paciente)"}`).join('\n');
+        let resp = prompt("Qual ficha deseja imprimir?\n" + nomes + "\nDigite o número:", "1");
+        if (!resp) return;
+        idx = Math.max(0, Math.min(fichas.length - 1, parseInt(resp)-1));
+      }
+      const ficha = fichas[idx];
+      function pessoaFormatada(p, index) {
+        let campos = CLASSIFICACAO_CAMPOS[p.classificacao] || [];
+        let contextoFamiliar = "";
+        if (p.classificacao === "paciente") {
+          contextoFamiliar = `
+            <br/>
+            <b>Contexto Familiar:</b>
+            <ul>
+              <li><b>Estado civil dos pais biológicos:</b> ${p.estadocivil||""}${p.estadocivil === "outros" && p.estadociviloutros ? " (" + p.estadociviloutros + ")" : ""}</li>
+              ${(p.estadocivil === "separados" || p.estadocivil === "divorciados") ? `
+              <li><b>Idade do paciente na separação:</b> ${p.anosSeparacao||""}</li>
+              <li><b>Custódia legal:</b> ${p.custodia||""}</li>
+              ` : ""}
+              <li><b>Se não mora com os pais biológicos (motivo):</b> ${p.motivoMoradia||""}</li>
+            </ul>
+          `;
+        }
+        return `<li>
+          <b>${p.classificacao.charAt(0).toUpperCase()+p.classificacao.slice(1)}</b>: 
+          ${campos.map(c => `<i>${c.label}:</i> ${p[c.name]||""}`).join(' | ')}
+          ${contextoFamiliar}
+        </li>`;
+      }
+      let html = `
+      <html>
+      <head>
+        <meta charset="UTF-8" />
+        <title>Ficha de Anamnese</title>
+        <style>
+          body { font-family: 'Roboto', Arial, Helvetica, sans-serif; color: #232c3d; background: #fff; margin: 0; padding: 32px; }
+          h1 { color: #2e7dff; border-bottom: 2px solid #e3e8ee; padding-bottom: 8px; margin-bottom: 18px; }
+          h2 { color: #1756b3; font-size: 1.14em; margin-bottom: 8px; margin-top: 26px; }
+          .info-block { margin-bottom: 12px; }
+          .info-block strong { display:inline-block; min-width: 160px; color:#1756b3;}
+          ul, ol { margin: 0 0 0 22px; }
+        </style>
+      </head>
+      <body>
+      <h1>FICHA DE ANAMINESE PISICOPEDAGÓGICA</h1>
+      <h2>Pessoas cadastradas</h2>
+      <ul>
+        ${ (ficha.pessoas||[]).map(pessoaFormatada).join('') }
+      </ul>
+      <br/><br/>
+      <div style="font-size:0.95em;color:#777;">Gerado em: ${new Date().toLocaleString("pt-BR")}</div>
+      </body>
+      </html>
+      `;
+      let win = window.open('', '_blank');
+      win.document.write(html);
+      win.document.close();
+      setTimeout(() => {
+        win.focus();
+        win.print();
+      }, 400);
+    };
+  </script>
+</body>
+</html>
