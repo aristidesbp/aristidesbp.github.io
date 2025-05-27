@@ -22,11 +22,14 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 <title>Página Básica</title> 
 <!-- Título que aparecerá na aba do navegador -->
 
+<!-- ✅ METADADOS PARA SEO ✅ -->
+<!-- ✅ ARQUIVOS PARA CSS ✅ -->
+<!-- ✅ ARQUIVOS PARA JS✅ -->
 
-</head>
-<!-- Fim do Cabeçalho -->
-<body> 
-<!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
+</head><!-- Fim do Cabeçalho -->
+<body><!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
+
+
 <p>Olá, mundo!</p> 
 <!-- mensagem na página -->
 
@@ -40,24 +43,24 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 -----------------------------------------------------------------------------------------------------------------------
-## ✅ SEO PARA COLOCAR DENTRO DO BLOCO "head/ ANTES DO TITU":
+## <!-- ✅ METADADOS PARA SEO ✅ -->
 ```
 
-<!-- ✅ Codificação e compatibilidade -->
+<!--  Codificação e compatibilidade -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Compatibilidade com Internet Explorer -->
-<!-- ✅ Robots (instruções para motores de busca) -->
+<!--  Robots (instruções para motores de busca) -->
 <meta name="robots" content="index, follow">
 <!-- index = indexar; follow = seguir links internos -->
 
-<!-- ✅ Meta descrição (texto que aparece abaixo do título no Google) -->
+<!--  Meta descrição (texto que aparece abaixo do título no Google) -->
 <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos em HTML, CSS, JavaScript, AndroidIDE e estratégias de marketing digital.">
-<!-- ✅ Palavras-chave (menos usada hoje, mas ainda relevante em alguns mecanismos de busca) -->
+<!--  Palavras-chave (menos usada hoje, mas ainda relevante em alguns mecanismos de busca) -->
 <meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, desenvolvedor, HTML, CSS, JavaScript, AndroidIDE, tráfego pago, marketing digital, programador web, projetos web, sites profissionais">
-<!-- ✅ Canonical (evita conteúdo duplicado em URLs diferentes) -->
+<!--  Canonical (evita conteúdo duplicado em URLs diferentes) -->
 <link rel="canonical" href="https://aristidesbp.github.io" />
 
-<!-- ✅ Open Graph (para compartilhamento no Facebook, LinkedIn, etc.) -->
+<!--  Open Graph (para compartilhamento no Facebook, LinkedIn, etc.) -->
 <meta property="og:type" content="website">
 <!-- Tipo de conteúdo -->
 <meta property="og:url" content="https://aristidesbp.github.io">
@@ -69,7 +72,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 <meta property="og:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
 <!-- Imagem do card -->
 
-<!-- ✅ Twitter Card (para compartilhamento no Twitter) -->
+<!--  Twitter Card (para compartilhamento no Twitter) -->
 <meta name="twitter:card" content="summary_large_image">
 <!-- Tipo de card -->
 <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
@@ -78,10 +81,10 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 <meta name="twitter:site" content="@aristidesbp">
 <!-- Seu @ do Twitter, se tiver -->
 
-<!-- ✅ Favicon (ícone da aba do navegador) -->
+<!--  Favicon (ícone da aba do navegador) -->
 <link rel="icon" href="/icons/favicon.png" type="image/png">
 
-<!-- ✅ Manifest (para Progressive Web Apps – PWA) -->
+<!--  Manifest (para Progressive Web Apps – PWA) -->
 <link rel="manifest" href="/json/manifest.json">
 
 ```
@@ -106,85 +109,23 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-## ✅ 1. index.html (comentado e com SEO completo)
+## <!-- ✅ ARQUIVOS PARA CSS ✅ -->
 
 ```
-<!DOCTYPE html> <!-- Documento HTML5 -->
-<html lang="pt-BR"> <!-- Idioma português do Brasil -->
-
-<head>
-  <!-- SEO e configuração básica -->
-  <meta charset="UTF-8"> <!-- Permite acentos e caracteres especiais -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Compatível com IE -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsivo -->
-
-  <title>Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago</title> <!-- Título da aba do navegador -->
-
-  <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos web e estratégias de marketing digital."> <!-- Descrição nos buscadores -->
-  <meta name="author" content="Aristides Barbosa Pontes"> <!-- Autor -->
-  <meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, tráfego pago, HTML, CSS, JavaScript, AndroidIDE, sites, desenvolvedor"> <!-- Palavras-chave -->
-  <meta name="robots" content="index, follow"> <!-- Permite indexar e seguir links -->
-
-  <!-- Canonical -->
-  <link rel="canonical" href="https://www.seusite.com.br/">
-
-  <!-- Open Graph (Facebook, LinkedIn) -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.seusite.com.br/">
-  <meta property="og:title" content="Portfólio de Aristides Barbosa Pontes">
-  <meta property="og:description" content="Desenvolvedor Front-end e Gestor de Tráfego. Conheça meus projetos.">
-  <meta property="og:image" content="./assets/images/imagem-perfil.png">
-
-  <!-- Twitter Cards -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes">
-  <meta name="twitter:description" content="Desenvolvedor Front-end e Gestor de Tráfego. Confira meus projetos.">
-  <meta name="twitter:image" content="./assets/images/imagem-perfil.png">
-  <meta name="twitter:site" content="@aristidesbp">
-
-  <!-- Favicon -->
-  <link rel="icon" href="./assets/icons/favicon.png" type="image/png">
-
-  <!-- Fonte externa (opcional) -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
-
   <!-- CSS externo -->
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- Fonte externa (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+```
 
+
+## <!-- ✅ ARQUIVOS PARA JS ✅ -->
+``
   <!-- JS externo -->
   <script type="module" src="./assets/js/main.js" defer></script>
-</head>
-
-<body>
-  <h1>Olá, eu sou o Aristides 👨‍💻</h1> <!-- Exibição principal -->
-  <p>Sou desenvolvedor front-end e gestor de tráfego pago. Bem-vindo ao meu portfólio!</p>
-</body>
-
-</html>
-
 
 ```
 
-
-
-
-
-## CRIANDO UMA ESTRUTURA DE PASTAS
-
-```
-meu-portifolio/
-├── index.html                    # Página principal com SEO completo
-├── assets/
-│   ├── css/
-│   │   └── style.css             # Estilos personalizados
-│   ├── js/
-│   │   └── main.js              # Scripts JS (modular)
-│   ├── images/
-│   │   └── imagem-perfil.png    # Sua imagem ou banner
-│   └── icons/
-│       └── favicon.png          # Ícone do site
-└── manifest.json                # Manifesto para PWA (opcional)
-```
 
 
 ## CRIANDO UM ESTILO BÁSICO [assets/css/style.css]
@@ -214,7 +155,7 @@ p {
 
 ```
 
-## ✅ 3. main.js (JavaScript modular) : [assets/js/script.js]
+## ✅ 3. main.js (JavaScript modular) : [js/script.js]
 
 ```
 // main.js - JavaScript modular básico
