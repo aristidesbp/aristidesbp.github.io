@@ -1,4 +1,4 @@
-# DOCUMENTAÇÃO DO MEU PORTIFOLIO
+
 ## 🔧 1. CONFIGURAÇÃO BÁSICA DA PÁGINA + SEO:
 A divisão por blocos semânticos dentro da <head> é uma prática de organização profissional, que deixa o código limpo, 
 fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
@@ -6,7 +6,6 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 📌 "O código perfeito é o código comentado!"
 
 
----------------------------------------------------------------------------------------------------------------------------------------------
 # ✅ PASSO 1: CRIAR UMA ESTRUTURA BASICA DE UM HTML ✅
 ```
 <!DOCTYPE html> 
@@ -23,29 +22,6 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 <!-- Título que aparecerá na aba do navegador -->
 
 <!-- ✅ METADADOS PARA SEO ✅ -->
-<!-- ✅ ARQUIVOS PARA CSS ✅ -->
-<!-- ✅ ARQUIVOS PARA JS✅ -->
-
-</head><!-- Fim do Cabeçalho -->
-<body><!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
-
-
-<p>Olá, mundo!</p> 
-<!-- mensagem na página -->
-
-
-</body>
-<!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
-</html> 
-<!-- Fim do documento HTML -->
-```
-
-
-
---------------------------------------
-# ✅ PASSO 2: ADICIONAR META DADOS PARA SEO ✅
-```
-
 <!--  Codificação e compatibilidade -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Compatibilidade com Internet Explorer -->
@@ -87,9 +63,34 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 <!--  Manifest (para Progressive Web Apps – PWA) -->
 <link rel="manifest" href="/json/manifest.json">
 
+<!-- ✅CHAMANDO  ARQUIVOS  E BIBLIOTECAS CSS EXTERNAS ✅ -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- Fonte externa (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<!-- ✅ CHAMANDO ARQUIVOS E BIBLIOTECAS JAVASCRIPT EXTERNAS ✅ -->
+
+<!-- JS externo -->
+  <script type="module" src="./js/main.js" defer></script>
+
+</head><!-- Fim do Cabeçalho -->
+<body><!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
+
+<!-- ✅ CORPO DA PAGINA ✅ -->
+<p>Olá, mundo!</p> 
+<!-- mensagem na página -->
+
+
+</body>
+<!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
+</html> 
+<!-- Fim do documento HTML -->
 ```
 
-### ✅ Checklist de SEO incluído:
+
+
+
+# 📚 Checklist de SEO incluído:
 
 | Recurso             | Incluído? | Descrição rápida                                        |
 | ------------------- | --------- | ------------------------------------------------------- |
@@ -105,35 +106,31 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 | Twitter Cards       | ✅         | Compartilhamento otimizado para Twitter                 |
 | Favicon             | ✅         | Ícone da aba do navegador                               |
 | Manifest            | ✅         | Suporte para PWA (opcional, mas moderno)                |
+| Links css           | ✅         | Suporte para PWA (opcional, mas moderno)                |
+| links js            | ✅         | Suporte para PWA (opcional, mas moderno)                |
 
 
 
-#  ✅ PASSO 3: ADICIONANDO CHAMADA DE  ARQUIVOS CSS ESTERNOS ✅ 
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+## ✅ PASSO 2: CRIAR O ARQUIVO JAVASCRIPT MODULAR  ( main.js ) ✅
 
 ```
-  <!-- CSS externo -->
-  <link rel="stylesheet" href="./assets/css/style.css">
-  <!-- Fonte externa (opcional) -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
-```
-
-
-# ✅ PASSO 4: ADICIONANDO CHAMADA DE ARQUIVOS PARA JS ✅ 
-```
-  <!-- JS externo -->
-  <script type="module" src="./js/main.js" defer></script>
+// main.js - JavaScript modular básico
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
+});
 
 ```
 
-
------
 
 # 🧠 O que é o DOM?
 
 DOM = Document Object Model (Modelo de Objeto do Documento)
 É uma representação em forma de árvore de todos os elementos HTML de uma página. Cada tag, atributo e texto vira um objeto manipulável com JavaScript.
 
-## 📚 Para que serve?
+## 🧠 Para que serve?
 Serve para que o JavaScript possa interagir, modificar, criar ou remover elementos HTML dinamicamente.
 
 Exemplo de interações com o DOM:
@@ -143,7 +140,7 @@ Exemplo de interações com o DOM:
     Aplicar uma animação ou estilo dinamicamente.
 
 
-## 🧩 Como funciona?
+## 🧠 Como funciona?
 1- Quando a página HTML é carregada no navegador, o navegador cria automaticamente a estrutura do 
 DOM baseada no conteúdo do HTML.
 2- O JavaScript pode acessar essa estrutura para ler ou modificar os elementos
@@ -166,15 +163,7 @@ document
 
 ```
 
-## ✅ CRIANDO O ARQUIVO  main.js (JavaScript modular) ✅
 
-```
-// main.js - JavaScript modular básico
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
-});
-
-```
 
 ## 🚨 O que é DOMContentLoaded no main.js?
 
