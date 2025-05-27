@@ -29,8 +29,14 @@ tanto na forma bruta quanto formatada. Ele converte texto simples em HTML estrut
 
 # 🧱 Estrutura Básica de um Arquivo Markdown
 ## Como criar caixa de Textos : 
-``` use tres crases, verifique o codigo ``` 
+``` use tres crases! ``
 
+``
+verifique o codigo !
+``
+
+
+---
 ## 1. **Títulos (Headings)**
 Use `#` para criar títulos:
 
@@ -48,7 +54,7 @@ Use `#` para criar títulos:
 #### Título de nível 4
 ##### Título de nível 5
 ###### Título de nível 6
-
+---
 
 # 2. Ênfase de texto:
 
@@ -60,8 +66,8 @@ __Negrito com underline__
 
 ***Negrito + Itálico***
 
-
-#3. Listas
+---
+# 3. Listas
 ## Lista não ordenada:
 
 - Item 1
@@ -71,16 +77,16 @@ __Negrito com underline__
 
 ## Lista ordenada:
 
-
-4. Links e Imagens
+---
+# 4. Links e Imagens
 Inserindo links:
 [Google](https://www.google.com)
 
 Inserindo imagens:
 ![Texto alternativo](https://via.placeholder.com/150)
+---
 
-
-5. Código
+# 5. Código
 Código em linha (inline):
 
 Use a função `print()` para mostrar algo na tela.
@@ -101,13 +107,13 @@ function digaOla(nome) {
 def diga_ola(nome):
     return f"Olá, {nome}!"
 
+---
 
-
-#6. Citações (Blockquotes)
+# 6. Citações (Blockquotes)
 > Esta é uma citação. Pode ser usada para destacar frases, trechos de livros, etc.
+---
 
-
-#7. Tabelas
+# 7. Tabelas
 
 | Nome     | Idade | Profissão     |
 |----------|-------|---------------|
@@ -115,9 +121,10 @@ def diga_ola(nome):
 | João     | 34    | Engenheiro    |
 | Juliana  | 45    | Nutricionista |
 
-
-8. Linha Horizontal
 ---
+
+# 8. Linha Horizontal
+
 
 
 Você disse:
