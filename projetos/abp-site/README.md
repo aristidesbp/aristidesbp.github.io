@@ -57,15 +57,17 @@
 <!--  Manifest (para Progressive Web Apps – PWA) -->
 <link rel="manifest" href="/json/manifest.json">
 
-<!--  CHAMANDO  ARQUIVOS  E BIBLIOTECAS CSS EXTERNAS  -->
+<!--  🧠 CHAMANDO  ARQUIVOS  E BIBLIOTECAS CSS EXTERNAS  -->
   <link rel="stylesheet" href="./assets/css/style.css">
   <!-- Fonte externa (opcional) -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
 
-<!--  CHAMANDO ARQUIVOS E BIBLIOTECAS JAVASCRIPT EXTERNAS  -->
-
-<!-- JS externo -->
+<!--  🧠 CHAMANDO ARQUIVOS E BIBLIOTECAS JAVASCRIPT EXTERNAS  -->
   <script type="module" src="./js/main.js" defer></script>
+  <script src="./js/model.js" type="module"></script>
+  <script src="./js/view.js" type="module"></script>
+  <script src="./js/controller.js" type="module"></script>
+
 
 </head><!-- Fim do Cabeçalho -->
 <body>
@@ -78,10 +80,7 @@
     <!-- Aqui será renderizado o conteúdo dinâmico da view.js -->
   </main>
 
-  <!-- Scripts MVC -->
-  <script src="./assets/js/model.js" type="module"></script>
-  <script src="./assets/js/view.js" type="module"></script>
-  <script src="./assets/js/controller.js" type="module"></script>
+
 
 </body>
 <!-- Inicio do Corpo da página (conteúdo visível ao usuário) -->
