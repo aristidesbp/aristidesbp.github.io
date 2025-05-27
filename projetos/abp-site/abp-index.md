@@ -1,5 +1,6 @@
 # DOCUMENTAÇÃO DO MEU PORTIFOLIO
 ## HTML BASICO COM SEO :
+
 ```
 <!DOCTYPE html> 
 <!-- Define o tipo de documento como HTML5 -->
@@ -26,16 +27,16 @@ com suporte a recursos de segurança via 'crossorigin' -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <!-- Garante compatibilidade com o Internet Explorer usando o modo mais recente de renderização -->
 
-<meta name="description" content="Portifólio de Lucyan Ovídio, desenvolvedor web Front-end" /> 
+<meta name="description" content="Portifólio de Aristides Barbosa Pontes, desenvolvedor web Front-end" /> 
 <!-- Fornece uma descrição do site para mecanismos de busca e compartilhamento -->
 
-<meta name="author" content="Lucyan Ovídio" /> 
+<meta name="author" content="Aristides Barbosa Pontes" /> 
 <!-- Informa o autor do conteúdo da página -->
 
-<meta property="og:description" content="Portifólio de Lucyan Ovídio, desenvolvedor web Front-end" /> 
+<meta property="og:description" content="Portifólio de Aristides Barbosa Pontes, desenvolvedor web Front-end" /> 
 <!-- Define a descrição exibida ao compartilhar o site em redes sociais usando o protocolo Open Graph -->
 
-<meta property="og:image" content="./assets/images/imagem-de-lucyan-vestindo-camisa-social-branca-e-sorrindo-com-plantas-no-fundo.png" /> 
+<meta property="og:image" content="./assets/images/imagem-de-Aristides-vestindo-camisa-social-branca-e-sorrindo-com-plantas-no-fundo.png" /> 
 <!-- Define a imagem de destaque que será exibida ao compartilhar o site nas redes sociais -->
 
 <meta property="og:type" content="website" /> 
