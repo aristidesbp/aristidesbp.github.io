@@ -306,6 +306,47 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 }
 
 ```
+
+## 🧠 O que é o manifest.json?
+O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
+Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
+
+### ✅ EXPLICAÇÃO LINHA A LINHA:
+
+🔹 "name"  → Nome completo do aplicativo que será exibido ao usuário, como o título do seu portfólio.
+🔹 "short_name" → Nome curto que será exibido em espaços limitados, como o ícone na tela do celular.
+🔹 "start_url" → Página que será carregada ao abrir o app a partir da tela inicial. Normalmente, é a home do seu site.
+🔹 "display" → Define o modo de exibição:
+
+    "standalone" simula um app nativo (sem barra de endereço).
+    "fullscreen" abre em tela cheia.
+    "browser" abre como um site normal no navegador.
+    "minimal-ui" mostra uma interface mínima do navegador.
+
+🔹 "background_color" → Cor de fundo da tela inicial durante o carregamento do app (splash screen).
+🔹 "theme_color" → Cor usada na barra de status do navegador em dispositivos móveis, e também influencia na aparência do cabeçalho.
+🔹 "icons" → Lista de ícones que representam seu app quando salvo na tela inicial.
+
+    "src": caminho da imagem (ícone).
+    "sizes": tamanho da imagem (importante para alta resolução).
+    "type": tipo de imagem, geralmente "image/png".
+
+### 🧠 Resumo geral:
+
+| Propriedade        | Finalidade                                           |
+| ------------------ | ---------------------------------------------------- |
+| `name`             | Nome completo do app                                 |
+| `short_name`       | Nome curto para atalhos                              |
+| `start_url`        | Página de início quando o app for aberto             |
+| `display`          | Modo de exibição: standalone, fullscreen, etc.       |
+| `background_color` | Cor de fundo durante carregamento inicial            |
+| `theme_color`      | Cor da barra de status e elementos do sistema        |
+| `icons`            | Ícones usados para representar o app na tela inicial |
+
+
+
+
+
 ---
 # Perfeito, HORA DE TESTAR !
 ### Faça um repositorio no github e crie os arquivos e teste o projeto!
