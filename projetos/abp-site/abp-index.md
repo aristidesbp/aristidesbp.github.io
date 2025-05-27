@@ -161,6 +161,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 ## CRIANDO UMA ESTRUTURA DE PASTAS
 
+```
 meu-portifolio/
 ├── index.html                    # Página principal com SEO completo
 ├── assets/
@@ -173,9 +174,34 @@ meu-portifolio/
 │   └── icons/
 │       └── favicon.png          # Ícone do site
 └── manifest.json                # Manifesto para PWA (opcional)
+```
 
 
+## CRIANDO UM ESTILO BÁSICO [assets/css/style.css]
 
+```
+/* Reset básico */
+* {
+  margin: 0;                 /* Remove margens padrão */
+  padding: 0;                /* Remove espaçamentos padrão */
+  box-sizing: border-box;   /* Inclui bordas e padding no cálculo de largura/altura */
+}
 
+body {
+  font-family: 'DM Sans', sans-serif; /* Aplica fonte moderna */
+  background-color: #f4f4f4;           /* Fundo suave */
+  color: #333;                         /* Cor da fonte principal */
+  padding: 20px;                       /* Espaçamento interno da página */
+}
+
+h1 {
+  color: #0077cc;                     /* Destaque no título */
+}
+
+p {
+  margin-top: 10px;                   /* Espaço abaixo do título */
+}
+
+```
 
 
