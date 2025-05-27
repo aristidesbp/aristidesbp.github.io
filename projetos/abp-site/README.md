@@ -127,15 +127,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-## ✅ 3. main.js (JavaScript modular) : [js/script.js]
 
-```
-// main.js - JavaScript modular básico
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
-});
-
-```
 ### 🧠 O que é o DOM?
 
 DOM = Document Object Model (Modelo de Objeto do Documento)
@@ -208,6 +200,22 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 | Por que usar       | Para evitar erro ao acessar elementos antes de existirem |
 
 
+## ✅ 3. main.js (JavaScript modular) : [js/script.js]
+
+```
+// main.js - JavaScript modular básico
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
+});
+
+```
+
+
+
+## 🧠 O que é o manifest.json?
+O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
+Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
+
 
 ## ✅ 4. manifest.json (para instalar como app no celular): [assets/manifest.json]
 
@@ -229,10 +237,6 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 }
 
 ```
-
-## 🧠 O que é o manifest.json?
-O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
-Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
 
 ### ✅ EXPLICAÇÃO LINHA A LINHA:
 
