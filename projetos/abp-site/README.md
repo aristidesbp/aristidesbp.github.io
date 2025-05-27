@@ -7,7 +7,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
-## ESTRUTURA BASICA DE UM HTML:
+## ✅ CRIANDO UMA ESTRUTURA BASICA DE UM HTML ✅
 ```
 <!DOCTYPE html> 
 <!-- Declara que este documento é do tipo HTML5 -->
@@ -43,7 +43,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 -----------------------------------------------------------------------------------------------------------------------
-## ✅ METADADOS PARA SEO ✅
+## ✅ ADICIONANDO METADADOS PARA SEO ✅
 ```
 
 <!--  Codificação e compatibilidade -->
@@ -108,7 +108,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-##  ✅ ARQUIVOS PARA CSS ✅ 
+##  ✅ ADICIONANDO ARQUIVOS PARA CSS ✅ 
 
 ```
   <!-- CSS externo -->
@@ -118,7 +118,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 ```
 
 
-##  ✅ ARQUIVOS PARA JS ✅ 
+##  ✅ ADICIONANDO ARQUIVOS PARA JS ✅ 
 ```
   <!-- JS externo -->
   <script type="module" src="./js/main.js" defer></script>
@@ -126,7 +126,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 ```
 
 
-
+-----
 
 ### 🧠 O que é o DOM?
 
@@ -186,7 +186,7 @@ document                 // Representa o DOM da página HTML carregada
 
 
 ```
-### ✅ Por que usar DOMContentLoaded?
+###  Por que usar DOMContentLoaded?
 Porque garante que o HTML esteja totalmente carregado antes de o JavaScript tentar acessar ou modificar os elementos.
 Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ainda não existe no DOM no momento da execução.
 
@@ -200,7 +200,10 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 | Por que usar       | Para evitar erro ao acessar elementos antes de existirem |
 
 
-## ✅ 3. main.js (JavaScript modular) : [js/script.js]
+
+
+---
+# ✅ CRIANDO O ARQUIVO  main.js (JavaScript modular) ✅
 
 ```
 // main.js - JavaScript modular básico
