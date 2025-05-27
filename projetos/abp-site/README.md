@@ -1,6 +1,6 @@
 # 🧠 Site com sistema mvc
 
-## ✅ index.html ✅
+# ✅ index.html ✅
 ```
 <!DOCTYPE html> 
 <!-- Declara que este documento é do tipo HTML5 -->
@@ -92,7 +92,7 @@
 
 
 
-## ✅ js/main.js ✅
+# ✅ js/main.js ✅
 
 ```
 // main.js - JavaScript modular básico
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-## ✅ js/manifest.json ✅
+# ✅ js/manifest.json ✅
 
 ```
 {
