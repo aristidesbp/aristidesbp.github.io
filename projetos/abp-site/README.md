@@ -385,9 +385,9 @@ Controller = Ponto de controle que conecta a view e o model (reage a eventos e a
 
 
 # ✅ Etapa 1: index.html (VIEW PRINCIPAL)
-#### Adicione o conteudo dentro do <body> aqui.. </body>, do arquivo "index.html"
 
 ```
+  <!-- Adicione o conteudo dentro do <body> aqui.. </body>, do arquivo "index.html" -->
   <!-- Componente de Cabeçalho -->
   <div id="header"></div> <!-- Será preenchido com o conteúdo de header.html via DOM -->
 
@@ -403,9 +403,155 @@ Controller = Ponto de controle que conecta a view e o model (reage a eventos e a
 
 ```
 
+# index.html v2
+```
+<!DOCTYPE html> <!-- Documento HTML5 -->
+<html lang="pt-BR"> <!-- Idioma português do Brasil -->
+
+<head>
+  <!-- SEO e configuração básica -->
+  <meta charset="UTF-8"> <!-- Permite acentos e caracteres especiais -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Compatível com IE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsivo -->
+
+  <title>Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago</title> <!-- Título da aba do navegador -->
+
+  <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos web e estratégias de marketing digital."> <!-- Descrição nos buscadores -->
+  <meta name="author" content="Aristides Barbosa Pontes"> <!-- Autor -->
+  <meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, tráfego pago, HTML, CSS, JavaScript, AndroidIDE, sites, desenvolvedor"> <!-- Palavras-chave -->
+  <meta name="robots" content="index, follow"> <!-- Permite indexar e seguir links -->
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.seusite.com.br/">
+
+  <!-- Open Graph (Facebook, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.seusite.com.br/">
+  <meta property="og:title" content="Portfólio de Aristides Barbosa Pontes">
+  <meta property="og:description" content="Desenvolvedor Front-end e Gestor de Tráfego. Conheça meus projetos.">
+  <meta property="og:image" content="./assets/images/imagem-perfil.png">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes">
+  <meta name="twitter:description" content="Desenvolvedor Front-end e Gestor de Tráfego. Confira meus projetos.">
+  <meta name="twitter:image" content="./assets/images/imagem-perfil.png">
+  <meta name="twitter:site" content="@aristidesbp">
+
+  <!-- Favicon -->
+  <link rel="icon" href="./assets/icons/favicon.png" type="image/png">
+
+  <!-- Fonte externa (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- JS externo -->
+  <script type="module" src="./assets/js/main.js" defer></script>
+</head>
+
+<body>
+  <!-- Componente de Cabeçalho -->
+  <div id="header"></div> <!-- Será preenchido com o conteúdo de header.html via DOM -->
+
+  <!-- Área principal -->
+  <main id="app">
+    <!-- Aqui será renderizado o conteúdo dinâmico da view.js -->
+  </main>
+
+  <!-- Scripts MVC -->
+  <script src="./assets/js/model.js" type="module"></script>
+  <script src="./assets/js/view.js" type="module"></script>
+  <script src="./assets/js/controller.js" type="module"></script>
+  
+</body>
+</html>
 
 
+```
 
 
+# ✅ Etapa 2: Componente header.html (REUTILIZÁVEL)
+### Isso permite reutilizar o header.html em várias páginas sem duplicar o código.
+
+```
+<!-- components/header.html -->
+<header>
+  <h1>Aristides Barbosa Pontes</h1>
+  <nav>
+    <ul>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+# ✅ Etapa 3: view.js (VIEW — DOM DINÂMICO)
+```
+// assets/js/view.js
+
+// Carrega o header.html de forma assíncrona e insere no DOM
+export async function loadHeader() {
+  const headerContainer = document.getElementById("header"); // seleciona a div #header
+  const response = await fetch("./components/header.html"); // faz requisição do HTML externo
+  const html = await response.text(); // transforma em texto
+  headerContainer.innerHTML = html; // insere o HTML dentro da div #header
+}
+
+// Renderiza os dados do portfólio no #app
+export function renderPortfolio(portfolio) {
+  const app = document.getElementById("app"); // seleciona a div #app
+  app.innerHTML = `
+    <section id="sobre">
+      <h2>Sobre Mim</h2>
+      <p>${portfolio.sobre}</p>
+    </section>
+
+    <section id="projetos">
+      <h2>Projetos</h2>
+      <ul>
+        ${portfolio.projetos.map(p => `<li>${p.nome} - <a href="${p.link}" target="_blank">Ver Projeto</a></li>`).join("")}
+      </ul>
+    </section>
+
+    <section id="contato">
+      <h2>Contato</h2>
+      <p>Email: ${portfolio.contato.email}</p>
+    </section>
+  `;
+}
+
+```
+# ✅ Etapa 4: model.js (MODEL — DADOS)
+```
+// assets/js/model.js
+
+export const portfolioData = {
+  sobre: "Sou Aristides, desenvolvedor Front-end e gestor de tráfego pago. Trabalho com soluções inteligentes e foco em resultado.",
+  projetos: [
+    { nome: "Projeto Coworking", link: "https://github.com/..." },
+    { nome: "App Lista de Tarefas", link: "https://github.com/..." }
+  ],
+  contato: {
+    email: "aristides@example.com"
+  }
+};
+
+```
+# ✅ Etapa 5: controller.js (CONTROLADOR)
+```
+// assets/js/controller.js
+import { loadHeader, renderPortfolio } from "./view.js"; // importa funções da View
+import { portfolioData } from "./model.js";              // importa dados do Model
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadHeader();                     // carrega o cabeçalho via DOM
+  renderPortfolio(portfolioData);  // renderiza os dados no corpo da página
+});
+
+```
 
 
