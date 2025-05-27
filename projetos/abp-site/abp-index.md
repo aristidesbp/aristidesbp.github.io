@@ -249,9 +249,10 @@ document
      └── body
          └── h1#titulo
 
-``
+```
 
 ### 🚨 O que é DOMContentLoaded no main.js?
+
 ```
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Página carregada com sucesso!");
