@@ -1,11 +1,3 @@
-
-## 🔧 1. CONFIGURAÇÃO BÁSICA DA PÁGINA + SEO:
-A divisão por blocos semânticos dentro da <head> é uma prática de organização profissional, que deixa o código limpo, 
-fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
-
-📌 "O código perfeito é o código comentado!"
-
-
 # ✅ PASSO 1: CRIAR UMA ESTRUTURA BASICA DE UM HTML ✅
 ```
 <!DOCTYPE html> 
@@ -90,7 +82,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-# 📚 Checklist de SEO incluído:
+## 📚 Checklist de SEO incluído:
 
 | Recurso             | Incluído? | Descrição rápida                                        |
 | ------------------- | --------- | ------------------------------------------------------- |
@@ -114,7 +106,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
-## ✅ PASSO 2: CRIAR O ARQUIVO JAVASCRIPT MODULAR  ( main.js ) ✅
+# ✅ PASSO 2: CRIAR O ARQUIVO JAVASCRIPT MODULAR  ( main.js ) ✅
 
 ```
 // main.js - JavaScript modular básico
@@ -125,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 ```
 
 
-# 🧠 O que é o DOM?
+## 🧠 O que é o DOM?
 
 DOM = Document Object Model (Modelo de Objeto do Documento)
 É uma representação em forma de árvore de todos os elementos HTML de uma página. Cada tag, atributo e texto vira um objeto manipulável com JavaScript.
@@ -185,12 +177,12 @@ document                 // Representa o DOM da página HTML carregada
 
 
 ```
-###  Por que usar DOMContentLoaded?
+##  Por que usar DOMContentLoaded?
 Porque garante que o HTML esteja totalmente carregado antes de o JavaScript tentar acessar ou modificar os elementos.
 Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ainda não existe no DOM no momento da execução.
 
 
-### 🧠 Resumo prático
+## 🧠 Resumo prático
 | Conceito           | Explicação curta                                         |
 | ------------------ | -------------------------------------------------------- |
 | DOM                | Representação da página HTML como objetos                |
@@ -201,15 +193,9 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 
 
 
----
-
-
-# 🧠 O que é o manifest.json?
-O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
-Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
-
-
-## ✅ 4. manifest.json (para instalar como app no celular): [assets/manifest.json]
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+# ✅ PASSO 3: CRIAR ARQUIVO "manifest.json" (para instalar como app no celular):
 
 ```
 {
@@ -229,6 +215,14 @@ Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele a
 }
 
 ```
+
+
+# 🧠 O que é o manifest.json?
+O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
+Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
+
+
+
 
 
 
