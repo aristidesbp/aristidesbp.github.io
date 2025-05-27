@@ -1,21 +1,30 @@
-/* Reset básico */
-* {
-  margin: 0;                 /* Remove margens padrão */
-  padding: 0;                /* Remove espaçamentos padrão */
-  box-sizing: border-box;   /* Inclui bordas e padding no cálculo de largura/altura */
-}
+/* assets/css/style.css */
 
 body {
-  font-family: 'DM Sans', sans-serif; /* Aplica fonte moderna */
-  background-color: #f4f4f4;           /* Fundo suave */
-  color: #333;                         /* Cor da fonte principal */
-  padding: 20px;                       /* Espaçamento interno da página */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-h1 {
-  color: #0077cc;                     /* Destaque no título */
+header {
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  text-align: center;
 }
 
-p {
-  margin-top: 10px;                   /* Espaço abaixo do título */
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+}
+
+main {
+  padding: 20px;
 }
