@@ -271,6 +271,18 @@ document                 // Representa o DOM da página HTML carregada
 
 
 ```
+### ✅ Por que usar DOMContentLoaded?
+Porque garante que o HTML esteja totalmente carregado antes de o JavaScript tentar acessar ou modificar os elementos.
+Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ainda não existe no DOM no momento da execução.
+
+
+### 🧠 Resumo prático
+| Conceito           | Explicação curta                                         |
+| ------------------ | -------------------------------------------------------- |
+| DOM                | Representação da página HTML como objetos                |
+| Manipulação DOM    | Usar JS para alterar ou interagir com HTML               |
+| `DOMContentLoaded` | Evento disparado quando todo o HTML foi carregado        |
+| Por que usar       | Para evitar erro ao acessar elementos antes de existirem |
 
 
 
@@ -294,9 +306,12 @@ document                 // Representa o DOM da página HTML carregada
 }
 
 ```
+---
+# Perfeito, ORA DE TESTAR !
+---
 
-
-
+# Você está dando um passo importante: criar um portfólio profissional real, seguindo boas práticas de programação com arquitetura MVC, boas práticas de HTML, CSS, JS e ainda com foco em reuso de código para hospedagem no GitHub Pages.
+# VAMOS CONTINUAR!
 
 
 
