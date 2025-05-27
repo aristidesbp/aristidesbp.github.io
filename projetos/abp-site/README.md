@@ -7,7 +7,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
-## ✅ CRIANDO UMA ESTRUTURA BASICA DE UM HTML ✅
+# ✅ PASSO 1: CRIAR UMA ESTRUTURA BASICA DE UM HTML ✅
 ```
 <!DOCTYPE html> 
 <!-- Declara que este documento é do tipo HTML5 -->
@@ -42,8 +42,8 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
------------------------------------------------------------------------------------------------------------------------
-## ✅ ADICIONANDO METADADOS PARA SEO ✅
+--------------------------------------
+# ✅ PASSO 2: ADICIONAR META DADOS PARA SEO ✅
 ```
 
 <!--  Codificação e compatibilidade -->
@@ -108,7 +108,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-##  ✅ ADICIONANDO ARQUIVOS PARA CSS ✅ 
+#  ✅ PASSO 3: ADICIONANDO CHAMADA DE  ARQUIVOS CSS ESTERNOS ✅ 
 
 ```
   <!-- CSS externo -->
@@ -118,7 +118,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 ```
 
 
-##  ✅ ADICIONANDO ARQUIVOS PARA JS ✅ 
+# ✅ PASSO 4: ADICIONANDO CHAMADA DE ARQUIVOS PARA JS ✅ 
 ```
   <!-- JS externo -->
   <script type="module" src="./js/main.js" defer></script>
@@ -128,12 +128,12 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 -----
 
-### 🧠 O que é o DOM?
+# 🧠 O que é o DOM?
 
 DOM = Document Object Model (Modelo de Objeto do Documento)
 É uma representação em forma de árvore de todos os elementos HTML de uma página. Cada tag, atributo e texto vira um objeto manipulável com JavaScript.
 
-### 📚 Para que serve?
+## 📚 Para que serve?
 Serve para que o JavaScript possa interagir, modificar, criar ou remover elementos HTML dinamicamente.
 
 Exemplo de interações com o DOM:
@@ -143,7 +143,7 @@ Exemplo de interações com o DOM:
     Aplicar uma animação ou estilo dinamicamente.
 
 
-### 🧩 Como funciona?
+## 🧩 Como funciona?
 1- Quando a página HTML é carregada no navegador, o navegador cria automaticamente a estrutura do 
 DOM baseada no conteúdo do HTML.
 2- O JavaScript pode acessar essa estrutura para ler ou modificar os elementos
@@ -166,7 +166,17 @@ document
 
 ```
 
-### 🚨 O que é DOMContentLoaded no main.js?
+## ✅ CRIANDO O ARQUIVO  main.js (JavaScript modular) ✅
+
+```
+// main.js - JavaScript modular básico
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
+});
+
+```
+
+## 🚨 O que é DOMContentLoaded no main.js?
 
 ```
 document.addEventListener("DOMContentLoaded", () => {
@@ -203,19 +213,9 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 
 
 ---
-# ✅ CRIANDO O ARQUIVO  main.js (JavaScript modular) ✅
-
-```
-// main.js - JavaScript modular básico
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
-});
-
-```
 
 
-
-## 🧠 O que é o manifest.json?
+# 🧠 O que é o manifest.json?
 O manifest.json é um arquivo de configuração que descreve como seu site deve se comportar quando for instalado na tela inicial de um dispositivo (como um app no celular). 
 Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele ajuda a transformar um site em uma “quase” aplicação nativa, permitindo que o site seja adicionado à tela inicial do celular, entre outras vantagens.
 
@@ -241,7 +241,9 @@ Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele a
 
 ```
 
-### ✅ EXPLICAÇÃO LINHA A LINHA:
+
+
+## ✅ EXPLICAÇÃO LINHA A LINHA:
 
 🔹 "name"  → Nome completo do aplicativo que será exibido ao usuário, como o título do seu portfólio.
 🔹 "short_name" → Nome curto que será exibido em espaços limitados, como o ícone na tela do celular.
