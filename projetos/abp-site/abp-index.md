@@ -204,4 +204,108 @@ p {
 
 ```
 
+## ✅ 3. main.js (JavaScript modular) : [assets/js/script.js]
+
+```
+// main.js - JavaScript modular básico
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Página carregada com sucesso!"); // Confirma o carregamento do DOM
+});
+
+```
+### 🧠 O que é o DOM?
+
+DOM = Document Object Model (Modelo de Objeto do Documento)
+É uma representação em forma de árvore de todos os elementos HTML de uma página. Cada tag, atributo e texto vira um objeto manipulável com JavaScript.
+
+### 📚 Para que serve?
+Serve para que o JavaScript possa interagir, modificar, criar ou remover elementos HTML dinamicamente.
+
+Exemplo de interações com o DOM:
+    Mudar o texto de um botão.
+    Esconder ou mostrar uma imagem.
+    Adicionar um novo item a uma lista.
+    Aplicar uma animação ou estilo dinamicamente.
+
+
+### 🧩 Como funciona?
+1- Quando a página HTML é carregada no navegador, o navegador cria automaticamente a estrutura do 
+DOM baseada no conteúdo do HTML.
+2- O JavaScript pode acessar essa estrutura para ler ou modificar os elementos
+
+ <h1 id="titulo">Olá, Mundo!</h1>
+ 
+```
+### ESTRUTURA HTML :
+
+<body>
+  <h1 id="titulo">Olá, Mundo!</h1>
+</body>
+
+### Essa estrutura HTML vira isso no DOM:
+
+document
+ └── html
+     └── body
+         └── h1#titulo
+
+``
+
+### 🚨 O que é DOMContentLoaded no main.js?
+```
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Página carregada com sucesso!");
+});
+
+### 🔍 Explicação linha a linha:
+
+document                 // Representa o DOM da página HTML carregada
+.addEventListener(       // Adiciona um "ouvinte" de evento
+  "DOMContentLoaded",    // Evento disparado quando o HTML foi totalmente carregado (sem precisar esperar imagens ou CSS)
+  () => {                // Função anônima (arrow function) que será executada
+    console.log("Página carregada com sucesso!"); // Ação executada: exibe mensagem no console
+  }
+);
+
+
+
+```
+
+
+
+## ✅ 4. manifest.json (para instalar como app no celular): [assets/manifest.json]
+
+```
+{
+  "name": "Portfólio Aristides BP",
+  "short_name": "Portfólio",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0077cc",
+  "icons": [
+    {
+      "src": "/assets/icons/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
