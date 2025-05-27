@@ -28,13 +28,13 @@ tanto na forma bruta quanto formatada. Ele converte texto simples em HTML estrut
 
 
 # 🧱 Estrutura Básica de um Arquivo Markdown
+## Como criar caixa de Textos : 
+``` use tres crases, verifique o codigo ``` 
 
-### 1. **Títulos (Headings)**
-
+## 1. **Títulos (Headings)**
 Use `#` para criar títulos:
 
 ```
-markdown
 # Título de nível 1
 ## Título de nível 2
 ### Título de nível 3
@@ -42,7 +42,12 @@ markdown
 ##### Título de nível 5
 ###### Título de nível 6
 ```
-
+# Título de nível 1
+## Título de nível 2
+### Título de nível 3
+#### Título de nível 4
+##### Título de nível 5
+###### Título de nível 6
 
 
 # 2. Ênfase de texto:
