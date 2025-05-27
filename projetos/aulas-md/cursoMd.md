@@ -7,14 +7,14 @@ documentações, arquivos README, e blogs.
 
 ---
 
-## 🛠️ O que é Markdown?
+# 🛠️ O que é Markdown?
 
 Markdown é uma linguagem de marcação leve, criada para tornar o texto fácil de escrever e ler, 
 tanto na forma bruta quanto formatada. Ele converte texto simples em HTML estruturado.
 
 ---
 
-## 📝 Como criar um arquivo `.md`
+# 📝 Como criar um arquivo `.md`
 
 1. **Escolha um editor de texto**:
    - Pode usar qualquer editor: VS Code, Notepad++, Sublime, ou até blocos de notas.
@@ -26,24 +26,26 @@ tanto na forma bruta quanto formatada. Ele converte texto simples em HTML estrut
 
 ---
 
-## 🧱 Estrutura Básica de um Arquivo Markdown
+
+# 🧱 Estrutura Básica de um Arquivo Markdown
 
 ### 1. **Títulos (Headings)**
 
 Use `#` para criar títulos:
 
-```markdown```
+```
+markdown
 # Título de nível 1
 ## Título de nível 2
 ### Título de nível 3
 #### Título de nível 4
 ##### Título de nível 5
 ###### Título de nível 6
+```
 
 
 
-
-#2. Ênfase de texto:
+# 2. Ênfase de texto:
 
 *Itálico com asterisco*
 _Itálico com underline_
