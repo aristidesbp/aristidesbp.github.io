@@ -307,11 +307,12 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 
 ```
 ---
-# Perfeito, ORA DE TESTAR !
+# Perfeito, HORA DE TESTAR !
+### Faça um repositorio no github e crie os arquivos e teste o projeto!
 ---
 
 # Você está dando um passo importante: criar um portfólio profissional real, seguindo boas práticas de programação com arquitetura MVC, boas práticas de HTML, CSS, JS e ainda com foco em reuso de código para hospedagem no GitHub Pages.
-# VAMOS CONTINUAR!
+### VAMOS CONTINUAR!
 
 
 
