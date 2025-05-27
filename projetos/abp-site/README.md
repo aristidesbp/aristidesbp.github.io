@@ -43,7 +43,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 -----------------------------------------------------------------------------------------------------------------------
-## <!-- ✅ METADADOS PARA SEO ✅ -->
+## ✅ METADADOS PARA SEO ✅
 ```
 
 <!--  Codificação e compatibilidade -->
@@ -89,7 +89,6 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 ```
 
-
 ### ✅ Checklist de SEO incluído:
 
 | Recurso             | Incluído? | Descrição rápida                                        |
@@ -109,7 +108,7 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 
 
 
-## <!-- ✅ ARQUIVOS PARA CSS ✅ -->
+##  ✅ ARQUIVOS PARA CSS ✅ 
 
 ```
   <!-- CSS externo -->
@@ -119,12 +118,16 @@ fácil de entender e manter, além de ser didaticamente perfeito para ensinar.
 ```
 
 
-## <!-- ✅ ARQUIVOS PARA JS ✅ -->
+##  ✅ ARQUIVOS PARA JS ✅ 
 ``
   <!-- JS externo -->
   <script type="module" src="./assets/js/main.js" defer></script>
 
 ```
+
+
+
+
 
 
 
