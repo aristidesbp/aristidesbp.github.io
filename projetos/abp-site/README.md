@@ -1,4 +1,4 @@
-# ✅ PASSO 1: CRIAR UMA ESTRUTURA BASICA DE UM HTML ✅
+# ✅ index.html ✅
 ```
 <!DOCTYPE html> 
 <!-- Declara que este documento é do tipo HTML5 -->
@@ -106,7 +106,7 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
-# ✅ PASSO 2: CRIAR O ARQUIVO JAVASCRIPT MODULAR  ( main.js ) ✅
+# ✅ main.js ✅
 
 ```
 // main.js - JavaScript modular básico
@@ -195,7 +195,7 @@ Se você escrever JS antes do HTML carregar, pode dar erro porque o elemento ain
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------
-# ✅ PASSO 3: CRIAR ARQUIVO "manifest.json" (para instalar como app no celular):
+# ✅ manifest.json ✅
 
 ```
 {
