@@ -1,0 +1,92 @@
+/* RESET GERAL E CONFIGURAÇÃO INICIAL */
+* {
+  margin: 0;                        /* Remove margens padrão */
+  padding: 0;                       /* Remove espaçamento padrão */
+  box-sizing: border-box;          /* Faz com que padding e border não aumentem o tamanho do elemento */
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;  /* Fonte moderna e elegante */
+  background-color: #f5f5f5;            /* Cor de fundo clara */
+  color: #333;                          /* Cor do texto padrão */
+  line-height: 1.6;                     /* Espaçamento entre linhas */
+}
+
+/* CABEÇALHO PRINCIPAL */
+header {
+  background: linear-gradient(to right, #111, #444);  /* Gradiente elegante */
+  color: white;                                       /* Texto branco */
+  padding: 40px 20px;                                 /* Espaçamento interno */
+  text-align: center;                                 /* Centraliza o texto */
+}
+
+header h1 {
+  font-size: 36px;            /* Tamanho grande do título */
+  margin-bottom: 10px;        /* Espaço abaixo do título */
+}
+
+/* SEÇÕES PRINCIPAIS */
+section {
+  padding: 60px 20px;         /* Espaçamento interno */
+  max-width: 1200px;          /* Largura máxima da seção */
+  margin: auto;               /* Centraliza no meio da página */
+}
+
+/* TÍTULOS DAS SEÇÕES */
+.titulo-secao {
+  font-size: 28px;            /* Tamanho do título */
+  color: #111;                /* Cor do texto */
+  margin-bottom: 30px;        /* Espaço abaixo do título */
+  text-align: center;         /* Centraliza o título */
+}
+
+/* GRID DE SERVIÇOS */
+.servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Layout responsivo com mínimo de 250px */
+  gap: 30px;                                                    /* Espaço entre colunas */
+}
+
+/* CARD INDIVIDUAL DE SERVIÇO */
+.card-servico {
+  background: white;                           /* Fundo branco */
+  border-radius: 12px;                         /* Cantos arredondados */
+  padding: 20px;                               /* Espaçamento interno */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);     /* Sombra suave */
+  transition: transform 0.3s;                  /* Suaviza a animação ao passar o mouse */
+}
+
+/* ANIMAÇÃO AO PASSAR O MOUSE */
+.card-servico:hover {
+  transform: translateY(-5px);                 /* Eleva o card para cima */
+}
+
+/* TÍTULOS DOS CARDS */
+.card-servico h3 {
+  margin-bottom: 10px;                         /* Espaço abaixo do título */
+  color: #222;                                 /* Cor do título */
+}
+
+/* PARÁGRAFOS DOS CARDS */
+.card-servico p {
+  font-size: 15px;                             /* Tamanho do texto */
+  color: #555;                                 /* Cor do texto */
+}
+
+/* SEÇÃO SOBRE MIM */
+.sobre-mim {
+  background-color: #222;                      /* Fundo escuro */
+  color: white;                                /* Texto branco */
+  border-radius: 12px;                         /* Cantos arredondados */
+  padding: 40px 30px;                          /* Espaçamento interno */
+  margin-top: 40px;                            /* Espaço acima */
+}
+
+/* RODAPÉ */
+footer {
+  background-color: #111;                      /* Fundo escuro */
+  color: white;                                /* Texto branco */
+  text-align: center;                          /* Centraliza o texto */
+  padding: 20px;                               /* Espaçamento interno */
+  font-size: 14px;                             /* Tamanho do texto */
+}
