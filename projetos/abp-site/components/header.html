@@ -1,8 +1,21 @@
 <!-- components/header.html -->
 <header>
-  <h1>Aristides Barbosa Pontes</h1>
-  <nav>
-    <ul>
+  <nav class="navbar">
+    <!-- Logo ou Nome -->
+    <h1 class="logo">AristidesBP</h1>
+
+    <!-- Botão Hamburguer para menu mobile -->
+    <button id="menu-toggle" aria-label="Abrir Menu" class="hamburguer">
+      &#9776;
+    </button>
+
+    <!-- Botão de troca de tema -->
+    <button id="theme-toggle" aria-label="Trocar Tema" class="theme-toggle">
+      ☀
+    </button>
+
+    <!-- Links do menu -->
+    <ul id="nav-links" class="nav-links">
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#projetos">Projetos</a></li>
       <li><a href="#contato">Contato</a></li>
