@@ -344,22 +344,64 @@ Utilizado em aplicações web progressivas (PWA – Progressive Web Apps). Ele a
 | `icons`            | Ícones usados para representar o app na tela inicial |
 
 
+##### OBS: Depois vamos criar um PWA completo do seu portfólio para ser instalado no celular como se fosse um app nativo — com splash screen, ícones adaptáveis, e até notificações.
 
 
 
 ---
 # Perfeito, HORA DE TESTAR !
 ### Faça um repositorio no github e crie os arquivos e teste o projeto!
+### Você está dando um passo importante: criar um portfólio profissional real, seguindo boas práticas de programação com arquitetura MVC, boas práticas de HTML, CSS, JS e ainda com foco em reuso de código para hospedagem no GitHub Pages.VAMOS CONTINUAR!
 ---
 
-# Você está dando um passo importante: criar um portfólio profissional real, seguindo boas práticas de programação com arquitetura MVC, boas práticas de HTML, CSS, JS e ainda com foco em reuso de código para hospedagem no GitHub Pages.
-### VAMOS CONTINUAR!
+# ✅ Etapas do Projeto
+A cada passo, vou comentando e explicando tudo, inclusive o uso do DOM.
+
+# 🧱 Estrutura do Projeto (MVC)
+```
+/portfolio-aristidesbp/
+├── index.html              # View principal
+├── /assets/
+│   ├── /css/
+│   │   └── style.css       # Arquivo de estilos
+│   ├── /js/
+│   │   ├── controller.js   # Controlador (MVC)
+│   │   ├── model.js        # Dados e lógica do sistema
+│   │   └── view.js         # Manipulação do DOM
+│   └── /img/
+│       └── foto.png        # Imagem de perfil (exemplo)
+├── /components/
+│   └── header.html         # Componentes reutilizáveis
+└── README.md               # Documentação
+
+```
+
+# 🧠 O que é MVC nesse contexto?
+
+Model = Dados e lógica da aplicação.
+View = O que o usuário vê (HTML + DOM).
+Controller = Ponto de controle que conecta a view e o model (reage a eventos e atualiza a tela).
 
 
 
+# ✅ Etapa 1: index.html (VIEW PRINCIPAL)
+#### Adicione o conteudo dentro do <body> aqui.. </body>, do arquivo "index.html"
 
+```
+  <!-- Componente de Cabeçalho -->
+  <div id="header"></div> <!-- Será preenchido com o conteúdo de header.html via DOM -->
 
+  <!-- Área principal -->
+  <main id="app">
+    <!-- Aqui será renderizado o conteúdo dinâmico da view.js -->
+  </main>
 
+  <!-- Scripts MVC -->
+  <script src="./assets/js/model.js" type="module"></script>
+  <script src="./assets/js/view.js" type="module"></script>
+  <script src="./assets/js/controller.js" type="module"></script>
+
+```
 
 
 
