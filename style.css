@@ -25,15 +25,11 @@ body {
 #meu-header {
   background-color: #1a1a1a;              /* Cor escura de fundo */
   color: #ffffff;                         /* Texto branco */
-  padding: 20px;                          /* Espaçamento interno */
-  text-align: center;                     /* Centraliza texto */
-  font-size: 24px;                        /* Tamanho da fonte */
-  font-weight: bold;                      /* Negrito */
 }
 
 #conteudo {
   padding: 40px 20px;                     /* Espaçamento interno */
-  max-width: 1200px;                      /* Largura máxima */
+  max-width: 1100px;                      /* Largura máxima */
   margin: auto;                           /* Centraliza */
   flex: 1;                                /* Ocupa o espaço restante */
 }
@@ -41,9 +37,6 @@ body {
 #meu-footer {
   background-color: #1a1a1a;              /* Fundo escuro */
   color: #ffffff;                         /* Cor do texto */
-  text-align: center;                     /* Centraliza */
-  padding: 20px;                          /* Espaçamento interno */
-  font-size: 14px;                        /* Fonte menor */
 }
 
 /* 💡 BOTÕES PADRÃO */
