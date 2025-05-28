@@ -39,21 +39,7 @@ body {
   color: #ffffff;                         /* Cor do texto */
 }
 
-/* 💡 BOTÕES PADRÃO */
-.btn-padrao {
-  background-color: #ffb400;              /* Cor amarelo-dourado */
-  color: #000;                            /* Texto preto */
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
 
-.btn-padrao:hover {
-  background-color: #d49c00;
-}
 
 /* 📱 RESPONSIVIDADE */
 @media (max-width: 768px) {
