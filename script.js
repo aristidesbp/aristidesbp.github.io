@@ -36,7 +36,6 @@ function carregarComponentes() {
       console.error('Erro ao carregar o conteúdo:', error);
     });
 
-
   // 📌 Carregar o footer.html na div com id "meu-footer"
   fetch('contato.html')
     .then(response => response.text())
@@ -52,8 +51,6 @@ function carregarComponentes() {
 // ✅ Chamada da função quando a página estiver carregada
 document.addEventListener('DOMContentLoaded', carregarComponentes);
 
-
- 
 /*###################################################################*/
 /*###################################################################*/
 /*###################################################################*/
