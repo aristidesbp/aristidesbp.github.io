@@ -46,7 +46,7 @@ function carregarComponentes() {
       console.error('Erro ao carregar o header:', error); // Mostra erro no console se falhar
     });
 
-///////////////////////////////////////////////
+ ///////////////////////////////////////////////
  // 📌 Carregar o conteudo.html na div com id "conteudo"
   fetch('sobre.html')
     .then(response => response.text())
@@ -57,6 +57,7 @@ function carregarComponentes() {
       console.error('Erro ao carregar o conteúdo:', error);
     });
 
+  ///////////////////////////////////////////////
   // 📌 Carregar o footer.html na div com id "meu-footer"
   fetch('footer.html')
     .then(response => response.text())
