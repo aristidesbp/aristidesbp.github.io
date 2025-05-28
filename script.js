@@ -12,22 +12,6 @@ http://localhost:8000
 5. curtir a pagina kkk!
 */
 
-
-// 📌 Função chamada ao mudar a opção do <select>
-function trocarConteudo() {
-
-  // 🧠 Pegamos o elemento <select> pelo ID
-  const seletor = document.getElementById("seletorConteudo");
-
-  // 📥 Pegamos o valor da opção selecionada (que é o caminho da página)
-  const paginaSelecionada = seletor.value;
-
-  // 🔁 Redirecionamos o navegador para a página escolhida
-  window.location.href = paginaSelecionada;
-
-} // 🔚 Fim da função trocarConteudo()
-
-
 /*###################################################################*/
 /*###################################################################*/
 /*###################################################################*/
