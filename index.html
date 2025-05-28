@@ -61,44 +61,24 @@
 <link href="icons/favicon.png" type="image/x-icon" rel="shortcut icon"/><!-- Estilo CSS externo -->
 <link rel="stylesheet" href="markdown.css">
 
-
-
-
-<style>
-/* 🌐 CONFIGURAÇÕES GERAIS DA PÁGINA */
-* {
-  margin: 0;                              /* Remove margens padrão */
-  padding: 0;                             /* Remove espaçamentos padrão */
-  box-sizing: border-box;                /* Inclui padding e border no cálculo do tamanho total do elemento */
-  font-family: 'DM Sans', sans-serif;    /* Define a fonte padrão da página */
-}
-
-body {
-  background-color: #f9f9f9;             /* Cor de fundo clara */
-  color: #333;                            /* Cor de texto suave */
-  font-size: 16px;                        /* Tamanho padrão da fonte */
-  line-height: 1.6;                       /* Espaçamento entre linhas */
-  height: 100vh;                          /* Garante altura total da tela */
-}
-
-</style>
 </head> 
 <body>
 
 
- 
- 
-    
-    <!-- Cabeçalho da página -->
-      <header id="meu-header"></header>
 
-    <!-- Conteúdo principal -->
-    <main id="conteudo"></main>
+<div id="header-container"></div>
+<script src="header.js"></script>
+<script>createHeader();</script>
 
-    <!-- Rodapé da página -->
-    <footer id="meu-footer"></footer>
-    
- 
+<div id="sobre"></div>
+<script src="sobre.js"></script>
+<script>createSobre();</script>
+
+<div id="footer-container"></div>
+<script src="footer.js"></script>
+<script>createFooter();</script>
+
+
 
 
 
@@ -108,67 +88,9 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>
- /*
-OBS: CASO NAO FUNCIONE TENTE PELO LOCAL HOST.
-✅ OPÇÃO 1: Usar o Python para criar um servidor local (super fácil!)
-🧱 Passo a passo:
-1. Abra o terminal no Linux Mint.
-2. Navegue até a pasta do seu projeto HTML:    
-Exemplo (cd /home/seu-usuario/Documentos/meu-projeto)
-3.Digite o codigo:
-python3 -m http.server
-4.No navegador:
-http://localhost:8000
-5. curtir a pagina kkk!
-*/
-
-/*###################################################################*/
-/*###################################################################*/
-/*###################################################################*/
 
 
-// 🚀 Função para carregar conteúdos HTML em elementos específicos
-function carregarComponentes() {
-
-  // 📌 Carregar o header.html na div com id "meu-header"
-  fetch('header.html') // Caminho do arquivo que será carregado
-    .then(response => response.text()) // Converte a resposta para texto
-    .then(data => {
-      document.getElementById('meu-header').innerHTML = data; // Insere o conteúdo na div
-    })
-    .catch(error => {
-      console.error('Erro ao carregar o header:', error); // Mostra erro no console se falhar
-    });
-
- ///////////////////////////////////////////////
- // 📌 Carregar o conteudo.html na div com id "conteudo"
-  fetch('sobre.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('conteudo').innerHTML = data;
-    })
-    .catch(error => {
-      console.error('Erro ao carregar o conteúdo:', error);
-    });
-
-  ///////////////////////////////////////////////
-  // 📌 Carregar o footer.html na div com id "meu-footer"
-  fetch('footer.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('meu-footer').innerHTML = data;
-    })
-    .catch(error => {
-      console.error('Erro ao carregar o footer:', error);
-    });
-
-} // 🔚 Fim da função carregarComponentes()
-
-// ✅ Chamada da função quando a página estiver carregada
-document.addEventListener('DOMContentLoaded', carregarComponentes);
 
 
-</script>
 </body>
 </html>
