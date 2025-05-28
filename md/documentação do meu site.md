@@ -1,5 +1,5 @@
 # INDEX.HTML (PAGINA INICIAL)
-``
+```
 <!DOCTYPE html><!-- Declarando que este documento é do tipo HTML5 --> 
 
 <!-- 🧠 CONFIGURAÇÃO BÁSICA DA PÁGINA-->
@@ -94,6 +94,6 @@
 # STYLE.CSS (ARQUIVO DE ESTILO DA PAGINA)
 ```
 
-``
+```
 
 
