@@ -1,55 +1,61 @@
-// 💡 Classe responsável por carregar componentes HTML dinamicamente na página
-class ComponentLoader {
+/* 
+  Classe responsável por carregar dinamicamente os componentes da página 
+  e trocar os conteúdos com base no seletor.
+*/
 
-  // 🔧 Construtor da classe, recebe os IDs dos elementos onde os componentes serão injetados
-  constructor(headerId, conteudoId, footerId) {
-    this.headerElement = document.getElementById(headerId);   // 🧩 Elemento do header
-    this.conteudoElement = document.getElementById(conteudoId); // 🧩 Elemento principal de conteúdo
-    this.footerElement = document.getElementById(footerId);   // 🧩 Elemento do footer
-  }
-
-  // 🚀 Método para carregar qualquer arquivo HTML em um determinado elemento
-  carregarArquivo(caminho, destinoElement) {
-    fetch(caminho)                         // 📥 Faz a requisição do arquivo
-      .then(response => response.text())   // 📄 Converte a resposta em texto
-      .then(data => {
-        destinoElement.innerHTML = data;   // 🎯 Insere o conteúdo no elemento de destino
-      })
-      .catch(error => {
-        console.error(`❌ Erro ao carregar o arquivo ${caminho}:`, error); // 🚨 Trata erro
-      });
-  }
-
-  // 📦 Método que carrega os componentes fixos ao iniciar a página
-  carregarComponentesFixos() {
-    this.carregarArquivo('header.html', this.headerElement);   // 🔼 Header
-    this.carregarArquivo('sobre.html', this.conteudoElement);  // 🧠 Conteúdo inicial (sobre.html)
-    this.carregarArquivo('footer.html', this.footerElement);   // 🔽 Footer
-  }
-
-  // 🔁 Método para trocar o conteúdo da div #conteudo dinamicamente com base no <select>
-  trocarConteudo(caminhoArquivo) {
-    this.carregarArquivo(caminhoArquivo, this.conteudoElement); // 🧠 Atualiza a área de conteúdo com novo arquivo
-  }
-
-} // 🔚 Fim da classe ComponentLoader
-
-// ✅ Instancia a classe quando a página for carregada
-document.addEventListener('DOMContentLoaded', () => {
+class CarregadorComponentes {
   
-  // 🧱 Cria o objeto carregador de componentes
-  const loader = new ComponentLoader('meu-header', 'conteudo', 'meu-footer');
+  constructor() {
+    // Iniciar o carregamento dos componentes principais da página
+    this.carregarHeader();
+    this.carregarFooter();
+    this.carregarConteudo('sobre.html'); // Carrega a página padrão inicial
+  }
 
-  // 🚀 Carrega os componentes fixos (header, sobre, footer)
-  loader.carregarComponentesFixos();
+  // 🔼 Carrega o conteúdo do header.html
+  carregarHeader() {
+    fetch('header.html') // Busca o arquivo header.html
+      .then(response => response.text()) // Converte para texto
+      .then(data => {
+        document.getElementById('meu-header').innerHTML = data; // Insere no DOM
+        this.configurarSeletor(); // Chama o método para ativar o <select> após inserido no DOM
+      })
+      .catch(error => console.error('Erro ao carregar o header:', error));
+  }
 
-  // 📥 Adiciona o evento para escutar mudanças no <select>
-  const seletor = document.getElementById("seletorConteudo");
+  // 🔽 Carrega o conteúdo do footer.html
+  carregarFooter() {
+    fetch('footer.html') // Busca o footer
+      .then(response => response.text()) // Converte para texto
+      .then(data => {
+        document.getElementById('meu-footer').innerHTML = data; // Insere no DOM
+      })
+      .catch(error => console.error('Erro ao carregar o footer:', error));
+  }
 
-  // ⏳ Quando o <select> mudar de valor, chama o método da classe para trocar o conteúdo
-  seletor.addEventListener("change", () => {
-    const paginaSelecionada = seletor.value; // Ex: 'contato.html'
-    loader.trocarConteudo(paginaSelecionada); // 🧠 Troca conteúdo sem recarregar a página
-  });
+  // 📄 Carrega qualquer página HTML dentro da div#conteudo
+  carregarConteudo(pagina) {
+    fetch(pagina) // Busca a página
+      .then(response => response.text()) // Converte para texto
+      .then(data => {
+        document.getElementById('conteudo').innerHTML = data; // Insere o conteúdo
+      })
+      .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+  }
 
+  // 🎯 Configura o seletor de páginas após o header ser inserido no DOM
+  configurarSeletor() {
+    const seletor = document.getElementById('seletorConteudo'); // Pega o select pelo ID
+    if (seletor) {
+      seletor.addEventListener('change', () => {
+        const paginaSelecionada = seletor.value; // Pega o valor selecionado
+        this.carregarConteudo(paginaSelecionada); // Chama o método da classe para trocar o conteúdo
+      });
+    }
+  }
+}
+
+// ✅ Instancia a classe quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', () => {
+  new CarregadorComponentes(); // Cria a instância e ativa tudo
 });
