@@ -1,0 +1,104 @@
+/* 🌐 CONFIGURAÇÕES GERAIS DA PÁGINA */
+
+/* Aplica estilo global a todos os elementos da página */
+* {
+  margin: 0;                         /* Remove margens padrão */
+  padding: 0;                        /* Remove espaçamentos padrão */
+  box-sizing: border-box;           /* Inclui padding e border no cálculo do tamanho total do elemento */
+  font-family: 'DM Sans', sans-serif; /* Define a fonte padrão da página */
+}
+
+/* Define o plano de fundo e cor do texto do body */
+body {
+  background-color: #f9f9f9;        /* Cor de fundo clara para contraste */
+  color: #333;                      /* Cor de texto padrão (preto suave) */
+  line-height: 1.6;                 /* Altura da linha para melhor leitura */
+  font-size: 16px;                  /* Tamanho padrão da fonte */
+}
+
+/* 🧠 ESTRUTURA PRINCIPAL */
+
+/* Estiliza o cabeçalho da página */
+#meu-header {
+  background-color: #1a1a1a;        /* Fundo escuro para contraste */
+  color: #ffffff;                   /* Texto branco */
+  padding: 20px;                    /* Espaçamento interno */
+  text-align: center;              /* Centraliza o conteúdo */
+  font-size: 24px;                  /* Aumenta o tamanho da fonte */
+  font-weight: bold;               /* Deixa o texto em negrito */
+}
+
+/* Estiliza o conteúdo principal */
+#conteudo {
+  padding: 40px 20px;               /* Espaço interno nas laterais e topo/baixo */
+  max-width: 1200px;                /* Largura máxima do conteúdo */
+  margin: auto;                     /* Centraliza o conteúdo na tela */
+}
+
+/* Estiliza o rodapé */
+#meu-footer {
+  background-color: #1a1a1a;        /* Fundo escuro igual ao cabeçalho */
+  color: #ffffff;                   /* Cor branca para contraste */
+  text-align: center;              /* Centraliza o conteúdo */
+  padding: 20px;                    /* Espaço interno */
+  font-size: 14px;                  /* Tamanho menor para o rodapé */
+  margin-top: 40px;                 /* Distância do conteúdo principal */
+}
+
+/* 💡 BOTÕES PADRÃO */
+.btn-padrao {
+  background-color: #ffb400;        /* Cor de fundo amarelo-dourado */
+  color: #000;                      /* Cor do texto preta */
+  padding: 10px 20px;               /* Espaço interno do botão */
+  border: none;                     /* Remove a borda padrão */
+  border-radius: 5px;               /* Cantos levemente arredondados */
+  cursor: pointer;                  /* Altera cursor ao passar sobre o botão */
+  font-weight: bold;               /* Deixa o texto do botão em negrito */
+  transition: background-color 0.3s;/* Suaviza a transição da cor */
+}
+
+.btn-padrao:hover {
+  background-color: #d49c00;        /* Cor mais escura ao passar o mouse */
+}
+
+/* 🧩 CLASSES UTILITÁRIAS */
+.texto-centralizado {
+  text-align: center;              /* Centraliza o texto horizontalmente */
+}
+
+.margem-topo {
+  margin-top: 20px;                /* Adiciona margem superior */
+}
+
+.margem-inferior {
+  margin-bottom: 20px;             /* Adiciona margem inferior */
+}
+
+/* 🔄 ANIMAÇÕES COM SCROLLREVEAL (inicialmente invisíveis) */
+[data-anime] {
+  opacity: 0;                       /* Torna o elemento invisível até a animação acontecer */
+  transform: translateY(50px);      /* Move o elemento 50px para baixo */
+  transition: 0.8s ease;            /* Duração e tipo da animação */
+}
+
+[data-anime].ativo {
+  opacity: 1;                       /* Elemento visível */
+  transform: translateY(0);         /* Retorna à posição original */
+}
+
+/* 📱 RESPONSIVIDADE BÁSICA */
+@media (max-width: 768px) {
+  #conteudo {
+    padding: 20px 10px;             /* Reduz o espaçamento lateral em telas menores */
+  }
+
+  #meu-header,
+  #meu-footer {
+    font-size: 18px;                /* Reduz o tamanho da fonte em telas pequenas */
+    padding: 15px;                  /* Reduz padding para melhor ajuste */
+  }
+
+  .btn-padrao {
+    padding: 8px 16px;              /* Ajusta o tamanho dos botões */
+  }
+}
