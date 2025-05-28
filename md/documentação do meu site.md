@@ -1,4 +1,7 @@
-# INDEX.HTML (PAGINA INICIAL)
+# veja meu site: https://aristidesbp.guithub.io
+
+
+## INDEX.HTML (PAGINA INICIAL)
 ```
 <!DOCTYPE html><!-- Declarando que este documento é do tipo HTML5 --> 
 
@@ -94,7 +97,7 @@
 
 
 -----
-# HEADER.HTML (PAGINA QUE CONTEM A PARTE SUPERIOR DO CORPO DA PAGINA )
+## HEADER.HTML (PAGINA QUE CONTEM A PARTE SUPERIOR DO CORPO DA PAGINA )
 ### MENU, LOGO ETC...
 ```
 <!-- ################ imagem da Logo azul abaixo  da navebar/menu ######################### -->
@@ -124,7 +127,7 @@
 ```
 
 -----
-# FOOTER.HTML (PAGINA QUE CONTEM A PARTE SUPERIOR DO CORPO DA PAGINA )
+## FOOTER.HTML (PAGINA QUE CONTEM A PARTE SUPERIOR DO CORPO DA PAGINA )
 ### CONTATO, RODAPE ETC...
 ```
 <!-- Rodapé -->
@@ -172,7 +175,7 @@ Analista de Sistemas</p>
 
 
 ----
-# SCRIPT.JS (AQUIVO LOGICO QUE EXECUTA FUNÇÕES)
+## SCRIPT.JS (AQUIVO LOGICO QUE EXECUTA FUNÇÕES)
 ```
 // 🚀 Função para carregar conteúdos HTML em elementos específicos
 function carregarComponentes() {
@@ -257,7 +260,7 @@ function trocarConteudo() {
 ```
 
 ----
-# STYLE.CSS (ARQUIVO DE ESTILO DA PAGINA)
+## STYLE.CSS (ARQUIVO DE ESTILO DA PAGINA)
 ```
 
 ```
