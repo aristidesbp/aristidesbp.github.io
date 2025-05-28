@@ -47,7 +47,9 @@
 <meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
 <meta name="twitter:site" content="@aristidesbp"> <!-- Seu @ do Twitter, se tiver -->
 
-
+<!-- 🧠 Manifest (para Progressive Web Apps – PWA) -->
+<link rel="manifest" href="json/site-mvc-manifest.json">
+ 
 <!-- 🧠 ARQUIVOS EXTERNOS DE ESTILO (FONTS + CSS) -->
 <!-- Pré-carregamento para fontes do Google (melhora desempenho) -->
 <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin /><!-- Importação de fontes do Google Fonts -->
@@ -57,12 +59,85 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet"> 
 <link href="icons/favicon.png" type="image/x-icon" rel="shortcut icon"/><!-- Estilo CSS externo -->
-<link href="style.css" rel="stylesheet">
 <link rel="stylesheet" href="markdown.css">
 
 
- <!-- 🧠 Manifest (para Progressive Web Apps – PWA) -->
-<link rel="manifest" href="json/site-mvc-manifest.json">
+
+
+<stayle>
+/* 🌐 CONFIGURAÇÕES GERAIS DA PÁGINA */
+* {
+  margin: 0;                              /* Remove margens padrão */
+  padding: 0;                             /* Remove espaçamentos padrão */
+  box-sizing: border-box;                /* Inclui padding e border no cálculo do tamanho total do elemento */
+  font-family: 'DM Sans', sans-serif;    /* Define a fonte padrão da página */
+}
+
+body {
+  background-color: #f9f9f9;             /* Cor de fundo clara */
+  color: #333;                            /* Cor de texto suave */
+  font-size: 16px;                        /* Tamanho padrão da fonte */
+  line-height: 1.6;                       /* Espaçamento entre linhas */
+  height: 100vh;                          /* Garante altura total da tela */
+}
+
+/* Envolve toda a estrutura da página */
+#pagina {
+  display: flex;                          /* Ativa Flexbox */
+  flex-direction: column;                /* Elementos em coluna */
+  min-height: 100vh;                     /* Altura mínima de 100% da viewport */
+}
+
+/* 🧠 ESTRUTURA PRINCIPAL */
+#meu-header {
+  background-color: #1a1a1a;              /* Cor escura de fundo */
+  color: #ffffff;                         /* Texto branco */
+}
+
+#conteudo {
+  padding: 40px 20px;                     /* Espaçamento interno */
+  max-width: 1100px;                      /* Largura máxima */
+  margin: auto;                           /* Centraliza */
+  flex: 1;                                /* Ocupa o espaço restante */
+}
+
+#meu-footer {
+  background-color: #1a1a1a;              /* Fundo escuro */
+  color: #ffffff;                         /* Cor do texto */
+}
+
+
+
+/* 📱 RESPONSIVIDADE */
+@media (max-width: 768px) {
+  #conteudo {
+    padding: 20px 10px;
+  }
+
+  #meu-header,
+  #meu-footer {
+    font-size: 18px;
+    padding: 15px;
+  }
+
+  .btn-padrao {
+    padding: 8px 16px;
+  }
+}
+
+
+/* Envolve toda a estrutura da página para controlar o layout */
+#pagina {
+  display: flex;                /* Ativa o Flexbox */
+  flex-direction: column;      /* Alinha os filhos em coluna (vertical) */
+  min-height: 100vh;           /* Garante que ocupe 100% da altura da tela */
+}
+
+/* Permite que o conteúdo cresça e empurre o footer para o fim */
+#conteudo {
+  flex: 1;                      /* Ocupa o espaço restante entre header e footer */
+}
+</stayle>
 </head> 
 <body>
 
