@@ -1,30 +1,94 @@
-<!-- Rodapé -->
-<!-- Seção Contato Completa -->
+<!-- includes/footer.html -->
+<!-- RODAPÉ INDEPENDENTE E REUTILIZÁVEL -->
+<link rel="stylesheet" href="../css/footer.css"> <!-- Vincula o CSS do rodapé -->
+
 <section id="contato" class="text-center">
-<h2 class="section-header">Entre em Contato</h2>
+  <h2 class="section-header">Entre em Contato</h2>
 
-<p style="font-size: 0.9em;">Email: <a href="mailto:aristidesbp@gmail.com">aristidesbp@gmail.com</a></p>  
-<p style="font-size: 0.9em;">Telefone: <a href="tel:+5591992420981">(91)9 9242-0981</a></p>
-<br>   
-    
-<div class="social-icons">
-<a href="https://www.facebook.com/aristidesbp" target="_blank" class="me-3"><i class="bi bi-facebook"></i></a>      
-<a href="https://www.instagram.com/aristidesbp" target="_blank" class="me-3"><i class="bi bi-instagram"></i></a>      
-<a href="https://x.com/aristidesbp?t=T5iGxvFQKyPJ3XDwgpxCCg&s=09" target="_blank" class="me-3"><i class="bi bi-twitter"></i></a>      
-<a href="https://www.tiktok.com/@aristidesbp?_t=8rAHAv90Du4&_r=1" target="_blank" class="me-3"><i class="bi bi-tiktok"></i></a>
-    
-</div>
-<br>   
+  <!-- Informações de contato -->
+  <p class="contato">Email: <a href="mailto:aristidesbp@gmail.com">aristidesbp@gmail.com</a></p>  
+  <p class="contato">Telefone: <a href="tel:+5591992420981">(91) 9 9242-0981</a></p>
 
-<a href="https://wa.me/5591992420981" target="_blank" class="btn btn-success">WhatsApp</a>
+  <!-- Ícones das redes sociais -->
+  <div class="social-icons">
+    <a href="https://www.facebook.com/aristidesbp" target="_blank"><i class="bi bi-facebook"></i></a>
+    <a href="https://www.instagram.com/aristidesbp" target="_blank"><i class="bi bi-instagram"></i></a>
+    <a href="https://x.com/aristidesbp?t=T5iGxvFQKyPJ3XDwgpxCCg&s=09" target="_blank"><i class="bi bi-twitter"></i></a>
+    <a href="https://www.tiktok.com/@aristidesbp?_t=8rAHAv90Du4&_r=1" target="_blank"><i class="bi bi-tiktok"></i></a>
+  </div>
+
+  <!-- Botão de WhatsApp -->
+  <a href="https://wa.me/5591992420981" target="_blank" class="btn btn-success">WhatsApp</a>
 </section>
-<br>
 
-<!-- FOOTER -->
+<!-- MAPA INTEGRADO DO GOOGLE MAPS -->
+<div class="map-container">
+  <iframe
+    src="https://www.google.com/maps?q=Travessa+da+Estrela,+2321,+Belém,+Pará,+Brasil&output=embed"
+    width="100%"
+    height="300"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+
+<!-- Rodapé final -->
 <footer class="text-center">
-<p>ARISTIDES B PONTES
-<br>
-Analista de Sistemas</p>   
-<p2> Endereço: Trav. Estrela, N° 2321, sala 201A, Marco,  Belém-Pa</p2> 
-<p> &copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados. <a href="#privacy-policy">Política de Privacidade</a> </p>
+  <p><strong>ARISTIDES B PONTES</strong><br>Analista de Sistemas</p>   
+  <p class="endereco">Endereço: Trav. Estrela, N° 2321, sala 201A, Marco, Belém-PA</p> 
+  <p>&copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados. <a href="#privacy-policy">Política de Privacidade</a></p>
 </footer>
+
+
+
+<style>
+/* footer.css - Estilo exclusivo para o rodapé */
+
+/* Estiliza os textos de contato */
+#contato .contato {
+  font-size: 0.9em; /* Texto mais discreto */
+  margin: 5px 0;     /* Espaçamento vertical */
+}
+
+/* Estiliza os ícones sociais */
+.social-icons a {
+  font-size: 1.5em;       /* Tamanho dos ícones */
+  margin: 0 10px;         /* Espaçamento entre os ícones */
+  color: #333;            /* Cor padrão dos ícones */
+  text-decoration: none;  /* Remove sublinhado */
+  transition: color 0.3s; /* Animação suave de cor */
+}
+
+.social-icons a:hover {
+  color: #007BFF; /* Cor ao passar o mouse */
+}
+
+/* Estilo do mapa */
+.map-container {
+  margin: 20px auto;
+  max-width: 600px;  /* Limita o tamanho do mapa */
+  border-radius: 10px;
+  overflow: hidden;  /* Garante bordas arredondadas no iframe */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo do rodapé */
+footer {
+  background-color: #f8f9fa; /* Cor de fundo clara */
+  padding: 20px;
+  font-size: 0.9em;
+  color: #555;
+  border-top: 1px solid #ddd; /* Linha separadora */
+}
+
+footer a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+</style>
