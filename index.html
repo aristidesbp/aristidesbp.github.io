@@ -81,70 +81,13 @@ body {
   height: 100vh;                          /* Garante altura total da tela */
 }
 
-/* Envolve toda a estrutura da página */
-#pagina {
-  display: flex;                          /* Ativa Flexbox */
-  flex-direction: column;                /* Elementos em coluna */
-  min-height: 100vh;                     /* Altura mínima de 100% da viewport */
-}
-
-/* 🧠 ESTRUTURA PRINCIPAL */
-#meu-header {
-  background-color: #1a1a1a;              /* Cor escura de fundo */
-  color: #ffffff;                         /* Texto branco */
-}
-
-#conteudo {
-  padding: 40px 20px;                     /* Espaçamento interno */
-  max-width: 1100px;                      /* Largura máxima */
-  margin: auto;                           /* Centraliza */
-  flex: 1;                                /* Ocupa o espaço restante */
-}
-
-#meu-footer {
-  background-color: #1a1a1a;              /* Fundo escuro */
-  color: #ffffff;                         /* Cor do texto */
-}
-
-
-
-/* 📱 RESPONSIVIDADE */
-@media (max-width: 768px) {
-  #conteudo {
-    padding: 20px 10px;
-  }
-
-  #meu-header,
-  #meu-footer {
-    font-size: 18px;
-    padding: 15px;
-  }
-
-  .btn-padrao {
-    padding: 8px 16px;
-  }
-}
-
-
-/* Envolve toda a estrutura da página para controlar o layout */
-#pagina {
-  display: flex;                /* Ativa o Flexbox */
-  flex-direction: column;      /* Alinha os filhos em coluna (vertical) */
-  min-height: 100vh;           /* Garante que ocupe 100% da altura da tela */
-}
-
-/* Permite que o conteúdo cresça e empurre o footer para o fim */
-#conteudo {
-  flex: 1;                      /* Ocupa o espaço restante entre header e footer */
-}
 </stayle>
 </head> 
 <body>
 
 
  
- <!-- Container principal da página -->
-  <div id="pagina">
+ 
     
     <!-- Cabeçalho da página -->
       <header id="meu-header"></header>
@@ -155,7 +98,7 @@ body {
     <!-- Rodapé da página -->
     <footer id="meu-footer"></footer>
     
-  </div>
+ 
 
 
 
