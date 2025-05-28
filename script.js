@@ -1,7 +1,19 @@
+/*
+OBS: CASO NAO FUNCIONE TENTE PELO LOCAL HOST.
+✅ OPÇÃO 1: Usar o Python para criar um servidor local (super fácil!)
+🧱 Passo a passo:
+1. Abra o terminal no Linux Mint.
+2. Navegue até a pasta do seu projeto HTML:    
+Exemplo (cd /home/seu-usuario/Documentos/meu-projeto)
+3.Digite o codigo:
+python3 -m http.server
+4.No navegador:
+http://localhost:8000
+5. curtir a pagina kkk!
+*/
+
 // 🚀 Função para carregar conteúdos HTML em elementos específicos
 function carregarComponentes() {
-
-
 
   // 📌 Carregar o header.html na div com id "meu-header"
   fetch('menu.html') // Caminho do arquivo que será carregado
@@ -13,8 +25,6 @@ function carregarComponentes() {
       console.error('Erro ao carregar o header:', error); // Mostra erro no console se falhar
     });
 
-
-
 ///////////////////////////////////////////////
  // 📌 Carregar o conteudo.html na div com id "conteudo"
   fetch('sobre.html')
@@ -25,8 +35,6 @@ function carregarComponentes() {
     .catch(error => {
       console.error('Erro ao carregar o conteúdo:', error);
     });
-
-
 
 
   // 📌 Carregar o footer.html na div com id "meu-footer"
@@ -44,22 +52,8 @@ function carregarComponentes() {
 // ✅ Chamada da função quando a página estiver carregada
 document.addEventListener('DOMContentLoaded', carregarComponentes);
 
-/*
-OBS: CASO NAO FUNCIONE TENTE PELO LOCAL HOST.
-✅ OPÇÃO 1: Usar o Python para criar um servidor local (super fácil!)
-🧱 Passo a passo:
-1. Abra o terminal no Linux Mint.
-2. Navegue até a pasta do seu projeto HTML:    
-Exemplo (cd /home/seu-usuario/Documentos/meu-projeto)
-3.Digite o codigo:
-python3 -m http.server
-4.No navegador:
-http://localhost:8000
-5. curtir a pagina kkk!
-*/
 
-
-  
+ 
 /*###################################################################*/
 /*###################################################################*/
 /*###################################################################*/
