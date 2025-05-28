@@ -16,7 +16,7 @@ http://localhost:8000
 function carregarComponentes() {
 
   // 📌 Carregar o header.html na div com id "meu-header"
-  fetch('menu.html') // Caminho do arquivo que será carregado
+  fetch('header.html') // Caminho do arquivo que será carregado
     .then(response => response.text()) // Converte a resposta para texto
     .then(data => {
       document.getElementById('meu-header').innerHTML = data; // Insere o conteúdo na div
@@ -37,7 +37,7 @@ function carregarComponentes() {
     });
 
   // 📌 Carregar o footer.html na div com id "meu-footer"
-  fetch('contato.html')
+  fetch('footer.html')
     .then(response => response.text())
     .then(data => {
       document.getElementById('meu-footer').innerHTML = data;
