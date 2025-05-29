@@ -341,11 +341,86 @@ Hi SEU_USUARIO! You've successfully authenticated...
 Nunca compartilhe sua chave privada (`id_ed25519`). Compartilhe **apenas a pública** (`id_ed25519.pub`).
 
 ---
+# 🚀 Como usar `git push origin main` com chave SSH
 
-```
-git push origin main 
-# Envia os commits da branch main para o GitHub
-         
-```
 ---
+
+## ✅ Passo 1: Verifique a URL remota do seu repositório
+
+Execute o comando abaixo no terminal para ver como o Git está se conectando ao GitHub:
+
+```bash
+git remote -v
+```
+
+Se aparecer algo como:
+
+```bash
+origin  https://github.com/usuario/repositorio.git (fetch)
+origin  https://github.com/usuario/repositorio.git (push)
+```
+
+⚠️ **Você está usando HTTPS.** Vamos trocar para SSH.
+
+---
+
+## 🔁 Passo 2: Troque a URL remota para usar SSH
+
+Use o comando abaixo para reconfigurar o repositório:
+
+```bash
+git remote set-url origin git@github.com:usuario/repositorio.git
+```
+
+> Substitua `usuario/repositorio.git` pelo nome real do seu repositório.
+
+Depois, confira se foi trocado corretamente:
+
+```bash
+git remote -v
+```
+
+Agora deve aparecer:
+
+```bash
+origin  git@github.com:usuario/repositorio.git (fetch)
+origin  git@github.com:usuario/repositorio.git (push)
+```
+
+---
+
+## 🚀 Passo 3: Faça o push com SSH
+
+Agora, envie seus commits com:
+
+```bash
+git push origin main
+```
+
+> Como a autenticação é via chave SSH, **não será solicitada senha**.
+
+---
+
+## 🧪 Teste de conexão com GitHub via SSH (opcional)
+
+Para garantir que tudo está certo, você pode rodar:
+
+```bash
+ssh -T git@github.com
+```
+
+Se aparecer a mensagem:
+
+```bash
+Hi SEU_USUARIO! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+✅ **Está tudo certo com sua chave SSH.**
+
+---
+
+🧠 **Dica final:** Lembre-se de **sempre configurar sua chave SSH no GitHub**, e usar a **URL SSH** no `remote`.
+
+🗨️ _"O código perfeito é o código comentado!"_
+
 
