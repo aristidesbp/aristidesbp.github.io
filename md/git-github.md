@@ -350,7 +350,7 @@ Nunca compartilhe sua chave privada (`id_ed25519`). Compartilhe **apenas a públ
 
 ---
 
-## ✅ Passo 1: Verifique a URL remota do seu repositório
+## ✅  Verifique a URL remota do seu repositório
 
 Execute o comando abaixo no terminal para ver como o Git está se conectando ao GitHub:
 
@@ -369,7 +369,7 @@ origin  https://github.com/usuario/repositorio.git (push)
 
 ---
 
-## 🔁 Passo 2: Troque a URL remota para usar SSH
+## 🔁 Troque a URL remota para usar SSH
 
 Use o comando abaixo para reconfigurar o repositório:
 
@@ -393,19 +393,6 @@ origin  git@github.com:usuario/repositorio.git (push)
 ```
 
 ---
-
-## 🚀 Passo 3: Faça o push com SSH
-
-Agora, envie seus commits com:
-
-```bash
-git push origin main
-```
-
-> Como a autenticação é via chave SSH, **não será solicitada senha**.
-
----
-
 ## 🧪 Teste de conexão com GitHub via SSH (opcional)
 
 Para garantir que tudo está certo, você pode rodar:
@@ -421,6 +408,35 @@ Hi SEU_USUARIO! You've successfully authenticated, but GitHub does not provide s
 ```
 
 ✅ **Está tudo certo com sua chave SSH.**
+
+
+##  Atualizar seu repositório local com o que está no GitHub:
+```
+git pull origin main --rebase
+```
+    --rebase é usado para evitar merge commits desnecessários, deixando o histórico limpo.
+
+## ⚠️ Dica Importante
+
+Se ao fazer o pull aparecer conflitos (conflict), o Git vai pedir para resolver manualmente os arquivos afetados, e depois seguir com:
+```
+git add .
+git rebase --continue
+```
+    
+## 🚀  Faça o push com SSH
+
+Agora, envie seus commits com:
+
+```bash
+git push origin main
+```
+
+> Como a autenticação é via chave SSH, **não será solicitada senha**.
+
+---
+
+
 
 ---
 
