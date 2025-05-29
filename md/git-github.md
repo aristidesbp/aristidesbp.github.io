@@ -71,6 +71,78 @@ Agora você já tem uma conta no GitHub e pode:
 **💬 Dica:** Salve seu nome de usuário e senha em um local seguro!
 
 
+# 📁 Como Criar um Repositório no GitHub
+
+Repositórios são onde você armazena seus projetos no GitHub. Vamos criar um passo a passo simples e direto!
+
+---
+
+## 🔶 Pré-requisito
+
+✔ Você já precisa ter uma conta criada no GitHub.  
+Caso ainda não tenha, veja o tutorial [Como criar uma conta no GitHub](#).
+
+---
+
+## 🚀 Passo a Passo para Criar um Repositório
+
+### 🔸 1. Acesse sua Conta
+
+- Vá para: [https://github.com](https://github.com)
+- Faça login com seu **nome de usuário** e **senha**.
+
+---
+
+### 🔸 2. Vá para "New Repository"
+
+- No canto superior esquerdo, clique no ícone **"+"**.
+- Depois clique em **"New repository"** (Novo repositório).
+
+---
+
+### 🔸 3. Preencha os Detalhes
+
+Preencha os campos do formulário:
+
+- **Repository name**: Escolha um nome para o projeto (ex: `meu-projeto`).
+- **Description (optional)**: Escreva uma breve descrição (opcional).
+- **Visibility**:
+  - 🔓 `Public`: qualquer pessoa pode ver seu código.
+  - 🔒 `Private`: somente você (e quem você permitir) verá.
+
+✅ Marque a opção:
+- `✔ Initialize this repository with a README`  
+(Assim já cria um arquivo inicial explicando seu projeto)
+
+---
+
+### 🔸 4. Clique em "Create Repository"
+
+- Após preencher tudo, clique no botão **"Create repository"** no final da página.
+
+---
+
+## ✅ Pronto!
+
+Seu repositório está criado com sucesso!  
+Você pode agora:
+
+- Enviar (fazer **push**) códigos com o Git.
+- Clonar o projeto para sua máquina com `git clone`.
+- Compartilhar o link com outras pessoas.
+
+---
+
+## 📝 Dica Extra
+
+Para copiar o link do repositório:
+- Vá até a página principal dele.
+- Clique no botão **"Code"**.
+- Escolha a opção **HTTPS** e clique no ícone de **copiar**.
+
+Depois use este link com Git:
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
 
 
 
@@ -79,6 +151,10 @@ Agora você já tem uma conta no GitHub e pode:
 
 
 
+---
+---
+---
+---
 
 
 #### ✅ TAREFAS A CUMPRIR 
