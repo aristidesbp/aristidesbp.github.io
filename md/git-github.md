@@ -13,41 +13,63 @@ Este tutorial ensina os comandos Git mais usados, explicando de forma clara e ob
 
 ---
 
-## 📌 CONFIGURAÇÃO INICIAL DO GIT
+## 🗂️ COMANDOS PARA REPOSITÓRIOS
 
-```bash
-git config --global user.name "Seu Nome"
-# Define seu nome como autor dos commits em qualquer repositório
-
-git config --global user.email "seu@email.com"
-# Define o e-mail do autor (usado no GitHub, GitLab, etc)
-
-git config --global core.editor "code --wait"
-# Define o editor padrão para mensagens de commit (VS Code neste caso)
-
-git config --list
-# Lista todas as configurações ativas
+```
+# verificar se ja existe a pasta do git
+ls -a
+```
+```
+# Cria um novo repositório Git na pasta atual
+git init
+```
+```
+# Clona um repositório remoto para sua máquina
+git clone https://github.com/usuario/repositorio.git
+```
+```
+# ir para dentro do repositório
+cd repositorio.git
+```
+```
+# Mostra o status atual dos arquivos (modificados, novos, deletados)
+git status
+```
+```
+# Exibe o histórico de commits
+git log
+```
+```
+# Mostra o histórico de forma resumida (1 linha por commit)
+git log --oneline
 ```
 
 ---
 
-## 🗂️ COMANDOS PARA REPOSITÓRIOS
+## 📌 CONFIGURAÇÃO INICIAL DO GIT
 
 ```bash
-git init
-# Cria um novo repositório Git na pasta atual
+# Define seu nome como autor dos commits em qualquer repositório
+git config --global user.name "Seu Nome"
+```
+```
+# Define o e-mail do autor (usado no GitHub, GitLab, etc)
+git config --global user.email "seu@email.com"
+```
+```
+# Lista todas as configurações ativas
+git config --list
+```
+---
 
-git clone https://github.com/usuario/repositorio.git
-# Clona um repositório remoto para sua máquina
+## 🔐 CHAVES SSH
 
-git status
-# Mostra o status atual dos arquivos (modificados, novos, deletados)
+```bash
+ssh-keygen -t ed25519 -C "seu@email.com"
+# Cria uma nova chave SSH
 
-git log
-# Exibe o histórico de commits
-
-git log --oneline
-# Mostra o histórico de forma resumida (1 linha por commit)
+ssh-add ~/.ssh/id_ed25519
+# Adiciona a chave ao SSH Agent
 ```
 
 ---
@@ -134,17 +156,7 @@ git revert <id-do-commit>
 # Reverte um commit específico sem apagar o histórico
 ```
 
----
 
-## 🔐 CHAVES SSH (relembrando)
-
-```bash
-ssh-keygen -t ed25519 -C "seu@email.com"
-# Cria uma nova chave SSH
-
-ssh-add ~/.ssh/id_ed25519
-# Adiciona a chave ao SSH Agent
-```
 
 ---
 
