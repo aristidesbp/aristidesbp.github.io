@@ -316,7 +316,12 @@ git merge nova-branch
 4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
 5. Clique em **New SSH key**
 6. Em **Title**, coloque um nome (ex: “Meu notebook”)
-7. Em **Key**, cole a chave pública copiada
+7. Em **Key**, cole a chave pública copiada (noterminal digite)
+```
+cat ~/.ssh/id_ed25519.pub
+# Mostrar a chave pública para adicionar no GitHub
+```
+
 8. Clique em **Add SSH key**
 
 ---
