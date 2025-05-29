@@ -193,8 +193,7 @@ Depois use este link com Git:
 git clone https://github.com/seu-usuario/seu-repositorio.git
 
 
-
-
+---
 
 # 🛠️ Instalação e Configuração Completa do Git (Linux, Termux, Windows e macOS)
 
@@ -328,15 +327,25 @@ Agora você tem:
 - Conexão segura com GitHub via SSH
 - Diretórios autorizados para uso
 
----
-
-✨ **"O código perfeito é o código comentado!"**
 
 
 
----
----
----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
 
