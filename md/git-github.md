@@ -9,6 +9,78 @@
     O ***Git*** fosse o caderno onde você anota tudo o que fez.
     E o ***GitHub*** fosse a nuvem, onde você guarda esse caderno para acessar de qualquer lugar.
 
+
+# ✅ Como Criar uma Conta no GitHub
+
+GitHub é uma plataforma onde você pode guardar seus projetos com controle de versão usando o Git, colaborar com outras pessoas e até mostrar seu portfólio como desenvolvedor. Vamos aprender a criar uma conta!
+
+---
+
+## 🔶 Passo 1: Acesse o Site Oficial
+
+Abra seu navegador e vá até o site:
+
+🔗 [https://github.com](https://github.com)
+
+---
+
+## 🔶 Passo 2: Clique em "Sign up" (Cadastrar)
+
+No canto superior direito da tela, clique no botão **Sign up** (ou "Inscrever-se").
+
+---
+
+## 🔶 Passo 3: Preencha os Dados
+
+Você verá um formulário pedindo:
+
+- **Email**: Digite seu e-mail válido.
+- **Create a password**: Crie uma senha forte.
+- **Username**: Escolha um nome de usuário (será o seu @ no GitHub).
+- **Verify your account**: Marque a verificação do tipo “sou humano”.
+
+Depois de preencher tudo, clique em **Continue**.
+
+---
+
+## 🔶 Passo 4: Configurações Iniciais
+
+Você pode responder algumas perguntas sobre como pretende usar o GitHub, mas pode pular essa parte clicando em **Skip personalization**.
+
+---
+
+## 🔶 Passo 5: Confirme seu E-mail
+
+Abra o seu e-mail e procure a mensagem do GitHub.
+
+Clique no link de **verificação** enviado para ativar sua conta.
+
+---
+
+## ✅ Pronto!
+
+Agora você já tem uma conta no GitHub e pode:
+
+- Criar e gerenciar repositórios.
+- Colaborar com outros desenvolvedores.
+- Hospedar projetos e portfólios.
+- Usar o Git para versionar seus códigos.
+
+---
+
+**💬 Dica:** Salve seu nome de usuário e senha em um local seguro!
+
+
+
+
+
+
+
+
+
+
+
+
 #### ✅ TAREFAS A CUMPRIR 
 #### 📌 soluções
 
@@ -49,7 +121,7 @@ pkg install git
 ✅ Verificar se o Git foi instalado com sucesso (termux)
 ### 📌 Mostra a versão atual do Git instalada
 ``` git --version ``` 
-# 📌 Limpa a tela
+### 📌 Limpa a tela
 ``` clear ```                     
 
 
