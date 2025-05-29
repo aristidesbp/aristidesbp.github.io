@@ -4,23 +4,30 @@
 ######################################################################################################
 #############################    🔥 INSTALAÇÃO DO GIT 🔥    ##########################################
 ######################################################################################################
-# ✅ verificar 
-# 📌 solução
+#✅ verificar 
+##📌 solução
 
-✅ Verificar se o Git foi instalado com sucesso (termux)
-git --version              # Mostra a versão atual do Git instalada
-clear                      # Limpa a tela
+##✅ Verificar se o Git foi instalado com sucesso (termux)
+####📌 Mostra a versão atual do Git instalada
+``` git --version ```             
 
-#📌 Terminal no Linux:
-sudo apt update          # Atualiza a lista de pacotes disponíveis no repositório
-sudo apt install git     # Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
+##✅ Terminal no Linux:
+####📌 Atualiza a lista de pacotes disponíveis no repositório
+``` sudo apt update ```          
+####📌 Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
+``` sudo apt install git ```     
 
-# 📌 Terminal no Termux (Android):
-pkg update && upgrade            # Atualiza os pacotes do Termux
-pkg install git                  # Instala o Git no ambiente Termux
+##✅ Terminal no Termux (Android):
+####📌 Atualiza os pacotes do Termux
+``` pkg update && upgrade ```
+####📌 Instala o Git no ambiente Termux
+pkg install git                  
+
 
 # 📌  No macOS:(Use o Homebrew para instalar:)
 brew install git
+
+
 
 # 📌 No Windows:
 1. Acesse o site oficial: [https://git-scm.com/](https://git-scm.com/) e baixe o instalador.
