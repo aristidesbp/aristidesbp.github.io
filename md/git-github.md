@@ -265,8 +265,7 @@ git pull origin main
 ```
 git log  
 # Lista todos os commits com hash, autor e data
-q
-# digite q para sair                        
+# PARA SAIR DIGITE: q                        
 ```
 ---
 
