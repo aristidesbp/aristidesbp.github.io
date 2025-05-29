@@ -1,15 +1,63 @@
 ---
 # 🔥  TUTORIAL COMPLETO DE GIT E GITHUB 🔥
 ---
-**Git** é um programa que serve para salvar versões de arquivos, como se fosse um “controle remoto” do histórico do seu projeto. Com ele, você pode ver o que mudou, quem mudou, quando mudou e até voltar no tempo se algo der errado.
- 
- **GitHub** é um site onde você pode guardar esses arquivos com histórico na internet, compartilhar com outras pessoas e até trabalhar junto com elas no mesmo projeto — mesmo que estejam em lugares diferentes do mundo.
 
-É como se:
-    O ***Git*** fosse o caderno onde você anota tudo o que fez.
-    E o ***GitHub*** fosse a nuvem, onde você guarda esse caderno para acessar de qualquer lugar.
+Bem-vindo ao primeiro módulo do curso! Aqui você aprenderá os conceitos básicos sobre Git, 
+entenderá como instalar e configurar no seu ambiente de trabalho.
+
+---
+
+## 🔥 O que é o Git?
+
+### Definição
+O Git é um sistema de controle de versão distribuído. Ele permite que você acompanhe as alterações 
+no código-fonte ao longo do tempo, facilita o trabalho em equipe e possibilita reverter a qualquer 
+ponto no histórico do projeto.
+
+### 🔥 Benefícios de usar o Git:
+- **Rastreamento de alterações**: Monitora todas as mudanças feitas nos arquivos do projeto.
+- **Trabalho em equipe**: Permite que várias pessoas trabalhem no mesmo projeto simultaneamente.
+- **Flexibilidade**: Suporta diversos fluxos de trabalho e integrações com ferramentas modernas.
+- **Reversibilidade**: Corrige erros facilmente revertendo a versões anteriores.
+- **Histórico completo**: Mantém um registro completo de todas as alterações feitas no projeto.
+
+---
+
+## 🔥 O que é o GitHub?
+
+### Definição
+O GitHub é uma plataforma baseada em nuvem que utiliza o Git como sistema de controle de versão.
+ Ele adiciona funcionalidades sociais e colaboração, como compartilhamento de projetos, revisão 
+de código e automação de tarefas.
 
 
+### Diferença entre Git e GitHub
+| Git                                    | GitHub                                             |
+|----------------------------------------|----------------------------------------------------|
+| Sistema de controle de versão.         | Plataforma para hospedar e gerenciar projetos Git. |
+| Funciona localmente no seu computador. | Funciona online, permitindo colaboração.           |
+| Não possui interface gráfica.          | Possui interface gráfica e ferramentas adicionais. |
+
+
+### Recursos do GitHub
+- **Issues**: Gerenciamento de tarefas e bugs.
+- **Pull Requests (PRs)**: Solicitações de alteração no código com revisão integrada.
+- **GitHub Actions**: Automação de fluxos de trabalho, como testes e implantações.
+- **GitHub Pages**: Hospedagem gratuita de sites estáticos.
+- **Segurança**: Análises de vulnerabilidades e proteção de branches.
+
+✅ Criar uma conta e um repositório no GitHub
+   1- Acesse https://github.com
+   2- Crie uma conta no site!
+   3- Crie um novo repositório clicando na sua foto / your repositositories / new.
+   4- Dê um nome, marque como público ou privado, e clique em Create Repository
+
+obs: caso queira hospedar paginas no github, o nome do repositorio deve ser igual ao nome do seu usuario.
+exemplo:  aristidesbp.github.io , marque como público, adicione licensa e redmi.
+link/tutorial: https://pages.github.com/
+
+
+---
 # ✅ Como Criar uma Conta no GitHub
 
 GitHub é uma plataforma onde você pode guardar seus projetos com controle de versão usando o Git, colaborar com outras pessoas e até mostrar seu portfólio como desenvolvedor. Vamos aprender a criar uma conta!
@@ -509,59 +557,7 @@ git push -u origin main                        # Envia os arquivos locais para o
 #########################       📚 Módulo 1: Introdução ao Git-Github   ##############################
 ######################################################################################################
 
-Bem-vindo ao primeiro módulo do curso! Aqui você aprenderá os conceitos básicos sobre Git, 
-entenderá como instalar e configurar no seu ambiente de trabalho.
 
----
-
-## 🔥 O que é o Git?
-
-### Definição
-O Git é um sistema de controle de versão distribuído. Ele permite que você acompanhe as alterações 
-no código-fonte ao longo do tempo, facilita o trabalho em equipe e possibilita reverter a qualquer 
-ponto no histórico do projeto.
-
-### 🔥 Benefícios de usar o Git:
-- **Rastreamento de alterações**: Monitora todas as mudanças feitas nos arquivos do projeto.
-- **Trabalho em equipe**: Permite que várias pessoas trabalhem no mesmo projeto simultaneamente.
-- **Flexibilidade**: Suporta diversos fluxos de trabalho e integrações com ferramentas modernas.
-- **Reversibilidade**: Corrige erros facilmente revertendo a versões anteriores.
-- **Histórico completo**: Mantém um registro completo de todas as alterações feitas no projeto.
-
----
-
-## 🔥 O que é o GitHub?
-
-### Definição
-O GitHub é uma plataforma baseada em nuvem que utiliza o Git como sistema de controle de versão.
- Ele adiciona funcionalidades sociais e colaboração, como compartilhamento de projetos, revisão 
-de código e automação de tarefas.
-
-
-### Diferença entre Git e GitHub
-| Git                                    | GitHub                                             |
-|----------------------------------------|----------------------------------------------------|
-| Sistema de controle de versão.         | Plataforma para hospedar e gerenciar projetos Git. |
-| Funciona localmente no seu computador. | Funciona online, permitindo colaboração.           |
-| Não possui interface gráfica.          | Possui interface gráfica e ferramentas adicionais. |
-
-
-### Recursos do GitHub
-- **Issues**: Gerenciamento de tarefas e bugs.
-- **Pull Requests (PRs)**: Solicitações de alteração no código com revisão integrada.
-- **GitHub Actions**: Automação de fluxos de trabalho, como testes e implantações.
-- **GitHub Pages**: Hospedagem gratuita de sites estáticos.
-- **Segurança**: Análises de vulnerabilidades e proteção de branches.
-
-✅ Criar uma conta e um repositório no GitHub
-   1- Acesse https://github.com
-   2- Crie uma conta no site!
-   3- Crie um novo repositório clicando na sua foto / your repositositories / new.
-   4- Dê um nome, marque como público ou privado, e clique em Create Repository
-
-obs: caso queira hospedar paginas no github, o nome do repositorio deve ser igual ao nome do seu usuario.
-exemplo:  aristidesbp.github.io , marque como público, adicione licensa e redmi.
-link/tutorial: https://pages.github.com/
 
 
 ---
