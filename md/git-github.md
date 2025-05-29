@@ -1,35 +1,36 @@
 ---
 # 🔥  TUTORIAL COMPLETO DE GIT E GITHUB 🔥
 ---
-*Git* é um programa que serve para salvar versões de arquivos, como se fosse um “controle remoto” do histórico do seu projeto. Com ele, você pode ver o que mudou, quem mudou, quando mudou e até voltar no tempo se algo der errado.
- *GitHub* é um site onde você pode guardar esses arquivos com histórico na internet, compartilhar com outras pessoas e até trabalhar junto com elas no mesmo projeto — mesmo que estejam em lugares diferentes do mundo.
+**Git** é um programa que serve para salvar versões de arquivos, como se fosse um “controle remoto” do histórico do seu projeto. Com ele, você pode ver o que mudou, quem mudou, quando mudou e até voltar no tempo se algo der errado.
+ 
+ **GitHub** é um site onde você pode guardar esses arquivos com histórico na internet, compartilhar com outras pessoas e até trabalhar junto com elas no mesmo projeto — mesmo que estejam em lugares diferentes do mundo.
 
 É como se:
-    O *Git* fosse o caderno onde você anota tudo o que fez.
-    E o *GitHub* fosse a nuvem, onde você guarda esse caderno para acessar de qualquer lugar.
+    O ***Git*** fosse o caderno onde você anota tudo o que fez.
+    E o ***GitHub*** fosse a nuvem, onde você guarda esse caderno para acessar de qualquer lugar.
 
 #### ✅ TAREFAS A CUMPRIR 
 #### 📌 soluções
 
+
 ---
----
-
-
-
-##✅ Verificar se o Git foi instalado com sucesso (termux)
-####📌 Mostra a versão atual do Git instalada
+# ✅ Verificar se o Git foi instalado com sucesso (linux/termux/windos/mac)?
+### 📌 Basta digitar este comando no terminal (vale para Linux, Termux, Windows ou Mac):
 ``` git --version ```             
 
-##✅ Terminal no Linux:
-####📌 Atualiza a lista de pacotes disponíveis no repositório
+---
+# ✅  instalar Git no Terminal no Linux:
+#### 📌 Atualiza a lista de pacotes disponíveis no repositório
 ``` sudo apt update ```          
-####📌 Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
+#### 📌 Instala o Git na distribuição Linux baseada em Debian (como Ubuntu)
 ``` sudo apt install git ```     
 
-##✅ Terminal no Termux (Android):
-####📌 Atualiza os pacotes do Termux
+
+---
+# ✅  instalar Git no Terminal no Termux (Android):
+#### 📌 Atualiza os pacotes do Termux
 ``` pkg update && upgrade ```
-####📌 Instala o Git no ambiente Termux
+#### 📌 Instala o Git no ambiente Termux
 pkg install git                  
 
 
