@@ -33,21 +33,29 @@
 #### 📌 Instala o Git no ambiente Termux
 pkg install git                  
 
+---
+# ✅  instalar Git no No macOS:(Use o Homebrew para instalar:)
+#### 📌 Instala
+``` brew install git ```
 
-# 📌  No macOS:(Use o Homebrew para instalar:)
-brew install git
 
-
-
-# 📌 No Windows:
+---
+# ✅ No Windows:
 1. Acesse o site oficial: [https://git-scm.com/](https://git-scm.com/) e baixe o instalador.
 2. Execute o instalador e siga as instruções na tela.
 3. Durante a instalação, escolha as configurações recomendadas (defaults).
 
-
+---
 ✅ Verificar se o Git foi instalado com sucesso (termux)
-git --version              # Mostra a versão atual do Git instalada
-clear                      # Limpa a tela
+### 📌 Mostra a versão atual do Git instalada
+``` git --version ``` 
+# 📌 Limpa a tela
+``` clear ```                     
+
+
+
+
+
 
 
 ######################################################################################################
