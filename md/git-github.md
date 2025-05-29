@@ -505,3 +505,35 @@ Assim, você terá uma cópia 100% do que está na nuvem, isolada para conferên
 🗨️ _"O código perfeito é o código comentado!"_
 
 
+
+# ✅ Solução 1: COMMITAR suas mudanças
+
+Já que você está pronto para salvar essas alterações, o caminho mais direto é commitar o que está pendente e depois fazer o pull --rebase.
+🛠️ PASSO A PASSO
+
+# 1. Adiciona tudo que está modificado para o commit
+git add .
+
+# 2. Cria o commit com uma mensagem
+git commit -m "Adiciona nome-do-arquivo.txt e outras mudanças locais"
+
+# 3. Agora sim: puxa da nuvem com rebase
+git pull origin main --rebase
+
+# 4. E depois envia tudo para a nuvem
+git push origin main
+
+💡 Alternativa: usar git stash
+
+Se você quiser guardar as mudanças temporariamente, sem commitar, faça:
+
+git stash             # guarda as mudanças
+git pull origin main  # puxa as mudanças remotas
+git stash pop         # recupera o que estava guardado
+
+Se quiser, posso gerar o passo a passo como .md com comentários linha por linha para você salvar no seu projeto.
+
+Quer isso, mestre Aristidesbp?
+📚 "O código perfeito é o código comentado!"
+
+
