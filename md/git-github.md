@@ -279,16 +279,17 @@ git checkout -b nova-branch abc1234
 
 ## 📝 7. Criar um novo arquivo de texto com a frase "ola mundo conectado"
 ```
-nano nome-do-arquivo
+nano nome-do-arquivo.txt
 # Cria um novo arquivo com a mensagem
 # CONTR+S  CONTR+X para salvar depois de alterar
-
-git add mensagem.txt
+```
+```
+git add nome-do-arquivo.txt
 # Adiciona o arquivo para a área de staging
-
+```
+```
 git commit -m "Adiciona mensagem de conexão"   
 # Faz o commit com a mensagem
- 
 ```
 ---
 
