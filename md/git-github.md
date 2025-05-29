@@ -221,12 +221,17 @@ cd repositorio
 ```
 ls -a
 # verificar se existe
-       
-git init                                  
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
 
 git config --list
 # Lista todas as configurações ativas
+
+```
+```
+       
+git init                                  
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+```
+```
 
 git config --global --add safe.directory "$(pwd)"
 # Configurar a pasta como segura (evita erros de segurança)
