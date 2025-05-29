@@ -308,6 +308,40 @@ git merge nova-branch
 ---
 
 ## 🚀 9. Subir o repositório local para o GitHub
+#### 💻 Adicione a chave SSH no GitHub
+
+1. Acesse: [https://github.com](https://github.com)
+2. Faça login na sua conta
+3. No canto superior direito, clique na sua foto de perfil → **Settings**
+4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
+5. Clique em **New SSH key**
+6. Em **Title**, coloque um nome (ex: “Meu notebook”)
+7. Em **Key**, cole a chave pública copiada
+8. Clique em **Add SSH key**
+
+---
+
+#### 🧪 Teste a conexão com o GitHub
+
+No terminal, digite:
+
+```bash
+ssh -T git@github.com
+```
+
+Se tudo estiver certo, você verá:
+
+```
+Hi SEU_USUARIO! You've successfully authenticated...
+```
+
+---
+
+### 💡 Dica de Segurança:
+Nunca compartilhe sua chave privada (`id_ed25519`). Compartilhe **apenas a pública** (`id_ed25519.pub`).
+
+---
+
 ```
 git push origin main 
 # Envia os commits da branch main para o GitHub
