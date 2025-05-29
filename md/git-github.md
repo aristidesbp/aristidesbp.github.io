@@ -463,7 +463,40 @@ git push origin main
 
 ---
 
+# ✅ Como ver os arquivos que estão no repositório da nuvem (GitHub)
 
+Para verificar o que já está na nuvem (GitHub) e comparar com seus arquivos locais, siga um desses métodos:
+🔎 1. Pelo Navegador (Método Visual e Simples)
+
+    Acesse o site: https://github.com
+
+    Faça login (se necessário).
+
+    Vá até o seu repositório:
+    👉 https://github.com/aristidesbp/aristidesbp.github.io
+
+    Você verá todos os arquivos e pastas que estão no GitHub (nuvem).
+
+🧠 2. Usando Git na Linha de Comando (Avançado)
+Ver todos os arquivos que já foram enviados (commits) pro repositório remoto:
+
+git ls-remote
+
+Ou, mais direto, para ver os arquivos no último commit remoto:
+
+git fetch origin
+git diff --name-only origin/main
+
+    Isso mostra quais arquivos existem na nuvem que diferem do seu local (se houverem).
+
+☑️ Dica bônus — Clonar em outra pasta só para comparação (opcional)
+
+cd ~/Downloads
+git clone git@github.com:aristidesbp/aristidesbp.github.io repositorio-na-nuvem
+cd repositorio-na-nuvem
+ls
+
+Assim, você terá uma cópia 100% do que está na nuvem, isolada para conferência. Pode comparar à vontade com seu repositório local.
 
 ---
 
