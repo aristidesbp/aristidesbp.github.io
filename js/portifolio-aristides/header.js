@@ -10,8 +10,11 @@ function createHeader(containerId = "header-container") {
       box-sizing: border-box;
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
     .custom-header {
       background-color: #111;
       color: #fff;
@@ -26,6 +29,7 @@ function createHeader(containerId = "header-container") {
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     }
 
+<<<<<<< HEAD
 
 .custom-header {
   background-color: #111;
@@ -42,6 +46,8 @@ function createHeader(containerId = "header-container") {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
+=======
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
     .custom-logo {
       font-size: 1.8rem;
       font-weight: bold;
@@ -120,7 +126,10 @@ function createHeader(containerId = "header-container") {
     }
   `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
   // ⬇️ 2. Cria o elemento <header> com o conteúdo HTML
   const header = document.createElement("header");
   header.className = "custom-header";
@@ -129,11 +138,19 @@ function createHeader(containerId = "header-container") {
     <button class="custom-menu-toggle" aria-label="Abrir menu">☰</button>
     <nav class="custom-nav">
       <ul>
+<<<<<<< HEAD
         <li><a href="index.html">Início</a></li>
         <li><a href="#servico">Serviços</a></li>
         <li><a href="#sobre">Sobre</a></li>
          <li><a href="#projetos">Projetos</a></li>
         <li><a href="#contato">Contato</a></li>
+=======
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Serviços</a></li>
+        <li><a href="#">Portfólio</a></li>
+        <li><a href="#">Sobre</a></li>
+        <li><a href="#">Contato</a></li>
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
       </ul>
     </nav>
 

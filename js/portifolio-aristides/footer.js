@@ -39,7 +39,11 @@ function createFooter() {
 
       /* Estilo do rodapé */
       .footer-final {
+<<<<<<< HEAD
         background-color: black;
+=======
+        background-color: #f8f9fa;
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
         padding: 20px;
         font-size: 0.9em;
         color: #555;
@@ -62,6 +66,7 @@ function createFooter() {
         font-size: 1.5em;
         margin-bottom: 10px;
       }
+<<<<<<< HEAD
 
 
 
@@ -119,6 +124,30 @@ function createFooter() {
     </section>
 
     <!-- MAPA -->
+=======
+    </style>
+
+    <!-- Conteúdo da seção de contato -->
+    <section class="footer-contato text-center">
+      <h2 class="footer-section-header">Entre em Contato</h2>
+
+      <p class="contato">Email: <a href="mailto:aristidesbp@gmail.com">aristidesbp@gmail.com</a></p>  
+      <p class="contato">Telefone: <a href="tel:+5591992420981">(91) 9 9242-0981</a></p>
+
+      <!-- Ícones das redes sociais -->
+      <div class="footer-social-icons">
+        <a href="https://www.facebook.com/aristidesbp" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/aristidesbp" target="_blank"><i class="bi bi-instagram"></i></a>
+        <a href="https://x.com/aristidesbp?t=T5iGxvFQKyPJ3XDwgpxCCg&s=09" target="_blank"><i class="bi bi-twitter"></i></a>
+        <a href="https://www.tiktok.com/@aristidesbp?_t=8rAHAv90Du4&_r=1" target="_blank"><i class="bi bi-tiktok"></i></a>
+      </div>
+
+      <!-- Botão de WhatsApp -->
+      <a href="https://wa.me/5591992420981" target="_blank" class="btn btn-success">WhatsApp</a>
+    </section>
+
+    <!-- Mapa integrado via Google Maps -->
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
     <div class="footer-map-container">
       <iframe
         src="https://www.google.com/maps?q=Travessa+da+Estrela,+2321,+Belém,+Pará,+Brasil&output=embed"
@@ -128,6 +157,7 @@ function createFooter() {
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade">
       </iframe>
+<<<<<<< HEAD
      <!-- fim do MAPA -->
 
 <br>
@@ -163,6 +193,18 @@ function createFooter() {
     </p>
   </footer>
 
+=======
+    </div>
+
+    <!-- Rodapé final com informações adicionais -->
+    <footer class="footer-final">
+      <p><strong>ARISTIDES B PONTES</strong><br>Analista de Sistemas</p>   
+      <p class="endereco">Endereço: Trav. Estrela, N° 2321, sala 201A, Marco, Belém-PA</p> 
+      <p>&copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados. 
+        <a href="#privacy-policy">Política de Privacidade</a>
+      </p>
+    </footer>
+>>>>>>> 62677ce72ec8567d2449ba70b790421934071e68
   `;
 
   // Adiciona o conteúdo do rodapé no final do <body>
