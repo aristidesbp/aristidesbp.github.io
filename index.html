@@ -143,11 +143,12 @@
 
 
   <!-- Navbar -->
+<div id="header-container"></div>
+<script src="js/portifolio-aristides/header.js"></script>
+<script>createHeader();</script>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
- <div id="header-container"></div>
-<script src="header.js"></script>
-<script>createHeader();</script>
+ 
     </div>
   </nav>
 
@@ -187,45 +188,10 @@
     }
   }
 </script>
+<!-- fim da Hero -->
 
-
-
-
-
-  <!-- Sobre Mim -->
-  <section class="container py-5">
-    <div class="row align-items-center">
-      <div class="col-md-6" data-aos="fade-right">
-<img src="img/Aristidesbp.png" class="img-fluid rounded" alt="Sobre Aristides" />
-      </div>
-      <div class="col-md-6" data-aos="fade-left">
-        <h2>Sobre mim</h2>
-        <p>Sou especialista em desenvolvimento web e mobile. Atuo com marketing digital, tráfego pago e programação orientada a objeto. Meu objetivo é criar soluções que impactem.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slides de Projetos -->
-  <section class="container py-5">
-    <h2 class="text-center mb-4">Projetos em Destaque</h2>
-    <div class="swiper mySwiper" data-aos="zoom-in">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 1" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 2" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 3" />
-        </div>
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
-  </section>
-
-  <!-- Cards de Serviços -->
-  <section class="container py-5">
+ <!-- Cards de Serviços -->
+  <section class="container py-5" id="servico">
     <h2 class="text-center mb-4">Serviços</h2>
     <div class="row">
       <div class="col-md-4" data-aos="flip-left">
@@ -251,8 +217,29 @@
       </div>
     </div>
   </section>
+<!-- fim do Cards de Serviços -->
 
-  <!-- Vídeo Apresentação -->
+<!-- Slides de Projetos -->
+  <section class="container py-5" id="projetos">
+    <h2 class="text-center mb-4">Projetos em Destaque</h2>
+    <div class="swiper mySwiper" data-aos="zoom-in">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 1" />
+        </div>
+        <div class="swiper-slide">
+          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 2" />
+        </div>
+        <div class="swiper-slide">
+          <img src="https://via.placeholder.com/800x400" class="img-fluid" alt="Projeto 3" />
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+<!-- fim do Slides de Projetos -->
+
+<!-- Vídeo Apresentação -->
   <section class="container py-5 text-center" id="video">
     <h2 class="mb-4">Assista minha apresentação</h2>
     <div class="ratio ratio-16x9" data-aos="fade-up">
@@ -260,35 +247,149 @@
     </div>
   </section>
 
-  <!-- Contato -->
-  <section class="container py-5">
-    <h2 class="text-center mb-4">Fale Comigo</h2>
-    <form class="row g-3" data-aos="fade-up">
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Seu nome" />
+  
+<!-- fim do Vídeo Apresentação -->
+
+  <!-- Sobre Mim -->
+  <section class="container py-5" id="sobre">
+    <div class="row align-items-center">
+      <div class="col-md-6" data-aos="fade-right">
+<img src="img/Aristidesbp.png" class="img-fluid rounded" alt="Sobre Aristides" />
       </div>
-      <div class="col-md-6">
-        <input type="email" class="form-control" placeholder="Seu e-mail" />
+      <div class="col-md-6" data-aos="fade-left">
+        <h2>Sobre mim</h2>
+        <p>Sou especialista em desenvolvimento web e mobile. Atuo com marketing digital, tráfego pago e programação orientada a objeto. Meu objetivo é criar soluções que impactem.</p>
       </div>
-      <div class="col-12">
-        <textarea class="form-control" rows="5" placeholder="Sua mensagem"></textarea>
-      </div>
-      <div class="col-12 text-center">
-        <button type="submit" class="btn btn-warning">Enviar</button>
-      </div>
-    </form>
+    </div>
   </section>
 
-  <!-- Rodapé -->
-  <footer class="text-center">
+  <!-- fim do Sobre Mim -->
+
+
+
+<!--  formulario -->
+<style> 
+
+    form {
+    /*  background: white;  Fundo branco para destaque */
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block; /* Cada label em linha separada */
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%; /* Ocupa toda largura */
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box; /* Inclui padding na largura */
+    }
+    textarea {
+      resize: vertical; /* Usuário pode ajustar altura */
+      min-height: 80px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #25D366; /* Verde WhatsApp */
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #1ebe57;
+    }
+
+ </style> 
+
+  <script>
+    /* ===========================
+       JS - Envio via WhatsApp
+       Utilizando orientação a objeto
+       =========================== */
+
+    // Classe para manipular o formulário e montar a mensagem
+    class PedidoPortfolio {
+      constructor(formId, telefoneDestino) {
+        // Recebe o id do form e o telefone para envio
+        this.form = document.getElementById(formId);
+        this.telefoneDestino = telefoneDestino;
+
+        // Liga o evento de submit do formulário
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+      }
+
+      // Remove emojis e caracteres especiais do texto
+      removeEmojis(text) {
+        // Regex para remover caracteres fora do padrão básico (ASCII e alguns símbolos)
+        return text.replace(/[^\w\s\.,\-@:\r\náéíóúãõçÁÉÍÓÚÃÕÇ]/g, '');
+      }
+
+      // Monta o texto para WhatsApp só com campos preenchidos
+      montarMensagem(dados) {
+        // Começa com o título e linha separadora, usando \r\n para quebra de linha
+        let mensagem = "*NOVO PEDIDO DE PORTFÓLIO*\r\n";
+        mensagem += "----------------------------------\r\n\r\n";
+
+        // Percorre o objeto dados e adiciona somente campos preenchidos
+        for (const [chave, valor] of Object.entries(dados)) {
+          if (valor.trim() !== '') { // Se não estiver vazio
+            // Chave em maiúscula + valor
+            mensagem += `${chave.toUpperCase()}: ${valor.trim()}\r\n`;
+          }
+        }
+        return mensagem;
+      }
+
+      // Evento do submit do form
+      handleSubmit(event) {
+        event.preventDefault(); // Evita envio padrão
+
+        // Coleta dados do formulário em objeto
+        const dados = {
+          nome: this.removeEmojis(this.form.nome.value),
+          telefone: this.removeEmojis(this.form.telefone.value),
+          email: this.removeEmojis(this.form.email.value),
+          empresa: this.removeEmojis(this.form.empresa.value),
+          descricao: this.removeEmojis(this.form.descricao.value)
+        };
+
+        // Monta mensagem formatada
+        const textoMensagem = this.montarMensagem(dados);
+
+        // Gera URL para WhatsApp com encodeURIComponent para evitar problemas
+        const urlWhats = "https://wa.me/" + this.telefoneDestino + "?text=" + encodeURIComponent(textoMensagem);
+
+        // Abre nova aba para envio no WhatsApp Web ou app
+        window.open(urlWhats, "_blank");
+      }
+    }
+
+    // Instancia a classe, passando id do form e telefone destino para o WhatsApp (somente números e código do país)
+    // Exemplo para Brasil: 5591999999999 (55=Brasil, 91=DDD, número)
+    const pedido = new PedidoPortfolio('pedidoForm', '5591992420981');
+  </script>
+<!-- fim do formulario -->
+
+  
+  <!-- FOOTER -->
+  <footer class="text-center" id="contato">
 <div id="footer-container"></div>
-<script src="footer.js"></script>
+<script src="js/portifolio-aristides/footer.js"></script>
 <script>createFooter();</script>
   </footer>
-
-
-
-
+ <!-- FIM DO FOOTER -->
 
 
   <!-- 🧠 ARQUIVOS EXTERNOS JAVASCRIPT -->
@@ -322,11 +423,6 @@
       },
     });
   </script>
-
-
-
- 
-
 
 
 </body>
