@@ -152,13 +152,45 @@
   </nav>
 
 
-  <!-- Hero -->
-  <section class="hero">
-    <div data-aos="fade-up">
-      <h1>Seu próximo desenvolvedor full-stack</h1>
-      <button class="btn btn-sound mt-4" onclick="playSound()">Clique e conheça meu trabalho</button>
-    </div>
-  </section>
+<!-- Hero -->
+<section class="hero">
+  <div data-aos="fade-up">
+    <h1>Seu próximo desenvolvedor full-stack</h1>
+
+    <!-- Botão que toca som e faz scroll até a seção 'video' -->
+    <button class="btn btn-sound mt-4" onclick="playSoundAndScroll()">
+      Clique e conheça meu trabalho
+    </button>
+  </div>
+</section>
+
+<!-- Áudio único que será tocado ao clicar -->
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+<script>
+  // Função que toca o som e faz scroll suave até a seção com id="video"
+  function playSoundAndScroll() {
+    // Toca o áudio
+    const audio = document.getElementById('clickSound');
+
+    if (audio) {
+      // 🔊 Som só será executado se houver interação direta com o clique
+      audio.currentTime = 0;  // Reinicia o áudio se já tiver sido tocado
+      audio.play().catch(error => {
+        console.warn("O áudio não pôde ser reproduzido automaticamente:", error);
+      });
+    }
+
+    // Rola suavemente até a seção com id="video"
+    const videoSection = document.querySelector('#video');
+    if (videoSection) {
+      videoSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
+
+
+
 
   <!-- Sobre Mim -->
   <section class="container py-5">
@@ -221,7 +253,7 @@
   </section>
 
   <!-- Vídeo Apresentação -->
-  <section class="container py-5 text-center">
+  <section class="container py-5 text-center" id="video">
     <h2 class="mb-4">Assista minha apresentação</h2>
     <div class="ratio ratio-16x9" data-aos="fade-up">
       <iframe src="https://www.youtube.com/embed/8BLNsWEDVic" title="YouTube video" allowfullscreen></iframe>
@@ -256,8 +288,6 @@
 
 
 
-  <!-- Som ao clicar -->
-  <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
 
 
 
@@ -269,13 +299,7 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 
-  <!-- Scripts -->
-  <script>
-    // Reproduz som ao clicar no botão
-    function playSound() {
-      document.getElementById('clickSound').play();
-    }
-  </script>
+
 
   <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
