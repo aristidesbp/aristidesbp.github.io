@@ -98,15 +98,14 @@ git checkout nome-da-branch
 # Troca para a branch escolhida
 git stash apply
 # Recupera alterações salvas com `stash`
-git merge nome-da-branch
+git merge especificar-nome-da-branch
 # Une a branch especificada com a atual
 git branch -d nome-da-branch
 # Deleta a branch (caso já tenha sido mesclada)
-git pull origin main
-# Garante que está atualizado com o repositório remoto
 git merge nova-branch 
 # Junta as alterações da branch de trabalho com a main
-
+git pull origin main
+# Garante que está atualizado com o repositório remoto
 
 
 ########################################################################
@@ -119,9 +118,9 @@ git add nome-do-arquivo.txt
 # Adiciona o arquivo para a área de staging
 
 
-#############################
-## 📝 TRABALHANDO COM COMMIT
-##############################
+###################################################
+## 📝 TRABALHANDO COM COMMIT (DIGITE "Q" PARA SAIR)
+###################################################
 git add nome-do-arquivo.ext
 # Adiciona um arquivo específico para a área de staging
 git add .
@@ -156,29 +155,26 @@ git revert <id-do-commit>
 
 
 
-#####################################
-## 📤 ENVIANDO E RECEBENDO DO GITHUB
-#####################################
+###########################################
+## 📤   RECEBENDO E ENVIANDO PARA O GITHUB 
+###########################################
 git remote add origin git@github.com:usuario/repositorio.git
 # Conecta seu repositório local ao repositório remoto via SSH
-git push -u origin main
-# Envia o repositório local para o GitHub (main = branch principal)
-git pull
-# Baixa alterações do GitHub para seu projeto local
-git pull origin main --rebase
-##  Atualizar seu repositório local com o que está no GitHub:
 git fetch
 # Busca atualizações do repositório remoto (mas não aplica)
 git merge
 # Aplica as atualizações buscadas com `git fetch`
+git pull
+# Baixa alterações do GitHub para seu projeto local
+git pull origin main --rebase
+##  Atualizar seu repositório local com o que está no GitHub:
+git push -u origin main
+# Envia o repositório local para o GitHub (main = branch principal)
 
 
 
 
 
-#################################################
-## 🚀 9. Subir o repositório local para o GitHub
-#################################################
 
 
 
