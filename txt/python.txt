@@ -1,3 +1,9 @@
+##########################
+# iniciando um servidor
+python3 -m http.server 8000
+############################
+
+
 #CURSO DE PYTHON
 
 📦 Bloco 1: Instalando e Configurando o Ambiente no Termux
@@ -20,6 +26,7 @@ pkg install nano
 # Instale o git (opcional, para clonar repositórios)
 pkg install git
 
+################################################
 🐍 Bloco 2: Escrevendo e Executando Seu Primeiro Programa em Python
 
 # Crie um novo arquivo Python
@@ -33,7 +40,7 @@ print("Olá, mundo!")
 
 # Execute o programa
 python hello.py
-
+################################################
 🧮 Bloco 3: Conceitos Básicos de Python
 
 # Variáveis e Tipos de Dados
@@ -66,7 +73,7 @@ contador = 0
 while contador < 5:
     print(contador)
     contador += 1
-
+################################################
 📚 Bloco 4: Trabalhando com Módulos e Pacotes
 
 # Instale pacotes usando pip
@@ -79,7 +86,7 @@ import requests
 resposta = requests.get("https://www.google.com")
 print(resposta.status_code)
 
-
+################################################
 #🗂️ Bloco 5: Manipulação de Arquivos
 
  # Escrevendo em um arquivo
@@ -91,6 +98,8 @@ with open("arquivo.txt", "r") as f:
     conteudo = f.read()
     print(conteudo)
 
+
+################################################
 🧰 Bloco 6: Funções e Tratamento de Erros
 
 # Definindo uma função
@@ -108,7 +117,7 @@ except ValueError:
 except ZeroDivisionError:
     print("Não é possível dividir por zero.")
 
-
+################################################
 🧪 Bloco 7: Projetos Práticos
 
 # Calculadora Simples
@@ -133,7 +142,7 @@ def calculadora():
 
 calculadora()
 
-
+################################################
 🧠 Bloco 8: Avançando no Python
 
 

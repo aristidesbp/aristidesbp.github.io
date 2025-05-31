@@ -184,6 +184,7 @@ header.innerHTML = `
     <li><a href="https://www.youtube.com/">YouTube</a></li>
     <li><a href="https://chatgpt.com/">ChatGPT</a></li>
     <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+    <li><a href="txt/editorTxt.html/">editorTxt</a></li>
   </ul>
 </li>
 
