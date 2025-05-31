@@ -1,0 +1,350 @@
+<!DOCTYPE html>  <html lang="pt-br">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <meta name="description" content="Portfólio profissional de AristidesBP - Desenvolvimento Web, Aplicativos e Tráfego Pago.">  
+  <meta name="keywords" content="AristidesBP, Desenvolvimento Web, Programador, Tráfego Pago, Front-End, AndroidIDE, Aplicativos">  
+  <meta name="author" content="AristidesBP">  
+  <title>Portfólio AristidesBP</title>  
+  <link rel="stylesheet" href="style.css">  
+  <link rel="preconnect" href="https://fonts.googleapis.com">  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">  
+</head>  
+
+
+<body>  <!-- Caixa flutuante da rádio e botão tema -->  <div id="radio-float">  <!-- Botão de tema claro/escuro -->  <button id="theme-toggle" title="Alternar tema">🌓</button>
+
+<button id="radio-float-toggle" title="Mostrar/Ocultar Rádio">🎵</button>
+
+<div id="radio-float-content">  
+<audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>  
+      <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>  
+      <div class="music-controls-row">  
+        <button id="bgMusicBtn" title="Play/Pause">🎵</button>  
+        <button id="vol-down" title="Diminuir volume">➖</button>  
+        <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">  
+        <button id="vol-up" title="Aumentar volume">➕</button>  
+      </div>  
+      <div class="music-controls-row">  
+        <select id="music-select" title="Escolha a trilha">  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7</option>  
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8</option>  
+          <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>  
+          <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>  
+          <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>  
+        </select>  
+        <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">  
+        <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>  
+      </div>  
+      <div class="music-controls-row">  
+        <span id="music-current">0:00</span>  
+        <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">  
+        <span id="music-duration">0:00</span>  
+      </div>  
+<!-- Rodapé Final -->
+  <footer class="footer-final">
+    <p>&copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados. 
+      <a href="#privacy-policy">Política de Privacidade</a>
+    </p>
+  </footer>
+    </div>  
+  </div>  
+ <!-- fim da Caixa flutuante da rádio com o botão tema -->  
+
+
+
+
+
+
+
+<style>
+/* Reset básico para padronizar estilos entre navegadores */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fonte base do projeto */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f7f7f7; /* Fundo claro padrão */
+  color: #333; /* Cor da fonte padrão */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Estilo para modo escuro */
+body.dark {
+  background-color: #121212;     /* Fundo escuro */
+  color: #f1f1f1;                /* Texto claro */
+}
+
+/* ===========================
+   🔊 CAIXA FLUTUANTE DE RÁDIO
+=========================== */
+
+#radio-float {
+  position: fixed;               /* Fixa no canto da tela */
+  bottom: 20px;                  /* Distância da borda inferior */
+  right: 20px;                   /* Distância da borda direita */
+  background-color: #fff;       /* Fundo branco */
+  border-radius: 10px;          /* Cantos arredondados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  padding: 15px;
+  z-index: 1000;                 /* Sobreposição máxima */
+  width: 320px;                 /* Largura padrão */
+  transition: all 0.4s ease-in-out;
+}
+body.dark #radio-float {
+  background-color: #1e1e1e;     /* Fundo escuro no modo dark */
+}
+
+/* Quando estiver fechado */
+#radio-float.closed #radio-float-content {
+  display: none;                 /* Esconde o conteúdo */
+}
+
+/* Botões flutuantes (Tema e Toggle Rádio) */
+#theme-toggle,
+#radio-float-toggle {
+  position: absolute;
+  top: -12px;                   /* Posiciona acima da caixa */
+  padding: 5px 8px;
+  background-color: #007BFF;   /* Azul padrão */
+  color: #fff;                 /* Texto branco */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 5px;
+}
+#theme-toggle {
+  right: 40px;                  /* Alinha botão de tema à direita */
+}
+#radio-float-toggle {
+  right: 5px;                   /* Alinha botão de rádio mais à direita ainda */
+}
+
+/* Agrupamento de controles (row) */
+.music-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Espaço entre os elementos */
+  margin-top: 10px;
+  gap: 8px;                        /* Espaço entre os elementos */
+}
+
+/* Botões de controle de volume e música */
+.music-controls-row button {
+  background-color: #007BFF;     /* Azul */
+  color: white;                  /* Cor do ícone */
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.music-controls-row button:hover {
+  background-color: #0056b3;     /* Tom mais escuro ao passar o mouse */
+}
+
+/* Slider de volume e progresso */
+.music-controls-row input[type="range"] {
+  flex-grow: 1;                 /* Ocupa todo espaço disponível */
+  height: 6px;
+  cursor: pointer;
+}
+
+/* Select de músicas */
+#music-select {
+  flex-grow: 1;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Tempo da música (início e fim) */
+#music-current,
+#music-duration {
+  font-size: 14px;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Label de repetição (ícone 🔁) */
+label[for="repeatMusic"] {
+  user-select: none;
+}
+
+/* Estilização do slider com cor no modo claro e escuro */
+input[type="range"]::-webkit-slider-thumb {
+  background: #007BFF;
+}
+body.dark input[type="range"] {
+  accent-color: #00BFFF; /* Azul claro no modo escuro */
+}
+
+/* Responsividade */
+@media (max-width: 500px) {
+  #radio-float {
+    width: 95%;                /* Ocupa quase toda largura */
+    right: 2.5%;
+    bottom: 10px;
+  }
+}
+</style>
+
+
+
+
+
+
+
+<script>  
+// Modo claro/escuro  
+const themeBtn = document.getElementById('theme-toggle');  
+function setTheme(dark) {  
+  if(dark) {  
+    document.body.classList.add('dark');  
+    localStorage.setItem('theme','dark');  
+  } else {  
+    document.body.classList.remove('dark');  
+    localStorage.setItem('theme','light');  
+  }  
+}  
+themeBtn.onclick = function() {  
+  setTheme(!document.body.classList.contains('dark'));  
+};  
+if(localStorage.getItem('theme') === 'dark' ||  
+   (localStorage.getItem('theme')===null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {  
+  setTheme(true);  
+} else {  
+  setTheme(false);  
+}  
+  
+// Caixa flutuante rádio: mostra/esconde conteúdo  
+const radioFloat = document.getElementById('radio-float');  
+const radioFloatToggle = document.getElementById('radio-float-toggle');  
+radioFloatToggle.onclick = function() {  
+  radioFloat.classList.toggle('closed');  
+  radioFloatToggle.title = radioFloat.classList.contains('closed') ? "Mostrar Rádio" : "Ocultar Rádio";  
+};  
+  
+// Painel música (igual antes)  
+document.addEventListener('DOMContentLoaded', function () {  
+  const bgMusic = document.getElementById('bgMusic');  
+  const bgMusicBtn = document.getElementById('bgMusicBtn');  
+  const volDown = document.getElementById('vol-down');  
+  const volUp = document.getElementById('vol-up');  
+  const volSlider = document.getElementById('vol-slider');  
+  const musicSelect = document.getElementById('music-select');  
+  const musicProgress = document.getElementById('music-progress');  
+  const musicCurrent = document.getElementById('music-current');  
+  const musicDuration = document.getElementById('music-duration');  
+  const repeatMusic = document.getElementById('repeatMusic');  
+  const musicList = Array.from(musicSelect.options).map(opt => opt.value);  
+  
+  bgMusic.volume = parseFloat(volSlider.value);  
+  bgMusic.loop = false;  
+  bgMusicBtn.title = 'Play/Pause';  
+  
+  bgMusicBtn.onclick = function () {  
+    if (bgMusic.paused) {  
+      bgMusic.play().catch(()=>{});  
+      bgMusicBtn.textContent = '🔊';  
+    } else {  
+      bgMusic.pause();  
+      bgMusicBtn.textContent = '🎵';  
+    }  
+  };  
+  function updateVolumeDisplay() {  
+    volSlider.value = bgMusic.volume;  
+  }  
+  volDown.onclick = function () {  
+    bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);  
+    updateVolumeDisplay();  
+  };  
+  volUp.onclick = function () {  
+    bgMusic.volume = Math.min(1, bgMusic.volume + 0.08);  
+    updateVolumeDisplay();  
+  };  
+  volSlider.oninput = function () {  
+    bgMusic.volume = parseFloat(volSlider.value);  
+  };  
+  // Troca de música pelo select  
+  musicSelect.onchange = function() {  
+    const wasPlaying = !bgMusic.paused;  
+    bgMusic.src = musicSelect.value;  
+    bgMusic.currentTime = 0;  
+    if (wasPlaying) {  
+      bgMusic.play().catch(()=>{});  
+      bgMusicBtn.textContent = '🔊';  
+    } else {  
+      bgMusicBtn.textContent = '🎵';  
+    }  
+  };  
+  // Barra de progresso  
+  function formatTime(sec) {  
+    if (isNaN(sec)) return "0:00";  
+    sec = Math.floor(sec);  
+    let min = Math.floor(sec / 60);  
+    let s = sec % 60;  
+    return min + ":" + (s < 10 ? "0" : "") + s;  
+  }  
+  function updateProgress() {  
+    const current = bgMusic.currentTime;  
+    const duration = bgMusic.duration;  
+    musicCurrent.textContent = formatTime(current);  
+    musicDuration.textContent = formatTime(duration);  
+    musicProgress.value = duration ? (current / duration) * 100 : 0;  
+  }  
+  bgMusic.addEventListener('timeupdate', updateProgress);  
+  bgMusic.addEventListener('durationchange', updateProgress);  
+  bgMusic.addEventListener('loadedmetadata', updateProgress);  
+  bgMusic.addEventListener('ended', function() {  
+    if (repeatMusic.checked) {  
+      bgMusic.currentTime = 0;  
+      bgMusic.play().catch(()=>{});  
+      bgMusicBtn.textContent = '🔊';  
+    } else {  
+      let idx = musicList.indexOf(musicSelect.value);  
+      let next = (idx + 1) % musicList.length;  
+      musicSelect.selectedIndex = next;  
+      bgMusic.src = musicList[next];  
+      bgMusic.currentTime = 0;  
+      bgMusic.play().catch(()=>{});  
+      bgMusicBtn.textContent = '🔊';  
+    }  
+  });  
+  musicProgress.addEventListener('input', function() {  
+    if (bgMusic.duration) {  
+      bgMusic.currentTime = (musicProgress.value / 100) * bgMusic.duration;  
+    }  
+  });  
+  musicSelect.addEventListener('change', function() {  
+    setTimeout(updateProgress, 400);  
+  });  
+  repeatMusic.addEventListener('change', function () {  
+    bgMusic.loop = repeatMusic.checked;  
+  });  
+  // Sound on hover for .links a  
+  document.querySelectorAll('.links a').forEach(link => {  
+    link.addEventListener('mouseenter', () => {  
+      const audio = document.getElementById('hoverSound');  
+      audio.currentTime = 0;  
+      audio.volume = 0.20;  
+      audio.play();  
+    });  
+  });  
+});  
+</script>  </body>  
+</html>  

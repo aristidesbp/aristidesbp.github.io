@@ -1,0 +1,90 @@
+<!DOCTYPE html><!-- Declarando que este documento é do tipo HTML5 --> 
+
+<!-- 🧠 CONFIGURAÇÃO BÁSICA DA PÁGINA-->
+<!-- Define o idioma da página como português do Brasil -->
+<html lang="pt-BR"> 
+<!-- Início do cabeçalho -->
+<head> 
+<!-- Codificação para suportar acentuação -->
+<meta charset="UTF-8" /> 
+<!-- Responsividade em dispositivos móveis -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+<!-- Compatibilidade com IE -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<!-- Título da aba do navegador -->
+<title> Aristides Barbosa Pontes  // Portifólio </title>
+
+<!-- 🧠 SEO (Search Engine Optimization)-->
+<!-- Meta descrição Descrição para mecanismos de busca (texto que aparece abaixo do título no Google) -->
+<meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos em HTML, CSS, JavaScript, AndroidIDE e estratégias de marketing digital.">
+<!--  Autor da página -->
+<meta name="author" content="Aristides Barbosa Pontes">
+<!--  Palavras-chave (menos usada hoje, mas ainda relevante em alguns mecanismos de busca) -->
+<meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, desenvolvedor, HTML, CSS, JavaScript, tráfego pago, marketing digital, programador web, projetos web, sites profissionais,developer, programação, dev, desenvolvedor, programador, html, css, javascript, nodejs, reactjs, react, github, frontend, front-end">
+<!--  Robots (instruções para motores de busca) -->
+<meta name="robots" content="index, follow"> <!-- index = indexar; follow = seguir links internos -->
+<!-- Canonical (evita conteúdo duplicado em URLs diferentes) -->
+<link rel="canonical" href="https://aristidesbp.github.io/" />
+
+<!-- 🧠 Open Graph (para compartilhamento no Facebook, LinkedIn, etc.) -->
+<!-- Tipo de conteúdo -->
+<meta property="og:type" content="website"> 
+<!-- URL da página -->
+<meta property="og:url" content="https://aristidesbp.github.io/"> 
+<!-- Título no compartilhamento -->
+<meta property="og:title" content="Portfólio de Aristides Barbosa Pontes – Dev Front-End e Gestor de Tráfego">
+<!-- Descrição no card -->
+<meta property="og:description" content="Conheça os projetos e estratégias digitais de Aristides Barbosa Pontes, especialista em desenvolvimento web e tráfego pago."> 
+<!-- Imagem do card -->  
+<meta property="og:image" content="./img/Aristidesbp.png"> 
+
+
+<!-- 🧠 Twitter Card (para compartilhamento no Twitter) -->
+<!-- Tipo de card -->
+<meta name="twitter:card" content="summary_large_image"> 
+<meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
+<meta name="twitter:description" content="Confira meus projetos e estratégias como desenvolvedor front-end e gestor de tráfego.">
+<meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+<meta name="twitter:site" content="@aristidesbp"> <!-- Seu @ do Twitter, se tiver -->
+
+
+<!-- 🧠 ARQUIVOS EXTERNOS DE ESTILO (FONTS + CSS) -->
+<!-- Pré-carregamento para fontes do Google (melhora desempenho) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Importação de fontes do Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet" />
+<!-- Ícone que aparece na aba do navegador -->
+<link rel="shortcut icon" href="icons/favicon.png" type="image/x-icon" />
+<!-- Estilo CSS externo -->
+<link rel="stylesheet" href="css/site-mvc-style.css" />
+
+
+<!-- 🧠 ARQUIVOS EXTERNOS JAVASCRIPT -->
+<!-- Biblioteca para animações de scroll -->
+<script src="https://unpkg.com/scrollreveal"></script>
+<!-- Script principal em módulo ES6, carregado ao final -->
+<script type="module" src="js/site-mvc-main.js" defer></script>
+
+
+<!-- 🧠 Manifest (para Progressive Web Apps – PWA) -->
+<link rel="manifest" href="json/site-mvc-manifest.json">
+</head>
+
+<body>
+  <!-- Componente de Cabeçalho -->
+  <div id="header"></div> <!-- Será preenchido com o conteúdo de header.html via DOM -->
+
+  <!-- Área principal -->
+  <main id="app">
+    <!-- Aqui será renderizado o conteúdo dinâmico da view.js -->
+  </main>
+
+  <!-- Scripts MVC -->
+  <script src="./assets/js/model.js" type="module"></script>
+  <script src="./assets/js/view.js" type="module"></script>
+  <script src="./assets/js/controller.js" type="module"></script>
+  
+</body>
+</html>
+
