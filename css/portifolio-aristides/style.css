@@ -1,0 +1,102 @@
+/*STYLE DO INCEX*/
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #000000, #1a1a1a);
+      color: #ffffff;
+    }
+
+    .navbar {
+      background-color: #111;
+    }
+
+    .hero {
+      background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    .card {
+      background-color: #222;
+      border: none;
+    }
+
+    .card-title {
+      color: #f9c74f;
+    }
+
+    footer {
+      background: #000;
+      color: #ccc;
+      padding: 40px 0;
+    }
+
+    .btn-sound {
+      background-color: #f9c74f;
+      border: none;
+      color: black;
+      transition: 0.3s;
+    }
+
+    .btn-sound:hover {
+      background-color: #fff;
+    }
+
+
+/*formulario*/
+
+
+
+    form {
+    /*  background: white;  Fundo branco para destaque */
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block; /* Cada label em linha separada */
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%; /* Ocupa toda largura */
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box; /* Inclui padding na largura */
+    }
+    textarea {
+      resize: vertical; /* Usuário pode ajustar altura */
+      min-height: 80px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #25D366; /* Verde WhatsApp */
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #1ebe57;
+    }
+
+

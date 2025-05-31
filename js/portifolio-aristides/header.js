@@ -118,27 +118,78 @@ function createHeader(containerId = "header-container") {
         display: block;
       }
     }
-  `;
+
+/* 🔽 Estiliza o container dropdown */
+.custom-header .dropdown {
+  position: relative; /* Permite posicionar o submenu dentro desse item */
+}
+
+/* 🔽 Oculta o submenu inicialmente */
+.custom-header .dropdown-menu {
+  display: none;             /* Esconde o submenu */
+  position: absolute;        /* Posiciona abaixo do item principal */
+  background-color: #222;    /* Cor de fundo */
+  padding: 1rem;
+  top: 100%;                 /* Aparece logo abaixo do link */
+  left: 0;
+  z-index: 999;
+  border-radius: 4px;
+}
+
+/* 🔽 Quando o item estiver ativo, mostra o submenu */
+.custom-header .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+/* 🔽 Itens dentro do submenu */
+.custom-header .dropdown-menu li a {
+  display: block;
+  padding: 0.5rem 0;
+  color: #fff;
+  text-decoration: none;
+  text-align: left;
+}
+
+.custom-header .dropdown-menu li a:hover {
+  color: #f9a825; /* Efeito hover amarelo */
+}
 
 
-  // ⬇️ 2. Cria o elemento <header> com o conteúdo HTML
-  const header = document.createElement("header");
-  header.className = "custom-header";
-  header.innerHTML = `
-    <div class="custom-logo">Impacto<span>Web</span></div>
-    <button class="custom-menu-toggle" aria-label="Abrir menu">☰</button>
-    <nav class="custom-nav">
-      <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="#servico">Serviços</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-         <li><a href="#projetos">Projetos</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </nav>
+/*fim do style*/`;
 
 
-  `;
+/*Cria o elemento <header> com o conteúdo HTML*/
+const header = document.createElement("header");
+header.className = "custom-header";
+header.innerHTML = `
+<div class="custom-logo">Impacto<span>Web</span></div>
+<button class="custom-menu-toggle" aria-label="Abrir menu">☰</button>
+<nav class="custom-nav">
+<ul>
+<!-- LINKS DO MENU -->       
+<li><a href="index.html">Início</a></li>
+<li><a href="#servico">Serviços</a></li>
+<li><a href="#sobre">Sobre</a></li>
+<li><a href="#projetos">Projetos</a></li>
+<li><a href="#contato">Contato</a></li>
+
+<!-- ITEM DE MENU COM SUBMENU DROPDOWN -->
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle">OUTROS LINKS ▾</a> <!-- Seta indicativa -->
+  <ul class="dropdown-menu"> <!-- Lista oculta inicialmente -->
+    <li><a href="https://github.com/">Github</a></li>
+    <li><a href="https://www.facebook.com/?locale=pt_BR">Facebook</a></li>
+    <li><a href="https://www.google.com/intl/pt-br_br/business/">Google meu Negócio</a></li>
+    <li><a href="https://sites.google.com/">Google Sites</a></li>
+    <li><a href="https://www.youtube.com/">YouTube</a></li>
+    <li><a href="https://chatgpt.com/">ChatGPT</a></li>
+    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+  </ul>
+</li>
+
+
+<!-- FIM DOS LINKS DO MENU -->  
+</ul></nav>`;/*final Cria o elemento <header> com o conteúdo HTML*/
 
 
 
@@ -160,6 +211,17 @@ function createHeader(containerId = "header-container") {
   toggle.addEventListener("click", () => {
     nav.classList.toggle("active");
   });
+
+// ⬇️ 6. Dropdown "OUTROS LINKS"
+const dropdownToggle = header.querySelector(".dropdown-toggle"); // seleciona o botão "OUTROS LINKS"
+const dropdown = header.querySelector(".dropdown");              // seleciona o <li> pai
+
+// ⬇️ Quando clicar, alterna a classe "active" para mostrar ou esconder o submenu
+dropdownToggle.addEventListener("click", (e) => {
+  e.preventDefault();                         // Impede comportamento padrão do link
+  dropdown.classList.toggle("active");        // Alterna a exibição do submenu
+});
+
 }
 
 

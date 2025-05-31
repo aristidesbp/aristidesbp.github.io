@@ -1,0 +1,402 @@
+<!-- editorTxt.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>EditorTxt</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Cabeçalho fixo -->
+  <header id="header">
+    <div class="topo-header">
+      <!-- Link para voltar ao menu principal -->
+      <a href="../" class="btn-voltar" id="btnVoltar">Aristidesbp</a>
+
+      <!-- Barra de busca para buscar e substituir texto -->
+      <div class="busca-container" id="buscaContainer">
+        <input type="text" id="palavraBusca" placeholder="Buscar..." />
+        <input type="text" id="palavraSubstituir" placeholder="Substituir por..." />
+        <button id="btnBuscar">Buscar</button>
+        <button id="btnSubstituirTudo">Substituir tudo</button>
+        <span id="contador"></span>
+        <button id="btnAnterior">←</button>
+        <button id="btnProximo">→</button>
+      </div>
+
+      <!-- Select para navegar entre os arquivos -->
+      <select id="seletorArquivo">
+        <option value="documentacao.txt">documentacao.txt</option>
+        <option value="git-hub.txt">git-hub.txt</option>
+        <option value="linux-mint.txt">linux-mint.txt</option>
+        <option value="termux.txt">termux.txt</option>
+        <option value="python.txt">python.txt</option>
+        <option value="prompt-Engenharia.txt">prompt-Engenharia.txt</option>
+        <option value="trafego-pago.txt">trafego-pago.txt</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Espaço para o textarea do editor -->
+  <textarea id="editor"></textarea>
+
+  <!-- Controles para zoom e download -->
+  <div class="zoom-controls" id="zoomControls">
+    <button id="btnDiminuirFonte">−</button>
+    <button id="btnAumentarFonte">+</button>
+    <button id="btnBaixarArquivo">Download</button>
+  </div>
+
+  <!-- Estilos internos para facilitar visualização -->
+  <style>
+    /* Reset básico e box-sizing para todos os elementos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Corpo e html ocupam 100% da altura da viewport */
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Estilo do cabeçalho fixo */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #222;
+      color: white;
+      padding: 10px 15px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Botão de voltar com estilo */
+    .btn-voltar {
+      background-color: #555;
+      color: white;
+      padding: 8px 12px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn-voltar:hover {
+      background-color: #777;
+    }
+
+    /* Container dos controles de zoom */
+    .zoom-controls {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    /* Botões de zoom e download */
+    .zoom-controls button {
+      padding: 10px 15px;
+      font-size: 18px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .zoom-controls button:hover {
+      background-color: #555;
+    }
+
+    /* Área do textarea para o editor de texto */
+    #editor {
+      position: absolute;
+      top: 70px; /* Altura do header + espaçamento */
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 140px - 60px); /* Altura total menos header e rodapé */
+      border: none;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: none;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    /* Container da busca */
+    .busca-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Inputs da busca */
+    .busca-container input[type="text"] {
+      padding: 5px 8px;
+      font-size: 14px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+
+    /* Botões da busca */
+    .busca-container button {
+      padding: 6px 10px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .busca-container button:hover {
+      background-color: #666;
+    }
+
+    /* Span contador */
+    #contador {
+      min-width: 70px;
+      text-align: center;
+      font-weight: bold;
+      color: #eee;
+    }
+
+    /* Select de arquivos */
+    #seletorArquivo {
+      padding: 6px 8px;
+      font-size: 14px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: black;
+    }
+  </style>
+
+  <!-- Script JavaScript com POO e funções comentadas -->
+  <script>
+    /**
+     * Classe EditorTxt para controlar o editor, buscas, fontes e arquivos
+     */
+    class EditorTxt {
+      constructor() {
+        // Elementos do DOM
+        this.editor = document.getElementById('editor');
+        this.seletorArquivo = document.getElementById('seletorArquivo');
+        this.palavraBusca = document.getElementById('palavraBusca');
+        this.palavraSubstituir = document.getElementById('palavraSubstituir');
+        this.contador = document.getElementById('contador');
+        this.tamanhoFonte = 14;
+
+        // Controle de ocorrências da busca
+        this.ocorrencias = [];
+        this.indiceAtual = 0;
+
+        // Inicializa eventos
+        this.iniciarEventos();
+
+        // Carrega arquivo inicial
+        this.carregarArquivoSelecionado();
+      }
+
+      /**
+       * Inicializa eventos dos botões e selects
+       */
+      iniciarEventos() {
+        // Quando muda o arquivo selecionado, carregar o conteúdo
+        this.seletorArquivo.addEventListener('change', () => this.carregarArquivoSelecionado());
+
+        // Botão buscar
+        document.getElementById('btnBuscar').addEventListener('click', () => this.buscarPalavra());
+
+        // Botão substituir tudo
+        document.getElementById('btnSubstituirTudo').addEventListener('click', () => this.substituirTudo());
+
+        // Navegar ocorrências anteriores
+        document.getElementById('btnAnterior').addEventListener('click', () => this.navegarOcorrencia(-1));
+
+        // Navegar ocorrências próximas
+        document.getElementById('btnProximo').addEventListener('click', () => this.navegarOcorrencia(1));
+
+        // Botão aumentar fonte
+        document.getElementById('btnAumentarFonte').addEventListener('click', () => this.aumentarFonte());
+
+        // Botão diminuir fonte
+        document.getElementById('btnDiminuirFonte').addEventListener('click', () => this.diminuirFonte());
+
+        // Botão baixar arquivo
+        document.getElementById('btnBaixarArquivo').addEventListener('click', () => this.baixarArquivo());
+      }
+
+      /**
+       * Carrega o conteúdo do arquivo selecionado no textarea
+       */
+      carregarArquivoSelecionado() {
+        const arquivo = this.seletorArquivo.value;
+
+        fetch(arquivo)
+          .then(response => {
+            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+            return response.text();
+          })
+          .then(data => {
+            this.editor.value = data;
+            this.limparBusca();
+          })
+          .catch(error => {
+            this.editor.value = `Erro ao carregar o arquivo: ${error.message}`;
+          });
+      }
+
+      /**
+       * Aumenta o tamanho da fonte no editor (máximo 40px)
+       */
+      aumentarFonte() {
+        if (this.tamanhoFonte < 40) {
+          this.tamanhoFonte += 2;
+          this.editor.style.fontSize = this.tamanhoFonte + 'px';
+        }
+      }
+
+      /**
+       * Diminui o tamanho da fonte no editor (mínimo 8px)
+       */
+      diminuirFonte() {
+        if (this.tamanhoFonte > 8) {
+          this.tamanhoFonte -= 2;
+          this.editor.style.fontSize = this.tamanhoFonte + 'px';
+        }
+      }
+
+      /**
+       * Baixa o conteúdo do editor como arquivo de texto
+       */
+      baixarArquivo() {
+        const texto = this.editor.value;
+        const blob = new Blob([texto], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'conteudo.txt';
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+
+      /**
+       * Busca o termo informado e armazena as ocorrências no texto
+       */
+      buscarPalavra() {
+        const texto = this.editor.value;
+        const termo = this.palavraBusca.value.trim();
+
+        this.ocorrencias = [];
+        this.indiceAtual = 0;
+
+        if (!termo) {
+          this.limparBusca();
+          return;
+        }
+
+        const regex = new RegExp(termo, 'gi');
+        let match;
+
+        while ((match = regex.exec(texto)) !== null) {
+          this.ocorrencias.push(match.index);
+        }
+
+        this.atualizarContador();
+        this.destacarOcorrencia();
+      }
+
+      /**
+       * Atualiza o contador de ocorrências encontradas e a posição atual
+       */
+      atualizarContador() {
+        if (this.ocorrencias.length > 0) {
+          this.contador.textContent = `${this.indiceAtual + 1} de ${this.ocorrencias.length}`;
+        } else {
+          this.contador.textContent = '0 encontrada';
+        }
+      }
+
+      /**
+       * Navega para a ocorrência anterior ou próxima, com loop circular
+       * @param {number} direcao -1 para anterior, 1 para próximo
+       */
+      navegarOcorrencia(direcao) {
+        if (this.ocorrencias.length === 0) return;
+
+        this.indiceAtual += direcao;
+
+        if (this.indiceAtual < 0) this.indiceAtual = this.ocorrencias.length - 1;
+        if (this.indiceAtual >= this.ocorrencias.length) this.indiceAtual = 0;
+
+        this.destacarOcorrencia();
+        this.atualizarContador();
+      }
+
+      /**
+       * Destaca a ocorrência atual no textarea usando seleção
+       */
+      destacarOcorrencia() {
+        const index = this.ocorrencias[this.indiceAtual];
+        const termo = this.palavraBusca.value.trim();
+
+        if (index !== undefined && termo.length > 0) {
+          this.editor.focus();
+          this.editor.setSelectionRange(index, index + termo.length);
+        }
+      }
+
+      /**
+       * Substitui todas as ocorrências do termo por outro texto no editor
+       */
+      substituirTudo() {
+        const termo = this.palavraBusca.value.trim();
+        const substituto = this.palavraSubstituir.value;
+
+        if (!termo) return;
+
+        const texto = this.editor.value;
+        const regex = new RegExp(termo, 'gi');
+        const novoTexto = texto.replace(regex, substituto);
+
+        this.editor.value = novoTexto;
+
+        // Atualiza as ocorrências após substituição
+        this.buscarPalavra();
+      }
+
+      /**
+       * Limpa o estado de busca e contador
+       */
+      limparBusca() {
+        this.ocorrencias = [];
+        this.indiceAtual = 0;
+        this.contador.textContent = '';
+        this.palavraBusca.value = '';
+        this.palavraSubstituir.value = '';
+      }
+    }
+
+    // Inicializa o editor ao carregar a página
+    window.onload = () => {
+      new EditorTxt();
+    };
+  </script>
+
+</body>
+</html>
+
