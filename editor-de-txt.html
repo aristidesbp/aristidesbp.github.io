@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Editor.txt ABP</title>  
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho fixo -->
+
+  <header>
+  <div class="topo-header">
+  <!-- criando linik para voltar para o menu -->
+  <a href="../" class="btn-voltar">Aristidesbp</a>
+ <!-- barra de pesquisa para buscar e editar texto --> 
+  <div class="busca-container">
+    <input type="text" id="palavraBusca" placeholder="Buscar..." />
+    <input type="text" id="palavraSubstituir" placeholder="Substituir por..." />
+    <button onclick="buscarPalavra()">Buscar</button>
+    <button onclick="substituirTudo()">Substituir tudo</button>
+    <span id="contador"></span>
+    <button onclick="navegarOcorrencia(-1)">←</button>
+    <button onclick="navegarOcorrencia(1)">→</button>
+  </div>
+    
+  <!-- criando um select para navegar entre os conteudos -->  
+ <select id="seletor-arquivo" onchange="carregarArquivoSelecionado()">
+
+<option value="txt/termux.txt">Termux</option>      
+<option value="txt/git-github.txt">Git-Github</option>
+<option value="txt/python.txt">Python</option>
+<option value="txt/https://organic-eureka-69vjwppqrwg2r9q6.github.dev/">editor</option>
+   
+
+   
+</select>
+</div>   
+</header>
+<br>
+<br><br>
+
+  <!-- Caixa de texto -->
+  <textarea id="editor"></textarea>
+
+  <!-- Controles no rodapé -->
+  <div class="zoom-controls">
+    <button onclick="diminuirFonte()">−</button>
+    <button onclick="aumentarFonte()">+</button>
+    <button onclick="baixarArquivo()">Download</button>
+  </div>
+
+
+  <script src="js/script.js"></script>
+</body>
+</html>
