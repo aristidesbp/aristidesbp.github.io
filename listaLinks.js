@@ -8,14 +8,17 @@ listaLinks.innerHTML = `
 
 <!-- Meus-Projetos ########################################################################### -->
 <section class="column" id="Testes-Projetos"><h1>Meus-Projetos</h1><ul class="lista-links">
-<li><a href="https://aristidesbp.github.io/" target="_blank">Meu Portifolio</a></li>
+<li><a href="projetos/jorgecorreaf/index.html" target="_blank">jorgecorreaf</a></li>
+<li><a href="projetos/delivary/index.html" target="_blank">Delivary</a></li>
+<li><a href="projetos/portfolio-aristidesbp/index.html" target="_blank">portfolio-aristidesbp</a></li>
 <li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">Meu Site Google</a></li>
-<li><a href="lista-de-tarefas.html" target="_blank">lista-de-tarefas.html</a></li>
-<li><a href="projetos/delivery" target="_blank">Delivery</a></li>
-<li><a href="lista-de-tarefas2.html" target="_blank">lista-de-tarefas2.html</a></li>
-<li><a href="plays.html" target="_blank">plays.html</a></li>
-<li><a href="portifolio-interativo.html" target="_blank">portifolio-interativo.html</a></li>
-<li><a href="portifolio-w3s.html" target="_blank">portifolio-w3s.html</a></li>
+<li><a href="projetos/aulas/index.html" target="_blank">Aulas.txt</a></li>
+<li><a href="projetos/ficha-anamnese/index.html" target="_blank">ficha-anamnese</a></li>
+<li><a href="projetos/form-whatzap/index.html" target="_blank">form-whatzap</a></li>
+<li><a href="projetos/listar-tarefas/index.html" target="_blank">listar-tarefas</a></li>
+<li><a href="projetos/site-cursos/index.html" target="_blank">site-cursos</a></li>
+
+
 </ul>
 </section>
 
