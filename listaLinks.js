@@ -6,7 +6,7 @@ const listaLinks = document.getElementById("listaLinks");
 listaLinks.innerHTML = `
 <!-- lista de links -->
 
-<!-- Testes-Projetos ########################################################################### -->
+<!-- Meus-Projetos ########################################################################### -->
 <section class="column" id="Testes-Projetos"><h1>Meus-Projetos</h1><ul class="lista-links">
 <li><a href="https://aristidesbp.github.io/" target="_blank">Meu Portifolio</a></li>
 <li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">Meu Site Google</a></li>
