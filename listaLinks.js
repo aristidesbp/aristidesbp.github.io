@@ -6,6 +6,20 @@ const listaLinks = document.getElementById("listaLinks");
 listaLinks.innerHTML = `
 <!-- lista de links -->
 
+<!-- Testes-Projetos ########################################################################### -->
+<section class="column" id="Testes-Projetos"><h1>Meus-Projetos</h1><ul class="lista-links">
+<li><a href="https://aristidesbp.github.io/" target="_blank">Meu Portifolio</a></li>
+<li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">Meu Site Google</a></li>
+<li><a href="lista-de-tarefas.html" target="_blank">lista-de-tarefas.html</a></li>
+<li><a href="projetos/delivery" target="_blank">Delivery</a></li>
+<li><a href="lista-de-tarefas2.html" target="_blank">lista-de-tarefas2.html</a></li>
+<li><a href="plays.html" target="_blank">plays.html</a></li>
+<li><a href="portifolio-interativo.html" target="_blank">portifolio-interativo.html</a></li>
+<li><a href="portifolio-w3s.html" target="_blank">portifolio-w3s.html</a></li>
+</ul>
+</section>
+
+
 <!-- likns de Cursos ########################################################################### -->
 <section class="column" id="Cursos"> <h2>Links para Cursos</h2><ul class="lista-links">
 <li><a href="https://aprendamais.mec.gov.br/" target="_blank">aprendamais.mec.gov</a></li>
@@ -40,19 +54,7 @@ listaLinks.innerHTML = `
 </ul>
 </section>
        
-<!-- Testes-Projetos ########################################################################### -->
-<section class="column" id="Testes-Projetos"><h2>Testes-Projetos</h2><ul class="lista-links">
-<li><a href="https://sites.google.com/view/marketing-digital-abp/sobre" target="_blank">Portfólio Google Sites</a></li>
-<li><a href="index-com-radio.html" target="_blank">index-com-radio.html</a></li>
-<li><a href="Abp-radio.html" target="_blank">Abp-radio.html</a></li>
-<li><a href="ler-arquivo-json.html" target="_blank">ler-arquivo-json.html</a></li>
-<li><a href="lista-de-tarefas.html" target="_blank">lista-de-tarefas.html</a></li>
-<li><a href="lista-de-tarefas2.html" target="_blank">lista-de-tarefas2.html</a></li>
-<li><a href="plays.html" target="_blank">plays.html</a></li>
-<li><a href="portifolio-interativo.html" target="_blank">portifolio-interativo.html</a></li>
-<li><a href="portifolio-w3s.html" target="_blank">portifolio-w3s.html</a></li>
-</ul>
-</section>
+
 
 <!-- Seção de Inteligência Artificial ########################################################################### -->
 <section class="column" id="Inteligência-Artificial"><h2>Inteligência Artificial</h2> <ul class="lista-links"> 
