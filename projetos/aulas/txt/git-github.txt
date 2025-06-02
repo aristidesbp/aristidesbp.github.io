@@ -108,36 +108,48 @@ ssh -T git@github.com
 ########################################
 ## Clona o repositório com chave SSH
 git clone git@github.com:usuario/repositorio.git
+
 ## verificar todas as pastas/arquivo do repositorio ate oucultos   
 ls -a
+
 ## vai para dentro da pasta do repositorio
 cd nome-do-reositorio
+
 ## verificar todas as pastas/arquivo do repositorio ate oucultos   
 ls -a
+
 ## Mostra os repositórios remotos configurados
 git remote -v 
+
 ## Busca atualizações sem aplicar
 git fetch 
+
 ## Sincroniza com o repositório remoto (branch main)
 git pull origin main 
-## Mostra o histórico de forma resumida (1 linha por commit)
-git log --oneline
-## Exibe histórico de todos os commits com hash, autor e data (PARA SAIR DIGITE: q) 
-git log 
-## Mostra o status atual dos arquivos (modificados, novos, deletados)
-git status 
+
+
+
+
 
 ##############################
 # 🌱 BRANCHES (RAMIFICAÇÕES) 
 ##############################
+# Lista todas as branches (ramificações) com:
 git branch
-# Lista todas as branches (ramificações)
-git checkout -b novaBranch numero-do-commit
-# Criar uma branch a partir do commit 
+
+## Exibe histórico de todos os commits com hash, autor e data (PARA SAIR DIGITE: q) 
+git log 
+
+# Criar uma branch a partir do commit com:
 # ex:: git checkout -b novaBranch  2ad9347bba64542687c6
+git checkout -b novaBranch numero-do-commit
+
+
 git branch nome-da-branch
+
 # Cria uma nova branch com o nome informado
 git checkout -b nova-branch
+
 # Cria e já muda para a nova branch
 git stash
 # Salva temporariamente alterações não commitadas (útil para trocar de branch)
@@ -170,25 +182,42 @@ git add nome-do-arquivo.txt
 ###################################################
 ## 📝 TRABALHANDO COM COMMIT (DIGITE "Q" PARA SAIR)
 ###################################################
-git add nome-do-arquivo.ext
-# Adiciona um arquivo específico para a área de staging
-git add .
-# Adiciona TODOS os arquivos modificados para o commit
-git commit -m "Mensagem clara e objetiva"
-# Cria um commit com a mensagem entre aspas
-git commit -am "Mensagem"
-# Adiciona e comita arquivos rastreados (não funciona com novos arquivos)
-git diff
-# Mostra as diferenças entre o código atual e o último commit
-git commit -m "Adiciona mensagem de conexão" 
-# Faz o commit com a mensagem
-git show
-# Mostra detalhes do último commit
-git blame nome-do-arquivo
-# Mostra linha por linha quem modificou o quê (ótimo para rastrear bugs)
-git tag -a v1.0 -m "Versão 1.0"
-# Cria uma tag de versão
 
+## Mostra o status atual dos arquivos (modificados, novos, deletados)
+git status 
+
+# Adiciona um arquivo específico para a área de staging
+git add nome-do-arquivo.ext
+
+# Adiciona TODOS os arquivos modificados para o commit
+git add .
+
+# Cria um commit com a mensagem entre aspas
+git commit -m "Mensagem clara e objetiva"
+
+# Adiciona e comita arquivos rastreados (não funciona com novos arquivos)
+git commit -am "Mensagem"
+
+# Mostra as diferenças entre o código atual e o último commit
+git diff
+
+# Faz o commit com a mensagem
+git commit -m "Adiciona mensagem de conexão" 
+
+# Mostra detalhes do último commit
+git show
+
+# Mostra linha por linha quem modificou o quê (ótimo para rastrear bugs)
+git blame nome-do-arquivo
+
+# Cria uma tag de versão
+git tag -a v1.0 -m "Versão 1.0"
+
+## Mostra o histórico de forma resumida (1 linha por commit)
+git log --oneline
+
+## Exibe histórico de todos os commits com hash, autor e data (PARA SAIR DIGITE: q) 
+git log 
 
 ###########################
 ## 🧹 CORREÇÕES E AJUSTES
