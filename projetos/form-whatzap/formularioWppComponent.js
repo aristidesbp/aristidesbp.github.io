@@ -1,5 +1,14 @@
-// formularioWppComponent.js
-// ✅ Web Component reutilizável para agendamento de serviços de consultoria
+
+/*formularioWppComponent.js
+
+COMO USAR NO HTML
+<!-- Substitua pelo número desejado -->
+<script src="formularioWppComponent.js" defer></script>
+<formulario-wpp numero="5591992420981"></formulario-wpp>
+
+✅ Web Component reutilizável para agendamento de serviços de consultoria*/
+
+
 
 class FormularioWppComponent extends HTMLElement {
   constructor() {
