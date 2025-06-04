@@ -2,25 +2,25 @@
 # COMANDOS LINUX  ##
 ####################
 ## para mostrar conteudo da pasta:
-'''
+```
 ls -a
-'''
+```
 ## para criar pasta
-'''
+```
 mkdir nome
-'''
+```
 ## para criar arquivo
-'''
+```
 nano nome
-'''
+```
 ## entrar na pasta
-'''
+```
 cd nome
-'''
+```
 ## mover pasta ou arquivo (./pasta anterior)
-'''
+```
 mv psta
-'''
+```
 ## volta para pasta anterior
 '''
 cd ..
