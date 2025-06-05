@@ -1,71 +1,102 @@
 <!DOCTYPE html>
-<!-- ----------------------------------
- Olá meu nome é Aristides, sou desenvolvedor desse código, através dele irei te ensinar alguns fundamentos de desenvolvimento web. usarei várias tag de comentário nesse código com finalidade de repassar o conhecimento e explicar como fazer determinadas coisas, agora por exemplo vou te ensinar como iniciar uma tag de comentário: 
-
-<   = sinaliza a abertura de uma tag.
-
-!   = símbolo de instrução especial.
-
---  = sinaliza o início do comentário.
-
-/>  = sinaliza o fechamento de uma tag
-
-Note a diferença da primeira tag "!DOCTYPE html" (Declarando que este documento é do tipo HTML5), para está que contém o texto da primeira explicação . (MÓDULO 1: HTML)
------------------------------------- --> 
-
-
-
-
-
-<!-- ################################## -->
-<!-- ⚙️ CONFIGURAÇÃO BÁSICA DA PÁGINA   -->
-<!-- ################################## -->
-<!-- --------------------------------------
-O primeiro passo após a tag de abertura é definirmos o idioma da página como português do Brasil, para isso vamos utilizar a seguinte tag abaixo.
- -------------------------------------- -->
+<!-- 
+<!DOCTYPE html> é a declaração do tipo de documento. 
+Ela informa ao navegador que este é um documento HTML5, 
+permitindo que ele interprete corretamente a estrutura e os elementos da página. 
+Essa linha deve ser a primeira do arquivo HTML e não é uma tag HTML, 
+mas uma instrução ao navegador sobre qual versão do HTML está sendo usada.
+-->
 <html lang="pt-BR"> 
-<!-- --------------------------------------
-A agora vamos dar início ao nosso cabeçalho da página ele é responsável por armazenar elementos que não serão exibidos na nossa página web, contendo parâmetros metadados e informações de arquivos e bibliotecas necessárias 
---------------------------------------- -->
-<head> 
-<!-- --------------------------------------
-próximo passo será escrever a tag de Codificação para suportar acentuação gráfica como: ç, é, ã, ô etc...
---------------------------------------- -->
+<!--
+<html lang="pt-BR"> é utilizada para declarar qual a linguagem da sua página,
+ no nosso caso, estamos declarando ao navegador que nossa página está em português.
+ -->
+<head>  
+<!-- 
+Uma uma página html é composta por uma estrutura só qual é formada pelas tags:
+
+<html></html>: temos aqui duas telas a de abertura e de fechamento, são utilizadas para 
+definir o corpo de um arquivo html, é como se fosse uma caixa de papelão ou um container, 
+aqui você está declarando que tudo que tiver dentro dele faz parte de um arquivo html.
+  
+<head></head>: tag de abertura e fechamento do cabeçalho da página, dentro delas ficam 
+as configurações da página e importações de arquivos externos irão fazer parte da 
+sua página web, os arquivos e códigos dentro desta tag não irão aparecer para o usuário!
+
+<body></body>: dentro dele iremos colocar tudo o que será apresentado ao usuário (leitor),
+será toda parte visível o conteúdo da sua página o que você quer apresentar.
+
+Exemplo da estrutura mais básica do html: 
+  
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Página Exemplo</title>
+  </head>
+  <body>
+    <h1>Olá, mundo!</h1>
+    <p>Esse é um exemplo básico de HTML.</p>
+  </body>
+</html>
+-->
+ 
 <meta charset="UTF-8" /> 
-<!-- ---------------------------------------
-Aatualmente, as pessoas têm acesso a diferentes dispositivos móveis, podendo ser PC celular tablet ou até mesmo TV, por isso adicionaremos a tag de Responsividade em dispositivos móveis , ela é responsável por fazer o site ficar no formato de cada dispositivo condizente com a configuração do arquivo CSS, abaixo você notará a tag responsável por isso 😎.
----------------------------------------- -->
+<!-- 
+<meta charset="UTF-8" /> Esta tag é usada para determinar a Codificação,
+permitindo suportar acentuação gráfica da língua portuguesa, 
+como por exemplo o uso de acentuação gráfica:
+ ç, é, ã, ô etc...
+-->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-<!-- ---------------------------------------
-Compatibilidade com IE (internet Explorer), usando essa tag para tornar o browser mais compatível com o nosso site
----------------------------------------- -->
+<!-- 
+Atualmente, as pessoas têm acesso a diferentes dispositivos móveis, 
+podendo ser PC celular tablet ou até mesmo TV, por isso 
+utilizamos a tag acima para adicionar Responsividade a nossa página, 
+permitindo que ela se adapte a dispositivos móveis com um layout mais fácil 
+e acessível para cada dispositivo.
+-->
+
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-<!-- ---------------------------------------
-Abaixo iremos adicionar o Título da aba do navegador, é o nome que fica lá naquela vinha embaixo da URL indicando qual é a aba da sua página 🙄
----------------------------------------- -->
+<!-- 
+usada para melhorar a Compatibilidade com IE (internet Explorer), 
+usamos essa tag para tornar o browser mais compatível com o nosso site,
+através de uma biblioteca/arquivo (content="IE=edge) está hospedado no endereço 
+http-equiv="X-UA-Compatible.
+-->
+
 <title>Tapioca do Ari // Portifólio </title>
+<!-- 
+através da tag  <title> adicionamos o Título da aba do navegador, 
+o nome que fica lá na parte de cima, embaixo da URL indicando qual
+é o nome da sua página. 
+-->
 
-
-
-
-
-
-<!-- ################################## -->
-<!-- 🤖 SEO - BUSCADORES E PESQUISAS    -->
-<!-- ################################## -->
-<!-- --------------------------------------
-Teg do Título que aparecerá no compartilhamento (como se fosse um título de post ou notícia) 
---------------------------------------- -->
 <meta property="og:title" content="Tapioca do Ari – Tapioca Gourmet Artesanal em Belém">
-<!-- --------------------------------------
-Meta descrição para motores de busca 
---------------------------------------- -->
+<!-- 
+Teg do Título que aparecerá no compartilhamento (como se fosse um título de post ou notícia).
+aquele título que aparece quando a gente compartilha uma página, 
+no WhatsApp para o nosso colega 😎
+-->
+
 <meta name="description" content="Tapioca do Ari é a melhor barraca de tapioca gourmet artesanal de Belém! Tapiocas recheadas com ingredientes selecionados, sabor irresistível e atendimento especial.">
-<!-- --------------------------------------
-Palavras-chave para SEO 
---------------------------------------- -->
+<!-- 
+Meta descrição para motores de busca, responsável para facilitar a vida dos buscadores ou
+barras de pesquisa. imagine que uma pessoa está procurando por tapioca recheada, 
+os nossos incríveis navegadores irão vasculhar site que contém estas mesmas palavras, 
+porém aqui no nosso site ela parece como uma espécie de subtítulo facilitando a pesquisa e te colocando, 
+no topo das respostas pois ele te encontrou o primeiro. esta meta tag faz parte do SEO de sua pagina.
+-->
+ 
 <meta name="keywords" content="tapioca gourmet, barraca de tapioca, tapioca em Belém, tapioca recheada, tapioca artesanal, comida nordestina, café da manhã, lanche saudável, comida de rua, gastronomia paraense">
-<!-- -------------------------------------
+<!-- 
+Assim como vimos a tag acima, esta se comporta da mesma forma, 
+porém aqui iremos determinar as Palavras-chave para SEO ,
+as palavras que geralmente as pessoas pesquisam nos navegadores.
+-->
+
+ <!-- -------------------------------------
 Open Graph para redes sociais (Facebook, LinkedIn, etc.):
 Essas tags com o atributo "property=og:*" fazem parte do protocolo Open Graph. Elas são usadas quando alguém compartilha seu site no Facebook, LinkedIn e outras redes sociais, definem o título, descrição e imagem que aparecem no "cartão de compartilhamento". 
 -------------------------------------- -->
