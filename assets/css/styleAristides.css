@@ -1,0 +1,55 @@
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #000000, #1a1a1a);
+      color: #ffffff;
+    }
+
+    .navbar {
+      background-color: #111;
+    }
+
+    .hero {
+      background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    .card {
+      background-color: #222;
+      border: none;
+    }
+
+    .card-title {
+      color: #f9c74f;
+    }
+
+    footer {
+      background: #000;
+      color: #ccc;
+      padding: 40px 0;
+    }
+
+    .btn-sound {
+      background-color: #f9c74f;
+      border: none;
+      color: black;
+      transition: 0.3s;
+    }
+
+    .btn-sound:hover {
+      background-color: #fff;
+    }
+

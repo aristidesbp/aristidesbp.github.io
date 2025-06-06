@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfólio profissional de AristidesBP - Desenvolvimento Web, Aplicativos e Tráfego Pago.">
+  <meta name="keywords" content="AristidesBP, Desenvolvimento Web, Programador, Tráfego Pago, Front-End, AndroidIDE, Aplicativos">
+  <meta name="author" content="AristidesBP">
+  <title>Portfólio AristidesBP</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  
+
+  
+
+  <!-- Caixa flutuante da rádio com o botão tema -->
+  <div id="radio-float">
+<!-- Botão de tema claro/escuro -->
+  <button id="theme-toggle" title="Alternar tema">🌓</button>
+    <button id="radio-float-toggle" title="Mostrar/Ocultar Rádio">🎵</button>
+    <div id="radio-float-content">
+      <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
+      <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+      <div class="music-controls-row">
+        <button id="bgMusicBtn" title="Play/Pause">🎵</button>
+        <button id="vol-down" title="Diminuir volume">➖</button>
+        <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
+        <button id="vol-up" title="Aumentar volume">➕</button>
+      </div>
+      <div class="music-controls-row">
+        <select id="music-select" title="Escolha a trilha">
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8</option>
+          <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>
+          <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>
+          <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>
+        </select>
+        <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">
+        <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>
+      </div>
+      <div class="music-controls-row">
+        <span id="music-current">0:00</span>
+        <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">
+        <span id="music-duration">0:00</span>
+      </div>
+    </div>
+  </div>
+ <!-- fim da Caixa flutuante da rádio com o botão tema -->
+
+ <header>
+    <h1>Player de Mídia</h1> <!-- Cabeçalho principal -->
+  </header>
+
+  <main>
+    <!-- Seção de MÚSICAS -->
+    <section id="musicSection">
+      <h2>Músicas</h2>
+      <input type="text" id="searchMusic" placeholder="Buscar música..."> <!-- Campo de busca -->
+      <ul id="musicList">
+        <!-- Lista de músicas com nome e botão de play -->
+        <li data-name="Trilha Aventura">
+          Trilha Aventura
+          <button onclick="playMusic('musicas/aventura.mp3')">Play</button>
+        </li>
+        <li data-name="Relaxamento Natureza">
+          Relaxamento Natureza
+          <button onclick="playMusic('musicas/natureza.mp3')">Play</button>
+        </li>
+      </ul>
+      <audio id="audioElement" controls></audio> <!-- Player de áudio -->
+    </section>
+
+    <!-- Seção de VÍDEOS -->
+    <section id="videoSection">
+      <h2>Vídeos</h2>
+      <input type="text" id="searchVideo" placeholder="Buscar vídeo..."> <!-- Campo de busca -->
+      <ul id="videoList">
+        <!-- Lista de vídeos com nome e botão de play -->
+        <li data-name="Vídeo Motivacional">
+          Vídeo Motivacional
+          <button onclick="playVideo('videos/motivacional.mp4')">Play</button>
+        </li>
+        <li data-name="Tutorial HTML">
+          Tutorial HTML
+          <button onclick="playVideo('videos/tutorial.mp4')">Play</button>
+        </li>
+      </ul>
+      <video id="videoElement" controls></video> <!-- Player de vídeo -->
+    </section>
+  </main>
+
+  <script src="player.js"></script> <!-- Lógica JS -->
+ 
+  
+
+
+
+
+<style>
+:root {
+  --primary: #007BFF;
+  --secondary: #6c757d;
+  --bg-light: #f7fafd;
+  --bg-dark: #1a202c;
+  --container-light: #fff;
+  --container-dark: #232b3e;
+  --text-main-light: #1a202c;
+  --text-main-dark: #e2e8f0;
+  --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.08);
+  --shadow-dark: 0 8px 32px #0006;
+  --accent: #e0c3fc;
+  --gradient: linear-gradient(270deg, #74ebd5, #acb6e5, #e0c3fc, #f7971e, #a8edea, #fed6e3, #89f7fe, #66a6ff, #ff6a88, #ff99ac);
+}
+
+html, body {
+  min-height: 100vh;
+}
+
+body {
+  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg-light);
+  color: var(--text-main-light);
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-main-dark);
+}
+
+  
+.card img {
+      max-width: 100%;
+      max-height: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto 12px auto;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+#theme-toggle {
+  position: fixed;
+  top: 18px;
+  left: 16px;
+  z-index: 300;
+  background: var(--accent);
+  color: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.6em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0001;
+  transition: background 0.2s, color 0.2s;
+}
+body.dark #theme-toggle {
+  background: #373d4c;
+  color: #ffd700;
+}
+
+.header {
+  width: 100%;
+  background: var(--container-light);
+  box-shadow: 0 2px 16px #0002;
+  border-radius: 0 0 14px 14px;
+  transition: background 0.3s, color 0.3s;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+body.dark .header {
+  background: var(--container-dark);
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+  padding: 12px 6vw;
+  justify-content: space-between;
+}
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px #e0c3fc33;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+.nav-links li {
+  margin: 0;
+}
+.nav-links a {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1.08em;
+  font-weight: bold;
+  color: var(--primary);
+  padding: 8px 14px;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #e0c3fc 0%, #fff 100%);
+  transition: background 0.24s, color 0.24s;
+}
+.nav-links a:hover {
+  background: linear-gradient(90deg, var(--primary) 0%, #e0c3fc 100%);
+  color: #fff;
+}
+body.dark .nav-links a {
+  background: linear-gradient(90deg, #232b3e 0%, #2a4365 100%);
+  color: #ffd700;
+}
+body.dark .nav-links a:hover {
+  background: linear-gradient(90deg, #ffd700 0%, #403a63 100%);
+  color: #222;
+}
+
+.animated-bg {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
+  background: var(--gradient);
+  background-size: 2000% 2000%;
+  animation: gradientMove 20s ease-in-out infinite;
+  opacity: 0.25;
+  pointer-events: none;
+}
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  25% {background-position: 100% 50%;}
+  50% {background-position: 100% 100%;}
+  75% {background-position: 0% 100%;}
+  100% {background-position: 0% 50%;}
+}
+
+.navbar-spacer { height: 70px; }
+@media (max-width: 700px) { .navbar-spacer{height:97px;} }
+@media (max-width: 600px) { .navbar-spacer{height:124px;} }
+
+.container {
+  position: relative;
+  z-index: 2;
+  background: var(--container-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  padding: 38px 8vw 28px 8vw;
+  width: 90%;
+  max-width: 700px;
+  margin: 48px auto 24px auto;
+  text-align: center;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+body.dark .container {
+  background: var(--container-dark);
+  color: var(--text-main-dark);
+  box-shadow: var(--shadow-dark);
+}
+
+h1 {
+  color: var(--primary);
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px #e0c3fc60;
+  transition: color 0.2s;
+}
+body.dark h1 {
+  color: #ffd700;
+  text-shadow: 0 2px 8px #2e266c99;
+}
+h2 {
+  color: var(--secondary);
+  margin: 32px 0 14px 0;
+  font-size: 1.25rem;
+  position: relative;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+body.dark h2 {
+  color: #b0b9c8;
+}
+.underline::after {
+  content: '';
+  display: block;
+  margin: 8px auto 0 auto;
+  width: 90px; height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent) 80%);
+  border-radius: 2px;
+  animation: underlineGrow 1s 1;
+}
+@keyframes underlineGrow {
+  0% { width: 0; }
+  100% { width: 90px; }
+}
+
+p {
+  color: #444;
+  font-size: 1.08rem;
+  margin-bottom: 28px;
+  line-height: 1.5;
+  transition: color 0.2s;
+}
+body.dark p { color: #b0b9c8;}
+
+.sobre-lista {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  text-align: left;
+  font-size: 1.05em;
+  display: inline-block;
+}
+.sobre-lista li { margin-bottom: 6px; }
+
+.cards {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.card {
+  background: #fff;
+  border-radius: 13px;
+  box-shadow: 0 2px 10px #e0c3fc33;
+  padding: 22px 18px 18px 18px;
+  min-width: 170px;
+  max-width: 220px;
+  flex: 1;
+  text-align: center;
+  font-size: 1.12em;
+  margin-bottom: 18px;
+  transition: background 0.19s, color 0.19s, box-shadow 0.19s;
+}
+.card h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: var(--primary);
+  font-size: 1.09em;
+}
+body.dark .card {
+  background: #232b3e;
+  color: #ffd700;
+  box-shadow: 0 2px 10px #232b3e44;
+}
+.section {
+  margin-bottom: 36px;
+}
+
+.links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.links li { margin: 0; }
+.links a {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1.13rem;
+  color: var(--primary);
+  padding: 10px 22px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e0c3fc 0%, #fff 100%);
+  box-shadow: 0 2px 10px #e0c3fc33;
+  transition: background 0.24s, color 0.24s, box-shadow 0.19s, transform 0.13s;
+  position: relative;
+  overflow: hidden;
+}
+.links a:hover {
+  background: linear-gradient(90deg, var(--primary) 0%, #e0c3fc 100%);
+  color: #fff;
+  box-shadow: 0 6px 22px #007bff48, 0 1px 6px #0001;
+  transform: scale(1.055);
+}
+body.dark .links a {
+  background: linear-gradient(90deg, #232b3e 0%, #2a4365 100%);
+  color: #ffd700;
+  box-shadow: 0 2px 10px #232b3e44;
+}
+body.dark .links a:hover {
+  background: linear-gradient(90deg, #ffd700 0%, #403a63 100%);
+  color: #222;
+}
+
+.contact .social {
+  margin: 18px 0 14px 0;
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+.contact .social a {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--primary);
+  background: #e0c3fc33;
+  padding: 7px 16px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.contact .social a:hover {
+  background: var(--primary);
+  color: #fff;
+}
+body.dark .contact .social a {
+  background: #232b3e;
+  color: #ffd700;
+}
+body.dark .contact .social a:hover {
+  background: #ffd700;
+  color: #232b3e;
+}
+
+.map {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
+  box-shadow: 0 2px 12px #e0c3fc33;
+}
+
+.footer-links {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
+}
+.footer-links a.github { color: #007BFF; }
+.footer-links a.w3 { color: #04AA6D; }
+.footer-links a.mdn { color: #212121; }
+.footer-links a.fcc { color: #006400; }
+.footer-links img {
+  width: 20px; height: 20px; vertical-align:middle;
+  border-radius: 4px;
+}
+
+.footer {
+  margin-top: 22px;
+  color: #444;
+  font-size: 0.98rem;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  text-shadow: 0 1px 2px #e0c3fc22;
+  transition: color 0.2s;
+  text-align: center;
+}
+body.dark .footer { color: #b0b9c8; text-shadow: 0 1px 2px #232b3e44;}
+
+@media (max-width: 900px) {
+  .cards { flex-direction: column; align-items: center; }
+  .container { padding: 28px 3vw 18px 3vw; }
+}
+@media (max-width: 700px) {
+  .container { max-width: 98vw; }
+  .navbar, .nav-links { gap: 10px; }
+}
+@media (max-width: 480px) {
+  h1 { font-size: 1.3rem; }
+  .container { padding: 15px 2vw; }
+  .logo { width: 34px; height: 34px;}
+}
+
+#music-controls-navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 200;
+  width: 100vw;
+  background: var(--container-light);
+  color: var(--text-main-light);
+  box-shadow: 0 2px 16px #0002;
+  border-radius: 0 0 14px 14px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+body.dark #music-controls-navbar {
+  background: var(--container-dark);
+  color: var(--text-main-dark);
+  box-shadow: 0 2px 16px #0006;
+}
+.music-controls-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px 5px 8px;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+.music-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+#music-controls-navbar button, #music-controls-navbar select {
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+#music-controls-navbar button {
+  border: none;
+  background: var(--accent);
+  color: var(--primary);
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 6px 12px;
+  margin: 0 1px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0001;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1.1em;
+  display: flex; align-items: center; gap: 2px;
+}
+body.dark #music-controls-navbar button {
+  background: #373d4c;
+  color: #ffd700;
+}
+#music-controls-navbar select {
+  background: #fff7;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 5px 6px;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 88px;
+  font-size: 0.98em;
+  margin-right: 1px;
+}
+body.dark #music-controls-navbar select {
+  background: #232b3e;
+  color: #ffd700;
+  border: 1px solid #555;
+}
+#music-controls-navbar label {
+  font-size: 0.95em;
+  margin-right: 2px;
+  white-space: nowrap;
+  color: inherit;
+}
+#music-progress[type=range] {
+  accent-color: var(--primary);
+  height: 6px;
+  background: #e0e7ef;
+  border-radius: 7px;
+  outline: none;
+  margin: 0 2px;
+  min-width: 40px;
+  flex: 1 1 50px;
+  max-width: 130px;
+}
+#music-progress[type=range]::-webkit-slider-thumb {
+  background: var(--primary);
+  border-radius: 50%;
+  width: 11px;
+  height: 11px;
+  cursor: pointer;
+}
+#music-current, #music-duration {
+  font-size: 0.93em;
+  width: 30px;
+  text-align: center;
+  color: inherit;
+}
+@media (max-width: 700px) {
+  .music-controls-content { padding: 7px 2vw 5px 2vw; gap: 2px; }
+}
+@media (max-width: 600px) {
+  #music-controls-navbar { font-size: 0.97rem; }
+  .music-controls-row { gap: 2px; }
+  #music-controls-navbar select { min-width: 0; }
+  #music-progress[type=range] { min-width: 30px; max-width: 85px; }
+  #music-current, #music-duration { width: 25px; }
+}
+@media (max-width: 440px) {
+  .music-controls-content { padding: 4px 1vw 3px 1vw; }
+  .music-controls-row { gap: 1px;}
+  #music-progress[type=range] { min-width: 12px; max-width: 55px;}
+  #music-current, #music-duration { width: 18px; font-size:0.88em; }
+}
+/* ... (mantém todo o seu CSS anterior, apenas acrescente as regras abaixo no final) ... */
+
+/* ===== RADIO FLOAT STYLES ===== */
+#radio-float {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 999;
+  background: var(--container-light);
+  box-shadow: 0 4px 24px #0003;
+  border-radius: 16px;
+  padding: 0 0 2px 0;
+  min-width: 240px;
+  max-width: 320px;
+  transition: box-shadow 0.2s, background 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+body.dark #radio-float {
+  background: var(--container-dark);
+  box-shadow: 0 4px 24px #0008;
+}
+
+#radio-float-toggle {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.45em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0002;
+  margin: 8px 8px 0 0;
+  align-self: flex-end;
+  transition: background 0.2s, color 0.2s;
+}
+
+#radio-float-content {
+  padding: 12px 18px 10px 18px;
+  width: 100%;
+  display: block;
+  transition: max-height 0.22s;
+}
+
+#radio-float.closed #radio-float-content {
+  display: none;
+}
+
+/* Responsivo para rádio */
+@media (max-width: 700px) {
+  #radio-float { bottom: 12px; right: 12px; min-width: 160px; }
+  #radio-float-content { padding: 8px 6px 8px 6px; }
+}
+@media (max-width: 480px) {
+  #radio-float { right: 0; left: 0; margin: 0 auto; min-width: 0; max-width: 98vw; }
+}
+
+/* Ajuste dos controles na caixa flutuante */
+#radio-float .music-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+#radio-float select, #radio-float input[type="range"] {
+  font-size: 0.98em;
+}
+#radio-float label {
+  font-size: 1em;
+}
+
+</style>
+<script>
+// Modo claro/escuro
+const themeBtn = document.getElementById('theme-toggle');
+function setTheme(dark) {
+  if(dark) {
+    document.body.classList.add('dark');
+    localStorage.setItem('theme','dark');
+  } else {
+    document.body.classList.remove('dark');
+    localStorage.setItem('theme','light');
+  }
+}
+themeBtn.onclick = function() {
+  setTheme(!document.body.classList.contains('dark'));
+};
+if(localStorage.getItem('theme') === 'dark' ||
+   (localStorage.getItem('theme')===null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  setTheme(true);
+} else {
+  setTheme(false);
+}
+
+// Caixa flutuante rádio: mostra/esconde conteúdo
+const radioFloat = document.getElementById('radio-float');
+const radioFloatToggle = document.getElementById('radio-float-toggle');
+radioFloatToggle.onclick = function() {
+  radioFloat.classList.toggle('closed');
+  radioFloatToggle.title = radioFloat.classList.contains('closed') ? "Mostrar Rádio" : "Ocultar Rádio";
+};
+
+// Painel música (igual antes)
+document.addEventListener('DOMContentLoaded', function () {
+  const bgMusic = document.getElementById('bgMusic');
+  const bgMusicBtn = document.getElementById('bgMusicBtn');
+  const volDown = document.getElementById('vol-down');
+  const volUp = document.getElementById('vol-up');
+  const volSlider = document.getElementById('vol-slider');
+  const musicSelect = document.getElementById('music-select');
+  const musicProgress = document.getElementById('music-progress');
+  const musicCurrent = document.getElementById('music-current');
+  const musicDuration = document.getElementById('music-duration');
+  const repeatMusic = document.getElementById('repeatMusic');
+  const musicList = Array.from(musicSelect.options).map(opt => opt.value);
+
+  bgMusic.volume = parseFloat(volSlider.value);
+  bgMusic.loop = false;
+  bgMusicBtn.title = 'Play/Pause';
+
+  bgMusicBtn.onclick = function () {
+    if (bgMusic.paused) {
+      bgMusic.play().catch(()=>{});
+      bgMusicBtn.textContent = '🔊';
+    } else {
+      bgMusic.pause();
+      bgMusicBtn.textContent = '🎵';
+    }
+  };
+  function updateVolumeDisplay() {
+    volSlider.value = bgMusic.volume;
+  }
+  volDown.onclick = function () {
+    bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);
+    updateVolumeDisplay();
+  };
+  volUp.onclick = function () {
+    bgMusic.volume = Math.min(1, bgMusic.volume + 0.08);
+    updateVolumeDisplay();
+  };
+  volSlider.oninput = function () {
+    bgMusic.volume = parseFloat(volSlider.value);
+  };
+  // Troca de música pelo select
+  musicSelect.onchange = function() {
+    const wasPlaying = !bgMusic.paused;
+    bgMusic.src = musicSelect.value;
+    bgMusic.currentTime = 0;
+    if (wasPlaying) {
+      bgMusic.play().catch(()=>{});
+      bgMusicBtn.textContent = '🔊';
+    } else {
+      bgMusicBtn.textContent = '🎵';
+    }
+  };
+  // Barra de progresso
+  function formatTime(sec) {
+    if (isNaN(sec)) return "0:00";
+    sec = Math.floor(sec);
+    let min = Math.floor(sec / 60);
+    let s = sec % 60;
+    return min + ":" + (s < 10 ? "0" : "") + s;
+  }
+  function updateProgress() {
+    const current = bgMusic.currentTime;
+    const duration = bgMusic.duration;
+    musicCurrent.textContent = formatTime(current);
+    musicDuration.textContent = formatTime(duration);
+    musicProgress.value = duration ? (current / duration) * 100 : 0;
+  }
+  bgMusic.addEventListener('timeupdate', updateProgress);
+  bgMusic.addEventListener('durationchange', updateProgress);
+  bgMusic.addEventListener('loadedmetadata', updateProgress);
+  bgMusic.addEventListener('ended', function() {
+    if (repeatMusic.checked) {
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(()=>{});
+      bgMusicBtn.textContent = '🔊';
+    } else {
+      let idx = musicList.indexOf(musicSelect.value);
+      let next = (idx + 1) % musicList.length;
+      musicSelect.selectedIndex = next;
+      bgMusic.src = musicList[next];
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(()=>{});
+      bgMusicBtn.textContent = '🔊';
+    }
+  });
+  musicProgress.addEventListener('input', function() {
+    if (bgMusic.duration) {
+      bgMusic.currentTime = (musicProgress.value / 100) * bgMusic.duration;
+    }
+  });
+  musicSelect.addEventListener('change', function() {
+    setTimeout(updateProgress, 400);
+  });
+  repeatMusic.addEventListener('change', function () {
+    bgMusic.loop = repeatMusic.checked;
+  });
+  // Sound on hover for .links a
+  document.querySelectorAll('.links a').forEach(link => {
+    link.addEventListener('mouseenter', () => {
+      const audio = document.getElementById('hoverSound');
+      audio.currentTime = 0;
+      audio.volume = 0.20;
+      audio.play();
+    });
+  });
+});
+</script>
+</body>
+</html>
