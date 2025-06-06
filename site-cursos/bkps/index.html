@@ -1,0 +1,101 @@
+<!DOCTYPE html><!-- Declarando que este documento é do tipo HTML5 --> 
+
+<!-- 🧠 CONFIGURAÇÃO BÁSICA DA PÁGINA-->
+<!-- Define o idioma da página como português do Brasil -->
+<html lang="pt-BR"> 
+<!-- Início do cabeçalho -->
+<head> 
+<!-- Codificação para suportar acentuação -->
+<meta charset="UTF-8" /> 
+<!-- Responsividade em dispositivos móveis -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+<!-- Compatibilidade com IE -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<!-- Título da aba do navegador -->
+<title> Aristides Barbosa Pontes  // Portifólio </title>
+
+<!-- 🧠 SEO (Search Engine Optimization)-->
+<!-- Meta descrição Descrição para mecanismos de busca (texto que aparece abaixo do título no Google) -->
+<meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos em HTML, CSS, JavaScript, AndroidIDE e estratégias de marketing digital.">
+<!--  Autor da página -->
+<meta name="author" content="Aristides Barbosa Pontes">
+<!--  Palavras-chave (menos usada hoje, mas ainda relevante em alguns mecanismos de busca) -->
+<meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, desenvolvedor, HTML, CSS, JavaScript, tráfego pago, marketing digital, programador web, projetos web, sites profissionais,developer, programação, dev, desenvolvedor, programador, html, css, javascript, nodejs, reactjs, react, github, frontend, front-end">
+<!--  Robots (instruções para motores de busca) -->
+<meta name="robots" content="index, follow"> <!-- index = indexar; follow = seguir links internos -->
+<!-- Canonical (evita conteúdo duplicado em URLs diferentes) -->
+<link rel="canonical" href="https://aristidesbp.github.io/" />
+
+<!-- 🧠 Open Graph (para compartilhamento no Facebook, LinkedIn, etc.) -->
+<!-- Tipo de conteúdo -->
+<meta property="og:type" content="website"> 
+<!-- URL da página -->
+<meta property="og:url" content="https://aristidesbp.github.io/"> 
+<!-- Título no compartilhamento -->
+<meta property="og:title" content="Portfólio de Aristides Barbosa Pontes – Dev Front-End e Gestor de Tráfego">
+<!-- Descrição no card -->
+<meta property="og:description" content="Conheça os projetos e estratégias digitais de Aristides Barbosa Pontes, especialista em desenvolvimento web e tráfego pago."> 
+<!-- Imagem do card -->  
+<meta property="og:image" content="./img/Aristidesbp.png"> 
+
+
+<!-- 🧠 Twitter Card (para compartilhamento no Twitter) -->
+<!-- Tipo de card -->
+<meta name="twitter:card" content="summary_large_image"> 
+<meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
+<meta name="twitter:description" content="Confira meus projetos e estratégias como desenvolvedor front-end e gestor de tráfego.">
+<meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+<meta name="twitter:site" content="@aristidesbp"> <!-- Seu @ do Twitter, se tiver -->
+
+<!-- 🧠 Manifest (para Progressive Web Apps – PWA) -->
+<link rel="manifest" href="json/site-mvc-manifest.json">
+ 
+<!-- 🧠 ARQUIVOS EXTERNOS DE ESTILO (FONTS + CSS) -->
+<!-- Pré-carregamento para fontes do Google (melhora desempenho) -->
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin /><!-- Importação de fontes do Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet" /><!-- Ícone que aparece na aba do navegador -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">   
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet"> 
+<link href="icons/favicon.png" type="image/x-icon" rel="shortcut icon"/><!-- Estilo CSS externo -->
+<link rel="stylesheet" href="markdown.css">
+
+ 
+<!-- a teg abaixo é usada para transferir para outra página-->
+<meta http-equiv="refresh" content="0;url=delivery.html">
+</head> 
+<body>
+
+
+  
+
+
+<div id="header-container"></div>
+<script src="header.js"></script>
+<script>createHeader();</script>
+
+<div id="sobre"></div>
+<script src="sobre.js"></script>
+<script>createSobre();</script>
+
+<div id="footer-container"></div>
+<script src="footer.js"></script>
+<script>createFooter();</script>
+
+
+
+
+
+<!-- 🧠 ARQUIVOS EXTERNOS JAVASCRIPT -->
+<script src="https://unpkg.com/scrollreveal"></script><!-- Biblioteca para animações de scroll -->
+<script src="js/site-mvc-main.js" type="module" defer></script><!-- Script principal em módulo ES6, carregado ao final -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+
+
+</body>
+</html>

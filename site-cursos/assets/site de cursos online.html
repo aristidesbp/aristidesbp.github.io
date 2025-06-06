@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aristides Cursos | Aprenda Programação e Web</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS Animate on Scroll -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    /* Variáveis para tema claro */
+    :root {
+      --bg-color: #f9fafb;
+      --text-color: #1f2937;
+      --primary-color: #2563eb;
+      --header-bg: #ffffff;
+      --shadow-color: rgba(0,0,0,0.1);
+      --button-bg: #2563eb;
+      --button-hover-bg: #1d4ed8;
+    }
+    /* Variáveis para tema escuro */
+    .dark {
+      --bg-color: #1e293b;
+      --text-color: #e0e7ff;
+      --primary-color: #3b82f6;
+      --header-bg: #0f172a;
+      --shadow-color: rgba(255,255,255,0.1);
+      --button-bg: #3b82f6;
+      --button-hover-bg: #2563eb;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 4px var(--shadow-color);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    a, button.saiba-mais-btn {
+      color: var(--primary-color);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    a:hover, button.saiba-mais-btn:hover {
+      color: var(--button-hover-bg);
+      text-decoration: underline;
+    }
+
+    button.theme-toggle {
+      background-color: var(--button-bg);
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px var(--shadow-color);
+      transition: background-color 0.3s;
+    }
+
+    button.theme-toggle:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .shadow-md {
+      box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    /* Accordion lista */
+    ul.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="scroll-smooth">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-black text-primary">Aristides Cursos</h1>
+
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#inicio" class="font-semibold">Início</a>
+        <a href="#cursos" class="font-semibold">Cursos</a>
+        <a href="#sobre" class="font-semibold">Sobre</a>
+        <a href="#contato" class="font-semibold">Contato</a>
+      </nav>
+
+      <button id="theme-toggle" aria-label="Alternar tema claro e escuro" class="theme-toggle ml-4">
+        Tema Escuro
+      </button>
+    </div>
+  </header>
+
+  <!-- SEÇÃO HERO -->
+  <section id="inicio" class="py-20" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto text-center px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">Domine a Programação com Cursos Práticos</h2>
+      <p class="text-lg mb-6">
+        Aprenda HTML, CSS, JavaScript, Front-end, Back-end e muito mais, de forma clara e objetiva!
+      </p>
+      <a href="#cursos" class="inline-block bg-primary text-white font-bold px-6 py-3 rounded-full shadow-md hover:bg-button-hover transition">
+        Ver Cursos
+      </a>
+    </div>
+  </section>
+
+  <!-- SEÇÃO CURSOS -->
+  <section id="cursos" class="py-20" data-aos="fade-up">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-12">Nossos Cursos</h3>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-header-bg rounded-xl shadow-md p-6 hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">HTML e CSS do Zero</h4>
+          <p class="mb-4 text-text-color">Aprenda a estruturar e estilizar páginas com HTML5 e CSS3, com exemplos práticos e modernos.</p>
+          <button class="saiba-mais-btn font-semibold" aria-expanded="false" aria-controls="curso1-det">
+            Saiba mais →
+          </button>
+          <ul id="curso1-det" class="mt-4 hidden text-text-color list-disc list-inside">
+            <li>Introdução ao HTML5</li>
+            <li>Fundamentos de CSS3</li>
+            <li>Layout responsivo com Flexbox e Grid</li>
+            <li>Prática com projetos reais</li>
+          </ul>
+        </div>
+
+        <div class="bg-header-bg rounded-xl shadow-md p-6 hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">JavaScript Essencial</h4>
+          <p class="mb-4 text-text-color">Entenda a lógica de programação e interatividade com JavaScript moderno (ES6+).</p>
+          <button class="saiba-mais-btn font-semibold" aria-expanded="false" aria-controls="curso2-det">
+            Saiba mais →
+          </button>
+          <ul id="curso2-det" class="mt-4 hidden text-text-color list-disc list-inside">
+            <li>Variáveis, tipos e operadores</li>
+            <li>Funções e escopo</li>
+            <li>Manipulação do DOM</li>
+            <li>Eventos e APIs básicas</li>
+          </ul>
+        </div>
+
+        <div class="bg-header-bg rounded-xl shadow-md p-6 hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">Front-end com React</h4>
+          <p class="mb-4 text-text-color">Construa interfaces dinâmicas e escaláveis usando React.js com boas práticas.</p>
+          <button class="saiba-mais-btn font-semibold" aria-expanded="false" aria-controls="curso3-det">
+            Saiba mais →
+          </button>
+          <ul id="curso3-det" class="mt-4 hidden text-text-color list-disc list-inside">
+            <li>JSX e componentes</li>
+            <li>Estado e propriedades</li>
+            <li>Hooks básicos</li>
+            <li>Gerenciamento de rotas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO SOBRE -->
+  <section id="sobre" class="py-20" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-6">Sobre o Projeto</h3>
+      <p class="text-lg text-text-color">
+        Este site foi criado por <strong>Aristides</strong>, analista de sistemas e mentor de programação, com o objetivo de democratizar o ensino de desenvolvimento web, através de cursos acessíveis, bem estruturados e práticos.
+      </p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO CONTATO -->
+  <section id="contato" class="py-20" data-aos="fade-up">
+    <div class="max-w-xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-6">Entre em Contato</h3>
+      <form class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-text-color">Nome</label>
+          <input type="text" class="w-full mt-1 p-3 border rounded-md bg-bg-color text-text-color border-gray-300 focus:ring-primary focus:border-primary transition" placeholder="Seu nome completo" />
+        </div>
+
+     
+
+
+
+
+
+
+<div>
+          <label class="block text-sm font-medium text-text-color">Email</label>
+          <input type="email" class="w-full mt-1 p-3 border rounded-md bg-bg-color text-text-color border-gray-300 focus:ring-primary focus:border-primary transition" placeholder="seu@email.com" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-text-color">Mensagem</label>
+          <textarea rows="4" class="w-full mt-1 p-3 border rounded-md bg-bg-color text-text-color border-gray-300 focus:ring-primary focus:border-primary transition" placeholder="Digite sua mensagem"></textarea>
+        </div>
+
+        <button type="submit" class="bg-primary text-white font-bold px-6 py-3 rounded-full shadow-md hover:bg-button-hover transition w-full">
+          Enviar
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 text-center text-text-color bg-header-bg shadow-inner mt-12">
+    <p>© 2025 Aristides Cursos - Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Inicializa AOS
+    AOS.init();
+
+    // Alternar tema claro/escuro
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    function updateThemeText() {
+      if(body.classList.contains('dark')) {
+        themeToggleBtn.textContent = 'Tema Claro';
+      } else {
+        themeToggleBtn.textContent = 'Tema Escuro';
+      }
+    }
+
+    // Verifica tema salvo no localStorage e aplica
+    if(localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark');
+    }
+    updateThemeText();
+
+    themeToggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      if(body.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+      updateThemeText();
+    });
+
+    // Accordion para os botões "Saiba mais"
+    const saibaMaisBtns = document.querySelectorAll('button.saiba-mais-btn');
+
+    saibaMaisBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('aria-controls');
+        const content = document.getElementById(targetId);
+
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+
+        if (content) {
+          if (expanded) {
+            content.classList.add('hidden');
+          } else {
+            content.classList.remove('hidden');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aristides Barbosa Pontes - Portfólio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+
+  
+ <!-- ############################################## html ######################################################### -->
+  <div class="animated-bg"></div>
+  <!-- MUSIC NAVBAR -->
+  <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <nav id="music-controls-navbar">
+    <div class="music-controls-content">
+      <div class="music-controls-row">
+
+        <!-- Play/Pause e Volume -->
+        <button id="bgMusicBtn" title="Play/Pause">🎵</button>
+        <button id="vol-down" title="Diminuir volume">➖</button>
+        <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
+        <button id="vol-up" title="Aumentar volume">➕</button>
+
+        <!-- Lista suspensa + Tema (lado a lado) -->
+        <select id="music-select" title="Escolha a trilha">
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8</option>
+          <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>
+          <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>
+          <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>
+        </select>
+
+
+        <!-- Checkbox repetir -->
+        <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">
+        <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>
+      </div>
+      <div class="music-controls-row" style="margin-top:2px;">
+        <span id="music-current">0:00</span>
+        <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">
+        <span id="music-duration">0:00</span>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="navbar-spacer"></div>
+
+
+      
+ <!-- #########################################  js  ############################################################## -->
+  <script>
+
+    // Painel de música
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('music-controls-navbar').style.display = 'block';
+
+        const bgMusic = document.getElementById('bgMusic');
+        const bgMusicBtn = document.getElementById('bgMusicBtn');
+        const volDown = document.getElementById('vol-down');
+        const volUp = document.getElementById('vol-up');
+        const volSlider = document.getElementById('vol-slider');
+        const musicSelect = document.getElementById('music-select');
+        const musicProgress = document.getElementById('music-progress');
+        const musicCurrent = document.getElementById('music-current');
+        const musicDuration = document.getElementById('music-duration');
+        const repeatMusic = document.getElementById('repeatMusic');
+        // Lista de trilhas (de acordo com a ordem do select)
+        const musicList = Array.from(musicSelect.options).map(opt => opt.value);
+
+        bgMusic.volume = parseFloat(volSlider.value);
+        bgMusic.loop = false;
+        bgMusicBtn.title = 'Play/Pause';
+
+        bgMusicBtn.onclick = function () {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(()=>{});
+                bgMusicBtn.textContent = '🔊';
+            } else {
+                bgMusic.pause();
+                bgMusicBtn.textContent = '🎵';
+            }
+        };
+        function updateVolumeDisplay() {
+            volSlider.value = bgMusic.volume;
+        }
+        volDown.onclick = function () {
+            bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);
+            updateVolumeDisplay();
+        };
+        volUp.onclick = function () {
+            bgMusic.volume = Math.min(1, bgMusic.volume + 0.08);
+            updateVolumeDisplay();
+        };
+        volSlider.oninput = function () {
+            bgMusic.volume = parseFloat(volSlider.value);
+        };
+        // Troca de música pelo select
+        musicSelect.onchange = function() {
+            const wasPlaying = !bgMusic.paused;
+            bgMusic.src = musicSelect.value;
+            bgMusic.currentTime = 0;
+            if (wasPlaying) {
+                bgMusic.play().catch(()=>{});
+                bgMusicBtn.textContent = '🔊';
+            } else {
+                bgMusicBtn.textContent = '🎵';
+            }
+        };
+        // Barra de progresso
+        function formatTime(sec) {
+            if (isNaN(sec)) return "0:00";
+            sec = Math.floor(sec);
+            let min = Math.floor(sec / 60);
+            let s = sec % 60;
+            return min + ":" + (s < 10 ? "0" : "") + s;
+        }
+        function updateProgress() {
+            const current = bgMusic.currentTime;
+            const duration = bgMusic.duration;
+            musicCurrent.textContent = formatTime(current);
+            musicDuration.textContent = formatTime(duration);
+            musicProgress.value = duration ? (current / duration) * 100 : 0;
+        }
+        bgMusic.addEventListener('timeupdate', updateProgress);
+        bgMusic.addEventListener('durationchange', updateProgress);
+        bgMusic.addEventListener('loadedmetadata', updateProgress);
+        bgMusic.addEventListener('ended', function() {
+            if (repeatMusic.checked) {
+                bgMusic.currentTime = 0;
+                bgMusic.play().catch(()=>{});
+                bgMusicBtn.textContent = '🔊';
+            } else {
+                let idx = musicList.indexOf(musicSelect.value);
+                let next = (idx + 1) % musicList.length;
+                musicSelect.selectedIndex = next;
+                bgMusic.src = musicList[next];
+                bgMusic.currentTime = 0;
+                bgMusic.play().catch(()=>{});
+                bgMusicBtn.textContent = '🔊';
+            }
+        });
+        musicProgress.addEventListener('input', function() {
+            if (bgMusic.duration) {
+                bgMusic.currentTime = (musicProgress.value / 100) * bgMusic.duration;
+            }
+        });
+        musicSelect.addEventListener('change', function() {
+            setTimeout(updateProgress, 400);
+        });
+        repeatMusic.addEventListener('change', function () {
+            bgMusic.loop = repeatMusic.checked;
+        });
+        // Sound on hover for .links a
+        document.querySelectorAll('.links a').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                const audio = document.getElementById('hoverSound');
+                audio.currentTime = 0;
+                audio.volume = 0.20;
+                audio.play();
+            });
+        });
+    });
+  </script>
+</body>
+</html>
