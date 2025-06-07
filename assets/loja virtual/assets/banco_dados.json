@@ -1,0 +1,12 @@
+[
+  {
+    "nome": "bola",
+    "categoria": "produto",
+    "preco": 10
+  },
+{
+    "nome": "carrinho",
+    "categoria": "produto",
+    "preco": 5
+  }
+]

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Administrativo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    input, select, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+    #controls {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    #export-import {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel Administrativo</h1>
+
+  <div id="controls">
+    <div>
+      <input type="text" id="searchInput" placeholder="Buscar por nome...">
+      <select id="filterSelect">
+        <option value="todos">Todos</option>
+        <option value="produto">Produto</option>
+        <option value="serviço">Serviço</option>
+      </select>
+    </div>
+    <div>
+      <button onclick="adicionarItem()">Adicionar Item</button>
+    </div>
+  </div>
+
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Preço</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="export-import">
+    <button onclick="exportarJSON()">Exportar .JSON</button>
+    <button onclick="exportarSQL()">Exportar .SQL</button>
+    <input type="file" id="importFile" onchange="importarJSON(event)">
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'banco_dados';
+    
+    function obterDados() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function salvarDados(dados) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+      atualizarTabela();
+    }
+
+    function adicionarItem() {
+      const nome = prompt("Nome do item:");
+      const categoria = prompt("Categoria (produto ou serviço):").toLowerCase();
+      const preco = parseFloat(prompt("Preço:"));
+
+      if (!nome || (categoria !== 'produto' && categoria !== 'serviço') || isNaN(preco)) {
+        alert("Dados inválidos.");
+        return;
+      }
+
+      const dados = obterDados();
+      dados.push({ nome, categoria, preco });
+      salvarDados(dados);
+    }
+
+    function atualizarTabela() {
+      const tabela = document.querySelector("#tabela tbody");
+      tabela.innerHTML = "";
+
+      let dados = obterDados();
+
+      // Aplicar filtro e busca
+      const filtro = document.getElementById('filterSelect').value;
+      const busca = document.getElementById('searchInput').value.toLowerCase();
+
+      dados = dados.filter(item => {
+        const matchCategoria = filtro === "todos" || item.categoria === filtro;
+        const matchBusca = item.nome.toLowerCase().includes(busca);
+        return matchCategoria && matchBusca;
+      });
+
+      // Ordenar alfabeticamente
+      dados.sort((a, b) => a.nome.localeCompare(b.nome));
+
+      for (const item of dados) {
+        const row = tabela.insertRow();
+        row.insertCell(0).textContent = item.nome;
+        row.insertCell(1).textContent = item.categoria;
+        row.insertCell(2).textContent = "R$ " + item.preco.toFixed(2);
+      }
+    }
+
+    function exportarJSON() {
+      const dados = obterDados();
+      const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "banco_dados.json";
+      a.click();
+    }
+
+    function exportarSQL() {
+      const dados = obterDados();
+      let sql = "CREATE TABLE produtos (nome TEXT, categoria TEXT, preco REAL);\n";
+      dados.forEach(item => {
+        sql += `INSERT INTO produtos VALUES ('${item.nome}', '${item.categoria}', ${item.preco});\n`;
+      });
+      const blob = new Blob([sql], { type: "text/sql" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "banco_dados.sql";
+      a.click();
+    }
+
+    function importarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const novosDados = JSON.parse(e.target.result);
+          const dadosExistentes = obterDados();
+
+          // Mesclar dados evitando duplicatas por nome
+          const nomesExistentes = dadosExistentes.map(i => i.nome);
+          const dadosMesclados = [...dadosExistentes];
+
+          novosDados.forEach(item => {
+            if (!nomesExistentes.includes(item.nome)) {
+              dadosMesclados.push(item);
+            }
+          });
+
+          salvarDados(dadosMesclados);
+          alert("Dados importados com sucesso!");
+        } catch (err) {
+          alert("Erro ao importar JSON.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Eventos de busca/filtro
+    document.getElementById("searchInput").addEventListener("input", atualizarTabela);
+    document.getElementById("filterSelect").addEventListener("change", atualizarTabela);
+
+    // Inicializar tabela
+    atualizarTabela();
+  </script>
+
+</body>
+</html>

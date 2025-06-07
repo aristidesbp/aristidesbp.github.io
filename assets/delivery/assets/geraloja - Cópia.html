@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gerador de Página da Loja</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-8">
+
+  <h1 class="text-3xl font-bold mb-6 text-center">Gerador de Página da Loja</h1>
+
+  <form id="formLoja" class="space-y-4 max-w-xl mx-auto bg-white p-6 rounded shadow">
+
+    <label class="block">
+      Nome da Loja:
+      <input type="text" id="nomeLoja" class="border w-full p-2 rounded" required>
+    </label>
+
+    <label class="block">
+      Descrição da Loja:
+      <textarea id="descricaoLoja" class="border w-full p-2 rounded" required></textarea>
+    </label>
+
+    <label class="block">
+      Palavras-chave (separadas por vírgula):
+      <textarea id="palavrasChave" class="border w-full p-2 rounded"></textarea>
+    </label>
+
+    <label class="block">
+      URL da imagem para compartilhamento (og:image):
+      <input type="url" id="ogImage" class="border w-full p-2 rounded">
+    </label>
+
+    <label class="block">
+      URL da imagem grande do header (banner):
+      <input type="url" id="headerImage" class="border w-full p-2 rounded">
+    </label>
+
+    <label class="block">
+      Texto do subtítulo do header:
+      <input type="text" id="subtituloHeader" class="border w-full p-2 rounded">
+    </label>
+
+    <label class="block">
+      Cor de fundo da página:
+      <input type="color" id="corFundo" class="border w-full p-2 rounded" value="#f3e5c1">
+    </label>
+
+    <label class="block">
+      Cor do cabeçalho:
+      <input type="color" id="corHeader" class="border w-full p-2 rounded" value="#b2332b">
+    </label>
+
+    <label class="block">
+      Telefone do WhatsApp (somente números com DDI e DDD):
+      <input type="text" id="telefoneWhatsApp" class="border w-full p-2 rounded" required>
+    </label>
+
+    <div class="flex justify-between mt-6">
+      <button type="button" onclick="exportarJSON()" class="bg-blue-500 text-white px-4 py-2 rounded">Exportar JSON</button>
+      <button type="button" onclick="exportarHTML()" class="bg-green-500 text-white px-4 py-2 rounded">Exportar HTML</button>
+    </div>
+
+  </form>
+
+  <script>
+    function getDadosForm() {
+      return {
+        nomeLoja: document.getElementById('nomeLoja').value,
+        descricaoLoja: document.getElementById('descricaoLoja').value,
+        palavrasChave: document.getElementById('palavrasChave').value,
+        ogImage: document.getElementById('ogImage').value,
+        headerImage: document.getElementById('headerImage').value,
+        subtituloHeader: document.getElementById('subtituloHeader').value,
+        corFundo: document.getElementById('corFundo').value,
+        corHeader: document.getElementById('corHeader').value,
+        telefoneWhatsApp: document.getElementById('telefoneWhatsApp').value
+      };
+    }
+
+    function exportarJSON() {
+      const dados = getDadosForm();
+      const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pagina-loja.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportarHTML() {
+      const dados = getDadosForm();
+
+      const html = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${dados.nomeLoja} // Portfólio</title>
+<meta name="description" content="${dados.descricaoLoja}">
+<meta name="keywords" content="${dados.palavrasChave}">
+<meta property="og:title" content="${dados.nomeLoja}">
+<meta property="og:description" content="${dados.descricaoLoja}">
+<meta property="og:image" content="${dados.ogImage}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+<style>
+:root {
+  --cor-header: ${dados.corHeader};
+  --cor-fundo: ${dados.corFundo};
+}
+body {
+  background-color: var(--cor-fundo);
+}
+header {
+  background-color: var(--cor-header);
+  color: white;
+}
+</style>
+</head>
+
+<body>
+<header class="text-center p-4">
+  <img src="${dados.headerImage}" alt="Banner da loja" class="w-full h-64 object-cover mb-4 rounded">
+  <h1 class="text-4xl font-bold">${dados.nomeLoja}</h1>
+  <p class="text-lg mt-2">${dados.subtituloHeader}</p>
+</header>
+
+<section class="container py-8">
+  <h2 class="text-2xl font-bold mb-4">Nosso Cardápio</h2>
+  <div id="menu-items" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Produtos aqui -->
+  </div>
+</section>
+
+<section class="bg-black text-white py-8 px-4">
+  <div class="container mx-auto">
+    <p class="text-lg font-bold">Total do pedido: R$ <span id="total">0,00</span></p>
+    <div id="itens-pedido" class="mb-4 max-h-48 overflow-y-auto bg-gray-800 p-4 rounded text-white space-y-2"></div>
+
+    <h2 class="text-2xl font-bold mb-4">Finalizar Pedido</h2>
+    <form id="pedido-form" onsubmit="event.preventDefault(); enviarWhatsApp();">
+      <input type="text" placeholder="Nome Completo" id="nome" class="w-full p-3 rounded mb-2" required>
+      <input type="text" placeholder="CPF" id="cpf" class="w-full p-3 rounded mb-2" required>
+      <input type="tel" placeholder="Telefone" id="telefone" class="w-full p-3 rounded mb-2" required>
+      <input type="text" placeholder="Endereço Completo" id="endereco" class="w-full p-3 rounded mb-2" required>
+      <select id="formaPagamento" class="w-full p-3 rounded mb-2" required>
+        <option value="" disabled selected>Forma de Pagamento</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Cartão de Débito">Cartão de Débito</option>
+        <option value="Pix">Pix</option>
+        <option value="Transferência">Transferência</option>
+      </select>
+      <textarea id="obs" placeholder="Observações" class="w-full p-3 rounded mb-4" rows="3"></textarea>
+      <button type="submit" class="bg-yellow-400 text-black py-3 px-6 rounded font-semibold">Enviar pedido via WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<script>
+function enviarWhatsApp() {
+  let nome = document.getElementById('nome').value;
+  let cpf = document.getElementById('cpf').value;
+  let telefone = document.getElementById('telefone').value;
+  let endereco = document.getElementById('endereco').value;
+  let formaPagamento = document.getElementById('formaPagamento').value;
+  let obs = document.getElementById('obs').value;
+
+  let mensagem = \`*Pedido da ${dados.nomeLoja}*\n
+Nome: \${nome}
+CPF: \${cpf}
+Telefone: \${telefone}
+Endereço: \${endereco}
+Forma de pagamento: \${formaPagamento}\n
+Observações: \${obs || 'Nenhuma'}\`;
+
+  let url = \`https://wa.me/${dados.telefoneWhatsApp}?text=\${encodeURIComponent(mensagem)}\`;
+  window.open(url, '_blank');
+}
+
+
+
+`;
+
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pagina-loja.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>

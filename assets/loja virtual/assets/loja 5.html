@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loja Online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <a class="navbar-brand" href="#">Minha Loja</a>
+    <div class="ms-auto">
+      <button class="btn btn-outline-light position-relative" onclick="openCartModal()">
+        Carrinho
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+
+<!-- Botão Admin no Navbar -->
+<button class="btn btn-outline-light ms-3" onclick="openAdminLoginModal()">Admin</button>
+
+<!-- Modal Login Admin -->
+<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="modal-header">
+          <h5 class="modal-title">Login Administrativo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="password" id="adminPassword" class="form-control" placeholder="Senha" required />
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Painel Administrativo -->
+<div class="modal fade" id="adminPanelModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Painel Administrativo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Aqui vamos colocar as funções de cadastro, vendas, total do caixa e exportação.</p>
+        <!-- Aqui vamos construir o painel completo em breve -->
+      </div>
+    </div>
+  </div>
+</div>
+
+  </nav>
+
+  <!-- Filtro -->
+  <div class="container mt-4">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <select class="form-select" id="filterCategory" onchange="filterItems()">
+          <option value="todos">Todas as Categorias</option>
+          <option value="produto">Produtos</option>
+          <option value="servico">Serviços</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Itens -->
+    <div class="row" id="itemContainer"></div>
+  </div>
+
+  <!-- Modal Carrinho -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form onsubmit="enviarPedido(event)">
+          <div class="modal-header">
+            <h5 class="modal-title">Seu Carrinho</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group mb-3" id="cartItems"></ul>
+            <h5 id="totalPedido" class="mb-4">Total: R$ 0,00</h5>
+
+            <div class="mb-2"><input class="form-control" id="nome" placeholder="Nome completo" required></div>
+            <div class="mb-2"><input class="form-control" id="cpf" placeholder="CPF" required></div>
+            <div class="mb-2"><input class="form-control" id="telefone" placeholder="Telefone para contato" required></div>
+            <div class="mb-2"><input class="form-control" id="email" placeholder="E-mail" required></div>
+            <div class="mb-2"><input class="form-control" id="endereco" placeholder="Endereço completo" required></div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enviar Pedido via WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estilo extra -->
+  <style>
+    .card {
+      height: 100%;
+    }
+    .card-title {
+      font-size: 1.2rem;
+    }
+    .cart-count {
+      background: red;
+      color: white;
+      padding: 0 6px;
+      border-radius: 50%;
+    }
+  </style>
+
+  <!-- Script principal -->
+  <script>
+    // Lista de produtos e serviços
+    const items = [
+      { id: 1, nome: "Site Profissional", tipo: "servico", preco: 500 },
+      { id: 2, nome: "Consultoria de Marketing", tipo: "servico", preco: 300 },
+      { id: 3, nome: "Mouse Gamer", tipo: "produto", preco: 150 },
+      { id: 4, nome: "Notebook Dell", tipo: "produto", preco: 3500 }
+    ];
+
+    // Elementos da interface
+    const itemContainer = document.getElementById("itemContainer");
+    const cartItemsEl = document.getElementById("cartItems");
+    const cartCount = document.getElementById("cartCount");
+    const totalPedido = document.getElementById("totalPedido");
+
+    let cartModalInstance = null; // Instância do modal
+
+    function loadItems() {
+      itemContainer.innerHTML = "";
+      const filter = document.getElementById("filterCategory").value;
+      const filtered = items.filter(item => filter === "todos" || item.tipo === filter);
+
+      filtered.forEach(item => {
+        itemContainer.innerHTML += `
+          <div class="col-md-3 mb-4">
+            <div class="card p-3">
+              <div class="card-body text-center">
+                <h5 class="card-title">${item.nome}</h5>
+                <p class="card-text">Tipo: ${item.tipo}</p>
+                <p class="card-text">Preço: R$ ${item.preco}</p>
+                <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem("cart")) || [];
+    }
+
+    function updateCart(cart) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      cartCount.innerText = cart.length;
+    }
+
+    function addToCart(id) {
+      const cart = getCart();
+      const item = items.find(i => i.id === id);
+      cart.push(item);
+      updateCart(cart);
+    }
+
+    function openCartModal() {
+      const cart = getCart();
+      cartItemsEl.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = "<li class='list-group-item'>Carrinho vazio</li>";
+      } else {
+        cart.forEach((item, index) => {
+          total += item.preco;
+          cartItemsEl.innerHTML += `
+            <li class='list-group-item d-flex justify-content-between'>
+              ${item.nome} - R$ ${item.preco}
+              <button class="btn btn-sm btn-danger" onclick="removeFromCart(${index})">Remover</button>
+            </li>`;
+        });
+      }
+
+      totalPedido.innerText = `Total: R$ ${total.toFixed(2)}`;
+
+      if (!cartModalInstance) {
+        cartModalInstance = new bootstrap.Modal(document.getElementById("cartModal"));
+      }
+
+      cartModalInstance.show();
+    }
+
+    function removeFromCart(index) {
+      const cart = getCart();
+      cart.splice(index, 1);
+      updateCart(cart);
+
+      if (cart.length === 0) {
+        if (cartModalInstance) cartModalInstance.hide();
+      } else {
+        openCartModal();
+      }
+    }
+
+    function filterItems() {
+      loadItems();
+    }
+
+    function enviarPedido(e) {
+      e.preventDefault();
+      const cart = getCart();
+      if (cart.length === 0) return alert("Carrinho vazio.");
+
+      const nome = document.getElementById("nome").value;
+      const cpf = document.getElementById("cpf").value;
+      const telefone = document.getElementById("telefone").value;
+      const email = document.getElementById("email").value;
+      const endereco = document.getElementById("endereco").value;
+
+      const itens = cart.map(i => `• ${i.nome} - R$ ${i.preco}`).join("\n");
+      const total = cart.reduce((sum, i) => sum + i.preco, 0);
+
+      const mensagem = `Olá! Gostaria de finalizar uma compra com os seguintes dados:\n
+*NOME:* ${nome}
+*CPF:* ${cpf}
+*TELEFONE:* ${telefone}
+*EMAIL:* ${email}
+*ENDEREÇO:* ${endereco}
+
+*ITENS DO PEDIDO:*
+${itens}
+
+*TOTAL:* R$ ${total.toFixed(2)}
+`;
+
+      const numero = "5591992420981";
+      const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+      window.open(link, '_blank');
+    }
+
+    // Carrega a interface após o DOM estar pronto
+    window.addEventListener("DOMContentLoaded", () => {
+      loadItems();
+      updateCart(getCart());
+    });
+
+//botão administrador 
+let adminLoginModalInstance = null;
+
+function openAdminLoginModal() {
+  if (!adminLoginModalInstance) {
+    adminLoginModalInstance = new bootstrap.Modal(document.getElementById('adminLoginModal'));
+  }
+  adminLoginModalInstance.show();
+}
+
+function handleAdminLogin(event) {
+  event.preventDefault();
+  const senha = document.getElementById('adminPassword').value;
+  
+  // Por enquanto só fecha a modal, sem validação
+  alert('Senha digitada: ' + senha);
+  adminLoginModalInstance.hide();
+
+  // Depois aqui faremos a validação e abertura do painel administrativo
+}
+
+
+// validar senha de acesso 
+function handleAdminLogin(event) {
+  event.preventDefault();
+  const senha = document.getElementById('adminPassword').value;
+  const senhaCorreta = "admin123"; // Troque para a senha que quiser
+
+  if (senha === senhaCorreta) {
+    adminLoginModalInstance.hide();
+    openAdminPanel();
+  } else {
+    alert("Senha incorreta! Tente novamente.");
+  }
+}
+
+// função para abrir o painel administrativo 
+let adminPanelModalInstance = null;
+
+function openAdminPanel() {
+  if (!adminPanelModalInstance) {
+    adminPanelModalInstance = new bootstrap.Modal(document.getElementById('adminPanelModal'));
+  }
+  adminPanelModalInstance.show();
+}
+  </script>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
