@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Financeiro</title>
+<link rel="stylesheet" href="assets/css/financeiro.css" />
+</head>
+<body>
+
+  <h1>Financeiro - Cadastro de Vendas</h1>
+<button onclick="exportarVendasParaCSV()">Exportar CSV</button>
+<label>Data inicial: <input type="date" id="data-inicial"></label>
+<label>Data final: <input type="date" id="data-final"></label>
+<button onclick="filtrarVendasPorPeriodo()">Filtrar</button>
+<button onclick="exportarBackupJSON()">Exportar Backup (JSON)</button>
+<input type="file" onchange="importarBackupJSON(event)" />
+
+  <textarea id="input-vendas" placeholder="Cole as mensagens de vendas aqui..."></textarea>
+  <button id="botao-adicionar" class="botao-adicionar">Adicionar Vendas</button>
+
+  <h2>Lista de Vendas</h2>
+  <ul id="lista-vendas"></ul>
+
+  <h2>Controle de Vendas</h2>
+  <div id="controle-vendas">
+    <p><strong>Quantidade total de vendas:</strong> <span id="total-vendas">0</span></p>
+    <p><strong>Valor total no caixa:</strong> R$ <span id="valor-caixa">0.00</span></p>
+    <h3>Produtos mais vendidos:</h3>
+    <ul id="produtos-mais-vendidos"></ul>
+  </div>
+<canvas id="grafico-produtos" width="400" height="200"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="assets/js/financeiro.js"></script>
+</body>
+</html>
+
