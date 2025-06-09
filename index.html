@@ -1,85 +1,30 @@
 <!DOCTYPE html>
-<!--
-  ===========================================
-  ARISTIDESBP PORTFÓLIO + LOJA VIRTUAL
-  ===========================================
-  Comentado para máxima clareza. Rodapé agora está fixo no final da página!
--->
 <html lang="pt-BR">
 <head>
-  <!-- =================== METADADOS =================== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>AristidesBP Cursos | Aprenda Programação e Web</title>
-  <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos em HTML, CSS, JavaScript, AndroidIDE e estratégias digitais.">
-  <meta name="author" content="Aristides Barbosa Pontes">
-  <meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, desenvolvedor, HTML, CSS, JavaScript, tráfego pago, marketing digital, programador web, projetos web, sites profissionais">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://aristidesbp.github.io/" />
-
-  <!-- Open Graph & Twitter Card -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://aristidesbp.github.io/">
-  <meta property="og:title" content="Portfólio de Aristides Barbosa Pontes – Dev Front-End e Gestor de Tráfego">
-  <meta property="og:description" content="Conheça os projetos e estratégias digitais de Aristides Barbosa Pontes, especialista em desenvolvimento web e tráfego pago.">
-  <meta property="og:image" content="./img/Aristidesbp.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
-  <meta name="twitter:description" content="Confira meus projetos e estratégias como desenvolvedor front-end e gestor de tráfego.">
-  <meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
-  <meta name="twitter:site" content="@aristidesbp">
-
-  <!-- Manifest para PWA -->
-  <link rel="manifest" href="json/site-mvc-manifest.json">
-
-  <!-- =================== FONTS & CSS =================== -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet" />
+  <title>AristidesBP - Portfólio & Loja</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="icons/favicon.png" type="image/x-icon" rel="shortcut icon"/>
   <link rel="stylesheet" href="assets/css/index.css" />
+  <link rel="icon" type="image/png" href="icons/favicon.png">
 </head>
-
 <body class="bg-light">
-  <!--
-    =========================
-    CABEÇALHO PRINCIPAL
-    =========================
-  -->
+  <!-- CABEÇALHO -->
   <header>
     <h1>AristidesBP - Portfólio</h1>
     <p>Analista de Sistemas | Mentor de Programação | Desenvolvedor Full Stack</p>
   </header>
-
-  <!--
-    =========================
-    NAVBAR COM LOJA, SOBRE, ADMIN
-    =========================
-    Organização: Carrinho | Sobre | Admin
-  -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
     <a class="navbar-brand" href="#">Minha Loja</a>
     <div class="ms-auto d-flex align-items-center gap-2">
-      <!-- Botão Carrinho -->
-      <button class="btn btn-outline-light position-relative" onclick="openCartModal()">
-        Carrinho
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
-      <!-- Botão Sobre -->
+      <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
       <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
-      <!-- Botão Admin -->
       <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
     </div>
   </nav>
-
-  <!--
-    =========================
-    MODAL SOBRE
-    =========================
-  -->
+  <!-- MODAL SOBRE -->
   <div class="modal fade" id="sobreModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -88,7 +33,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body text-center">
-          <img src="assets/img/Aristidesbp.png" alt="Logo AristidesBP" style="max-width: 180px; border-radius: 12px; margin-bottom: 1rem;">
+          <img src="assets/img/logoAbp.jpg" alt="Logo AristidesBP" style="max-width: 180px; border-radius: 12px; margin-bottom: 1rem;">
           <p style="margin-top:1rem">
             Olá! Sou <strong>AristidesBP</strong>, Analista de Sistemas com experiência em desenvolvimento front-end e mobile usando AndroidIDE.
             Atuo também como mentor de programação e gestor de tráfego pago.<br><br>
@@ -98,12 +43,7 @@
       </div>
     </div>
   </div>
-
-  <!--
-    =========================
-    MODAL LOGIN ADMIN
-    =========================
-  -->
+  <!-- MODAL LOGIN ADMIN -->
   <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -122,12 +62,7 @@
       </div>
     </div>
   </div>
-
-  <!--
-    =========================
-    MODAL PAINEL ADMIN
-    =========================
-  -->
+  <!-- MODAL PAINEL ADMIN -->
   <div class="modal fade" id="adminPanelModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -138,12 +73,8 @@
         <div class="modal-body">
           <h4 class="mt-4">Cadastrar Novo Produto ou Serviço</h4>
           <form id="cadastroForm" class="mb-4">
-            <div class="mb-2">
-              <input class="form-control" id="novoNome" placeholder="Nome do produto/serviço" required>
-            </div>
-            <div class="mb-2">
-              <input type="number" class="form-control" id="novoPreco" placeholder="Preço (R$)" required>
-            </div>
+            <div class="mb-2"><input class="form-control" id="novoNome" placeholder="Nome do produto/serviço" required></div>
+            <div class="mb-2"><input type="number" class="form-control" id="novoPreco" placeholder="Preço (R$)" required></div>
             <div class="mb-2">
               <select class="form-select" id="novoTipo" required>
                 <option value="">Selecione o tipo</option>
@@ -151,24 +82,48 @@
                 <option value="servico">Serviço</option>
               </select>
             </div>
-            <div class="mb-2">
-              <!-- Campo Descrição adicionado -->
-              <textarea class="form-control" id="novoDescricao" placeholder="Descrição"></textarea>
-            </div>
+            <div class="mb-2"><textarea class="form-control" id="novoDescricao" placeholder="Descrição"></textarea></div>
+            <div class="mb-2"><input class="form-control" id="novoFoto" placeholder="Endereço da foto (URL)"></div>
             <button type="submit" class="btn btn-primary">Cadastrar</button>
             <button class="btn btn-outline-primary mt-3" type="button" onclick="toggleView()">Visualizar Itens</button>
+            <button class="btn btn-success mt-3" type="button" onclick="baixarLoja()">Baixar Loja</button>
             <div id="itensAdmin" class="mt-4"></div>
           </form>
         </div>
       </div>
     </div>
   </div>
-
-  <!--
-    =========================
-    MODAL CARRINHO DE COMPRAS
-    =========================
-  -->
+  <!-- MODAL EDITAR ITEM -->
+  <div class="modal fade" id="editItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="editItemForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Produto/Serviço</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editItemId">
+            <div class="mb-2"><input class="form-control" id="editNome" placeholder="Nome do produto/serviço" required></div>
+            <div class="mb-2"><input type="number" class="form-control" id="editPreco" placeholder="Preço (R$)" required></div>
+            <div class="mb-2">
+              <select class="form-select" id="editTipo" required>
+                <option value="">Selecione o tipo</option>
+                <option value="produto">Produto</option>
+                <option value="servico">Serviço</option>
+              </select>
+            </div>
+            <div class="mb-2"><textarea class="form-control" id="editDescricao" placeholder="Descrição"></textarea></div>
+            <div class="mb-2"><input class="form-control" id="editFoto" placeholder="Endereço da foto (URL)"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL CARRINHO -->
   <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -193,12 +148,7 @@
       </div>
     </div>
   </div>
-
-  <!--
-    =========================
-    FILTRO DE CATEGORIA E LISTA DE ITENS
-    =========================
-  -->
+  <!-- FILTRO E LISTA DE ITENS -->
   <div class="container mt-4">
     <div class="row mb-3">
       <div class="col-md-4">
@@ -209,15 +159,9 @@
         </select>
       </div>
     </div>
-    <!-- Cards dos itens/produtos/serviços -->
     <div class="row" id="itemContainer"></div>
   </div>
-
-  <!--
-    =========================
-    SEÇÃO DE SERVIÇOS (EXIBIÇÃO ESTÁTICA)
-    =========================
-  -->
+  <!-- SEÇÃO SERVIÇOS -->
   <section>
     <h2 class="titulo-secao">Serviços</h2>
     <div class="servicos">
@@ -239,35 +183,26 @@
       </div>
     </div>
   </section>
-
-  <!--
-   
-
-  <!--
-    =========================
-    CAIXA FLUTUANTE DA RÁDIO + BOTÃO DE TEMA
-    =========================
-    Inclui player, barra de progresso, volume e seleção de faixas.
-    Todos componentes ficam dentro do container!
-    (Agora SEM footer/rodapé dentro da caixa!)
-  -->
+  <!-- SEÇÃO SOBRE MIM -->
+  <section class="sobre-mim">
+    <h2 class="titulo-secao" style="color: white;">Sobre Mim</h2>
+    <p>
+      Olá! Sou <strong>AristidesBP</strong>, Analista de Sistemas com experiência em desenvolvimento front-end e mobile usando AndroidIDE. Atuo também como mentor de programação e gestor de tráfego pago. Acredito que o código perfeito é o código comentado, e tenho como missão ensinar, criar soluções práticas e entregar projetos de alta qualidade para meus clientes.
+    </p>
+  </section>
+  <!-- CAIXA FLUTUANTE DA RÁDIO E BOTÃO DE TEMA -->
   <div id="radio-float">
-    <!-- Botão de tema claro/escuro -->
     <button id="theme-toggle" title="Alternar tema">🌓</button>
-    <!-- Botão para mostrar/ocultar rádio -->
     <button id="radio-float-toggle" title="Mostrar/Ocultar Rádio">🎵</button>
     <div id="radio-float-content">
-      <!-- Áudios -->
       <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
       <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-      <!-- Linha de controles principais -->
       <div class="music-controls-row">
         <button id="bgMusicBtn" title="Play/Pause">🎵</button>
         <button id="vol-down" title="Diminuir volume">➖</button>
         <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
         <button id="vol-up" title="Aumentar volume">➕</button>
       </div>
-      <!-- Linha de seleção de faixa e repetição -->
       <div class="music-controls-row">
         <select id="music-select" title="Escolha a trilha">
           <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>
@@ -285,7 +220,6 @@
         <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">
         <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>
       </div>
-      <!-- Linha de progresso da música -->
       <div class="music-controls-row">
         <span id="music-current">0:00</span>
         <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">
@@ -293,24 +227,14 @@
       </div>
     </div>
   </div>
-
-  <!--
-    =========================
-    RODAPÉ FINAL FIXO
-    =========================
-    Agora fixo no final da página, fora da caixa de som flutuante!
-  -->
+  <!-- RODAPÉ FIXO -->
   <footer class="footer-final-fixed">
     <p>&copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados.
       <a href="#privacy-policy">Política de Privacidade</a>
     </p>
   </footer>
-
-  <!-- =================== SCRIPTS EXTERNOS =================== -->
-  <script src="https://unpkg.com/scrollreveal"></script>
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="assets/js/index.js"></script>
 </body>
 </html>
