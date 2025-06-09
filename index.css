@@ -77,6 +77,15 @@ body.dark .card-description { color: #b0b0b0; }
 }
 body.dark #itemContainer .card-img-top { background: #222b; }
 
+/* um embaixo do outro */
+#itemContainer > .col-md-3,
+#itemContainer > [class^="col-"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+
 /* Botão editar */
 .btn-edit {
   background: #ffc107;
