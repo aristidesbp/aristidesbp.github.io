@@ -10,20 +10,26 @@
   <link rel="icon" type="image/png" href="icons/favicon.png">
 </head>
 <body class="bg-light">
+ 
+    
+  
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top">
+  <a class="navbar-brand" href="#">Minha Loja</a>
+  <div class="ms-auto d-flex align-items-center gap-2">
+    <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
+    <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
+    <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
+  </div>
+  </nav>
+  
   <!-- CABEÇALHO -->
   <header>
     <h1>AristidesBP - Portfólio</h1>
     <p>Analista de Sistemas | Mentor de Programação | Desenvolvedor Full Stack</p>
   </header>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <a class="navbar-brand" href="#">Minha Loja</a>
-    <div class="ms-auto d-flex align-items-center gap-2">
-      <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
-      <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
-      <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
-    </div>
-  </nav>
+
+  
   <!-- MODAL SOBRE -->
   <div class="modal fade" id="sobreModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -43,6 +49,7 @@
       </div>
     </div>
   </div>
+  
   <!-- MODAL LOGIN ADMIN -->
   <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
