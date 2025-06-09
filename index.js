@@ -189,23 +189,23 @@ function loadItems() {
   const filteredItems = allItems.filter(item =>
     filter === "todos" || item.tipo === filter
   );
-  filteredItems.forEach(item => {
-    itemContainer.innerHTML += `
-      <div class="col-md-3 mb-4">
-        <div class="card p-3 h-100 d-flex flex-column">
-          ${item.foto ? `<img class="card-img-top" src="${item.foto}" alt="${item.nome}">` : ""}
-          <div class="card-body text-center d-flex flex-column">
-            <h5 class="card-title">${item.nome}</h5>
-            <p class="card-description" style="min-height:60px">${item.descricao ? item.descricao : ""}</p>
-            <p class="card-text">Tipo: ${item.tipo}</p>
-            <p class="card-text">Preço: R$ ${item.preco}</p>
-            <div class="btn-group">
-              <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
-              <button class="btn btn-edit" onclick="openEditItemModal(${item.id})">Editar</button>
-            </div>
+  // ...dentro da função loadItems, substitua o trecho do card por:
+filteredItems.forEach(item => {
+  itemContainer.innerHTML += `
+    <div class="col-md-3 mb-4">
+      <div class="card p-3 h-100 d-flex flex-column">
+        ${item.foto ? `<img class="card-img-top" src="${item.foto}" alt="${item.nome}">` : ""}
+        <div class="card-body text-center d-flex flex-column">
+          <h5 class="card-title">${item.nome}</h5>
+          <p class="card-description" style="min-height:60px">${item.descricao ? item.descricao : ""}</p>
+          <p class="card-text">Tipo: ${item.tipo}</p>
+          <p class="card-text">Preço: R$ ${item.preco}</p>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
           </div>
         </div>
-      </div>`;
+      </div>
+    </div>`;
   });
 }
 
