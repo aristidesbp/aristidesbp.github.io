@@ -9,9 +9,9 @@ function setTheme(dark) {
     localStorage.setItem('theme', 'light');
   }
 }
-themeBtn.onclick = function() {
+themeBtn && (themeBtn.onclick = function() {
   setTheme(!document.body.classList.contains('dark'));
-};
+});
 if (localStorage.getItem('theme') === 'dark' ||
   (localStorage.getItem('theme') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
   setTheme(true);
@@ -20,10 +20,10 @@ if (localStorage.getItem('theme') === 'dark' ||
 // ================== RÁDIO FLUTUANTE ===================
 const radioFloat = document.getElementById('radio-float');
 const radioFloatToggle = document.getElementById('radio-float-toggle');
-radioFloatToggle.onclick = function() {
+radioFloatToggle && (radioFloatToggle.onclick = function() {
   radioFloat.classList.toggle('closed');
   radioFloatToggle.title = radioFloat.classList.contains('closed') ? "Mostrar Rádio" : "Ocultar Rádio";
-};
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   const bgMusic = document.getElementById('bgMusic');
@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const musicDuration = document.getElementById('music-duration');
   const repeatMusic = document.getElementById('repeatMusic');
   const musicList = Array.from(musicSelect.options).map(opt => opt.value);
+
+  if (!bgMusic) return; // fail safe
 
   bgMusic.volume = parseFloat(volSlider.value);
   bgMusic.loop = false;
@@ -111,9 +113,11 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.links a').forEach(link => {
     link.addEventListener('mouseenter', () => {
       const audio = document.getElementById('hoverSound');
-      audio.currentTime = 0;
-      audio.volume = 0.20;
-      audio.play();
+      if (audio) {
+        audio.currentTime = 0;
+        audio.volume = 0.20;
+        audio.play();
+      }
     });
   });
 });
@@ -151,6 +155,22 @@ const items = [
     "preco": 1500,
     "descricao": "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas.",
     "foto": "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    "id": 5,
+    "nome": "Mouse Gamer",
+    "tipo": "produto",
+    "preco": 150,
+    "descricao": "Mouse de alta precisão, ideal para jogos e produtividade.",
+    "foto": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    "id": 6,
+    "nome": "Notebook Dell",
+    "tipo": "produto",
+    "preco": 3500,
+    "descricao": "Notebook Dell com processador potente, ideal para trabalho e estudos.",
+    "foto": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
   }
 ];
 
@@ -166,30 +186,31 @@ function getAllItems() {
 // ========== ATUALIZA LISTA NA TELA ==========
 const itemContainer = document.getElementById("itemContainer");
 function loadItems() {
+  if (!itemContainer) return;
   itemContainer.innerHTML = "";
-  const filter = document.getElementById("filterCategory").value;
+  const filterSelect = document.getElementById("filterCategory");
+  const filter = filterSelect ? filterSelect.value : "todos";
   const allItems = getAllItems();
   window.items = allItems;
   const filteredItems = allItems.filter(item =>
     filter === "todos" || item.tipo === filter
   );
-  // ...dentro da função loadItems, substitua o trecho do card por:
-filteredItems.forEach(item => {
-  itemContainer.innerHTML += `
-    <div class="col-md-3 mb-4">
-      <div class="card p-3 h-100 d-flex flex-column">
-        ${item.foto ? `<img class="card-img-top" src="${item.foto}" alt="${item.nome}">` : ""}
-        <div class="card-body text-center d-flex flex-column">
-          <h5 class="card-title">${item.nome}</h5>
-          <p class="card-description" style="min-height:60px">${item.descricao ? item.descricao : ""}</p>
-          <p class="card-text">Tipo: ${item.tipo}</p>
-          <p class="card-text">Preço: R$ ${item.preco}</p>
-          <div class="btn-group">
-            <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
+  filteredItems.forEach(item => {
+    itemContainer.innerHTML += `
+      <div class="col-md-3 mb-4">
+        <div class="card p-3 h-100 d-flex flex-column">
+          ${item.foto ? `<img class="card-img-top" src="${item.foto}" alt="${item.nome}">` : ""}
+          <div class="card-body text-center d-flex flex-column">
+            <h5 class="card-title">${item.nome}</h5>
+            <p class="card-description" style="min-height:60px">${item.descricao ? item.descricao : ""}</p>
+            <p class="card-text">Tipo: ${item.tipo}</p>
+            <p class="card-text">Preço: R$ ${item.preco}</p>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>`;
+      </div>`;
   });
 }
 
@@ -204,29 +225,68 @@ function getCart() {
 }
 function updateCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
-  cartCount.innerText = cart.length;
+  if (cartCount) {
+    let qtd = 0;
+    cart.forEach(item => qtd += item.quantidade || 1);
+    cartCount.innerText = qtd;
+  }
 }
 function addToCart(id) {
   const cart = getCart();
   const item = (window.items && window.items.find(i => i.id === id));
-  if (item) {
-    cart.push(item);
-    updateCart(cart);
+  if (!item) return;
+  if (item.tipo === "servico") {
+    // Permite apenas um serviço igual no carrinho
+    if (cart.some(i => i.id === id)) {
+      alert("Este serviço já está no carrinho!");
+      return;
+    }
+    cart.push({ ...item, quantidade: 1 });
+  } else {
+    // Produto: soma quantidade se já existe, senão adiciona
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx !== -1) {
+      cart[idx].quantidade = (cart[idx].quantidade || 1) + 1;
+    } else {
+      cart.push({ ...item, quantidade: 1 });
+    }
   }
+  updateCart(cart);
 }
 function openCartModal() {
   const cart = getCart();
+  if (!cartItemsEl || !totalPedido) return;
   cartItemsEl.innerHTML = "";
   let total = 0;
   if (cart.length === 0) {
     cartItemsEl.innerHTML = "<li class='list-group-item'>Carrinho vazio</li>";
   } else {
     cart.forEach((item, index) => {
-      total += item.preco;
+      const qtd = item.quantidade || 1;
+      total += item.preco * qtd;
       cartItemsEl.innerHTML += `
-        <li class='list-group-item d-flex justify-content-between'>
-          ${item.nome} - R$ ${item.preco}
-          <button class="btn btn-sm btn-danger" onclick="removeFromCart(${index})">Remover</button>
+        <li class='list-group-item d-flex justify-content-between align-items-center'>
+         
+
+ <div>
+            ${item.nome} - R$ ${item.preco} 
+            ${item.tipo === 'produto' ? `
+              
+<button class="btn btn-sm btn-secondary ms-2" onclick="alterarQtd(${index}, -1)">🔻</button>
+
+<button class="btn btn-sm btn-secondary" onclick="alterarQtd(${index}, 1)">🔺</button>
+
+
+<button class="btn btn-sm btn-danger" onclick="removeFromCart(${index})">❌</button> 
+
+
+<span class="mx-2">${qtd}</span>
+
+            ` : `<span class="mx-2">Qtd: ${qtd}</span>`}
+          </div>
+         
+
+
         </li>`;
     });
   }
@@ -236,12 +296,24 @@ function openCartModal() {
   }
   cartModalInstance.show();
 }
+function alterarQtd(index, delta) {
+  const cart = getCart();
+  if (!cart[index]) return;
+  if (cart[index].tipo === 'produto') {
+    cart[index].quantidade = (cart[index].quantidade || 1) + delta;
+    if (cart[index].quantidade < 1) {
+      cart.splice(index, 1);
+    }
+    updateCart(cart);
+    openCartModal();
+  }
+}
 function removeFromCart(index) {
   const cart = getCart();
   cart.splice(index, 1);
   updateCart(cart);
-  if (cart.length === 0) {
-    if (cartModalInstance) cartModalInstance.hide();
+  if (cart.length === 0 && cartModalInstance) {
+    cartModalInstance.hide();
   } else {
     openCartModal();
   }
@@ -280,6 +352,10 @@ function validateCPF(cpf) {
   if (resto !== parseInt(cpf.substring(10, 11))) return false;
   return true;
 }
+function validateTelefone(tel) {
+  // Aceita formatos: (99) 99999-9999
+  return /^\(\d{2}\) \d{5}-\d{4}$/.test(tel);
+}
 window.addEventListener("DOMContentLoaded", () => {
   const cpfInput = document.getElementById("cpf");
   const telInput = document.getElementById("telefone");
@@ -302,22 +378,22 @@ function enviarPedido(e) {
   if (!nome) return alert("Informe seu nome.");
   if (!validateCPF(cpf)) return alert("CPF inválido.");
   if (!validateEmail(email)) return alert("E-mail inválido.");
-  if (telefone.length < 14) return alert("Telefone incompleto.");
+  if (!validateTelefone(telefone)) return alert("Telefone no formato inválido. Use (99) 99999-9999.");
   if (!endereco) return alert("Informe o endereço.");
 
   // Gera o objeto da venda
   const jsonVenda = {
     nome, cpf, telefone, email, endereco,
     itens: cart,
-    total: cart.reduce((sum, i) => sum + i.preco, 0),
+    total: cart.reduce((sum, i) => sum + (i.preco * (i.quantidade || 1)), 0),
     data: (new Date()).toISOString()
   };
   // Codifica em Base64
   const jsonString = JSON.stringify(jsonVenda);
   const jsonBase64 = btoa(unescape(encodeURIComponent(jsonString))); // compatível com UTF-8
 
-  const itens = cart.map(i => `• ${i.nome} - R$ ${i.preco}`).join("\n");
-  const total = cart.reduce((sum, i) => sum + i.preco, 0);
+  const itens = cart.map(i => `• ${i.nome} - R$ ${i.preco} x${i.quantidade || 1}`).join("\n");
+  const total = cart.reduce((sum, i) => sum + (i.preco * (i.quantidade || 1)), 0);
   const mensagem =
     `Olá! Gostaria de finalizar uma compra com os seguintes dados:\n
 *NOME:* ${nome}
@@ -341,6 +417,14 @@ ${itens}
   updateCart([]);
 }
 
+// Sincronizar alterações do LocalStorage entre abas
+window.addEventListener('storage', function(e) {
+  if (e.key === 'items' || e.key === 'cart') {
+    loadItems();
+    updateCart(getCart());
+  }
+});
+
 // Carrega itens ao iniciar
 window.addEventListener("DOMContentLoaded", () => {
   loadItems();
@@ -358,6 +442,7 @@ function openAdminLoginModal() {
 function handleAdminLogin(event) {
   event.preventDefault();
   const senha = document.getElementById('adminPassword').value;
+  // Para produção, implemente método seguro de senha!
   const senhaCorreta = "admin123";
   if (senha === senhaCorreta) {
     adminLoginModalInstance.hide();
@@ -399,11 +484,13 @@ function salvarNovoItem(event) {
   document.getElementById("cadastroForm").reset();
   loadItems();
 }
-document.getElementById("cadastroForm").addEventListener("submit", salvarNovoItem);
+document.getElementById("cadastroForm") &&
+  document.getElementById("cadastroForm").addEventListener("submit", salvarNovoItem);
 
 let visualizacaoAtiva = false;
 function toggleView() {
   const container = document.getElementById("itensAdmin");
+  if (!container) return;
   if (visualizacaoAtiva) {
     container.innerHTML = "";
     visualizacaoAtiva = false;
@@ -472,84 +559,11 @@ function openEditItemModal(id) {
   }
   window.editItemModalInstance.show();
 }
-document.getElementById("editItemForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-  const id = Number(document.getElementById("editItemId").value);
-  const nome = document.getElementById("editNome").value.trim();
-  const preco = parseFloat(document.getElementById("editPreco").value);
-  const tipo = document.getElementById("editTipo").value;
-  const descricao = document.getElementById("editDescricao").value.trim();
-  const foto = document.getElementById("editFoto").value.trim();
-  let storedItems = JSON.parse(localStorage.getItem("items")) || [];
-  const idx = storedItems.findIndex(i => i.id === id);
-  if (idx !== -1) {
-    storedItems[idx] = { id, nome, preco, tipo, descricao, foto };
-  } else {
-    storedItems.push({ id, nome, preco, tipo, descricao, foto });
-  }
-  localStorage.setItem("items", JSON.stringify(storedItems));
-  window.editItemModalInstance.hide();
-  loadItems();
-});
-
-// ========== MODAL SOBRE ==========
-let sobreModalInstance = null;
-function openSobreModal() {
-  if (!sobreModalInstance) {
-    sobreModalInstance = new bootstrap.Modal(document.getElementById('sobreModal'));
-  }
-  sobreModalInstance.show();
-}
-
-// ========== BACKUP/BAIXAR LOJA ==========
-async function baixarLoja() {
-  // 1. Baixe os arquivos fonte
-  const htmlResp = await fetch('index.html');
-  let html = await htmlResp.text();
-
-  const cssResp = await fetch('index.css');
-  const css = await cssResp.text();
-
-  const jsResp = await fetch('index.js');
-  let js = await jsResp.text();
-
-  // 2. Gere o novo array de itens (fixos + localStorage)
-  const storedItems = JSON.parse(localStorage.getItem("items")) || [];
-  const defaultItems = [
-    {
-      id: 1,
-      nome: "Desenvolvimento Web",
-      tipo: "servico",
-      preco: 2000,
-      descricao: "Criação de sites profissionais, landing pages e portfólios modernos com HTML, CSS, JavaScript e frameworks.",
-      foto: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 2,
-      nome: "Mentoria em Programação",
-      tipo: "servico",
-      preco: 1200,
-      descricao: "Aulas práticas e personalizadas para quem quer aprender lógica, front-end e boas práticas no desenvolvimento.",
-      foto: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 3,
-      nome: "Criação de Aplicativos",
-      tipo: "servico",
-      preco: 3500,
-      descricao: "Aplicativos móveis Android com interface moderna e uso de banco de dados local, ideal para negócios.",
-      foto: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 4,
-      nome: "Gestão de Tráfego Pago",
-      tipo: "servico",
-      preco: 1500,
-      descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas.",
-      foto: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
-  const allItems = [...defaultItems, ...storedItems];
-  js = js.replace(
-    /const items\s*=\s*\[(.|\s)*?\];/m,
-    `const ite
+document.getElementById("editItemForm") &&
+  document.getElementById("editItemForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const id = Number(document.getElementById("editItemId").value);
+    const nome = document.getElementById("editNome").value.trim();
+    const preco = parseFloat(document.getElementById("editPreco").value);
+    const tipo = document.getElementById("editTipo").value;
+    const descricao = document.getElementById("editDescricao").value.
