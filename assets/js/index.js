@@ -455,23 +455,17 @@ function openSobreModal() {
 
 // ========== BACKUP/BAIXAR LOJA ==========
 async function baixarLoja() {
-  // 1. Baixa o HTML original
+  // 1. Baixe os arquivos fonte
   const htmlResp = await fetch('index.html');
   let html = await htmlResp.text();
 
-  // 2. Baixa e insere o CSS
   const cssResp = await fetch('assets/css/index.css');
   const css = await cssResp.text();
-  html = html.replace(
-    /<link\s+rel="stylesheet".*index\.css".*?>/,
-    `<style>\n${css}\n</style>`
-  );
 
-  // 3. Baixa o JS original e atualiza o array de itens
   const jsResp = await fetch('assets/js/index.js');
   let js = await jsResp.text();
 
-  // Gera o novo array de itens (fixos + localStorage)
+  // 2. Gere o novo array de itens (fixos + localStorage)
   const storedItems = JSON.parse(localStorage.getItem("items")) || [];
   const defaultItems = [
     {
@@ -529,22 +523,23 @@ async function baixarLoja() {
     `const items = ${JSON.stringify(allItems, null, 2)};`
   );
 
-  // 4. Substitui o <script src="assets/js/index.js"></script> por <script>...</script>
-  html = html.replace(
-    /<script\s+src="assets\/js\/index\.js"><\/script>/,
-    `<script>\n${js}\n</script>`
-  );
+  // 3. Função utilitária para baixar arquivo individual
+  function baixarArquivo(conteudo, nome, tipo) {
+    const blob = new Blob([conteudo], { type: tipo });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+  }
 
-  // 5. Gera o download
-  const blob = new Blob([html], { type: "text/html" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "loja_backup.html";
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 100);
+  // 4. Baixe os arquivos
+  baixarArquivo(html, "index.html", "text/html");
+  baixarArquivo(css, "assets/css/index.css", "text/css");
+  baixarArquivo(js, "assets/js/index.js", "application/javascript");
 }
