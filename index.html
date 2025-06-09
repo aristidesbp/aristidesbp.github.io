@@ -25,6 +25,21 @@
     </ul>
   </div>
   <div class="ms-auto d-flex align-items-center gap-2">
+    <!-- FILTRO E LISTA DE ITENS -->
+  <div class="container mt-4">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <select class="form-select" id="filterCategory" onchange="filterItems()">
+          <option value="todos">Todas as Categorias</option>
+          <option value="produto">Produtos</option>
+          <option value="servico">Serviços</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" id="itemContainer"></div>
+  </div>
+
+
     <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
   </div>
   </nav>
@@ -162,20 +177,7 @@
       </div>
     </div>
   </div>
-  <!-- FILTRO E LISTA DE ITENS -->
-  <div class="container mt-4">
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <select class="form-select" id="filterCategory" onchange="filterItems()">
-          <option value="todos">Todas as Categorias</option>
-          <option value="produto">Produtos</option>
-          <option value="servico">Serviços</option>
-        </select>
-      </div>
-    </div>
-    <div class="row" id="itemContainer"></div>
-  </div>
-
+  
   
   <!-- CAIXA FLUTUANTE DA RÁDIO E BOTÃO DE TEMA -->
   <div id="radio-float">
