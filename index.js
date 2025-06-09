@@ -121,52 +121,36 @@ document.addEventListener('DOMContentLoaded', function () {
 // ========== LISTA DE ITENS/PRODUTOS/SERVIÇOS ==========
 const items = [
   {
-    id: 1,
-    nome: "Desenvolvimento Web",
-    tipo: "servico",
-    preco: 2000,
-    descricao: "Criação de sites profissionais, landing pages e portfólios modernos com HTML, CSS, JavaScript e frameworks.",
-    foto: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80"
+    "id": 1,
+    "nome": "Desenvolvimento Web",
+    "tipo": "servico",
+    "preco": 2000,
+    "descricao": "Criação de sites profissionais, landing pages e portfólios modernos com HTML, CSS, JavaScript e frameworks.",
+    "foto": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80"
   },
   {
-    id: 2,
-    nome: "Mentoria em Programação",
-    tipo: "servico",
-    preco: 1200,
-    descricao: "Aulas práticas e personalizadas para quem quer aprender lógica, front-end e boas práticas no desenvolvimento.",
-    foto: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=400&q=80"
+    "id": 2,
+    "nome": "Mentoria em Programação",
+    "tipo": "servico",
+    "preco": 1200,
+    "descricao": "Aulas práticas e personalizadas para quem quer aprender lógica, front-end e boas práticas no desenvolvimento.",
+    "foto": "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=400&q=80"
   },
   {
-    id: 3,
-    nome: "Criação de Aplicativos",
-    tipo: "servico",
-    preco: 3500,
-    descricao: "Aplicativos móveis Android com interface moderna e uso de banco de dados local, ideal para negócios.",
-    foto: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+    "id": 3,
+    "nome": "Criação de Aplicativos",
+    "tipo": "servico",
+    "preco": 3500,
+    "descricao": "Aplicativos móveis Android com interface moderna e uso de banco de dados local, ideal para negócios.",
+    "foto": "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
   },
   {
-    id: 4,
-    nome: "Gestão de Tráfego Pago",
-    tipo: "servico",
-    preco: 1500,
-    descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas.",
-    foto: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=400&q=80"
-  },
-  {
-    id: 5,
-    nome: "Mouse Gamer",
-    tipo: "produto",
-    preco: 150,
-    descricao: "Mouse de alta precisão, ideal para jogos e produtividade.",
-    foto: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
-  },
-  {
-    id: 6,
-    nome: "Notebook Dell",
-    tipo: "produto",
-    preco: 3500,
-    descricao: "Notebook Dell com processador potente, ideal para trabalho e estudos.",
-    foto: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
+    "id": 4,
+    "nome": "Gestão de Tráfego Pago",
+    "tipo": "servico",
+    "preco": 1500,
+    "descricao": "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas.",
+    "foto": "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=400&q=80"
   }
 ];
 
@@ -568,26 +552,4 @@ async function baixarLoja() {
   const allItems = [...defaultItems, ...storedItems];
   js = js.replace(
     /const items\s*=\s*\[(.|\s)*?\];/m,
-    `const items = ${JSON.stringify(allItems, null, 2)};`
-  );
-
-  // 3. Função utilitária para baixar arquivo individual
-  function baixarArquivo(conteudo, nome, tipo) {
-    const blob = new Blob([conteudo], { type: tipo });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = nome;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 100);
-  }
-
-  // 4. Baixe os arquivos
-  baixarArquivo(html, "index.html", "text/html");
-  baixarArquivo(css, "index.css", "text/css");
-  baixarArquivo(js, "index.js", "application/javascript");
-}
+    `const ite
