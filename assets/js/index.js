@@ -198,22 +198,7 @@ const items = [
         tipo: "servico",
         preco: 1500,
         descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas."
-    },
-    // Produtos físicos (exemplo, pode remover se não quiser exibir)
-    {
-        id: 5,
-        nome: "Mouse Gamer",
-        tipo: "produto",
-        preco: 150,
-        descricao: "Mouse de alta precisão, ideal para jogos e produtividade."
-    },
-    {
-        id: 6,
-        nome: "Notebook Dell",
-        tipo: "produto",
-        preco: 3500,
-        descricao: "Notebook Dell com processador potente, ideal para trabalho e estudos."
-    }
+    }   
 ];
 
 // Elementos da loja/carrinho
