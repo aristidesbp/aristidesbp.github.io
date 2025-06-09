@@ -523,10 +523,10 @@ async function baixarLoja() {
   const htmlResp = await fetch('index.html');
   let html = await htmlResp.text();
 
-  const cssResp = await fetch('assets/css/index.css');
+  const cssResp = await fetch('index.css');
   const css = await cssResp.text();
 
-  const jsResp = await fetch('assets/js/index.js');
+  const jsResp = await fetch('index.js');
   let js = await jsResp.text();
 
   // 2. Gere o novo array de itens (fixos + localStorage)
@@ -563,22 +563,6 @@ async function baixarLoja() {
       preco: 1500,
       descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas.",
       foto: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 5,
-      nome: "Mouse Gamer",
-      tipo: "produto",
-      preco: 150,
-      descricao: "Mouse de alta precisão, ideal para jogos e produtividade.",
-      foto: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 6,
-      nome: "Notebook Dell",
-      tipo: "produto",
-      preco: 3500,
-      descricao: "Notebook Dell com processador potente, ideal para trabalho e estudos.",
-      foto: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
     }
   ];
   const allItems = [...defaultItems, ...storedItems];
@@ -604,6 +588,6 @@ async function baixarLoja() {
 
   // 4. Baixe os arquivos
   baixarArquivo(html, "index.html", "text/html");
-  baixarArquivo(css, "assets/css/index.css", "text/css");
-  baixarArquivo(js, "assets/js/index.js", "application/javascript");
+  baixarArquivo(css, "index.css", "text/css");
+  baixarArquivo(js, "index.js", "application/javascript");
 }
