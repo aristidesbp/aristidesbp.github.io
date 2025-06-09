@@ -263,18 +263,79 @@ function removeFromCart(index) {
   }
 }
 function filterItems() { loadItems(); }
+
+// ========== MÁSCARAS E VALIDAÇÃO FORMULÁRIO ==========
+function maskCPF(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 11);
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  input.value = v;
+}
+function maskTelefone(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 11);
+  v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+  v = v.replace(/(\d{5})(\d)/, "$1-$2");
+  input.value = v;
+}
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function validateCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  let soma = 0, resto;
+  for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+  soma = 0;
+  for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(10, 11))) return false;
+  return true;
+}
+window.addEventListener("DOMContentLoaded", () => {
+  const cpfInput = document.getElementById("cpf");
+  const telInput = document.getElementById("telefone");
+  if (cpfInput) cpfInput.addEventListener("input", () => maskCPF(cpfInput));
+  if (telInput) telInput.addEventListener("input", () => maskTelefone(telInput));
+});
+
+// ========== FINALIZAR PEDIDO ==========
 function enviarPedido(e) {
   e.preventDefault();
   const cart = getCart();
   if (cart.length === 0) return alert("Carrinho vazio.");
-  const nome = document.getElementById("nome").value;
-  const cpf = document.getElementById("cpf").value;
-  const telefone = document.getElementById("telefone").value;
-  const email = document.getElementById("email").value;
-  const endereco = document.getElementById("endereco").value;
+  const nome = document.getElementById("nome").value.trim();
+  const cpf = document.getElementById("cpf").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const endereco = document.getElementById("endereco").value.trim();
+
+  // Validação!
+  if (!nome) return alert("Informe seu nome.");
+  if (!validateCPF(cpf)) return alert("CPF inválido.");
+  if (!validateEmail(email)) return alert("E-mail inválido.");
+  if (telefone.length < 14) return alert("Telefone incompleto.");
+  if (!endereco) return alert("Informe o endereço.");
+
+  // Gera o objeto da venda
+  const jsonVenda = {
+    nome, cpf, telefone, email, endereco,
+    itens: cart,
+    total: cart.reduce((sum, i) => sum + i.preco, 0),
+    data: (new Date()).toISOString()
+  };
+  // Codifica em Base64
+  const jsonString = JSON.stringify(jsonVenda);
+  const jsonBase64 = btoa(unescape(encodeURIComponent(jsonString))); // compatível com UTF-8
+
   const itens = cart.map(i => `• ${i.nome} - R$ ${i.preco}`).join("\n");
   const total = cart.reduce((sum, i) => sum + i.preco, 0);
-  const mensagem = `Olá! Gostaria de finalizar uma compra com os seguintes dados:\n
+  const mensagem =
+    `Olá! Gostaria de finalizar uma compra com os seguintes dados:\n
 *NOME:* ${nome}
 *CPF:* ${cpf}
 *TELEFONE:* ${telefone}
@@ -285,7 +346,10 @@ function enviarPedido(e) {
 ${itens}
 
 *TOTAL:* R$ ${total.toFixed(2)}
+
+*CÓDIGO DA VENDA:* ${jsonBase64}
 `;
+
   const numero = "5591992420981";
   const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
   window.open(link, '_blank');
