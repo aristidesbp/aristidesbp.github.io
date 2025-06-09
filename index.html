@@ -85,7 +85,43 @@
 <p>Analista de Sistemas | Mentor de Programação | Desenvolvedor Full Stack</p>
 </header>
 
-     
+ <!-- ... (antes da navbar) ... -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <a class="navbar-brand" href="#">Minha Loja</a>
+  <div class="ms-auto d-flex align-items-center gap-2">
+    <button class="btn btn-outline-light position-relative" onclick="openCartModal()">
+      Carrinho
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+
+    <!-- Botão Sobre -->
+    <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
+
+    <!-- Botão Admin -->
+    <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
+  </div>
+  <!-- ... (restante da navbar) ... -->
+</nav>
+
+<!-- ... (depois do admin modal, adicione o modal Sobre) ... -->
+<div class="modal fade" id="sobreModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sobre AristidesBP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="assets/img/logoAbp.jpg" alt="Logo AristidesBP" style="max-width: 180px; border-radius: 12px; margin-bottom: 1rem;">
+        <p style="margin-top:1rem">
+          Olá! Sou <strong>AristidesBP</strong>, Analista de Sistemas com experiência em desenvolvimento front-end e mobile usando AndroidIDE. 
+          Atuo também como mentor de programação e gestor de tráfego pago. <br><br>
+          <b>Acredito que o código perfeito é o código comentado</b>, e tenho como missão ensinar, criar soluções práticas e entregar projetos de alta qualidade para meus clientes.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>    
 
 <!-- ######## -->
 <!--  Navbar  -->
