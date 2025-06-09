@@ -1,5 +1,11 @@
-// Modo claro/escuro
+// ====================
+// MODO CLARO/ESCURO
+// ====================
+
+// Elemento do botão de alternância de tema
 const themeBtn = document.getElementById('theme-toggle');
+
+// Função para definir o tema claro ou escuro
 function setTheme(dark) {
     if (dark) {
         document.body.classList.add('dark');
@@ -9,9 +15,13 @@ function setTheme(dark) {
         localStorage.setItem('theme', 'light');
     }
 }
+
+// Alterna o tema ao clicar no botão
 themeBtn.onclick = function() {
     setTheme(!document.body.classList.contains('dark'));
 };
+
+// Define o tema com base no localStorage ou na preferência do SO
 if (
     localStorage.getItem('theme') === 'dark' ||
     (localStorage.getItem('theme') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -21,16 +31,23 @@ if (
     setTheme(false);
 }
 
-// Caixa flutuante rádio: mostra/esconde conteúdo
+// ==============================================
+// CAIXA FLUTUANTE DE RÁDIO (PLAYER DE MÚSICA)
+// ==============================================
+
+// Elementos da caixa flutuante
 const radioFloat = document.getElementById('radio-float');
 const radioFloatToggle = document.getElementById('radio-float-toggle');
+
+// Mostra ou esconde o conteúdo da caixa de rádio
 radioFloatToggle.onclick = function() {
     radioFloat.classList.toggle('closed');
     radioFloatToggle.title = radioFloat.classList.contains('closed') ? "Mostrar Rádio" : "Ocultar Rádio";
 };
 
-// Painel música
+// Configuração do player de música, controles e eventos
 document.addEventListener('DOMContentLoaded', function () {
+    // Elementos do player
     const bgMusic = document.getElementById('bgMusic');
     const bgMusicBtn = document.getElementById('bgMusicBtn');
     const volDown = document.getElementById('vol-down');
@@ -43,10 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const repeatMusic = document.getElementById('repeatMusic');
     const musicList = Array.from(musicSelect.options).map(opt => opt.value);
 
+    // Configuração inicial do volume e loop
     bgMusic.volume = parseFloat(volSlider.value);
     bgMusic.loop = false;
     bgMusicBtn.title = 'Play/Pause';
 
+    // Play/Pause ao clicar no botão
     bgMusicBtn.onclick = function () {
         if (bgMusic.paused) {
             bgMusic.play().catch(() => {});
@@ -56,9 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
             bgMusicBtn.textContent = '🎵';
         }
     };
+
+    // Atualiza visualização do volume
     function updateVolumeDisplay() {
         volSlider.value = bgMusic.volume;
     }
+    // Botões de volume
     volDown.onclick = function () {
         bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);
         updateVolumeDisplay();
@@ -70,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
     volSlider.oninput = function () {
         bgMusic.volume = parseFloat(volSlider.value);
     };
+
+    // Troca a música selecionada
     musicSelect.onchange = function() {
         const wasPlaying = !bgMusic.paused;
         bgMusic.src = musicSelect.value;
@@ -82,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Formata o tempo em minutos:segundos
     function formatTime(sec) {
         if (isNaN(sec)) return "0:00";
         sec = Math.floor(sec);
@@ -89,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const s = sec % 60;
         return min + ":" + (s < 10 ? "0" : "") + s;
     }
+    // Atualiza a barra de progresso e tempos
     function updateProgress() {
         const current = bgMusic.currentTime;
         const duration = bgMusic.duration;
@@ -96,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         musicDuration.textContent = formatTime(duration);
         musicProgress.value = duration ? (current / duration) * 100 : 0;
     }
+    // Eventos para atualizar progresso e repetir música
     bgMusic.addEventListener('timeupdate', updateProgress);
     bgMusic.addEventListener('durationchange', updateProgress);
     bgMusic.addEventListener('loadedmetadata', updateProgress);
@@ -114,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             bgMusicBtn.textContent = '🔊';
         }
     });
+    // Permite arrastar a barra de progresso
     musicProgress.addEventListener('input', function() {
         if (bgMusic.duration) {
             bgMusic.currentTime = (musicProgress.value / 100) * bgMusic.duration;
@@ -126,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         bgMusic.loop = repeatMusic.checked;
     });
 
-    // Sound on hover for .links a
+    // Efeito sonoro ao passar mouse em links (classe .links a)
     document.querySelectorAll('.links a').forEach(link => {
         link.addEventListener('mouseenter', () => {
             const audio = document.getElementById('hoverSound');
@@ -137,7 +165,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Lista de produtos e serviços
+// ================================================
+// LISTA DE PRODUTOS E SERVIÇOS (CARDS DA LOJA)
+// ================================================
+
+// Lista fixa de itens (serviços e produtos)
 const items = [
     {
         id: 1,
@@ -167,7 +199,7 @@ const items = [
         preco: 1500,
         descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas."
     },
-    // Exemplo de produto físico (se desejar manter produtos)
+    // Produtos físicos (exemplo, pode remover se não quiser exibir)
     {
         id: 5,
         nome: "Mouse Gamer",
@@ -184,27 +216,31 @@ const items = [
     }
 ];
 
-// Elementos da interface
+// Elementos da loja/carrinho
 const itemContainer = document.getElementById("itemContainer");
 const cartItemsEl = document.getElementById("cartItems");
 const cartCount = document.getElementById("cartCount");
 const totalPedido = document.getElementById("totalPedido");
 
-let cartModalInstance = null;
+let cartModalInstance = null; // Instância do modal do carrinho
 
+// Carrega e exibe os itens na loja, aplicando o filtro selecionado
 function loadItems() {
     itemContainer.innerHTML = "";
     const filter = document.getElementById("filterCategory").value;
 
+    // Junta os itens fixos com os cadastrados pelo admin
     const fixedItems = [...items];
     const storedItems = JSON.parse(localStorage.getItem("items")) || [];
     const allItems = [...fixedItems, ...storedItems];
     window.items = allItems;
 
+    // Filtra conforme categoria
     const filteredItems = allItems.filter(item =>
         filter === "todos" || item.tipo === filter
     );
 
+    // Gera o HTML dos cards, incluindo a descrição
     filteredItems.forEach(item => {
         itemContainer.innerHTML += `
         <div class="col-md-3 mb-4">
@@ -221,15 +257,18 @@ function loadItems() {
     });
 }
 
+// Retorna o carrinho do localStorage
 function getCart() {
     return JSON.parse(localStorage.getItem("cart")) || [];
 }
 
+// Atualiza o carrinho no localStorage e a contagem no menu
 function updateCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
     cartCount.innerText = cart.length;
 }
 
+// Adiciona item ao carrinho
 function addToCart(id) {
     const cart = getCart();
     const item = (window.items && window.items.find(i => i.id === id));
@@ -239,6 +278,7 @@ function addToCart(id) {
     }
 }
 
+// Abre o modal do carrinho, exibindo os itens e total
 function openCartModal() {
     const cart = getCart();
     cartItemsEl.innerHTML = "";
@@ -263,6 +303,7 @@ function openCartModal() {
     cartModalInstance.show();
 }
 
+// Remove item do carrinho pela posição
 function removeFromCart(index) {
     const cart = getCart();
     cart.splice(index, 1);
@@ -275,15 +316,18 @@ function removeFromCart(index) {
     }
 }
 
+// Atualiza a lista quando muda o filtro
 function filterItems() {
     loadItems();
 }
 
+// Envia o pedido via WhatsApp e limpa o carrinho
 function enviarPedido(e) {
     e.preventDefault();
     const cart = getCart();
     if (cart.length === 0) return alert("Carrinho vazio.");
 
+    // Dados do cliente
     const nome = document.getElementById("nome").value;
     const cpf = document.getElementById("cpf").value;
     const telefone = document.getElementById("telefone").value;
@@ -293,6 +337,7 @@ function enviarPedido(e) {
     const itens = cart.map(i => `• ${i.nome} - R$ ${i.preco}`).join("\n");
     const total = cart.reduce((sum, i) => sum + i.preco, 0);
 
+    // Mensagem formatada
     const mensagem = `Olá! Gostaria de finalizar uma compra com os seguintes dados:\n
 *NOME:* ${nome}
 *CPF:* ${cpf}
@@ -313,14 +358,19 @@ ${itens}
     updateCart([]);
 }
 
-// Carrega a interface após o DOM estar pronto
+// Carrega a interface quando o DOM está pronto
 window.addEventListener("DOMContentLoaded", () => {
     loadItems();
     updateCart(getCart());
 });
 
-// Painel Administrativo
+// ==============================================
+// PAINEL ADMINISTRATIVO (LOGIN E CADASTRO)
+// ==============================================
+
+// Instância do modal de login admin
 let adminLoginModalInstance = null;
+// Função para abrir o modal de login admin
 function openAdminLoginModal() {
     if (!adminLoginModalInstance) {
         adminLoginModalInstance = new bootstrap.Modal(document.getElementById('adminLoginModal'));
@@ -328,6 +378,7 @@ function openAdminLoginModal() {
     adminLoginModalInstance.show();
 }
 
+// Valida senha de admin e abre painel se correta
 function handleAdminLogin(event) {
     event.preventDefault();
     const senha = document.getElementById('adminPassword').value;
@@ -340,7 +391,9 @@ function handleAdminLogin(event) {
     }
 }
 
+// Instância do modal do painel admin
 let adminPanelModalInstance = null;
+// Abre o modal do painel admin
 function openAdminPanel() {
     if (!adminPanelModalInstance) {
         adminPanelModalInstance = new bootstrap.Modal(document.getElementById('adminPanelModal'));
@@ -348,7 +401,7 @@ function openAdminPanel() {
     adminPanelModalInstance.show();
 }
 
-// Cadastro de produto/serviço
+// Salva novo item cadastrado no painel admin
 function salvarNovoItem(event) {
     event.preventDefault();
     const nome = document.getElementById("novoNome").value.trim();
@@ -376,7 +429,7 @@ function salvarNovoItem(event) {
 }
 document.getElementById("cadastroForm").addEventListener("submit", salvarNovoItem);
 
-// Visualizar/remover produtos cadastrados
+// Alterna visualização da tabela de itens cadastrados no admin
 let visualizacaoAtiva = false;
 function toggleView() {
     const container = document.getElementById("itensAdmin");
@@ -421,10 +474,26 @@ function toggleView() {
     container.innerHTML = tabelaHTML;
     visualizacaoAtiva = true;
 }
+
+// Remove item cadastrado pelo admin
 function removerItem(index) {
     const dadosSalvos = JSON.parse(localStorage.getItem("items")) || [];
     dadosSalvos.splice(index, 1);
     localStorage.setItem("items", JSON.stringify(dadosSalvos));
     toggleView();
     toggleView();
+}
+
+// ==============================================
+// MODAL "SOBRE" (INFORMAÇÃO DO AUTOR)
+// ==============================================
+
+// Instância do modal "Sobre"
+let sobreModalInstance = null;
+// Abre o modal de informações sobre AristidesBP
+function openSobreModal() {
+    if (!sobreModalInstance) {
+        sobreModalInstance = new bootstrap.Modal(document.getElementById('sobreModal'));
+    }
+    sobreModalInstance.show();
 }
