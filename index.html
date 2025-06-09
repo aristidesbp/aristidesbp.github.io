@@ -15,13 +15,21 @@
   
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top">
-  <a class="navbar-brand" href="#">Minha Loja</a>
+  <div class="dropdown">
+    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+      Minha Loja
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <li><button class="dropdown-item" onclick="openCartModal()">Login</button></li>
+      <li><button class="dropdown-item" onclick="openSobreModal()">Sobre</button></li>
+      <li><button class="dropdown-item" onclick="openAdminLoginModal()">Admin</button></li>
+    </ul>
+  </div>
   <div class="ms-auto d-flex align-items-center gap-2">
     <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
-    <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
-    <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
   </div>
   </nav>
+
   
   <!-- CABEÇALHO -->
   <header>
