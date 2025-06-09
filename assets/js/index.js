@@ -170,18 +170,21 @@ const items = [
   }
 ];
 
-const itemContainer = document.getElementById("itemContainer");
-const cartItemsEl = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-const totalPedido = document.getElementById("totalPedido");
-let cartModalInstance = null;
+// ========== ITENS: SEMPRE PRIORIZE LOCALSTORAGE POR ID ==========
+function getAllItems() {
+  const fixedItems = [...items];
+  const storedItems = JSON.parse(localStorage.getItem("items")) || [];
+  // Remove do array fixo os que foram editados (mesmo id)
+  const filteredFixed = fixedItems.filter(fix => !storedItems.some(st => st.id === fix.id));
+  return [...filteredFixed, ...storedItems];
+}
 
+// ========== ATUALIZA LISTA NA TELA ==========
+const itemContainer = document.getElementById("itemContainer");
 function loadItems() {
   itemContainer.innerHTML = "";
   const filter = document.getElementById("filterCategory").value;
-  const fixedItems = [...items];
-  const storedItems = JSON.parse(localStorage.getItem("items")) || [];
-  const allItems = [...fixedItems, ...storedItems];
+  const allItems = getAllItems();
   window.items = allItems;
   const filteredItems = allItems.filter(item =>
     filter === "todos" || item.tipo === filter
@@ -206,15 +209,19 @@ function loadItems() {
   });
 }
 
+// ========== CARRINHO ==========
+const cartItemsEl = document.getElementById("cartItems");
+const cartCount = document.getElementById("cartCount");
+const totalPedido = document.getElementById("totalPedido");
+let cartModalInstance = null;
+
 function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
 }
-
 function updateCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
   cartCount.innerText = cart.length;
 }
-
 function addToCart(id) {
   const cart = getCart();
   const item = (window.items && window.items.find(i => i.id === id));
@@ -223,7 +230,6 @@ function addToCart(id) {
     updateCart(cart);
   }
 }
-
 function openCartModal() {
   const cart = getCart();
   cartItemsEl.innerHTML = "";
@@ -246,7 +252,6 @@ function openCartModal() {
   }
   cartModalInstance.show();
 }
-
 function removeFromCart(index) {
   const cart = getCart();
   cart.splice(index, 1);
@@ -257,9 +262,7 @@ function removeFromCart(index) {
     openCartModal();
   }
 }
-
 function filterItems() { loadItems(); }
-
 function enviarPedido(e) {
   e.preventDefault();
   const cart = getCart();
@@ -296,7 +299,7 @@ window.addEventListener("DOMContentLoaded", () => {
   updateCart(getCart());
 });
 
-// ================= PAINEL ADMINISTRATIVO ====================
+// ========== PAINEL ADMINISTRATIVO ==========
 let adminLoginModalInstance = null;
 function openAdminLoginModal() {
   if (!adminLoginModalInstance) {
@@ -405,9 +408,9 @@ function removerItem(index) {
   toggleView();
 }
 
-// =================== MODAL EDITAR ITEM ===================
+// ========== MODAL EDITAR ITEM ==========
 function openEditItemModal(id) {
-  const allItems = window.items || [];
+  const allItems = getAllItems();
   const item = allItems.find(i => i.id === id);
   if (!item) return;
   document.getElementById("editItemId").value = item.id;
@@ -433,11 +436,10 @@ document.getElementById("editItemForm").addEventListener("submit", function(even
   const idx = storedItems.findIndex(i => i.id === id);
   if (idx !== -1) {
     storedItems[idx] = { id, nome, preco, tipo, descricao, foto };
-    localStorage.setItem("items", JSON.stringify(storedItems));
   } else {
     storedItems.push({ id, nome, preco, tipo, descricao, foto });
-    localStorage.setItem("items", JSON.stringify(storedItems));
   }
+  localStorage.setItem("items", JSON.stringify(storedItems));
   window.editItemModalInstance.hide();
   loadItems();
 });
@@ -452,9 +454,26 @@ function openSobreModal() {
 }
 
 // ========== BACKUP/BAIXAR LOJA ==========
-function gerarBlocoJSAtualizado() {
+async function baixarLoja() {
+  // 1. Baixa o HTML original
+  const htmlResp = await fetch('index.html');
+  let html = await htmlResp.text();
+
+  // 2. Baixa e insere o CSS
+  const cssResp = await fetch('assets/css/index.css');
+  const css = await cssResp.text();
+  html = html.replace(
+    /<link\s+rel="stylesheet".*index\.css".*?>/,
+    `<style>\n${css}\n</style>`
+  );
+
+  // 3. Baixa o JS original e atualiza o array de itens
+  const jsResp = await fetch('assets/js/index.js');
+  let js = await jsResp.text();
+
+  // Gera o novo array de itens (fixos + localStorage)
   const storedItems = JSON.parse(localStorage.getItem("items")) || [];
-  // Copie aqui o array de items fixos (igual ao início do script)
+  // Copiar exatamente o array de itens fixos do JS (ajuste para seu caso)
   const defaultItems = [
     {
       id: 1,
@@ -506,35 +525,27 @@ function gerarBlocoJSAtualizado() {
     }
   ];
   const allItems = [...defaultItems, ...storedItems];
-  return `const items = ${JSON.stringify(allItems, null, 2)};`;
-}
-function baixarLoja() {
-  // Captura o HTML do body inteiro
-  const html = document.documentElement.outerHTML;
-  // Carrega o JS original do seu projeto
-  fetch('assets/js/index.js')
-    .then(resp => resp.text())
-    .then(jsText => {
-      // Troca o bloco "const items = ..." no JS pelo bloco atualizado
-      const jsAtualizado = jsText.replace(
-        /const items\s*=\s*\[(.|\s)*?\];/m,
-        gerarBlocoJSAtualizado()
-      );
-      // Troca o <script src="assets/js/index.js"></script> por um <script> inline atualizado
-      const htmlAtualizado = html.replace(
-        /<script\s+src="assets\/js\/index\.js"><\/script>/,
-        `<script>\n${jsAtualizado}\n</script>`
-      );
-      const blob = new Blob([htmlAtualizado], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "loja_backup.html";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 100);
-    });
+  js = js.replace(
+    /const items\s*=\s*\[(.|\s)*?\];/m,
+    `const items = ${JSON.stringify(allItems, null, 2)};`
+  );
+
+  // 4. Substitui o <script src="assets/js/index.js"></script> por <script>...</script>
+  html = html.replace(
+    /<script\s+src="assets\/js\/index\.js"><\/script>/,
+    `<script>\n${js}\n</script>`
+  );
+
+  // 5. Gera o download
+  const blob = new Blob([html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "loja_backup.html";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
 }
