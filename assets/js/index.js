@@ -139,10 +139,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Lista de produtos e serviços
 const items = [
-    { id: 1, nome: "Site Profissional", tipo: "servico", preco: 500 },
-    { id: 2, nome: "Consultoria de Marketing", tipo: "servico", preco: 300 },
-    { id: 3, nome: "Mouse Gamer", tipo: "produto", preco: 150 },
-    { id: 4, nome: "Notebook Dell", tipo: "produto", preco: 3500 }
+    {
+        id: 1,
+        nome: "Desenvolvimento Web",
+        tipo: "servico",
+        preco: 2000,
+        descricao: "Criação de sites profissionais, landing pages e portfólios modernos com HTML, CSS, JavaScript e frameworks."
+    },
+    {
+        id: 2,
+        nome: "Mentoria em Programação",
+        tipo: "servico",
+        preco: 1200,
+        descricao: "Aulas práticas e personalizadas para quem quer aprender lógica, front-end e boas práticas no desenvolvimento."
+    },
+    {
+        id: 3,
+        nome: "Criação de Aplicativos",
+        tipo: "servico",
+        preco: 3500,
+        descricao: "Aplicativos móveis Android com interface moderna e uso de banco de dados local, ideal para negócios."
+    },
+    {
+        id: 4,
+        nome: "Gestão de Tráfego Pago",
+        tipo: "servico",
+        preco: 1500,
+        descricao: "Criação de campanhas otimizadas no Google Ads e Meta Ads para atrair clientes e aumentar suas vendas."
+    },
+    // Exemplo de produto físico (se desejar manter produtos)
+    {
+        id: 5,
+        nome: "Mouse Gamer",
+        tipo: "produto",
+        preco: 150,
+        descricao: "Mouse de alta precisão, ideal para jogos e produtividade."
+    },
+    {
+        id: 6,
+        nome: "Notebook Dell",
+        tipo: "produto",
+        preco: 3500,
+        descricao: "Notebook Dell com processador potente, ideal para trabalho e estudos."
+    }
 ];
 
 // Elementos da interface
@@ -169,12 +208,13 @@ function loadItems() {
     filteredItems.forEach(item => {
         itemContainer.innerHTML += `
         <div class="col-md-3 mb-4">
-            <div class="card p-3">
-                <div class="card-body text-center">
+            <div class="card p-3 h-100">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title">${item.nome}</h5>
+                    <p class="card-description" style="min-height:60px">${item.descricao ? item.descricao : ""}</p>
                     <p class="card-text">Tipo: ${item.tipo}</p>
                     <p class="card-text">Preço: R$ ${item.preco}</p>
-                    <button class="btn btn-primary" onclick="addToCart(${item.id})">Adicionar</button>
+                    <button class="btn btn-primary mt-auto" onclick="addToCart(${item.id})">Adicionar</button>
                 </div>
             </div>
         </div>`;
@@ -192,7 +232,7 @@ function updateCart(cart) {
 
 function addToCart(id) {
     const cart = getCart();
-    const item = items.find(i => i.id === id) || (window.items && window.items.find(i => i.id === id));
+    const item = (window.items && window.items.find(i => i.id === id));
     if (item) {
         cart.push(item);
         updateCart(cart);
@@ -314,6 +354,7 @@ function salvarNovoItem(event) {
     const nome = document.getElementById("novoNome").value.trim();
     const preco = parseFloat(document.getElementById("novoPreco").value);
     const tipo = document.getElementById("novoTipo").value;
+    const descricao = document.getElementById("novoDescricao") ? document.getElementById("novoDescricao").value.trim() : "";
 
     if (!nome || !preco || !tipo) {
         alert("Preencha todos os campos corretamente.");
@@ -324,7 +365,8 @@ function salvarNovoItem(event) {
         id: Date.now(),
         nome,
         preco,
-        tipo
+        tipo,
+        descricao
     };
     items.push(novoItem);
     localStorage.setItem("items", JSON.stringify(items));
@@ -356,6 +398,7 @@ function toggleView() {
                     <th>Nome</th>
                     <th>Tipo</th>
                     <th>Preço (R$)</th>
+                    <th>Descrição</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -367,6 +410,7 @@ function toggleView() {
                 <td>${item.nome}</td>
                 <td>${item.tipo}</td>
                 <td>${item.preco}</td>
+                <td>${item.descricao ? item.descricao : ""}</td>
                 <td>
                     <button class="btn btn-sm btn-danger" onclick="removerItem(${index})">Remover</button>
                 </td>
