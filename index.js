@@ -44,10 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
   bgMusicBtn.onclick = function () {
     if (bgMusic.paused) {
       bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
+      bgMusicBtn.textContent = '⏹️';
     } else {
       bgMusic.pause();
-      bgMusicBtn.textContent = '🎵';
+      bgMusicBtn.textContent = '▶️';
     }
   };
   function updateVolumeDisplay() { volSlider.value = bgMusic.volume; }
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
     bgMusic.currentTime = 0;
     if (wasPlaying) {
       bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
-    } else { bgMusicBtn.textContent = '🎵'; }
+      bgMusicBtn.textContent = '⏹️';
+    } else { bgMusicBtn.textContent = '▶️'; }
   };
   function formatTime(sec) {
     if (isNaN(sec)) return "0:00";
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (repeatMusic.checked) {
       bgMusic.currentTime = 0;
       bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
+      bgMusicBtn.textContent = '⏹️';
     } else {
       let idx = musicList.indexOf(musicSelect.value);
       let next = (idx + 1) % musicList.length;
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
       bgMusic.src = musicList[next];
       bgMusic.currentTime = 0;
       bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
+      bgMusicBtn.textContent = '⏹️';
     }
   });
   musicProgress.addEventListener('input', function() {
