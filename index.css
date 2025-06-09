@@ -47,7 +47,7 @@ header p { font-size: 1.5em; margin-top: 10px; color: #a8b2d1; }
   background: white;
   transition: background 0.3s, color 0.3s;
 }
-body.dark #itemContainer .card { background: #181818; color: #f1f1f1; }
+body.dark #itemContainer .card { background: #181818; }
 .card-title { font-size: 1.25em; font-weight: bold; }
 .card-description { font-size: 1em; color: #666; margin-bottom: 0.6em; }
 body.dark .card-description { color: #b0b0b0; }
