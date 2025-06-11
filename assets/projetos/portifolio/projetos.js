@@ -24,6 +24,8 @@ function criarServicos() {
   ];
 
   container.innerHTML = `
+
+  <h2>PROJETOS REALIZADOS</h2>
     <div class="servicos-wrapper">
       ${servicos.map((s, i) => `
         <div class="card-servico" data-index="${i}">
