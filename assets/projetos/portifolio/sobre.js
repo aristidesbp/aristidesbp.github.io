@@ -84,7 +84,7 @@ function criarSobre() {
           </p>
         </div>
         <div class="sobre-imagem">
-          <img src="../img/Aristidesbp.png" alt="Foto representando Aristides Pontes">
+          <img src="Aristidesbp.png" alt="Foto representando Aristides Pontes">
         </div>
       </div>
     </section>
