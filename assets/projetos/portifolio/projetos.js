@@ -1,26 +1,33 @@
 // assets/js/servicos.js
 
 function criarServicos() {
-  const container = document.getElementById("componente-servicos");
+  const container = document.getElementById("componente-projetos");
 
   if (!container) return;
 
   const servicos = [
     {
-      titulo: "Desenvolvimento Web",
-      descricao: "Criação de sites rápidos, responsivos e otimizados para conversão.",
+      titulo: "Minha-Ide",
+      descricao: "Editor de texto simples, com ferramentas para ajudar no desenvolvimento de aplicações.",
       extra: "Tecnologias como HTML, CSS, JS, frameworks modernos e SEO."
     },
     {
-      titulo: "Gestão de Tráfego Pago",
-      descricao: "Campanhas no Google Ads e Meta Ads com foco em ROI.",
+      titulo: "Loja virtual",
+      descricao: "Loja virtual de produtos e serviçõs, com mensagens no whatzap",
       extra: "Segmentação avançada, copy persuasiva e funis de vendas."
     },
     {
-      titulo: "Consultoria Estratégica",
+      titulo: "Portifolio",
       descricao: "Planejamento digital sob medida para sua empresa crescer.",
-      extra: "Diagnóstico, plano de ação e acompanhamento de métricas."
+      extra: "Segmentação avançada, copy persuasiva e funis de vendas."
     }
+
+    {
+      titulo: "Cardapio Digital",
+      descricao: "Planejamento digital sob medida para sua empresa crescer.",
+      extra: "Segmentação avançada, copy persuasiva e funis de vendas."
+    }
+  
   ];
 
   container.innerHTML = `
