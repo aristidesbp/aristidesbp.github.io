@@ -1,38 +1,29 @@
 // assets/js/servicos.js
 
 function criarServicos() {
-  const container = document.getElementById("componente-projetos");
+  const container = document.getElementById("componente-servicos");
 
   if (!container) return;
 
   const servicos = [
     {
-      titulo: "Minha-Ide",
-      descricao: "Editor de texto simples, com ferramentas para ajudar no desenvolvimento de aplicações.",
+      titulo: "Desenvolvimento Web",
+      descricao: "Criação de sites rápidos, responsivos e otimizados para conversão.",
       extra: "Tecnologias como HTML, CSS, JS, frameworks modernos e SEO."
     },
     {
-      titulo: "Loja virtual",
-      descricao: "Loja virtual de produtos e serviçõs, com mensagens no whatzap",
+      titulo: "Gestão de Tráfego Pago",
+      descricao: "Campanhas no Google Ads e Meta Ads com foco em ROI.",
       extra: "Segmentação avançada, copy persuasiva e funis de vendas."
     },
     {
-      titulo: "Portifolio",
+      titulo: "Consultoria Estratégica",
       descricao: "Planejamento digital sob medida para sua empresa crescer.",
-      extra: "Segmentação avançada, copy persuasiva e funis de vendas."
-    },
-
-    {
-      titulo: "Cardapio Digital",
-      descricao: "Planejamento digital sob medida para sua empresa crescer.",
-      extra: "Segmentação avançada, copy persuasiva e funis de vendas."
+      extra: "Diagnóstico, plano de ação e acompanhamento de métricas."
     }
-  
   ];
 
   container.innerHTML = `
-
-  <h2>PROJETOS REALIZADOS</h2>
     <div class="servicos-wrapper">
       ${servicos.map((s, i) => `
         <div class="card-servico" data-index="${i}">
