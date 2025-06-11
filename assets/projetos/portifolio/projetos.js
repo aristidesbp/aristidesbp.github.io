@@ -20,7 +20,7 @@ function criarServicos() {
       titulo: "Portifolio",
       descricao: "Planejamento digital sob medida para sua empresa crescer.",
       extra: "Segmentação avançada, copy persuasiva e funis de vendas."
-    }
+    },
 
     {
       titulo: "Cardapio Digital",
