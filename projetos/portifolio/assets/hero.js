@@ -62,7 +62,7 @@ function criarHero() {
       <div class="hero-texto">
         <h2>Soluções Digitais Que Convertem</h2>
         <p>Desenvolvimento web, design e tráfego pago com foco em resultados reais.</p>
-        <a href="#main-formularioContato" class="cta-btn">Solicite um orçamento</a>
+        <a href="aristidesbp.github.io/projetos/formularios" class="cta-btn">Solicite um orçamento</a>
       </div>
     </section>
   `;
