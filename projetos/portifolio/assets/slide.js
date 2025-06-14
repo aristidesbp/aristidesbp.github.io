@@ -113,8 +113,9 @@ function criarSlide() {
       <div class="slide-wrapper">
         ${services.map((s, i) => `
           <div class="slide-item${i === 0 ? ' active' : ''}" role="group" aria-roledescription="slide" aria-label="${s.titulo}">
-            <img src="${s.img}" alt="${s.titulo}">
-            <div class="slide-caption">${s.titulo}</div>
+                        <div class="slide-caption">${s.titulo}</div>
+                        <img src="${s.img}" alt="${s.titulo}">
+
           </div>
         `).join('')}
       </div>
