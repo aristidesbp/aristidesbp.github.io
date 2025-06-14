@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini Fazenda - Havest Mom</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.8s;
+    }
+    #game {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+    #farm {
+      flex: 1 1 auto;
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+      /* Os tamanhos serão definidos via JS para garantir quadrados */
+      background: transparent;
+      box-shadow: 0 2px 14px #3333;
+      margin: 0;
+      transition: background 0.8s;
+    }
+    .tile {
+      background: #e1c699;
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2vw;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-width: 0; min-height: 0;
+    }
+    .player { color: #1d3557; font-weight: bold; font-size: 2.2vw; }
+    .seed   { color: #6c4827; }
+    .sprout { color: #388e3c; }
+    .plant  { color: #007200; }
+    .watered { background: #a2d5c6 !important;}
+    #hud {
+      position: absolute;
+      top: 0; left: 0; width: 100vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 3vw 0 3vw;
+      z-index: 3;
+      font-size: 1.3em;
+      pointer-events: none;
+      color: inherit;
+    }
+    #hud > div {
+      pointer-events: auto;
+      background: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      padding: 6px 18px;
+      margin: 0 6px;
+      box-shadow: 0 2px 6px #0002;
+      font-weight: 500;
+    }
+    .night #hud > div {
+      background: rgba(30,30,40,0.80);
+      color: #f0e9ff;
+    }
+    #controls {
+      position: absolute;
+      bottom: 2vw; left: 50%; transform: translateX(-50%);
+      background: rgba(255,255,255,0.8);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #3332;
+      display: flex; gap: 0.8em;
+      padding: 8px 20px;
+      z-index: 4;
+      pointer-events: auto;
+      font-size: 1em;
+    }
+    .night #controls { background: rgba(25,20,40,0.80); color: #f0e9ff; }
+    button {
+      font-size: 1em;
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: none;
+      background: #74c69d;
+      color: #222;
+      cursor: pointer;
+      margin: 0 2px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .night button { background: #2c3e50; color: #f8f8f8; }
+    button.selected { border: 2px solid #1d3557; background: #f9c846; }
+    .night button.selected { border: 2px solid #f9d846; background: #34495e; color: #fff; }
+    @media (max-width: 600px) {
+      #hud { font-size: 1em; }
+      #controls { font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="hud">
+      <div id="relogio">06:00</div>
+      <div>Sementes: <span id="seedCount">5</span></div>
+      <div>Dia: <span id="day">1</span></div>
+    </div>
+    <div id="farm"></div>
+    <div id="controls">
+      <button id="moveBtn" onclick="selectAction('move')">Mover</button>
+      <button id="plantBtn" onclick="selectAction('plant')">Plantar (S)</button>
+      <button id="waterBtn" onclick="selectAction('water')">Regar (W)</button>
+      <button id="harvestBtn" onclick="selectAction('harvest')">Colher (C)</button>
+      <button onclick="nextDay()" title="(Espaço)">Próximo Dia</button>
+    </div>
+  </div>
+  <script>
+    // Estado do jogo
+    const farmSize = 10;
+    let farm = [];
+    let player = { x: 5, y: 5 };
+    let action = 'move'; // move, plant, water, harvest
+    let seeds = 5;
+    let day = 1;
+
+    // Relógio e tema
+    let horas = 6, minutos = 0; // Começa às 6h00
+    let relogioInterval = null;
+
+    // Tema claro/escuro
+    function updateTheme() {
+      // Dia: 6h~18h, Noite: 18h~6h
+      const isNight = (horas < 6 || horas >= 18);
+      document.body.className = isNight ? 'night' : '';
+      document.getElementById('farm').style.background = isNight
+        ? 'linear-gradient(#1d2233 80%, #4b4d5d 100%)'
+        : 'linear-gradient(#6da06f 80%, #b9e4c9 100%)';
+      document.body.style.background = isNight
+        ? 'linear-gradient(#10131e 60%, #50506d 100%)'
+        : 'linear-gradient(#b9e4c9 60%, #f6f9e7 100%)';
+    }
+
+    // Relógio
+    function relogioTick() {
+      minutos += 10;
+      if (minutos >= 60) { minutos = 0; horas++; }
+      if (horas >= 24) { horas = 6; minutos = 0; nextDay(); }
+      renderHud();
+      updateTheme();
+    }
+    function renderHud() {
+      const h = horas.toString().padStart(2,'0');
+      const m = minutos.toString().padStart(2,'0');
+      document.getElementById('relogio').textContent = `${h}:${m}`;
+      document.getElementById('seedCount').textContent = seeds;
+      document.getElementById('day').textContent = day;
+    }
+
+    // Mapa e grid
+    function resizeFarmGrid() {
+      const farmDiv = document.getElementById('farm');
+      // Calcula tamanho mínimo para quadrados perfeitos
+      const w = window.innerWidth, h = window.innerHeight;
+      const cellSize = Math.floor(Math.min(w, h) / farmSize);
+      farmDiv.style.gridTemplateColumns = `repeat(${farmSize}, ${cellSize}px)`;
+      farmDiv.style.gridTemplateRows = `repeat(${farmSize}, ${cellSize}px)`;
+      Array.from(farmDiv.children).forEach(tile => {
+        tile.style.width = cellSize+"px";
+        tile.style.height = cellSize+"px";
+        tile.style.fontSize = (cellSize*0.65)+"px";
+      });
+    }
+    window.addEventListener('resize', resizeFarmGrid);
+
+    // Construção do mapa
+    for(let y=0; y<farmSize; y++) {
+      farm[y] = [];
+      for(let x=0; x<farmSize; x++) {
+        farm[y][x] = { state: 'empty', watered: false, grow: 0 };
+      }
+    }
+
+    function renderFarm() {
+      const farmDiv = document.getElementById('farm');
+      farmDiv.innerHTML = '';
+      for(let y=0; y<farmSize; y++) {
+        for(let x=0; x<farmSize; x++) {
+          const tile = document.createElement('div');
+          tile.className = 'tile';
+          if (farm[y][x].watered) tile.classList.add('watered');
+          let emoji = '';
+          if (player.x === x && player.y === y) {
+            emoji = '<span class="player">&#128100;</span>';
+          } else if (farm[y][x].state === 'seed') {
+            emoji = '<span class="seed">&#129716;</span>';
+          } else if (farm[y][x].state === 'sprout') {
+            emoji = '<span class="sprout">&#127793;</span>';
+          } else if (farm[y][x].state === 'plant') {
+            emoji = '<span class="plant">&#127805;</span>';
+          }
+          tile.innerHTML = emoji;
+          tile.onclick = () => tileAction(x, y);
+          farmDiv.appendChild(tile);
+        }
+      }
+      resizeFarmGrid();
+      highlightSelectedAction();
+    }
+
+    function selectAction(act) {
+      action = act;
+      highlightSelectedAction();
+    }
+    function highlightSelectedAction() {
+      ['move','plant','water','harvest'].forEach(id => {
+        document.getElementById(id+'Btn').classList.toggle('selected', action===id);
+      });
+    }
+
+    function tileAction(x, y) {
+      if (player.x !== x || player.y !== y) {
+        player.x = x; player.y = y;
+        renderFarm();
+        return;
+      }
+      if (action === 'plant') plantSeed();
+      else if (action === 'water') waterPlant();
+      else if (action === 'harvest') harvestPlant();
+    }
+
+    function plantSeed() {
+      const tile = farm[player.y][player.x];
+      if (tile.state === 'empty' && seeds > 0) {
+        tile.state = 'seed';
+        tile.grow = 0;
+        seeds--;
+        renderFarm();
+        renderHud();
+      }
+    }
+
+    function waterPlant() {
+      const tile = farm[player.y][player.x];
+      if ((tile.state === 'seed' || tile.state === 'sprout') && !tile.watered) {
+        tile.watered = true;
+        renderFarm();
+      }
+    }
+
+    function harvestPlant() {
+      const tile = farm[player.y][player.x];
+      if (tile.state === 'plant') {
+        tile.state = 'empty';
+        tile.watered = false;
+        tile.grow = 0;
+        seeds++;
+        renderFarm();
+        renderHud();
+      }
+    }
+
+    // Passa para o próximo dia
+    function nextDay() {
+      day++;
+      horas = 6; minutos = 0;
+      for(let y=0; y<farmSize; y++) {
+        for(let x=0; x<farmSize; x++) {
+          const tile = farm[y][x];
+          if ((tile.state === 'seed' || tile.state === 'sprout') && tile.watered) {
+            tile.grow++;
+            tile.watered = false;
+            if (tile.state === 'seed' && tile.grow >= 1) {
+              tile.state = 'sprout'; // Broto
+            } else if (tile.state === 'sprout' && tile.grow >= 2) {
+              tile.state = 'plant'; // Planta adulta (colhível)
+            }
+          } else {
+            tile.watered = false;
+          }
+        }
+      }
+      renderFarm();
+      renderHud();
+      updateTheme();
+    }
+
+    // Movimentação com teclas
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      if (action === 'move') {
+        let moved = false;
+        if (e.key === 'ArrowUp' && player.y > 0) { player.y--; moved = true; }
+        if (e.key === 'ArrowDown' && player.y < farmSize-1) { player.y++; moved = true; }
+        if (e.key === 'ArrowLeft' && player.x > 0) { player.x--; moved = true; }
+        if (e.key === 'ArrowRight' && player.x < farmSize-1) { player.x++; moved = true; }
+        if (moved) renderFarm();
+      }
+      if (e.key === 's' || e.key === 'S') { selectAction('plant'); plantSeed(); }
+      if (e.key === 'w' || e.key === 'W') { selectAction('water'); waterPlant(); }
+      if (e.key === 'c' || e.key === 'C') { selectAction('harvest'); harvestPlant(); }
+      if (e.key === ' ') { nextDay(); }
+    });
+
+    // Iniciar relógio e renderização
+    function startGame() {
+      renderFarm();
+      renderHud();
+      updateTheme();
+      if (relogioInterval) clearInterval(relogioInterval);
+      relogioInterval = setInterval(relogioTick, 800); // 1 "hora" a cada 800ms
+    }
+    startGame();
+  </script>
+</body>
+</html>
