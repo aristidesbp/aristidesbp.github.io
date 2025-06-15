@@ -72,15 +72,15 @@ function criarSobre() {
         <div class="sobre-texto">
           <h2>Sobre Mim</h2>
           <p>
-            Sou <strong>Aristides Barbosa Pontes</strong>, desenvolvedor front-end e gestor de tráfego pago.
+            Sou <strong>Aristides Barbosa Pontes</strong>, formado em análise de sistemas, desenvolvedor front-end e gestor de tráfego pago.
             Minha missão é transformar ideias em interfaces funcionais e estratégias digitais que geram resultados.
           </p>
           <p>
-            Tenho experiência sólida com <b>HTML, CSS, JavaScript, React</b> e também em plataformas como Google Ads, Facebook Ads e Analytics.
+            Tenho experiência sólida com <b>HTML, CSS, JavaScript, Php, Python, Sql </b> e também em plataformas como Google Ads, Facebook Ads e Analytics.
             Atuo com foco em performance, design moderno e código limpo.
           </p>
           <p>
-            Combinando tecnologia e marketing, ajudo empresas e profissionais a conquistarem mais presença e conversões.
+            Combinando tecnologia e marketing, ajudo empresas e profissionais autônomos a conquistarem mais presença e conversões.
           </p>
         </div>
         <div class="sobre-imagem">
