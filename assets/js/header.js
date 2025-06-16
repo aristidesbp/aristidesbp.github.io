@@ -2,11 +2,11 @@ function criarHeader() {
   const header = document.getElementById('componente-Header');
   if (!header) return;
 
-  // Estrutura HTML
   header.innerHTML = `
     <section class="hero-header">
       <div class="slideshow-container">
-        <div class="slide fade" id="slide-img"></div>
+        <div class="slide" id="slide-img-1"></div>
+        <div class="slide" id="slide-img-2"></div>
         <div class="overlay">
           <div class="hero-content">
             <h1 id="slide-title" class="fade-in">Título 1</h1>
@@ -17,7 +17,6 @@ function criarHeader() {
     </section>
   `;
 
-  // CSS
   const style = document.createElement('style');
   style.textContent = `
     #componente-Header {
@@ -43,6 +42,8 @@ function criarHeader() {
       height: 100%;
       top: 0;
       left: 0;
+      overflow: hidden;
+      z-index: 1;
     }
 
     .slide {
@@ -51,7 +52,26 @@ function criarHeader() {
       height: 100%;
       background-size: cover;
       background-position: center;
-      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      opacity: 0;
+      transform: translateY(0);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      will-change: opacity, transform;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .slide.to-top {
+      transform: translateY(-100%);
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .slide.from-bottom {
+      transform: translateY(100%);
+      opacity: 0;
       z-index: 1;
     }
 
@@ -60,41 +80,42 @@ function criarHeader() {
       background: rgba(0, 0, 0, 0.6);
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 3;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 2rem;
+      pointer-events: none;
     }
 
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 2.2;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+      color: #fff;
+      opacity: 0;
+      transform: translateY(30px);
+      animation-fill-mode: forwards;
+    }
 
-
-.hero-content h1 {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  line-height: 2.2; /* Altura das linhas */
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-  color: #fff;
-}
-
-.hero-content p {
-  font-size: 1.5rem;
-  line-height: 2.6; /* Altura das linhas */
-  color: #e0e0e0;
-}
-
-
-
-
-
-
-
-
+    .hero-content p {
+      font-size: 1.5rem;
+      line-height: 2.6;
+      color: #e0e0e0;
+      opacity: 0;
+      transform: translateY(30px);
+      animation-fill-mode: forwards;
+    }
 
     .fade-in {
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards;
+      animation-name: fadeInUp;
+      animation-duration: 1s;
+      animation-timing-function: ease;
+      animation-fill-mode: forwards;
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .fade-in.delay {
@@ -102,11 +123,11 @@ function criarHeader() {
     }
 
     @keyframes fadeInUp {
-      0% {
+      from {
         opacity: 0;
         transform: translateY(30px);
       }
-      100% {
+      to {
         opacity: 1;
         transform: translateY(0);
       }
@@ -116,7 +137,6 @@ function criarHeader() {
       .hero-content h1 {
         font-size: 2rem;
       }
-
       .hero-content p {
         font-size: 1rem;
       }
@@ -124,7 +144,6 @@ function criarHeader() {
   `;
   document.head.appendChild(style);
 
-  // JS - Slide dinâmico
   const slides = [
     {
       imagem: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
@@ -134,46 +153,33 @@ function criarHeader() {
     {
       imagem: 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?auto=format&fit=crop&w=600&q=80',
       titulo: 'Gestão de Tráfego Pago',
-      texto: 'Impucione e ganhe visibilidade.'
+      texto: 'Impressione e ganhe visibilidade.'
     },
     {
       imagem: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
       titulo: 'Consultoria Estratégica',
-      texto: 'Receba um relatorio completo com estartegias que funcionam!'
+      texto: 'Receba um relatório completo com estratégias que funcionam!'
     }
   ];
 
-
-
-
-
-
-
-
-
-
   let currentIndex = 0;
-  const slideImg = document.getElementById('slide-img');
+  const slide1 = document.getElementById('slide-img-1');
+  const slide2 = document.getElementById('slide-img-2');
   const slideTitle = document.getElementById('slide-title');
   const slideText = document.getElementById('slide-text');
 
-  function showSlide(index) {
-    const { imagem, titulo, texto } = slides[index];
+  // Estado: qual slide está visível no momento (1 ou 2)
+  let showingFirst = true;
 
-    // Atualiza imagem com leve transição
-    slideImg.style.opacity = 0;
-    slideImg.style.transform = 'translateY(-20px)';
-    setTimeout(() => {
-      slideImg.style.backgroundImage = `url('${imagem}')`;
-      slideImg.style.opacity = 1;
-      slideImg.style.transform = 'translateY(0)';
-    }, 400);
-
-    // Atualiza textos
-    slideTitle.classList.remove('fade-in');
+  function updateText(titulo, texto) {
+    slideTitle.classList.remove('fade-in', 'delay');
     slideText.classList.remove('fade-in', 'delay');
 
-    void slideTitle.offsetWidth; // força reflow para reiniciar animação
+    slideTitle.style.opacity = '0';
+    slideText.style.opacity = '0';
+
+    // Força reflow para reiniciar animação
+    void slideTitle.offsetWidth;
     void slideText.offsetWidth;
 
     slideTitle.textContent = titulo;
@@ -183,10 +189,44 @@ function criarHeader() {
     slideText.classList.add('fade-in', 'delay');
   }
 
-  showSlide(currentIndex);
+  function showSlide(nextIndex) {
+    const next = slides[nextIndex];
+    const currentSlide = showingFirst ? slide1 : slide2;
+    const nextSlide = showingFirst ? slide2 : slide1;
+
+    // Setup next slide abaixo da viewport (100%)
+    nextSlide.style.backgroundImage = `url('${next.imagem}')`;
+    nextSlide.className = 'slide from-bottom';
+
+    // Força reflow para reiniciar a transição
+    void nextSlide.offsetWidth;
+
+    // Animar atual subindo e sumindo
+    currentSlide.className = 'slide to-top';
+
+    // Animar próximo descendo e aparecendo
+    nextSlide.classList.add('active');
+    nextSlide.style.opacity = '1';
+    nextSlide.style.transform = 'translateY(0)';
+
+    // Atualizar texto com delay para sincronizar com animação
+    setTimeout(() => updateText(next.titulo, next.texto), 600);
+
+    // Após transição, atualizar estados
+    setTimeout(() => {
+      currentSlide.className = 'slide';
+      showingFirst = !showingFirst;
+      currentIndex = nextIndex;
+    }, 1200);
+  }
+
+  // Inicializa primeiro slide
+  slide1.style.backgroundImage = `url('${slides[0].imagem}')`;
+  slide1.className = 'slide active';
+  updateText(slides[0].titulo, slides[0].texto);
 
   setInterval(() => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-  }, 6000); // 6s por slide
+    const nextIndex = (currentIndex + 1) % slides.length;
+    showSlide(nextIndex);
+  }, 6000);
 }

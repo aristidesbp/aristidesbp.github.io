@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Formulário de briefing para criação de site com SEO completo.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Briefing para Criação de Site</title>
+  <link rel="stylesheet" href="css/form.css" />
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Transformamos ideias em crescimento digital</h1>
+      <p>Preencha o formulário para começarmos seu projeto com SEO de alto impacto.</p>
+    </div>
+  </header>
+
+  <main>
+    <form id="briefingForm">
+      <label>Nome da Empresa:</label>
+      <input type="text" name="empresa" required>
+
+      <label>Descrição Curta / Missão:</label>
+      <textarea name="descricao" required></textarea>
+
+      <label>Serviços Oferecidos:</label>
+      <textarea name="servicos" placeholder="Separe por vírgulas" required></textarea>
+
+      <label>Cidade e Estado:</label>
+      <input type="text" name="localizacao" required>
+
+      <label>Público-alvo:</label>
+      <textarea name="publico" required></textarea>
+
+      <label>Diferenciais da Empresa:</label>
+      <textarea name="diferenciais"></textarea>
+
+      <label>Redes Sociais (links):</label>
+      <textarea name="redes"></textarea>
+
+      <label>Nome do Responsável:</label>
+      <input type="text" name="responsavel" required>
+
+      <label>WhatsApp para Contato:</label>
+      <input type="text" name="whatsapp" required>
+
+      <label>E-mail para Contato:</label>
+      <input type="email" name="email" required>
+
+      <label>URL do Site Atual (se houver):</label>
+      <input type="url" name="site" value="http://">
+
+      <label>Objetivo principal do site:</label>
+      <textarea name="objetivo" required></textarea>
+
+      <label>Selecione uma paleta de cores desejada para o site:</label>
+      <div class="color-group">
+        <button type="button" class="color-option" onclick="setColor('Azul & Branco')">Azul & Branco</button>
+        <button type="button" class="color-option" onclick="setColor('Preto & Dourado')">Preto & Dourado</button>
+        <button type="button" class="color-option" onclick="setColor('Verde & Cinza')">Verde & Cinza</button>
+        <button type="button" class="color-option" onclick="setColor('Rosa & Roxo')">Rosa & Roxo</button>
+      </div>
+      <input type="text" name="paleta" id="paleta" placeholder="Ou digite uma combinação personalizada">
+
+      <fieldset class="produtos">
+        <legend>Selecione os produtos para compra:</legend>
+
+        <label>
+          <input type="checkbox" name="produto1_ativo" />
+          Produto 1 - Serviço Premium - R$ 199,90
+        </label>
+        <input type="number" name="produto1_qtd" min="1" value="1" disabled />
+
+        <label>
+          <input type="checkbox" name="produto2_ativo" />
+          Produto 2 - Consultoria Especializada - R$ 249,90
+        </label>
+        <input type="number" name="produto2_qtd" min="1" value="1" disabled />
+
+        <label>
+          <input type="checkbox" name="produto3_ativo" />
+          Produto 3 - Gestão de Tráfego - R$ 299,90
+        </label>
+        <input type="number" name="produto3_qtd" min="1" value="1" disabled />
+      </fieldset>
+
+      <p>Total: R$ <span id="totalValor">0,00</span></p>
+
+      <div class="note">
+        📎 <strong>Observação:</strong> Caso tenha, envie imagens, vídeos, logotipo ou materiais de referência via WhatsApp após o envio deste formulário.
+      </div>
+
+      <button type="submit">Enviar via WhatsApp</button>
+    </form>
+  </main>
+
+  <script src="js/form.js"></script>
+</body>
+</html>
