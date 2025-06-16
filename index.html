@@ -1,506 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- ✅ Estrutura básica com foco em SEO, performance e compartilhamento social -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AristidesBP - LINKS-SOM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Aristides Barbosa Pontes // Portfólio</title>
+
+  <!-- ✅ SEO para posicionamento no Google -->
+  <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Veja meu portfólio com projetos em HTML, CSS, JavaScript, AndroidIDE e estratégias de marketing digital.">
+  <meta name="author" content="Aristides Barbosa Pontes">
+  <meta name="keywords" content="portfólio, Aristides Barbosa Pontes, front-end, desenvolvedor, HTML, CSS, JavaScript, tráfego pago, marketing digital, programador web, projetos web, sites profissionais, developer, programação, dev, desenvolvedor, programador, html, css, javascript, nodejs, reactjs, react, github, frontend, front-end">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://aristidesbp.github.io/" />
+
+  <!-- ✅ Compartilhamento em redes sociais (Open Graph & Twitter Card) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aristidesbp.github.io/">
+  <meta property="og:title" content="Portfólio de Aristides Barbosa Pontes – Dev Front-End e Gestor de Tráfego">
+  <meta property="og:description" content="Conheça os projetos e estratégias digitais de Aristides Barbosa Pontes, especialista em desenvolvimento web e tráfego pago.">
+  <meta property="og:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
+  <meta name="twitter:description" content="Confira meus projetos e estratégias como desenvolvedor front-end e gestor de tráfego.">
+  <meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+  <meta name="twitter:site" content="@aristidesbp">
+
+  <!-- PWA e Favicon -->
+  <link rel="manifest" href="json/site-mvc-manifest.json">
+  <link rel="icon" href="icons/favicon.png" type="image/x-icon"/>
+
+  <!-- Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-   <link rel="icon" type="image/png" href="icons/favicon.png">
- <link rel="stylesheet" href="css/loja.css" />
-<style>
-/* RESET & FONTE BASE */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f7f7f7;
-  color: #333;
-  transition: background-color 0.3s, color 0.3s;
-  padding-bottom: 80px;
-}
-body.dark { background-color: #121212; color: #f1f1f1; }
-
-/* HEADER */
-header {
-  background-color: #0a192f;
-  color: white;
-  text-align: center;
-  padding: 60px 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-header h1 { font-size: 3em; margin: 0; }
-header p { font-size: 1.5em; margin-top: 10px; color: #a8b2d1; }
-
-/* NAVBAR & BOTÕES */
-.navbar { margin-bottom: 0; }
-.cart-count {
-  background: red;
-  color: white;
-  padding: 0 6px;
-  border-radius: 50%;
-}
-.btn-outline-info {
-  border-color: #0dcaf0 !important;
-  color: #0dcaf0 !important;
-}
-.btn-outline-info:hover {
-  background: #0dcaf0 !important;
-  color: white !important;
-}
-
-/* CARDS ITENS/LOJA */
-#itemContainer .card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  background: white;
-  transition: background 0.3s, color 0.3s;
-}
-
-body.dark #itemContainer .card { background: #181818; color: #f1f1f1; }
-.card-title { font-size: 1.25em; font-weight: bold; }
-.card-description { font-size: 1em; color: #666; margin-bottom: 0.6em; }
-body.dark .card-description { color: #b0b0b0; }
-.card-text { margin-bottom: 0.3em; }
-#itemContainer .btn { margin-top: auto; }
-
-/* Card com imagem */
-#itemContainer .card-img-top {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 7px 7px 0 0;
-  margin-bottom: 0.8em;
-  background: #dbeafe;
-}
-body.dark #itemContainer .card-img-top { background: #222b; }
-
-/* Botão editar */
-.btn-edit {
-  background: #ffc107;
-  color: #222;
-  margin-right: 7px;
-  margin-bottom: 3px;
-  border: none;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-size: 1em;
-}
-.btn-edit:hover { background: #ffb300; color: #111; }
-#itemContainer .card .btn-group {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  gap: 0.5em;
-}
-
-/* PAINEL ADMIN */
-#itensAdmin table { font-size: 1em; }
-#itensAdmin th, #itensAdmin td { vertical-align: middle; }
-
-/* SEÇÃO SERVIÇOS & SOBRE MIM */
-.titulo-secao {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  text-align: center;
-}
-.servicos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5em;
-  margin-bottom: 2.5em;
-}
-.card-servico {
-  background: #f1f5fb;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  padding: 1.1em 1.7em;
-  width: 290px;
-  min-height: 170px;
-}
-.card-servico h3 { margin-bottom: 0.5em; font-size: 1.18em; }
-.card-servico p { color: #444; }
-body.dark .card-servico { background: #212833; color: #d5dbe6; }
-.sobre-mim {
-  background: #0a192f;
-  color: #fff;
-  padding: 2.5rem 1rem;
-  text-align: center;
-}
-.sobre-mim p { font-size: 1.1em; max-width: 700px; margin: 0 auto; }
-
-/* MODAIS */
-.modal-content { border-radius: 10px; }
-.modal-title { font-weight: bold; }
-
-/* CAIXA FLUTUANTE DA RÁDIO */
-#radio-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 15px;
-  z-index: 1000;
-  width: 320px;
-  max-width: 95vw;
-  transition: all 0.4s ease-in-out;
-}
-body.dark #radio-float { background-color: #1e1e1e; }
-#radio-float.closed #radio-float-content { display: none; }
-#theme-toggle, #radio-float-toggle {
-  position: absolute;
-  top: -12px;
-  padding: 5px 8px;
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 18px;
-  margin-right: 5px;
-}
-#theme-toggle { right: 40px; }
-#radio-float-toggle { right: 5px; }
-
-/* PLAYER DE MÚSICA */
-.music-controls-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 10px;
-  gap: 6px;
-}
-.music-controls-row > * { min-width: 0; flex-shrink: 1; }
-.music-controls-row button {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-.music-controls-row button:hover { background-color: #0056b3; }
-.music-controls-row input[type="range"] {
-  min-width: 50px;
-  max-width: 120px;
-  flex-grow: 1;
-  height: 6px;
-  cursor: pointer;
-}
-#music-select {
-  flex-grow: 1;
-  padding: 4px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-#music-current, #music-duration {
-  font-size: 14px;
-  min-width: 40px;
-  text-align: center;
-}
-label[for="repeatMusic"] { user-select: none; }
-input[type="range"]::-webkit-slider-thumb { background: #007BFF; }
-body.dark input[type="range"] { accent-color: #00BFFF; }
-
-/* FOOTER FIXO */
-.footer-final-fixed {
-  background: #222;
-  color: #ccc;
-  text-align: center;
-  padding: 1.2rem 1rem 1rem;
-  font-size: 1em;
-  width: 100vw;
-  left: 0;
-  bottom: 0;
-  position: fixed;
-  z-index: 2000;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.12);
-}
-.footer-final-fixed a { color: #00BFFF; text-decoration: underline; }
-
-/* RESPONSIVIDADE */
-@media (max-width: 900px) {
-  .servicos { flex-direction: column; align-items: center; }
-}
-@media (max-width: 500px) {
-  #radio-float { width: 95vw; right: 2.5vw; bottom: 10px; }
-  .card-servico { width: 98vw; min-width: 0; }
-}
-
-</style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/index.css">
 </head>
 
-<body class="bg-light">
+<body>
 
-<h1>ARISTIDES B PONTES</h1>
-<h2>ANALISTA DE SISTEMAS</h2>
+ <!-- 
+🤖 Prompt para IA: Crie um componente modular de header (cabeçalho) com as seguintes características:
 
+1. Deve conter um *slideshow de imagens de fundo* em tela cheia com transição suave (ex: `@keyframes`), ocupando 100% da altura da viewport (`100vh`).
+2. Imagens devem cobrir todo o fundo com `background-size: cover` e `background-position: center`, sem bordas brancas no topo ou nas laterais.
+3. Sobre o slideshow, aplique um *overlay escuro* (semi-transparente) para destacar o conteúdo textual acima das imagens.
+4. No centro da tela, insira um título (`h1`) com frase de efeito e uma `p` com subtítulo. Ambos devem ter animações de entrada suaves (ex: `fadeInUp`).
+5. Tipografia moderna, legível e com destaque visual. Use fontes como "DM Sans" ou similares via Google Fonts.
+6. O design deve ser responsivo: fontes menores no mobile, sem quebrar layout.
+7. Deve ser reutilizável/modular, injetado via função JavaScript `criarHeader()` e chamado por ID.
+8. Não usar classes genéricas globais, todo estilo deve ser escopado para evitar conflitos.
+9. Compatível com navegadores modernos, sem uso de bibliotecas externas.
 
-<h2>Meus-Projetos</h2>
-<ul class="lista-links">
-<li><a href="projetos/portifolio" target="_blank">Portifloio-AristidesBp</a></li>
-<li><a href="projetos/loja" target="_blank">loja</a></li>
-<li><a href="projetos/formularios" target="_blank">formularios</a></li>
-<li><a href="projetos/torre defencer" target="_blank">torre defencer</a></li>
-<li><a href="projetos/cardapio-tapioca.html" target="_blank">cardapio-tapioca</a></li>
-<li><a href="projetos/ficha-anaminese.html" target="_blank">ficha-anaminese</a></li>
-<li><a href="projetos/ficha-tarefas.html" target="_blank">ficha-tarefas</a></li>
-<li><a href="portifolio-interativo.html.html target="_blank">portifolio-interativo.html</a></li>
-</ul>
-  
-<h2>links de Redes-Sociais</h2> 
-<ul class="lista-links">
-<li><a href="http://github.com/aristidesbp/aristidesbp.github.io" target="_blank">GitHub</a></li>
-<li><a href="https://web.whatsapp.com/" target="_blank">whatsapp</a></li>
-<li><a href="https://www.instagram.com/" target="_blank">Instagram</a></li>
-<li><a href="https://www.linkedin.com/" target="_blank">LinkedIn</a></li>
-<li><a href="https://www.twitter.com/" target="_blank">Twitter (X)</a></li>
-<li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
-<li><a href="https:https://www.google.com/intl/pt-br_br/business/" target="_blank">google-business</a></li>
-  
-</ul>
-<h2>Links para Cursos</h2>
-<ul class="lista-links">
-<li><a href="https://aprendamais.mec.gov.br/" target="_blank">aprendamais.mec.gov</a></li>
-<li><a href="https://www.escolavirtual.gov.br/" target="_blank">escolavirtual.gov</a></li>
-<li><a href="https://estude.ifrs.edu.br/" target="_blank">estude.ifrs</a></li>     
-<li><a href="https://www.w3schools.com/" target="_blank">W3Schools</a></li>
-<li><a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs</a></li>
-<li><a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp</a></li>
-</ul>
-
-<h2>likns para Empregos-Freelance</h2>
-<ul class="lista-links"> 
-<li><a href="https://www.linkedin.com/jobs/" target="_blank">LinkedIn Jobs</a></li>     <!-- Vagas de emprego -->
-<li><a href="https://www.fiverr.com/" target="_blank">Fiverr</a></li>                   <!-- Trabalhos freelance globais -->
-<li><a href="https://www.workana.com/" target="_blank">Workana</a></li>                 <!-- Freelance na América Latina -->
-<li><a href="https://www.freelancer.com/" target="_blank">Freelancer</a></li>           <!-- Plataforma internacional -->
-<li><a href="https://remoteok.com/" target="_blank">RemoteOK</a></li>                   <!-- Trabalhos remotos internacionais -->
-</ul>
+🧩 Este componente será chamado com o seguinte código no HTML:
+-->
+<header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
+<script src="assets/js/header.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHeader);</script>
 
 
 
 
+  <!-- 🧠 Prompt: Crie um componente de navbar fixo e responsivo, com botão hamburguer moderno, efeito sticky e sombra dourada. Deve conter navegação fluida e visual marcante em preto e dourado. Independente e reutilizável. -->
+  <nav id="componente-Navbar" role="navigation" aria-label="Menu de navegação principal"></nav>
+  <script src="assets/js/navbar.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
+
+  <main>
+
+<!-- 🧠 Prompt: Crie uma seção "Sobre Mim" com layout responsivo, imagem de perfil, texto institucional e visual de confiança. Deve ter tipografia moderna, animações suaves e ser plugável em outras páginas. -->
+
+<section id="componente-sobre" aria-label="Seção institucional sobre Aristides Barbosa Pontes"></section>
+<script src="assets/js/sobre.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarSobre);</script>
+    
+
+<!-- 🧠 Prompt: Crie uma seção com cards de serviços com design elegante e botão “saiba mais” que expande a descrição. Os cards devem ser animados e ter aparência premium. Componente modular e independente. -->
+    <section id="componente-servicos" aria-label="Serviços oferecidos"></section>
+   <script src="assets/js/servicos.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', criarServicos);</script>
 
 
 
-<h2>Inteligência Artificial</h2> 
-<ul class="lista-links"> 
-<li><a href="https://chatgpt.com/" target="_blank"><strong>ChatGPT</strong></a> – Assistente de conversas, redação e programação.</li>
-<li><a href="https://claude.ai/" target="_blank"><strong>Claude AI</strong></a> – Alternativa ao ChatGPT com foco em respostas seguras e longas.</li>
-<li><a href="https://gemini.google.com/app?hl=pt-BR" target="_blank"><strong>Google Gemini</strong></a> – IA multimodal do Google integrada a seus produtos.</li>
-<li> <a href="https://copilot.microsoft.com/" target="_blank"><strong>Microsoft Copilot</strong></a> – Assistente integrado ao Windows e Microsoft Office.</li>
-<li><a href="https://www.perplexity.ai/" target="_blank"><strong>Perplexity AI</strong></a> – IA com respostas baseadas em busca contextual.</li>
-<li><a href="https://www.phind.com/" target="_blank"><strong>Phind</strong></a> – Especializada para programadores, com busca técnica.</li>
-<li><a href="https://www.midjourney.com/" target="_blank"><strong>Midjourney</strong></a> – Geração de imagens artísticas com IA.</li>
-<li><a href="https://openai.com/dall-e" target="_blank"><strong>DALL·E</strong></a> – Criação de imagens realistas a partir de texto.</li>
-<li><a href="https://stablediffusionweb.com/" target="_blank"><strong>Stable Diffusion</strong></a> – Modelo open source para criação de imagens.</li>
-<li><a href="https://runwayml.com/" target="_blank"><strong>Runway ML</strong></a> – Geração e edição de vídeos com IA.</li>
-<li><a href="https://www.elevenlabs.io/" target="_blank"><strong>ElevenLabs</strong></a> – Geração de vozes realistas com IA.</li>
-<li><a href="https://www.synthesia.io/" target="_blank"><strong>Synthesia</strong></a> – Criação de vídeos com avatares gerados por IA.</li>
-<li><a href="https://www.canva.com/pt_br/recursos/canva-ai/" target="_blank"><strong>Canva AI</strong></a> – Ferramentas de design com auxílio de IA.</li>
-<li><a href="https://www.deepl.com/translator" target="_blank"><strong>DeepL</strong></a> – Tradutor de alta qualidade com IA.</li>
-<li><a href="https://www.notion.so/product/ai" target="_blank"><strong>Notion AI</strong></a> – Auxilia na organização de ideias e documentos.</li>
-<li><a href="https://www.grammarly.com/" target="_blank"><strong>Grammarly AI</strong></a> – Correção de textos e sugestões de estilo.</li>
-<li><a href="https://poe.com/" target="_blank"><strong>Poe</strong></a> – Plataforma que reúne vários modelos de IA como ChatGPT, Claude e Gemini.</li>
-<li><a href="https://www.jasper.ai/" target="_blank"><strong>Jasper AI</strong></a> – Geração de conteúdo para marketing.</li>
-<li><a href="https://www.copy.ai/" target="_blank"><strong>Copy.ai</strong></a> – Escrita de textos publicitários e vendas.</li>
-<li><a href="https://writesonic.com/" target="_blank"><strong>Writesonic</strong></a> – IA para blogs, anúncios e redes sociais.</li>
-<li><a href="https://rytr.me/" target="_blank"><strong>Rytr</strong></a> – Escrita rápida para diversos formatos.</li>
-<li><a href="https://www.sudowrite.com/" target="_blank"><strong>Sudowrite</strong></a> – IA para escritores criativos.</li>
-<li><a href="https://app.leonardo.ai/" target="_blank"><strong>Leonardo AI</strong></a> – Ferramenta poderosa para geração de imagens criativas.</li>
-<li><a href="https://www.figma.com/ai/" target="_blank"><strong>Flux AI</strong></a> – IA para design assistido em interfaces digitais.</li>
-<li><a href="https://www.recraft.ai/" target="_blank"><strong>Recraft</strong></a> – Design gráfico assistido por IA para marcas e produtos.</li>
-<li><a href="https://ideogram.ai/" target="_blank"><strong>Ideogram</strong></a> – Criação de diagramas e fluxogramas com IA.</li>
-<li><a href="https://filmora.wondershare.com/video-editor/" target="_blank"><strong>Filmora AI</strong></a> – Editor de vídeo com ferramentas automáticas.</li>
-<li><a href="https://www.opus.pro/" target="_blank"><strong>OpusClip</strong></a> – Converte vídeos longos em clipes curtos para redes sociais.</li>
-<li><a href="https://fathom.video/" target="_blank"><strong>Fathom</strong></a> – Transcrição e resumo automático de reuniões online. </li>
-<li><a href="https://notebooklm.google/" target="_blank"><strong>NotebookLM</strong></a> – Organiza pesquisas e anotações com IA.</li>
-<li><a href="https://n8n.io/" target="_blank"><strong>n8n</strong></a> – Plataforma de automação de fluxos com integração de IA.</li>
-</ul>
+  <!-- 🧠 Prompt: Crie um componente "hero" com chamada à ação forte, CTA chamativo e layout responsivo. Deve induzir o cliente a clicar e se interessar pelos serviços, usando fontes grandes e contraste forte. -->
+  <section id="componente-hero" aria-label="Chamada de ação principal"></section>
+  <script src="assets/js/hero.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', criarHero);</script>
+    
 
- <!-- CAIXA FLUTUANTE DA RÁDIO E BOTÃO DE TEMA -->
-  <div id="radio-float">
-    <button id="theme-toggle" title="Alternar tema">🌓</button>
-    <button id="radio-float-toggle" title="Mostrar/Ocultar Rádio">🎵</button>
-    <div id="radio-float-content">
-      <audio id="hoverSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1b4.mp3" preload="auto"></audio>
-      <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-      <div class="music-controls-row">
-        <button id="bgMusicBtn" title="Play/Pause">🎵</button>
-        <button id="vol-down" title="Diminuir volume">➖</button>
-        <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
-        <button id="vol-up" title="Aumentar volume">➕</button>
-      </div>
-      <div class="music-controls-row">
-        <select id="music-select" title="Escolha a trilha">
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Trilha 1</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Trilha 2</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Trilha 3</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Trilha 4</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Trilha 5</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Trilha 6</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Trilha 7</option>
-          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Trilha 8</option>
-          <option value="https://cdn.pixabay.com/audio/2023/02/10/audio_12c6a1d6bb.mp3">Jazz Suave</option>
-          <option value="https://cdn.pixabay.com/audio/2022/12/19/audio_12f5e4b66b.mp3">Ambiental Chill</option>
-          <option value="https://cdn.pixabay.com/audio/2022/10/16/audio_12a8f0d3f4.mp3">Piano Relaxante</option>
-        </select>
-        <input type="checkbox" id="repeatMusic" style="accent-color:#007BFF;" title="Repetir faixa">
-        <label for="repeatMusic" title="Repetir faixa" style="font-size:1.05em;cursor:pointer;">🔁</label>
-      </div>
-      <div class="music-controls-row">
-        <span id="music-current">0:00</span>
-        <input id="music-progress" type="range" min="0" max="100" value="0" step="0.01" aria-label="Progresso da música">
-        <span id="music-duration">0:00</span>
-      </div>
 
- 
-  <!-- RODAPÉ FIXO -->
-
-    <p>&copy; 2016 Aristides Barbosa Pontes - Todos os direitos reservados.
-      <a href="#privacy-policy">Política de Privacidade</a>
-    </p>
-
- </div>
-    </div>
+  </main>
 
 
 
+  <!-- 🧠 Prompt: Crie um rodapé elegante com redes sociais, links institucionais e copyright. Estilo dark, com ícones modernos. Deve ser compacto no mobile e completo no desktop. Reutilizável e independente. -->
+  <footer id="footer-container" role="contentinfo" aria-label="Rodapé do site"></footer>
+<script src="assets/js/footer.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarFooter);</script>
 
 
-  <!-- SCRIPTS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-// ==================== TEMA CLARO/ESCURO ====================
-const themeBtn = document.getElementById('theme-toggle');
-function setTheme(dark) {
-  if (dark) {
-    document.body.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-  } else {
-    document.body.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-  }
-}
-themeBtn.onclick = function() {
-  setTheme(!document.body.classList.contains('dark'));
-};
-if (localStorage.getItem('theme') === 'dark' ||
-  (localStorage.getItem('theme') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  setTheme(true);
-} else { setTheme(false); }
 
-// ================== RÁDIO FLUTUANTE ===================
-const radioFloat = document.getElementById('radio-float');
-const radioFloatToggle = document.getElementById('radio-float-toggle');
-radioFloatToggle.onclick = function() {
-  radioFloat.classList.toggle('closed');
-  radioFloatToggle.title = radioFloat.classList.contains('closed') ? "Mostrar Rádio" : "Ocultar Rádio";
-};
+  <!-- 🔧 Scripts externos e principais -->
+  <!-- 🧠 Prompt: Importe bibliotecas modernas que melhorem animações e interação. Scripts devem ser carregados no final para performance. Use defer e async quando necessário. -->
+  <script src="https://unpkg.com/scrollreveal" defer></script> <!-- Efeitos de scroll reveal -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 
-document.addEventListener('DOMContentLoaded', function () {
-  const bgMusic = document.getElementById('bgMusic');
-  const bgMusicBtn = document.getElementById('bgMusicBtn');
-  const volDown = document.getElementById('vol-down');
-  const volUp = document.getElementById('vol-up');
-  const volSlider = document.getElementById('vol-slider');
-  const musicSelect = document.getElementById('music-select');
-  const musicProgress = document.getElementById('music-progress');
-  const musicCurrent = document.getElementById('music-current');
-  const musicDuration = document.getElementById('music-duration');
-  const repeatMusic = document.getElementById('repeatMusic');
-  const musicList = Array.from(musicSelect.options).map(opt => opt.value);
-
-  bgMusic.volume = parseFloat(volSlider.value);
-  bgMusic.loop = false;
-  bgMusicBtn.title = 'Play/Pause';
-  bgMusicBtn.onclick = function () {
-    if (bgMusic.paused) {
-      bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
-    } else {
-      bgMusic.pause();
-      bgMusicBtn.textContent = '🎵';
-    }
-  };
-  function updateVolumeDisplay() { volSlider.value = bgMusic.volume; }
-  volDown.onclick = function () {
-    bgMusic.volume = Math.max(0, bgMusic.volume - 0.08);
-    updateVolumeDisplay();
-  };
-  volUp.onclick = function () {
-    bgMusic.volume = Math.min(1, bgMusic.volume + 0.08);
-    updateVolumeDisplay();
-  };
-  volSlider.oninput = function () { bgMusic.volume = parseFloat(volSlider.value); };
-  musicSelect.onchange = function() {
-    const wasPlaying = !bgMusic.paused;
-    bgMusic.src = musicSelect.value;
-    bgMusic.currentTime = 0;
-    if (wasPlaying) {
-      bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
-    } else { bgMusicBtn.textContent = '🎵'; }
-  };
-  function formatTime(sec) {
-    if (isNaN(sec)) return "0:00";
-    sec = Math.floor(sec);
-    const min = Math.floor(sec / 60);
-    const s = sec % 60;
-    return min + ":" + (s < 10 ? "0" : "") + s;
-  }
-  function updateProgress() {
-    const current = bgMusic.currentTime;
-    const duration = bgMusic.duration;
-    musicCurrent.textContent = formatTime(current);
-    musicDuration.textContent = formatTime(duration);
-    musicProgress.value = duration ? (current / duration) * 100 : 0;
-  }
-  bgMusic.addEventListener('timeupdate', updateProgress);
-  bgMusic.addEventListener('durationchange', updateProgress);
-  bgMusic.addEventListener('loadedmetadata', updateProgress);
-  bgMusic.addEventListener('ended', function() {
-    if (repeatMusic.checked) {
-      bgMusic.currentTime = 0;
-      bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
-    } else {
-      let idx = musicList.indexOf(musicSelect.value);
-      let next = (idx + 1) % musicList.length;
-      musicSelect.selectedIndex = next;
-      bgMusic.src = musicList[next];
-      bgMusic.currentTime = 0;
-      bgMusic.play().catch(() => {});
-      bgMusicBtn.textContent = '🔊';
-    }
-  });
-  musicProgress.addEventListener('input', function() {
-    if (bgMusic.duration) {
-      bgMusic.currentTime = (musicProgress.value / 100) * bgMusic.duration;
-    }
-  });
-  musicSelect.addEventListener('change', function() { setTimeout(updateProgress, 400); });
-  repeatMusic.addEventListener('change', function () { bgMusic.loop = repeatMusic.checked; });
-  document.querySelectorAll('.links a').forEach(link => {
-    link.addEventListener('mouseenter', () => {
-      const audio = document.getElementById('hoverSound');
-      audio.currentTime = 0;
-      audio.volume = 0.20;
-      audio.play();
-    });
-  });
-});
-
-</script>
+  <!-- 🧠 Prompt: Carregue o script principal do site com type="module" para suportar import/export. Use defer para não bloquear renderização. -->
+  <script src="js/site-mvc-main.js" type="module" defer></script>
+  <script src="assets/js/index.js" defer></script>
 </body>
 </html>
