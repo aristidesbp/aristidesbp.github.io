@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR"> 
 <head>
+  
+<!-- ✅ Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K7DDW9C5');</script>
+<!-- End Google Tag Manager -->
+  
   <!-- ✅ Estrutura básica com foco em SEO, performance e compartilhamento social -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,11 +36,11 @@
   <meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
   <meta name="twitter:site" content="@aristidesbp">
 
-  <!-- PWA e Favicon -->
+  <!--  ✅ PWA e Favicon -->
   <link rel="manifest" href="json/site-mvc-manifest.json">
   <link rel="icon" href="icons/favicon.png" type="image/x-icon"/>
 
-  <!-- Fonts & CSS -->
+  <!--  ✅ Fonts & CSS -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
@@ -41,63 +50,37 @@
 </head>
 
 <body>
+  
+<!--  ✅ Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7DDW9C5"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
- <!-- 
-🤖 Prompt para IA: Crie um componente modular de header (cabeçalho) com as seguintes características:
-
-1. Deve conter um *slideshow de imagens de fundo* em tela cheia com transição suave (ex: `@keyframes`), ocupando 100% da altura da viewport (`100vh`).
-2. Imagens devem cobrir todo o fundo com `background-size: cover` e `background-position: center`, sem bordas brancas no topo ou nas laterais.
-3. Sobre o slideshow, aplique um *overlay escuro* (semi-transparente) para destacar o conteúdo textual acima das imagens.
-4. No centro da tela, insira um título (`h1`) com frase de efeito e uma `p` com subtítulo. Ambos devem ter animações de entrada suaves (ex: `fadeInUp`).
-5. Tipografia moderna, legível e com destaque visual. Use fontes como "DM Sans" ou similares via Google Fonts.
-6. O design deve ser responsivo: fontes menores no mobile, sem quebrar layout.
-7. Deve ser reutilizável/modular, injetado via função JavaScript `criarHeader()` e chamado por ID.
-8. Não usar classes genéricas globais, todo estilo deve ser escopado para evitar conflitos.
-9. Compatível com navegadores modernos, sem uso de bibliotecas externas.
-
-🧩 Este componente será chamado com o seguinte código no HTML:
--->
 <header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
 <script src="assets/js/header.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarHeader);</script>
 
+<nav id="componente-Navbar" role="navigation" aria-label="Menu de navegação principal"></nav>
+<script src="assets/js/navbar.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
 
-
-
-  <!-- 🧠 Prompt: Crie um componente de navbar fixo e responsivo, com botão hamburguer moderno, efeito sticky e sombra dourada. Deve conter navegação fluida e visual marcante em preto e dourado. Independente e reutilizável. -->
-  <nav id="componente-Navbar" role="navigation" aria-label="Menu de navegação principal"></nav>
-  <script src="assets/js/navbar.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
-
-  <main>
-
-<!-- 🧠 Prompt: Crie uma seção "Sobre Mim" com layout responsivo, imagem de perfil, texto institucional e visual de confiança. Deve ter tipografia moderna, animações suaves e ser plugável em outras páginas. -->
+<main>
 
 <section id="componente-sobre" aria-label="Seção institucional sobre Aristides Barbosa Pontes"></section>
 <script src="assets/js/sobre.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarSobre);</script>
     
+<section id="componente-servicos" aria-label="Serviços oferecidos"></section>
+<script src="assets/js/servicos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarServicos);</script>
 
-<!-- 🧠 Prompt: Crie uma seção com cards de serviços com design elegante e botão “saiba mais” que expande a descrição. Os cards devem ser animados e ter aparência premium. Componente modular e independente. -->
-    <section id="componente-servicos" aria-label="Serviços oferecidos"></section>
-   <script src="assets/js/servicos.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', criarServicos);</script>
-
-
-
-  <!-- 🧠 Prompt: Crie um componente "hero" com chamada à ação forte, CTA chamativo e layout responsivo. Deve induzir o cliente a clicar e se interessar pelos serviços, usando fontes grandes e contraste forte. -->
-  <section id="componente-hero" aria-label="Chamada de ação principal"></section>
-  <script src="assets/js/hero.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', criarHero);</script>
+<section id="componente-hero" aria-label="Chamada de ação principal"></section>
+<script src="assets/js/hero.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHero);</script>
     
+</main>
 
-
-  </main>
-
-
-
-  <!-- 🧠 Prompt: Crie um rodapé elegante com redes sociais, links institucionais e copyright. Estilo dark, com ícones modernos. Deve ser compacto no mobile e completo no desktop. Reutilizável e independente. -->
-  <footer id="footer-container" role="contentinfo" aria-label="Rodapé do site"></footer>
+<footer id="footer-container" role="contentinfo" aria-label="Rodapé do site"></footer>
 <script src="assets/js/footer.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarFooter);</script>
 
