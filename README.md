@@ -132,3 +132,4 @@ Agora eu quero que você tranforme esses em uma copy para um site, onde deve ter
 
 Depois da copy feita, crie este site para mim, use cores frias proficionais
 ```
+# KPI (CUSTO POR VENDA, MÁXIMO DE CUSTO POR VENDA)
