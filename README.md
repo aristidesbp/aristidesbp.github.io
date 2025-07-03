@@ -126,3 +126,9 @@ Quais são as 10 principais informações, dentro do que você pesquisou sobre e
 Liste as 10 da mais importante para a menus importante.
 
 ```
+# CRIANDO UMA COPY:
+```
+Agora eu quero que você tranforme esses em uma copy para um site, onde deve ter a primeira com uma oferta em  headline mais uma subheadline e um cta, e os demais blocos abaixo.
+
+Depois da copy feita, crie este site para mim, use cores frias proficionais
+```
