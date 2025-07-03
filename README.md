@@ -21,3 +21,6 @@ google, de quem deseja comprar este servoço.
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
 ```
+## VALIDAR AS PALAVRAS CHAVES:
+1- ACESSAR A CONTA DO GOOGLE ADS: https://ads.google.com
+2- PESQUISAR POR : ``` Planejador de palavra-chave ```
