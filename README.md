@@ -1,26 +1,18 @@
-# 🚀 Portfólio Profissional - Aristides B Pontes
-
-[![Deploy](https://img.shields.io/github/deployments/SeuUsuario/SeuRepo/production?label=Deploy)](https://SeuSite.com)
-[![Build Status](https://github.com/SeuUsuario/SeuRepo/actions/workflows/ci.yml/badge.svg)](https://github.com/SeuUsuario/SeuRepo/actions)
-[![License](https://img.shields.io/github/license/SeuUsuario/SeuRepo.svg)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/SeuUsuario/SeuRepo.svg)](https://github.com/SeuUsuario/SeuRepo/issues)
-[![Stars](https://img.shields.io/github/stars/SeuUsuario/SeuRepo.svg)](https://github.com/SeuUsuario/SeuRepo/stargazers)
-
-## ✨ Sobre o Projeto
-
-Este projeto é meu portfólio profissional, com foco em demonstrar:
-- **Qualidade técnica e boas práticas de desenvolvimento**  
-- **Design moderno, interatividade e UX de alto nível**  
-- **Capacidade de entrega como freelancer e como profissional para equipes de desenvolvimento**
-
-Deploy: [aristidesbp.github.io](https://arsitidesbp.github.io)
-
-## 🛠️ Tecnologias
-
-- React
-- TailwindCSS
-- Framer Motion
-- GitHub Actions (CI)
-- Vercel / Netlify
-
-## 📂 Organização
+# 🚀 COMO VENDER NA INTERNET
+# GOOGLE
+# PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
+```
+[Sou AristidesBP], vou vender na internete [o serviço de gestor de trafego pago] para um público
+super exigente. Será uma campanha no Google Ads, logo eu preciso saber as informações 
+que vou te passar abaixo.
+```
+# PASSO 2 [PESQUISAR PUBLICO ALVO]:
+```
+quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
+Traga isso listado por topico de cada pergunta.
+```
+# PASSO 2 [PESQUISAR PUBLICO ALVO]:
+```
+quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
+Traga isso listado por topico de cada pergunta.
+```
