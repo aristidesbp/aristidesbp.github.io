@@ -1,4 +1,5 @@
 # 🚀 COMO VENDER NA INTERNET
+[chatgpt, gemini, manus]
 # GOOGLE
 # PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
@@ -109,5 +110,12 @@ palavra-chaves, tipo de solução, interesse.
 ## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 ## "NO CONJUNTO DAS PALAVRAS-CHAVES NO MINIMO 10K DE BUSCA MES!"
 
+```
+# MANUS [https://manus.im/app]
+```
+Eu quero criar um anúncio no Google para o meu serviço de [Trafego pago].Eu quero que voçe faça essa busca no Google, algumas vezes, e anlize todos os anuncios que vão aparecer.
 
+A partir disso quero que voçe crie 5 ideias de anuncio, no mesmo formato que vai encontrar.Traga ideias de acordo com os prinscipais gatilhos que voçe encontrar.
+
+E, além disso, crie um site navegavel com todos os insights do que vc encontrar nessa pesquisa.
 ```
