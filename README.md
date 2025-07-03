@@ -62,7 +62,19 @@ Quero construir uma tabela em um arquivo .md para verificar cada uma das palavra
 1- Faça uma planilha ou Tabela com as seguintes colunas:
 palavra-negativas, motivo.
 ```
-# Palavras-chave negativas
-grátis, tutorial, curso, pdf, exemplo, amostra, como fazer, ferramenta gratuita, sem custo, dicas.
+## EXEMPLO:
+| Palavra-negativa    | Motivo                                                         |
+|---------------------|----------------------------------------------------------------|
+| grátis              | Usuários buscando soluções sem pagar, sem intenção de compra   |
+| tutorial            | Pessoas querendo aprender, não contratar                       |
+| curso               | Interesse em aprender tráfego pago, não em contratar gestor    |
+| pdf                 | Busca por material gratuito ou informativo                     |
+| exemplo             | Usuários querendo modelos ou ideias, não serviços              |
+| amostra             | Busca por algo sem custo ou demonstração gratuita               |
+| como fazer          | Interesse em executar por conta própria                        |
+| ferramenta gratuita | Procurando ferramentas e não serviços profissionais            |
+| sem custo           | Busca por alternativas gratuitas                               |
+| dicas               | Usuários querendo informações e não serviço pago               |
+
 
 
