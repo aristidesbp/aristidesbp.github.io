@@ -28,3 +28,12 @@ https://ads.google.com
 ```
 Planejador de palavra-chave
 ```
+#### EM [DESCOBRIR NOVAS PALAVRAS CHAVES], COLE OS RESULTADOS DA IA, UMA POR VEZ!
+#### APERTE EM BUSCAR E SELECIONE A REGIÃO.
+
+# PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
+```
+Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
+1- Faça uma planilha ou pabela com as seguintes colunas:
+palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução(intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves
+```
