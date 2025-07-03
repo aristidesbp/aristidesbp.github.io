@@ -78,3 +78,25 @@ palavra-negativas, motivo.
 
 
 
+# "GOOGLE ADS É DIFERENTE DO META ADS, ELE TEM UMA HIERARQUIA NA ESTRUTURA DE CAMPANHAS QUE DEVE SER RESPEITADA!"
+## PARA CADA SOLUÇÃO UMA CAMPANHA.
+## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
+# PASSO 4 [FAZER UMA PLANILHA PARA SERAPARA AS PALAVRAS-CHAVES POR TIPO DE SOLUÇÃO E INTERESSE]:
+```
+Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras-chaves.
+1- Faça uma planilha ou Tabela com as seguintes colunas:
+palavra-chaves, tipo de solução, interesse.
+```
+## EXEMPLO:
+| Palavra-chave                        | Tipo de Solução                     | Interesse                              |
+|--------------------------------------|--------------------------------------|----------------------------------------|
+| gestor de tráfego pago               | Serviço profissional                 | Alta intenção de contratação          |
+| especialista em tráfego pago         | Serviço profissional                 | Alta intenção de contratação          |
+| consultoria de tráfego pago          | Consultoria e estratégia             | Média-alta intenção                    |
+| tráfego pago para e-commerce         | Solução para e-commerce              | Média intenção                         |
+| gerenciamento de anúncios Google Ads| Gestão de campanhas Google Ads       | Alta intenção de contratação          |
+| agência de tráfego pago              | Agência especializada                | Alta intenção de contratação          |
+| profissional de tráfego pago         | Serviço individual                   | Média intenção                         |
+| tráfego pago para vendas online      | Solução para aumento de vendas       | Média intenção                         |
+| otimização de campanhas Google Ads   | Serviço de otimização                | Média intenção                         |
+| tráfego pago para empresas           | Solução B2B                          | Média-alta intenção                    |
