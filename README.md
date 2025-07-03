@@ -100,3 +100,14 @@ palavra-chaves, tipo de solução, interesse.
 | tráfego pago para vendas online      | Solução para aumento de vendas       | Média intenção                         |
 | otimização de campanhas Google Ads   | Serviço de otimização                | Média intenção                         |
 | tráfego pago para empresas           | Solução B2B                          | Média-alta intenção                    |
+
+# UM ANUNCIO BEM FEITO E QUASE GRARANTIA DE VENDAS!!
+```
+  Com base nas pesquisas realizadas , faça um anuncio com 4 tituloas (no maximo 30 caracteres cada um) e 2 descrições (com no maximo 90 caracteres cada uma).
+
+## PARA CADA SOLUÇÃO UMA CAMPANHA.
+## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
+## "NO CONJUNTO DAS PALAVRAS-CHAVES NO MINIMO 10K DE BUSCA MES!"
+
+
+```
