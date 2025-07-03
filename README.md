@@ -34,11 +34,10 @@ Planejador de palavra-chave
 # PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
-1- Faça uma planilha ou pabela com as seguintes colunas:
-palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução(intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves
+1- Faça uma planilha ou Tabela com as seguintes colunas:
+palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução(intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves.
 ```
-# "PARA CADA PRODUTO UMA PAGINA, NÃO FAÇA CAMPANHAS PARA SAITE INSTITUCIONAL!"
-# "NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
+
 ## EXEMPLO:
 | Palavra-chave                              | Busca/mês (est.) | CPC médio (R$) | Custo do Tráfego* | Concorrência* | Relação com a solução         | Intencionalidade     | Relação site/palavra |
 |--------------------------------------------|------------------|----------------|-------------------|----------------|-------------------------------|-----------------------|-----------------------|
@@ -53,6 +52,17 @@ palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Rela
 | agência de tráfego pago                    | 600–1,100        | 4,50–7,50      | Alta              | Alta           | Busca empresa especializada  | Exclusiva (80–100%)   | Forte                |
 | otimização de campanhas Google Ads         | 400–800          | 3,50–5,50      | Média             | Média          | Busca melhorar campanhas     | 50–70%               | Moderada             |
 
+## "PARA CADA PRODUTO UMA CAMPANHA E UMA PAGINA, NÃO FAÇA CAMPANHAS PARA SITE INSTITUCIONAL!"
+## "NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
 
+
+# PASSO 4 [FAZER UMA PLANILHA PARA  AS PALAVRAS NEGATIVAS]:
+```
+Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras negativas.
+1- Faça uma planilha ou Tabela com as seguintes colunas:
+palavra-negativas, motivo.
+```
+# Palavras-chave negativas
+grátis, tutorial, curso, pdf, exemplo, amostra, como fazer, ferramenta gratuita, sem custo, dicas.
 
 
