@@ -119,3 +119,10 @@ A partir disso quero que voçe crie 5 ideias de anuncio, no mesmo formato que va
 
 E, além disso, crie um site navegavel com todos os insights do que vc encontrar nessa pesquisa.
 ```
+
+# ESCOLHENDO 10 INFORMAÇÕES:
+```
+Quais são as 10 principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
+Liste as 10 da mais importante para a menus importante.
+
+```
