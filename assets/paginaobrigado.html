@@ -1,1 +1,99 @@
-pagina de obrigado
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Obrigado pela compra</title>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  <!-- End Google Tag Manager -->
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;background:#0b0c0f;color:#e6e8eb}
+    .wrap{max-width:720px;margin:8vh auto;padding:32px}
+    .card{background:#121419;border:1px solid #1e2230;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding:28px}
+    h1{margin:0 0 12px;font-size:28px}
+    p{margin:6px 0 14px;line-height:1.5;color:#c7cbd1}
+    .muted{font-size:12px;color:#9aa2af}
+    .summary{margin-top:18px;font-size:14px}
+    .tag{display:inline-block;border:1px solid #2a3142;border-radius:999px;padding:4px 10px;margin-right:8px;margin-top:8px}
+    .divider{height:1px;background:#1e2230;margin:18px 0}
+    .btn{display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px}
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="wrap">
+    <div class="card">
+      <h1>Compra confirmada ✅</h1>
+      <p>Obrigado! Seu pedido <strong id="orderId">#—</strong> foi recebido e está sendo processado.</p>
+      <div class="summary" id="summary">
+        <div class="divider"></div>
+        <div>Valor: <strong>R$ <span id="amount">0,00</span></strong></div>
+        <div class="muted">Moeda: <span id="currency">BRL</span></div>
+        <div id="items"></div>
+      </div>
+      <div class="divider"></div>
+      <a href="/" class="btn">Voltar ao site</a>
+      <div class="muted">Esta página dispara o evento de conversão via Google Tag Manager.</div>
+    </div>
+  </div>
+
+  <script>
+    // --- UTIL: formata número BRL ---
+    function formatBRL(n){ try{ return (Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2}); }catch(e){ return n; } }
+
+    // --- Parse de parâmetros (?order_id=123&value=199.90&currency=BRL&items=[{...}]) ---
+    const qp = new URLSearchParams(location.search);
+    const orderId = qp.get('order_id') || qp.get('transaction_id') || '000000';
+    const value   = qp.get('value') || qp.get('amount') || '0';
+    const currency= (qp.get('currency') || 'BRL').toUpperCase();
+    let itemsRaw  = qp.get('items');
+    let items = [];
+    try{ if(itemsRaw){ items = JSON.parse(itemsRaw); if(!Array.isArray(items)) items=[]; } }catch(e){ items = []; }
+
+    // --- Atualiza UI ---
+    document.getElementById('orderId').textContent = '#'+orderId;
+    document.getElementById('amount').textContent = formatBRL(value);
+    document.getElementById('currency').textContent = currency;
+    if(items.length){
+      const itemsEl = document.getElementById('items');
+      const label = document.createElement('div'); label.className='muted'; label.textContent='Itens:'; itemsEl.appendChild(label);
+      items.forEach(i=>{
+        const el = document.createElement('span'); el.className='tag';
+        el.textContent = (i.name||i.item_name||'Item') + (i.quantity?` × ${i.quantity}`:'');
+        itemsEl.appendChild(el);
+      });
+    }
+
+    // --- dataLayer push para conversão (Google Ads via GTM) ---
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event': 'purchase',              // Use este nome para o Trigger do GTM
+      'transaction_id': orderId,        // Mapear para o campo Transaction ID
+      'value': Number(value) || 0,      // Mapear para Conversion Value
+      'currency': currency,             // Mapear para Currency Code
+      'items': items                    // Opcional: itens do pedido
+    });
+
+    // Opcional: GA4 e-commerce (se usar GA4 no GTM)
+    window.dataLayer.push({
+      'event': 'purchase_ga4',
+      'ecommerce': {
+        'transaction_id': orderId,
+        'value': Number(value) || 0,
+        'currency': currency,
+        'items': items
+      }
+    });
+  </script>
+</body>
+</html>
+
