@@ -133,3 +133,12 @@ Agora eu quero que você tranforme esses em uma copy para um site, onde deve ter
 Depois da copy feita, crie este site para mim, use cores frias proficionais
 ```
 # KPI (CUSTO POR VENDA, MÁXIMO DE CUSTO POR VENDA)
+
+
+
+
+
+# COMO CRIAR TEG DE CONVERÇÃO:
+## PASSO 1: URL DA PAGINA DE OBRIGADO
+Crie uma pagina agradecendo a compra, ela sera responsavel por armazenar a teg de conveção que por sua vez ira informar ao google que pode cobrar o trafego.
+
