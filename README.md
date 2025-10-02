@@ -1,14 +1,13 @@
-#🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# MATERIAL DE APOIO
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMANDOS TERMUX  
-
-``` ls ```
 ### para mostrar conteudo da pasta
-
-``` ls -a```
+``` ls ```
 ### para mostrar conteudo o culto da pasta
-
-```  mkdir repositorios_git```
+``` ls -a```
 ### para criar pasta com o nome repositorios_git
+```  mkdir repositorios_git```
 
 
 nano teste.txt
