@@ -403,8 +403,11 @@ modal.addEventListener('click', ()=>{ modal.style.display='none'; });
 // Função para enviar formulário para WhatsApp
 function initFormHandler() {
   const form = document.getElementById("contact-form");
+  
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    // Captura dos valores do formulário
     const nome = document.getElementById("nome").value;
     const email = document.getElementById("email").value;
     const telefone = document.getElementById("telefone").value;
@@ -414,23 +417,40 @@ function initFormHandler() {
     const orcamento = document.getElementById("orcamento").value;
     const mensagem = document.getElementById("mensagem").value;
 
+    // Texto formatado para WhatsApp
     const texto = `*Novo Orçamento*%0A
-    Nome: ${nome}%0A
-    Email: ${email}%0A
-    Telefone: ${telefone}%0A
-    Data: ${data}%0A
-    Local: ${local}%0A
-    Pessoas: ${pessoas}%0A
-    Orçamento: ${orcamento}%0A
-    Observações: ${mensagem}`;
+Nome: ${nome}%0A
+Email: ${email}%0A
+Telefone: ${telefone}%0A
+Data: ${data}%0A
+Local: ${local}%0A
+Pessoas: ${pessoas}%0A
+Orçamento: ${orcamento}%0A
+Observações: ${mensagem}`;
 
-    // Abre WhatsApp
+    // Abre WhatsApp em nova aba
     window.open(`https://wa.me/559481115057?text=${texto}`, "_blank");
 
-    // Redireciona para página de obrigado
-    window.location.href = "obrigado.html";
+    // Cria parâmetros para página de obrigado
+    const params = new URLSearchParams({
+      status: "ok",                  // necessário para validar a página
+      order_id: Date.now(),          // ID único do orçamento
+      value: 0,                      // pode usar 0 para orçamento
+      currency: "BRL",
+      items: JSON.stringify([
+        {
+          name: "Orçamento",
+          quantity: 1,
+          details: `Nome: ${nome}, Telefone: ${telefone}, Data: ${data}, Local: ${local}, Pessoas: ${pessoas}, Orçamento: ${orcamento}`
+        }
+      ])
+    });
+
+    // Redireciona para obrigado.html com parâmetros
+    window.location.href = `obrigado.html?${params.toString()}`;
   });
 }
+
 
       
 
