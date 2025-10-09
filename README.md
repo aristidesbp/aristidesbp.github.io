@@ -3,11 +3,11 @@
 ---
 
 # 📘 ÍNDICE
-1. [Como Organizar Repositório pelo Celular](#como-organizar-repositório-pelo-celular)
-2. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
-3. [Comandos basicos do Termux](#comandos-basicos-do-termux)
+1. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
+2. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
+3. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
 4. [Git-GitHub](#git-github)
-5. [Clonando um repositório do GitHub](#clonando-um-repositório-do-github)
+5. [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
 6. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
 7. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
 
