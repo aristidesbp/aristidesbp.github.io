@@ -15,7 +15,7 @@
 ---
 Acesse o link oficial (não use da Play Store):
 faça o download do aplicativo direto no github
-
+https://github.com/termux/termux-app/releases
 
 ```
 pkg update && pkg upgrade -y 
@@ -167,26 +167,32 @@ ssh -T git@github.com
 # 💻 Clonando um repositorio do  GitHub
 ---
 
-```git clone git@github.com:usuario/repositorio.git```
+```
+git clone git@github.com:usuario/repositorio.git
 ## Clona o repositório com chave SSH
-
-```cd nome_do_reposito_clonado```
+```
+```
+cd nome_do_reposito_clonado
 ## entra na pasta do repositório 
-
-```git config --global --add safe.directory "$(pwd)"```
+```
+```
+git config --global --add safe.directory "$(pwd)"```
 ## Configurar a pasta como segura (evita erros de segurança)   
-
-```git remote -v```
+```
+```
+git remote -v
 ## Mostra os repositórios remotos configurados
 ## git@github.com:usuario/repositorio.git (fetch).Mostra a URL SSH usada para buscar (fetch) atualizações do repositório remoto. Ou seja, de onde você pode baixar mudanças do GitHub para o seu computador.
 ## git@github.com:usuario/repositorio.git (push).Mostra a URL SSH usada para enviar (push) suas mudanças locais para o repositório no GitHub.
-
-```git fetch```
+```
+```
+git fetch
 ## Busca atualizações sem aplicar
- 
-```git pull origin main```
+```
+```
+git pull origin main
 ## Sincroniza com o repositório remoto (branch main)
- 
+``` 
 
 
 
@@ -194,46 +200,59 @@ ssh -T git@github.com
 # 🌱 BRANCHES (RAMIFICAÇÕES) 
 ---
 
-```git branch```
+```
+git branch
 # Lista todas as branches (ramificações) existentes no repositório
-
-```git log```
+```
+```
+git log
 # Exibe histórico de commits com hash, autor e data (PARA SAIR DIGITE: q)
-
-``` git checkout -b novaBranch numero-do-commit```
+```
+``` 
+git checkout -b novaBranch numero-do-commit
 # Cria uma nova branch a partir de um commit específico e já muda para ela
 # Exemplo: git checkout -b novaBranch 2ad9347bba64542687c6
-
-```git branch nome-da-branch```
+```
+```
+git branch nome-da-branch
 # Cria uma nova branch com o nome informado (sem trocar para ela)
-
-```git checkout -b nova-branch```
+```
+```
+git checkout -b nova-branch
 # Cria uma nova branch e já muda para ela
-
-```git stash```
+```
+```
+git stash
 # Salva temporariamente alterações não commitadas (útil antes de trocar de branch)
-
-```git checkout main```
+```
+```
+git checkout main
 # Troca para a branch principal (main)
-
-```git checkout nome-da-branch```
+```
+```
+git checkout nome-da-branch
 # Troca para a branch especificada
-
-```git stash apply```
+```
+```
+git stash apply
 # Recupera alterações salvas com `git stash`
- 
-```git merge especificar-nome-da-branch```
+``` 
+```
+git merge especificar-nome-da-branch
 # Une a branch especificada com a branch atual
-
-```git branch -d nome-da-branch```
+```
+```
+git branch -d nome-da-branch
 # Deleta a branch local (apenas se já foi mesclada)
-
-```git merge nova-branch```
+```
+```
+git merge nova-branch
 # Junta as alterações da branch "nova-branch" com a atual (ex: main)
-
-```git pull origin main```
+```
+```
+git pull origin main
 # Atualiza a branch atual com as últimas alterações do repositório remoto (main)
-
+```
 
 
 ---
@@ -243,11 +262,11 @@ ssh -T git@github.com
 git status
 # Mostra o status atual dos arquivos (modificados, novos, deletados)
 ```
----
-```git add nome-do-arquivo.ext```
+
+```git add nome-do-arquivo.ext
 # Adiciona um arquivo específico para a área de staging
 # OBS: CASO VOCÊ JÁ TENHA CRIADO OU ALTERADO ALGUM ATIVO
-
+```
 
 git add .
 # Adiciona TODOS os arquivos modificados para o commit
