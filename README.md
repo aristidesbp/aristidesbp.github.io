@@ -1,6 +1,10 @@
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+ # VISITE MEU SITE !!!!!  
+## aristidesbp.github.io  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+____________________________________________
 #   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+___
   É possível programar pelo site do Github, mas 
 o processo pode ficar meio lento por ter que 
 esperar atualizar. caso você queira trabalhar 
@@ -11,85 +15,86 @@ linux não dependendo de comunicação com internet
 caso você não esteja precisando instalar/baixar 
 algum pacote ou biblioteca, tec...
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
 # COMANDOS TERMUX 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## para mostrar conteudo da pasta
+---
+
 ``` ls ```
-## para mostrar conteudo o culto da pasta
+## O comando acima, mostrar conteudo da pasta
+
 ``` ls -a```
-## para criar pasta com o nome repositorios_git
+## para mostrar conteudo o culto da pasta
+
 ```  mkdir repositorios_git ```
+## para criar pasta com o nome repositorios_git
 
-## abre o arquivo teste.txt 
-### obs: ele cria caso não exista
-### Ctrl+S  para salvar
-### Crtl+X  para sair
 ``` nano teste.txt ```
+## abre o arquivo teste.txt 
+##### obs: ele cria caso não exista
+##### Ctrl+S  para salvar
+##### Crtl+X  para sair
 
 
-## mover pasta ou arquivo (./pasta_destino)
 ``` mv teste.txt ./repositorios_git ```
+## mover pasta ou arquivo (./pasta_destino)
 
-## vai para dentro da pasta repositorios_git
 ``` cd repositorios_git ```
+## vai para dentro da pasta repositorios_git
 
-## volta para pasta anterior
 ``` cd .. ```
+## volta para pasta anterior
 
-## apagar pasta/arquivo
 ``` rm -rf teste.txt ```
+## apagar pasta/arquivo
 
-# usado para limpar a tela
 ``` clear ```
+## usado para limpar a tela
 
 
 
 
-
-🟥🟥🟥🟥🟥🟥🟥
 # GIT-GITHUB 
-🟥🟥🟥🟥🟥🟥🟥
-  
-git --help
-#  usado para procurar comandos git
 
-git <comando> --help
-#pesquise por comando especifico :
+  
+```git --help```
+##  usado para procurar comandos git
+
+```git <comando> --help```
+## pesquise por comando especifico :
 
               
-git init
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+```git init```
+## Inicializa o repositório Git local (caso não tenha vindo com o clone)
 
-git config --global --add safe.directory "$(pwd)"
-# Configurar a pasta como segura (evita erros de segurança)                               
+```git config --global --add safe.directory "$(pwd)"```
+## Configurar a pasta como segura (evita erros de segurança)                               
 
-git config --list
-# Lista todas as configurações ativas 
+```git config --list```
+## Lista todas as configurações ativas 
 
-git config --global user.name "Seu Nome"
-# Configurar nome de usuário
+```git config --global user.name "Seu Nome"```
+## Configurar nome de usuário
 
-git config --global user.email "seu@email.com"
-# Configurar email do GitHub
+```git config --global user.email "seu@email.com"```
+## Configurar email do GitHub
 
-eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
-# Iniciar o agente ssh
+```eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519```
+## Iniciar o agente ssh
 
-ssh-keygen -t ed25519 -C "seu@email.com"
-# Gerar nova chave SSH (caso ainda não tenha)
+```ssh-keygen -t ed25519 -C "seu@email.com"```
+## Gerar nova chave SSH (caso ainda não tenha)
 
 
-cat ~/.ssh/id_ed25519.pub
-# Mostrar a chave pública para adicionar no GitHub
+```cat ~/.ssh/id_ed25519.pub```
+## Mostrar a chave pública para adicionar no GitHub
 
-git remote set-url origin git@github.com:usuario/repositorio.git
-# Troque a URL remota para usar SSH
+```git remote set-url origin git@github.com:usuario/repositorio.git```
+## Troque a URL remota para usar SSH
 
-ssh -T git@github.com
+```ssh -T git@github.com```
 ## 🧪 Teste de conexão com GitHub via SSH 
-# Se tudo estiver certo, você verá:
-# Hi SEU_USUARIO! You've successfully authenticated..
+### Se tudo estiver certo, você verá:
+### Hi SEU_USUARIO! You've successfully authenticated..
 
 
 ## OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
