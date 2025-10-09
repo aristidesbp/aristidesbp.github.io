@@ -1,43 +1,55 @@
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# MATERIAL DE APOIO
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMANDOS TERMUX  
-### para mostrar conteudo da pasta
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+  É possível programar pelo site do Github, mas 
+o processo pode ficar meio lento por ter que 
+esperar atualizar. caso você queira trabalhar 
+diretamente pelo celular aconselho você usar
+o TERMUX.
+  O TERMUX é um aplicativo que atua como terminal 
+linux não dependendo de comunicação com internet
+caso você não esteja precisando instalar/baixar 
+algum pacote ou biblioteca, tec...
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMANDOS TERMUX 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## para mostrar conteudo da pasta
 ``` ls ```
-### para mostrar conteudo o culto da pasta
+## para mostrar conteudo o culto da pasta
 ``` ls -a```
-### para criar pasta com o nome repositorios_git
-```  mkdir repositorios_git```
+## para criar pasta com o nome repositorios_git
+```  mkdir repositorios_git ```
 
-
-nano teste.txt
 ## abre o arquivo teste.txt 
-## obs: ele cria caso não exista
-## Ctrl+S  para salvar
-## Crtl+X  para sair
+### obs: ele cria caso não exista
+### Ctrl+S  para salvar
+### Crtl+X  para sair
+``` nano teste.txt ```
 
 
-mv teste.txt ./repositorios_git
 ## mover pasta ou arquivo (./pasta_destino)
-## no caso acima foi movido para a parte anterior
+``` mv teste.txt ./repositorios_git ```
 
-cd repositorios_git
 ## vai para dentro da pasta repositorios_git
+``` cd repositorios_git ```
 
-rm -rf teste.txt
-## apagar pasta/arquivo
-
-clear
-# usado para limpar a tela
-
-cd ..
 ## volta para pasta anterior
+``` cd .. ```
+
+## apagar pasta/arquivo
+``` rm -rf teste.txt ```
+
+# usado para limpar a tela
+``` clear ```
 
 
-#🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-################
-## GIT-GITHUB ##
-################
+
+
+
+🟥🟥🟥🟥🟥🟥🟥
+# GIT-GITHUB 
+🟥🟥🟥🟥🟥🟥🟥
   
 git --help
 #  usado para procurar comandos git
