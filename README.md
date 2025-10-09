@@ -3,14 +3,26 @@
 ---
 
 # 📘 ÍNDICE
-1. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
-2. [Como Organizar Repositório pelo Celular](#como-organizar-repositório-pelo-celular)
+1. [Como Organizar Repositório pelo Celular](#como-organizar-repositório-pelo-celular)
+2. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
 3. [Comandos Termux](#comandos-termux)
 4. [Git-GitHub](#git-github)
 5. [Observações Importantes](#obs-verifique-config-github-caso-não-funcione)
 
+
+---
+#   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
 ---
 
+  É possível programar pelo site do Github, mas 
+caso você queira trabalhar diretamente pelo celular
+de forma local aconselho você usar o TERMUX 
+juntamente com o gerenciador de arquivos que 
+permita edição, recomendo o F AQUIVOS. 
+(OBS: VOU DEIXAR AMBOS NA PASTA DE APLICATIVOS)
+  
+
+---
 # INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX
 ---
 Acesse o link oficial (não use da Play Store):
@@ -34,19 +46,6 @@ pkg install tree -y
 # instala ferramentas básicas para programar e conectar ao GitHub
 ```
 
----
-#   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
----
-
-  É possível programar pelo site do Github, mas 
-o processo pode ficar meio lento por ter que 
-esperar atualizar. caso você queira trabalhar 
-diretamente pelo celular aconselho você usar
-o TERMUX.
-  O TERMUX é um aplicativo que atua como terminal 
-linux não dependendo de comunicação com internet
-caso você não esteja precisando instalar/baixar 
-algum pacote ou biblioteca, tec...
 
 ---
 # COMANDOS TERMUX 
