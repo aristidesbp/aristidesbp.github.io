@@ -2,10 +2,11 @@
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # COMO VENDER NA INTERNET: Empreendedorismo Digital com Recursos Mínimos
-#### Autor: Aristides Barbosa Pontes. 09/10/2025.
+#### Artigo escrito por Aristides Barbosa Pontes. 09/10/2025.
 ---
 # 📘 ÍNDICE
 1. [RESUMO](#resumo)
+2. [INTRODUÇÃO](#introdução)
 3. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
 4. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
 5. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
@@ -17,15 +18,14 @@
 
 
 ---
-# Resumo:
+# RESUMO
 Este artigo apresenta estratégias práticas para criar e gerir um negócio digital utilizando apenas um celular, sem investimento inicial. O objetivo é fornecer orientações a indivíduos que desejam empreender de forma autônoma, especialmente mães e pais que necessitam conciliar trabalho e cuidados domésticos. São discutidos métodos para montar lojas virtuais, vender produtos ou serviços e aplicar técnicas de marketing digital de baixo custo.
 
 Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, autônomo.
 
 
 ---
-
-# Introdução
+# INTRODUÇÃO 
 
 O avanço da tecnologia e o acesso crescente à internet possibilitam que qualquer pessoa inicie um negócio online com recursos limitados. Este artigo busca demonstrar como é possível criar uma loja virtual profissional e vender produtos ou serviços de forma estratégica apenas com um celular.
 
@@ -33,35 +33,22 @@ O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair
 
 
 ---
-
-2. Fundamentação Teórica
+# FUNDAMENTAÇÃO TEÓRICA 
 
 Empreendedorismo digital: conceito e importância no contexto atual.
-
 Microempreendedorismo: estratégias para iniciar negócios com poucos recursos.
-
 Comércio eletrônico: plataformas gratuitas ou de baixo custo para vendas online.
-
 Marketing digital básico: uso de redes sociais, anúncios pagos mínimos e engajamento orgânico.
 
 
 
 ---
-
-3. Metodologia
-
+# Metodologia
 Para alcançar os objetivos propostos, o artigo utiliza:
 
 1. Pesquisa bibliográfica sobre empreendedorismo digital e comércio eletrônico.
-
-
 2. Estudo de casos de lojas virtuais criadas apenas com celular.
-
-
 3. Orientações práticas para implementação de estratégias de vendas online sem investimento inicial.
-
-
-
 
 ---
 
