@@ -8,6 +8,8 @@
 3. [Comandos basicos do Termux](#comandos-basicos-do-termux)
 4. [Git-GitHub](#git-github)
 5. [Clonando um repositório do GitHub](#clonando-um-repositório-do-github)
+6. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
+7. [TRABALHANDO COM COMMIT](#trabalhando-com-comit)
 
 
 ---
@@ -196,7 +198,7 @@ git pull origin main
 
 
 ---
-# 🌱 BRANCHES (RAMIFICAÇÕES) 
+# BRANCHES AS RAMIFICAÇÕES
 ---
 
 ```
@@ -255,11 +257,12 @@ git pull origin main
 
 
 ---
-# 📝 TRABALHANDO COM COMMIT (DIGITE "Q" PARA SAIR)
+# TRABALHANDO COM COMMIT 
 ---
 ```
 git status
 # Mostra o status atual dos arquivos (modificados, novos, deletados)
+# digite Q para sair
 ```
 ```
 git add nome-do-arquivo.ext
