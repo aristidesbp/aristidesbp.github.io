@@ -9,7 +9,7 @@
 4. [Git-GitHub](#git-github)
 5. [Clonando um repositório do GitHub](#clonando-um-repositório-do-github)
 6. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
-7. [TRABALHANDO COM COMMIT](#trabalhando-com-comit)
+7. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
 
 
 ---
