@@ -3,15 +3,127 @@
 ---
 
 # 📘 ÍNDICE
-1. [COMO VENDER NA INTERNET](como-vender-na-internet)
-2. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
-3. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
-4. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
-5. [Git-GitHub](#git-github)
-6. [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
-7. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
-8. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
-9. 
+2. [COMO  VENDER NA INTERNET](#como-vender-na-internet)
+3. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
+4. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
+5. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
+6. [Git-GitHub](#git-github)
+7. [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
+8. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
+9. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
+10. 
+
+
+
+# COMO VENDER NA INTERNET
+## Empreendedorismo Digital com Recursos Mínimos
+
+# Resumo:
+Este artigo apresenta estratégias práticas para criar e gerir um negócio digital utilizando apenas um celular, sem investimento inicial. O objetivo é fornecer orientações a indivíduos que desejam empreender de forma autônoma, especialmente mães e pais que necessitam conciliar trabalho e cuidados domésticos. São discutidos métodos para montar lojas virtuais, vender produtos ou serviços e aplicar técnicas de marketing digital de baixo custo.
+
+Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, autônomo.
+
+
+---
+
+# Introdução
+
+O avanço da tecnologia e o acesso crescente à internet possibilitam que qualquer pessoa inicie um negócio online com recursos limitados. Este artigo busca demonstrar como é possível criar uma loja virtual profissional e vender produtos ou serviços de forma estratégica apenas com um celular.
+
+O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair de casa, promovendo autonomia financeira e inclusão digital.
+
+
+---
+
+2. Fundamentação Teórica
+
+Empreendedorismo digital: conceito e importância no contexto atual.
+
+Microempreendedorismo: estratégias para iniciar negócios com poucos recursos.
+
+Comércio eletrônico: plataformas gratuitas ou de baixo custo para vendas online.
+
+Marketing digital básico: uso de redes sociais, anúncios pagos mínimos e engajamento orgânico.
+
+
+
+---
+
+3. Metodologia
+
+Para alcançar os objetivos propostos, o artigo utiliza:
+
+1. Pesquisa bibliográfica sobre empreendedorismo digital e comércio eletrônico.
+
+
+2. Estudo de casos de lojas virtuais criadas apenas com celular.
+
+
+3. Orientações práticas para implementação de estratégias de vendas online sem investimento inicial.
+
+
+
+
+---
+
+4. Montando uma loja virtual sem investimento
+
+4.1 Escolha da plataforma
+
+Plataformas gratuitas ou com versão trial (ex: Shopify, Wix, Nuvemshop, OLX, Mercado Livre).
+
+
+4.2 Cadastro de produtos ou serviços
+
+Fotografias simples e atraentes com celular.
+
+Descrição clara e objetiva do produto ou serviço.
+
+
+4.3 Estratégias de marketing digital
+
+Uso de redes sociais (Instagram, TikTok, WhatsApp).
+
+Criação de conteúdo relevante e persuasivo.
+
+Exploração de grupos e marketplaces gratuitos.
+
+
+4.4 Gestão de vendas e atendimento
+
+Organização de pedidos via planilhas ou apps de gerenciamento.
+
+Atendimento ágil e humanizado via WhatsApp ou DM.
+
+
+
+---
+
+5. Resultados Esperados
+
+Ao seguir as orientações propostas, indivíduos poderão:
+
+Iniciar vendas online sem capital inicial.
+
+Alcançar autonomia financeira e flexibilidade de horário.
+
+Desenvolver habilidades em marketing digital, gestão de clientes e negociação.
+
+
+
+---
+
+6. Conclusão
+
+A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
+
+
+---
+
+Se você quiser, posso já adaptar este texto para um artigo científico completo pronto para submissão, com normas da ABNT ou APA, referências e até exemplos de casos de sucesso.
+
+Palavras até agora: 303
+
 
 ---
 # COMO VENDER NA INTERNET
