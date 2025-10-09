@@ -1,6 +1,39 @@
-
- # VISITE MEU SITE  https://aristidesbp.github.io 
+# VISITE MEU SITE  https://aristidesbp.github.io  
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
+
+# 📘 ÍNDICE
+1. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
+2. [Como Organizar Repositório pelo Celular](#como-organizar-repositório-pelo-celular)
+3. [Comandos Termux](#comandos-termux)
+4. [Git-GitHub](#git-github)
+5. [Observações Importantes](#obs-verifique-config-github-caso-não-funcione)
+
+---
+
+# INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX
+---
+Acesse o link oficial (não use da Play Store):
+faça o download do aplicativo direto no github
+
+
+```
+pkg update && pkg upgrade -y 
+# comando utilizado para atualizar o Termux
+```
+```
+termux-setup-storage
+# comando usado para permitir acesso às pastas internas do Android
+```
+```
+pkg install git -y
+pkg install nano -y
+pkg install openssh -y
+pkg install curl -y
+pkg install tree -y
+# instala ferramentas básicas para programar e conectar ao GitHub
+```
+
 ---
 #   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
 ---
