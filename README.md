@@ -15,9 +15,17 @@
 
 ---
 # COMO VENDER NA INTERNET
-[chatgpt, gemini, manus]
 ---
+  hoje você é capaz de criar uma empresa do zero, utilizando apenas um celular, 
+com ajuda deixa o material, irei te ajudar a montar uma loja virtual, na qual 
+será capaz de vender qualquer produto ou serviços de forma inteligente profissional.
+  A intenção deste artigo é ajudar as pessoas a entrar no mercado de trabalho 
+de forma empreendedora e autônoma, pessoas que possuem um celular mas não tem nenhum 
+dinheiro para investir no negócio.
+  Dedico este artigo também para mães e pais que precisam cuidar de sua casa, 
+sem tempo para trabalhar fora e precisa fazer uma renda extra.
 
+  
 # GOOGLE
 # PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
