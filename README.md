@@ -3,7 +3,8 @@
 ---
 
 # 📘 ÍNDICE
-2. [COMO  VENDER NA INTERNET](#como-vender-na-internet)
+1. [COMO  VENDER NA INTERNET](#como-vender-na-internet)
+2. [RESUMO](#resumo)
 3. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
 4. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
 5. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
