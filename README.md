@@ -3,14 +3,15 @@
 ---
 
 # 📘 ÍNDICE
-# [COMO VENDER NA INTERNET](como-vender-na-internet)
-# [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
-# [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
-# [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
-# [Git-GitHub](#git-github)
-# [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
-# [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
-# [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
+1. [COMO VENDER NA INTERNET](como-vender-na-internet)
+2. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
+3. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
+4. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
+5. [Git-GitHub](#git-github)
+6. [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
+7. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
+8. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
+9. 
 
 ---
 # COMO VENDER NA INTERNET
