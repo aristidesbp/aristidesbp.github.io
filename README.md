@@ -20,6 +20,9 @@ algum pacote ou biblioteca, tec...
 ---
 
 ```
+# isto é um comentário utilizado para explicações
+```
+```
 ls 
 # O comando acima, mostrar conteudo da pasta
 ```
