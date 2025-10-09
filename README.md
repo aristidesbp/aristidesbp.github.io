@@ -7,7 +7,7 @@
 2. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
 3. [Comandos basicos do Termux](#comandos-basicos-do-termux)
 4. [Git-GitHub](#git-github)
-5. [Clonando um repositorio do  GitHub](#Clonando-um-repositorio-do-GitHub)
+5. [Clonando um repositorio do  GitHub](#clonando-um-repositorio-do-github)
 
 
 ---
