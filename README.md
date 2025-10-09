@@ -149,7 +149,7 @@ ssh -T git@github.com
 ```
 
 
-## OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
+## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
 ----------------------------------------------------
 1. Acesse: https://github.com](https://github.com
 2. Faça login na sua conta
@@ -163,7 +163,7 @@ ssh -T git@github.com
 
 
 ---
-# 💻 Clonando um repositorio do  GitHub
+# Clonando um repositorio do  GitHub
 ---
 
 ```
