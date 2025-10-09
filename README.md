@@ -2,7 +2,7 @@
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # COMO VENDER NA INTERNET: Empreendedorismo Digital com Recursos Mínimos
-
+#### Autor: Aristides Barbosa Pontes. 09/10/2025.
 ---
 # 📘 ÍNDICE
 1. [RESUMO](#resumo)
