@@ -3,8 +3,7 @@
 ---
 
 # 📘 ÍNDICE
-1. [COMO  VENDER NA INTERNET](#como-vender-na-internet)
-2. [RESUMO](#resumo)
+1. [RESUMO](#resumo)
 3. [COMO ORGANIZAR REPOSITÓRIO PELO CELULAR](#como-organizar-repositório-pelo-celular)
 4. [INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX](#instalação-e-configuração-do-termux)
 5. [COMANDOS BÁSICOS DO TERMUX](#comandos-basicos-do-termux)
@@ -16,8 +15,7 @@
 
 
 
-# COMO VENDER NA INTERNET
-## Empreendedorismo Digital com Recursos Mínimos
+# COMO VENDER NA INTERNET: Empreendedorismo Digital com Recursos Mínimos
 
 # Resumo:
 Este artigo apresenta estratégias práticas para criar e gerir um negócio digital utilizando apenas um celular, sem investimento inicial. O objetivo é fornecer orientações a indivíduos que desejam empreender de forma autônoma, especialmente mães e pais que necessitam conciliar trabalho e cuidados domésticos. São discutidos métodos para montar lojas virtuais, vender produtos ou serviços e aplicar técnicas de marketing digital de baixo custo.
