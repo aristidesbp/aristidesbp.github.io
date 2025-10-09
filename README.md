@@ -7,7 +7,7 @@
 2. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
 3. [Comandos basicos do Termux](#comandos-basicos-do-termux)
 4. [Git-GitHub](#git-github)
-5. [Clonando um repositorio do  GitHub](#clonando-um-repositorio-do-github)
+5. [Clonando um repositório do GitHub](#clonando-um-repositório-do-github)
 
 
 ---
@@ -163,9 +163,9 @@ ssh -T git@github.com
 
 
 ---
-# Clonando um repositorio do  GitHub
+# Clonando um repositório do GitHub
 ---
-
+ 
 ```
 git clone git@github.com:usuario/repositorio.git
 ## Clona o repositório com chave SSH
