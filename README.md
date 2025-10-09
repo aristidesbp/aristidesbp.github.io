@@ -104,11 +104,8 @@ Desenvolver habilidades em marketing digital, gestão de clientes e negociação
 A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
 
 
----
 
-Se você quiser, posso já adaptar este texto para um artigo científico completo pronto para submissão, com normas da ABNT ou APA, referências e até exemplos de casos de sucesso.
 
-Palavras até agora: 303
 
 
 ---
