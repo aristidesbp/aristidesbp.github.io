@@ -1,8 +1,7 @@
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # "Da falta de emprego à criação de oportunidades: o poder de empreender online". Uma proposta acessível para geração de renda e inclusão digital através de sites gratuitos e ferramentas open-source.
-#### Artigo escrito por Aristides Barbosa Pontes. 09/10/2025.
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#### Artigo escrito por Aristides Barbosa Pontes. 09/10/2025---
 ---
 # 📘 ÍNDICE
 1. [RESUMO](#resumo)
