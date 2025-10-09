@@ -1,5 +1,5 @@
 
- # VISITE MEU SITE [ aristidesbp.github.io ]!!!! 
+ # VISITE MEU SITE  https://aristidesbp.github.io 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 #   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
@@ -97,6 +97,7 @@ algum pacote ou biblioteca, tec...
 ### Hi SEU_USUARIO! You've successfully authenticated..
 
 
+
 ## OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
 ----------------------------------------------------
 1. Acesse: https://github.com](https://github.com
@@ -183,15 +184,15 @@ algum pacote ou biblioteca, tec...
 
 
 
-#🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-###################################################
-## 📝 TRABALHANDO COM COMMIT (DIGITE "Q" PARA SAIR)
-###################################################
-
+---
+# 📝 TRABALHANDO COM COMMIT (DIGITE "Q" PARA SAIR)
+---
+```
 git status
-## Mostra o status atual dos arquivos (modificados, novos, deletados)
- 
-git add nome-do-arquivo.ext
+# Mostra o status atual dos arquivos (modificados, novos, deletados)
+```
+---
+```git add nome-do-arquivo.ext```
 # Adiciona um arquivo específico para a área de staging
 # OBS: CASO VOCÊ JÁ TENHA CRIADO OU ALTERADO ALGUM ATIVO
 
