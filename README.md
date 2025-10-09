@@ -5,9 +5,9 @@
 # 📘 ÍNDICE
 1. [Como Organizar Repositório pelo Celular](#como-organizar-repositório-pelo-celular)
 2. [Instalação e Configuração do Termux](#instalação-e-configuração-do-termux)
-3. [Comandos Termux](#comandos-termux)
+3. [Comandos basicos do Termux](#comandos-basicos-do-termux)
 4. [Git-GitHub](#git-github)
-5. [Observações Importantes](#obs-verifique-config-github-caso-não-funcione)
+5. [Clonando um repositorio do  GitHub](#Clonando-um-repositorio-do-GitHub)
 
 
 ---
@@ -48,7 +48,7 @@ pkg install tree -y
 
 
 ---
-# COMANDOS TERMUX 
+# COMANDOS BASICOS DO TERMUX 
 ---
 
 ```
