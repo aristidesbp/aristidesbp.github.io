@@ -27,6 +27,11 @@ Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, aut�
 
 ---
 # INTRODUÇÃO 
+  A falta de empregos formais e a desigualdade de oportunidades têm sido problemas persistentes no mundo contemporâneo. Em meio a esse cenário, milhões de pessoas — especialmente mães de família, jovens e trabalhadores informais — buscam alternativas para gerar renda sem depender de grandes investimentos ou estrutura profissional.
+
+Este artigo apresenta uma proposta prática e inclusiva: ensinar qualquer pessoa, utilizando apenas um celular e ferramentas gratuitas, a criar e hospedar um site de vendas. O objetivo é mostrar que é possível iniciar um negócio digital sem custo inicial, vendendo produtos próprios ou de terceiros, e transformar a tecnologia em uma aliada na luta contra o desemprego e a desigualdade.
+
+A iniciativa parte do princípio de que o conhecimento digital acessível é uma das chaves para a autonomia financeira e o empoderamento social, contribuindo para uma sociedade mais justa e independente
 
 O avanço da tecnologia e o acesso crescente à internet possibilitam que qualquer pessoa inicie um negócio online com recursos limitados. Este artigo busca demonstrar como é possível criar uma loja virtual profissional e vender produtos ou serviços de forma estratégica apenas com um celular.
 
