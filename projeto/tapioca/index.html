@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delivery - Aristidesbp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/delivery.css" />
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)] font-sans">
+
+  <!-- Cabeçalho -->
+  <header class="bg-[var(--vermelho-telha)] text-white py-6 shadow-lg text-center">
+  <img src="assets/img/barraquinha-lanche.jpg" alt="Barraquinha" class="w-full h-64 object-cover rounded-b-xl shadow-lg" />
+  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
+  <p class="text-lg">Seu lanche artesanal favorito!</p>
+
+  <!-- Filtro -->
+  <div class="mt-4">
+    <select id="filtroCategoria" class="filtro-categoria">
+      <option value="todos">Todos</option>
+      <option value="lanches">Lanches</option>
+      <option value="bebidas">Bebidas</option>
+      <option value="sobremesas">Sobremesas</option>
+    </select>
+  </div>
+</header>
+
+  <!-- Cardápio -->
+  <section class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6 text-[var(--marrom-madeira)]">Nosso Cardápio</h2>
+    <div id="menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Pedido -->
+  <section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
+    <div class="container mx-auto">
+      <p class="text-lg font-bold mb-4">
+        Total do pedido: R$ <span id="total">0,00</span>
+      </p>
+
+      <div id="itens-pedido" class="mb-6 max-h-48 overflow-y-auto bg-gray-800 p-4 rounded text-white space-y-2"></div>
+
+      <h2 class="text-2xl font-bold mb-4">Finalizar Pedido</h2>
+
+      <form id="pedido-form" class="space-y-4">
+        <input type="text" id="nome" placeholder="Nome Completo" class="campo" required />
+        <input type="text" id="cpf" placeholder="CPF" class="campo" required />
+        <input type="tel" id="telefone" placeholder="Telefone" class="campo" required />
+        <input type="text" id="endereco" placeholder="Endereço Completo" class="campo" required />
+
+        <select id="formaPagamento" class="campo" required>
+          <option value="" disabled selected>Forma de Pagamento</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Pix">Pix</option>
+          <option value="Transferência">Transferência</option>
+        </select>
+
+        <textarea id="obs" placeholder="Observações" class="campo" rows="3"></textarea>
+
+        <button type="submit" class="botao">Enviar pedido via WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <script src="assets/js/delivery.js"></script>
+</body>
+</html>
