@@ -715,10 +715,33 @@ git checkout -b nova-branch <id_do_commit>
 # Exemplo: git checkout -b teste-antigo a1b2c3d
 ```
 
+---
+# CRIANDO UM SERVIDOR COM PYTHON 
+---
 
 
+# Passo 1: Instalar o Python
 
+Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+```
+cd pasta_do_arquivo
+# Navegue até a pasta onde seus arquivos estão 
+```
+```
+python -m http.server 8080
+# Ele inicia um servidor web simples na porta 8080:
+# O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+```
+# Como Acessar o Site no Navegador
+Abra o navegador do seu celular (Chrome, Firefox, etc.).
+Digite o seguinte endereço na barra de URL:
 
+```
+http://localhost:8080/admin.html
+```
 
+O Painel Administrativo agora deve carregar, e o JavaScript (Bloco 6) deve funcionar, permitindo que você clique no botão para adicionar campos e que o localStorage funcione corretamente.
 
+Para parar o servidor, volte para o Termux e pressione 
+#### Ctrl + C.
 
