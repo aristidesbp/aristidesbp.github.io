@@ -15,7 +15,8 @@
 7. [CLONANDO UM REPOSITÓRIO DO GITHUB](#clonando-um-repositório-do-github)
 8. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
 9. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
-10. 
+10. [CRIANDO UM SERVIDOR COM PYTHON](#criando-um-servidor-com-python)
+12. 
 
 
 ---
