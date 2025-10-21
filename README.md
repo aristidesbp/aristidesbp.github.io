@@ -592,7 +592,7 @@ Explicação:
 
 ```<h1> a <h6>```: títulos, do mais importante (h1) ao menos importante (h6).
 
-<p>: parágrafo.
+```<p>```: parágrafo.
 
 
 
@@ -600,19 +600,19 @@ Explicação:
 
 1.3 Tags usadas no site do AristidesBP
 
-<nav>: barra de navegação.
+```<nav>```: barra de navegação.
 
-<header>: área principal com título, subtítulo e botão de CTA.
+```<header>```: área principal com título, subtítulo e botão de CTA.
 
-<section>: seções da página, como Sobre, Serviços e Contato.
+```<section>```: seções da página, como Sobre, Serviços e Contato.
 
-<div>: contêiner genérico para agrupar elementos.
+```<div>```: contêiner genérico para agrupar elementos.
 
-<img>: para imagens.
+```<img>```: para imagens.
 
-<a>: link clicável.
+```<a>```: link clicável.
 
-<form>, <input>, <textarea>, <button>: formulário de contato.
+```<form>, <input>, <textarea>, <button>```: formulário de contato.
 
 
 
