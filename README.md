@@ -117,16 +117,74 @@ A utilização de dispositivos móveis e ferramentas digitais acessíveis democr
 
 
 ---
-# COMO VENDER NA INTERNET
----
-  hoje você é capaz de criar uma empresa do zero, utilizando apenas um celular, 
-com ajuda deixa o material, irei te ajudar a montar uma loja virtual, na qual 
-será capaz de vender qualquer produto ou serviços de forma inteligente profissional.
-  A intenção deste artigo é ajudar as pessoas a entrar no mercado de trabalho 
-de forma empreendedora e autônoma, pessoas que possuem um celular mas não tem nenhum 
-dinheiro para investir no negócio.
-  Dedico este artigo também para mães e pais que precisam cuidar de sua casa, 
-sem tempo para trabalhar fora e precisa fazer uma renda extra.
+# Como vender na internet usando GitHub
+
+Você pode vender produtos ou serviços diretamente na internet usando GitHub Pages, uma ferramenta gratuita para hospedar sites estáticos. Com os códigos que você tem, é possível criar landing pages profissionais para cada tipo de negócio: vendas de produtos (como no exemplo do delivery) ou serviços (como o site de locação de estruturas).
+
+Passos básicos:
+
+1. Crie um repositório no GitHub.
+
+
+2. Suba todos os arquivos do site (HTML, CSS, JS, imagens).
+
+
+3. Ative o GitHub Pages nas configurações do repositório.
+
+
+4. O site será publicado em https://seuusuario.github.io/nome-do-repositorio/.
+
+
+5. Configure formulários ou links de WhatsApp/checkout para receber pedidos.
+
+
+
+Vantagens de usar GitHub Pages:
+
+Gratuito e confiável.
+
+Fácil de atualizar com commits.
+
+Ideal para sites estáticos leves.
+
+Integração com HTTPS nativa.
+
+
+Desvantagens:
+
+Não suporta backend dinâmico nativo (necessário usar APIs externas como WhatsApp, Firebase ou Mercado Pago).
+
+Não tem suporte a bancos de dados internos.
+
+Limitações de personalização de SEO e URL sem domínio próprio. caso você queira o domínio próprio Será que contratar o mesmo me configurá-lo pelo DNS.
+
+Recursos de e-commerce completos exigem integração externa.
+
+
+Usar um domínio próprio:
+
+Vantagens: passa mais credibilidade, melhora SEO, URL mais curta e memorável.
+
+Desvantagens: custo anual do domínio e necessidade de configuração DNS.
+
+
+Tags de conversão e rastreamento:
+
+Adicione tags de rastreamento (Google Analytics, Google Ads, Facebook Pixel) para medir vendas e cliques.
+
+Permite otimizar campanhas e aumentar conversão.
+
+
+Resumo:
+GitHub Pages é ótimo para começar a vender online sem custo, mas para negócios maiores, é recomendável usar domínio próprio e integrar sistemas de pagamento e rastreamento.
+
+
+
+
+
+
+
+
 
   
 # GOOGLE
@@ -366,6 +424,12 @@ clear
 # usado para limpar a tela
 ```
 
+
+
+
+
+
+🟥🟥🟥🟥
 
 ---
 # GIT-GITHUB 
