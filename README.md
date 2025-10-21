@@ -101,7 +101,7 @@ GitHub Pages é ótimo para começar a vender online sem custo, mas para negóci
 
 
 
-🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 
   
@@ -351,7 +351,7 @@ clear
 
 
 
-🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ---
 # GIT-GITHUB 
