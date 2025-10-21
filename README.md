@@ -41,122 +41,48 @@ O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair
 
 
 ---
-# FUNDAMENTAÇÃO TEÓRICA 
-
-Empreendedorismo digital: conceito e importância no contexto atual.
-Microempreendedorismo: estratégias para iniciar negócios com poucos recursos.
-Comércio eletrônico: plataformas gratuitas ou de baixo custo para vendas online.
-Marketing digital básico: uso de redes sociais, anúncios pagos mínimos e engajamento orgânico.
-
-
-
----
-# Metodologia
-Para alcançar os objetivos propostos, o artigo utiliza:
-
-1. Pesquisa bibliográfica sobre empreendedorismo digital e comércio eletrônico.
-2. Estudo de casos de lojas virtuais criadas apenas com celular.
-3. Orientações práticas para implementação de estratégias de vendas online sem investimento inicial.
-
----
-
-4. Montando uma loja virtual sem investimento
-
-4.1 Escolha da plataforma
-
-Plataformas gratuitas ou com versão trial (ex: Shopify, Wix, Nuvemshop, OLX, Mercado Livre).
-
-
-4.2 Cadastro de produtos ou serviços
-
-Fotografias simples e atraentes com celular.
-
-Descrição clara e objetiva do produto ou serviço.
-
-
-4.3 Estratégias de marketing digital
-
-Uso de redes sociais (Instagram, TikTok, WhatsApp).
-
-Criação de conteúdo relevante e persuasivo.
-
-Exploração de grupos e marketplaces gratuitos.
-
-
-4.4 Gestão de vendas e atendimento
-
-Organização de pedidos via planilhas ou apps de gerenciamento.
-
-Atendimento ágil e humanizado via WhatsApp ou DM.
-
-
-
----
-
-5. Resultados Esperados
+# Resultados Esperados
 
 Ao seguir as orientações propostas, indivíduos poderão:
-
 Iniciar vendas online sem capital inicial.
-
 Alcançar autonomia financeira e flexibilidade de horário.
-
 Desenvolver habilidades em marketing digital, gestão de clientes e negociação.
 
 
-
 ---
-
-6. Conclusão
+# Conclusão
 
 A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
-
-
-
 
 
 
 ---
 # Como vender na internet usando GitHub
 
-Você pode vender produtos ou serviços diretamente na internet usando GitHub Pages, uma ferramenta gratuita para hospedar sites estáticos. Com os códigos que você tem, é possível criar landing pages profissionais para cada tipo de negócio: vendas de produtos (como no exemplo do delivery) ou serviços (como o site de locação de estruturas).
+Você pode vender produtos ou serviços diretamente na internet usando GitHub Pages, uma ferramenta gratuita para hospedar sites estáticos. Com os códigos que você tem, é possível criar landing pages profissionais para cada tipo de negócio: vendas de produtos (como no exemplo do delivery) ou serviços.
 
-Passos básicos:
+### Passos básicos:
 
 1. Crie um repositório no GitHub.
-
-
 2. Suba todos os arquivos do site (HTML, CSS, JS, imagens).
-
-
 3. Ative o GitHub Pages nas configurações do repositório.
-
-
 4. O site será publicado em https://seuusuario.github.io/nome-do-repositorio/.
-
-
 5. Configure formulários ou links de WhatsApp/checkout para receber pedidos.
 
-
-
-Vantagens de usar GitHub Pages:
+### Vantagens de usar GitHub Pages:
 
 Gratuito e confiável.
-
 Fácil de atualizar com commits.
-
 Ideal para sites estáticos leves.
-
 Integração com HTTPS nativa.
 
 
-Desvantagens:
+### Desvantagens:
 
-Não suporta backend dinâmico nativo (necessário usar APIs externas como WhatsApp, Firebase ou Mercado Pago).
+Não suporta backend dinâmico nativo (necessário usar APIs externas, neste arquivo utilizaremos WhatsApp).
 
-Não tem suporte a bancos de dados internos.
+Não tem suporte a bancos de dados internos. (vamos utilizar localstorage, indexeddb, arquivo jsom para contornar essa tarefa ).
 
-Limitações de personalização de SEO e URL sem domínio próprio. caso você queira o domínio próprio Será que contratar o mesmo me configurá-lo pelo DNS.
 
 Recursos de e-commerce completos exigem integração externa.
 
