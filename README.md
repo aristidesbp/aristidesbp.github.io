@@ -547,319 +547,321 @@ Custo Visita Técnica: R$50,00`;
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # MINI CURSO HTML, CSS E JAVASCRIPT:
 
-Perfeito, Aristides! 😎 Vamos criar um mini curso completo e direto para que seu cliente entenda tudo que foi feito nessa página, dividido em módulos: HTML, CSS e JavaScript, com explicações, exemplos e exercícios práticos. Vou estruturar de forma progressiva, do mais básico até o que usamos no seu site.
+
+Perfeito! Vamos criar um mini curso completo e didático, usando os seus três códigos como exemplos. Vou organizar de forma clara, com explicações passo a passo, trechos de código e conceitos importantes.
 
 
 ---
 
-Mini Curso: HTML, CSS e JavaScript – Criação de Sites Profissionais
+Mini Curso: HTML, CSS e JavaScript na Prática
+
+Este mini curso vai ensinar o básico e avançado necessário para criar páginas web interativas como as que você recebeu, incluindo armazenamento local e manipulação de dados.
 
 
 ---
 
-Módulo 1 – HTML: A Estrutura da Página
+1. Estrutura Básica de HTML
 
-1.1 O que é HTML?
-
-HTML (HyperText Markup Language) é a linguagem de marcação usada para criar páginas na web. Ela define a estrutura do seu site, ou seja, quais elementos aparecem na tela e em qual ordem.
-
-
----
-
-1.2 Estrutura básica de um arquivo HTML
+HTML é a linguagem de marcação usada para estruturar páginas web. Cada página começa com a estrutura básica:
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Meu Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Página</title>
 </head>
 <body>
-  <h1>Olá, mundo!</h1>
-  <p>Este é meu primeiro site.</p>
+  <h1>Olá Mundo!</h1>
 </body>
 </html>
 ```
-Explicação:
+```<head>```: Configurações da página, título, links de CSS e metadados.
 
-```<!DOCTYPE html>```: indica que o documento é HTML5.
-
-```<html lang="pt-BR">```: define o idioma da página.
-
-```<head>```: contém informações da página (título, meta tags, links de CSS).
-
-```<body>```:contém todo o conteúdo visível da página.
-
-```<h1> a <h6>```: títulos, do mais importante (h1) ao menos importante (h6).
-
-```<p>```: parágrafo.
+```<body>```: Conteúdo visível, como textos, imagens, formulários, vídeos.
 
 
+Exemplo real do seu código:
 
----
-
-1.3 Tags usadas no site do AristidesBP
-
-```<nav>```: barra de navegação.
-
-```<header>```: área principal com título, subtítulo e botão de CTA.
-
-```<section>```: seções da página, como Sobre, Serviços e Contato.
-
-```<div>```: contêiner genérico para agrupar elementos.
-
-```<img>```: para imagens.
-
-```<a>```: link clicável.
-
-```<form>, <input>, <textarea>, <button>```: formulário de contato.
-
+```
+<header>
+  <h1>Transforme seu Negócio Online!</h1>
+  <p>Sites profissionais + campanhas de tráfego pago que geram vendas reais.</p>
+  <a href="#contact">Quero Meu Site Agora</a>
+</header>
+```
+Aqui, ```<header>``` define a área inicial da página (hero), com título, descrição e botão.
 
 
 ---
 
-1.4 Exercício Prático
+2. Estilizando com CSS
 
-Crie uma página com:
+CSS é usado para dar estilo visual às páginas: cores, fontes, tamanhos e layouts. Pode ser interno (<style>), externo (```<link>```), ou inline (direto no elemento).
 
-Um título principal (h1)
-
-Um parágrafo (p)
-
-Um link (a) que leve ao Google
-
-Uma imagem (img) com link de qualquer imagem da internet.
-
-
-
----
-
-Módulo 2 – CSS: Estilo e Layout
-
-2.1 O que é CSS?
-
-CSS (Cascading Style Sheets) define como os elementos HTML aparecem, incluindo cores, fontes, tamanhos, espaçamentos, bordas e posicionamento.
-
-
----
-
-2.2 Como aplicar CSS
-
-Existem três formas:
-
-1. Inline: diretamente no elemento
-
-
-
-<p style="color: red;">Texto vermelho</p>
-
-2. Interno: dentro da tag <style> no <head>
-
-
-
-<style>
-  p { color: blue; }
-</style>
-
-3. Externo: arquivo separado (style.css) vinculado com <link>
-
-
-
-
----
-
-2.3 Seletores importantes usados no site
-
-* → todos os elementos
-
-body → corpo da página
-
-nav, header, section, footer → estilizamos por tag
-
-.class → estiliza elementos por classe
-
-#id → estiliza elementos por ID
-
-Pseudo-classes: :hover → altera estilo ao passar o mouse
-
-
-
----
-
-2.4 Layout e Responsividade
-
-Flexbox: para organizar elementos horizontal e verticalmente
-
-
-.cards {
-  display: flex;
-  gap: 20px;
+Exemplo do seu código:
+```
+header {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('img/header.jpg') center/cover no-repeat;
+  color: #fff;
+  text-align: center;
+  padding: 120px 20px;
+}
+header h1 { font-size: 3rem; margin-bottom: 10px; }
+header a {
+  background: #f97316;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 30px;
+  text-decoration: none;
 }
 
-Grid: para criar layouts em linhas e colunas
+background: imagem de fundo + gradiente
+
+text-align: centraliza o texto
+
+padding: espaço interno
+
+border-radius: cantos arredondados
 
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
+TailwindCSS (como no delivery) é uma forma de escrever CSS direto no HTML usando classes utilitárias:
 
-Media Queries: para adaptar para celular
+<h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
 
+text-4xl: tamanho da fonte
 
-@media(max-width:768px){
-  nav ul { display: none; }
-}
+font-bold: negrito
 
+mt-4: margem superior
 
----
-
-2.5 Estilizando o Formulário
-
-Inputs, textareas e selects recebem padding, borda e border-radius.
-
-Botão com background, color, border-radius e hover.
-
-
+```
 
 ---
 
-2.6 Exercício Prático
+3. Interatividade com JavaScript
 
-Crie um formulário com:
+JavaScript permite que páginas respondam a ações do usuário, como cliques e envios de formulário.
 
-2 inputs de texto
-
-1 textarea
-
-1 botão
-
-
-Estilize o formulário para que fique centralizado, com cores e bordas arredondadas.
-
-
-
----
-
-Módulo 3 – JavaScript: Interatividade
-
-3.1 O que é JavaScript?
-
-JavaScript adiciona comportamento e interatividade à sua página. Ele permite:
-
-Responder a cliques
-
-Alterar conteúdo dinamicamente
-
-Enviar formulários
-
-Criar animações e muito mais
-
-
-
----
-
-3.2 Manipulação de elementos
-
-const titulo = document.querySelector("h1");
-titulo.textContent = "Novo Título!";
-
-3.3 Eventos
-
-const botao = document.querySelector("button");
-botao.addEventListener("click", function(){
-  alert("Você clicou no botão!");
-});
-
-No site do AristidesBP:
-
-O formulário envia os dados para WhatsApp.
-
-O botão de envio verifica se o checkbox de aceite foi marcado.
-
-Há animações fade-in ao rolar a página (Intersection Observer).
-
-
-
----
-
-3.4 Enviando formulário para WhatsApp
-
+Exemplo: envio de formulário para WhatsApp (seu código de contrato):
+```
 const form = document.getElementById("contact-form");
-form.addEventListener("submit", function(e){
-  e.preventDefault();
+form.addEventListener("submit", function(e) {
+  e.preventDefault(); // evita recarregar a página
+
   const nome = document.getElementById("nome").value;
-  const texto = `*Contrato*%0ANome: ${nome}`;
+  const mensagem = document.getElementById("mensagem").value;
+
+  const texto = `*Contrato*%0ANome: ${nome}%0AMensagem: ${mensagem}`;
   window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
 });
 
+addEventListener: escuta eventos (como submit)
 
----
+e.preventDefault(): evita comportamento padrão do navegador
 
-3.5 Exercício Prático
-
-Crie um formulário com 1 input e 1 botão.
-
-Ao clicar no botão, exiba o valor do input em um alert.
-
-Adicione um checkbox que deve ser marcado para enviar o alert.
-
+window.open: abre link, neste caso o WhatsApp
+```
 
 
 ---
 
-Módulo 4 – Projeto Prático: Montando a Página Completa
+4. Armazenamento de Dados Local
 
-Objetivo: reproduzir a página do AristidesBP usando tudo que aprendeu.
+LocalStorage
 
-1. HTML:
+Armazena dados simples no navegador, que permanecem mesmo após fechar a página.
 
-Navbar
+Limite: ~5MB por site.
 
-Header com CTA
-
-Seções (Sobre, Serviços, Contato)
-
-Footer
+Útil para salvar listas, preferências e pequenos dados.
 
 
+Exemplo do cadastro de entregas:
+```
+function getEntregas() {
+  return JSON.parse(localStorage.getItem("entregas") || "[]");
+}
 
-2. CSS:
+function salvarEntregas(dados) {
+  localStorage.setItem("entregas", JSON.stringify(dados));
+}
 
-Paleta de cores
+JSON.stringify: converte objeto JavaScript em texto
 
-Cards com sombra
-
-Formulário estilizado
-
-Layout responsivo
-
+JSON.parse: transforma texto em objeto novamente
+```
 
 
-3. JavaScript:
+---
 
-Formulário envia mensagem para WhatsApp
+IndexedDB
 
-Checkbox de aceite obrigatório
+Banco de dados local mais poderoso que o localStorage
+Permite armazenar objetos complexos, grandes arquivos e imagens
+Funciona de forma assíncrona Ideal para apps offline ou delivery com fotos
 
-Animações de fade-in ao rolar
 
+Uso sugerido: você poderia salvar os pedidos e fotos em IndexedDB em vez de LocalStorage para mais segurança.
+
+
+---
+
+Base64
+
+Forma de codificar arquivos binários (como imagens) em texto
+
+Permite salvar imagens diretamente em LocalStorage
+
+Exemplo no cadastro de entrega:
+
+```
+const reader = new FileReader();
+reader.onload = function (event) {
+  novo.foto = event.target.result; // aqui a imagem vira Base64
+}
+reader.readAsDataURL(fotoInput.files[0]);
+
+novo.foto agora contém a imagem codificada em Base64 e pode ser exibida em <img src="...">
+```
+
+
+---
+
+5. Criando Cards e Listas Dinâmicas
+
+Exemplo do seu delivery:
+```
+const menu = [
+  { nome: "Tapioca", preco: 8 },
+  { nome: "Suco Natural", preco: 5 }
+];
+
+menu.forEach(item => {
+  const div = document.createElement("div");
+  div.innerHTML = `<h3>${item.nome}</h3><p>R$ ${item.preco}</p>`;
+  document.getElementById("menu").appendChild(div);
+});
+```
+
+Cria elementos dinamicamente
+
+Permite atualizar conteúdo sem recarregar a página
+
+
+Exemplo do gerenciamento de entregas:
+```
+entregas.forEach((e, i) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${e.nome}</strong> - ${e.endereco}`;
+  lista.appendChild(li);
+});
+```
+
+---
+
+6. Formulários e Validação
+
+Formulários permitem capturar informações do usuário. Sempre valide campos obrigatórios:
+```
+<input type="text" id="nome" required placeholder="Nome Completo">
+
+if(!aceite) {
+  alert("Aceite os termos para continuar");
+  return;
+}
+```
+required no HTML garante que o campo não fique vazio
+
+JavaScript permite validações personalizadas
+
+
+
+---
+
+7. Trabalhando com Vídeos e Imagens Responsivas
+
+Para vídeos do YouTube responsivos:
+
+```
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+```
+Para imagens responsivas:
+
+```
+<img src="img/card01.jpg" alt="Resultados" style="width:100%; border-radius:10px;">
+```
+
+---
+
+8. Resumo do Projeto
+
+Projeto 1: Site + tráfego pago
+
+HTML: Estrutura de página
+
+CSS: Estilo profissional
+
+JS: Formulário envia contrato para WhatsApp
+
+
+Projeto 2: Delivery
+
+HTML/Tailwind: Cardápio e filtros
+
+JS: Pedido via WhatsApp
+
+
+Projeto 3: Cadastro de entregas
+
+HTML/Tailwind: Formulário de entrega
+
+JS: Lista de entregas, status, fotos
+
+LocalStorage/Base64: armazenam dados e fotos
+
+Possível upgrade: IndexedDB para dados maiores
 
 
 
 
 ---
 
-Dicas
+9. Próximos Passos para o Cliente
 
-Sempre teste no celular para garantir responsividade.
+1. Praticar alterando textos, imagens e cores.
 
-Use cores consistentes para manter identidade visual.
 
-Comentários ajudam a entender o código.
+2. Criar novos cards e elementos dinâmicos.
 
-Pratique alterando imagens, textos e cores para ver o efeito.
+
+3. Testar envio de formulários via WhatsApp.
+
+
+4. Experimentar armazenar novos dados no LocalStorage e Base64.
+
+
+5. Aprender IndexedDB para dados maiores.
+
+
+
+
+---
+
+
 
 
 
