@@ -110,23 +110,23 @@ Neste  artigo, vamos atacar um nicho de criação de sites e gestão de tráfego
 
 
 
-# PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
+## PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
 [Sou AristidesBP], [Moro em Belém do Pará , Brasil] vou vender na internete [o serviço de criação de sites e gestor de trafego pago] para um público
 super exigente. Será uma campanha no Google Ads, logo eu preciso saber as informações 
 que vou te passar abaixo.
 ```
-# PASSO 2 [PESQUISAR PUBLICO ALVO (PERSONA)]:
+## PASSO 2 [PESQUISAR PUBLICO ALVO (PERSONA)]:
 ```
 Quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
 Traga isso listado por topico de cada pergunta.
 ```
-# PASSO 3 [PALAVRAS CHAVES]:
+## PASSO 3 [PALAVRAS CHAVES]:
 ```
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
 ```
-# PASSO 3 [PALAVRAS CHAVES]:
+## PASSO 4 [PALAVRAS CHAVES]:
 ```
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
@@ -141,14 +141,14 @@ Planejador de palavra-chave
 #### EM [DESCOBRIR NOVAS PALAVRAS CHAVES], COLE OS RESULTADOS DA IA, UMA POR VEZ!
 #### APERTE EM BUSCAR E SELECIONE A REGIÃO.
 
-# PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
+## PASSO 5 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
 palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução(intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves.
 ```
 
-## EXEMPLO:
+### EXEMPLO:
 | Palavra-chave                              | Busca/mês (est.) | CPC médio (R$) | Custo do Tráfego* | Concorrência* | Relação com a solução         | Intencionalidade     | Relação site/palavra |
 |--------------------------------------------|------------------|----------------|-------------------|----------------|-------------------------------|-----------------------|-----------------------|
 | gestor de tráfego pago                     | 1,000–2,000      | 4,00–6,00      | Alta              | Alta           | Quer contratar                | Exclusiva (80–100%)   | Forte                |
@@ -166,7 +166,7 @@ palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Rela
 ## "NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
 
 
-# PASSO 4 [FAZER UMA PLANILHA PARA  AS PALAVRAS NEGATIVAS]:
+# PASSO 6 : PALAVRAS NEGATIVAS
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras negativas.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
