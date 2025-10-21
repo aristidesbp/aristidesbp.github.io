@@ -1,4 +1,4 @@
-
+obs: projeto em andamento podendo conter erros!
 #### Artigo escrito por Aristides Barbosa Pontes. 09/10/2025
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # "Da falta de emprego à criação de oportunidades: o poder de empreender online"
