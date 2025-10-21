@@ -1019,27 +1019,6 @@ Possível upgrade: IndexedDB para dados maiores
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-
-
-# CRIANDO UMA TEG DE CONVERÇÃO:
-## Crie uma pagina de obrigado pela compra para colocar a teg, e salve a url.
-## 
-
-
-
-
-
-# COMO CRIAR TEG DE CONVERÇÃO:
-## PASSO 1: URL DA PAGINA DE OBRIGADO
-
-Crie uma pagina agradecendo a compra, ela sera responsavel por armazenar a teg de conveção que por sua vez ira informar ao google que pode cobrar o trafego.
-
-
-
-
-
 
 
 
