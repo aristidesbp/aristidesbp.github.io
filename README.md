@@ -291,7 +291,6 @@ section { padding:80px 20px; text-align:center; }
 </head>
 <body>
 
-
   <!-- NAVBAR -->
   <nav>
     <h2>AristidesBP</h2>
@@ -302,8 +301,6 @@ section { padding:80px 20px; text-align:center; }
     </ul>
   </nav>
 
-
-
   <!-- HEADER -->
   <header>
     <h1>Transforme seu Negócio Online!</h1>
@@ -311,14 +308,11 @@ section { padding:80px 20px; text-align:center; }
     <a href="#contact">Quero Meu Site Agora</a>
   </header>
 
-
-
   <!-- SOBRE -->
   <section id="about">
     <h2>Por Que Escolher AristidesBP?</h2>
     <p>Profissional especializado em criação de sites que convertem e gestão de tráfego pago para empresas exigentes. Resultados reais, transparência e suporte próximo.</p>
  
-
 <!-- CARDS --> 
 <div class="cards">
      
@@ -336,7 +330,6 @@ section { padding:80px 20px; text-align:center; }
 <p>Mais de 10 anos de experiência, portfólio de clientes satisfeitos.</p>
       </div>
       
-
 <!-- CARD03 -->
 <div class="card">
         <img src="img/card03" alt="Suporte">
@@ -358,7 +351,6 @@ section { padding:80px 20px; text-align:center; }
     <h2>Serviços</h2>
     <div class="cards">
      
-
 <!-- CARD05 -->
  <div class="card">
         <img src="img/card05.jpg" alt="Sites Profissionais">
