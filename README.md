@@ -544,7 +544,328 @@ Custo Visita Técnica: R$50,00`;
 ```
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# MINI CURSO HTML, CSS E JAVASCRIPT:
 
+Perfeito, Aristides! 😎 Vamos criar um mini curso completo e direto para que seu cliente entenda tudo que foi feito nessa página, dividido em módulos: HTML, CSS e JavaScript, com explicações, exemplos e exercícios práticos. Vou estruturar de forma progressiva, do mais básico até o que usamos no seu site.
+
+
+---
+
+Mini Curso: HTML, CSS e JavaScript – Criação de Sites Profissionais
+
+
+---
+
+Módulo 1 – HTML: A Estrutura da Página
+
+1.1 O que é HTML?
+
+HTML (HyperText Markup Language) é a linguagem de marcação usada para criar páginas na web. Ela define a estrutura do seu site, ou seja, quais elementos aparecem na tela e em qual ordem.
+
+
+---
+
+1.2 Estrutura básica de um arquivo HTML
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Site</title>
+</head>
+<body>
+  <h1>Olá, mundo!</h1>
+  <p>Este é meu primeiro site.</p>
+</body>
+</html>
+```
+Explicação:
+
+```<!DOCTYPE html>```: indica que o documento é HTML5.
+
+```<html lang="pt-BR">```: define o idioma da página.
+
+```<head>```: contém informações da página (título, meta tags, links de CSS).
+
+```<body>```:contém todo o conteúdo visível da página.
+
+```<h1> a <h6>```: títulos, do mais importante (h1) ao menos importante (h6).
+
+<p>: parágrafo.
+
+
+
+---
+
+1.3 Tags usadas no site do AristidesBP
+
+<nav>: barra de navegação.
+
+<header>: área principal com título, subtítulo e botão de CTA.
+
+<section>: seções da página, como Sobre, Serviços e Contato.
+
+<div>: contêiner genérico para agrupar elementos.
+
+<img>: para imagens.
+
+<a>: link clicável.
+
+<form>, <input>, <textarea>, <button>: formulário de contato.
+
+
+
+---
+
+1.4 Exercício Prático
+
+Crie uma página com:
+
+Um título principal (h1)
+
+Um parágrafo (p)
+
+Um link (a) que leve ao Google
+
+Uma imagem (img) com link de qualquer imagem da internet.
+
+
+
+---
+
+Módulo 2 – CSS: Estilo e Layout
+
+2.1 O que é CSS?
+
+CSS (Cascading Style Sheets) define como os elementos HTML aparecem, incluindo cores, fontes, tamanhos, espaçamentos, bordas e posicionamento.
+
+
+---
+
+2.2 Como aplicar CSS
+
+Existem três formas:
+
+1. Inline: diretamente no elemento
+
+
+
+<p style="color: red;">Texto vermelho</p>
+
+2. Interno: dentro da tag <style> no <head>
+
+
+
+<style>
+  p { color: blue; }
+</style>
+
+3. Externo: arquivo separado (style.css) vinculado com <link>
+
+
+
+
+---
+
+2.3 Seletores importantes usados no site
+
+* → todos os elementos
+
+body → corpo da página
+
+nav, header, section, footer → estilizamos por tag
+
+.class → estiliza elementos por classe
+
+#id → estiliza elementos por ID
+
+Pseudo-classes: :hover → altera estilo ao passar o mouse
+
+
+
+---
+
+2.4 Layout e Responsividade
+
+Flexbox: para organizar elementos horizontal e verticalmente
+
+
+.cards {
+  display: flex;
+  gap: 20px;
+}
+
+Grid: para criar layouts em linhas e colunas
+
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+Media Queries: para adaptar para celular
+
+
+@media(max-width:768px){
+  nav ul { display: none; }
+}
+
+
+---
+
+2.5 Estilizando o Formulário
+
+Inputs, textareas e selects recebem padding, borda e border-radius.
+
+Botão com background, color, border-radius e hover.
+
+
+
+---
+
+2.6 Exercício Prático
+
+Crie um formulário com:
+
+2 inputs de texto
+
+1 textarea
+
+1 botão
+
+
+Estilize o formulário para que fique centralizado, com cores e bordas arredondadas.
+
+
+
+---
+
+Módulo 3 – JavaScript: Interatividade
+
+3.1 O que é JavaScript?
+
+JavaScript adiciona comportamento e interatividade à sua página. Ele permite:
+
+Responder a cliques
+
+Alterar conteúdo dinamicamente
+
+Enviar formulários
+
+Criar animações e muito mais
+
+
+
+---
+
+3.2 Manipulação de elementos
+
+const titulo = document.querySelector("h1");
+titulo.textContent = "Novo Título!";
+
+3.3 Eventos
+
+const botao = document.querySelector("button");
+botao.addEventListener("click", function(){
+  alert("Você clicou no botão!");
+});
+
+No site do AristidesBP:
+
+O formulário envia os dados para WhatsApp.
+
+O botão de envio verifica se o checkbox de aceite foi marcado.
+
+Há animações fade-in ao rolar a página (Intersection Observer).
+
+
+
+---
+
+3.4 Enviando formulário para WhatsApp
+
+const form = document.getElementById("contact-form");
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  const nome = document.getElementById("nome").value;
+  const texto = `*Contrato*%0ANome: ${nome}`;
+  window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
+});
+
+
+---
+
+3.5 Exercício Prático
+
+Crie um formulário com 1 input e 1 botão.
+
+Ao clicar no botão, exiba o valor do input em um alert.
+
+Adicione um checkbox que deve ser marcado para enviar o alert.
+
+
+
+---
+
+Módulo 4 – Projeto Prático: Montando a Página Completa
+
+Objetivo: reproduzir a página do AristidesBP usando tudo que aprendeu.
+
+1. HTML:
+
+Navbar
+
+Header com CTA
+
+Seções (Sobre, Serviços, Contato)
+
+Footer
+
+
+
+2. CSS:
+
+Paleta de cores
+
+Cards com sombra
+
+Formulário estilizado
+
+Layout responsivo
+
+
+
+3. JavaScript:
+
+Formulário envia mensagem para WhatsApp
+
+Checkbox de aceite obrigatório
+
+Animações de fade-in ao rolar
+
+
+
+
+
+---
+
+Dicas
+
+Sempre teste no celular para garantir responsividade.
+
+Use cores consistentes para manter identidade visual.
+
+Comentários ajudam a entender o código.
+
+Pratique alterando imagens, textos e cores para ver o efeito.
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 
 
