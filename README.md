@@ -16,7 +16,7 @@
 8. [BRANCHES AS RAMIFICAÇÕES](#branches-as-ramificações)
 9. [TRABALHANDO COM COMMIT](#trabalhando-com-commit)
 10. [CRIANDO UM SERVIDOR COM PYTHON](#criando-um-servidor-com-python)
-11. [LOCALSTORAGE VS IDENXEDDB](#localstorage-vs-indexeddb)
+11. [LOCALSTORAGE VS INDEXEDDB](#localstorage-vs-indexeddb)
 13. 
 
 
@@ -1499,7 +1499,7 @@ Para parar o servidor, volte para o Termux e pressione
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# LOCALSTORAGE VS IDENXEDDB
+# LOCALSTORAGE VS IndexedDB
 
 
 ---
