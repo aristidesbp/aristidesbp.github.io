@@ -229,15 +229,15 @@ A partir disso quero que voçe crie 5 ideias de anuncio, no mesmo formato que va
 E, além disso, crie um site navegavel com todos os insights do que vc encontrar nessa pesquisa.
 ```
 
-# ESCOLHENDO 10 INFORMAÇÕES:
+# ESCOLHENDO  INFORMAÇÕES:
 ```
 Quais são as principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
-Liste as 10 da mais importante para a menus importante.
+Liste da mais importante para a menus importante.
 
 ```
 # CRIANDO UMA COPY:
 ```
- Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
+Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo com as informações importantes pesquisadas assima. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
 
 Depois da copy feita, crie esta pagina html, use cores frias proficionais, quero uma página bonita e elegante com imagens e animações.
 ```
