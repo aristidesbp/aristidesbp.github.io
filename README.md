@@ -231,15 +231,15 @@ E, além disso, crie um site navegavel com todos os insights do que vc encontrar
 
 # ESCOLHENDO 10 INFORMAÇÕES:
 ```
-Quais são as 10 principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
+Quais são as principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
 Liste as 10 da mais importante para a menus importante.
 
 ```
 # CRIANDO UMA COPY:
 ```
-Agora eu quero que você tranforme esses em uma copy para um site, onde deve ter a primeira com uma oferta em  headline mais uma subheadline e um cta, e os demais blocos abaixo.
+ Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
 
-Depois da copy feita, crie este site para mim, use cores frias proficionais
+Depois da copy feita, crie esta pagina html, use cores frias proficionais, quero uma página bonita e elegante com imagens e animações.
 ```
 # CRIANDO UMA TEG DE CONVERÇÃO:
 ## Crie uma pagina de obrigado pela compra para colocar a teg, e salve a url.
