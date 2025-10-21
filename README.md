@@ -811,11 +811,7 @@ Ideal para	Configurações, cache leve	Apps offline, dados grandes
 
 
 
----
 
-Quer que eu te mostre um exemplo prático de como converter teu sistema atual (que usa localStorage) para IndexedDB?
-
-(208 palavras até agora.)
 
 ---
 
@@ -909,6 +905,4 @@ navigator.storage.estimate().then(info => {
 
 ---
 
-Quer que eu adicione nessa página também um botão para apagar todo o localStorage do navegador direto por código?
 
-(271 palavras até agora.)
