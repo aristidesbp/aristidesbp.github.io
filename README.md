@@ -71,52 +71,48 @@ Você pode vender produtos ou serviços diretamente na internet usando GitHub Pa
 
 ### Vantagens de usar GitHub Pages:
 
-Gratuito e confiável.
-Fácil de atualizar com commits.
+Gratuito e confiável utilzado por grandes empresas e programadores.
+
+Sistema de versionamento para backup.
+
 Ideal para sites estáticos leves.
+
 Integração com HTTPS nativa.
+
+Configura domínio próprio via DNS passndo mais credibilidade, melhora SEO, URL mais curta e memorável.
+
+Adiciona Tags de conversão e rastreamento (Google Analytics, Google Ads, Facebook Pixel) para medir vendas e cliques.
+Permite otimizar campanhas e aumentar conversão.
 
 
 ### Desvantagens:
 
-Não suporta backend dinâmico nativo (necessário usar APIs externas, neste arquivo utilizaremos WhatsApp).
+Não suporta backend dinâmico nativo (necessário usar APIs externas, neste artigo utilizaremos WhatsApp).
 
 Não tem suporte a bancos de dados internos. (vamos utilizar localstorage, indexeddb, arquivo jsom para contornar essa tarefa ).
-
 
 Recursos de e-commerce completos exigem integração externa.
 
 
-Usar um domínio próprio:
-
-Vantagens: passa mais credibilidade, melhora SEO, URL mais curta e memorável.
-
-Desvantagens: custo anual do domínio e necessidade de configuração DNS.
-
-
-Tags de conversão e rastreamento:
-
-Adicione tags de rastreamento (Google Analytics, Google Ads, Facebook Pixel) para medir vendas e cliques.
-
-Permite otimizar campanhas e aumentar conversão.
-
-
-Resumo:
-GitHub Pages é ótimo para começar a vender online sem custo, mas para negócios maiores, é recomendável usar domínio próprio e integrar sistemas de pagamento e rastreamento.
+### Resumo:
+GitHub Pages é ótimo para começar a vender online sem custo, mas para negócios maiores, é recomendável usar domínio
 
 
 
 
 
-
-
+🟥🟥🟥🟥
 
 
   
-# GOOGLE
+# BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+Neste  artigo, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
+
+
+
 # PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
-[Sou AristidesBP], [Moro em Belém do Pará , Brasil] vou vender na internete [o serviço de gestor de trafego pago] para um público
+[Sou AristidesBP], [Moro em Belém do Pará , Brasil] vou vender na internete [o serviço de criação de sites e gestor de trafego pago] para um público
 super exigente. Será uma campanha no Google Ads, logo eu preciso saber as informações 
 que vou te passar abaixo.
 ```
