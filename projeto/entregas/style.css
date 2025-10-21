@@ -1,0 +1,20 @@
+body { 
+  background-color: #f3f4f6; 
+}
+
+/* Título fixo */
+#tituloFixo {
+  position: sticky;
+  top: 0;
+  background-color: #facc15; /* amarelo */
+  z-index: 50;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  cursor: pointer;
+  text-align: center; /* garante que o título fique centralizado */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* leve sombra para destaque */
+}
+
+#tituloFixo h1 {
+  color: white; /* mantém o texto visível */
+}

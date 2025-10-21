@@ -1,68 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Entregas | Entregador</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ABP Sistema de Entrega</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 p-4">
+<body class="p-4">
 
-    <header class="max-w-xl mx-auto mb-4 flex justify-between items-center">
-        <h1 class="text-3xl font-extrabold text-blue-600">Entregas App</h1>
-        <a href="admin.html" class="text-sm text-gray-600 hover:text-blue-800 underline">Ir para Admin</a>
-    </header>
+<!-- Cabeçalho fixo -->
+<div id="tituloFixo" class="max-w-xl mx-auto text-center">
+<h1 class="text-3xl font-bold text-gray-800 mb-2 cursor-pointer">ABP SISTEMA DE ENTREGA</h1>
+</div>
 
-    <div id="cadastro-entrega" class="max-w-xl mx-auto bg-white shadow rounded-xl p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Entrega</h2>
-        <form id="formulario" class="space-y-4">
-            <input type="hidden" id="indexEdicao" value="-1">
-            
-            <div>
-                <label class="block text-gray-700 font-medium mb-1">Cidade</label>
-                <select id="cidade" required class="w-full border rounded px-3 py-2 text-gray-700">
-                    <option value="">Carregando Cidades...</option>
-                </select>
-            </div>
+<div class="max-w-xl mx-auto text-center mt-6">
+<div class="flex flex-col gap-4 items-center">
 
-            <div><label class="block text-gray-700 font-medium mb-1">Código da Venda</label><input id="codigo" required class="w-full border rounded px-3 py-2"></div>
-            <div><label class="block text-gray-700 font-medium mb-1">Nome do Cliente</label><input id="nome" required class="w-full border rounded px-3 py-2"></div>
-            <div><label class="block text-gray-700 font-medium mb-1">Endereço</label><input id="endereco" required class="w-full border rounded px-3 py-2"></div>
-            <div>
-                <label class="block text-gray-700 font-medium mb-1">Bairro</label>
-                <select id="bairro" required class="w-full border rounded px-3 py-2 text-gray-700" disabled>
-                    <option value="">Selecione a Cidade primeiro</option>
-                </select>
-            </div>
-            <div id="info-valor-entrega" class="text-sm text-gray-500 hidden p-2 bg-blue-50 rounded">
-                Valor do Frete para o entregador: <span id="valor-entrega-label" class="font-bold text-blue-800">R$ 0,00</span>
-            </div>
-            
-            <div><label class="block text-gray-700 font-medium mb-1">Valor da Venda (R$)</label><input id="valor" type="number" step="0.01" required class="w-full border rounded px-3 py-2"></div>
-            <div><label class="block text-gray-700 font-medium mb-1">Observação</label><textarea id="observacao" class="w-full border rounded px-3 py-2"></textarea></div>
-            <div><label class="block text-gray-700 font-medium mb-1">Foto da Nota</label><input id="foto" type="file" accept="image/*" capture="environment" class="w-full"></div>
+  <!-- ======= FUNCIONÁRIOS ======= -->
+  <div class="flex justify-center gap-4 mb-4">
+    <button id="btnAddFunc" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">CADASTRAR NOVO FUNCIONÁRIO</button>
+    <button id="btnListFunc" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">FUNCIONÁRIOS CADASTRADOS</button>
+  </div>
 
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold">Salvar Entrega</button>
-        </form>
+  <div id="divListaFunc" class="w-full bg-white shadow rounded-xl p-4 hidden">
+    <input id="pesquisaFunc" type="text" placeholder="Pesquisar funcionário..." class="w-full border rounded px-3 py-2 mb-3" />
+    <ul id="listaFunc" class="space-y-3"></ul>
+  </div>
 
-        <div class="mt-6 border-t pt-4">
-            <h3 class="text-lg font-semibold mb-3">Gerar Relatório de Entregas</h3>
-            <div class="flex gap-2 mb-3">
-                <input type="date" id="dataInicio" class="border rounded px-3 py-2 w-1/2 text-gray-700">
-                <input type="date" id="dataFim" class="border rounded px-3 py-2 w-1/2 text-gray-700">
-            </div>
-            <button id="gerarRelatorio" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 font-semibold">Gerar PDF</button>
-        </div>
-    </div>
+  <div id="divFormFunc" class="max-w-xl w-full bg-white shadow rounded-xl p-6 hidden">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Funcionários</h2>
+    <form id="formFunc" class="space-y-4">
+      <input type="hidden" id="indexEdicaoFunc" value="-1" />
+      <div><label>Nome do Funcionário</label><input id="nome" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Endereço</label><input id="endereco" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Bairro</label><input id="bairro" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Telefone</label><input id="telefone" type="tel" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Observação</label><textarea id="observacao" class="w-full border rounded px-3 py-2"></textarea></div>
+      <div><label>Foto</label><input id="foto" type="file" accept="image/*" capture="environment" class="w-full" /></div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
 
-    <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4">
-        <h3 class="text-xl font-bold mb-3">Entregas Cadastradas</h3>
-        <ul id="lista" class="space-y-3"></ul>
-    </div>
+  <!-- ======= BAIRROS ======= -->
+  <div class="flex justify-center gap-4 mb-4">
+    <button id="btnAddBairro" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">CADASTRAR NOVO BAIRRO</button>
+    <button id="btnListBairro" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">BAIRROS CADASTRADOS</button>
+  </div>
 
-    <script src="assets/js/script.js"></script>
+  <div id="divListaBairros" class="w-full bg-white shadow rounded-xl p-4 hidden">
+    <input id="pesquisaBairro" type="text" placeholder="Pesquisar bairro..." class="w-full border rounded px-3 py-2 mb-3" />
+    <ul id="listaBairros" class="space-y-3"></ul>
+  </div>
+
+  <div id="divFormBairro" class="max-w-xl w-full bg-white shadow rounded-xl p-6 hidden">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Bairros</h2>
+    <form id="formBairro" class="space-y-4">
+      <input type="hidden" id="indexEdicaoBairro" value="-1" />
+      <div><label>Funcionário</label><select id="funcionarioSelect" required class="w-full border rounded px-3 py-2"></select></div>
+      <div><label>Cidade</label><input id="cidade" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Bairro</label><input id="bairroNome" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Valor (R$)</label><input id="valor" type="number" step="0.01" required class="w-full border rounded px-3 py-2" /></div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
+
+  <!-- ======= ENTREGAS ======= -->
+  <div class="flex justify-center gap-4 mb-4">
+    <button id="btnAddEntrega" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">CADASTRAR NOVA ENTREGA</button>
+    <button id="btnListEntrega" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">ENTREGAS CADASTRADAS</button>
+  </div>
+
+  <div id="divListaEntrega" class="w-full bg-white shadow rounded-xl p-4 hidden">
+    <input id="pesquisaEntrega" type="text" placeholder="Pesquisar entrega..." class="w-full border rounded px-3 py-2 mb-3" />
+    <ul id="listaEntrega" class="space-y-3"></ul>
+  </div>
+
+  <div id="divFormEntrega" class="max-w-xl w-full bg-white shadow rounded-xl p-6 hidden">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Entrega</h2>
+    <form id="formEntrega" class="space-y-4">
+      <input type="hidden" id="indexEdicaoEntrega" value="-1" />
+      <div><label>Código da Venda</label><input id="codigo" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Nome do Cliente</label><input id="cliente" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Endereço</label><input id="enderecoEntrega" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Bairro</label><input id="bairroEntrega" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Valor (R$)</label><input id="valorEntrega" type="number" step="0.01" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Observação</label><textarea id="observacaoEntrega" class="w-full border rounded px-3 py-2"></textarea></div>
+      <div><label>Foto da Nota</label><input id="fotoEntrega" type="file" accept="image/*" capture="environment" class="w-full" /></div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
+
+</div>
+</div>
+
+<!-- Botões fixos de banco de dados -->
+<div class="fixed bottom-0 left-0 w-full bg-gray-100 shadow-t py-3 flex justify-center gap-3 z-50">
+  <button id="btnImportarDB" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Importar banco de dados</button>
+  <button id="btnExportarDB" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Exportar banco de dados</button>
+  <button id="btnExcluirDB" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Excluir banco de dados</button>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/funcionarios.js"></script>
+<script src="js/bairros.js"></script>
+<script src="js/entregas.js"></script>
+<script src="js/db.js"></script>
+
 </body>
 </html>
