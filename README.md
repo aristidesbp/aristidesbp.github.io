@@ -514,9 +514,8 @@ Custo Visita Técnica: R$50,00`;
 <body>
   
 <!--  ✅ Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7DDW9C5"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
 
 <header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
 <script src="js/header.js"></script>
