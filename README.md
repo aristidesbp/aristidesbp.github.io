@@ -1676,7 +1676,7 @@ Crie um projeto completo no Firebase chamado “Loja Universal — Versão Supre
 
 👑 2️⃣ USUÁRIO MASTER
 - Criar usuário:
-  • Login: Aristidesbp@gmail.com
+  • Login: aristidesbp@gmail.com
   • Senha: 12344321Abp.
   • Tipo: master
 - Permissões: total, incluindo criar novas lojas e acessar todo o conteúdo do tutorial
