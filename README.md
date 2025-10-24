@@ -126,11 +126,7 @@ Traga isso listado por topico de cada pergunta.
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
 ```
-## PASSO 4 [PALAVRAS CHAVES]:
-```
-Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
-google, de quem deseja comprar este servoço.
-```
+
 ## VALIDAR AS PALAVRAS CHAVES:
 #### ACESSAR A CONTA DO GOOGLE ADS:
 https://ads.google.com
