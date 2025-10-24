@@ -236,6 +236,8 @@ Liste da mais importante para a menus importante.
 Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo com as informações importantes pesquisadas assima. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
 
 Depois da copy feita, crie esta pagina html, use cores frias proficionais, quero uma página bonita e elegante com imagens e animações.
+
+abaixo vou te passar um código para que você mude uma estrutura semelhante a dele.
 ```
 
 
@@ -460,7 +462,245 @@ Custo Visita Técnica: R$50,00`;
 </html>
 
 ```
+## Modular com Seo 
+```
+<!doctype html>
 
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AristidesBP — Site Profissional + Tráfego Pago</title>
+  <meta name="description" content="Criação de sites profissionais e gestão de tráfego pago para empresas que desejam resultado e prestígio." />
+  <style>
+    :root{
+      --bg:#0f1724; /* very dark blue */
+      --card:#111827;
+      --accent:#0ea5e9; /* sky-500 */
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.03);
+      --gold:#b58900;
+      --radius:14px;
+      --maxw:1100px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#071028);color:#e6eef6;line-height:1.5}
+    .container{max-width:var(--maxw);margin:40px auto;padding:28px}
+    header{display:flex;align-items:center;gap:24px}
+    .logo{font-weight:700;font-size:18px;color:var(--accent)}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-top:28px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:28px;box-shadow:0 8px 30px rgba(4,6,22,0.6);backdrop-filter: blur(6px)}/* Headline */
+h1{font-size:30px;margin:0 0 10px 0}
+.sub{color:var(--muted);margin-bottom:18px}
+.offer{display:inline-block;background:linear-gradient(90deg,var(--accent),#7dd3fc);color:#012; padding:10px 14px;border-radius:10px;font-weight:700;margin-bottom:12px}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:var(--accent);color:#022;font-weight:700;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(14,165,233,0.12)}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--muted)}
+
+/* Features */
+.features{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.feature{display:flex;gap:12px;align-items:flex-start}
+.dot{width:10px;height:10px;background:var(--accent);border-radius:50%;margin-top:6px}
+
+/* Form */
+form{display:flex;flex-direction:column;gap:12px}
+input, textarea, select{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.flex-row{display:flex;gap:12px}
+.half{flex:1}
+
+/* Info blocks */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.small{font-size:13px;color:var(--muted)}
+
+footer{margin-top:36px;text-align:center;color:var(--muted);font-size:13px}
+
+/* Animations */
+.hero-image{height:420px;border-radius:16px;background-image:url('https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3d0f2e4b4c7b3e1b3f7e4b9a9f5a9b82');background-size:cover;background-position:center;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(2,6,23,0.6)}
+.glide{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.0) 0%, rgba(2,6,23,0.55) 70%);display:flex;align-items:end;padding:26px}
+.meta{background:rgba(255,255,255,0.03);padding:12px;border-radius:10px}
+
+/* Responsive */
+@media (max-width:960px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.hero-image{height:300px}.container{padding:18px}}
+
+/* nice list styling */
+ul.clean{padding-left:16px;margin:0}
+li.item{margin-bottom:8px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">ARISTIDESBP • Sites & Tráfego</div>
+      <nav style="margin-left:auto;display:flex;gap:12px;align-items:center">
+        <a class="ghost" href="#cases">Cases</a>
+        <a class="ghost" href="#servicos">Serviços</a>
+        <a class="ghost" href="#contato">Contato</a>
+        <a class="ghost" href="cardapio.html">Cardapio</a>
+
+      </nav>
+    </header><section class="hero">
+  <div class="card">
+    <div class="offer">Oferta: Site + Tráfego — Lançamento</div>
+    <h1>Site Profissional + Tráfego Pago</h1>
+    <p class="sub">Tenha site que transmite autoridade e anúncios que realmente geram clientes. Resultado focado em ROI.</p>
+
+    <div style="display:flex;gap:12px">
+      <button class="cta" id="cta-primary">Quero Avaliação Grátis</button>
+      <a href="https://wa.me/5591992420981?text=Ol%C3%A1%2C+gostaria+de+uma+avalia%C3%A7%C3%A3o+do+site+e+tr%C3%A1fego" target="_blank" rel="noopener" class="ghost">Falar no WhatsApp</a>
+    </div>
+
+    <div class="features">
+      <div class="feature"><div class="dot"></div><div><strong>Entrega</strong> em 15–30 dias, design premium e otimizado para conversão.</div></div>
+      <div class="feature"><div class="dot"></div><div><strong>Foco</strong> em ROI: campanhas com otimização contínua e relatórios claros.</div></div>
+      <div class="feature"><div class="dot"></div><div><strong>Suporte</strong> direto via WhatsApp e acompanhamento semanal.</div></div>
+    </div>
+
+    <div style="margin-top:18px" class="small">*Válido para novos clientes — pacote inicial com diagnóstico gratuito.</div>
+  </div>
+
+  <aside style="display:flex;flex-direction:column;gap:16px">
+    <div class="hero-image">
+      <div class="glide">
+        <div class="meta">
+          <strong>Agende</strong>
+          <div class="small">Avaliação gratuita por WhatsApp</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 8px 0">Contato Rápido</h3>
+      <form id="lead-form">
+        <input type="text" id="nome" placeholder="Seu nome" required />
+        <input type="tel" id="telefone" placeholder="Telefone (com DDD)" required />
+        <input type="email" id="email" placeholder="Email" />
+        <select id="interesse">
+          <option value="site">Criação de Site Profissional</option>
+          <option value="trafego">Gestão de Tráfego Pago</option>
+          <option value="pacote">Pacote: Site + Tráfego</option>
+        </select>
+        <textarea id="mensagem" rows="3" placeholder="Breve descrição do projeto"></textarea>
+        <div style="display:flex;gap:8px">
+          <button type="submit" class="cta" style="flex:1">Enviar pelo WhatsApp</button>
+          <button type="button" id="cta-call" class="ghost" style="width:120px">Ligar</button>
+        </div>
+      </form>
+      <div class="small" style="margin-top:10px">Ao enviar, a mensagem abrirá no seu WhatsApp para confirmar o envio ao número <strong>+55 91 99242-0981</strong>.</div>
+    </div>
+  </aside>
+</section>
+
+<!-- Informações pesquisadas: dores, desejos, objeções, motivações, palavras e negativas -->
+<section id="servicos" class="grid">
+  <div class="card">
+    <h4>Principais Dores</h4>
+    <ul class="clean">
+      <li class="item">Sites lentos / imagem amadora</li>
+      <li class="item">Falta de retorno em anúncios</li>
+      <li class="item">Leads de baixa qualidade</li>
+      <li class="item">Tempo escasso e medo de gastar sem retorno</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>Desejos</h4>
+    <ul class="clean">
+      <li class="item">Site que transmite autoridade</li>
+      <li class="item">Geração constante de clientes</li>
+      <li class="item">Automação e previsibilidade de vendas</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>Objeções & Motivações</h4>
+    <ul class="clean">
+      <li class="item">Objeções: "Já tentei antes", "Está caro", "Meu sobrinho faz barato"</li>
+      <li class="item">Motivações: status, segurança, retorno financeiro claro</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>Top 10 Palavras-chave</h4>
+    <ul class="clean small">
+      <li class="item">criação de site profissional</li>
+      <li class="item">desenvolvimento de site para empresa</li>
+      <li class="item">site responsivo para negócios</li>
+      <li class="item">gestão de tráfego pago</li>
+      <li class="item">agência de tráfego pago Brasil</li>
+      <li class="item">contratar gestor de tráfego pago</li>
+      <li class="item">serviço de tráfego pago Google Ads</li>
+      <li class="item">orçamento para criação de site</li>
+      <li class="item">agência criação de site e tráfego pago</li>
+      <li class="item">melhor agência tráfego pago e site</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>Palavras-negativas (exemplo)</h4>
+    <ul class="clean small">
+      <li class="item">grátis — busca por serviços sem pagar</li>
+      <li class="item">tutorial — aprendizado, não contratação</li>
+      <li class="item">curso — intenção educacional</li>
+      <li class="item">emprego / vagas / estágio — público errado</li>
+      <li class="item">template / modelo — busca por soluções prontas e baratas</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>Anúncio modelo</h4>
+    <div class="small">
+      <strong>Títulos (até 30c):</strong>
+      <ul class="clean small">
+        <li class="item">Crie Seu Site Profissional</li>
+        <li class="item">Domine o Google com Anúncios</li>
+        <li class="item">Aumente Vendas com Tráfego Pago</li>
+        <li class="item">Sites Rápidos e Que Convertem</li>
+      </ul>
+      <strong>Descrições (até 90c):</strong>
+      <ul class="clean small">
+        <li class="item">Transforme sua presença online em vendas reais com sites e anúncios de elite.</li>
+        <li class="item">Conquiste resultados de verdade com tráfego pago e design estratégico.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Desenvolvido por AristidesBP • Belém do Pará — <span style="color:var(--muted)">WhatsApp: +55 91 99242-0981</span>
+</footer>
+
+  </div>  <script>
+    // Form -> open WhatsApp with filled message to the provided number
+    const form = document.getElementById('lead-form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value || '—';
+      const tel = document.getElementById('telefone').value || '—';
+      const email = document.getElementById('email').value || '—';
+      const interesse = document.getElementById('interesse').value;
+      const mensagem = document.getElementById('mensagem').value || '—';
+
+      const text = `Ol%C3%A1%2C+meu+nome+%C3%A9+${encodeURIComponent(nome)}.%0ATelefone%3A+${encodeURIComponent(tel)}.%0AEmail%3A+${encodeURIComponent(email)}.%0AInteresse%3A+${encodeURIComponent(interesse)}.%0AMensagem%3A+${encodeURIComponent(mensagem)}`;
+      const phone = '5591992420981'; // número fornecido
+      const url = `https://wa.me/${phone}?text=${text}`;
+      window.open(url, '_blank');
+    });
+
+    // CTA primary scroll to form and focus
+    document.getElementById('cta-primary').addEventListener('click', () => {
+      document.getElementById('nome').scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById('nome').focus();
+    });
+
+    // Call button
+    document.getElementById('cta-call').addEventListener('click', () => {
+      window.location.href = 'tel:+5591992420981';
+    });
+  </script></body>
+</html>
+
+```
 
 ## CARDÁPIO LANCHONETE 
 ```
