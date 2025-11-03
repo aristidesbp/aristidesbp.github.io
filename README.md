@@ -6,14 +6,24 @@ obs: projeto em andamento podendo conter erros!
 
 ---
 # 📘 ÍNDICE
-1. [01 Resumo](#01)
-2. [02 Introdução](#02)
-3. [03 Resultados Esperados](#03)
-4. [04 Conclusão](#04)
-5. [Como vender na internet usando GitHub](05)
+1. [Resumo](#01)
+2. [Introdução](#02)
+3. [Resultados Esperados](#03)
+4. [Conclusão](#04)
+5. [Como vender na internet usando GitHub](#05)
+6. [BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA](#06)
+7. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#07)
+9. [MINI CURSO HTML, CSS E JAVASCRIPT:](#08)
+10. [GIT-GITHUB](#09)
+11. [LOCALSTORAGE VS IndexedDB](#10)
+12. [](#11)
+13. [](#12)
+14. 
+    
+
   
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 01
 # RESUMO
@@ -21,7 +31,7 @@ Este artigo apresenta estratégias práticas para criar e gerir um negócio digi
 
 Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, autônomo.
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 02
 # INTRODUÇÃO 
@@ -35,7 +45,7 @@ O avanço da tecnologia e o acesso crescente à internet possibilitam que qualqu
 
 O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair de casa, promovendo autonomia financeira e inclusão digital.
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 03
 # Resultados Esperados
@@ -45,7 +55,7 @@ Iniciar vendas online sem capital inicial.
 Alcançar autonomia financeira e flexibilidade de horário.
 Desenvolver habilidades em marketing digital, gestão de clientes e negociação.
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 04
 # Conclusão
@@ -53,8 +63,9 @@ Desenvolver habilidades em marketing digital, gestão de clientes e negociação
 A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
 
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
+# 05
 # Como vender na internet usando GitHub
 
 Você pode vender produtos ou serviços diretamente na internet usando GitHub Pages, uma ferramenta gratuita para hospedar sites estáticos. Com os códigos que você tem, é possível criar landing pages profissionais para cada tipo de negócio: vendas de produtos (como no exemplo do delivery) ou serviços.
@@ -100,9 +111,8 @@ GitHub Pages é ótimo para começar a vender online sem custo, mas para negóci
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-
-  
+---
+# 06 
 # BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
 Neste  artigo, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
 
@@ -229,7 +239,11 @@ Quais são as principais informações, dentro do que você pesquisou sobre esta
 Liste da mais importante para a menus importante.
 
 ```
-# CRIANDO UMA COPY:
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
+# 07
+# CRIANDO UMA COPY/SITE/LOJA COM IA:
+
 ```
 Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo com as informações importantes pesquisadas assima. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
 
@@ -792,6 +806,8 @@ Custo Visita Técnica: R$50,00`;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
+# 08
 # MINI CURSO HTML, CSS E JAVASCRIPT:
 
 
@@ -1208,8 +1224,8 @@ clear
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
 ---
+# 09
 # GIT-GITHUB 
 ---
   
@@ -1593,7 +1609,8 @@ Para parar o servidor, volte para o Termux e pressione
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
+---
+# 10
 # LOCALSTORAGE VS IndexedDB
 
 
