@@ -1,121 +1,32 @@
 obs: projeto em andamento podendo conter erros!
-#### Artigo escrito por Aristides Barbosa Pontes. 09/10/2025
+#### Tutoriais escrito por Aristides Barbosa Pontes. 09/10/2025
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# "Da falta de emprego à criação de oportunidades: o poder de empreender online"
-## Uma proposta acessível para geração de renda e inclusão digital através de sites gratuitos e ferramentas open-source.
+
 
 ---
 # 📘 ÍNDICE
-1. [Resumo](#01)
-2. [Introdução](#02)
-3. [Resultados Esperados](#03)
-4. [Conclusão](#04)
-5. [Como vender na internet usando GitHub](#05)
-6. [BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA](#06)
-7. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#07)
-9. [MINI CURSO HTML, CSS E JAVASCRIPT:](#08)
-10. [GIT-GITHUB](#09)
-11. [LOCALSTORAGE VS IndexedDB](#10)
+1. [BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA](#01)
+2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
+3. [MINI CURSO HTML, CSS E JAVASCRIPT:](#03)
+4. [TERMUX](#04)
+5. [](#05)
+6. [](#06)
+7. [](#07)
+9. [](#08)
+10. [](#09)
+11. [](#10)
 12. [](#11)
 13. [](#12)
 14. 
     
 
   
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 01
-# RESUMO
-Este artigo apresenta estratégias práticas para criar e gerir um negócio digital utilizando apenas um celular, sem investimento inicial. O objetivo é fornecer orientações a indivíduos que desejam empreender de forma autônoma, especialmente mães e pais que necessitam conciliar trabalho e cuidados domésticos. São discutidos métodos para montar lojas virtuais, vender produtos ou serviços e aplicar técnicas de marketing digital de baixo custo.
-
-Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, autônomo.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
 ---
-# 02
-# INTRODUÇÃO 
-  A falta de empregos formais e a desigualdade de oportunidades têm sido problemas persistentes no mundo contemporâneo. Em meio a esse cenário, milhões de pessoas — especialmente mães de família, jovens e trabalhadores informais — buscam alternativas para gerar renda sem depender de grandes investimentos ou estrutura profissional.
-
-Este artigo apresenta uma proposta prática e inclusiva: ensinar qualquer pessoa, utilizando apenas um celular e ferramentas gratuitas, a criar e hospedar um site de vendas. O objetivo é mostrar que é possível iniciar um negócio digital sem custo inicial, vendendo produtos próprios ou de terceiros, e transformar a tecnologia em uma aliada na luta contra o desemprego e a desigualdade.
-
-A iniciativa parte do princípio de que o conhecimento digital acessível é uma das chaves para a autonomia financeira e o empoderamento social, contribuindo para uma sociedade mais justa e independente
-
-O avanço da tecnologia e o acesso crescente à internet possibilitam que qualquer pessoa inicie um negócio online com recursos limitados. Este artigo busca demonstrar como é possível criar uma loja virtual profissional e vender produtos ou serviços de forma estratégica apenas com um celular.
-
-O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair de casa, promovendo autonomia financeira e inclusão digital.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
----
-# 03
-# Resultados Esperados
-
-Ao seguir as orientações propostas, indivíduos poderão:
-Iniciar vendas online sem capital inicial.
-Alcançar autonomia financeira e flexibilidade de horário.
-Desenvolver habilidades em marketing digital, gestão de clientes e negociação.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
----
-# 04
-# Conclusão
-
-A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
----
-# 05
-# Como vender na internet usando GitHub
-
-Você pode vender produtos ou serviços diretamente na internet usando GitHub Pages, uma ferramenta gratuita para hospedar sites estáticos. Com os códigos que você tem, é possível criar landing pages profissionais para cada tipo de negócio: vendas de produtos (como no exemplo do delivery) ou serviços.
-
-### Passos básicos:
-
-1. Crie um repositório no GitHub.
-2. Suba todos os arquivos do site (HTML, CSS, JS, imagens).
-3. Ative o GitHub Pages nas configurações do repositório.
-4. O site será publicado em https://seuusuario.github.io/nome-do-repositorio/.
-5. Configure formulários ou links de WhatsApp/checkout para receber pedidos.
-
-### Vantagens de usar GitHub Pages:
-
-Gratuito e confiável utilzado por grandes empresas e programadores.
-
-Sistema de versionamento para backup.
-
-Ideal para sites estáticos leves.
-
-Integração com HTTPS nativa.
-
-Configura domínio próprio via DNS passndo mais credibilidade, melhora SEO, URL mais curta e memorável.
-
-Adiciona Tags de conversão e rastreamento (Google Analytics, Google Ads, Facebook Pixel) para medir vendas e cliques.
-Permite otimizar campanhas e aumentar conversão.
-
-
-### Desvantagens:
-
-Não suporta backend dinâmico nativo (necessário usar APIs externas, neste artigo utilizaremos WhatsApp).
-
-Não tem suporte a bancos de dados internos. (vamos utilizar localstorage, indexeddb, arquivo jsom para contornar essa tarefa ).
-
-Recursos de e-commerce completos exigem integração externa.
-
-
-### Resumo:
-GitHub Pages é ótimo para começar a vender online sem custo, mas para negócios maiores, é recomendável usar domínio
-
-
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
----
-# 06 
-# BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
-Neste  artigo, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
-
 
 
 ## PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
@@ -241,8 +152,9 @@ Liste da mais importante para a menus importante.
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
-# 07
+# 02
 # CRIANDO UMA COPY/SITE/LOJA COM IA:
+---
 
 ```
 Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo com as informações importantes pesquisadas assima. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
@@ -807,7 +719,7 @@ Custo Visita Técnica: R$50,00`;
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
-# 08
+# 03
 # MINI CURSO HTML, CSS E JAVASCRIPT:
 
 
@@ -1122,7 +1034,156 @@ Possível upgrade: IndexedDB para dados maiores
 
 
 
+# LOCALSTORAGE VS IndexedDB
+
+
 ---
+
+🧱 localStorage
+
+Armazena textos simples (strings).
+
+Ideal para dados pequenos (configurações, preferências, listas curtas).
+
+Limite médio: 5 MB por domínio.
+
+É síncrono → pode travar a página se gravar muito.
+
+Usa localStorage.setItem() e getItem().
+
+Exemplo:
+
+localStorage.setItem("nome", "Usuário");
+console.log(localStorage.getItem("nome"));
+
+
+
+---
+
+🗄️ IndexedDB
+
+Armazena grandes volumes de dados (até centenas de MB).
+
+Aceita objetos complexos, imagens, arrays etc.
+
+É assíncrono → não trava a página.
+
+Funciona como um banco de dados real, com tabelas (“object stores”), índices e transações.
+
+Ideal para aplicativos offline e sistemas grandes.
+
+Exemplo básico:
+
+const request = indexedDB.open("meuBanco", 1);
+request.onsuccess = () => console.log("Banco aberto!");
+
+
+
+---
+
+📊 Resumo rápido:
+
+Recurso	localStorage	IndexedDB
+
+Tipo	Texto simples	Estrutura de banco de dados
+Tamanho	~5 MB	Muito maior (depende do navegador)
+Velocidade	Simples, mas pode travar	Rápido e assíncrono
+Complexidade	Muito fácil	Mais complexo
+Ideal para	Configurações, cache leve	Apps offline, dados grandes
+
+
+
+
+
+---
+
+✅ 1. Por que o botão não funcionou no celular
+
+No Android, o Google Chrome Mobile não permite que o comando
+indexedDB.databases() funcione — ele é bloqueado por segurança.
+Por isso a página não mostra nada.
+Mas o localStorage continua funcionando normalmente, só não dá para listar via script.
+
+
+---
+
+✅ 2. Como ver e apagar o armazenamento direto pelo Chrome (sem PC)
+
+🔹 Passo a passo:
+
+1. Abra o Chrome no seu celular.
+
+
+2. Toque nos três pontinhos (⋮) no canto superior direito.
+
+
+3. Vá em Configurações → Privacidade e segurança → Limpar dados de navegação.
+
+
+4. Marque "Cookies e dados do site" e "Imagens e arquivos armazenados em cache".
+→ Isso apaga tudo (inclusive localStorage e IndexedDB).
+
+
+5. Toque em “Limpar dados”.
+
+
+
+⚠️ Dica:
+Se quiser apagar só um site específico (sem apagar tudo):
+
+1. Abra o site que você quer limpar.
+
+
+2. Toque nos três pontinhos → “Informações do site” → “Limpar e redefinir”.
+→ Isso apaga o localStorage só daquele site.
+
+
+
+
+---
+
+✅ 3. Para ver quanto espaço o navegador está usando:
+
+1. No Chrome, digite na barra:
+
+chrome://settings/siteData
+
+
+2. Toque em Enter.
+
+
+3. Lá aparecem todos os sites com armazenamento (inclui localStorage, IndexedDB etc).
+
+
+4. Você pode tocar em “Remover” em cada um.
+
+
+
+
+---
+
+✅ 4. Alternativa com código simples (só pra ver tamanho usado):
+
+Crie um arquivo HTML com o código abaixo e abra no celular:
+
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Ver uso de armazenamento</h3>
+<p id="info"></p>
+<script>
+navigator.storage.estimate().then(info => {
+  const usado = (info.usage / 1024 / 1024).toFixed(2);
+  const limite = (info.quota / 1024 / 1024).toFixed(2);
+  document.getElementById("info").innerText =
+    `Armazenamento usado: ${usado} MB / Limite: ${limite} MB`;
+});
+</script>
+</body>
+</html>
+
+👉 Esse mostra quanto espaço total seu navegador está usando e o limite máximo.
+
 
 
 
@@ -1135,20 +1196,16 @@ Possível upgrade: IndexedDB para dados maiores
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
-#   COMO ORGANIZAR REPOSITÓRIO PELO CELULAR
+# 04
+# TERMUX
 ---
-
   É possível programar pelo site do Github, mas 
 caso você queira trabalhar diretamente pelo celular
 de forma local aconselho você usar o TERMUX 
 juntamente com o gerenciador de arquivos que 
 permita edição, recomendo o F AQUIVOS. 
-(OBS: VOU DEIXAR AMBOS NA PASTA DE APLICATIVOS)
-  
 
----
-# INSTALAÇÃO E CONFIGURAÇÃO DO TERMUX
----
+
 Acesse o link oficial (não use da Play Store):
 faça o download do aplicativo direto no github
 https://github.com/termux/termux-app/releases
@@ -1609,157 +1666,7 @@ Para parar o servidor, volte para o Termux e pressione
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
----
-# 10
-# LOCALSTORAGE VS IndexedDB
 
-
----
-
-🧱 localStorage
-
-Armazena textos simples (strings).
-
-Ideal para dados pequenos (configurações, preferências, listas curtas).
-
-Limite médio: 5 MB por domínio.
-
-É síncrono → pode travar a página se gravar muito.
-
-Usa localStorage.setItem() e getItem().
-
-Exemplo:
-
-localStorage.setItem("nome", "Usuário");
-console.log(localStorage.getItem("nome"));
-
-
-
----
-
-🗄️ IndexedDB
-
-Armazena grandes volumes de dados (até centenas de MB).
-
-Aceita objetos complexos, imagens, arrays etc.
-
-É assíncrono → não trava a página.
-
-Funciona como um banco de dados real, com tabelas (“object stores”), índices e transações.
-
-Ideal para aplicativos offline e sistemas grandes.
-
-Exemplo básico:
-
-const request = indexedDB.open("meuBanco", 1);
-request.onsuccess = () => console.log("Banco aberto!");
-
-
-
----
-
-📊 Resumo rápido:
-
-Recurso	localStorage	IndexedDB
-
-Tipo	Texto simples	Estrutura de banco de dados
-Tamanho	~5 MB	Muito maior (depende do navegador)
-Velocidade	Simples, mas pode travar	Rápido e assíncrono
-Complexidade	Muito fácil	Mais complexo
-Ideal para	Configurações, cache leve	Apps offline, dados grandes
-
-
-
-
-
----
-
-✅ 1. Por que o botão não funcionou no celular
-
-No Android, o Google Chrome Mobile não permite que o comando
-indexedDB.databases() funcione — ele é bloqueado por segurança.
-Por isso a página não mostra nada.
-Mas o localStorage continua funcionando normalmente, só não dá para listar via script.
-
-
----
-
-✅ 2. Como ver e apagar o armazenamento direto pelo Chrome (sem PC)
-
-🔹 Passo a passo:
-
-1. Abra o Chrome no seu celular.
-
-
-2. Toque nos três pontinhos (⋮) no canto superior direito.
-
-
-3. Vá em Configurações → Privacidade e segurança → Limpar dados de navegação.
-
-
-4. Marque "Cookies e dados do site" e "Imagens e arquivos armazenados em cache".
-→ Isso apaga tudo (inclusive localStorage e IndexedDB).
-
-
-5. Toque em “Limpar dados”.
-
-
-
-⚠️ Dica:
-Se quiser apagar só um site específico (sem apagar tudo):
-
-1. Abra o site que você quer limpar.
-
-
-2. Toque nos três pontinhos → “Informações do site” → “Limpar e redefinir”.
-→ Isso apaga o localStorage só daquele site.
-
-
-
-
----
-
-✅ 3. Para ver quanto espaço o navegador está usando:
-
-1. No Chrome, digite na barra:
-
-chrome://settings/siteData
-
-
-2. Toque em Enter.
-
-
-3. Lá aparecem todos os sites com armazenamento (inclui localStorage, IndexedDB etc).
-
-
-4. Você pode tocar em “Remover” em cada um.
-
-
-
-
----
-
-✅ 4. Alternativa com código simples (só pra ver tamanho usado):
-
-Crie um arquivo HTML com o código abaixo e abra no celular:
-
-<!DOCTYPE html>
-<html>
-<body>
-<h3>Ver uso de armazenamento</h3>
-<p id="info"></p>
-<script>
-navigator.storage.estimate().then(info => {
-  const usado = (info.usage / 1024 / 1024).toFixed(2);
-  const limite = (info.quota / 1024 / 1024).toFixed(2);
-  document.getElementById("info").innerText =
-    `Armazenamento usado: ${usado} MB / Limite: ${limite} MB`;
-});
-</script>
-</body>
-</html>
-
-👉 Esse mostra quanto espaço total seu navegador está usando e o limite máximo.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
