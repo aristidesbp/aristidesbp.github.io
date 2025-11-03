@@ -6,24 +6,24 @@ obs: projeto em andamento podendo conter erros!
 
 ---
 # 📘 ÍNDICE
-1. [Abp01 Resumo](#abp01)
-2. [Abp02 Introdução](#abp02)
-3. [Abp03- Resultados Esperados](#abp03)
-4. [Abp04- Conclusão](#abp04)
+1. [01 Resumo](#01)
+2. [02 Introdução](#02)
+3. [03 Resultados Esperados](#03)
+4. [04 Conclusão](#04)
   
 
 
 ---
-# Abp01
-## RESUMO
+# 01
+# RESUMO
 Este artigo apresenta estratégias práticas para criar e gerir um negócio digital utilizando apenas um celular, sem investimento inicial. O objetivo é fornecer orientações a indivíduos que desejam empreender de forma autônoma, especialmente mães e pais que necessitam conciliar trabalho e cuidados domésticos. São discutidos métodos para montar lojas virtuais, vender produtos ou serviços e aplicar técnicas de marketing digital de baixo custo.
 
 Palavras-chave: empreendedorismo digital, e-commerce, celular, renda extra, autônomo.
 
 
 ---
-# Abp02
-## INTRODUÇÃO 
+# 02
+# INTRODUÇÃO 
   A falta de empregos formais e a desigualdade de oportunidades têm sido problemas persistentes no mundo contemporâneo. Em meio a esse cenário, milhões de pessoas — especialmente mães de família, jovens e trabalhadores informais — buscam alternativas para gerar renda sem depender de grandes investimentos ou estrutura profissional.
 
 Este artigo apresenta uma proposta prática e inclusiva: ensinar qualquer pessoa, utilizando apenas um celular e ferramentas gratuitas, a criar e hospedar um site de vendas. O objetivo é mostrar que é possível iniciar um negócio digital sem custo inicial, vendendo produtos próprios ou de terceiros, e transformar a tecnologia em uma aliada na luta contra o desemprego e a desigualdade.
@@ -36,8 +36,8 @@ O foco é ajudar pessoas sem capital inicial e que precisam gerar renda sem sair
 
 
 ---
-# Abp03
-## Resultados Esperados
+# 03
+# Resultados Esperados
 
 Ao seguir as orientações propostas, indivíduos poderão:
 Iniciar vendas online sem capital inicial.
@@ -46,8 +46,8 @@ Desenvolver habilidades em marketing digital, gestão de clientes e negociação
 
 
 ---
-# Abp04
-## Conclusão
+# 04
+# Conclusão
 
 A utilização de dispositivos móveis e ferramentas digitais acessíveis democratiza o empreendedorismo, permitindo que qualquer pessoa, independentemente de recursos financeiros, crie um negócio online. Este artigo contribui para a inclusão digital e para o desenvolvimento de renda extra de forma prática e profissional, especialmente para mães e pais que buscam conciliar trabalho e responsabilidades familiares.
 
