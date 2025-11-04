@@ -25,8 +25,9 @@ obs: projeto em andamento podendo conter erros!
 ---
 # 01
 # BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+
 Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
----
+
 
 
 # PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
