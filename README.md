@@ -159,11 +159,33 @@ Com base na minha escolha, faça uma logo.png
 
 ```
 
-Abaixo vou te passar um código, Com base em tudo que vimos até agora, coloque/substitua pelas informações  coletadas na pesquisa assima.
+> Abaixo vou te enviar um código HTML completo que servirá como base para reconstrução da página.
 
-O formulário de contato, deverá mandar as respostas para o seguinte número do WhatsApp [+5591992420981], antes de ser enviado deve ter um elemento check list para confirmação do aceito da cobrança.
+Com base em tudo o que já analisamos e construímos até agora — incluindo as pesquisas, persona, marca, identidade visual e logo — quero que você reconstrua o código com as seguintes orientações:
 
-Recrecontrua pagina html, use cores condizentes com a minha logo, quero uma página bonita e elegante com todos os elementos e animações
+1. Substitua e insira todas as informações coletadas nas etapas anteriores (persona, dores, desejos, objeções, motivações e identidade visual).
+
+
+2. O formulário de contato deve enviar as respostas diretamente para o WhatsApp +55 91 99242-0981.
+
+
+3. Antes do envio, o formulário deve incluir um checklist de confirmação de aceitação da cobrança.
+
+
+4. A página deve ter um visual elegante e profissional, condizente com as cores da logo (dourado e preto).
+
+
+5. Utilize animações suaves, interatividade e transições modernas.
+
+
+6. Toda a estrutura deve seguir as boas práticas de HTML5, CSS3 e JavaScript, com foco em performance e conversão.
+
+
+
+👉 Após enviar o código-base, reconstrua a página completa aplicando todas essas instruções.
+
+
+
 
 ```
 
