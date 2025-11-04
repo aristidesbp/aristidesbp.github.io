@@ -9,7 +9,7 @@ obs: projeto em andamento podendo conter erros!
 2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
-5. 
+6.[FIREBASE](#06)
     
 
   
