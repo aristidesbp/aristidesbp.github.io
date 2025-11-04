@@ -24,32 +24,32 @@ obs: projeto em andamento podendo conter erros!
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 01
-## BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+# BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
 Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
 ---
 
 
-## PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
+# PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
 passo 1: 
 [Sou AristidesBP], [Moro em Belém do Pará , Brasil] vou vender na internete [o serviço de criação de sites e gestor de trafego pago] para um público
 super exigente. Será uma campanha no Google Ads, logo eu preciso saber as informações 
 que vou te passar abaixo.
 ```
-## PASSO 2 [PESQUISAR PUBLICO ALVO (PERSONA)]:
+# PASSO 2 [PESQUISAR PUBLICO ALVO (PERSONA)]:
 ```
 passo 2:
 Quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
 Traga isso listado por topico de cada pergunta.
 ```
-## PASSO 3 [PALAVRAS CHAVES]:
+# PASSO 3 [PALAVRAS CHAVES]:
 ```
 passo 3:
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
 ```
 
-## PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
+# PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
 passo 4:
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
