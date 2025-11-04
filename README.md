@@ -46,16 +46,6 @@ Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajud
 google, de quem deseja comprar este servoço.
 ```
 
-## VALIDAR AS PALAVRAS CHAVES:
-#### ACESSAR A CONTA DO GOOGLE ADS:
-https://ads.google.com
-#### PESQUISAR POR : 
-```
-Planejador de palavra-chave
-```
-#### EM [DESCOBRIR NOVAS PALAVRAS CHAVES], COLE OS RESULTADOS DA IA, UMA POR VEZ!
-#### APERTE EM BUSCAR E SELECIONE A REGIÃO.
-
 ## PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
@@ -709,7 +699,17 @@ Custo Visita Técnica: R$50,00`;
 </html>
 ```
 
-# BONUS IA MANUS [https://manus.im/app]
+# BONUS 
+## VALIDAR AS PALAVRAS CHAVES:
+#### ACESSAR A CONTA DO GOOGLE ADS:
+https://ads.google.com
+#### PESQUISAR POR : 
+```
+Planejador de palavra-chave
+```
+#### EM [DESCOBRIR NOVAS PALAVRAS CHAVES], COLE OS RESULTADOS DA IA, UMA POR VEZ!
+#### APERTE EM BUSCAR E SELECIONE A REGIÃO.
+# IA MANUS [https://manus.im/app]
 ```
 Eu quero criar um anúncio no Google para o meu serviço de [Trafego pago].Eu quero que voçe faça essa busca no Google, algumas vezes, e anlize todos os anuncios que vão aparecer.
 
