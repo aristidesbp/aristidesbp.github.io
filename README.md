@@ -10,6 +10,7 @@ obs: projeto em andamento podendo conter erros!
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
 5. [FIREBASE](#06)
+6. [FIRE BASE- TAPIOCA](#07)
     
 
   
@@ -2592,6 +2593,143 @@ firebase deploy --only hosting
 Pronto 🎉
 Seu site estará hospedado com pagamento via Mercado Pago, registro no Firebase e confirmação automática de status.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
+
+# 07
+# FIRE BASE - TAPIOCA
+
+🔥 Usaremos Firebase (plano gratuito Spark) + Mercado Pago sandbox + envio via link normal do WhatsApp.
+O sistema vai confirmar o pagamento automaticamente antes de abrir o WhatsApp.
+
 
 ---
+
+#### 🚀 Início do desenvolvimento
+Bloco 1 de 6 — Configuração do Firebase (Firestore + Functions)
+> Este bloco prepara o ambiente para armazenar pedidos e permitir que as funções monitorem o pagamento.
+
+
+
+
+---
+
+#### 🧩 Estrutura esperada do projeto
+
+/project-root
+ ├── public/
+ │   ├── index.html
+ │   ├── assets/
+ │   │   ├── js/delivery.js
+ │   │   └── css/delivery.css
+ ├── functions/
+ │   ├── index.js
+ │   └── package.json
+ └── firebase.json
+
+
+---
+
+#### 1️⃣ Criação e configuração do Firebase
+
+1. Vá em https://console.firebase.google.com
+2. Crie um novo projeto:
+3. ``` tapioca-delivery ```
+4. Clique em </> Adicionar app Web e copie o trecho de configuração, ele terá esse formato:
+
+
+```
+const firebaseConfig = {
+  apiKey: "sua-chave",
+  authDomain: "tapioca-delivery.firebaseapp.com",
+  projectId: "tapioca-delivery",
+  storageBucket: "tapioca-delivery.appspot.com",
+  messagingSenderId: "XXXXXXXX",
+  appId: "1:XXXXXXXX:web:XXXXXXXX"
+};
+```
+
+4. Ative o Firestore Database → modo “produção” ou “teste” (tanto faz por enquanto).
+5. Ative o Cloud Functions na aba Build > Functions.
+
+
+
+
+---
+
+#### 2️⃣ Arquivo firebase.json
+Crie este arquivo na raiz:
+```
+{
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}
+```
+
+---
+
+3️⃣ Dentro da pasta functions/ → package.json
+```
+{
+  "name": "tapioca-delivery-functions",
+  "engines": { "node": "18" },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.4.0",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5"
+  }
+}
+
+```
+---
+
+4️⃣ Dentro da pasta functions/ → index.js
+```
+/* Configuração base das Cloud Functions */
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const cors = require("cors")({ origin: true });
+
+admin.initializeApp();
+const db = admin.firestore();
+
+/* Endpoint para criar novo pedido */
+exports.criarPedido = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    if (req.method !== "POST") return res.status(405).send("Método não permitido");
+
+    try {
+      const pedido = req.body;
+      pedido.status = "aguardando_pagamento";
+      pedido.criadoEm = new Date();
+
+      const docRef = await db.collection("pedidos").add(pedido);
+      res.status(200).send({ id: docRef.id });
+    } catch (error) {
+      console.error("Erro ao criar pedido:", error);
+      res.status(500).send("Erro interno");
+    }
+  });
+});
+```
+
+📝 Função:
+
+Recebe um pedido via POST (enviado do front-end delivery.js)
+Cria o documento no Firestore
+Define status: "aguardando_pagamento"
+Retorna o id do pedido
+
+
+
+---
+
+Quer que eu prossiga agora com o
+💳 Bloco 2 de 6 — Configuração do Mercado Pago (sandbox + geração de pagamento), Aristides?
 
