@@ -2615,7 +2615,7 @@ Bloco 1 de 6 — Configuração do Firebase (Firestore + Functions)
 ---
 
 #### 🧩 Estrutura esperada do projeto
-
+```
 /project-root
  ├── public/
  │   ├── index.html
@@ -2626,7 +2626,7 @@ Bloco 1 de 6 — Configuração do Firebase (Firestore + Functions)
  │   ├── index.js
  │   └── package.json
  └── firebase.json
-
+```
 
 ---
 
