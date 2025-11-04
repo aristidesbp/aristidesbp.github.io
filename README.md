@@ -898,6 +898,238 @@ Etapa	Ação
 
 
 
+# GITHUB PAGES
+Vamos criar passo a passo a sua GitHub Page, ou seja, um site gratuito hospedado diretamente no seu repositório do GitHub — ideal para portfólios, lojas, landing pages e até sistemas com HTML, CSS e JS.
+
+
+---
+
+🌐 O que é o GitHub Pages
+
+O GitHub Pages transforma um repositório do GitHub em um site acessível publicamente (ex: https://aristidesbp.github.io/).
+
+Você pode:
+
+Hospedar seus projetos (HTML, CSS, JS).
+
+Criar um site pessoal ou de empresa.
+
+Publicar documentações ou landing pages sem pagar nada.
+
+
+
+---
+
+🧩 1️⃣ Pré-requisitos
+
+Antes de tudo, você precisa:
+
+1. Ter uma conta no GitHub (✅ já ensinamos antes).
+
+
+2. Ter criado ou saber criar um repositório.
+
+
+
+
+---
+
+🏗️ 2️⃣ Criando o repositório
+
+➤ Passos:
+
+1. Entre em https://github.com/.
+
+
+2. Clique no botão “New” (ao lado de “Repositories”).
+
+
+3. Preencha os campos:
+
+Repository name: pode ser:
+
+Para um site pessoal → aristidesbp.github.io
+
+Para um projeto específico → loja-virtual, portfolio, etc.
+
+
+Description: coloque uma breve descrição (opcional).
+
+Public: deixe público.
+
+Marque ✅ “Add a README file”.
+
+
+
+4. Clique em “Create repository”.
+
+
+
+
+---
+
+📁 3️⃣ Enviando seus arquivos
+
+Agora você tem duas opções:
+
+🔹 Opção 1 — Upload manual pelo site:
+
+1. Dentro do repositório, clique em “Add file → Upload files”.
+
+
+2. Selecione seus arquivos do projeto:
+
+index.html
+
+style.css
+
+script.js
+
+
+
+3. Clique em “Commit changes” (botão verde).
+
+
+
+🔹 Opção 2 — Envio pelo Git (mais profissional):
+
+Se estiver usando o terminal:
+
+git clone https://github.com/aristidesbp/portfolio.git
+cd portfolio
+# Copie seus arquivos do site para essa pasta
+git add .
+git commit -m "Primeira versão do site"
+git push origin main
+
+
+---
+
+⚙️ 4️⃣ Ativando o GitHub Pages
+
+1. Vá até o repositório do seu projeto.
+
+
+2. Clique em Settings (⚙️ canto direito superior).
+
+
+3. No menu lateral, selecione Pages.
+
+
+4. Em Branch, selecione:
+
+main  /  (root)
+
+
+5. Clique em Save.
+
+
+
+
+---
+
+🚀 5️⃣ Acessando seu site
+
+Após alguns segundos, o GitHub gera um link como este:
+
+https://seuusuario.github.io/nomedorepositorio/
+
+Por exemplo:
+
+https://aristidesbp.github.io/loja-virtual/
+
+💡 O link aparecerá na parte superior da página de configuração, com um botão “Visit site”.
+
+
+---
+
+🎨 6️⃣ Estrutura recomendada do projeto
+
+Exemplo simples de site hospedável:
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Site no GitHub Pages</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Bem-vindo ao meu site!</h1>
+  <p>Site hospedado no GitHub Pages 😎</p>
+  <script src="script.js"></script>
+</body>
+</html>
+
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+}
+h1 {
+  color: #333;
+}
+
+/* script.js */
+console.log("Site ativo no GitHub Pages!");
+
+
+---
+
+🧱 7️⃣ Atualizando seu site
+
+Sempre que quiser atualizar:
+
+1. Faça mudanças nos arquivos (HTML, CSS, JS).
+
+
+2. Envie novamente (git push ou “Upload files”).
+
+
+3. O site se atualiza automaticamente em 1–2 minutos.
+
+
+
+
+---
+
+🧾 8️⃣ Customizando com domínio próprio (opcional)
+
+Se quiser usar um domínio como meusite.com:
+
+1. Vá em Settings → Pages.
+
+
+2. Em Custom domain, insira o domínio.
+
+
+3. Configure o DNS no seu provedor apontando para:
+
+CNAME → yourusername.github.io
+
+
+
+
+---
+
+✅ Resumo final
+
+Etapa	Ação
+
+1	Criar repositório público
+2	Adicionar arquivos (HTML, CSS, JS)
+3	Ir em Settings → Pages
+4	Escolher branch “main / root”
+5	Salvar e aguardar o link
+6	Acessar o site publicado
+7	(Opcional) Configurar domínio próprio
+
+
+
+---
 
 
 
