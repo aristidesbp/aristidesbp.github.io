@@ -9,7 +9,7 @@ obs: projeto em andamento podendo conter erros!
 2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
-6.[FIREBASE](#06)
+5. [FIREBASE](#06)
     
 
   
@@ -2327,20 +2327,20 @@ Adicionar um campo obrigatório para o cliente confirmar que entende e aceita o 
 ✅ Como fazer:
 
 1. Localize a seção do formulário no seu HTML:
-
+```
 <form id="contact-form">
-
+```
 
 2. Logo antes do botão de envio, adicione o seguinte bloco:
-
+```
 <label>
   <input type="checkbox" id="confirmarPagamento" required>
   Confirmo que estou ciente do custo de <strong>R$50,00</strong> e desejo prosseguir com o pagamento.
 </label>
-
+```
 
 3. E no JavaScript, adicione a verificação antes do envio (substituindo o trecho atual que só checa “aceite”):
-
+```
 const confirmarPagamento = document.getElementById("confirmarPagamento").checked;
 
 if (!confirmarPagamento) {
@@ -2348,7 +2348,7 @@ if (!confirmarPagamento) {
   return;
 }
 
-
+```
 
 
 ---
@@ -2444,7 +2444,7 @@ Usar as Firebase Functions para criar ordens de pagamento e receber notificaçõ
 
 1. No diretório functions/, abra o arquivo index.js.
 Apague o conteúdo e cole:
-
+```
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const mercadopago = require("mercadopago");
@@ -2511,17 +2511,17 @@ exports.confirmarPagamento = functions.https.onRequest(async (req, res) => {
     res.sendStatus(400);
   }
 });
-
+```
 
 2. Em functions/package.json, adicione:
-
+```
 "dependencies": {
   "firebase-admin": "^11.5.0",
   "firebase-functions": "^4.3.0",
   "mercadopago": "^1.5.14"
 }
 
-
+```
 3. Faça o deploy:
 
 firebase deploy --only functions
@@ -2540,7 +2540,7 @@ Ao clicar em “Confirmar Contrato”, criar o pagamento e redirecionar o usuár
 ✅ Passos:
 
 1. No seu script.js, adicione:
-
+```
 form.addEventListener("submit", async function(e) {
   e.preventDefault();
 
@@ -2567,7 +2567,7 @@ form.addEventListener("submit", async function(e) {
   window.location.href = data.init_point; // Redireciona para checkout do Mercado Pago
 });
 
-
+```
 
 
 ---
