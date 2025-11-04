@@ -31,23 +31,27 @@ Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfe
 
 ## PASSO 1 [APRESENTAÇÃO DA LOJA/SERVIÇÕS]:
 ```
+passo 1: 
 [Sou AristidesBP], [Moro em Belém do Pará , Brasil] vou vender na internete [o serviço de criação de sites e gestor de trafego pago] para um público
 super exigente. Será uma campanha no Google Ads, logo eu preciso saber as informações 
 que vou te passar abaixo.
 ```
 ## PASSO 2 [PESQUISAR PUBLICO ALVO (PERSONA)]:
 ```
+passo 2:
 Quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
 Traga isso listado por topico de cada pergunta.
 ```
 ## PASSO 3 [PALAVRAS CHAVES]:
 ```
+passo 3:
 Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
 google, de quem deseja comprar este servoço.
 ```
 
 ## PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
+passo 4:
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
 palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução(intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves.
@@ -67,12 +71,13 @@ palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Rela
 | agência de tráfego pago                    | 600–1,100        | 4,50–7,50      | Alta              | Alta           | Busca empresa especializada  | Exclusiva (80–100%)   | Forte                |
 | otimização de campanhas Google Ads         | 400–800          | 3,50–5,50      | Média             | Média          | Busca melhorar campanhas     | 50–70%               | Moderada             |
 
-## "PARA CADA PRODUTO UMA CAMPANHA E UMA PAGINA, NÃO FAÇA CAMPANHAS PARA SITE INSTITUCIONAL!"
-## "NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
+"PARA CADA PRODUTO UMA CAMPANHA E UMA PAGINA, NÃO FAÇA CAMPANHAS PARA SITE INSTITUCIONAL!"
+"NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
 
 
 # PASSO 5 : PALAVRAS NEGATIVAS
 ```
+passo 5:
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras negativas.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
 palavra-negativas, motivo.
@@ -93,11 +98,13 @@ palavra-negativas, motivo.
 
 
 
-# "GOOGLE ADS É DIFERENTE DO META ADS, ELE TEM UMA HIERARQUIA NA ESTRUTURA DE CAMPANHAS QUE DEVE SER RESPEITADA!"
-## PARA CADA SOLUÇÃO UMA CAMPANHA.
-## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
+"GOOGLE ADS É DIFERENTE DO META ADS, ELE TEM UMA HIERARQUIA NA ESTRUTURA DE CAMPANHAS QUE DEVE SER RESPEITADA!"
+PARA CADA SOLUÇÃO UMA CAMPANHA.
+PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
+
 # PASSO 6 [FAZER UMA PLANILHA PARA SERAPARA AS PALAVRAS-CHAVES POR TIPO DE SOLUÇÃO E INTERESSE]:
 ```
+passo 6:
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras-chaves.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
 palavra-chaves, tipo de solução, interesse.
@@ -116,8 +123,9 @@ palavra-chaves, tipo de solução, interesse.
 | otimização de campanhas Google Ads   | Serviço de otimização                | Média intenção                         |
 | tráfego pago para empresas           | Solução B2B                          | Média-alta intenção                    |
 
-# UM ANUNCIO BEM FEITO E QUASE GRARANTIA DE VENDAS!!
+# PASSO 7: UM ANUNCIO BEM FEITO E QUASE GRARANTIA DE VENDAS!!
 ```
+passo 7:
   Com base nas pesquisas realizadas , faça um anuncio com 4 tituloas (no maximo 30 caracteres cada um) e 2 descrições (com no maximo 90 caracteres cada uma).
 
 ## PARA CADA SOLUÇÃO UMA CAMPANHA.
@@ -126,8 +134,9 @@ palavra-chaves, tipo de solução, interesse.
 
 ```
 
-# ESCOLHENDO  INFORMAÇÕES:
+# PASSO 8: ESCOLHENDO  INFORMAÇÕES:
 ```
+passo 8:
 Quais são as principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
 Liste da mais importante para a menus importante.
 
