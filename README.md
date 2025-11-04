@@ -142,6 +142,15 @@ Quais são as principais informações, dentro do que você pesquisou sobre esta
 Liste da mais importante para a menus importante.
 
 ```
+
+# PASSO 9: CRIAR NOME E LOGO DA EMPRESA
+```
+passo 9:
+Faça a sugestão de 10 nomes para minha empresa, me apresente ela de formas numeradas para eu poder te responder qual eu escolho.
+
+Com base na minha escolha, faça uma logo.png 
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # 02
@@ -149,11 +158,13 @@ Liste da mais importante para a menus importante.
 ---
 
 ```
-Com base em tudo que vimos até agora, crie uma copy, onde deve ter uma oferta em  headline mais uma subheadline e um cta, com os demais blocos abaixo com as informações importantes pesquisadas assima. deve ter um formulário de contato, no qual eu estou um lado deverá mudar as respostas para o seguinte número do WhatsApp [+5591992420981].
 
-Depois da copy feita, crie esta pagina html, use cores frias proficionais, quero uma página bonita e elegante com imagens e animações.
+Abaixo vou te passar um código, Com base em tudo que vimos até agora, coloque/substitua pelas informações  coletadas na pesquisa assima.
 
-abaixo vou te passar um código para que você mude uma estrutura semelhante a dele.
+O formulário de contato, deverá mandar as respostas para o seguinte número do WhatsApp [+5591992420981], antes de ser enviado deve ter um elemento check list para confirmação do aceito da cobrança.
+
+Recrecontrua pagina html, use cores condizentes com a minha logo, quero uma página bonita e elegante com todos os elementos e animações
+
 ```
 
 
