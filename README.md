@@ -9,15 +9,7 @@ obs: projeto em andamento podendo conter erros!
 2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [COMO CRIAR UMA GITHUB PAG](#04)
-5. [](#05)
-6. [](#06)
-7. [](#07)
-9. [](#08)
-10. [](#09)
-11. [](#10)
-12. [](#11)
-13. [](#12)
-14. 
+5. [MINI CURSO HTML, CSS E JAVASCRIPT:](#05)
     
 
   
