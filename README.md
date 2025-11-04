@@ -56,7 +56,7 @@ Planejador de palavra-chave
 #### EM [DESCOBRIR NOVAS PALAVRAS CHAVES], COLE OS RESULTADOS DA IA, UMA POR VEZ!
 #### APERTE EM BUSCAR E SELECIONE A REGIÃO.
 
-## PASSO 5 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
+## PASSO 4 [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras chaves.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
@@ -81,7 +81,7 @@ palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Rela
 ## "NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!"
 
 
-# PASSO 6 : PALAVRAS NEGATIVAS
+# PASSO 5 : PALAVRAS NEGATIVAS
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras negativas.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
@@ -106,7 +106,7 @@ palavra-negativas, motivo.
 # "GOOGLE ADS É DIFERENTE DO META ADS, ELE TEM UMA HIERARQUIA NA ESTRUTURA DE CAMPANHAS QUE DEVE SER RESPEITADA!"
 ## PARA CADA SOLUÇÃO UMA CAMPANHA.
 ## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
-# PASSO 4 [FAZER UMA PLANILHA PARA SERAPARA AS PALAVRAS-CHAVES POR TIPO DE SOLUÇÃO E INTERESSE]:
+# PASSO 6 [FAZER UMA PLANILHA PARA SERAPARA AS PALAVRAS-CHAVES POR TIPO DE SOLUÇÃO E INTERESSE]:
 ```
 Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras-chaves.
 1- Faça uma planilha ou Tabela com as seguintes colunas:
@@ -134,14 +134,6 @@ palavra-chaves, tipo de solução, interesse.
 ## PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 ## "NO CONJUNTO DAS PALAVRAS-CHAVES NO MINIMO 10K DE BUSCA MES!"
 
-```
-# MANUS [https://manus.im/app]
-```
-Eu quero criar um anúncio no Google para o meu serviço de [Trafego pago].Eu quero que voçe faça essa busca no Google, algumas vezes, e anlize todos os anuncios que vão aparecer.
-
-A partir disso quero que voçe crie 5 ideias de anuncio, no mesmo formato que vai encontrar.Traga ideias de acordo com os prinscipais gatilhos que voçe encontrar.
-
-E, além disso, crie um site navegavel com todos os insights do que vc encontrar nessa pesquisa.
 ```
 
 # ESCOLHENDO  INFORMAÇÕES:
@@ -716,6 +708,16 @@ Custo Visita Técnica: R$50,00`;
 </body>
 </html>
 ```
+
+# BONUS IA MANUS [https://manus.im/app]
+```
+Eu quero criar um anúncio no Google para o meu serviço de [Trafego pago].Eu quero que voçe faça essa busca no Google, algumas vezes, e anlize todos os anuncios que vão aparecer.
+
+A partir disso quero que voçe crie 5 ideias de anuncio, no mesmo formato que vai encontrar.Traga ideias de acordo com os prinscipais gatilhos que voçe encontrar.
+
+E, além disso, crie um site navegavel com todos os insights do que vc encontrar nessa pesquisa.
+```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
