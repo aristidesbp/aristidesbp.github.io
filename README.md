@@ -13,6 +13,619 @@ obs: projeto em andamento podendo conter erros!
 6. [FIRE BASE- TAPIOCA](#07)
     
 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 01
+# COMO CRIAR UMA CONTA NO GITHUB
+
+---
+
+#### 🧭 O que é o GitHub (resumo rápido)
+
+O GitHub é uma plataforma onde você pode:
+. Armazenar e versionar códigos de forma segura (com Git).
+. Mostrar seus projetos como portfólio profissional.
+. Colaborar com outras pessoas ou empresas.
+
+---
+
+#### 🪪 1️⃣ Criando a conta
+
+🔗 Acesse o site
+1. Vá até https://github.com/
+🖊️ Clique em “Sign up” (canto superior direito)
+
+---
+
+🧩 2️⃣ Preencha os dados
+
+Na tela de criação, você verá algo assim:
+
+Campo	O que colocar
+
+Email address	Seu e-mail principal (use um e-mail que você tenha acesso fácil).
+Password	Uma senha forte (mínimo 8 caracteres).
+Username	Um nome de usuário único, sem espaços (ex: aristidesbp). Este será seu endereço no GitHub → https://github.com/aristidesbp
+Email preferences	Pode deixar desmarcado se não quiser receber notícias.
+
+
+Depois clique em Continue.
+
+
+---
+
+🔐 3️⃣ Confirmação de segurança (captcha)
+
+O GitHub pode pedir para:
+
+Resolver um pequeno desafio visual (ex: “clique nas imagens corretas”)
+ou
+
+Digitar um código enviado por e-mail.
+
+
+⚠️ Importante: verifique sua caixa de entrada (e o spam) e clique no link que o GitHub enviar.
+
+
+---
+
+🧱 4️⃣ Escolha o plano
+
+Você verá duas opções:
+
+Free (Gratuito) ✅
+
+Pro (Pago)
+
+
+Selecione Free e clique em Continue.
+
+
+---
+
+⚙️ 5️⃣ Personalização inicial
+
+O GitHub vai te perguntar:
+
+Se você é estudante, profissional, etc.
+
+Quais tipos de projeto deseja criar.
+
+
+Você pode pular essa parte clicando em Skip personalization.
+
+
+---
+
+🏁 6️⃣ Pronto! Sua conta foi criada
+
+Agora você está dentro do seu painel principal (Dashboard) do GitHub.
+
+Você verá o botão “Create repository”, que é o próximo passo para começar um projeto.
+
+
+---
+
+💡 7️⃣ Dicas iniciais
+
+Depois de criar a conta:
+
+1. Clique no seu avatar (canto superior direito) → “Your profile”
+
+
+2. Clique em Edit profile para:
+
+Adicionar foto de perfil
+
+Escrever uma bio profissional
+
+Inserir seu site ou portfólio
+
+
+
+3. Seu perfil fica público e pode ser usado como currículo técnico.
+
+
+
+
+---
+
+⚙️ 8️⃣ (Opcional, mas útil) — Instalar o Git
+
+Para enviar códigos ao GitHub pelo computador, instale o Git:
+
+Vá até: https://git-scm.com/downloads
+
+Siga as instruções da instalação.
+
+Depois conecte o Git com seu GitHub usando:
+
+git config --global user.name "SeuNome"
+git config --global user.email "seuemail@exemplo.com"
+
+
+
+---
+
+✅ Resumo final
+
+Etapa	Ação
+
+1	Acesse github.com
+2	Clique em “Sign up”
+3	Preencha e confirme o e-mail
+4	Escolha plano Free
+5	Personalize ou pule
+6	Edite seu perfil
+7	Comece a criar seus repositórios
+
+
+
+---
+
+
+
+
+# GITHUB PAGES
+Vamos criar passo a passo a sua GitHub Page, ou seja, um site gratuito hospedado diretamente no seu repositório do GitHub — ideal para portfólios, lojas, landing pages e até sistemas com HTML, CSS e JS.
+
+
+---
+
+🌐 O que é o GitHub Pages
+
+O GitHub Pages transforma um repositório do GitHub em um site acessível publicamente (ex: https://aristidesbp.github.io/).
+
+Você pode:
+
+Hospedar seus projetos (HTML, CSS, JS).
+
+Criar um site pessoal ou de empresa.
+
+Publicar documentações ou landing pages sem pagar nada.
+
+
+
+---
+
+🧩 1️⃣ Pré-requisitos
+
+Antes de tudo, você precisa:
+
+1. Ter uma conta no GitHub (✅ já ensinamos antes).
+
+
+2. Ter criado ou saber criar um repositório.
+
+
+
+
+---
+
+🏗️ 2️⃣ Criando o repositório
+
+➤ Passos:
+
+1. Entre em https://github.com/.
+
+
+2. Clique no botão “New” (ao lado de “Repositories”).
+
+
+3. Preencha os campos:
+
+Repository name: pode ser:
+
+Para um site pessoal → aristidesbp.github.io
+
+Para um projeto específico → loja-virtual, portfolio, etc.
+
+
+Description: coloque uma breve descrição (opcional).
+
+Public: deixe público.
+
+Marque ✅ “Add a README file”.
+
+
+
+4. Clique em “Create repository”.
+
+
+
+
+---
+
+📁 3️⃣ Enviando seus arquivos
+
+Agora você tem duas opções:
+
+🔹 Opção 1 — Upload manual pelo site:
+
+1. Dentro do repositório, clique em “Add file → Upload files”.
+
+
+2. Selecione seus arquivos do projeto:
+
+index.html
+
+style.css
+
+script.js
+
+
+
+3. Clique em “Commit changes” (botão verde).
+
+
+
+🔹 Opção 2 — Envio pelo Git (mais profissional):
+
+Se estiver usando o terminal:
+
+git clone https://github.com/aristidesbp/portfolio.git
+cd portfolio
+# Copie seus arquivos do site para essa pasta
+git add .
+git commit -m "Primeira versão do site"
+git push origin main
+
+
+---
+
+⚙️ 4️⃣ Ativando o GitHub Pages
+
+1. Vá até o repositório do seu projeto.
+
+
+2. Clique em Settings (⚙️ canto direito superior).
+
+
+3. No menu lateral, selecione Pages.
+
+
+4. Em Branch, selecione:
+
+main  /  (root)
+
+
+5. Clique em Save.
+
+
+
+
+---
+
+🚀 5️⃣ Acessando seu site
+
+Após alguns segundos, o GitHub gera um link como este:
+
+https://seuusuario.github.io/nomedorepositorio/
+
+Por exemplo:
+
+https://aristidesbp.github.io/loja-virtual/
+
+💡 O link aparecerá na parte superior da página de configuração, com um botão “Visit site”.
+
+
+---
+
+🎨 6️⃣ Estrutura recomendada do projeto
+
+Exemplo simples de site hospedável:
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Site no GitHub Pages</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Bem-vindo ao meu site!</h1>
+  <p>Site hospedado no GitHub Pages 😎</p>
+  <script src="script.js"></script>
+</body>
+</html>
+
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+}
+h1 {
+  color: #333;
+}
+
+/* script.js */
+console.log("Site ativo no GitHub Pages!");
+
+
+---
+
+🧱 7️⃣ Atualizando seu site
+
+Sempre que quiser atualizar:
+
+1. Faça mudanças nos arquivos (HTML, CSS, JS).
+
+
+2. Envie novamente (git push ou “Upload files”).
+
+
+3. O site se atualiza automaticamente em 1–2 minutos.
+
+
+
+
+---
+
+🧾 8️⃣ Customizando com domínio próprio (opcional)
+
+Se quiser usar um domínio como meusite.com:
+
+1. Vá em Settings → Pages.
+
+
+2. Em Custom domain, insira o domínio.
+
+
+3. Configure o DNS no seu provedor apontando para:
+
+CNAME → yourusername.github.io
+
+
+
+
+---
+
+✅ Resumo final
+
+Etapa	Ação
+
+1	Criar repositório público
+2	Adicionar arquivos (HTML, CSS, JS)
+3	Ir em Settings → Pages
+4	Escolher branch “main / root”
+5	Salvar e aguardar o link
+6	Acessar o site publicado
+7	(Opcional) Configurar domínio próprio
+
+
+
+---
+
+
+# ADICIONANDO COLABORADORES 
+
+
+Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
+
+
+---
+
+🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
+
+
+---
+
+💡 Objetivo
+
+Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
+
+
+---
+
+🧩 1️⃣ Pré-requisitos
+
+Antes de começar:
+
+Você precisa ter uma conta no GitHub.
+
+Ter um repositório criado (ex: loja-virtual ou aristidesbp.github.io).
+
+Saber o usuário GitHub de quem você quer adicionar (ex: joaoprogramador).
+
+
+
+---
+
+🏗️ 2️⃣ Acesse o repositório do seu site
+
+1. Entre em https://github.com/.
+
+
+2. Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
+
+
+3. Você será levado para a tela principal com os arquivos do projeto.
+
+
+
+
+---
+
+⚙️ 3️⃣ Vá até as configurações do repositório
+
+1. Clique em ⚙️ Settings (no canto direito superior).
+
+
+2. No menu lateral esquerdo, role até encontrar “Collaborators”
+(fica dentro da seção Access → Collaborators).
+
+
+
+
+---
+
+🪪 4️⃣ Adicionando o colaborador
+
+1. Clique no botão “Add people”.
+
+
+2. Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
+
+
+3. Clique no botão “Add” ao lado do nome que aparecer.
+
+
+
+
+---
+
+🧱 5️⃣ Escolhendo o nível de acesso
+
+O GitHub vai perguntar o tipo de permissão que o colaborador terá.
+Escolha de acordo com o papel de cada um:
+
+Permissão	O que pode fazer	Indicação
+
+Read	Somente visualizar o código.	Ideal para revisores ou clientes.
+Triage	Visualizar + gerenciar issues/pull requests.	Gerentes de projeto.
+Write ✅	Criar, editar e enviar arquivos.	Programadores de confiança.
+Maintain	Controla configurações de branch e issues.	Líder técnico.
+Admin ⚠️	Controle total, inclusive remover você.	Use com cautela.
+
+
+👉 Normalmente, para desenvolvedores, use Write.
+
+4. Após escolher o nível, clique em “Add to repository”.
+
+
+
+
+---
+
+🔐 6️⃣ Confirmação de convite
+
+O colaborador receberá um convite por e-mail e uma notificação no GitHub.
+Ele deve clicar em “Accept Invitation” para ter acesso.
+
+Você pode acompanhar o status em:
+
+Settings → Collaborators → Pending invitations
+
+
+---
+
+🧱 7️⃣ O que o colaborador poderá fazer
+
+Assim que aceitar o convite, ele poderá:
+
+✅ Clonar o repositório:
+
+git clone https://github.com/aristidesbp/loja-virtual.git
+
+✅ Criar branches, editar e enviar commits:
+
+git add .
+git commit -m "Atualização da seção de contato"
+git push origin main
+
+✅ Fazer upload direto no navegador:
+
+Clicar em Add file → Upload files
+
+Enviar novos arquivos HTML, CSS, JS
+
+Finalizar com Commit changes
+
+
+
+---
+
+🧰 8️⃣ Boas práticas de colaboração
+
+Para evitar conflitos e manter o site estável:
+
+1. Crie branches de desenvolvimento:
+
+Exemplo: dev, melhorias-layout, checkout-api.
+
+
+git checkout -b dev
+
+Assim o código novo não afeta o site principal até ser revisado.
+
+
+2. Use Pull Requests (PR):
+
+O colaborador envia o código → você revisa → aprova → publica.
+
+Isso protege o código principal e mantém histórico limpo.
+
+
+
+3. Descreva as regras no README.md:
+
+Como organizar pastas.
+
+Como rodar o projeto localmente.
+
+Padrão de commits e branches.
+
+
+
+
+
+---
+
+🧾 9️⃣ (Opcional) — Revogar acesso
+
+Se quiser remover um colaborador:
+
+1. Vá novamente em Settings → Collaborators.
+
+
+2. Ao lado do nome da pessoa, clique em Remove access.
+
+
+
+Pronto — ela perde acesso imediatamente.
+
+
+---
+
+✅ Resumo final
+
+Etapa	Ação
+
+1	Entrar no repositório
+2	Abrir Settings → Collaborators
+3	Clicar em Add people
+4	Digitar o nome de usuário GitHub
+5	Escolher o nível de permissão
+6	Aguardar o colaborador aceitar
+7	Colaboradores podem editar e enviar commits
+
+
+
+---
+
+💡 Dica bônus: controle de times
+
+Se você pretende ter vários programadores no projeto:
+
+Crie uma organização no GitHub:
+https://github.com/account/organizations/new
+
+Adicione todos os devs lá.
+
+Controle permissões por time (frontend, backend, design, etc.).
+
+
+
+---
+
+
+
+
+
+
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
@@ -819,625 +1432,6 @@ E, além disso, crie um site navegavel com todos os insights do que vc encontrar
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 03
-# COMO CRIAR UMA CONTA NO GITHUB
-
----
-
-🧭 O que é o GitHub (resumo rápido)
-
-O GitHub é uma plataforma onde você pode:
-
-Armazenar e versionar códigos de forma segura (com Git).
-
-Mostrar seus projetos como portfólio profissional.
-
-Colaborar com outras pessoas ou empresas.
-
-
-
----
-
-🪪 1️⃣ Criando a conta
-
-🔗 Acesse o site
-
-1. Vá até https://github.com/
-
-
-
-🖊️ Clique em “Sign up” (canto superior direito)
-
-
----
-
-🧩 2️⃣ Preencha os dados
-
-Na tela de criação, você verá algo assim:
-
-Campo	O que colocar
-
-Email address	Seu e-mail principal (use um e-mail que você tenha acesso fácil).
-Password	Uma senha forte (mínimo 8 caracteres).
-Username	Um nome de usuário único, sem espaços (ex: aristidesbp). Este será seu endereço no GitHub → https://github.com/aristidesbp
-Email preferences	Pode deixar desmarcado se não quiser receber notícias.
-
-
-Depois clique em Continue.
-
-
----
-
-🔐 3️⃣ Confirmação de segurança (captcha)
-
-O GitHub pode pedir para:
-
-Resolver um pequeno desafio visual (ex: “clique nas imagens corretas”)
-ou
-
-Digitar um código enviado por e-mail.
-
-
-⚠️ Importante: verifique sua caixa de entrada (e o spam) e clique no link que o GitHub enviar.
-
-
----
-
-🧱 4️⃣ Escolha o plano
-
-Você verá duas opções:
-
-Free (Gratuito) ✅
-
-Pro (Pago)
-
-
-Selecione Free e clique em Continue.
-
-
----
-
-⚙️ 5️⃣ Personalização inicial
-
-O GitHub vai te perguntar:
-
-Se você é estudante, profissional, etc.
-
-Quais tipos de projeto deseja criar.
-
-
-Você pode pular essa parte clicando em Skip personalization.
-
-
----
-
-🏁 6️⃣ Pronto! Sua conta foi criada
-
-Agora você está dentro do seu painel principal (Dashboard) do GitHub.
-
-Você verá o botão “Create repository”, que é o próximo passo para começar um projeto.
-
-
----
-
-💡 7️⃣ Dicas iniciais
-
-Depois de criar a conta:
-
-1. Clique no seu avatar (canto superior direito) → “Your profile”
-
-
-2. Clique em Edit profile para:
-
-Adicionar foto de perfil
-
-Escrever uma bio profissional
-
-Inserir seu site ou portfólio
-
-
-
-3. Seu perfil fica público e pode ser usado como currículo técnico.
-
-
-
-
----
-
-⚙️ 8️⃣ (Opcional, mas útil) — Instalar o Git
-
-Para enviar códigos ao GitHub pelo computador, instale o Git:
-
-Vá até: https://git-scm.com/downloads
-
-Siga as instruções da instalação.
-
-Depois conecte o Git com seu GitHub usando:
-
-git config --global user.name "SeuNome"
-git config --global user.email "seuemail@exemplo.com"
-
-
-
----
-
-✅ Resumo final
-
-Etapa	Ação
-
-1	Acesse github.com
-2	Clique em “Sign up”
-3	Preencha e confirme o e-mail
-4	Escolha plano Free
-5	Personalize ou pule
-6	Edite seu perfil
-7	Comece a criar seus repositórios
-
-
-
----
-
-
-
-
-# GITHUB PAGES
-Vamos criar passo a passo a sua GitHub Page, ou seja, um site gratuito hospedado diretamente no seu repositório do GitHub — ideal para portfólios, lojas, landing pages e até sistemas com HTML, CSS e JS.
-
-
----
-
-🌐 O que é o GitHub Pages
-
-O GitHub Pages transforma um repositório do GitHub em um site acessível publicamente (ex: https://aristidesbp.github.io/).
-
-Você pode:
-
-Hospedar seus projetos (HTML, CSS, JS).
-
-Criar um site pessoal ou de empresa.
-
-Publicar documentações ou landing pages sem pagar nada.
-
-
-
----
-
-🧩 1️⃣ Pré-requisitos
-
-Antes de tudo, você precisa:
-
-1. Ter uma conta no GitHub (✅ já ensinamos antes).
-
-
-2. Ter criado ou saber criar um repositório.
-
-
-
-
----
-
-🏗️ 2️⃣ Criando o repositório
-
-➤ Passos:
-
-1. Entre em https://github.com/.
-
-
-2. Clique no botão “New” (ao lado de “Repositories”).
-
-
-3. Preencha os campos:
-
-Repository name: pode ser:
-
-Para um site pessoal → aristidesbp.github.io
-
-Para um projeto específico → loja-virtual, portfolio, etc.
-
-
-Description: coloque uma breve descrição (opcional).
-
-Public: deixe público.
-
-Marque ✅ “Add a README file”.
-
-
-
-4. Clique em “Create repository”.
-
-
-
-
----
-
-📁 3️⃣ Enviando seus arquivos
-
-Agora você tem duas opções:
-
-🔹 Opção 1 — Upload manual pelo site:
-
-1. Dentro do repositório, clique em “Add file → Upload files”.
-
-
-2. Selecione seus arquivos do projeto:
-
-index.html
-
-style.css
-
-script.js
-
-
-
-3. Clique em “Commit changes” (botão verde).
-
-
-
-🔹 Opção 2 — Envio pelo Git (mais profissional):
-
-Se estiver usando o terminal:
-
-git clone https://github.com/aristidesbp/portfolio.git
-cd portfolio
-# Copie seus arquivos do site para essa pasta
-git add .
-git commit -m "Primeira versão do site"
-git push origin main
-
-
----
-
-⚙️ 4️⃣ Ativando o GitHub Pages
-
-1. Vá até o repositório do seu projeto.
-
-
-2. Clique em Settings (⚙️ canto direito superior).
-
-
-3. No menu lateral, selecione Pages.
-
-
-4. Em Branch, selecione:
-
-main  /  (root)
-
-
-5. Clique em Save.
-
-
-
-
----
-
-🚀 5️⃣ Acessando seu site
-
-Após alguns segundos, o GitHub gera um link como este:
-
-https://seuusuario.github.io/nomedorepositorio/
-
-Por exemplo:
-
-https://aristidesbp.github.io/loja-virtual/
-
-💡 O link aparecerá na parte superior da página de configuração, com um botão “Visit site”.
-
-
----
-
-🎨 6️⃣ Estrutura recomendada do projeto
-
-Exemplo simples de site hospedável:
-
-<!-- index.html -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Site no GitHub Pages</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Bem-vindo ao meu site!</h1>
-  <p>Site hospedado no GitHub Pages 😎</p>
-  <script src="script.js"></script>
-</body>
-</html>
-
-/* style.css */
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #f0f0f0;
-}
-h1 {
-  color: #333;
-}
-
-/* script.js */
-console.log("Site ativo no GitHub Pages!");
-
-
----
-
-🧱 7️⃣ Atualizando seu site
-
-Sempre que quiser atualizar:
-
-1. Faça mudanças nos arquivos (HTML, CSS, JS).
-
-
-2. Envie novamente (git push ou “Upload files”).
-
-
-3. O site se atualiza automaticamente em 1–2 minutos.
-
-
-
-
----
-
-🧾 8️⃣ Customizando com domínio próprio (opcional)
-
-Se quiser usar um domínio como meusite.com:
-
-1. Vá em Settings → Pages.
-
-
-2. Em Custom domain, insira o domínio.
-
-
-3. Configure o DNS no seu provedor apontando para:
-
-CNAME → yourusername.github.io
-
-
-
-
----
-
-✅ Resumo final
-
-Etapa	Ação
-
-1	Criar repositório público
-2	Adicionar arquivos (HTML, CSS, JS)
-3	Ir em Settings → Pages
-4	Escolher branch “main / root”
-5	Salvar e aguardar o link
-6	Acessar o site publicado
-7	(Opcional) Configurar domínio próprio
-
-
-
----
-
-
-# ADICIONANDO COLABORADORES 
-
-
-Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
-
-
----
-
-🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
-
-
----
-
-💡 Objetivo
-
-Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
-
-
----
-
-🧩 1️⃣ Pré-requisitos
-
-Antes de começar:
-
-Você precisa ter uma conta no GitHub.
-
-Ter um repositório criado (ex: loja-virtual ou aristidesbp.github.io).
-
-Saber o usuário GitHub de quem você quer adicionar (ex: joaoprogramador).
-
-
-
----
-
-🏗️ 2️⃣ Acesse o repositório do seu site
-
-1. Entre em https://github.com/.
-
-
-2. Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
-
-
-3. Você será levado para a tela principal com os arquivos do projeto.
-
-
-
-
----
-
-⚙️ 3️⃣ Vá até as configurações do repositório
-
-1. Clique em ⚙️ Settings (no canto direito superior).
-
-
-2. No menu lateral esquerdo, role até encontrar “Collaborators”
-(fica dentro da seção Access → Collaborators).
-
-
-
-
----
-
-🪪 4️⃣ Adicionando o colaborador
-
-1. Clique no botão “Add people”.
-
-
-2. Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
-
-
-3. Clique no botão “Add” ao lado do nome que aparecer.
-
-
-
-
----
-
-🧱 5️⃣ Escolhendo o nível de acesso
-
-O GitHub vai perguntar o tipo de permissão que o colaborador terá.
-Escolha de acordo com o papel de cada um:
-
-Permissão	O que pode fazer	Indicação
-
-Read	Somente visualizar o código.	Ideal para revisores ou clientes.
-Triage	Visualizar + gerenciar issues/pull requests.	Gerentes de projeto.
-Write ✅	Criar, editar e enviar arquivos.	Programadores de confiança.
-Maintain	Controla configurações de branch e issues.	Líder técnico.
-Admin ⚠️	Controle total, inclusive remover você.	Use com cautela.
-
-
-👉 Normalmente, para desenvolvedores, use Write.
-
-4. Após escolher o nível, clique em “Add to repository”.
-
-
-
-
----
-
-🔐 6️⃣ Confirmação de convite
-
-O colaborador receberá um convite por e-mail e uma notificação no GitHub.
-Ele deve clicar em “Accept Invitation” para ter acesso.
-
-Você pode acompanhar o status em:
-
-Settings → Collaborators → Pending invitations
-
-
----
-
-🧱 7️⃣ O que o colaborador poderá fazer
-
-Assim que aceitar o convite, ele poderá:
-
-✅ Clonar o repositório:
-
-git clone https://github.com/aristidesbp/loja-virtual.git
-
-✅ Criar branches, editar e enviar commits:
-
-git add .
-git commit -m "Atualização da seção de contato"
-git push origin main
-
-✅ Fazer upload direto no navegador:
-
-Clicar em Add file → Upload files
-
-Enviar novos arquivos HTML, CSS, JS
-
-Finalizar com Commit changes
-
-
-
----
-
-🧰 8️⃣ Boas práticas de colaboração
-
-Para evitar conflitos e manter o site estável:
-
-1. Crie branches de desenvolvimento:
-
-Exemplo: dev, melhorias-layout, checkout-api.
-
-
-git checkout -b dev
-
-Assim o código novo não afeta o site principal até ser revisado.
-
-
-2. Use Pull Requests (PR):
-
-O colaborador envia o código → você revisa → aprova → publica.
-
-Isso protege o código principal e mantém histórico limpo.
-
-
-
-3. Descreva as regras no README.md:
-
-Como organizar pastas.
-
-Como rodar o projeto localmente.
-
-Padrão de commits e branches.
-
-
-
-
-
----
-
-🧾 9️⃣ (Opcional) — Revogar acesso
-
-Se quiser remover um colaborador:
-
-1. Vá novamente em Settings → Collaborators.
-
-
-2. Ao lado do nome da pessoa, clique em Remove access.
-
-
-
-Pronto — ela perde acesso imediatamente.
-
-
----
-
-✅ Resumo final
-
-Etapa	Ação
-
-1	Entrar no repositório
-2	Abrir Settings → Collaborators
-3	Clicar em Add people
-4	Digitar o nome de usuário GitHub
-5	Escolher o nível de permissão
-6	Aguardar o colaborador aceitar
-7	Colaboradores podem editar e enviar commits
-
-
-
----
-
-💡 Dica bônus: controle de times
-
-Se você pretende ter vários programadores no projeto:
-
-Crie uma organização no GitHub:
-https://github.com/account/organizations/new
-
-Adicione todos os devs lá.
-
-Controle permissões por time (frontend, backend, design, etc.).
-
-
-
----
-
-
-
-
-
 🟥🟥🟥🟥🟥🟥🟥
 ---
 # 04
