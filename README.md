@@ -5,7 +5,7 @@ obs: projeto em andamento podendo conter erros!
 
 ---
 # 📘 ÍNDICE
-1. [BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA](#01)
+1. [ GITHUB ](#01)
 2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
