@@ -5,7 +5,7 @@ obs: projeto em andamento podendo conter erros!
 
 ---
 # 📘 ÍNDICE
-1. [ GITHUB ](#01)
+1. [ GITHUB - CRIANDO UMA CONTA ](#01)
 2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
@@ -34,35 +34,17 @@ O GitHub é uma plataforma onde você pode:
 🔗 Acesse o site
 1. Vá até https://github.com/
 🖊️ Clique em “Sign up” (canto superior direito)
-
----
-
-🧩 2️⃣ Preencha os dados
-
-Na tela de criação, você verá algo assim:
-
-Campo	O que colocar
-
-Email address	Seu e-mail principal (use um e-mail que você tenha acesso fácil).
-Password	Uma senha forte (mínimo 8 caracteres).
-Username	Um nome de usuário único, sem espaços (ex: aristidesbp). Este será seu endereço no GitHub → https://github.com/aristidesbp
-Email preferences	Pode deixar desmarcado se não quiser receber notícias.
-
+🧩 2️⃣ Preencha os dados ou tente logar com e-mail do Google.
 
 Depois clique em Continue.
 
 
----
 
 🔐 3️⃣ Confirmação de segurança (captcha)
 
 O GitHub pode pedir para:
-
 Resolver um pequeno desafio visual (ex: “clique nas imagens corretas”)
-ou
-
-Digitar um código enviado por e-mail.
-
+ou Digitar um código enviado por e-mail/celular.
 
 ⚠️ Importante: verifique sua caixa de entrada (e o spam) e clique no link que o GitHub enviar.
 
@@ -72,11 +54,8 @@ Digitar um código enviado por e-mail.
 🧱 4️⃣ Escolha o plano
 
 Você verá duas opções:
-
 Free (Gratuito) ✅
-
 Pro (Pago)
-
 
 Selecione Free e clique em Continue.
 
@@ -86,66 +65,33 @@ Selecione Free e clique em Continue.
 ⚙️ 5️⃣ Personalização inicial
 
 O GitHub vai te perguntar:
-
 Se você é estudante, profissional, etc.
-
 Quais tipos de projeto deseja criar.
-
-
 Você pode pular essa parte clicando em Skip personalization.
 
 
 ---
 
-🏁 6️⃣ Pronto! Sua conta foi criada
-
-Agora você está dentro do seu painel principal (Dashboard) do GitHub.
-
-Você verá o botão “Create repository”, que é o próximo passo para começar um projeto.
-
-
----
-
-💡 7️⃣ Dicas iniciais
+💡 6️⃣  Dicas iniciais
 
 Depois de criar a conta:
 
-1. Clique no seu avatar (canto superior direito) → “Your profile”
-
-
+1. Clique no seu avatar (canto superior direito) → “Your profile"
 2. Clique em Edit profile para:
-
 Adicionar foto de perfil
-
 Escrever uma bio profissional
-
 Inserir seu site ou portfólio
-
-
-
 3. Seu perfil fica público e pode ser usado como currículo técnico.
 
+---
 
+🏁 7️⃣ Pronto! Sua conta foi criada
 
+Agora você está dentro do seu painel principal (Dashboard) do GitHub.
+Você verá o botão “Create repository”, que é o próximo passo para começar um projeto.
 
 ---
 
-⚙️ 8️⃣ (Opcional, mas útil) — Instalar o Git
-
-Para enviar códigos ao GitHub pelo computador, instale o Git:
-
-Vá até: https://git-scm.com/downloads
-
-Siga as instruções da instalação.
-
-Depois conecte o Git com seu GitHub usando:
-
-git config --global user.name "SeuNome"
-git config --global user.email "seuemail@exemplo.com"
-
-
-
----
 
 ✅ Resumo final
 
