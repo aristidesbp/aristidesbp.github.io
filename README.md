@@ -505,7 +505,7 @@ Abaixo vou te passar um código depois vou te pedir uma tarefa.
 
 <!-- ✅ Sobre  -->
 <section id="componente-sobre" aria-label="Seção institucional sobre Aristides Barbosa Pontes"></section>
-<script src="js/sobre.js"></script>
+<script src="assets/js/sobre.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarSobre);</script>
     
 </main>
@@ -526,7 +526,7 @@ Abaixo vou te passar um código depois vou te pedir uma tarefa.
 
   <!-- 🧠 Prompt: Carregue o script principal do site com type="module" para suportar import/export. Use defer para não bloquear renderização. -->
   <script src="assets/js/site-mvc-main.js" type="module" defer></script>
-  <script src="js/index.js" defer></script>
+  <script src="assets/js/index.js" defer></script>
 </body>
 </html>
 
