@@ -467,13 +467,6 @@ Abaixo vou te passar 2 códigos depois vou te pedir uma tarefa.
 <script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
 
 
-<!-- ✅ Admin (após inserir a senha, o ADM cria e cadastra todas as sessões, de forma dinâmica utilizando banco de dados indexddb, base64 e Json) -->
-<section id="componente-admin" aria-label="Chamada de ação principal"></section>
-<script src="assets/js/admin.js"></script>
-<script>document.addEventListener('DOMContentLoaded', criarAdmin);</script>
-
-
-
 <!-- ✅ Header (promoções e propaganda) -->
 <header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
 <script src="assets/js/header.js"></script>
@@ -481,7 +474,7 @@ Abaixo vou te passar 2 códigos depois vou te pedir uma tarefa.
 
 <main>
 
-<!-- ✅ Catálogo de Produtos dinamico -->
+<!-- ✅ Cardapio -->
 <section id="componente-produtos" aria-label="Produtos oferecidos"></section>
 <script src="assets/js/produtos.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarProdutos);</script>
@@ -503,11 +496,6 @@ Abaixo vou te passar 2 códigos depois vou te pedir uma tarefa.
 <script src="assets/js/hero.js"></script>
 <script>document.addEventListener('DOMContentLoaded', criarHero);</script>
 
-<!-- ✅ Sobre  -->
-<section id="componente-sobre" aria-label="Seção institucional sobre Aristides Barbosa Pontes"></section>
-<script src="assets/js/sobre.js"></script>
-<script>document.addEventListener('DOMContentLoaded', criarSobre);</script>
-    
 </main>
 
 <!-- ✅ Footer -->
