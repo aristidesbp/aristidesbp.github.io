@@ -524,14 +524,11 @@ Abaixo vou te passar 2 códigos depois vou te pedir uma tarefa.
 ## Exemplo navbar.js
 ```
 // assets/js/navbar.js
-
 function criarNavbar() {
-  const nav = document.getElementById("componente-Navbar");
-
-  if (!nav) return;
-
-  nav.innerHTML = `
-
+const nav = document.getElementById("componente-Navbar");
+if (!nav) return;
+nav.innerHTML = `
+<!-- 🟥🟥 início do html 🟥🟥 -->
 <style>
 /* assets/css/Navbar.css */
 #componente-Navbar {
@@ -627,15 +624,15 @@ function criarNavbar() {
 
       </ul>
     </div>
-  `;
 
-  const hamburger = nav.querySelector(".hamburger");
-  const navLinks = nav.querySelector(".nav-links");
 
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("ativo");
-    hamburger.classList.toggle("ativo");
-  });
+<!-- 🟥🟥 início do html 🟥🟥 --> `;
+const hamburger = nav.querySelector(".hamburger");
+const navLinks = nav.querySelector(".nav-links");
+hamburger.addEventListener("click", () => {
+navLinks.classList.toggle("ativo");
+hamburger.classList.toggle("ativo");
+});
 }
 
 
