@@ -178,8 +178,6 @@ Marque ✅ “Add a README file”.
 4. Clique em “Create repository”.
 
 
-
-
 ---
 
 📁 3️⃣ Enviando seus arquivos
@@ -193,7 +191,94 @@ Agora você tem duas opções:
 3. coloque o name your file: index.html.
 4. copie o código abaixo dentro dele.
 
+
+### HTML BASICO MODULAR
    ```
+<!DOCTYPE html>
+<html lang="pt-BR"> 
+<head>
+
+<!-- ✅ Estrutura básica  -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title> TÍTULO DA PÁGINA </title>
+
+<link rel="stylesheet" href="css/index.css">
+<!-- ✅ Estrutura SEO  -->
+</head>
+<body> 
+
+<!-- ✅ Navbar  -->
+<nav id="componente-Navbar" role="navigation" aria-label="Menu de navegação principal">
+</nav>
+<script src="assets/js/navbar.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
+
+
+<!-- ✅ Admin (após inserir a senha, o ADM cria e cadastra todas as sessões, de forma dinâmica utilizando banco de dados indexddb, base64 e Json) -->
+<section id="componente-admin" aria-label="Chamada de ação principal"></section>
+<script src="assets/js/admin.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarAdmin);</script>
+
+
+
+<!-- ✅ Header (promoções e propaganda) -->
+<header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
+<script src="assets/js/header.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHeader);</script>
+
+<main>
+
+<!-- ✅ Catálogo de Produtos dinamico -->
+<section id="componente-produtos" aria-label="Produtos oferecidos"></section>
+<script src="assets/js/produtos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarProdutos);</script>
+
+<!-- ✅ formulário de pedido no whatsapp  -->
+<!-- O formulário recebe os produtos e quantidades selecionadas acima, fazendo o serviço de check-out e pagamento, depois enviando o pedido para o WhatsApp  -->
+<section id="componente-Fpedidos" aria-label="Produtos oferecidos"></section>
+<script src="assets/js/fpedidos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarCardapioFpedidos);</script>
+ 
+  
+<!-- ✅ Serviços e Eventos  -->
+<section id="componente-servicos" aria-label="Serviços oferecidos"></section>
+<script src="assets/js/servicos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarServicos);</script>
+
+<!-- ✅ Hero  -->
+<section id="componente-hero" aria-label="Chamada de ação principal"></section>
+<script src="assets/js/hero.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHero);</script>
+
+<!-- ✅ Sobre  -->
+<section id="componente-sobre" aria-label="Seção institucional sobre Aristides Barbosa Pontes"></section>
+<script src="js/sobre.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarSobre);</script>
+    
+</main>
+
+<!-- ✅ Footer -->
+<footer id="footer-container" role="contentinfo" aria-label="Rodapé do site"></footer>
+<script src="assets/js/footer.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarFooter);</script>
+
+
+
+  <!-- 🔧 Bibliotecas js externas e principais -->
+  <!-- 🧠 Prompt: Importe bibliotecas modernas que melhorem animações e interação. Scripts devem ser carregados no final para performance. Use defer e async quando necessário. -->
+  <script src="https://unpkg.com/scrollreveal" defer></script> <!-- Efeitos de scroll reveal -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
+  <!-- 🧠 Prompt: Carregue o script principal do site com type="module" para suportar import/export. Use defer para não bloquear renderização. -->
+  <script src="assets/js/site-mvc-main.js" type="module" defer></script>
+  <script src="js/index.js" defer></script>
+</body>
+</html>
+
 
    ```
 5. na parte superior direita utilize o botão verde "Commit changes" para salvar .
