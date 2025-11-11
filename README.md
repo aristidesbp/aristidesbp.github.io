@@ -6,7 +6,7 @@ obs: projeto em andamento podendo conter erros!
 ---
 # 📘 ÍNDICE
 1. [ GITHUB - CRIANDO UMA CONTA ](#01)
-2. [CRIANDO UMA COPY/SITE/LOJA COM IA:](#02)
+2. [CRIANDO UM REPOSITÓRIO](#02)
 3. [ COMO CRIAR UMA CONTA NO GITHUB:](#03)
 4. [MINI CURSO HTML, CSS E JAVASCRIPT:](#04)
 5. [FIREBASE](#06)
@@ -117,8 +117,8 @@ Etapa	Ação
 
 
 
-
-# GITHUB PAGES
+# 02
+# CRIANDO UM REPOSITÓRIO PARA GITHUB PAGES
 Vamos criar passo a passo a sua GitHub Page, ou seja, um site gratuito hospedado diretamente no seu repositório do GitHub — ideal para portfólios, lojas, landing pages e até sistemas com HTML, CSS e JS.
 
 
@@ -188,32 +188,17 @@ Agora você tem duas opções:
 
 🔹 Opção 1 — Upload manual pelo site:
 
-1. Dentro do repositório, clique em “Add file → Upload files”.
+1. Dentro do repositório (clique no nome do repositório para entrar nele),
+2. clique em “Add file → Create new file”.
+3. coloque o name your file: index.html.
+4. copie o código abaixo dentro dele.
 
-2. Selecione seus arquivos do projeto:
+   ```
 
-index.html
-
-style.css
-
-script.js
-
-
-
-3. Clique em “Commit changes” (botão verde).
+   ```
+5. na parte superior direita utilize o botão verde "Commit changes" para salvar .
 
 
-
-🔹 Opção 2 — Envio pelo Git (mais profissional):
-
-Se estiver usando o terminal:
-
-git clone https://github.com/aristidesbp/portfolio.git
-cd portfolio
-# Copie seus arquivos do site para essa pasta
-git add .
-git commit -m "Primeira versão do site"
-git push origin main
 
 
 ---
