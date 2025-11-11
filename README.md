@@ -98,11 +98,17 @@ Você verá o botão “Create repository”, que é o próximo passo para come�
 Etapa	Ação
 
 1	Acesse github.com
+
 2	Clique em “Sign up”
+
 3	Preencha e confirme o e-mail
+
 4	Escolha plano Free
+
 5	Personalize ou pule
+
 6	Edite seu perfil
+
 7	Comece a criar seus repositórios
 
 
