@@ -459,10 +459,28 @@ Saber o usuário GitHub de quem você quer adicionar (ex: joaoprogramador).
 ---
 
 ```
-Abaixo vou te passar um código para que você substitua as informações que tem nele, pelas informações que precisamos.
-O objetivo é usar o código como base para criar nosso site.
+Abaixo vou te passar um código depois vou te pedir uma tarefa.
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## VENDA DE SERVIÇOS 
 ```<!DOCTYPE html>
@@ -685,6 +703,9 @@ Custo Visita Técnica: R$50,00`;
 </html>
 
 ```
+
+
+
 ## HTML BASICO MODULAR
 ```
 <!DOCTYPE html>
