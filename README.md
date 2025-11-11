@@ -126,7 +126,8 @@ Vamos criar passo a passo a sua GitHub Page, ou seja, um site gratuito hospedado
 
 🌐 O que é o GitHub Pages
 
-O GitHub Pages transforma um repositório do GitHub em um site acessível publicamente (ex: https://aristidesbp.github.io/).
+O GitHub Pages transforma um repositório do GitHub em um site acessível publicamente 
+(ex: https://aristidesbp.github.io/).
 
 Você pode:
 
@@ -146,7 +147,6 @@ Antes de tudo, você precisa:
 
 1. Ter uma conta no GitHub (✅ já ensinamos antes).
 
-
 2. Ter criado ou saber criar um repositório.
 
 
@@ -157,28 +157,22 @@ Antes de tudo, você precisa:
 🏗️ 2️⃣ Criando o repositório
 
 ➤ Passos:
-
 1. Entre em https://github.com/.
-
-
 2. Clique no botão “New” (ao lado de “Repositories”).
-
-
 3. Preencha os campos:
 
-Repository name: pode ser:
+Repository name, deve ser:
 
-Para um site pessoal → aristidesbp.github.io
-
-Para um projeto específico → loja-virtual, portfolio, etc.
-
+Para github page → NomeDoUsuario.github.io
+Exemplo: aristidesbp.github.io 
+obs: o nome do repositório será o nome do domínio que você usará para acessar seu site!
+obs2: caso você tenha comprado um domínio, poderá trocar posteriormente.
 
 Description: coloque uma breve descrição (opcional).
 
 Public: deixe público.
 
 Marque ✅ “Add a README file”.
-
 
 
 4. Clique em “Create repository”.
@@ -195,7 +189,6 @@ Agora você tem duas opções:
 🔹 Opção 1 — Upload manual pelo site:
 
 1. Dentro do repositório, clique em “Add file → Upload files”.
-
 
 2. Selecione seus arquivos do projeto:
 
