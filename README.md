@@ -591,7 +591,14 @@ O Painel Administrativo agora deve carregar, e o JavaScript (Bloco 6) deve funci
 Para parar o servidor, volte para o Termux e pressione 
 #### Ctrl + C.
 
-
+# FIREBASE
+### INSTALANDO FIREBASE
+```
+pkg update && pkg upgrade
+pkg install nodejs git -y
+npm install -g firebase-tools
+firebase login
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 04
