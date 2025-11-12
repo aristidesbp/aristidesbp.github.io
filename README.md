@@ -592,13 +592,43 @@ Para parar o servidor, volte para o Termux e pressione
 #### Ctrl + C.
 
 # FIREBASE
-### INSTALANDO FIREBASE
+
 ```
+# Instalando o Firebase
 pkg update && pkg upgrade
 pkg install nodejs git -y
 npm install -g firebase-tools
 firebase login
 ```
+```
+# Atualiza o Firebase CLI para a versão mais recente
+npm install -g firebase-tools
+# Verifica se a instalação foi concluída e mostra a versão atual
+firebase --version
+
+```
+```
+# Cria uma nova pasta para seu projeto (exemplo: delivery)
+mkdir delivery && cd delivery
+```
+```
+# Inicializa o projeto Firebase dentro dessa pasta
+firebase init
+```
+```
+# Durante o "firebase init":
+# - Escolha: "Hosting" (pressione espaço para marcar e Enter para confirmar)
+# - Escolha: "Use an existing project" (se já criou no site do Firebase)
+# - Ou: "Create a new project" (para criar agora)
+# - Defina a pasta pública (geralmente "public" ou "dist")
+# - Escolha "No" quando perguntar sobre SPA (single page app)
+# - Escolha "Yes" para sobrescrever index.html se quiser um novo
+```
+```
+# 4️⃣ Depois de configurar, você pode testar o deploy:
+firebase deploy
+```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 04
