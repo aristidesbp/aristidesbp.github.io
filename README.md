@@ -1304,6 +1304,516 @@ Custo Visita Técnica: R$50,00`;
 </html>
 ```
 
+## CADASTRO DE PRODUTOS 
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro Profissional de Produtos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+
+  <!-- Formulário de Produtos -->
+  <div class="max-w-xl mx-auto bg-white shadow rounded-xl p-6">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Produtos</h2>
+    <form id="formulario" class="space-y-4">
+      <input type="hidden" id="indexEdicao" value="-1" />
+
+      <div>
+        <label>Imagem do Produto</label>
+        <input id="imagem" type="file" accept="image/*" class="w-full" />
+        <img id="previewImagem" class="mt-2 w-32 rounded border hidden" />
+      </div>
+
+      <div>
+        <label>Nome</label>
+        <input id="nome" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Descrição</label>
+        <textarea id="descricao" required class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div>
+        <label>Valor (R$)</label>
+        <input id="valor" type="number" step="0.01" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Código de Barras</label>
+        <input id="codigoBarras" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Dados do Fornecedor</label>
+        <input id="fornecedor" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Data de Validade</label>
+        <input id="validade" type="date" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
+
+  <!-- Filtros -->
+  <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4 flex flex-col gap-3">
+    <h3 class="text-xl font-bold">Filtros e Ordenação</h3>
+    <div class="flex gap-2 flex-wrap">
+      <input id="filtroFornecedor" placeholder="Filtrar por fornecedor" class="border px-2 py-1 rounded flex-1" />
+      <select id="filtroValidade" class="border px-2 py-1 rounded">
+        <option value="todas">Todas</option>
+        <option value="vencidos">Vencidos</option>
+        <option value="proximos">Próximos de vencer</option>
+      </select>
+      <select id="ordenarValor" class="border px-2 py-1 rounded">
+        <option value="padrao">Ordem padrão</option>
+        <option value="cres">Valor crescente</option>
+        <option value="dec">Valor decrescente</option>
+      </select>
+      <button id="aplicarFiltros" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Aplicar</button>
+    </div>
+  </div>
+
+  <!-- Lista de Produtos -->
+  <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4">
+    <h3 class="text-xl font-bold mb-3">Produtos Cadastrados</h3>
+    <ul id="lista" class="space-y-3"></ul>
+  </div>
+
+  <script>
+    class Produto {
+      constructor(imagem, nome, descricao, valor, codigoBarras, fornecedor, validade) {
+        this.imagem = imagem || "";
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = parseFloat(valor).toFixed(2);
+        this.codigoBarras = codigoBarras;
+        this.fornecedor = fornecedor;
+        this.validade = validade;
+      }
+    }
+
+    class CadastroProdutos {
+      constructor() {
+        this.lista = document.getElementById("lista");
+        this.form = document.getElementById("formulario");
+        this.previewImg = document.getElementById("previewImagem");
+        this.campos = ["imagem", "nome", "descricao", "valor", "codigoBarras", "fornecedor", "validade"];
+        this.produtos = [];
+        this.carregar();
+        this.bindEventos();
+      }
+
+      carregar() {
+        this.produtos = JSON.parse(localStorage.getItem("produtos") || "[]");
+        this.renderizar();
+      }
+
+      salvar() {
+        localStorage.setItem("produtos", JSON.stringify(this.produtos));
+        this.renderizar();
+      }
+
+      adicionar(produto) {
+        const idx = parseInt(document.getElementById("indexEdicao").value);
+        if (idx >= 0) {
+          produto.imagem = produto.imagem || this.produtos[idx].imagem;
+          this.produtos[idx] = produto;
+          document.getElementById("indexEdicao").value = -1;
+        } else {
+          this.produtos.push(produto);
+        }
+        this.salvar();
+      }
+
+      excluir(index) {
+        this.produtos.splice(index, 1);
+        this.salvar();
+      }
+
+      editar(index) {
+        const p = this.produtos[index];
+        this.campos.forEach(c => {
+          if (c === "imagem") return;
+          document.getElementById(c).value = p[c] || "";
+        });
+        document.getElementById("indexEdicao").value = index;
+        if(p.imagem){
+          this.previewImg.src = p.imagem;
+          this.previewImg.classList.remove("hidden");
+        } else {
+          this.previewImg.classList.add("hidden");
+        }
+      }
+
+      aplicarFiltros() {
+        let filtrados = [...this.produtos];
+        const fornecedor = document.getElementById("filtroFornecedor").value.toLowerCase();
+        const validadeFiltro = document.getElementById("filtroValidade").value;
+        const ordenar = document.getElementById("ordenarValor").value;
+
+        if(fornecedor) filtrados = filtrados.filter(p => p.fornecedor.toLowerCase().includes(fornecedor));
+
+        const hoje = new Date();
+        if(validadeFiltro === "vencidos"){
+          filtrados = filtrados.filter(p => new Date(p.validade) < hoje);
+        } else if(validadeFiltro === "proximos"){
+          const seteDias = new Date();
+          seteDias.setDate(hoje.getDate() + 7);
+          filtrados = filtrados.filter(p => new Date(p.validade) >= hoje && new Date(p.validade) <= seteDias);
+        }
+
+        if(ordenar === "cres"){
+          filtrados.sort((a,b)=> parseFloat(a.valor) - parseFloat(b.valor));
+        } else if(ordenar === "dec"){
+          filtrados.sort((a,b)=> parseFloat(b.valor) - parseFloat(a.valor));
+        }
+
+        this.renderizar(filtrados);
+      }
+
+      renderizar(listaFiltrada=null) {
+        const produtos = listaFiltrada || this.produtos;
+        this.lista.innerHTML = "";
+        produtos.forEach((p, i) => {
+          const imgTag = p.imagem ? `<img src="${p.imagem}" class="mt-2 w-32 rounded border" />` : "";
+          const li = document.createElement("li");
+          li.className = "p-3 border rounded bg-gray-50";
+          li.innerHTML = `
+            <div class="flex justify-between items-start">
+              <div>
+                <strong>${p.nome}</strong> - R$ ${p.valor}<br>
+                <p class="text-sm">${p.descricao}</p>
+                <p class="text-sm">Código: ${p.codigoBarras}</p>
+                <p class="text-sm">Fornecedor: ${p.fornecedor}</p>
+                <p class="text-sm">Validade: ${p.validade}</p>
+                ${imgTag}
+              </div>
+              <div class="flex flex-col gap-1 text-right">
+                <button onclick="cad.editar(${i})" class="text-blue-600 hover:underline text-sm">Editar</button>
+                <button onclick="cad.excluir(${i})" class="text-red-600 hover:underline text-sm">Excluir</button>
+              </div>
+            </div>
+          `;
+          this.lista.appendChild(li);
+        });
+      }
+
+      bindEventos() {
+        this.form.addEventListener("submit", e => {
+          e.preventDefault();
+          const novo = {};
+          this.campos.forEach(c => {
+            if (c !== "imagem") novo[c] = document.getElementById(c).value;
+          });
+          const fotoInput = document.getElementById("imagem");
+          if (fotoInput.files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = event => {
+              novo.imagem = event.target.result;
+              this.adicionar(new Produto(...this.campos.map(c => novo[c])));
+              this.form.reset();
+              this.previewImg.classList.add("hidden");
+            };
+            reader.readAsDataURL(fotoInput.files[0]);
+          } else {
+            this.adicionar(new Produto(...this.campos.map(c => novo[c])));
+            this.form.reset();
+            this.previewImg.classList.add("hidden");
+          }
+        });
+
+        document.getElementById("aplicarFiltros").addEventListener("click", e=>{
+          e.preventDefault();
+          this.aplicarFiltros();
+        });
+
+        document.getElementById("imagem").addEventListener("change", e=>{
+          if(this.imagem.files.length>0){
+            const reader = new FileReader();
+            reader.onload = ev=>{
+              this.previewImg.src = ev.target.result;
+              this.previewImg.classList.remove("hidden");
+            };
+            reader.readAsDataURL(this.imagem.files[0]);
+          }
+        });
+      }
+    }
+
+    const cad = new CadastroProdutos();
+  </script>
+
+</body>
+</html>
+
+
+```
+
+## VITRINE DOS PRODUTOS 
+
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro Profissional de Produtos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+
+  <!-- Formulário de Produtos -->
+  <div class="max-w-xl mx-auto bg-white shadow rounded-xl p-6">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Produtos</h2>
+    <form id="formulario" class="space-y-4">
+      <input type="hidden" id="indexEdicao" value="-1" />
+
+      <div>
+        <label>Imagem do Produto</label>
+        <input id="imagem" type="file" accept="image/*" class="w-full" />
+        <img id="previewImagem" class="mt-2 w-32 rounded border hidden" />
+      </div>
+
+      <div>
+        <label>Nome</label>
+        <input id="nome" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Descrição</label>
+        <textarea id="descricao" required class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div>
+        <label>Valor (R$)</label>
+        <input id="valor" type="number" step="0.01" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Código de Barras</label>
+        <input id="codigoBarras" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Dados do Fornecedor</label>
+        <input id="fornecedor" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <div>
+        <label>Data de Validade</label>
+        <input id="validade" type="date" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
+
+  <!-- Filtros -->
+  <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4 flex flex-col gap-3">
+    <h3 class="text-xl font-bold">Filtros e Ordenação</h3>
+    <div class="flex gap-2 flex-wrap">
+      <input id="filtroFornecedor" placeholder="Filtrar por fornecedor" class="border px-2 py-1 rounded flex-1" />
+      <select id="filtroValidade" class="border px-2 py-1 rounded">
+        <option value="todas">Todas</option>
+        <option value="vencidos">Vencidos</option>
+        <option value="proximos">Próximos de vencer</option>
+      </select>
+      <select id="ordenarValor" class="border px-2 py-1 rounded">
+        <option value="padrao">Ordem padrão</option>
+        <option value="cres">Valor crescente</option>
+        <option value="dec">Valor decrescente</option>
+      </select>
+      <button id="aplicarFiltros" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Aplicar</button>
+    </div>
+  </div>
+
+  <!-- Lista de Produtos -->
+  <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4">
+    <h3 class="text-xl font-bold mb-3">Produtos Cadastrados</h3>
+    <ul id="lista" class="space-y-3"></ul>
+  </div>
+
+  <script>
+    class Produto {
+      constructor(imagem, nome, descricao, valor, codigoBarras, fornecedor, validade) {
+        this.imagem = imagem || "";
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = parseFloat(valor).toFixed(2);
+        this.codigoBarras = codigoBarras;
+        this.fornecedor = fornecedor;
+        this.validade = validade;
+      }
+    }
+
+    class CadastroProdutos {
+      constructor() {
+        this.lista = document.getElementById("lista");
+        this.form = document.getElementById("formulario");
+        this.previewImg = document.getElementById("previewImagem");
+        this.campos = ["imagem", "nome", "descricao", "valor", "codigoBarras", "fornecedor", "validade"];
+        this.produtos = [];
+        this.carregar();
+        this.bindEventos();
+      }
+
+      carregar() {
+        this.produtos = JSON.parse(localStorage.getItem("produtos") || "[]");
+        this.renderizar();
+      }
+
+      salvar() {
+        localStorage.setItem("produtos", JSON.stringify(this.produtos));
+        this.renderizar();
+      }
+
+      adicionar(produto) {
+        const idx = parseInt(document.getElementById("indexEdicao").value);
+        if (idx >= 0) {
+          produto.imagem = produto.imagem || this.produtos[idx].imagem;
+          this.produtos[idx] = produto;
+          document.getElementById("indexEdicao").value = -1;
+        } else {
+          this.produtos.push(produto);
+        }
+        this.salvar();
+      }
+
+      excluir(index) {
+        this.produtos.splice(index, 1);
+        this.salvar();
+      }
+
+      editar(index) {
+        const p = this.produtos[index];
+        this.campos.forEach(c => {
+          if (c === "imagem") return;
+          document.getElementById(c).value = p[c] || "";
+        });
+        document.getElementById("indexEdicao").value = index;
+        if(p.imagem){
+          this.previewImg.src = p.imagem;
+          this.previewImg.classList.remove("hidden");
+        } else {
+          this.previewImg.classList.add("hidden");
+        }
+      }
+
+      aplicarFiltros() {
+        let filtrados = [...this.produtos];
+        const fornecedor = document.getElementById("filtroFornecedor").value.toLowerCase();
+        const validadeFiltro = document.getElementById("filtroValidade").value;
+        const ordenar = document.getElementById("ordenarValor").value;
+
+        if(fornecedor) filtrados = filtrados.filter(p => p.fornecedor.toLowerCase().includes(fornecedor));
+
+        const hoje = new Date();
+        if(validadeFiltro === "vencidos"){
+          filtrados = filtrados.filter(p => new Date(p.validade) < hoje);
+        } else if(validadeFiltro === "proximos"){
+          const seteDias = new Date();
+          seteDias.setDate(hoje.getDate() + 7);
+          filtrados = filtrados.filter(p => new Date(p.validade) >= hoje && new Date(p.validade) <= seteDias);
+        }
+
+        if(ordenar === "cres"){
+          filtrados.sort((a,b)=> parseFloat(a.valor) - parseFloat(b.valor));
+        } else if(ordenar === "dec"){
+          filtrados.sort((a,b)=> parseFloat(b.valor) - parseFloat(a.valor));
+        }
+
+        this.renderizar(filtrados);
+      }
+
+      renderizar(listaFiltrada=null) {
+        const produtos = listaFiltrada || this.produtos;
+        this.lista.innerHTML = "";
+        produtos.forEach((p, i) => {
+          const imgTag = p.imagem ? `<img src="${p.imagem}" class="mt-2 w-32 rounded border" />` : "";
+          const li = document.createElement("li");
+          li.className = "p-3 border rounded bg-gray-50";
+          li.innerHTML = `
+            <div class="flex justify-between items-start">
+              <div>
+                <strong>${p.nome}</strong> - R$ ${p.valor}<br>
+                <p class="text-sm">${p.descricao}</p>
+                <p class="text-sm">Código: ${p.codigoBarras}</p>
+                <p class="text-sm">Fornecedor: ${p.fornecedor}</p>
+                <p class="text-sm">Validade: ${p.validade}</p>
+                ${imgTag}
+              </div>
+              <div class="flex flex-col gap-1 text-right">
+                <button onclick="cad.editar(${i})" class="text-blue-600 hover:underline text-sm">Editar</button>
+                <button onclick="cad.excluir(${i})" class="text-red-600 hover:underline text-sm">Excluir</button>
+              </div>
+            </div>
+          `;
+          this.lista.appendChild(li);
+        });
+      }
+
+      bindEventos() {
+        this.form.addEventListener("submit", e => {
+          e.preventDefault();
+          const novo = {};
+          this.campos.forEach(c => {
+            if (c !== "imagem") novo[c] = document.getElementById(c).value;
+          });
+          const fotoInput = document.getElementById("imagem");
+          if (fotoInput.files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = event => {
+              novo.imagem = event.target.result;
+              this.adicionar(new Produto(...this.campos.map(c => novo[c])));
+              this.form.reset();
+              this.previewImg.classList.add("hidden");
+            };
+            reader.readAsDataURL(fotoInput.files[0]);
+          } else {
+            this.adicionar(new Produto(...this.campos.map(c => novo[c])));
+            this.form.reset();
+            this.previewImg.classList.add("hidden");
+          }
+        });
+
+        document.getElementById("aplicarFiltros").addEventListener("click", e=>{
+          e.preventDefault();
+          this.aplicarFiltros();
+        });
+
+        document.getElementById("imagem").addEventListener("change", e=>{
+          if(this.imagem.files.length>0){
+            const reader = new FileReader();
+            reader.onload = ev=>{
+              this.previewImg.src = ev.target.result;
+              this.previewImg.classList.remove("hidden");
+            };
+            reader.readAsDataURL(this.imagem.files[0]);
+          }
+        });
+      }
+    }
+
+    const cad = new CadastroProdutos();
+  </script>
+
+</body>
+</html>
+```
+
+
+
+
+
+
 # BONUS 
 ## VALIDAR AS PALAVRAS CHAVES:
 #### ACESSAR A CONTA DO GOOGLE ADS:
@@ -2708,4 +3218,6 @@ Retorna o id do pedido
 
 Quer que eu prossiga agora com o
 💳 Bloco 2 de 6 — Configuração do Mercado Pago (sandbox + geração de pagamento), Aristides?
+
+
 
