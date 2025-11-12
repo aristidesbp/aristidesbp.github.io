@@ -598,8 +598,7 @@ Abaixo vou te passar 3 códigos depois vou te pedir uma tarefa.
 1. Com base nas pesquisas que realizamos, faça as outras seções que faltam
 ```
 
-
-
+---
 # INDEX.HTML (MODULAR)
 ```
 <!DOCTYPE html>
@@ -675,6 +674,7 @@ Abaixo vou te passar 3 códigos depois vou te pedir uma tarefa.
 
 ```
 
+---
 ## Exemplo navbar.js
 ```
 // assets/js/navbar.js
@@ -842,7 +842,8 @@ hamburger.classList.toggle("ativo");
 
 
 ## VENDA DE SERVIÇOS 
-```<!DOCTYPE html>
+```
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
