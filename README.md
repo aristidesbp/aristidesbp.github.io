@@ -630,6 +630,56 @@ firebase deploy
 ```
 
 
+---
+# BAIXAR VIDEOS
+# INSTALE O yt-dlp:
+-------------------------------------------------------
+Agora instale o yt-dlp com o comando:
+
+pip install yt-dlp
+
+-------------------------------------------------------
+4. (OPCIONAL) INSTALE O FFMPEG:
+-------------------------------------------------------
+O ffmpeg permite baixar vídeos com áudio ou converter formatos:
+
+pkg install ffmpeg -y
+
+-------------------------------------------------------
+5. COMANDOS PARA BAIXAR VÍDEOS:
+-------------------------------------------------------
+
+# Comando básico para baixar vídeo:
+yt-dlp "URL_DO_VÍDEO"
+
+# Exemplo:
+yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+-------------------------------------------------------
+6. COMANDOS OPCIONAIS:
+-------------------------------------------------------
+
+# Baixar apenas o áudio em MP3:
+yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
+
+# Escolher qualidade de vídeo (exemplo: 720p):
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
+
+# Salvar com nome personalizado:
+yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
+
+# Ver formatos disponíveis:
+yt-dlp -F "URL_DO_VÍDEO"
+
+-------------------------------------------------------
+DICA EXTRA:
+-------------------------------------------------------
+Você pode criar um script `.sh` com esses comandos para facilitar o processo com menus interativos.
+
+Se quiser ajuda para isso, me avise!
+
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 04
 # CODIGOS PRONTOS
