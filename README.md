@@ -101,20 +101,23 @@ Liste da mais importante para a menus importante.
 
 ```
 # BONUS: LOJA COMERCIAL COMPLETA 
-### ESTRUTURA DO PROJETO: 
+### ESTRUTURA DE PASTAS DO PROJETO: 
 ```
+|── index.html
 ├── admin2.html
 ├── assets
-│   ├── img                            │   │   ├── barraquinha-lanche.jpg
-│   │   └── produtos
-│   │       ├── banana.jpg
-│   │       ├── carne-seca.jpg
-│   │       ├── coca.jpg               │   │       ├── frango.jpg
-│   │       ├── morango.jpg            │   │       ├── ovo.jpg
-│   │       ├── presunto.jpg
-│   │       ├── salada.jpg
-│   │       └── suco.jpg               │   └── produtos.json
-└── loja.html
+    ├── img
+    │   └── logo.jpg                        
+    │   └── produtos
+    │       ├── banana.jpg
+    │       ├── carne-seca.jpg
+    │       ├── coca.jpg                     
+    │       ├── morango.jpg               
+    │       ├── presunto.jpg
+    │       ├── salada.jpg
+    │       └── suco.jpg
+    └── produtos.json
+
 ```
 
 ### cardapio.html
@@ -176,7 +179,7 @@ body { scroll-behavior:smooth; }
 <body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)]">
 
 <header class="bg-[var(--vermelho-telha)] text-white text-center py-6">
-  <img src="assets/img/barraquinha-lanche.jpg" class="w-full h-64 object-cover">
+  <img src="assets/img/logo.jpg" class="w-full h-64 object-cover">
   <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
   <p>Seu lanche artesanal favorito!</p>
 
