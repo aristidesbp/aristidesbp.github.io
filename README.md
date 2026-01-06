@@ -100,7 +100,7 @@ Liste da mais importante para a menus importante.
 # PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 
 ```
-# BONUS: LOJA COMERCIAL COMPLETA 
+# BONUS: cardápio online para lanchonetes e restaurantes
 ### ESTRUTURA DE PASTAS DO PROJETO: 
 http://aristidesbp.github.io/projeto/tapioca/index.html
 ```
