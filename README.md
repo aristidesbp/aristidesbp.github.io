@@ -100,7 +100,21 @@ Liste da mais importante para a menus importante.
 # PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 
 ```
-## BONUS: LOJA COMERCIAL COMPLETA 
+# BONUS: LOJA COMERCIAL COMPLETA 
+### ESTRUTURA DO PROJETO: 
+├── admin2.html
+├── assets
+│   ├── img                            │   │   ├── barraquinha-lanche.jpg
+│   │   └── produtos
+│   │       ├── banana.jpg
+│   │       ├── carne-seca.jpg
+│   │       ├── coca.jpg               │   │       ├── frango.jpg
+│   │       ├── morango.jpg            │   │       ├── ovo.jpg
+│   │       ├── presunto.jpg
+│   │       ├── salada.jpg
+│   │       └── suco.jpg               │   └── produtos.json
+└── loja.html
+
 ### cardapio.html
 ```
 <!DOCTYPE html>
@@ -333,6 +347,214 @@ busca.oninput = renderMenu;
 ```
 ### cadastrar_produtos.html
 ```
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Produtos</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+  --bege-claro:#fff8e1;
+  --vermelho:#b22222;
+  --amarelo:#f7d84f;
+  --marrom:#8b4513;
+  --preto:#1a1a1a;
+}
+</style>
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto)]">
+
+<header class="bg-[var(--vermelho)] text-white text-center py-6 shadow">
+  <h1 class="text-3xl font-bold">Painel Administrativo</h1>
+  <p>Cadastro de Produtos</p>
+</header>
+
+<main class="container mx-auto p-4 space-y-8">
+
+<!-- IMPORTAR -->
+<section class="bg-white p-4 rounded-xl shadow">
+  <h2 class="font-bold mb-2">Importar produtos.json</h2>
+  <input type="file" id="importar" accept=".json"
+    class="w-full p-2 border rounded">
+</section>
+
+<!-- FORM -->
+<section class="bg-white p-4 rounded-xl shadow space-y-3">
+  <h2 class="font-bold">Novo / Editar Produto</h2>
+
+  <input id="nome" placeholder="Nome" class="w-full p-2 border rounded">
+  <input id="descricao" placeholder="Descrição" class="w-full p-2 border rounded">
+  <input id="preco" type="number" placeholder="Preço" class="w-full p-2 border rounded">
+
+  <!-- CATEGORIA -->
+  <select id="categoria" class="w-full p-2 border rounded">
+    <option value="">Selecione a categoria</option>
+    <option value="lanches">Lanches</option>
+    <option value="bebidas">Bebidas</option>
+    <option value="sobremesas">Sobremesas</option>
+  </select>
+
+  <input id="imagem" type="file" accept="image/*" class="w-full">
+
+  <img id="preview" class="hidden w-32 h-32 object-cover rounded shadow">
+
+  <button onclick="salvar()"
+    class="bg-[var(--amarelo)] px-4 py-2 rounded font-bold hover:opacity-90">
+    Salvar Produto
+  </button>
+</section>
+
+<!-- BUSCA -->
+<section class="bg-white p-4 rounded-xl shadow">
+  <input id="busca" placeholder="Buscar produto..."
+    class="w-full p-2 border rounded">
+</section>
+
+<!-- LISTA -->
+<section>
+  <h2 class="font-bold mb-4">Produtos</h2>
+  <div id="lista" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</section>
+
+<!-- EXPORTAR -->
+<section class="text-center">
+  <button onclick="exportar()"
+    class="bg-[var(--vermelho)] text-white px-6 py-3 rounded font-bold">
+    Exportar produtos.json
+  </button>
+</section>
+
+</main>
+
+<script>
+let produtos = [];
+let editandoId = null;
+
+importar.onchange = e => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    produtos = JSON.parse(reader.result);
+    ordenar();
+    render();
+  };
+  reader.readAsText(e.target.files[0]);
+};
+
+imagem.onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove("hidden");
+};
+
+busca.oninput = render;
+
+function ordenar() {
+  produtos.sort((a,b) =>
+    a.nome.localeCompare(b.nome, 'pt-BR'));
+}
+
+function render() {
+  const termo = busca.value.toLowerCase();
+  lista.innerHTML = "";
+
+  produtos
+    .filter(p => p.nome.toLowerCase().includes(termo))
+    .forEach(p => {
+      lista.innerHTML += `
+      <div class="bg-white p-4 rounded-xl shadow flex flex-col gap-2">
+        <img src="${p.imagem}" class="h-40 object-cover rounded">
+        <strong>${p.nome}</strong>
+        <span>R$ ${p.preco}</span>
+        <span class="text-sm text-gray-600">${p.categoria}</span>
+        <div class="flex gap-2">
+          <button onclick="editar(${p.id})"
+            class="bg-blue-500 text-white px-3 py-1 rounded">Editar</button>
+          <button onclick="excluir(${p.id})"
+            class="bg-red-500 text-white px-3 py-1 rounded">Excluir</button>
+        </div>
+      </div>`;
+    });
+}
+
+function salvar() {
+  if (!nome.value || !preco.value || !categoria.value)
+    return alert("Preencha nome, preço e categoria");
+
+  const img = imagem.files[0];
+  let imgPath = editandoId
+    ? produtos.find(p => p.id === editandoId).imagem
+    : "";
+
+  if (img) imgPath = "assets/img/produtos/" + img.name;
+
+  if (editandoId) {
+    Object.assign(produtos.find(p => p.id === editandoId), {
+      nome:nome.value,
+      descricao:descricao.value,
+      preco:+preco.value,
+      categoria:categoria.value,
+      imagem:imgPath
+    });
+    editandoId = null;
+  } else {
+    produtos.push({
+      id:Date.now(),
+      nome:nome.value,
+      descricao:descricao.value,
+      preco:+preco.value,
+      categoria:categoria.value,
+      imagem:imgPath
+    });
+  }
+
+  ordenar();
+  limpar();
+  render();
+}
+
+function editar(id) {
+  const p = produtos.find(p => p.id === id);
+  nome.value = p.nome;
+  descricao.value = p.descricao;
+  preco.value = p.preco;
+  categoria.value = p.categoria;
+  preview.src = p.imagem;
+  preview.classList.remove("hidden");
+  editandoId = id;
+}
+
+function excluir(id) {
+  produtos = produtos.filter(p => p.id !== id);
+  render();
+}
+
+function exportar() {
+  const blob = new Blob(
+    [JSON.stringify(produtos, null, 2)],
+    {type:"application/json"}
+  );
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "produtos.json";
+  a.click();
+}
+
+function limpar() {
+  nome.value = descricao.value =
+  preco.value = categoria.value = "";
+  imagem.value = "";
+  preview.classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
 ```
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
