@@ -1424,6 +1424,240 @@ carregarProdutos();
       
 
 ```
+
+## CADASTRO DE PRODUTOS (ADMIM)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Produtos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+<h1 class="text-3xl font-bold mb-6">Administração de Produtos</h1>
+
+<!-- IMPORTAR / EXPORTAR -->
+<div class="mb-6 bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+  <div>
+    <h2 class="text-xl font-semibold mb-1">Banco de Produtos</h2>
+    <input type="file" id="importarJson" accept=".json">
+  </div>
+
+  <button id="exportarJson"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    📦 Exportar produtos.json
+  </button>
+</div>
+
+<!-- FORMULÁRIO -->
+<div class="mb-6 bg-white p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">Produto</h2>
+
+  <form id="formProduto" class="grid gap-3">
+    <input type="hidden" id="indexProduto">
+
+    <input id="campoId" placeholder="ID (ex: lanche-001)" class="border p-2 rounded" required>
+    <input id="campoNome" placeholder="Nome" class="border p-2 rounded" required>
+    <input id="campoPreco" type="number" step="0.01" placeholder="Preço" class="border p-2 rounded" required>
+    <input id="campoCategoria" placeholder="Categoria" class="border p-2 rounded" required>
+    <textarea id="campoDescricao" placeholder="Descrição" class="border p-2 rounded"></textarea>
+
+    <input id="campoImagem" type="file" accept="image/*" class="border p-2 rounded">
+
+    <label class="flex items-center gap-2">
+      <input type="checkbox" id="campoAtivo" checked>
+      Produto ativo
+    </label>
+
+    <button class="bg-green-600 text-white py-2 rounded">
+      Salvar Produto
+    </button>
+  </form>
+</div>
+
+<!-- LISTAGEM -->
+<div class="bg-white p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">Produtos</h2>
+  <div id="listaProdutos" class="space-y-3"></div>
+</div>
+
+<script>
+/* ===============================
+   ESTADO
+================================ */
+let banco = {
+  meta: {
+    versao: "1.0",
+    atualizadoEm: ""
+  },
+  categorias: [],
+  produtos: []
+};
+
+let imagemBase64 = "";
+
+/* ===============================
+   ELEMENTOS
+================================ */
+const importarJson = document.getElementById("importarJson");
+const exportarJson = document.getElementById("exportarJson");
+const listaProdutos = document.getElementById("listaProdutos");
+const form = document.getElementById("formProduto");
+
+const campoId = document.getElementById("campoId");
+const campoNome = document.getElementById("campoNome");
+const campoPreco = document.getElementById("campoPreco");
+const campoCategoria = document.getElementById("campoCategoria");
+const campoDescricao = document.getElementById("campoDescricao");
+const campoImagem = document.getElementById("campoImagem");
+const campoAtivo = document.getElementById("campoAtivo");
+const indexProduto = document.getElementById("indexProduto");
+
+/* ===============================
+   IMPORTAR JSON
+================================ */
+importarJson.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      banco = JSON.parse(reader.result);
+      renderizarLista();
+    } catch {
+      alert("Arquivo JSON inválido");
+    }
+  };
+  reader.readAsText(file);
+});
+
+/* ===============================
+   EXPORTAR JSON
+================================ */
+exportarJson.addEventListener("click", () => {
+  banco.meta.atualizadoEm = new Date().toISOString().split("T")[0];
+
+  const json = JSON.stringify(banco, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "produtos.json";
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+});
+
+/* ===============================
+   IMAGEM → BASE64
+================================ */
+campoImagem.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => imagemBase64 = reader.result;
+  reader.readAsDataURL(file);
+});
+
+/* ===============================
+   SALVAR PRODUTO
+================================ */
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const produto = {
+    id: campoId.value,
+    nome: campoNome.value,
+    preco: Number(campoPreco.value),
+    categoria: campoCategoria.value,
+    descricao: campoDescricao.value,
+    imagem: imagemBase64,
+    ativo: campoAtivo.checked
+  };
+
+  if (indexProduto.value === "") {
+    banco.produtos.push(produto);
+  } else {
+    banco.produtos[indexProduto.value] = produto;
+  }
+
+  form.reset();
+  imagemBase64 = "";
+  indexProduto.value = "";
+
+  renderizarLista();
+});
+
+/* ===============================
+   LISTAR
+================================ */
+function renderizarLista() {
+  listaProdutos.innerHTML = "";
+
+  banco.produtos.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "flex items-center gap-4 border p-3 rounded bg-gray-50";
+
+    div.innerHTML = `
+      <img src="${p.imagem}" class="w-20 h-20 object-cover rounded border">
+
+      <div class="flex-1">
+        <strong>${p.nome}</strong><br>
+        <span class="text-sm text-gray-600">
+          ${p.categoria} — R$ ${p.preco.toFixed(2)}
+        </span>
+      </div>
+
+      <div class="space-x-2">
+        <button class="editar bg-yellow-400 px-3 py-1 rounded text-sm">Editar</button>
+        <button class="excluir bg-red-500 text-white px-3 py-1 rounded text-sm">Excluir</button>
+      </div>
+    `;
+
+    div.querySelector(".editar").onclick = () => editarProduto(i);
+    div.querySelector(".excluir").onclick = () => excluirProduto(i);
+
+    listaProdutos.appendChild(div);
+  });
+}
+
+/* ===============================
+   EDITAR
+================================ */
+function editarProduto(i) {
+  const p = banco.produtos[i];
+
+  indexProduto.value = i;
+  campoId.value = p.id;
+  campoNome.value = p.nome;
+  campoPreco.value = p.preco;
+  campoCategoria.value = p.categoria;
+  campoDescricao.value = p.descricao;
+  campoAtivo.checked = p.ativo;
+
+  imagemBase64 = p.imagem;
+}
+
+/* ===============================
+   EXCLUIR
+================================ */
+function excluirProduto(i) {
+  if (!confirm("Excluir produto?")) return;
+  banco.produtos.splice(i, 1);
+  renderizarLista();
+}
+</script>
+
+</body>
+</html>
+
+```
 ## CONTROLE DE ENTREGAS 
 ```
 <!DOCTYPE html>
