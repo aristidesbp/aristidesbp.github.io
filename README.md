@@ -102,6 +102,7 @@ Liste da mais importante para a menus importante.
 ```
 # BONUS: LOJA COMERCIAL COMPLETA 
 ### ESTRUTURA DE PASTAS DO PROJETO: 
+http://aristidesbp.github.io/projeto/tapioca/index.html
 ```
 |── index.html
 ├── admin2.html
