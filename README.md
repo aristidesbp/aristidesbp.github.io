@@ -100,6 +100,234 @@ Liste da mais importante para a menus importante.
 # PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 
 ```
+
+
+
+# BÔNUS: Site comercial venda de serviços 
+Obs: ao baixar verifique o endereço das pastas para salvar a imagem no código.
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criação de Sites & Tráfego Pago – AristidesBP</title>
+<meta name="description" content="Aumente suas vendas com um site profissional e campanhas de tráfego pago otimizadas.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f97316;
+      --dark: #1a1a1a;
+      --light: #f5f5f5;
+      --gray: #777;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans', sans-serif; }
+    body { background:var(--light); color:var(--dark); line-height:1.6; overflow-x:hidden; }
+    nav { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.1); z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:10px 30px; }
+    nav h2 { color:var(--primary); font-size:1.2rem; }
+    nav ul { list-style:none; display:flex; gap:20px; }
+    nav ul li a { text-decoration:none; color:var(--dark); font-weight:600; }
+  
+  
+
+header { background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/header.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:120px 20px; }
+   
+header h1 { font-size:3rem; margin-bottom:10px; }
+    header p { font-size:1.2rem; margin-bottom:20px; }
+    header a { background:var(--primary); color:#fff; padding:12px 30px; text-decoration:none; border-radius:30px; font-weight:600; }
+    
+
+
+section { padding:80px 20px; text-align:center; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:40px; }
+    .card { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    .card h3 { color:var(--primary); margin-bottom:15px; }
+    .card img { width:100%; border-radius:10px; margin-bottom:15px; }
+    .contact form { max-width:600px; margin:auto; display:flex; flex-direction:column; gap:15px; }
+    .contact input,.contact textarea,.contact select { padding:15px; border:1px solid #ddd; border-radius:5px; font-size:1rem; }
+    .contact button { background:var(--primary); color:#fff; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+    footer { background:var(--dark); color:#fff; text-align:center; padding:20px; margin-top:40px; }
+    footer a { color:#fff; text-decoration:none; margin:0 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h2>AristidesBP</h2>
+    <ul>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#services">Serviços</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Transforme seu Negócio Online!</h1>
+    <p>Sites profissionais + campanhas de tráfego pago que geram vendas reais.</p>
+    <a href="#contact">Quero Meu Site Agora</a>
+  </header>
+
+  <!-- SOBRE -->
+  <section id="about">
+    <h2>Por Que Escolher AristidesBP?</h2>
+    <p>Profissional especializado em criação de sites que convertem e gestão de tráfego pago para empresas exigentes. Resultados reais, transparência e suporte próximo.</p>
+ 
+<!-- CARDS --> 
+<div class="cards">
+     
+<!-- CARD01 --> 
+<div class="card">
+<img src="img/card01.jpg" alt="Resultados">
+<h3>Resultados Garantidos</h3>
+<p>Sites que vendem e campanhas de ads otimizadas para gerar ROI real.</p>
+</div>
+ 
+<!-- CARD02 -->
+<div class="card">
+<img src="img/card02.jpg" alt="Profissionalismo">
+<h3>Profissionalismo</h3>
+<p>Mais de 10 anos de experiência, portfólio de clientes satisfeitos.</p>
+      </div>
+      
+<!-- CARD03 -->
+<div class="card">
+        <img src="img/card03" alt="Suporte">
+        <h3>Suporte Personalizado</h3>
+        <p>Acompanhamento próximo, ajustes estratégicos e relatórios claros.</p>
+      </div>
+      
+<!-- CARD04 -->
+<div class="card">
+        <img src="img/CARD04.jpg" alt="Exclusividade">
+        <h3>Exclusividade</h3>
+        <p>Projetos sob medida, alinhados com o posicionamento da sua empresa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="services">
+    <h2>Serviços</h2>
+    <div class="cards">
+     
+<!-- CARD05 -->
+ <div class="card">
+        <img src="img/card05.jpg" alt="Sites Profissionais">
+        <h3>Criação de Sites Profissionais</h3>
+        <p>Design moderno, responsivo e otimizado para conversão de clientes.</p>
+      </div>
+
+<!-- CARD06 -->
+      <div class="card">
+        <img src="img/CARD06.jpg" alt="Tráfego Pago">
+        <h3>Gestão de Tráfego Pago</h3>
+        <p>Campanhas no Google Ads e redes sociais, maximizando resultados.</p>
+      </div>
+
+<!-- CARD07 -->
+      <div class="card">
+        <img src="img/card07.jpg" alt="Consultoria">
+        <h3>Consultoria Estratégica</h3>
+        <p>Planejamento e análise de resultados para escalar seu negócio online.</p>
+
+</div>
+    </div>
+  </section>
+
+<!-- VÍDEO -->
+<section id="video">
+  <h2>Assista Nosso Vídeo</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+      title="Vídeo Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</section>
+
+<style>
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 20px auto;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
+  <!-- FORMULÁRIO / CONTRATO -->
+  <section id="contact" class="contact">
+    <h2>Contrato de Prestação de Serviços</h2>
+    <p>Ao enviar o formulário você aceita a prestação do serviço de criação de site + gestão de tráfego pago. Será gerado o custo de <strong>R$50,00</strong> para visita técnica e relatório do projeto.</p>
+    <form id="contact-form">
+      <input type="text" id="nome" placeholder="Nome Completo" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="telefone" placeholder="Telefone" required>
+      <textarea id="mensagem" rows="5" placeholder="Descrição do Projeto / Informações adicionais" required></textarea>
+      <label><input type="checkbox" id="aceite" required> Aceito os termos e condições do contrato e autorizo o pagamento de R$50,00 para visita técnica.</label>
+      <button type="submit">Enviar para WhatsApp e Confirmar Contrato</button>
+    </form>
+  </section>
+
+<!-- FOOTER -->
+  <footer>
+    <p>Contatos e Redes Sociais</p>
+    <p>WhatsApp: <a href="https://wa.me/5591992420981" target="_blank">+55 91 99242-0981</a> | Email: contato@aristidesbp.com</p>
+    <p>
+      <a href="#" target="_blank">Facebook</a> | 
+      <a href="#" target="_blank">Instagram</a> | 
+      <a href="#" target="_blank">LinkedIn</a>
+    </p>
+    <p>&copy; 2025 AristidesBP. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Função para enviar formulário para WhatsApp
+    const form = document.getElementById("contact-form");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+      const mensagem = document.getElementById("mensagem").value;
+      const aceite = document.getElementById("aceite").checked;
+
+      if(!aceite){
+        alert("Você precisa aceitar os termos do contrato para continuar.");
+        return;
+      }
+
+      const texto = `*Contrato de Prestação de Serviços*%0A
+Nome: ${nome}%0A
+Email: ${email}%0A
+Telefone: ${telefone}%0A
+Mensagem: ${mensagem}%0A
+Aceite dos Termos: Sim%0A
+Custo Visita Técnica: R$50,00`;
+
+      // Abre WhatsApp no número fornecido
+      window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
+
+      alert("Formulário enviado! Aguarde nosso contato via WhatsApp.");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+```
+
+
 # BONUS: cardápio online para lanchonetes e restaurantes
 ### ESTRUTURA DE PASTAS DO PROJETO: 
 http://aristidesbp.github.io/projeto/tapioca/index.html
@@ -562,228 +790,8 @@ function limpar() {
 </body>
 </html>
 ```
-# BÔNUS: Site comercial venda de serviços 
-Obs: ao baixar verifique o endereço das pastas para salvar a imagem no código.
-```
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Criação de Sites & Tráfego Pago – AristidesBP</title>
-<meta name="description" content="Aumente suas vendas com um site profissional e campanhas de tráfego pago otimizadas.">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #f97316;
-      --dark: #1a1a1a;
-      --light: #f5f5f5;
-      --gray: #777;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans', sans-serif; }
-    body { background:var(--light); color:var(--dark); line-height:1.6; overflow-x:hidden; }
-    nav { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.1); z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:10px 30px; }
-    nav h2 { color:var(--primary); font-size:1.2rem; }
-    nav ul { list-style:none; display:flex; gap:20px; }
-    nav ul li a { text-decoration:none; color:var(--dark); font-weight:600; }
-  
-  
 
-header { background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/header.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:120px 20px; }
-   
-header h1 { font-size:3rem; margin-bottom:10px; }
-    header p { font-size:1.2rem; margin-bottom:20px; }
-    header a { background:var(--primary); color:#fff; padding:12px 30px; text-decoration:none; border-radius:30px; font-weight:600; }
-    
-
-
-section { padding:80px 20px; text-align:center; }
-    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:40px; }
-    .card { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-    .card h3 { color:var(--primary); margin-bottom:15px; }
-    .card img { width:100%; border-radius:10px; margin-bottom:15px; }
-    .contact form { max-width:600px; margin:auto; display:flex; flex-direction:column; gap:15px; }
-    .contact input,.contact textarea,.contact select { padding:15px; border:1px solid #ddd; border-radius:5px; font-size:1rem; }
-    .contact button { background:var(--primary); color:#fff; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
-    footer { background:var(--dark); color:#fff; text-align:center; padding:20px; margin-top:40px; }
-    footer a { color:#fff; text-decoration:none; margin:0 10px; }
-  </style>
-</head>
-<body>
-
-  <!-- NAVBAR -->
-  <nav>
-    <h2>AristidesBP</h2>
-    <ul>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="#services">Serviços</a></li>
-      <li><a href="#contact">Contato</a></li>
-    </ul>
-  </nav>
-
-  <!-- HEADER -->
-  <header>
-    <h1>Transforme seu Negócio Online!</h1>
-    <p>Sites profissionais + campanhas de tráfego pago que geram vendas reais.</p>
-    <a href="#contact">Quero Meu Site Agora</a>
-  </header>
-
-  <!-- SOBRE -->
-  <section id="about">
-    <h2>Por Que Escolher AristidesBP?</h2>
-    <p>Profissional especializado em criação de sites que convertem e gestão de tráfego pago para empresas exigentes. Resultados reais, transparência e suporte próximo.</p>
- 
-<!-- CARDS --> 
-<div class="cards">
-     
-<!-- CARD01 --> 
-<div class="card">
-<img src="img/card01.jpg" alt="Resultados">
-<h3>Resultados Garantidos</h3>
-<p>Sites que vendem e campanhas de ads otimizadas para gerar ROI real.</p>
-</div>
- 
-<!-- CARD02 -->
-<div class="card">
-<img src="img/card02.jpg" alt="Profissionalismo">
-<h3>Profissionalismo</h3>
-<p>Mais de 10 anos de experiência, portfólio de clientes satisfeitos.</p>
-      </div>
       
-<!-- CARD03 -->
-<div class="card">
-        <img src="img/card03" alt="Suporte">
-        <h3>Suporte Personalizado</h3>
-        <p>Acompanhamento próximo, ajustes estratégicos e relatórios claros.</p>
-      </div>
-      
-<!-- CARD04 -->
-<div class="card">
-        <img src="img/CARD04.jpg" alt="Exclusividade">
-        <h3>Exclusividade</h3>
-        <p>Projetos sob medida, alinhados com o posicionamento da sua empresa.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVIÇOS -->
-  <section id="services">
-    <h2>Serviços</h2>
-    <div class="cards">
-     
-<!-- CARD05 -->
- <div class="card">
-        <img src="img/card05.jpg" alt="Sites Profissionais">
-        <h3>Criação de Sites Profissionais</h3>
-        <p>Design moderno, responsivo e otimizado para conversão de clientes.</p>
-      </div>
-
-<!-- CARD06 -->
-      <div class="card">
-        <img src="img/CARD06.jpg" alt="Tráfego Pago">
-        <h3>Gestão de Tráfego Pago</h3>
-        <p>Campanhas no Google Ads e redes sociais, maximizando resultados.</p>
-      </div>
-
-<!-- CARD07 -->
-      <div class="card">
-        <img src="img/card07.jpg" alt="Consultoria">
-        <h3>Consultoria Estratégica</h3>
-        <p>Planejamento e análise de resultados para escalar seu negócio online.</p>
-      </div>
-    </div>
-  </section>
-
-<!-- VÍDEO -->
-<section id="video">
-  <h2>Assista Nosso Vídeo</h2>
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-      title="Vídeo Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</section>
-
-<style>
-.video-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-  height: 0;
-  overflow: hidden;
-  border-radius: 10px;
-  margin: 20px auto;
-}
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-</style>
-  <!-- FORMULÁRIO / CONTRATO -->
-  <section id="contact" class="contact">
-    <h2>Contrato de Prestação de Serviços</h2>
-    <p>Ao enviar o formulário você aceita a prestação do serviço de criação de site + gestão de tráfego pago. Será gerado o custo de <strong>R$50,00</strong> para visita técnica e relatório do projeto.</p>
-    <form id="contact-form">
-      <input type="text" id="nome" placeholder="Nome Completo" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="tel" id="telefone" placeholder="Telefone" required>
-      <textarea id="mensagem" rows="5" placeholder="Descrição do Projeto / Informações adicionais" required></textarea>
-      <label><input type="checkbox" id="aceite" required> Aceito os termos e condições do contrato e autorizo o pagamento de R$50,00 para visita técnica.</label>
-      <button type="submit">Enviar para WhatsApp e Confirmar Contrato</button>
-    </form>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>Contatos e Redes Sociais</p>
-    <p>WhatsApp: <a href="https://wa.me/5591992420981" target="_blank">+55 91 99242-0981</a> | Email: contato@aristidesbp.com</p>
-    <p>
-      <a href="#" target="_blank">Facebook</a> | 
-      <a href="#" target="_blank">Instagram</a> | 
-      <a href="#" target="_blank">LinkedIn</a>
-    </p>
-    <p>&copy; 2025 AristidesBP. Todos os direitos reservados.</p>
-  </footer>
-
-  <!-- ===== JAVASCRIPT ===== -->
-  <script>
-    // Função para enviar formulário para WhatsApp
-    const form = document.getElementById("contact-form");
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const nome = document.getElementById("nome").value;
-      const email = document.getElementById("email").value;
-      const telefone = document.getElementById("telefone").value;
-      const mensagem = document.getElementById("mensagem").value;
-      const aceite = document.getElementById("aceite").checked;
-
-      if(!aceite){
-        alert("Você precisa aceitar os termos do contrato para continuar.");
-        return;
-      }
-
-      const texto = `*Contrato de Prestação de Serviços*%0A
-Nome: ${nome}%0A
-Email: ${email}%0A
-Telefone: ${telefone}%0A
-Mensagem: ${mensagem}%0A
-Aceite dos Termos: Sim%0A
-Custo Visita Técnica: R$50,00`;
-
-      // Abre WhatsApp no número fornecido
-      window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
-
-      alert("Formulário enviado! Aguarde nosso contato via WhatsApp.");
-      form.reset();
-    });
-  </script>
-</body>
-</html>
-```
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # 02
