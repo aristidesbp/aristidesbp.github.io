@@ -100,6 +100,240 @@ Liste da mais importante para a menus importante.
 # PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 
 ```
+## BONUS: LOJA COMERCIAL COMPLETA 
+### cardapio.html
+```
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery - Aristidesbp</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+  --bege-claro:#fff8e1;
+  --vermelho-telha:#b22222;
+  --amarelo-mostarda:#f7d84f;
+  --marrom-madeira:#8b4513;
+  --preto-quadro:#1a1a1a;
+}
+body { scroll-behavior:smooth; }
+.filtro-categoria {
+  background:var(--amarelo-mostarda);
+  font-weight:bold;
+  padding:10px 20px;
+  border:2px solid var(--marrom-madeira);
+  border-radius:8px;
+}
+.busca {
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  border:2px solid var(--marrom-madeira);
+}
+.campo {
+  width:100%; padding:12px;
+  border-radius:8px; border:none;
+}
+.botao {
+  background:var(--amarelo-mostarda);
+  padding:12px 24px;
+  font-weight:600;
+  border-radius:8px;
+}
+
+.busca {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--marrom-madeira);
+  background: #fff;
+  color: #000;
+}
+</style>
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)]">
+
+<header class="bg-[var(--vermelho-telha)] text-white text-center py-6">
+  <img src="assets/img/barraquinha-lanche.jpg" class="w-full h-64 object-cover">
+  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
+  <p>Seu lanche artesanal favorito!</p>
+
+  <div class="mt-4 px-4 max-w-md mx-auto">
+    <select id="filtroCategoria" class="filtro-categoria w-full">
+      <option value="todos">Todos</option>
+      <option value="lanches">Lanches</option>
+      <option value="bebidas">Bebidas</option>
+      <option value="sobremesas">Sobremesas</option>
+    </select>
+
+    <input
+      type="text"
+      id="buscaProduto"
+      class="busca"
+      placeholder="Buscar produto pelo nome..."
+    >
+  </div>
+</header>
+
+<section class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 text-[var(--marrom-madeira)]">Nosso Cardápio</h2>
+  <div id="menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
+<div class="container mx-auto">
+
+<p class="text-lg font-bold mb-4">
+Total do pedido: R$ <span id="total">0,00</span>
+</p>
+
+<div id="itens-pedido" class="space-y-2 mb-6"></div>
+
+<form id="pedido-form" class="space-y-4">
+<input id="nome" placeholder="Nome Completo" class="campo" required>
+<input id="telefone" placeholder="Telefone" class="campo" required>
+<input id="endereco" placeholder="Endereço" class="campo" required>
+
+<select id="formaPagamento" class="campo" required>
+<option disabled selected>Forma de Pagamento</option>
+<option>Dinheiro</option>
+<option>Pix</option>
+<option>Cartão</option>
+</select>
+
+<textarea id="obs" placeholder="Observações" class="campo"></textarea>
+<button class="botao">Enviar pedido via WhatsApp</button>
+</form>
+
+</div>
+</section>
+
+<script>
+const menuEl = document.getElementById("menu");
+const filtro = document.getElementById("filtroCategoria");
+const busca = document.getElementById("buscaProduto");
+const itensEl = document.getElementById("itens-pedido");
+const totalEl = document.getElementById("total");
+
+let produtos = [];
+let carrinho = [];
+
+fetch("assets/produtos.json")
+.then(r => r.json())
+.then(d => { produtos = d; renderMenu(); });
+
+function renderMenu() {
+  const cat = filtro.value;
+  const termo = busca.value.toLowerCase();
+
+  menuEl.innerHTML = "";
+  produtos
+  .filter(p =>
+    (cat==="todos" || p.categoria.toLowerCase()===cat) &&
+    p.nome.toLowerCase().includes(termo)
+  )
+  .forEach(p => {
+    const div = document.createElement("div");
+    div.className="bg-white p-4 rounded shadow";
+    div.innerHTML=`
+      <img src="${p.imagem}" class="h-48 w-full object-cover rounded mb-2">
+      <strong>${p.nome}</strong>
+      <p>${p.desc||""}</p>
+      <span>R$ ${p.preco.toFixed(2)}</span>
+      <button class="mt-2 bg-yellow-400 w-full py-2 rounded">Adicionar</button>
+    `;
+    const btn = div.querySelector("button");
+    btn.onclick = () => adicionar(p,btn);
+    menuEl.appendChild(div);
+  });
+}
+
+function adicionar(p,btn){
+  const item = carrinho.find(i=>i.id===p.id);
+  if(item) item.qtd++;
+  else carrinho.push({...p,qtd:1});
+
+  btn.textContent="Adicionado ✓";
+  setTimeout(()=>btn.textContent="Adicionar",800);
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho(){
+  itensEl.innerHTML="";
+  let total=0;
+
+  carrinho.forEach((i,idx)=>{
+    total += i.preco * i.qtd;
+    itensEl.innerHTML += `
+    <div class="flex items-center justify-between bg-gray-800 p-2 rounded">
+      <span>${i.nome} (x${i.qtd})</span>
+      <div class="flex gap-2">
+        <button onclick="menos(${idx})">➖</button>
+        <button onclick="mais(${idx})">➕</button>
+        <button onclick="remover(${idx})">❌</button>
+      </div>
+    </div>`;
+  });
+
+  totalEl.textContent = total.toFixed(2);
+}
+
+function mais(i){ carrinho[i].qtd++; atualizarCarrinho(); }
+function menos(i){
+  carrinho[i].qtd--;
+  if(carrinho[i].qtd<=0) carrinho.splice(i,1);
+  atualizarCarrinho();
+}
+function remover(i){
+  carrinho.splice(i,1);
+  atualizarCarrinho();
+}
+
+filtro.onchange = renderMenu;
+busca.oninput = renderMenu;
+</script>
+
+</body>
+</html>
+```
+### produtos.json
+```
+[
+  {
+    "id": 1,
+    "nome": "Tapioca de Carne Seca",
+    "descricao": "Carne seca com queijo",
+    "preco": 18,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/carne-seca.jpg"
+  },
+  {
+    "id": 2,
+    "nome": "Suco Natural",
+    "descricao": "Suco gelado",
+    "preco": 6,
+    "categoria": "Bebidas",
+    "imagem": "assets/img/produtos/suco.jpg"
+  },
+  {
+    "id": 1767709985801,
+    "nome": "Tapioca de morango",
+    "descricao": "Tapioca de morango recheada com leite condensado",
+    "preco": 15,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/morango.jpg"
+  }
+]
+```
+### cadastrar_produtos.html
+```
+```
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # 02
