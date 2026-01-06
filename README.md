@@ -102,6 +102,7 @@ Liste da mais importante para a menus importante.
 ```
 # BONUS: LOJA COMERCIAL COMPLETA 
 ### ESTRUTURA DO PROJETO: 
+```
 ├── admin2.html
 ├── assets
 │   ├── img                            │   │   ├── barraquinha-lanche.jpg
@@ -114,6 +115,7 @@ Liste da mais importante para a menus importante.
 │   │       ├── salada.jpg
 │   │       └── suco.jpg               │   └── produtos.json
 └── loja.html
+```
 
 ### cardapio.html
 ```
