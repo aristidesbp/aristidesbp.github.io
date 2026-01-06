@@ -22,13 +22,6 @@ body { scroll-behavior:smooth; }
   border:2px solid var(--marrom-madeira);
   border-radius:8px;
 }
-.busca {
-  width:100%;
-  margin-top:12px;
-  padding:12px;
-  border-radius:8px;
-  border:2px solid var(--marrom-madeira);
-}
 .campo {
   width:100%; padding:12px;
   border-radius:8px; border:none;
@@ -38,16 +31,6 @@ body { scroll-behavior:smooth; }
   padding:12px 24px;
   font-weight:600;
   border-radius:8px;
-}
-
-.busca {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 2px solid var(--marrom-madeira);
-  background: #fff;
-  color: #000;
 }
 </style>
 </head>
@@ -59,20 +42,13 @@ body { scroll-behavior:smooth; }
   <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
   <p>Seu lanche artesanal favorito!</p>
 
-  <div class="mt-4 px-4 max-w-md mx-auto">
-    <select id="filtroCategoria" class="filtro-categoria w-full">
+  <div class="mt-4">
+    <select id="filtroCategoria" class="filtro-categoria">
       <option value="todos">Todos</option>
       <option value="lanches">Lanches</option>
       <option value="bebidas">Bebidas</option>
       <option value="sobremesas">Sobremesas</option>
     </select>
-
-    <input
-      type="text"
-      id="buscaProduto"
-      class="busca"
-      placeholder="Buscar produto pelo nome..."
-    >
   </div>
 </header>
 
@@ -112,7 +88,6 @@ Total do pedido: R$ <span id="total">0,00</span>
 <script>
 const menuEl = document.getElementById("menu");
 const filtro = document.getElementById("filtroCategoria");
-const busca = document.getElementById("buscaProduto");
 const itensEl = document.getElementById("itens-pedido");
 const totalEl = document.getElementById("total");
 
@@ -123,16 +98,10 @@ fetch("assets/produtos.json")
 .then(r => r.json())
 .then(d => { produtos = d; renderMenu(); });
 
-function renderMenu() {
-  const cat = filtro.value;
-  const termo = busca.value.toLowerCase();
-
+function renderMenu(cat="todos") {
   menuEl.innerHTML = "";
   produtos
-  .filter(p =>
-    (cat==="todos" || p.categoria.toLowerCase()===cat) &&
-    p.nome.toLowerCase().includes(termo)
-  )
+  .filter(p => cat==="todos" || p.categoria.toLowerCase()===cat)
   .forEach(p => {
     const div = document.createElement("div");
     div.className="bg-white p-4 rounded shadow";
@@ -190,8 +159,7 @@ function remover(i){
   atualizarCarrinho();
 }
 
-filtro.onchange = renderMenu;
-busca.oninput = renderMenu;
+filtro.onchange = ()=>renderMenu(filtro.value);
 </script>
 
 </body>

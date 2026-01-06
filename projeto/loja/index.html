@@ -1,34 +1,40 @@
 <!DOCTYPE html>
+<!-- CABEÇALHO -->
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AristidesBP - Portfólio & Loja</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AristidesBP - Portfólio & Loja</title>
+
+<!-- Bibliotecas CSS-->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
    <link rel="icon" type="image/png" href="icons/favicon.png">
  <link rel="stylesheet" href="css/loja.css" />
 </head>
 
 
 
-
-
+<!-- CORPO DO PROJETO -->
 <body class="bg-light">
-  <!-- CABEÇALHO -->
-  <header>
-    <h1>AristidesBP - Portfólio</h1>
-    <p>Analista de Sistemas | Mentor de Programação | Desenvolvedor Full Stack</p>
-  </header>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <a class="navbar-brand" href="#">Minha Loja</a>
-    <div class="ms-auto d-flex align-items-center gap-2">
-      <button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
-      <button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
-      <button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
-    </div>
-  </nav>
+  
+<!-- BANNER DO TOPO DA PÁGINA -->
+<header>
+<h1>AristidesBP - Portfólio</h1>
+<p>Analista de Sistemas | Mentor de Programação | Desenvolvedor Full Stack</p>
+</header>
+
+<!-- NAVBAR/MENU DE NAVEGAÇÃO -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+<a class="navbar-brand" href="#">Minha Loja</a>
+<div class="ms-auto d-flex align-items-center gap-2">
+<button class="btn btn-outline-light position-relative" onclick="openCartModal()">Carrinho <span class="cart-count" id="cartCount">0</span></button>
+<button class="btn btn-outline-info ms-2" onclick="openSobreModal()">Sobre</button>
+<button class="btn btn-outline-light ms-2" onclick="openAdminLoginModal()">Admin</button>
+</div>
+</nav>
+
+
   <!-- MODAL SOBRE -->
   <div class="modal fade" id="sobreModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
