@@ -100,7 +100,9 @@ Liste da mais importante para a menus importante.
 # PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
 
 ```
-
+# BÔNUS:GERAR IMAGEM Perchance 
+https://perchance.org/ai-text-to-image-generator
+escolha o modelo “Flux” ou “SDXL” se aparecer opção – eles dão mais nitidez
 
 
 # BÔNUS: Site comercial venda de serviços 
