@@ -2521,3 +2521,53 @@ function excluirProduto(i) {
 # 05
 # BANCO DE DADOS SUBASE.COM
 
+Aqui vai uma introdução básica e clara sobre o banco de dados Supabase, pensada para quem está começando do zero 👇
+Introdução ao Supabase
+O Supabase é uma plataforma de backend como serviço (BaaS – Backend as a Service) criada para facilitar o desenvolvimento de aplicações modernas. Ele fornece, de forma integrada, tudo o que normalmente seria necessário montar manualmente em um servidor backend.
+A principal proposta do Supabase é permitir que o desenvolvedor foque na aplicação (site ou app) enquanto a plataforma cuida da infraestrutura.
+Supabase como Banco de Dados
+O banco de dados do Supabase é baseado no PostgreSQL, um dos sistemas de banco de dados relacionais mais robustos e utilizados no mundo.
+Isso significa que:
+Os dados são organizados em tabelas
+É possível criar relacionamentos entre tabelas
+Suporta SQL padrão
+Permite consultas complexas, filtros e ordenações
+Diferente de outros serviços, no Supabase você tem acesso direto ao banco PostgreSQL, podendo usar tanto a interface web quanto comandos SQL.
+Principais Recursos do Supabase
+Banco de Dados PostgreSQL
+Totalmente gerenciado
+Suporte a funções, triggers e views
+Controle de permissões por usuário
+Autenticação
+Login com e-mail e senha
+Login social (Google, GitHub, etc.)
+Controle de sessões e tokens
+API Automática
+Cada tabela vira automaticamente uma API REST
+Acesso seguro com regras de permissão
+Não é necessário criar endpoints manualmente
+Segurança (Row Level Security – RLS)
+Define quem pode ler, inserir, atualizar ou excluir dados
+Regras diretamente no banco de dados
+Segurança aplicada mesmo acessando via SQL
+Armazenamento (Storage)
+Upload de imagens, vídeos e arquivos
+Integração com autenticação
+Controle de acesso por regras
+Como o Supabase é Usado
+O Supabase pode ser usado em:
+Sites HTML, CSS e JavaScript
+Aplicações React, Vue, Angular
+Aplicativos móveis (Android, iOS)
+Projetos pessoais ou sistemas corporativos
+A comunicação com o banco ocorre por meio de bibliotecas cliente (JavaScript, Dart, Python, etc.), que facilitam consultas, inserções e autenticação.
+Vantagens do Supabase
+Não precisa configurar servidor
+Banco de dados poderoso (PostgreSQL)
+Código mais simples e rápido
+Ideal para projetos pequenos e médios
+Código aberto (open source)
+Conclusão
+O Supabase é uma solução moderna que une banco de dados, autenticação, API e armazenamento em um único lugar.
+Ele é ideal para quem quer aprender banco de dados na prática ou desenvolver aplicações completas sem a complexidade de montar toda a infraestrutura do zero.
+
