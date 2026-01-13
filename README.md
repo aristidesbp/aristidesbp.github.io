@@ -2571,3 +2571,41 @@ Conclusão
 O Supabase é uma solução moderna que une banco de dados, autenticação, API e armazenamento em um único lugar.
 Ele é ideal para quem quer aprender banco de dados na prática ou desenvolver aplicações completas sem a complexidade de montar toda a infraestrutura do zero.
 
+# PROJETO SUPABASE - APP CURSOS EAD
+## SENHA: Aristidesbp8761
+
+# O QUE VAMOS APRENDER:
+## O QUE É SUPABASE?
+## CONCEITOS DE TABELAS COLUNAS E RELACIONAMENTOS
+## TIPOS DE DADOS
+## AUTENTICAÇÃO DE USUARIOS
+## VIEWS E SQL EDITOR
+## SEGURANÇA DE DADOS COM RLS (ROW LEVEL SECURITY)
+## CONECTANDO OS DADOS AO FRONTEND COM LOVABLE
+
+# OQUE É O SUPABASE?
+## É um BAAS (backend as a service)
+## Utiliza banco de daos postegreSQL Relacional
+
+# CONCEITOS DE TABELAS COLUNAS E RELACIONAMENTOS
+## TABELAS: 
+Onde os dados são Gravados.
+
+## COLUNAS:
+Definen: atributos/tipo de dado
+(Ex: nome=text, altura=doble)
+
+## RELACIONAMENTOS:
+Ligações entre tabelas que compartilham dados em comun.
+
+# BONUS : PROMPT PARA GEMINI
+``` 
+Crie uma função trigger para ser implementada no Supabase
+com o objetivo;
+ 
+A cada novo usuario que for criado no schema auth, 
+deve ser criado o mesmo usuario no public na tabela que eu 
+vou te passar abaixo.
+
+``` 
+
