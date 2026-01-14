@@ -85,7 +85,7 @@ create table public.avaliacoes (
   constraint avaliacoes_servico_id_fkey foreign KEY (servico_id) references servicos (id)
 ) TABLESPACE pg_default;
 ```
-# POPULAR TABELAS VIA SQL:
+# POPULAR TABELA CATEGORIA VIA SQL:
 ```
 insert into public.categorias (categoria) values
 ('Alimentos'),
@@ -147,8 +147,23 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 ```
+# POPULAR TABELA USUARIOS
+
+```
+insert into public.usuarios (nome_completo, bio, avatar_url) values
+('João da Silva', 'Usuário padrão do sistema', null),
+('Maria Oliveira', 'Perfil de testes internos', null),
+('Carlos Pereira', 'Cliente cadastrado manualmente', null),
+('Ana Souza', 'Usuária ativa da plataforma', null),
+('Lucas Fernandes', 'Conta criada para homologação', null),
+('Juliana Costa', 'Usuária administrativa', null),
+('Rafael Martins', 'Perfil comercial', null),
+('Patrícia Almeida', 'Usuária visitante', null),
+('Bruno Rocha', 'Conta de demonstração', null),
+('Fernanda Lima', 'Usuária comum do sistema', null);
 
 
+```
 
 # CRIANDO UMA VISUALIZAÇÃO COM VIEWS
 Database/Copy as SQL.
