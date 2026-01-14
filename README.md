@@ -85,6 +85,22 @@ create table public.avaliacoes (
   constraint avaliacoes_servico_id_fkey foreign KEY (servico_id) references servicos (id)
 ) TABLESPACE pg_default;
 ```
+# POPULAR TABELAS VIA SQL:
+```
+insert into public.categorias (categoria) values
+('Alimentos'),
+('Bebidas'),
+('Higiene Pessoal'),
+('Limpeza'),
+('Padaria'),
+('Hortifruti'),
+('Carnes'),
+('Congelados'),
+('Mercearia'),
+('Utilidades Domésticas');
+```
+
+
 
 # FUNCTION TRIGGER:
 ``` 
