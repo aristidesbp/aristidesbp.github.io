@@ -85,21 +85,6 @@ create table public.avaliacoes (
   constraint avaliacoes_servico_id_fkey foreign KEY (servico_id) references servicos (id)
 ) TABLESPACE pg_default;
 ```
-# POPULAR TABELA CATEGORIA VIA SQL:
-```
-insert into public.categorias (categoria) values
-('Alimentos'),
-('Bebidas'),
-('Higiene Pessoal'),
-('Limpeza'),
-('Padaria'),
-('Hortifruti'),
-('Carnes'),
-('Congelados'),
-('Mercearia'),
-('Utilidades Domésticas');
-```
-
 
 
 # FUNCTION TRIGGER:
@@ -147,6 +132,22 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 ```
+
+# POPULAR TABELA CATEGORIA VIA SQL:
+```
+insert into public.categorias (categoria) values
+('Alimentos'),
+('Bebidas'),
+('Higiene Pessoal'),
+('Limpeza'),
+('Padaria'),
+('Hortifruti'),
+('Carnes'),
+('Congelados'),
+('Mercearia'),
+('Utilidades Domésticas');
+```
+
 # POPULAR TABELA USUARIOS
 
 ```
@@ -164,6 +165,66 @@ insert into public.usuarios (nome_completo, bio, avatar_url) values
 
 
 ```
+# POPULAR SERVIÇOS
+
+```
+insert into public.servicos (
+  titulo,
+  descricao,
+  categoria,
+  preco_estimado,
+  preco_detalhe,
+  foto_url,
+  criado_por,
+  terceiro,
+  eu_mesmo,
+  whatsap
+) values
+('Instalação Elétrica Residencial', 'Instalação e reparos elétricos em residências', 10, 250.00, 'Preço por diária', null, 1, false, true, '11999990001'),
+('Conserto de Geladeira', 'Manutenção e conserto de geladeiras domésticas', 8, 180.00, 'Valor médio por serviço', null, 2, true, false, '11999990002'),
+('Limpeza Residencial', 'Limpeza completa de casas e apartamentos', 4, 150.00, 'Preço por período', null, 3, false, true, '11999990003'),
+('Aula Particular de Informática', 'Aulas básicas de informática para iniciantes', 9, 80.00, 'Preço por hora/aula', null, 4, false, true, '11999990004'),
+('Montagem de Móveis', 'Montagem e desmontagem de móveis em geral', 10, 120.00, 'Valor por móvel', null, 5, false, true, '11999990005'),
+('Manutenção de Computadores', 'Formatação e manutenção preventiva', 9, 200.00, 'Pacote básico', null, 6, true, false, '11999990006'),
+('Serviço de Jardinagem', 'Corte de grama e manutenção de jardim', 6, 100.00, 'Preço por visita', null, 7, false, true, '11999990007'),
+('Conserto Hidráulico', 'Reparo de vazamentos e encanamentos', 10, 220.00, 'Preço conforme serviço', null, 8, false, true, '11999990008'),
+('Fotografia para Eventos', 'Cobertura fotográfica de eventos pequenos', 10, 500.00, 'Pacote por evento', null, 9, true, false, '11999990009'),
+('Delivery de Compras', 'Compras em supermercado e entrega', 1, 60.00, 'Taxa fixa + compras', null, 10, false, true, '11999990010');
+
+```
+# POPULAR FAVORITOS
+
+```
+insert into public.favoritos (usuario_id, servico_id) values
+(1, 3),
+(1, 5),
+(2, 1),
+(2, 4),
+(3, 2),
+(3, 6),
+(4, 7),
+(5, 8),
+(6, 9),
+(7, 10);
+
+```
+# POPULAR AVALIAÇÕES
+
+```
+insert into public.avaliacoes (servico_id, autor_id, nota, comentario) values
+(1, 2, 5, 'Serviço excelente, muito profissional'),
+(1, 3, 4, 'Bom atendimento, resolveu o problema'),
+(2, 1, 4, 'Funcionou bem após o conserto'),
+(3, 4, 5, 'Limpeza impecável, recomendo'),
+(4, 5, 5, 'Didática clara e objetiva'),
+(5, 6, 4, 'Montagem rápida e bem feita'),
+(6, 7, 3, 'Serviço ok, poderia ser mais rápido'),
+(7, 8, 5, 'Jardim ficou ótimo'),
+(8, 9, 4, 'Resolveu o vazamento'),
+(9, 10, 5, 'Fotos de ótima qualidade');
+
+```
+
 
 # CRIANDO UMA VISUALIZAÇÃO COM VIEWS
 Database/Copy as SQL.
