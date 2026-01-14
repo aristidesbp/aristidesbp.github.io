@@ -41,7 +41,6 @@ create table public.categorias (
   categoria text null,
   constraint categorias_pkey primary key (id)
 ) TABLESPACE pg_default;
-## CRIANDO UM BANCO DE DADOS:
 ```
 ```
 create table public.servicos (
@@ -85,8 +84,6 @@ create table public.avaliacoes (
   constraint avaliacoes_autor_id_fkey foreign KEY (autor_id) references usuarios (id),
   constraint avaliacoes_servico_id_fkey foreign KEY (servico_id) references servicos (id)
 ) TABLESPACE pg_default;
-
-
 ```
 
 # FUNCTION TRIGGER:
