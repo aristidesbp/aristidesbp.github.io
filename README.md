@@ -298,38 +298,39 @@ CREATE TABLE public.usuarios (
 ## resposta da IA:
 ```
 
-create or replace view public.v_servicos_destaque as
-select 
-    -- Detalhes do Serviço
-    s.id as servico_id,
-    s.titulo,
-    s.descricao,
-    s.foto_url,
-    s.preco_estimado,
-    s.preco_detalhe,
-    s.whatsap,
-    
-    -- Detalhes da Categoria
-    c.categoria as categoria_nome,
-    
-    -- Detalhes do Autor (da tabela usuarios)
-    u.nome_completo as autor_nome,
-    u.avatar_url as autor_avatar,
-    
-    -- Cálculos de Avaliação
-    count(a.id) as total_avaliacoes,
-    coalesce(avg(a.nota), 0)::numeric(10,1) as media_notas
-    
-from public.servicos s
-left join public.categorias c on s.categoria = c.id
-left join public.usuarios u on s.criado_por = u.id
-left join public.avaliacoes a on s.id = a.servico_id
+create or replace view public.v_sevicos_destaque as
+select
+  s.id as servico_id,
+  s.titulo,
+  s.descricao,
+  s.preco_estimado,
+  s.preco_detalhe,
+  s.foto_url,
+  s.terceiro,
+  s.eu_mesmo,
+  s.whatsap,
+  s.created_at as servico_criado_em,
 
-group by 
-    s.id, 
-    c.categoria, 
-    u.nome_completo, 
-    u.avatar_url;
+  c.id as categoria_id,
+  c.categoria as nome_categoria,
+
+  u.id as autor_id,
+  u.nome_completo as autor_nome,
+  u.bio as autor_bio,
+  u.avatar_url as autor_avatar,
+
+  coalesce(avg(a.nota), 0)::numeric(10,2) as media_notas,
+  count(a.id) as total_avaliacoes
+
+from public.servicos s
+left join public.categorias c on c.id = s.categoria
+left join public.usuarios u on u.id = s.criado_por
+left join public.avaliacoes a on a.servico_id = s.id
+
+group by
+  s.id,
+  c.id,
+  u.id;
 
 ```
 
