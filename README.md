@@ -248,8 +248,8 @@ CREATE TABLE public.avaliacoes (
   nota smallint,
   comentario text,
   CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
-  CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id),
-  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (autor_id) REFERENCES public.usuarios(id)
+  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (autor_id) REFERENCES public.usuarios(id),
+  CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id)
 );
 CREATE TABLE public.categorias (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -263,8 +263,8 @@ CREATE TABLE public.favoritos (
   usuario_id bigint,
   servico_id bigint,
   CONSTRAINT favoritos_pkey PRIMARY KEY (id),
-  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(id),
-  CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id)
+  CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id),
+  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(id)
 );
 CREATE TABLE public.servicos (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -293,7 +293,6 @@ CREATE TABLE public.usuarios (
   CONSTRAINT usuarios_pkey PRIMARY KEY (id),
   CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
-
 ```
 
 ## resposta da IA:
