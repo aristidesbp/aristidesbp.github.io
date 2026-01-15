@@ -2,43 +2,104 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA ERP ABP - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Home</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #0f172a; color: white; text-align: center; padding: 50px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 40px auto; }
-        .card { background: #1e293b; padding: 30px; border-radius: 12px; text-decoration: none; color: white; border: 1px solid #334155; transition: 0.3s; }
-        .card:hover { border-color: #3ecf8e; transform: translateY(-5px); }
-        .btn-logout { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        :root { --primary: #3ecf8e; --dark: #0f172a; --sidebar-w: 260px; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding-top: 70px; }
+
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 65px; background: var(--dark); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { font-size: 22px; cursor: pointer; color: var(--primary); background: none; border: none; padding: 5px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--dark); border: 2px solid white; }
+
+        /* SIDEBAR */
+        .sidebar { position: fixed; top: 0; left: -260px; width: var(--sidebar-w); height: 100%; background: var(--dark); color: white; transition: 0.3s; z-index: 1001; padding-top: 20px; }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1000; }
+        .sidebar-overlay.active { display: block; }
+        .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #1e293b; transition: 0.2s; }
+        .sidebar a:hover { background: #1e293b; color: var(--primary); padding-left: 35px; }
+
+        /* PROFILE MENU */
+        .profile-menu { position: absolute; top: 70px; right: 10px; background: white; color: var(--dark); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; width: 220px; z-index: 1002; }
+        .profile-menu.active { display: block; }
+        .profile-menu .info { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.85em; word-break: break-all; color: #64748b; }
+        .profile-menu button { width: 100%; text-align: left; padding: 12px 15px; background: none; border: none; cursor: pointer; color: #e74c3c; font-weight: bold; }
+
+        /* CONTENT */
+        .content { max-width: 1000px; margin: auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; text-decoration: none; color: #334155; text-align: center; border: 1px solid #e2e8f0; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .card i { font-size: 45px; color: var(--primary); margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <h1>SISTEMA ERP ABP</h1>
-    <p id="welcome">Carregando...</p>
 
-    <div class="grid">
-        <a href="bloco_de_notas/bloco_de_notas.html" class="card">
-            <div style="font-size: 40px;">📝</div>
-            <h3>Bloco de Notas</h3>
-            <p>Gerencie suas anotações na nuvem</p>
-        </a>
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <span style="font-weight: bold; letter-spacing: 1px;">SISTEMA ERP ABP</span>
         </div>
+        <div class="nav-right">
+            <div class="user-avatar" onclick="toggleProfile()">A</div>
+            <div class="profile-menu" id="profileMenu">
+                <div class="info"><strong>Usuário:</strong><br><span id="userEmail">...</span></div>
+                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair da Conta</button>
+            </div>
+        </div>
+    </nav>
 
-    <button class="btn-logout" onclick="logout()">Sair do Sistema</button>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div style="padding: 25px; font-weight: bold; color: var(--primary); font-size: 1.2em;">MENU</div>
+        <a href="index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="bloco_de_notas/bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
+        <a href="#"><i class="fas fa-users"></i> Clientes (Breve)</a>
+    </div>
+
+    <div class="content">
+        <h1>Painel Geral</h1>
+        <p>Bem-vindo ao centro de operações do seu ERP.</p>
+        
+        <div class="grid">
+            <a href="bloco_de_notas/bloco_de_notas.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Bloco de Notas</h3>
+                <p>Anote e organize suas ideias na nuvem.</p>
+            </a>
+            <div class="card" style="opacity: 0.6; cursor: not-allowed;">
+                <i class="fas fa-users"></i>
+                <h3>Módulo Clientes</h3>
+                <p>Em breve: Gestão completa de cadastros.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+        function toggleProfile() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('welcome').innerText = `Bem-vindo, ${session.user.email}`;
-            }
+            if (!session) window.location.href = 'login.html';
+            document.getElementById('userEmail').innerText = session.user.email;
         }
+
         async function logout() {
             await _supabase.auth.signOut();
             window.location.href = 'login.html';
