@@ -21,24 +21,30 @@
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1000; }
         .sidebar-overlay.active { display: block; }
         .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #1e293b; }
-        .profile-menu { position: absolute; top: 70px; right: 10px; background: white; color: var(--dark); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; width: 220px; z-index: 1002; }
-        .profile-menu.active { display: block; }
-        .profile-menu button { width: 100%; text-align: left; padding: 12px 15px; background: none; border: none; cursor: pointer; color: #e74c3c; font-weight: bold; }
 
-        /* CONTEÚDO */
+        /* FORMULÁRIO */
         .container { max-width: 1000px; margin: auto; padding: 20px; }
-        .card-form { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card-form { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid var(--primary); }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
         input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 10px; }
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; font-size: 16px; transition: 0.2s; }
+        .btn-cancel { background: #64748b; color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
+        .btn-add:hover { filter: brightness(1.1); }
 
         /* TABELA */
         .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th { background: #f8fafc; text-align: left; padding: 15px; color: #64748b; font-size: 13px; text-transform: uppercase; }
         td { padding: 15px; border-top: 1px solid #f1f5f9; color: #1e293b; font-size: 14px; }
-        .btn-del { color: #e74c3c; cursor: pointer; background: none; border: none; font-size: 18px; }
+        
+        .actions { display: flex; gap: 10px; }
+        .btn-icon { border: none; background: none; cursor: pointer; font-size: 18px; transition: 0.2s; }
+        .btn-edit { color: #3b82f6; }
+        .btn-del { color: #ef4444; }
+        .btn-icon:hover { transform: scale(1.2); }
     </style>
 </head>
 <body>
@@ -49,10 +55,7 @@
             <span style="font-weight: bold;">👥 GESTÃO DE CLIENTES</span>
         </div>
         <div class="nav-right">
-            <div class="user-avatar" onclick="toggleProfile()">A</div>
-            <div class="profile-menu" id="profileMenu">
-                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
-            </div>
+            <div class="user-avatar" id="userInitial">A</div>
         </div>
     </nav>
 
@@ -60,29 +63,29 @@
     <div class="sidebar" id="sidebar">
         <div style="padding: 25px; font-weight: bold; color: var(--primary);">MENU</div>
         <a href="../index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
-        <a href="../bloco_de_notas/bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
         <a href="clientes.html"><i class="fas fa-users"></i> Clientes</a>
     </div>
 
     <div class="container">
         <div class="card-form">
-            <h3>Novo Cadastro de Cliente</h3>
+            <h3 id="form-title">Cadastrar Novo Cliente</h3>
+            <input type="hidden" id="edit-id">
             <div class="form-grid">
                 <div>
                     <label>Nome Completo *</label>
-                    <input type="text" id="nome_completo" placeholder="Ex: Aristides Silva">
+                    <input type="text" id="nome_completo">
                 </div>
                 <div>
-                    <label>CPF (11 dígitos) *</label>
-                    <input type="text" id="cpf" maxlength="11" placeholder="Ex: 12345678901">
+                    <label>CPF (Apenas números) *</label>
+                    <input type="text" id="cpf" maxlength="11">
                 </div>
                 <div>
                     <label>E-mail</label>
-                    <input type="email" id="email" placeholder="cliente@email.com">
+                    <input type="email" id="email">
                 </div>
                 <div>
                     <label>Telefone</label>
-                    <input type="text" id="telefone" placeholder="(99) 99999-9999">
+                    <input type="text" id="telefone">
                 </div>
                 <div>
                     <label>Data de Nascimento *</label>
@@ -90,10 +93,13 @@
                 </div>
                 <div>
                     <label>RG</label>
-                    <input type="text" id="rg" placeholder="Ex: 1234567">
+                    <input type="text" id="rg">
                 </div>
             </div>
-            <button class="btn-add" onclick="addClient()">Cadastrar Cliente</button>
+            <div class="btn-group">
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cliente</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar</button>
+            </div>
         </div>
 
         <div class="table-container">
@@ -117,12 +123,17 @@
         const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        let currentUserProfile = null;
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.sidebar-overlay').classList.toggle('active'); }
-        function toggleProfile() { document.getElementById('profileMenu').classList.toggle('active'); }
 
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session) window.location.href = '../login.html';
+            
+            // Busca o nível de acesso
+            const { data: profile } = await _supabase.from('usuarios').select('*').eq('user_id', session.user.id).single();
+            currentUserProfile = profile;
             loadClients();
         }
 
@@ -135,65 +146,78 @@
                     <td>${c.cpf}</td>
                     <td>${c.email || ''}<br><small>${c.telefone || ''}</small></td>
                     <td>${c.data_nascimento ? new Date(c.data_nascimento).toLocaleDateString('pt-BR') : '-'}</td>
-                    <td><button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button></td>
+                    <td class="actions">
+                        <button class="btn-icon btn-edit" onclick="editClient('${c.id}')" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon btn-del" onclick="deleteClient('${c.id}')" title="Excluir"><i class="fas fa-trash-alt"></i></button>
+                    </td>
                 </tr>
             `).join('');
         }
 
-        async function getOrCreateUser(user) {
-            // Busca o usuário na tabela public.usuarios
-            let { data, error } = await _supabase.from('usuarios').select('id').eq('user_id', user.id).maybeSingle();
-            
-            // Se não existe, cria agora
-            if (!data) {
-                const { data: newUser, error: insError } = await _supabase
-                    .from('usuarios')
-                    .insert([{ user_id: user.id, email: user.email }])
-                    .select('id')
-                    .single();
-                if (insError) throw insError;
-                return newUser.id;
+        async function handleSave() {
+            const id = document.getElementById('edit-id').value;
+            const payload = {
+                nome_completo: document.getElementById('nome_completo').value,
+                cpf: document.getElementById('cpf').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                data_nascimento: document.getElementById('data_nascimento').value,
+                rg: document.getElementById('rg').value,
+                usuario_id: currentUserProfile.id
+            };
+
+            if (!payload.nome_completo || !payload.cpf) return alert("Nome e CPF são obrigatórios!");
+
+            let result;
+            if (id) {
+                // Atualizar
+                result = await _supabase.from('clientes').update(payload).eq('id', id);
+            } else {
+                // Inserir
+                result = await _supabase.from('clientes').insert([payload]);
             }
-            return data.id;
+
+            if (result.error) alert("Erro: " + result.error.message);
+            else {
+                alert(id ? "Atualizado com sucesso!" : "Cadastrado com sucesso!");
+                resetForm();
+                loadClients();
+            }
         }
 
-        async function addClient() {
-            const nome_completo = document.getElementById('nome_completo').value;
-            const cpf = document.getElementById('cpf').value;
-            const data_nascimento = document.getElementById('data_nascimento').value;
+        async function editClient(id) {
+            const { data: c } = await _supabase.from('clientes').select('*').eq('id', id).single();
+            if (c) {
+                document.getElementById('edit-id').value = c.id;
+                document.getElementById('nome_completo').value = c.nome_completo;
+                document.getElementById('cpf').value = c.cpf;
+                document.getElementById('email').value = c.email || '';
+                document.getElementById('telefone').value = c.telefone || '';
+                document.getElementById('data_nascimento').value = c.data_nascimento;
+                document.getElementById('rg').value = c.rg || '';
 
-            if (!nome_completo || !cpf || !data_nascimento) return alert("Preencha os campos obrigatórios (*)");
-
-            try {
-                const { data: { user } } = await _supabase.auth.getUser();
-                const usuario_id = await getOrCreateUser(user);
-
-                const { error } = await _supabase.from('clientes').insert([{ 
-                    nome_completo, 
-                    cpf, 
-                    rg: document.getElementById('rg').value, 
-                    email: document.getElementById('email').value, 
-                    telefone: document.getElementById('telefone').value, 
-                    data_nascimento, 
-                    usuario_id 
-                }]);
-
-                if (error) throw error;
-                alert("Cliente cadastrado!");
-                location.reload();
-            } catch (err) {
-                alert("Erro: " + err.message);
+                document.getElementById('form-title').innerText = "Editar Cliente";
+                document.getElementById('btn-save').innerText = "Salvar Alterações";
+                document.getElementById('btn-cancel').style.display = "block";
+                window.scrollTo(0, 0);
             }
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('form-title').innerText = "Cadastrar Novo Cliente";
+            document.getElementById('btn-save').innerText = "Salvar Cliente";
+            document.getElementById('btn-cancel').style.display = "none";
         }
 
         async function deleteClient(id) {
-            if (confirm("Excluir?")) {
+            if (confirm("Deseja realmente excluir este cliente?")) {
                 await _supabase.from('clientes').delete().eq('id', id);
                 loadClients();
             }
         }
 
-        async function logout() { await _supabase.auth.signOut(); window.location.href = '../login.html'; }
         checkUser();
     </script>
 </body>
