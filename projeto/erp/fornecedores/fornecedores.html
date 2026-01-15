@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fornecedores - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
+
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        .section-title { 
+            color: var(--primary); font-size: 14px; text-transform: uppercase; 
+            margin: 20px 0 10px 0; border-bottom: 1px solid #eee; 
+            padding-bottom: 5px; font-weight: bold; 
+        }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input:focus { border-color: var(--primary); outline: none; }
+
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; font-size: 16px; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; text-align: left; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+        
+        .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; }
+        .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <h3 id="form-title" style="margin: 0 0 20px 0; color: var(--dark);">Novo Cadastro de Fornecedor</h3>
+            <input type="hidden" id="edit-id">
+            
+            <div class="section-title">Dados da Empresa</div>
+            <div class="form-grid">
+                <div style="grid-column: span 2;"><label>Razão Social *</label><input type="text" id="razao_social"></div>
+                <div style="grid-column: span 2;"><label>Nome Fantasia</label><input type="text" id="nome_fantasia"></div>
+                <div><label>CNPJ</label><input type="text" id="cnpj" placeholder="00.000.000/0000-00"></div>
+                <div><label>Insc. Estadual</label><input type="text" id="inscricao_estadual"></div>
+                <div><label>E-mail</label><input type="email" id="email"></div>
+                <div><label>Telefone</label><input type="text" id="telefone"></div>
+            </div>
+
+            <div class="section-title">Localização</div>
+            <div class="form-grid">
+                <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+                <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+                <div><label>Número</label><input type="text" id="numero"></div>
+                <div><label>Bairro</label><input type="text" id="bairro"></div>
+                <div><label>Cidade</label><input type="text" id="cidade"></div>
+                <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+            </div>
+
+            <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Fornecedor</button>
+            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fornecedor</th>
+                        <th>CNPJ / Contato</th>
+                        <th>Localização</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="fornecedores-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function buscaCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await res.json();
+                if (!data.erro) {
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                }
+            }
+        }
+
+        async function loadFornecedores() {
+            const { data: list } = await _supabase.from('fornecedores').select('*').order('razao_social');
+            const tbody = document.getElementById('fornecedores-list');
+            tbody.innerHTML = (list || []).map(f => `
+                <tr>
+                    <td><b>${f.razao_social}</b><br><small>${f.nome_fantasia || ''}</small></td>
+                    <td>${f.cnpj || '-'}<br><small>${f.telefone || ''}</small></td>
+                    <td>${f.cidade || '-'}/${f.estado || ''}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editFull('${f.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-del" onclick="deleteForn('${f.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum fornecedor encontrado.</td></tr>';
+        }
+
+        async function handleSave() {
+            const { data: { user } } = await _supabase.auth.getUser();
+            const id = document.getElementById('edit-id').value;
+            const dados = {
+                usuario_id: user.id,
+                razao_social: document.getElementById('razao_social').value,
+                nome_fantasia: document.getElementById('nome_fantasia').value,
+                cnpj: document.getElementById('cnpj').value,
+                inscricao_estadual: document.getElementById('inscricao_estadual').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                cep: document.getElementById('cep').value,
+                logradouro: document.getElementById('logradouro').value,
+                numero: document.getElementById('numero').value,
+                bairro: document.getElementById('bairro').value,
+                cidade: document.getElementById('cidade').value,
+                estado: document.getElementById('estado').value
+            };
+
+            if(!dados.razao_social) return alert("Razão Social é obrigatória!");
+
+            if (id) await _supabase.from('fornecedores').update(dados).eq('id', id);
+            else await _supabase.from('fornecedores').insert([dados]);
+
+            resetForm();
+            loadFornecedores();
+        }
+
+        async function editFull(id) {
+            const { data: f } = await _supabase.from('fornecedores').select('*').eq('id', id).single();
+            if (f) {
+                document.getElementById('edit-id').value = f.id;
+                document.getElementById('razao_social').value = f.razao_social;
+                document.getElementById('nome_fantasia').value = f.nome_fantasia;
+                document.getElementById('cnpj').value = f.cnpj;
+                document.getElementById('email').value = f.email;
+                document.getElementById('telefone').value = f.telefone;
+                document.getElementById('logradouro').value = f.logradouro;
+                document.getElementById('cidade').value = f.cidade;
+                document.getElementById('estado').value = f.estado;
+                document.getElementById('form-title').innerText = "Editando Fornecedor";
+                document.getElementById('btn-save').innerText = "Atualizar Fornecedor";
+                document.getElementById('btn-cancel').style.display = "block";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('form-title').innerText = "Novo Cadastro de Fornecedor";
+            document.getElementById('btn-save').innerText = "Salvar Fornecedor";
+            document.getElementById('btn-cancel').style.display = "none";
+        }
+
+        async function deleteForn(id) {
+            if (confirm("Excluir este fornecedor?")) {
+                await _supabase.from('fornecedores').delete().eq('id', id);
+                loadFornecedores();
+            }
+        }
+
+        loadFornecedores();
+    </script>
+    <script src="../menu.js"></script>
+</body>
+</html>
