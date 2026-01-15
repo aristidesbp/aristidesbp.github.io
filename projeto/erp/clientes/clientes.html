@@ -21,15 +21,13 @@
         .sidebar-overlay.active { display: block; }
         .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #1e293b; }
 
-        /* FORMULÁRIO UNIFICADO */
+        /* FORMULÁRIO */
         .container { max-width: 1100px; margin: auto; padding: 20px; }
         .card-form { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
         input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
         .btn-group { display: flex; gap: 10px; margin-top: 25px; }
         .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; font-size: 16px; }
         .btn-cancel { background: #64748b; color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
@@ -136,54 +134,42 @@
             loadClients();
         }
 
-  
         async function loadClients() {
-    try {
-        // Buscamos clientes e tentamos trazer o endereço vinculado
-        const { data: clients, error } = await _supabase
-            .from('clientes')
-            .select(`
-                *,
-                enderecos (
-                    logradouro,
-                    numero,
-                    cidade
-                )
-            `)
-            .order('nome_completo');
+            try {
+                // Tentamos buscar com endereços. Se a relação falhar, buscamos só os clientes.
+                let { data: clients, error } = await _supabase
+                    .from('clientes')
+                    .select('*, enderecos(*)')
+                    .order('nome_completo');
 
-        if (error) throw error;
+                // Se der erro de relacionamento, busca apenas os dados básicos para não travar a tela
+                if (error && error.message.includes('relationship')) {
+                    const basic = await _supabase.from('clientes').select('*').order('nome_completo');
+                    clients = basic.data;
+                } else if (error) throw error;
 
-        const list = document.getElementById('clients-list');
-        
-        if (!clients || clients.length === 0) {
-            list.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum cliente cadastrado.</td></tr>';
-            return;
+                const list = document.getElementById('clients-list');
+                list.innerHTML = (clients || []).map(c => {
+                    const end = (c.enderecos && c.enderecos[0]) 
+                        ? `${c.enderecos[0].logradouro}, ${c.enderecos[0].numero} - ${c.enderecos[0].cidade}` 
+                        : '<span style="color:#94a3b8; font-style: italic;">Endereço não vinculado</span>';
+                    
+                    return `
+                    <tr>
+                        <td><strong>${c.nome_completo}</strong></td>
+                        <td>${c.cpf}</td>
+                        <td><small>${end}</small></td>
+                        <td>
+                            <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn-del" onclick="deleteFull('${c.id}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum cliente cadastrado.</td></tr>';
+            } catch (err) {
+                console.error(err);
+                document.getElementById('clients-list').innerHTML = `<tr><td colspan="4" style="color:red; text-align:center">Erro crítico: ${err.message}</td></tr>`;
+            }
         }
-
-        list.innerHTML = clients.map(c => {
-            // Verifica se existe endereço. Se não, exibe "Não cadastrado"
-            const temEndereco = c.enderecos && c.enderecos.length > 0;
-            const resumoEnd = temEndereco 
-                ? `${c.enderecos[0].logradouro}, ${c.enderecos[0].numero} - ${c.enderecos[0].cidade}`
-                : '<span style="color: #94a3b8; font-style: italic;">Endereço não informado</span>';
-
-            return `
-                <tr>
-                    <td><strong>${c.nome_completo}</strong></td>
-                    <td>${c.cpf}</td>
-                    <td><small>${resumoEnd}</small></td>
-                    <td class="actions">
-                        <button class="btn-edit" onclick="editFull('${c.id}')" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn-del" onclick="deleteFull('${c.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-        }).join('');
-    } catch (err) {
-        console.error("Erro ao carregar lista:", err);
-        document.getElementById('clients-list').innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Erro ao carregar dados: ${err.message}</td></tr>`;
-    }
-}
 
         async function handleSave() {
             const id = document.getElementById('edit-id').value;
@@ -207,7 +193,6 @@
                     clientId = data.id;
                 }
 
-                // Salvar/Atualizar Endereço
                 const addrData = {
                     logradouro: document.getElementById('logradouro').value,
                     numero: document.getElementById('numero').value,
@@ -215,11 +200,10 @@
                     cidade: document.getElementById('cidade').value,
                     estado: document.getElementById('estado').value,
                     cep: document.getElementById('cep').value,
-                    cliente_id: clientId, // Vinculo direto
+                    cliente_id: clientId,
                     usuario_id: currentUserProfile.id
                 };
 
-                // Verifica se já existe endereço para este cliente para decidir se faz Update ou Insert
                 const { data: existingAddr } = await _supabase.from('enderecos').select('id').eq('cliente_id', clientId).maybeSingle();
                 
                 if (existingAddr) {
@@ -228,14 +212,14 @@
                     await _supabase.from('enderecos').insert([addrData]);
                 }
 
-                alert("Dados salvos com sucesso!");
+                alert("Salvo com sucesso!");
                 resetForm();
                 loadClients();
-            } catch (e) { alert("Erro: " + e.message); }
+            } catch (e) { alert("Erro ao salvar: " + e.message); }
         }
 
         async function editFull(id) {
-            const { data: c } = await _supabase.from('clientes').select(`*, enderecos(*)`).eq('id', id).single();
+            const { data: c } = await _supabase.from('clientes').select('*, enderecos(*)').eq('id', id).single();
             if (c) {
                 document.getElementById('edit-id').value = c.id;
                 document.getElementById('nome_completo').value = c.nome_completo;
@@ -254,7 +238,6 @@
                     document.getElementById('cidade').value = e.cidade || '';
                     document.getElementById('estado').value = e.estado || '';
                 }
-
                 document.getElementById('btn-save').innerText = "Atualizar Cadastro";
                 document.getElementById('btn-cancel').style.display = "block";
                 window.scrollTo(0,0);
@@ -269,7 +252,7 @@
         }
 
         async function deleteFull(id) {
-            if (confirm("Isso excluirá o cliente e o endereço vinculado. Confirmar?")) {
+            if (confirm("Excluir cliente e endereço?")) {
                 await _supabase.from('clientes').delete().eq('id', id);
                 loadClients();
             }
