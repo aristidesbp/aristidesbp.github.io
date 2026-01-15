@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Técnica - SISTEMA ERP ABP</title>
+    <style>
+        :root {
+            --primary: #3ecf8e;
+            --dark: #0f172a;
+            --code-bg: #f1f5f9;
+        }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #334155; max-width: 900px; margin: auto; padding: 40px; background: #fff; }
+        h1 { color: var(--dark); border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        h2 { color: var(--primary); margin-top: 30px; border-left: 5px solid var(--primary); padding-left: 15px; }
+        h3 { color: var(--dark); background: var(--code-bg); padding: 5px 10px; border-radius: 4px; }
+        code { background: var(--code-bg); padding: 2px 5px; border-radius: 4px; font-family: 'Courier New', monospace; font-weight: bold; }
+        pre { background: var(--dark); color: #fff; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .badge { background: var(--primary); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8em; vertical-align: middle; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: var(--code-bg); }
+        .note { background: #fff9db; border-right: 5px solid #f1c40f; padding: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Documentação do Projeto: Bloco de Notas Cloud <span class="badge">v1.0</span></h1>
+    <p><strong>Desenvolvedor:</strong> Aristides | <strong>Sistema:</strong> ERP ABP</p>
+
+    <h2>1. Visão Geral</h2>
+    <p>Uma aplicação web Single Page Application (SPA) para gestão de notas pessoais, com persistência em nuvem, autenticação de usuários e exportação de documentos. A arquitetura é baseada em <strong>Front-end estático</strong> (HTML/JS) e <strong>Backend as a Service (BaaS)</strong> utilizando Supabase.</p>
+
+    <h2>2. Stack Tecnológica</h2>
+    <ul>
+        <li><strong>Hospedagem:</strong> GitHub Pages (Protocolo HTTPS).</li>
+        <li><strong>Banco de Dados & Auth:</strong> Supabase (PostgreSQL).</li>
+        <li><strong>Segurança:</strong> Row Level Security (RLS).</li>
+        <li><strong>Bibliotecas:</strong> 
+            <code>@supabase/supabase-js</code> (Integração) e 
+            <code>jsPDF</code> (Geração de documentos).
+        </li>
+    </ul>
+
+    <h2>3. Arquitetura do Banco de Dados (Supabase)</h2>
+    <h3>Tabela Principal: <code>notes</code></h3>
+    <table>
+        <tr>
+            <th>Coluna</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>uuid</td>
+            <td>Chave primária gerada automaticamente.</td>
+        </tr>
+        <tr>
+            <td>user_id</td>
+            <td>uuid</td>
+            <td>Chave estrangeira (FK) ligada a <code>auth.users</code>.</td>
+        </tr>
+        <tr>
+            <td>title</td>
+            <td>text</td>
+            <td>Título da nota (obrigatório).</td>
+        </tr>
+        <tr>
+            <td>content</td>
+            <td>text</td>
+            <td>Conteúdo da nota em formato texto.</td>
+        </tr>
+        <tr>
+            <td>created_at</td>
+            <td>timestamp</td>
+            <td>Data de criação automática (UTC).</td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <strong>Regra de Segurança (RLS):</strong> 
+        <code>CREATE POLICY "Users can access own notes" ON notes FOR ALL TO authenticated USING (auth.uid() = user_id);</code>
+    </div>
+
+    <h2>4. Funcionalidades Implementadas (CRUD + Plus)</h2>
+    <ol>
+        <li><strong>Autenticação:</strong> Login, Cadastro e Recuperação de Senha por e-mail.</li>
+        <li><strong>Create:</strong> Inserção de notas vinculadas ao ID único do usuário.</li>
+        <li><strong>Read:</strong> Listagem dinâmica com busca em tempo real via JavaScript.</li>
+        <li><strong>Update:</strong> Edição de notas existentes com alteração de estado no DOM.</li>
+        <li><strong>Delete:</strong> Exclusão lógica no banco de dados com confirmação do usuário.</li>
+        <li><strong>Export:</strong> Geração de arquivos PDF (individuais ou em lote).</li>
+    </ol>
+
+    <h2>5. Guia de Replicação (Base para Novos Projetos)</h2>
+    <p>Para criar uma nova ferramenta (ex: Financeiro) usando esta base, siga estes passos:</p>
+    <pre>
+1. Criar Tabela no Supabase com coluna 'user_id' (uuid).
+2. Ativar RLS na tabela para isolamento de dados por usuário.
+3. Copiar a estrutura do `index.html` para gerenciar o acesso.
+4. Adaptar a função `loadData()` para apontar para a nova tabela.
+5. Manter as chaves `SUPABASE_URL` e `SUPABASE_KEY` consistentes.
+    </pre>
+
+    <h2>6. Configurações de Segurança Críticas</h2>
+    <p>Para que o projeto funcione em produção no GitHub, as seguintes URLs devem estar autorizadas no Supabase (Authentication > URL Configuration):</p>
+    <ul>
+        <li><code>http://localhost:3000</code> (Desenvolvimento)</li>
+        <li><code>https://aristidesbp.github.io</code> (Produção)</li>
+    </ul>
+
+    <footer style="margin-top: 50px; font-size: 0.8em; color: #999;">
+        Documento gerado em 15/01/2026 - SISTEMA ERP ABP
+    </footer>
+
+</body>
+</html>
