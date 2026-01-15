@@ -136,24 +136,54 @@
             loadClients();
         }
 
+  
         async function loadClients() {
-            // Buscamos clientes e seus endereços vinculados (se houver)
-            const { data: clients } = await _supabase.from('clientes').select(`*, enderecos(*)`).order('nome_completo');
-            const list = document.getElementById('clients-list');
-            list.innerHTML = (clients || []).map(c => {
-                const end = c.enderecos && c.enderecos[0] ? `${c.enderecos[0].logradouro}, ${c.enderecos[0].numero}` : 'Não informado';
-                return `
+    try {
+        // Buscamos clientes e tentamos trazer o endereço vinculado
+        const { data: clients, error } = await _supabase
+            .from('clientes')
+            .select(`
+                *,
+                enderecos (
+                    logradouro,
+                    numero,
+                    cidade
+                )
+            `)
+            .order('nome_completo');
+
+        if (error) throw error;
+
+        const list = document.getElementById('clients-list');
+        
+        if (!clients || clients.length === 0) {
+            list.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum cliente cadastrado.</td></tr>';
+            return;
+        }
+
+        list.innerHTML = clients.map(c => {
+            // Verifica se existe endereço. Se não, exibe "Não cadastrado"
+            const temEndereco = c.enderecos && c.enderecos.length > 0;
+            const resumoEnd = temEndereco 
+                ? `${c.enderecos[0].logradouro}, ${c.enderecos[0].numero} - ${c.enderecos[0].cidade}`
+                : '<span style="color: #94a3b8; font-style: italic;">Endereço não informado</span>';
+
+            return `
                 <tr>
                     <td><strong>${c.nome_completo}</strong></td>
                     <td>${c.cpf}</td>
-                    <td><small>${end}</small></td>
-                    <td>
-                        <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-del" onclick="deleteFull('${c.id}')"><i class="fas fa-trash"></i></button>
+                    <td><small>${resumoEnd}</small></td>
+                    <td class="actions">
+                        <button class="btn-edit" onclick="editFull('${c.id}')" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn-del" onclick="deleteFull('${c.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>`;
-            }).join('');
-        }
+        }).join('');
+    } catch (err) {
+        console.error("Erro ao carregar lista:", err);
+        document.getElementById('clients-list').innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Erro ao carregar dados: ${err.message}</td></tr>`;
+    }
+}
 
         async function handleSave() {
             const id = document.getElementById('edit-id').value;
