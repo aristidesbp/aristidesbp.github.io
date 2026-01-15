@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Supabase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Mantenha o CSS anterior ou use este simplificado */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #3ecf8e; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 id="title">Entrar</h2>
+        <input type="email" id="email" placeholder="E-mail">
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="handleAuth()" id="btn-auth">Entrar</button>
+        <p onclick="toggle()" style="cursor:pointer; font-size: 12px; margin-top: 10px; color: #666" id="toggle-text">Não tem conta? Cadastre-se</p>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let isLogin = true;
+        function toggle() {
+            isLogin = !isLogin;
+            document.getElementById('title').innerText = isLogin ? 'Entrar' : 'Cadastrar';
+            document.getElementById('btn-auth').innerText = isLogin ? 'Entrar' : 'Cadastrar';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (isLogin) {
+                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+                if (error) alert(error.message);
+                else window.location.href = 'bloco_de_notas.html';
+            } else {
+                const { data, error } = await _supabase.auth.signUp({ email, password });
+                if (error) alert(error.message);
+                else alert('Verifique seu e-mail para confirmar o cadastro!');
+            }
+        }
+    </script>
+</body>
+</html>
