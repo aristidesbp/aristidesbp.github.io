@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA ERP ABP - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; text-align: center; padding: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 40px auto; }
+        .card { background: #1e293b; padding: 30px; border-radius: 12px; text-decoration: none; color: white; border: 1px solid #334155; transition: 0.3s; }
+        .card:hover { border-color: #3ecf8e; transform: translateY(-5px); }
+        .btn-logout { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>SISTEMA ERP ABP</h1>
+    <p id="welcome">Carregando...</p>
+
+    <div class="grid">
+        <a href="bloco_de_notas/bloco_de_notas.html" class="card">
+            <div style="font-size: 40px;">📝</div>
+            <h3>Bloco de Notas</h3>
+            <p>Gerencie suas anotações na nuvem</p>
+        </a>
+        </div>
+
+    <button class="btn-logout" onclick="logout()">Sair do Sistema</button>
+
+    <script>
+        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function checkUser() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('welcome').innerText = `Bem-vindo, ${session.user.email}`;
+            }
+        }
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = 'login.html';
+        }
+        checkUser();
+    </script>
+</body>
+</html>
