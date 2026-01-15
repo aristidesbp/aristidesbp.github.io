@@ -8,69 +8,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS REUTILIZADO DO DASHBOARD PARA PADRONIZAÇÃO */
-        :root { --primary: #3ecf8e; --dark: #0f172a; --sidebar-w: 260px; }
+        :root { --primary: #3ecf8e; --dark: #0f172a; }
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding-top: 80px; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding-top: 90px; }
 
-        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 65px; background: var(--dark); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 1000; }
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        .menu-btn { font-size: 22px; cursor: pointer; color: var(--primary); background: none; border: none; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--dark); border: 2px solid white; }
-
-        .sidebar { position: fixed; top: 0; left: -260px; width: var(--sidebar-w); height: 100%; background: var(--dark); color: white; transition: 0.3s; z-index: 1001; padding-top: 20px; }
-        .sidebar.active { left: 0; }
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1000; }
-        .sidebar-overlay.active { display: block; }
-        .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #1e293b; }
-
-        .profile-menu { position: absolute; top: 70px; right: 10px; background: white; color: var(--dark); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; width: 220px; z-index: 1002; }
-        .profile-menu.active { display: block; }
-        .profile-menu button { width: 100%; text-align: left; padding: 12px 15px; background: none; border: none; cursor: pointer; color: #e74c3c; font-weight: bold; }
-
-        /* BLOCO DE NOTAS ESPECÍFICO */
+        /* ESTILO ESPECÍFICO DO BLOCO DE NOTAS */
         .container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         textarea, input { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        
         .btn-save { background: var(--primary); color: white; padding: 15px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 8px; font-size: 16px; transition: 0.3s; }
         .btn-save:hover { filter: brightness(1.1); }
+        
         .note { border-bottom: 1px solid #f1f1f1; padding: 20px 0; display: flex; justify-content: space-between; align-items: flex-start; }
         .note-content strong { color: #1e293b; font-size: 1.1em; display: block; margin-bottom: 5px; }
-        .note-content p { color: #64748b; margin: 0; line-height: 1.5; }
+        .note-content p { color: #64748b; margin: 0; line-height: 1.5; white-space: pre-wrap; }
+        
         .actions { display: flex; gap: 8px; }
         .actions button { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; color: white; font-size: 14px; }
+        
+        .search-box { margin-top: 30px; border-top: 1px solid #eee; pt-20: 20px; }
+        .export-btn { width: 100%; background: #2c3e50; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-left">
-            <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <span style="font-weight: bold;">📝 BLOCO DE NOTAS</span>
-        </div>
-        <div class="nav-right">
-            <div class="user-avatar" onclick="toggleProfile()">A</div>
-            <div class="profile-menu" id="profileMenu">
-                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div style="padding: 25px; font-weight: bold; color: var(--primary);">MENU</div>
-        <a href="../index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
-        <a href="bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
-    </div>
-
     <div class="container">
+        <h2 style="margin-top: 0; color: var(--dark);">Minhas Notas</h2>
         <input type="hidden" id="note-id">
         <input type="text" id="title" placeholder="Título da nota...">
         <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
         <button class="btn-save" id="btn-save" onclick="saveNote()">Salvar Nota</button>
 
-        <div style="margin-top: 30px;">
-            <input type="text" id="search" placeholder="🔍 Pesquisar em minhas notas..." onkeyup="filterNotes()" style="margin-bottom: 10px;">
-            <button onclick="exportAllToPDF()" style="width: 100%; background: #2c3e50; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;"><i class="fas fa-file-pdf"></i> Exportar Tudo</button>
+        <div class="search-box">
+            <label style="font-size: 13px; font-weight: bold; color: #64748b;">PESQUISAR OU EXPORTAR</label>
+            <input type="text" id="search" placeholder="🔍 Digite para buscar..." onkeyup="filterNotes()" style="margin-top: 5px;">
+            <button class="export-btn" onclick="exportAllToPDF()"><i class="fas fa-file-pdf"></i> Exportar Notas para PDF</button>
         </div>
 
         <div id="notes-list"></div>
@@ -82,8 +54,6 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let allNotes = [];
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.sidebar-overlay').classList.toggle('active'); }
-        function toggleProfile() { document.getElementById('profileMenu').classList.toggle('active'); }
 
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
@@ -100,28 +70,58 @@
         function renderNotes(notes) {
             document.getElementById('notes-list').innerHTML = notes.map(n => `
                 <div class="note">
-                    <div class="note-content"><strong>${n.title}</strong><p>${n.content}</p></div>
+                    <div class="note-content">
+                        <strong>${n.title}</strong>
+                        <p>${n.content}</p>
+                    </div>
                     <div class="actions">
                         <button style="background: #f1c40f;" onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)"><i class="fas fa-edit"></i></button>
                         <button style="background: #e74c3c;" onclick="deleteNote('${n.id}')"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
-            `).join('');
+            `).join('') || '<p style="text-align:center; color:#94a3b8; margin-top:20px;">Nenhuma nota encontrada.</p>';
         }
 
         async function saveNote() {
             const id = document.getElementById('note-id').value;
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
+            
+            if(!title || !content) return alert("Preencha título e conteúdo!");
+
             const { data: { user } } = await _supabase.auth.getUser();
 
-            if (id) await _supabase.from('notes').update({ title, content }).eq('id', id);
-            else await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+            if (id) {
+                await _supabase.from('notes').update({ title, content }).eq('id', id);
+            } else {
+                await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+            }
 
-            location.reload();
+            resetForm();
+            loadNotes();
         }
 
-        async function deleteNote(id) { if (confirm("Excluir?")) { await _supabase.from('notes').delete().eq('id', id); loadNotes(); } }
+        function prepareEdit(id, title, content) {
+            document.getElementById('note-id').value = id;
+            document.getElementById('title').value = title;
+            document.getElementById('content').value = content;
+            document.getElementById('btn-save').innerText = "Atualizar Nota";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('note-id').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('btn-save').innerText = "Salvar Nota";
+        }
+
+        async function deleteNote(id) { 
+            if (confirm("Deseja excluir esta nota?")) { 
+                await _supabase.from('notes').delete().eq('id', id); 
+                loadNotes(); 
+            } 
+        }
 
         function filterNotes() {
             const q = document.getElementById('search').value.toLowerCase();
@@ -129,9 +129,25 @@
             renderNotes(filtered);
         }
 
-        async function logout() { await _supabase.auth.signOut(); window.location.href = '../login.html'; }
+        async function exportAllToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Meu Bloco de Notas - ERP ABP", 10, 10);
+            
+            let y = 20;
+            allNotes.forEach((n, i) => {
+                doc.setFont(undefined, 'bold');
+                doc.text(`${i+1}. ${n.title}`, 10, y);
+                doc.setFont(undefined, 'normal');
+                doc.text(n.content, 10, y + 7);
+                y += 25;
+            });
+            doc.save("minhas-notas.pdf");
+        }
 
         checkUser();
     </script>
+
+    <script src="../menu.js"></script>
 </body>
 </html>
