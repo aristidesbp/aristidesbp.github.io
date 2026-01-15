@@ -10,11 +10,12 @@
             --primary: #3ecf8e;
             --dark: #1e293b;
             --light: #f8fafc;
+            --bg: #0f172a;
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a;
+            background-color: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -96,12 +97,12 @@
         .btn-back {
             background: #e2e8f0;
             color: #475569;
-            padding: 8px;
+            padding: 8px 12px;
             border-radius: 6px;
             border: none;
             margin-bottom: 20px;
             cursor: pointer;
-            display: none; /* Escondido por padrão */
+            display: none;
         }
     </style>
 </head>
@@ -113,11 +114,11 @@
     <h1>SISTEMA ERP ABP</h1>
     <h2 id="form-subtitle">Faça login para acessar suas notas</h2>
 
-    <div class="input-container">
+    <div class="input-container" id="email-group">
         <input type="email" id="email" placeholder="Seu e-mail">
     </div>
 
-    <div class="input-container" id="pass-container">
+    <div class="input-container" id="pass-group">
         <input type="password" id="password" placeholder="Sua senha">
         <button type="button" class="toggle-password" onclick="toggleVisibility()">👁️</button>
     </div>
@@ -140,19 +141,18 @@
     // 1. Alternar entre Login e Cadastro
     function toggleMode() {
         isLogin = !isLogin;
-        
         document.getElementById('form-subtitle').innerText = isLogin ? 'Faça login para acessar suas notas' : 'Crie sua conta gratuita';
         document.getElementById('btn-auth').innerText = isLogin ? 'Entrar' : 'Criar Conta';
         document.getElementById('btn-back').style.display = isLogin ? 'none' : 'inline-block';
         document.getElementById('link-toggle').style.display = isLogin ? 'block' : 'none';
         document.getElementById('link-forgot').style.display = isLogin ? 'block' : 'none';
+        document.getElementById('email-group').style.display = 'block';
     }
 
     // 2. Ver/Esconder Senha
     function toggleVisibility() {
         const passInput = document.getElementById('password');
         const toggleBtn = document.querySelector('.toggle-password');
-        
         if (passInput.type === 'password') {
             passInput.type = 'text';
             toggleBtn.innerText = '🙈';
@@ -162,15 +162,10 @@
         }
     }
 
-    // 3. Lógica de Autenticação
+    // 3. Lógica de Autenticação Principal
     async function handleAuth() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
-        if (!email || (isLogin && !password)) {
-            alert("Preencha os campos obrigatórios.");
-            return;
-        }
 
         if (isLogin) {
             const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
@@ -179,25 +174,58 @@
         } else {
             const { data, error } = await _supabase.auth.signUp({ email, password });
             if (error) alert("Erro ao cadastrar: " + error.message);
-            else alert("Cadastro realizado! Verifique seu e-mail para confirmar (se habilitado no Supabase).");
+            else alert("Cadastro realizado! Verifique seu e-mail.");
         }
     }
 
-    // 4. Esqueci minha Senha
+    // 4. Solicitar Recuperação de Senha
     async function forgotPassword() {
         const email = document.getElementById('email').value;
-        if (!email) {
-            alert("Digite seu e-mail primeiro para receber o link de recuperação.");
-            return;
-        }
+        if (!email) return alert("Digite seu e-mail para recuperar a senha.");
 
         const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.href, // O usuário volta para esta página após redefinir
+            redirectTo: window.location.href // O redirecionamento volta para esta mesma página
         });
 
-        if (error) alert("Erro: " + error.message);
-        else alert("Link de recuperação enviado para o seu e-mail!");
+        if (error) alert(error.message);
+        else alert("Link enviado! Verifique sua caixa de entrada.");
     }
+
+    // 5. Detectar se o usuário veio pelo link de recuperação (MUDANÇA DE SENHA)
+    async function checkRecovery() {
+        // No GitHub Pages, o token vem após o caractere '#'
+        const hash = window.location.hash;
+        
+        if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
+            // Alterar a UI para "Nova Senha"
+            document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha abaixo";
+            document.getElementById('email-group').style.display = 'none'; // Não precisa do e-mail
+            document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
+            document.getElementById('btn-auth').onclick = updatePassword; // Muda a função do botão
+            
+            document.getElementById('link-forgot').style.display = 'none';
+            document.getElementById('link-toggle').style.display = 'none';
+            document.getElementById('btn-back').style.display = 'none';
+        }
+    }
+
+    // 6. Atualizar a senha de fato
+    async function updatePassword() {
+        const newPassword = document.getElementById('password').value;
+        if (newPassword.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+
+        const { error } = await _supabase.auth.updateUser({ password: newPassword });
+
+        if (error) alert("Erro ao atualizar: " + error.message);
+        else {
+            alert("Senha atualizada com sucesso!");
+            window.location.hash = ""; // Limpa o token da URL
+            window.location.reload(); // Recarrega para o modo login
+        }
+    }
+
+    // Iniciar verificação ao carregar a página
+    window.onload = checkRecovery;
 </script>
 
 </body>
