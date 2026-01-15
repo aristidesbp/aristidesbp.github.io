@@ -220,56 +220,58 @@
 
         async function editFull(id) {
     try {
-        // Busca o cliente e tenta trazer o endereço junto
-        const { data: c, error } = await _supabase
+        console.log("Iniciando edição para o ID:", id);
+        
+        // 1. Primeiro buscamos os dados do cliente
+        const { data: cliente, error: errCliente } = await _supabase
             .from('clientes')
-            .select('*, enderecos(*)')
+            .select('*')
             .eq('id', id)
             .single();
 
-        if (error) throw error;
+        if (errCliente) throw errCliente;
 
-        if (c) {
-            // 1. Preenche os campos básicos do Cliente
-            document.getElementById('edit-id').value = c.id;
-            document.getElementById('nome_completo').value = c.nome_completo || '';
-            document.getElementById('cpf').value = c.cpf || '';
-            document.getElementById('data_nascimento').value = c.data_nascimento || '';
-            document.getElementById('email').value = c.email || '';
-            document.getElementById('telefone').value = c.telefone || '';
-            document.getElementById('rg').value = c.rg || '';
+        // 2. Preenchemos os campos básicos do cliente no formulário
+        document.getElementById('edit-id').value = cliente.id;
+        document.getElementById('nome_completo').value = cliente.nome_completo || '';
+        document.getElementById('cpf').value = cliente.cpf || '';
+        document.getElementById('data_nascimento').value = cliente.data_nascimento || '';
+        document.getElementById('email').value = cliente.email || '';
+        document.getElementById('telefone').value = cliente.telefone || '';
+        document.getElementById('rg').value = cliente.rg || '';
 
-            // 2. Preenche os campos de Endereço (se existirem)
-            // Verificamos se 'enderecos' é um array e se tem ao menos um item
-            if (c.enderecos && Array.isArray(c.enderecos) && c.enderecos.length > 0) {
-                const e = c.enderecos[0];
-                document.getElementById('cep').value = e.cep || '';
-                document.getElementById('logradouro').value = e.logradouro || '';
-                document.getElementById('numero').value = e.numero || '';
-                document.getElementById('bairro').value = e.bairro || '';
-                document.getElementById('cidade').value = e.cidade || '';
-                document.getElementById('estado').value = e.estado || '';
-            } else {
-                // Limpa os campos de endereço caso o cliente não tenha um
-                document.getElementById('cep').value = '';
-                document.getElementById('logradouro').value = '';
-                document.getElementById('numero').value = '';
-                document.getElementById('bairro').value = '';
-                document.getElementById('cidade').value = '';
-                document.getElementById('estado').value = '';
-            }
+        // 3. Tentamos buscar o endereço em uma consulta separada para não travar
+        const { data: endereco, error: errEnd } = await _supabase
+            .from('enderecos')
+            .select('*')
+            .eq('cliente_id', id)
+            .maybeSingle();
 
-            // 3. Ajusta a interface visual
-            document.getElementById('form-title').innerText = "Editando Cliente: " + c.nome_completo;
-            document.getElementById('btn-save').innerText = "Atualizar Cadastro";
-            document.getElementById('btn-cancel').style.display = "block";
-            
-            // Sobe a tela para o formulário
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Se houver endereço, preenchemos os campos
+        if (endereco) {
+            document.getElementById('cep').value = endereco.cep || '';
+            document.getElementById('logradouro').value = endereco.logradouro || '';
+            document.getElementById('numero').value = endereco.numero || '';
+            document.getElementById('bairro').value = endereco.bairro || '';
+            document.getElementById('cidade').value = endereco.cidade || '';
+            document.getElementById('estado').value = endereco.estado || '';
+        } else {
+            // Se não houver, limpamos os campos de endereço
+            ['cep', 'logradouro', 'numero', 'bairro', 'cidade', 'estado'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
         }
+
+        // 4. Mudamos o visual do botão para indicar edição
+        document.getElementById('btn-save').innerText = "Atualizar Cadastro Completo";
+        document.getElementById('btn-cancel').style.display = "block";
+        
+        // Sobe a página suavemente para o usuário ver o formulário cheio
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (err) {
-        console.error("Erro ao carregar dados para edição:", err);
-        alert("Erro ao carregar dados: " + err.message);
+        console.error("Erro detalhado na edição:", err);
+        alert("Erro ao carregar dados para editar: " + err.message);
     }
 }
         function resetForm() {
