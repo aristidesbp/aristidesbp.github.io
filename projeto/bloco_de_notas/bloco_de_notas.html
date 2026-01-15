@@ -2,203 +2,179 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SISTEMA ERP ABP</title>
+    <title>Meu Bloco de Notas - Cloud</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root {
-            --primary: #3ecf8e;
-            --dark: #1e293b;
-            --light: #f8fafc;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        h1 { color: var(--dark); margin-bottom: 5px; font-size: 24px; }
-        h2 { color: #64748b; margin-bottom: 25px; font-size: 16px; font-weight: normal; }
-
-        .input-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #666;
-        }
-
-        button.main-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button.main-btn:hover { background-color: #34b27b; }
-
-        .extra-links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 14px;
-        }
-
-        .link {
-            color: #4a90e2;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .link:hover { text-decoration: underline; }
-
-        .btn-back {
-            background: #e2e8f0;
-            color: #475569;
-            padding: 8px;
-            border-radius: 6px;
-            border: none;
-            margin-bottom: 20px;
-            cursor: pointer;
-            display: none; /* Escondido por padrão */
-        }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .note { border-bottom: 1px solid #eee; padding: 15px; display: flex; flex-direction: column; position: relative; }
+        .note-content { margin-bottom: 10px; }
+        .note-content strong { display: block; font-size: 1.1em; color: #333; }
+        .note-content p { color: #666; margin: 5px 0 0 0; white-space: pre-wrap; }
+        
+        textarea, input { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-save { background: #3ecf8e; color: white; padding: 12px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 5px; margin-bottom: 10px; }
+        
+        .actions { display: flex; gap: 5px; margin-top: 10px; }
+        .btn-edit { background: #f1c40f; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .btn-delete { background: #e74c3c; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .btn-pdf { background: #555; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        
+        .search-box { margin: 20px 0; border-bottom: 2px solid #3ecf8e; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-
-<div class="login-card">
-    <button id="btn-back" class="btn-back" onclick="toggleMode()">← Voltar para o Login</button>
-    
-    <h1>SISTEMA ERP ABP</h1>
-    <h2 id="form-subtitle">Faça login para acessar suas notas</h2>
-
-    <div class="input-container">
-        <input type="email" id="email" placeholder="Seu e-mail">
-    </div>
-
-    <div class="input-container" id="pass-container">
-        <input type="password" id="password" placeholder="Sua senha">
-        <button type="button" class="toggle-password" onclick="toggleVisibility()">👁️</button>
-    </div>
-
-    <button class="main-btn" id="btn-auth" onclick="handleAuth()">Entrar</button>
-
-    <div class="extra-links">
-        <span id="link-forgot" class="link" onclick="forgotPassword()">Esqueci minha senha</span>
-        <span id="link-toggle" class="link" onclick="toggleMode()">Não tem conta? Cadastre-se agora</span>
-    </div>
-</div>
-
-<script>
-    const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let isLogin = true;
-
-    // 1. Alternar entre Login e Cadastro
-    function toggleMode() {
-        isLogin = !isLogin;
+    <div class="container">
+        <button onclick="logout()" style="float: right; background: #94a3b8; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Sair</button>
+        <h2>📝 Bloco de Notas Cloud</h2>
         
-        document.getElementById('form-subtitle').innerText = isLogin ? 'Faça login para acessar suas notas' : 'Crie sua conta gratuita';
-        document.getElementById('btn-auth').innerText = isLogin ? 'Entrar' : 'Criar Conta';
-        document.getElementById('btn-back').style.display = isLogin ? 'none' : 'inline-block';
-        document.getElementById('link-toggle').style.display = isLogin ? 'block' : 'none';
-        document.getElementById('link-forgot').style.display = isLogin ? 'block' : 'none';
-    }
+        <input type="hidden" id="note-id">
+        <input type="text" id="title" placeholder="Título da nota">
+        <textarea id="content" rows="4" placeholder="Conteúdo da nota..."></textarea>
+        <button class="btn-save" id="btn-save" onclick="saveNote()">Salvar Nota</button>
 
-    // 2. Ver/Esconder Senha
-    function toggleVisibility() {
-        const passInput = document.getElementById('password');
-        const toggleBtn = document.querySelector('.toggle-password');
+        <div class="search-box">
+            <input type="text" id="search" placeholder="🔍 Pesquisar ou filtrar para exportar..." onkeyup="filterNotes()">
+            <button onclick="exportAllToPDF()" style="width: 100%; margin-top: 5px; background: #2c3e50; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">📥 Exportar Notas Visíveis para PDF</button>
+        </div>
+
+        <div id="notes-list"></div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let allNotes = []; 
+        let filteredNotes = [];
+
+        async function checkUser() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) window.location.href = 'index.html';
+            loadNotes();
+        }
+
+        async function loadNotes() {
+            const { data: notes, error } = await _supabase.from('notes').select('*').order('created_at', { ascending: false });
+            if (error) return;
+            allNotes = notes;
+            filteredNotes = notes;
+            renderNotes(allNotes);
+        }
+
+        function renderNotes(notesToRender) {
+            const list = document.getElementById('notes-list');
+            list.innerHTML = notesToRender.map(n => `
+                <div class="note">
+                    <div class="note-content">
+                        <strong>${n.title}</strong>
+                        <p>${n.content}</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="prepareEdit('${n.id}', \`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">✎ Editar</button>
+                        <button class="btn-pdf" onclick="exportSinglePDF(\`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">PDF</button>
+                        <button class="btn-delete" onclick="deleteNote('${n.id}')">✕ Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- FUNÇÕES DE EXPORTAÇÃO PDF ---
         
-        if (passInput.type === 'password') {
-            passInput.type = 'text';
-            toggleBtn.innerText = '🙈';
-        } else {
-            passInput.type = 'password';
-            toggleBtn.innerText = '👁️';
-        }
-    }
-
-    // 3. Lógica de Autenticação
-    async function handleAuth() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        if (!email || (isLogin && !password)) {
-            alert("Preencha os campos obrigatórios.");
-            return;
+        function exportSinglePDF(title, content) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text(title, 10, 20);
+            doc.setFontSize(12);
+            doc.text(content, 10, 35, { maxWidth: 180 });
+            
+            doc.save(`${title}.pdf`);
         }
 
-        if (isLogin) {
-            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-            if (error) alert("Erro: " + error.message);
-            else window.location.href = 'bloco_de_notas.html';
-        } else {
-            const { data, error } = await _supabase.auth.signUp({ email, password });
-            if (error) alert("Erro ao cadastrar: " + error.message);
-            else alert("Cadastro realizado! Verifique seu e-mail para confirmar (se habilitado no Supabase).");
+        function exportAllToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 20;
+
+            doc.setFontSize(22);
+            doc.text("Meu Relatório de Notas", 10, y);
+            y += 15;
+
+            filteredNotes.forEach((n, index) => {
+                if (y > 270) { doc.addPage(); y = 20; }
+                
+                doc.setFontSize(14);
+                doc.setTextColor(62, 207, 142); // Cor verde Supabase
+                doc.text(`${index + 1}. ${n.title}`, 10, y);
+                y += 7;
+                
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                const splitContent = doc.splitTextToSize(n.content, 180);
+                doc.text(splitContent, 10, y);
+                y += (splitContent.length * 5) + 10;
+            });
+
+            doc.save("todas_as_notas.pdf");
         }
-    }
 
-    // 4. Esqueci minha Senha
-    async function forgotPassword() {
-        const email = document.getElementById('email').value;
-        if (!email) {
-            alert("Digite seu e-mail primeiro para receber o link de recuperação.");
-            return;
+        // --- MANUTENÇÃO DAS NOTAS (SALVAR/APAGAR) ---
+
+        async function saveNote() {
+            const id = document.getElementById('note-id').value;
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            if (!title || !content) return alert("Preencha os campos!");
+
+            const { data: { user } } = await _supabase.auth.getUser();
+
+            if (id) {
+                await _supabase.from('notes').update({ title, content }).eq('id', id);
+            } else {
+                await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+            }
+
+            document.getElementById('note-id').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('btn-save').innerText = "Salvar Nota";
+            loadNotes();
         }
 
-        const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.href, // O usuário volta para esta página após redefinir
-        });
+        function prepareEdit(id, title, content) {
+            document.getElementById('note-id').value = id;
+            document.getElementById('title').value = title;
+            document.getElementById('content').value = content;
+            document.getElementById('btn-save').innerText = "Atualizar Nota";
+            window.scrollTo(0, 0);
+        }
 
-        if (error) alert("Erro: " + error.message);
-        else alert("Link de recuperação enviado para o seu e-mail!");
-    }
-</script>
+        async function deleteNote(id) {
+            if (confirm("Excluir nota?")) {
+                await _supabase.from('notes').delete().eq('id', id);
+                loadNotes();
+            }
+        }
 
+        function filterNotes() {
+            const query = document.getElementById('search').value.toLowerCase();
+            filteredNotes = allNotes.filter(n => 
+                n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query)
+            );
+            renderNotes(filteredNotes);
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        checkUser();
+    </script>
 </body>
 </html>
