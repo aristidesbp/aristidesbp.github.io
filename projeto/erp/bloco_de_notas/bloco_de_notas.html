@@ -2,41 +2,75 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Bloco de Notas - SISTEMA ERP ABP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloco de Notas - ERP ABP</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .note { border-bottom: 1px solid #eee; padding: 15px; display: flex; flex-direction: column; }
-        .note-content strong { display: block; font-size: 1.1em; color: #333; }
-        .note-content p { color: #666; margin: 5px 0 0 0; white-space: pre-wrap; }
-        textarea, input { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-save { background: #3ecf8e; color: white; padding: 12px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 5px; margin-bottom: 10px; }
-        .actions { display: flex; gap: 5px; margin-top: 10px; }
-        .btn-edit { background: #f1c40f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .btn-delete { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .btn-pdf { background: #555; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .search-box { margin: 20px 0; border-bottom: 2px solid #3ecf8e; padding-bottom: 10px; }
-        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        /* CSS REUTILIZADO DO DASHBOARD PARA PADRONIZAÇÃO */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --sidebar-w: 260px; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding-top: 80px; }
+
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 65px; background: var(--dark); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 1000; }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { font-size: 22px; cursor: pointer; color: var(--primary); background: none; border: none; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--dark); border: 2px solid white; }
+
+        .sidebar { position: fixed; top: 0; left: -260px; width: var(--sidebar-w); height: 100%; background: var(--dark); color: white; transition: 0.3s; z-index: 1001; padding-top: 20px; }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1000; }
+        .sidebar-overlay.active { display: block; }
+        .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #1e293b; }
+
+        .profile-menu { position: absolute; top: 70px; right: 10px; background: white; color: var(--dark); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; width: 220px; z-index: 1002; }
+        .profile-menu.active { display: block; }
+        .profile-menu button { width: 100%; text-align: left; padding: 12px 15px; background: none; border: none; cursor: pointer; color: #e74c3c; font-weight: bold; }
+
+        /* BLOCO DE NOTAS ESPECÍFICO */
+        .container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        textarea, input { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .btn-save { background: var(--primary); color: white; padding: 15px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 8px; font-size: 16px; transition: 0.3s; }
+        .btn-save:hover { filter: brightness(1.1); }
+        .note { border-bottom: 1px solid #f1f1f1; padding: 20px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+        .note-content strong { color: #1e293b; font-size: 1.1em; display: block; margin-bottom: 5px; }
+        .note-content p { color: #64748b; margin: 0; line-height: 1.5; }
+        .actions { display: flex; gap: 8px; }
+        .actions button { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; color: white; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="nav-header">
-            <button onclick="window.location.href='../index.html'">🏠 Início</button>
-            <button onclick="logout()" style="background: #94a3b8; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Sair</button>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <span style="font-weight: bold;">📝 BLOCO DE NOTAS</span>
         </div>
-        
-        <h2>📝 Bloco de Notas Cloud</h2>
+        <div class="nav-right">
+            <div class="user-avatar" onclick="toggleProfile()">A</div>
+            <div class="profile-menu" id="profileMenu">
+                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div style="padding: 25px; font-weight: bold; color: var(--primary);">MENU</div>
+        <a href="../index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
+    </div>
+
+    <div class="container">
         <input type="hidden" id="note-id">
-        <input type="text" id="title" placeholder="Título da nota">
-        <textarea id="content" rows="4" placeholder="Conteúdo da nota..."></textarea>
+        <input type="text" id="title" placeholder="Título da nota...">
+        <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
         <button class="btn-save" id="btn-save" onclick="saveNote()">Salvar Nota</button>
 
-        <div class="search-box">
-            <input type="text" id="search" placeholder="🔍 Pesquisar notas..." onkeyup="filterNotes()">
-            <button onclick="exportAllToPDF()" style="width: 100%; margin-top: 5px; background: #2c3e50; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">📥 Exportar PDF</button>
+        <div style="margin-top: 30px;">
+            <input type="text" id="search" placeholder="🔍 Pesquisar em minhas notas..." onkeyup="filterNotes()" style="margin-bottom: 10px;">
+            <button onclick="exportAllToPDF()" style="width: 100%; background: #2c3e50; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;"><i class="fas fa-file-pdf"></i> Exportar Tudo</button>
         </div>
 
         <div id="notes-list"></div>
@@ -47,109 +81,55 @@
         const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let allNotes = []; 
-        let filteredNotes = [];
+        let allNotes = [];
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.sidebar-overlay').classList.toggle('active'); }
+        function toggleProfile() { document.getElementById('profileMenu').classList.toggle('active'); }
 
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) window.location.href = '../login.html'; // Volta uma pasta
+            if (!session) window.location.href = '../login.html';
             loadNotes();
         }
 
         async function loadNotes() {
-            const { data: notes, error } = await _supabase.from('notes').select('*').order('created_at', { ascending: false });
-            if (error) return;
-            allNotes = notes;
-            filteredNotes = notes;
+            const { data: notes } = await _supabase.from('notes').select('*').order('created_at', { ascending: false });
+            allNotes = notes || [];
             renderNotes(allNotes);
         }
 
-        function renderNotes(notesToRender) {
-            const list = document.getElementById('notes-list');
-            list.innerHTML = notesToRender.map(n => `
+        function renderNotes(notes) {
+            document.getElementById('notes-list').innerHTML = notes.map(n => `
                 <div class="note">
-                    <div class="note-content">
-                        <strong>${n.title}</strong>
-                        <p>${n.content}</p>
-                    </div>
+                    <div class="note-content"><strong>${n.title}</strong><p>${n.content}</p></div>
                     <div class="actions">
-                        <button class="btn-edit" onclick="prepareEdit('${n.id}', \`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">✎</button>
-                        <button class="btn-pdf" onclick="exportSinglePDF(\`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">PDF</button>
-                        <button class="btn-delete" onclick="deleteNote('${n.id}')">✕</button>
+                        <button style="background: #f1c40f;" onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)"><i class="fas fa-edit"></i></button>
+                        <button style="background: #e74c3c;" onclick="deleteNote('${n.id}')"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function exportSinglePDF(title, content) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFontSize(20); doc.text(title, 10, 20);
-            doc.setFontSize(12); doc.text(content, 10, 35, { maxWidth: 180 });
-            doc.save(`${title}.pdf`);
-        }
-
-        function exportAllToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            let y = 20;
-            doc.setFontSize(20); doc.text("Relatório de Notas - ERP ABP", 10, y);
-            y += 15;
-            filteredNotes.forEach((n) => {
-                if (y > 270) { doc.addPage(); y = 20; }
-                doc.setFontSize(14); doc.setTextColor(62, 207, 142); doc.text(n.title, 10, y);
-                y += 7;
-                doc.setFontSize(11); doc.setTextColor(0, 0, 0);
-                const splitContent = doc.splitTextToSize(n.content, 180);
-                doc.text(splitContent, 10, y);
-                y += (splitContent.length * 5) + 10;
-            });
-            doc.save("notas_erp.pdf");
-        }
-
         async function saveNote() {
             const id = document.getElementById('note-id').value;
-            const title = document.getElementById('title').value.trim();
-            const content = document.getElementById('content').value.trim();
-            if (!title || !content) return alert("Preencha tudo!");
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
             const { data: { user } } = await _supabase.auth.getUser();
-            if (id) {
-                await _supabase.from('notes').update({ title, content }).eq('id', id);
-            } else {
-                await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
-            }
-            document.getElementById('note-id').value = '';
-            document.getElementById('title').value = '';
-            document.getElementById('content').value = '';
-            document.getElementById('btn-save').innerText = "Salvar Nota";
-            loadNotes();
+
+            if (id) await _supabase.from('notes').update({ title, content }).eq('id', id);
+            else await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+
+            location.reload();
         }
 
-        function prepareEdit(id, title, content) {
-            document.getElementById('note-id').value = id;
-            document.getElementById('title').value = title;
-            document.getElementById('content').value = content;
-            document.getElementById('btn-save').innerText = "Atualizar Nota";
-            window.scrollTo(0, 0);
-        }
-
-        async function deleteNote(id) {
-            if (confirm("Excluir?")) {
-                await _supabase.from('notes').delete().eq('id', id);
-                loadNotes();
-            }
-        }
+        async function deleteNote(id) { if (confirm("Excluir?")) { await _supabase.from('notes').delete().eq('id', id); loadNotes(); } }
 
         function filterNotes() {
-            const query = document.getElementById('search').value.toLowerCase();
-            filteredNotes = allNotes.filter(n => n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query));
-            renderNotes(filteredNotes);
+            const q = document.getElementById('search').value.toLowerCase();
+            const filtered = allNotes.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q));
+            renderNotes(filtered);
         }
 
-        async function logout() {
-            await _supabase.auth.signOut();
-            window.location.href = '../login.html';
-        }
+        async function logout() { await _supabase.auth.signOut(); window.location.href = '../login.html'; }
 
         checkUser();
     </script>
