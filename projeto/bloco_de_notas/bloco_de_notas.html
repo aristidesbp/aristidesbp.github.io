@@ -4,34 +4,31 @@
     <meta charset="UTF-8">
     <title>Meu Bloco de Notas - Cloud</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         
-        /* Estilização das Notas */
-        .note { border-bottom: 1px solid #eee; padding: 15px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .note:last-child { border-bottom: none; }
-        .note-content { flex-grow: 1; margin-right: 10px; }
+        .note { border-bottom: 1px solid #eee; padding: 15px; display: flex; flex-direction: column; position: relative; }
+        .note-content { margin-bottom: 10px; }
         .note-content strong { display: block; font-size: 1.1em; color: #333; }
         .note-content p { color: #666; margin: 5px 0 0 0; white-space: pre-wrap; }
         
-        /* Inputs e Botões */
         textarea, input { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-save { background: #3ecf8e; color: white; padding: 12px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 5px; transition: 0.3s; }
-        .btn-save:hover { opacity: 0.9; }
+        .btn-save { background: #3ecf8e; color: white; padding: 12px; border: none; cursor: pointer; width: 100%; font-weight: bold; border-radius: 5px; margin-bottom: 10px; }
         
-        .actions { display: flex; gap: 5px; }
-        .btn-edit { background: #f1c40f; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 3px; }
-        .btn-delete { background: #e74c3c; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 3px; }
+        .actions { display: flex; gap: 5px; margin-top: 10px; }
+        .btn-edit { background: #f1c40f; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .btn-delete { background: #e74c3c; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .btn-pdf { background: #555; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
         
-        /* Barra de Busca */
         .search-box { margin: 20px 0; border-bottom: 2px solid #3ecf8e; padding-bottom: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <button onclick="logout()" style="float: right; background: #94a3b8; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Sair</button>
-        <h2>📝 Minhas Notas Cloud</h2>
+        <h2>📝 Bloco de Notas Cloud</h2>
         
         <input type="hidden" id="note-id">
         <input type="text" id="title" placeholder="Título da nota">
@@ -39,7 +36,8 @@
         <button class="btn-save" id="btn-save" onclick="saveNote()">Salvar Nota</button>
 
         <div class="search-box">
-            <input type="text" id="search" placeholder="🔍 Pesquisar em minhas notas..." onkeyup="filterNotes()">
+            <input type="text" id="search" placeholder="🔍 Pesquisar ou filtrar para exportar..." onkeyup="filterNotes()">
+            <button onclick="exportAllToPDF()" style="width: 100%; margin-top: 5px; background: #2c3e50; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">📥 Exportar Notas Visíveis para PDF</button>
         </div>
 
         <div id="notes-list"></div>
@@ -50,7 +48,8 @@
         const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let allNotes = []; // Armazena as notas para a busca local
+        let allNotes = []; 
+        let filteredNotes = [];
 
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
@@ -59,17 +58,10 @@
         }
 
         async function loadNotes() {
-            const { data: notes, error } = await _supabase
-                .from('notes')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (error) {
-                console.error("Erro ao carregar:", error.message);
-                return;
-            }
-
+            const { data: notes, error } = await _supabase.from('notes').select('*').order('created_at', { ascending: false });
+            if (error) return;
             allNotes = notes;
+            filteredNotes = notes;
             renderNotes(allNotes);
         }
 
@@ -82,47 +74,75 @@
                         <p>${n.content}</p>
                     </div>
                     <div class="actions">
-                        <button class="btn-edit" onclick="prepareEdit('${n.id}', \`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">✎</button>
-                        <button class="btn-delete" onclick="deleteNote('${n.id}')">✕</button>
+                        <button class="btn-edit" onclick="prepareEdit('${n.id}', \`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">✎ Editar</button>
+                        <button class="btn-pdf" onclick="exportSinglePDF(\`${n.title.replace(/`/g, "\\`")}\`, \`${n.content.replace(/`/g, "\\`")}\`)">PDF</button>
+                        <button class="btn-delete" onclick="deleteNote('${n.id}')">✕ Excluir</button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // --- FUNÇÕES DE EXPORTAÇÃO PDF ---
+        
+        function exportSinglePDF(title, content) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text(title, 10, 20);
+            doc.setFontSize(12);
+            doc.text(content, 10, 35, { maxWidth: 180 });
+            
+            doc.save(`${title}.pdf`);
+        }
+
+        function exportAllToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 20;
+
+            doc.setFontSize(22);
+            doc.text("Meu Relatório de Notas", 10, y);
+            y += 15;
+
+            filteredNotes.forEach((n, index) => {
+                if (y > 270) { doc.addPage(); y = 20; }
+                
+                doc.setFontSize(14);
+                doc.setTextColor(62, 207, 142); // Cor verde Supabase
+                doc.text(`${index + 1}. ${n.title}`, 10, y);
+                y += 7;
+                
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                const splitContent = doc.splitTextToSize(n.content, 180);
+                doc.text(splitContent, 10, y);
+                y += (splitContent.length * 5) + 10;
+            });
+
+            doc.save("todas_as_notas.pdf");
+        }
+
+        // --- MANUTENÇÃO DAS NOTAS (SALVAR/APAGAR) ---
+
         async function saveNote() {
             const id = document.getElementById('note-id').value;
             const title = document.getElementById('title').value.trim();
             const content = document.getElementById('content').value.trim();
-            const btn = document.getElementById('btn-save');
-
-            if (!title || !content) return alert("Por favor, preencha o título e o conteúdo.");
+            if (!title || !content) return alert("Preencha os campos!");
 
             const { data: { user } } = await _supabase.auth.getUser();
 
             if (id) {
-                // Atualizar nota existente
-                const { error } = await _supabase
-                    .from('notes')
-                    .update({ title, content })
-                    .eq('id', id);
-                
-                if (error) alert(error.message);
+                await _supabase.from('notes').update({ title, content }).eq('id', id);
             } else {
-                // Criar nova nota
-                const { error } = await _supabase
-                    .from('notes')
-                    .insert([{ title, content, user_id: user.id }]);
-                
-                if (error) alert(error.message);
+                await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
             }
 
-            // Resetar formulário
             document.getElementById('note-id').value = '';
             document.getElementById('title').value = '';
             document.getElementById('content').value = '';
-            btn.innerText = "Salvar Nota";
-            btn.style.background = "#3ecf8e";
-            
+            document.getElementById('btn-save').innerText = "Salvar Nota";
             loadNotes();
         }
 
@@ -130,28 +150,23 @@
             document.getElementById('note-id').value = id;
             document.getElementById('title').value = title;
             document.getElementById('content').value = content;
-            
-            const btn = document.getElementById('btn-save');
-            btn.innerText = "Atualizar Nota (Clique para salvar alterações)";
-            btn.style.background = "#f1c40f";
+            document.getElementById('btn-save').innerText = "Atualizar Nota";
             window.scrollTo(0, 0);
         }
 
         async function deleteNote(id) {
-            if (confirm("Tem certeza que deseja apagar esta nota?")) {
-                const { error } = await _supabase.from('notes').delete().eq('id', id);
-                if (error) alert(error.message);
+            if (confirm("Excluir nota?")) {
+                await _supabase.from('notes').delete().eq('id', id);
                 loadNotes();
             }
         }
 
         function filterNotes() {
             const query = document.getElementById('search').value.toLowerCase();
-            const filtered = allNotes.filter(n => 
-                n.title.toLowerCase().includes(query) || 
-                n.content.toLowerCase().includes(query)
+            filteredNotes = allNotes.filter(n => 
+                n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query)
             );
-            renderNotes(filtered);
+            renderNotes(filteredNotes);
         }
 
         async function logout() {
