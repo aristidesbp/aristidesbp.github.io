@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Bloco de Notas - Cloud</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Use o CSS que forneci na primeira resposta */
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        .note { border-bottom: 1px solid #eee; padding: 10px; display: flex; justify-content: space-between; }
+        textarea, input { width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;}
+        .btn-save { background: #3ecf8e; color: white; padding: 10px; border: none; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="logout()" style="float: right;">Sair</button>
+        <h2>Minhas Notas Cloud</h2>
+        <input type="text" id="title" placeholder="Título">
+        <textarea id="content" rows="4" placeholder="Conteúdo"></textarea>
+        <button class="btn-save" onclick="saveNote()">Salvar Nota</button>
+        <div id="notes-list"></div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function checkUser() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) window.location.href = 'index.html';
+            loadNotes();
+        }
+
+        async function loadNotes() {
+            const { data: notes, error } = await _supabase
+                .from('notes')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            const list = document.getElementById('notes-list');
+            list.innerHTML = notes.map(n => `
+                <div class="note">
+                    <div><strong>${n.title}</strong><p>${n.content}</p></div>
+                    <button onclick="deleteNote('${n.id}')">Apagar</button>
+                </div>
+            `).join('');
+        }
+
+        async function saveNote() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const { data: { user } } = await _supabase.auth.getUser();
+
+            const { error } = await _supabase
+                .from('notes')
+                .insert([{ title, content, user_id: user.id }]);
+
+            if (error) alert(error.message);
+            else {
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                loadNotes();
+            }
+        }
+
+        async function deleteNote(id) {
+            await _supabase.from('notes').delete().eq('id', id);
+            loadNotes();
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        checkUser();
+    </script>
+</body>
+</html>
