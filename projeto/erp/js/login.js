@@ -7,33 +7,6 @@ const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
 // Criação do cliente Supabase
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Controle de modo (login ou cadastro)
-let isLogin = true;
-
-/**
- * Alterna entre modo login e cadastro
- */
-function toggleMode() {
-    isLogin = !isLogin;
-
-    document.getElementById('form-subtitle').innerText =
-        isLogin ? 'Faça login para acessar o ERP' : 'Crie sua conta gratuita';
-
-    document.getElementById('btn-auth').innerText =
-        isLogin ? 'Entrar' : 'Criar Conta';
-
-    document.getElementById('btn-back').style.display =
-        isLogin ? 'none' : 'inline-block';
-
-    document.getElementById('link-toggle').style.display =
-        isLogin ? 'block' : 'none';
-
-    document.getElementById('link-forgot').style.display =
-        isLogin ? 'block' : 'none';
-
-    document.getElementById('email-group').style.display = 'block';
-}
-
 /**
  * Alterna a visibilidade da senha
  */
@@ -46,23 +19,16 @@ function toggleVisibility() {
 }
 
 /**
- * Login ou cadastro
+ * Apenas Login
  */
 async function handleAuth() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    if (isLogin) {
-        const { error } = await _supabase.auth.signInWithPassword({ email, password });
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
 
-        if (error) alert("Erro: " + error.message);
-        else window.location.href = 'index.html';
-    } else {
-        const { error } = await _supabase.auth.signUp({ email, password });
-
-        if (error) alert("Erro: " + error.message);
-        else alert("Cadastro realizado! Verifique seu e-mail.");
-    }
+    if (error) alert("Erro: " + error.message);
+    else window.location.href = 'index.html';
 }
 
 /**
@@ -92,8 +58,6 @@ async function checkRecovery() {
         document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
         document.getElementById('btn-auth').onclick = updatePassword;
         document.getElementById('link-forgot').style.display = 'none';
-        document.getElementById('link-toggle').style.display = 'none';
-        document.getElementById('btn-back').style.display = 'none';
     }
 }
 
