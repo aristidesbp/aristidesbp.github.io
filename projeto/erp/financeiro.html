@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financeiro - ERP ABP</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/conexao.js"></script>
+    <script src="../js/conexao.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/financeiro.css">
+    <link rel="stylesheet" href="../css/financeiro.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 </head>
@@ -15,11 +15,11 @@
     <div class="container">
         <div class="dashboard-cards">
             <div class="card-fin total-receber">
-                <h4>A Receber (Período)</h4>
+                <h4>A Receber</h4>
                 <span id="resumo-receber">R$ 0,00</span>
             </div>
             <div class="card-fin total-pagar">
-                <h4>A Pagar (Período)</h4>
+                <h4>A Pagar</h4>
                 <span id="resumo-pagar">R$ 0,00</span>
             </div>
             <div class="card-fin saldo-atual">
@@ -29,26 +29,26 @@
         </div>
 
         <div class="card">
-            <h3>Novo Lançamento</h3>
+            <h3>Novo Lançamento Financeiro</h3>
             <div class="form-grid">
                 <div>
                     <label>Tipo</label>
-                    <select id="tipo" onchange="toggleRelacionamento()">
+                    <select id="tipo" onchange="toggleEntidade()">
                         <option value="receber">Receita (Entrada)</option>
                         <option value="pagar">Despesa (Saída)</option>
                     </select>
                 </div>
-                <div id="div-cliente">
+                <div id="campo-cliente">
                     <label>Cliente</label>
                     <select id="cliente_id"><option value="">Selecione...</option></select>
                 </div>
-                <div id="div-fornecedor" style="display:none;">
+                <div id="campo-fornecedor" style="display:none;">
                     <label>Fornecedor</label>
                     <select id="fornecedor_id"><option value="">Selecione...</option></select>
                 </div>
                 <div style="grid-column: span 2;">
                     <label>Descrição</label>
-                    <input type="text" id="descricao" placeholder="Ex: Aluguel, Venda de Produto...">
+                    <input type="text" id="descricao" placeholder="Ex: Aluguel mensal">
                 </div>
                 <div>
                     <label>Valor (R$)</label>
@@ -63,11 +63,11 @@
                     <input type="number" id="parcelas" value="1" min="1">
                 </div>
             </div>
-            <button class="btn-add" onclick="handleSaveFinanceiro()">Salvar Lançamento</button>
+            <button class="btn-add" onclick="salvarLancamento()">Lançar no Caixa</button>
         </div>
 
         <div class="card">
-            <h4>Busca e Relatórios</h4>
+            <h3>Busca e Relatórios</h3>
             <div class="form-grid">
                 <div>
                     <label>Data Início</label>
@@ -78,19 +78,23 @@
                     <input type="date" id="filtro_fim">
                 </div>
                 <div>
-                    <label>Descrição ou Nome</label>
-                    <input type="text" id="filtro_busca" placeholder="Procurar...">
+                    <label>Descrição / Nome</label>
+                    <input type="text" id="filtro_busca" placeholder="Digite para buscar...">
                 </div>
-                <div style="display: flex; align-items: flex-end; gap: 5px;">
-                    <button class="btn-add" onclick="loadFinanceiro()" style="margin:0; flex:1;"><i class="fas fa-search"></i> Filtrar</button>
-                    <button onclick="exportarPDF()" style="background:#e74c3c; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer;"><i class="fas fa-file-pdf"></i> PDF</button>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <button class="btn-add" onclick="loadFinanceiro()" style="margin:0; flex:1;">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
+                    <button onclick="exportarPDF()" style="background:#e74c3c; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer;">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div id="bulk-actions" style="display:none; margin-bottom: 10px;">
-            <button onclick="deleteSelected()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer;">
-                <i class="fas fa-trash-alt"></i> Excluir Selecionados (<span id="selected-count">0</span>)
+        <div id="bulk-actions" style="display:none; margin-bottom: 15px;">
+            <button onclick="deleteSelected()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; cursor:pointer; font-weight:bold;">
+                <i class="fas fa-trash"></i> Excluir Selecionados (<span id="selected-count">0</span>)
             </button>
         </div>
 
@@ -98,7 +102,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
+                        <th style="width: 40px;"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
                         <th>Vencimento</th>
                         <th>Descrição</th>
                         <th>Entidade</th>
@@ -107,12 +111,13 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody id="financeiro-list"></tbody>
+                <tbody id="financeiro-list">
+                    </tbody>
             </table>
         </div>
     </div>
 
-    <script src="js/navbar.js"></script>
-    <script src="js/financeiro.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/financeiro.js"></script>
 </body>
 </html>
