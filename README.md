@@ -133,7 +133,17 @@ create trigger on_auth_user_created
 
 ```
 
+# CRIAR APOLICE 
+```
+-- Cria a política que permite ao usuário gerenciar apenas os seus fornecedores
+CREATE POLICY "Acesso total aos próprios fornecedores" 
+ON public.fornecedores 
+FOR ALL 
+USING (auth.uid() = usuario_id);
+```
+
 # POPULAR TABELA CATEGORIA VIA SQL:
+
 ```
 insert into public.categorias (categoria) values
 ('Alimentos'),
