@@ -1,43 +1,32 @@
-// URL do Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+/**
+ * js/bloco_de_notas.js
+ * Depende de: js/conexao.js (que fornece a variável _supabase)
+ */
 
-// Chave pública
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-
-// Criação do cliente Supabase
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Armazena todas as notas carregadas
+// Armazena todas as notas carregadas localmente para busca rápida
 let allNotes = [];
 
 /**
- * Verifica se o usuário está autenticado
- */
-async function checkUser() {
-    const { data: { session } } = await _supabase.auth.getSession();
-
-    if (!session) {
-        window.location.href = '../login.html';
-    }
-
-    loadNotes();
-}
-
-/**
- * Carrega as notas do banco
+ * Carrega as notas do banco (Iniciado automaticamente ao carregar a página)
  */
 async function loadNotes() {
-    const { data: notes } = await _supabase
+    // Busca todas as notas ordenadas pela data de criação
+    const { data: notes, error } = await _supabase
         .from('notes')
         .select('*')
         .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar notas:", error.message);
+        return;
+    }
 
     allNotes = notes || [];
     renderNotes(allNotes);
 }
 
 /**
- * Renderiza as notas na tela
+ * Renderiza as notas na tela (HTML dinâmico)
  */
 function renderNotes(notes) {
     document.getElementById('notes-list').innerHTML =
@@ -64,7 +53,7 @@ function renderNotes(notes) {
 }
 
 /**
- * Salva ou atualiza uma nota
+ * Salva ou atualiza uma nota (CRUD - Create/Update)
  */
 async function saveNote() {
     const id = document.getElementById('note-id').value;
@@ -75,13 +64,16 @@ async function saveNote() {
         return alert("Preencha título e conteúdo!");
     }
 
+    // Obtém o usuário logado através da conexão ativa
     const { data: { user } } = await _supabase.auth.getUser();
 
     if (id) {
+        // Modo Edição (Update)
         await _supabase.from('notes')
             .update({ title, content })
             .eq('id', id);
     } else {
+        // Modo Novo (Insert)
         await _supabase.from('notes')
             .insert([{ title, content, user_id: user.id }]);
     }
@@ -91,7 +83,7 @@ async function saveNote() {
 }
 
 /**
- * Prepara edição da nota
+ * Prepara o formulário para edição (Preenche os campos)
  */
 function prepareEdit(id, title, content) {
     document.getElementById('note-id').value = id;
@@ -103,7 +95,7 @@ function prepareEdit(id, title, content) {
 }
 
 /**
- * Reseta formulário
+ * Reseta o formulário para o estado original
  */
 function resetForm() {
     document.getElementById('note-id').value = '';
@@ -113,7 +105,7 @@ function resetForm() {
 }
 
 /**
- * Exclui uma nota
+ * Exclui uma nota do banco (CRUD - Delete)
  */
 async function deleteNote(id) {
     if (confirm("Deseja excluir esta nota?")) {
@@ -123,7 +115,7 @@ async function deleteNote(id) {
 }
 
 /**
- * Filtra notas pelo texto digitado
+ * Filtra as notas carregadas pelo texto digitado na pesquisa
  */
 function filterNotes() {
     const q = document.getElementById('search').value.toLowerCase();
@@ -137,7 +129,7 @@ function filterNotes() {
 }
 
 /**
- * Exporta todas as notas para PDF
+ * Exporta todas as notas presentes na lista para um arquivo PDF
  */
 async function exportAllToPDF() {
     const { jsPDF } = window.jspdf;
@@ -158,5 +150,8 @@ async function exportAllToPDF() {
     doc.save("minhas-notas.pdf");
 }
 
-// Inicia verificação de usuário
-checkUser();
+/**
+ * Inicializa os dados assim que o documento estiver pronto
+ * A trava de segurança já foi executada no conexao.js
+ */
+document.addEventListener('DOMContentLoaded', loadNotes);
