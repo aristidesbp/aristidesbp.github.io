@@ -37,6 +37,7 @@ async function loadFornecedores() {
     }
 
     const tbody = document.getElementById('fornecedores-list');
+    if (!tbody) return;
 
     tbody.innerHTML = (data || []).map(f => `
         <tr>
@@ -55,10 +56,9 @@ async function loadFornecedores() {
 
 // Salva ou atualiza fornecedor (CRUD - Create/Update)
 async function handleSave() {
-    // Utiliza a sessão ativa da conexão global
     const { data: { user } } = await _supabase.auth.getUser();
-    
-    // CORREÇÃO: Usando document.getElementById para evitar erro de hifen no JS
+    if (!user) return alert("Sessão expirada. Faça login novamente.");
+
     const id = document.getElementById('edit-id').value;
 
     const dados = {
@@ -101,7 +101,6 @@ async function editFull(id) {
 
     if (error || !data) return;
 
-    // Preenche campos automaticamente baseados no ID do HTML
     Object.keys(data).forEach(k => {
         const el = document.getElementById(k);
         if (el) el.value = data[k] || '';
@@ -115,16 +114,18 @@ async function editFull(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Limpa formulário para o estado inicial
+// Limpa formulário
 function resetForm() {
-    document.querySelectorAll('input').forEach(i => i.value = '');
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(i => i.value = '');
+    
     document.getElementById('edit-id').value = '';
     document.getElementById('form-title').innerText = "Novo Cadastro de Fornecedor";
     document.getElementById('btn-save').innerText = "Salvar Fornecedor";
     document.getElementById('btn-cancel').style.display = "none";
 }
 
-// Exclui fornecedor do banco (CRUD - Delete)
+// Exclui fornecedor
 async function deleteForn(id) {
     if (confirm("Excluir este fornecedor definitivamente?")) {
         const { error } = await _supabase.from('fornecedores').delete().eq('id', id);
@@ -133,7 +134,5 @@ async function deleteForn(id) {
     }
 }
 
-/**
- * Inicializa a lista ao carregar o DOM
- */
+// Inicializa
 document.addEventListener('DOMContentLoaded', loadFornecedores);
