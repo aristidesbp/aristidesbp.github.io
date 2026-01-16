@@ -1,20 +1,22 @@
-// Configuração do Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+/**
+ * js/clientes.js
+ * Depende de: js/conexao.js (que fornece a variável _supabase)
+ */
 
 // Busca endereço pelo CEP usando ViaCEP
 async function buscaCEP() {
-    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    const cepInput = document.getElementById('cep');
+    const cep = cepInput.value.replace(/\D/g, '');
+    
     if (cep.length === 8) {
         try {
             const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
             const data = await res.json();
             if (!data.erro) {
-                logradouro.value = data.logradouro;
-                bairro.value = data.bairro;
-                cidade.value = data.localidade;
-                estado.value = data.uf;
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('estado').value = data.uf;
             }
         } catch {
             console.error("Erro ao buscar CEP");
@@ -22,12 +24,17 @@ async function buscaCEP() {
     }
 }
 
-// Carrega clientes do banco
+// Carrega a lista de clientes do banco (CRUD - Read)
 async function loadClients() {
-    const { data } = await _supabase
+    const { data, error } = await _supabase
         .from('clientes')
         .select('*')
         .order('nome_completo');
+
+    if (error) {
+        console.error("Erro ao carregar clientes:", error.message);
+        return;
+    }
 
     const list = document.getElementById('clients-list');
     list.innerHTML = (data || []).map(c => `
@@ -40,72 +47,85 @@ async function loadClients() {
                 <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>
-    `).join('');
+    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum cliente cadastrado.</td></tr>';
 }
 
-// Salva ou atualiza cliente
+// Salva ou atualiza cliente (CRUD - Create/Update)
 async function handleSave() {
+    // Obtém o usuário logado através da conexão ativa
     const { data: { user } } = await _supabase.auth.getUser();
-    const id = edit-id.value;
+    const id = document.getElementById('edit-id').value;
 
     const dados = {
         usuario_id: user.id,
-        nome_completo: nome_completo.value,
-        cpf: cpf.value,
-        data_nascimento: data_nascimento.value || null,
-        email: email.value,
-        telefone: telefone.value,
-        rg: rg.value,
-        cep: cep.value,
-        logradouro: logradouro.value,
-        numero: numero.value,
-        bairro: bairro.value,
-        cidade: cidade.value,
-        estado: estado.value
+        nome_completo: document.getElementById('nome_completo').value,
+        cpf: document.getElementById('cpf').value,
+        data_nascimento: document.getElementById('data_nascimento').value || null,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        rg: document.getElementById('rg').value,
+        cep: document.getElementById('cep').value,
+        logradouro: document.getElementById('logradouro').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        estado: document.getElementById('estado').value
     };
 
     if (!dados.nome_completo) return alert("Nome é obrigatório");
 
-    id
+    const { error } = id
         ? await _supabase.from('clientes').update(dados).eq('id', id)
         : await _supabase.from('clientes').insert([dados]);
 
-    resetForm();
-    loadClients();
+    if (error) {
+        alert("Erro ao salvar: " + error.message);
+    } else {
+        resetForm();
+        loadClients();
+    }
 }
 
-// Preenche formulário para edição
+// Preenche o formulário para edição
 async function editFull(id) {
-    const { data } = await _supabase.from('clientes').select('*').eq('id', id).single();
-    if (!data) return;
+    const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
+    
+    if (error || !data) return;
 
+    // Preenche cada campo automaticamente com base nas chaves do objeto
     Object.keys(data).forEach(k => {
         const el = document.getElementById(k);
         if (el) el.value = data[k] || '';
     });
 
-    edit-id.value = data.id;
-    form-title.innerText = "Editando Cliente";
-    btn-save.innerText = "Atualizar Cadastro";
-    btn-cancel.style.display = "block";
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('form-title').innerText = "Editando Cliente";
+    document.getElementById('btn-save').innerText = "Atualizar Cadastro";
+    document.getElementById('btn-cancel').style.display = "block";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Reseta formulário
+// Reseta o formulário para o estado original
 function resetForm() {
     document.querySelectorAll('input').forEach(i => i.value = '');
-    edit-id.value = '';
-    form-title.innerText = "Novo Cadastro de Cliente";
-    btn-save.innerText = "Salvar Cadastro";
-    btn-cancel.style.display = "none";
+    document.getElementById('edit-id').value = '';
+    document.getElementById('form-title').innerText = "Novo Cadastro de Cliente";
+    document.getElementById('btn-save').innerText = "Salvar Cadastro";
+    document.getElementById('btn-cancel').style.display = "none";
 }
 
-// Remove cliente
+// Remove cliente do banco (CRUD - Delete)
 async function deleteClient(id) {
-    if (confirm("Excluir definitivamente?")) {
-        await _supabase.from('clientes').delete().eq('id', id);
+    if (confirm("Excluir definitivamente este cliente?")) {
+        const { error } = await _supabase.from('clientes').delete().eq('id', id);
+        if (error) alert("Erro ao excluir: " + error.message);
         loadClients();
     }
 }
 
-// Inicialização
-loadClients();
+/**
+ * Inicializa a lista de clientes ao carregar a página
+ * A trava de segurança já foi executada no conexao.js
+ */
+document.addEventListener('DOMContentLoaded', loadClients);
