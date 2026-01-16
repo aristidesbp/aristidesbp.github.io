@@ -48,11 +48,12 @@ function injectMenu() {
 
 <!-- ################# -->
 
-        <a href="${prefix}index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="${prefix}index.html"><i class="fas fa-chart-line"></i> Inicio</a>
         <a href="${prefix}bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
+        <a href="${prefix}financeiro.html"> <i class="fas fa-sticky-note"></i> Financeiro</a>
         <a href="${prefix}clientes.html"><i class="fas fa-users"></i> Clientes</a>
         <a href="${prefix}fornecedores.html"> <i class="fas fa-truck"></i> Fornecedores</a>
-        <a href="${prefix}financeiro.html"> <i class="fas fa-truck"></i> Financeiro</a>
+      
   
 
 <!-- ################# -->
