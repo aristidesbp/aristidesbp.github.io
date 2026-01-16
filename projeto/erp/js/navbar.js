@@ -47,16 +47,16 @@ function injectMenu() {
         <div style="padding: 25px; font-weight: bold; color: var(--primary); font-size: 1.2em;">MENU</div>
 
 <!-- ################# -->
+
         <a href="${prefix}index.html"><i class="fas fa-chart-line"></i> Dashboard</a>
-
         <a href="${prefix}bloco_de_notas.html"><i class="fas fa-sticky-note"></i> Bloco de Notas</a>
-
         <a href="${prefix}clientes.html"><i class="fas fa-users"></i> Clientes</a>
-
         <a href="${prefix}fornecedores.html"> <i class="fas fa-truck"></i> Fornecedores</a>
-    </div>
+        <a href="${prefix}financeiro.html"> <i class="fas fa-truck"></i> Financeiro</a>
+  
 
 <!-- ################# -->
+  </div>
     `;
 
  document.body.insertAdjacentHTML('afterbegin', menuHTML);
