@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Define codificação de caracteres -->
     <meta charset="UTF-8">
+
+    <!-- Responsividade para dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título exibido na aba do navegador -->
     <title>SISTEMA ERP ABP - Dashboard</title>
+
+    <!-- Biblioteca oficial do Supabase (frontend) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Ícones do Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding-top: 80px; }
-        
-        .content { max-width: 1100px; margin: auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: white; padding: 30px; border-radius: 12px; text-decoration: none; color: #334155; text-align: center; border: 1px solid #e2e8f0; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
-        .card:hover { transform: translateY(-5px); border-color: #3ecf8e; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .card i { font-size: 45px; color: #3ecf8e; margin-bottom: 15px; }
-        .card h3 { margin: 10px 0; }
-        .card p { font-size: 0.9em; color: #64748b; }
-    </style>
+
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
+    <!-- Conteúdo central do dashboard -->
     <div class="content">
         <h1>Painel Geral</h1>
         <p>Selecione um módulo para gerenciar seus dados.</p>
-        
+
+        <!-- Grade de cards -->
         <div class="grid">
+
+            <!-- Card: Bloco de Notas -->
             <a href="bloco_de_notas/bloco_de_notas.html" class="card">
                 <i class="fas fa-sticky-note"></i>
                 <h3>Bloco de Notas</h3>
                 <p>Anote e organize suas ideias na nuvem.</p>
             </a>
 
+            <!-- Card: Clientes -->
             <a href="clientes/clientes.html" class="card">
                 <i class="fas fa-users"></i>
                 <h3>Gestão de Clientes</h3>
                 <p>Cadastro e gerenciamento completo de clientes.</p>
             </a>
 
+            <!-- Card: Endereços -->
             <a href="enderecos/enderecos.html" class="card">
                 <i class="fas fa-map-marker-alt"></i>
                 <h3>Endereços</h3>
                 <p>Gerencie localizações e logradouros.</p>
             </a>
+
         </div>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function checkUser() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) window.location.href = 'login.html';
-        }
-        checkUser();
-    </script>
-
-    <script src="menu.js"></script>
+<!-- Script principal do index -->
+<script src="js/index.js"></script>
+<!-- Script do menu (externo) -->
+<script src="js/navbar.js"></script>
 </body>
 </html>

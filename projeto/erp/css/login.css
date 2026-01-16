@@ -1,0 +1,120 @@
+/* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #1e293b;
+    --bg: #0f172a;
+}
+
+/* Estilo base da página */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Card central de login */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título principal */
+h1 {
+    color: var(--dark);
+    margin-bottom: 5px;
+    font-size: 24px;
+}
+
+/* Subtítulo */
+h2 {
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Container dos inputs */
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* Campos de entrada */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Botão para mostrar/ocultar senha */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Botão principal */
+button.main-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover do botão */
+button.main-btn:hover {
+    background-color: #34b27b;
+}
+
+/* Links extras */
+.extra-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* Estilo dos links */
+.link {
+    color: #4a90e2;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Botão de voltar */
+.btn-back {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: none;
+}

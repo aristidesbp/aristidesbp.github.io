@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Configurações básicas do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - ERP ABP</title>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="css/clientes.css">
+</head>
+<body>
+
+    <!-- Container principal -->
+    <div class="container">
+
+        <!-- Card do formulário -->
+        <div class="card">
+            <h3 id="form-title">Novo Cadastro de Cliente</h3>
+
+            <!-- Campo oculto usado para edição -->
+            <input type="hidden" id="edit-id">
+
+            <!-- Seção: Informações pessoais -->
+            <div class="section-title">Informações Pessoais</div>
+            <div class="form-grid">
+                <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
+                <div><label>CPF</label><input type="text" id="cpf"></div>
+                <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+                <div><label>E-mail</label><input type="email" id="email"></div>
+                <div><label>Telefone</label><input type="text" id="telefone"></div>
+                <div><label>RG</label><input type="text" id="rg"></div>
+            </div>
+
+            <!-- Seção: Endereço -->
+            <div class="section-title">Endereço</div>
+            <div class="form-grid">
+                <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+                <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+                <div><label>Número</label><input type="text" id="numero"></div>
+                <div><label>Bairro</label><input type="text" id="bairro"></div>
+                <div><label>Cidade</label><input type="text" id="cidade"></div>
+                <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+            </div>
+
+            <!-- Botões -->
+            <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
+            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        </div>
+
+        <!-- Tabela de clientes -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>CPF / Telefone</th>
+                        <th>Cidade/UF</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="clients-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript principal -->
+    <script src="clientes.js"></script>
+
+    <!-- Menu externo -->
+    <script src="js/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Master - Login e Cadastro PF</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #1e3a8a; --secondary: #3b82f6; --success: #10b981; --danger: #ef4444; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 450px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; }
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 13px; color: #555; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        
+        .senha-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        .btn-olhinho { 
+            position: absolute; 
+            right: 12px; 
+            background: none; 
+            border: none; 
+            color: #888; 
+            cursor: pointer; 
+            font-size: 18px;
+            padding: 5px;
+            z-index: 10;
+        }
+
+        button.principal { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button.principal:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-outline { width: 100%; padding: 12px; background: transparent; color: var(--secondary); border: 2px solid var(--secondary); border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        
+        .esqueci-senha { display: block; text-align: right; margin-top: 8px; font-size: 13px; color: var(--secondary); text-decoration: none; font-weight: 600; }
+        .esqueci-senha:hover { text-decoration: underline; }
+
+        .hidden { display: none; }
+        .row { display: flex; gap: 10px; }
+        .row div { flex: 1; }
+        
+        .secao-titulo { background: #f8fafc; padding: 8px; margin-top: 20px; font-weight: bold; border-left: 4px solid var(--primary); font-size: 14px; }
+        #msg-erro-senha { color: var(--danger); font-size: 12px; font-weight: bold; margin-top: 5px; display: none; }
+        #msg-global { text-align: center; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div id="area-login">
+            <h2>Acessar Conta</h2>
+            <input type="email" id="l-email" placeholder="E-mail">
+            <div class="senha-wrapper" style="margin-top: 10px;">
+                <input type="password" id="l-senha" placeholder="Senha">
+                <button type="button" class="btn-olhinho" onclick="toggleVisibilidade('l-senha', this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+            <a href="https://wa.me/5591900000000?text=Olá, esqueci minha senha de acesso." target="_blank" class="esqueci-senha">Esqueci minha senha</a>
+            
+            <button class="principal" onclick="realizarLogin()">ENTRAR</button>
+            <button class="btn-outline" onclick="toggleCadastro()">CRIAR MINHA CONTA (PF)</button>
+        </div>
+
+        <div id="area-cadastro" class="hidden">
+            <h2>Cadastro Pessoa Física</h2>
+            
+            <div class="secao-titulo">Dados Pessoais</div>
+            <label>Nome Completo</label>
+            <input type="text" id="c-nome">
+
+            <div class="row">
+                <div><label>CPF</label><input type="text" id="c-cpf" placeholder="000.000.000-00"></div>
+                <div><label>RG</label><input type="text" id="c-rg"></div>
+            </div>
+
+            <label>Data de Nascimento</label>
+            <input type="date" id="c-data">
+
+            <div class="secao-titulo">Segurança e Acesso</div>
+            <label>E-mail (Login)</label>
+            <input type="email" id="c-email">
+
+            <label>Senha de Acesso</label>
+            <div class="senha-wrapper">
+                <input type="password" id="c-senha" oninput="validarSenhas()" placeholder="******">
+                <button type="button" class="btn-olhinho" onclick="toggleVisibilidade('c-senha', this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <label>Confirmar Senha</label>
+            <div class="senha-wrapper">
+                <input type="password" id="c-senha-confirma" oninput="validarSenhas()" placeholder="******">
+                <button type="button" class="btn-olhinho" onclick="toggleVisibilidade('c-senha-confirma', this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+            <p id="msg-erro-senha">As senhas não coincidem!</p>
+
+            <label>Telefone / WhatsApp</label>
+            <input type="text" id="c-tel" placeholder="(00) 00000-0000">
+
+            <div class="secao-titulo">Endereço (Para Crediário)</div>
+            <label>CEP</label>
+            <input type="text" id="c-cep" maxlength="8" onblur="buscarCEP()" placeholder="Apenas números">
+            <label>Rua / Logradouro</label>
+            <input type="text" id="c-rua">
+            <div class="row">
+                <div><label>Número</label><input type="text" id="c-num"></div>
+                <div><label>Bairro</label><input type="text" id="c-bairro"></div>
+            </div>
+            <div class="row">
+                <div><label>Cidade</label><input type="text" id="c-cidade"></div>
+                <div><label>UF</label><input type="text" id="c-uf" maxlength="2"></div>
+            </div>
+
+            <button id="btn-salvar" class="principal" onclick="salvarCadastro()" disabled>FINALIZAR CADASTRO</button>
+            <button class="btn-outline" onclick="toggleCadastro()">VOLTAR AO LOGIN</button>
+        </div>
+
+        <p id="msg-global"></p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const supabaseUrl = 'https://jrxntfnaraicsxeppoms.supabase.co';
+    const supabaseKey = 'sb_publishable_JJ1rPCDGhfECEGBkyJWZrQ_U7HNrZCB';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    function toggleCadastro() {
+        document.getElementById('area-login').classList.toggle('hidden');
+        document.getElementById('area-cadastro').classList.toggle('hidden');
+        document.getElementById('msg-global').innerText = "";
+    }
+
+    function toggleVisibilidade(idInput, btn) {
+        const input = document.getElementById(idInput);
+        const icone = btn.querySelector('i');
+        if (input.type === "password") {
+            input.type = "text";
+            icone.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = "password";
+            icone.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    function validarSenhas() {
+        const s1 = document.getElementById('c-senha').value;
+        const s2 = document.getElementById('c-senha-confirma').value;
+        const btn = document.getElementById('btn-salvar');
+        const msgErro = document.getElementById('msg-erro-senha');
+
+        if (s1 === "" || s2 === "") { msgErro.style.display = "none"; btn.disabled = true; return; }
+
+        if (s1 === s2) {
+            msgErro.style.display = "none";
+            btn.disabled = false;
+            btn.style.background = "var(--success)";
+        } else {
+            msgErro.style.display = "block";
+            btn.disabled = true;
+            btn.style.background = "#ccc";
+        }
+    }
+
+    async function buscarCEP() {
+        const cep = document.getElementById('c-cep').value.replace(/\D/g, '');
+        if (cep.length !== 8) return;
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const d = await res.json();
+        if (!d.erro) {
+            document.getElementById('c-rua').value = d.logradouro;
+            document.getElementById('c-bairro').value = d.bairro;
+            document.getElementById('c-cidade').value = d.localidade;
+            document.getElementById('c-uf').value = d.uf;
+        }
+    }
+
+    async function salvarCadastro() {
+        const msg = document.getElementById('msg-global');
+        msg.innerText = "⏳ Gravando dados...";
+        try {
+            const { data: user, error: e1 } = await _supabase.from('usuarios').insert([{ 
+                email: document.getElementById('c-email').value, 
+                senha_hash: document.getElementById('c-senha').value, 
+                tipo: 'PESSOA_FISICA' 
+            }]).select();
+            if (e1) throw e1;
+
+            await _supabase.from('clientes').insert([{
+                id_usuario: user[0].id_usuario,
+                nome_completo: document.getElementById('c-nome').value,
+                cpf: document.getElementById('c-cpf').value,
+                telefone: document.getElementById('c-tel').value,
+                data_nascimento: document.getElementById('c-data').value
+            }]);
+
+            await _supabase.from('enderecos').insert([{
+                id_referencia: user[0].id_usuario,
+                tipo_vinculo: 'CLIENTE',
+                cep: document.getElementById('c-cep').value,
+                logradouro: document.getElementById('c-rua').value,
+                numero: document.getElementById('c-num').value,
+                bairro: document.getElementById('c-bairro').value,
+                cidade: document.getElementById('c-cidade').value,
+                estado: document.getElementById('c-uf').value
+            }]);
+
+            msg.innerText = "✅ Salvo com sucesso! Agora faça login.";
+            msg.style.color = "green";
+            setTimeout(toggleCadastro, 2500);
+        } catch (err) { msg.innerText = "Erro: " + err.message; msg.style.color = "red"; }
+    }
+
+    async function realizarLogin() {
+        const email = document.getElementById('l-email').value;
+        const senha = document.getElementById('l-senha').value;
+        const msg = document.getElementById('msg-global');
+
+        const { data, error } = await _supabase.from('usuarios').select('*').eq('email', email).eq('senha_hash', senha).single();
+        
+        if (data) {
+            sessionStorage.setItem('usuario', JSON.stringify(data));
+            // REDIRECIONANDO PARA INDEX.HTML
+            window.location.href = 'index.html';
+        } else {
+            msg.innerText = "❌ Credenciais inválidas!";
+            msg.style.color = "red";
+        }
+    }
+</script>
+</body>
+</html>
+

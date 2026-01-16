@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Master - Acesso</title>
+    <style>
+        :root { --primary: #1e3a8a; --secondary: #3b82f6; --success: #10b981; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; }
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 13px; color: #555; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        button { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        .btn-outline { background: transparent; color: var(--secondary); border: 2px solid var(--secondary); margin-top: 10px; }
+        .hidden { display: none; }
+        .row { display: flex; gap: 10px; }
+        .row div { flex: 1; }
+        #msg { text-align: center; margin-top: 15px; font-weight: bold; }
+        hr { margin: 25px 0; border: 0; border-top: 1px solid #eee; }
+        .secao-titulo { background: #f8fafc; padding: 5px 10px; border-left: 4px solid var(--primary); margin-top: 20px; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div id="area-login">
+            <h2>Acessar Conta</h2>
+            <input type="email" id="l-email" placeholder="E-mail">
+            <input type="password" id="l-senha" placeholder="Senha">
+            <button onclick="realizarLogin()">ENTRAR</button>
+            <button class="btn-outline" onclick="toggleCadastro()">NÃO TENHO CONTA (CADASTRAR)</button>
+        </div>
+
+        <div id="area-cadastro" class="hidden">
+            <h2>Novo Cadastro</h2>
+            
+            <label>Tipo de Conta</label>
+            <select id="c-tipo" onchange="ajustarFormulario()">
+                <option value="CLIENTE">Comprador (Pessoa Física)</option>
+                <option value="EMPRESA">Empresa (Lojista/Fornecedor)</option>
+            </select>
+
+            <div class="secao-titulo">Dados Básicos</div>
+            <label id="lbl-nome">Nome Completo</label>
+            <input type="text" id="c-nome">
+
+            <div class="row">
+                <div>
+                    <label id="lbl-doc">CPF</label>
+                    <input type="text" id="c-doc">
+                </div>
+                <div>
+                    <label id="lbl-data">Data de Nascimento</label>
+                    <input type="date" id="c-data">
+                </div>
+            </div>
+
+            <div id="campos-empresa" class="hidden">
+                <label>Inscrição Estadual (Opcional)</label>
+                <input type="text" id="c-ie">
+            </div>
+
+            <div class="secao-titulo">Contato e Acesso</div>
+            <label>E-mail (Será seu login)</label>
+            <input type="email" id="c-email">
+            <label>Senha de Acesso</label>
+            <input type="password" id="c-senha">
+            <label>Telefone / WhatsApp</label>
+            <input type="text" id="c-tel" placeholder="(00) 00000-0000">
+
+            <div class="secao-titulo">Endereço Completo</div>
+            <label>CEP</label>
+            <input type="text" id="c-cep" onblur="buscarCEP()" placeholder="00000-000">
+            <label>Rua/Avenida</label>
+            <input type="text" id="c-rua">
+            <div class="row">
+                <div><label>Número</label><input type="text" id="c-num"></div>
+                <div><label>Bairro</label><input type="text" id="c-bairro"></div>
+            </div>
+            <div class="row">
+                <div><label>Cidade</label><input type="text" id="c-cidade"></div>
+                <div><label>UF</label><input type="text" id="c-uf" maxlength="2"></div>
+            </div>
+
+            <div class="secao-titulo">Informações para Crediário</div>
+            <div class="row">
+                <div>
+                    <label>Renda/Faturamento</label>
+                    <input type="number" id="c-renda" placeholder="R$">
+                </div>
+                <div>
+                    <label>RG / Órgão Emissor</label>
+                    <input type="text" id="c-rg">
+                </div>
+            </div>
+            <label>Referência Comercial (Nome/Tel)</label>
+            <input type="text" id="c-ref" placeholder="Ex: Loja X - (00) 0000-0000">
+
+            <button style="background: var(--success);" onclick="salvarCadastro()">FINALIZAR E SALVAR</button>
+            <button class="btn-outline" onclick="toggleCadastro()">VOLTAR PARA LOGIN</button>
+        </div>
+
+        <p id="msg"></p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const supabaseUrl = 'https://jrxntfnaraicsxeppoms.supabase.co';
+    const supabaseKey = 'sb_publishable_JJ1rPCDGhfECEGBkyJWZrQ_U7HNrZCB';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    function toggleCadastro() {
+        document.getElementById('area-login').classList.toggle('hidden');
+        document.getElementById('area-cadastro').classList.toggle('hidden');
+        document.getElementById('msg').innerText = "";
+    }
+
+    function ajustarFormulario() {
+        const tipo = document.getElementById('c-tipo').value;
+        const isEmpresa = tipo === 'EMPRESA';
+        document.getElementById('lbl-nome').innerText = isEmpresa ? 'Razão Social' : 'Nome Completo';
+        document.getElementById('lbl-doc').innerText = isEmpresa ? 'CNPJ' : 'CPF';
+        document.getElementById('lbl-data').innerText = isEmpresa ? 'Início das Atividades' : 'Data de Nascimento';
+        document.getElementById('campos-empresa').classList.toggle('hidden', !isEmpresa);
+    }
+
+    async function buscarCEP() {
+        const cep = document.getElementById('c-cep').value.replace(/\D/g, '');
+        if (cep.length !== 8) return;
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const d = await res.json();
+        if (!d.erro) {
+            document.getElementById('c-rua').value = d.logradouro;
+            document.getElementById('c-bairro').value = d.bairro;
+            document.getElementById('c-cidade').value = d.localidade;
+            document.getElementById('c-uf').value = d.uf;
+        }
+    }
+
+    async function salvarCadastro() {
+        const msg = document.getElementById('msg');
+        msg.innerText = "⏳ Processando...";
+        msg.style.color = "blue";
+
+        const email = document.getElementById('c-email').value;
+        const senha = document.getElementById('c-senha').value;
+        const tipo = document.getElementById('c-tipo').value;
+
+        // 1. Criar Usuário Base
+        const { data: user, error: errU } = await _supabase
+            .from('usuarios')
+            .insert([{ email, senha_hash: senha, tipo }])
+            .select();
+
+        if (errU) { msg.innerText = "Erro: " + errU.message; return; }
+        const idUser = user[0].id_usuario;
+
+        // 2. Criar Perfil (Cliente ou Empresa) + Dados de Crediário
+        if (tipo === 'CLIENTE') {
+            await _supabase.from('clientes').insert([{
+                id_usuario: idUser,
+                nome_completo: document.getElementById('c-nome').value,
+                cpf: document.getElementById('c-doc').value,
+                data_nascimento: document.getElementById('c-data').value,
+                telefone: document.getElementById('c-tel').value
+            }]);
+        } else {
+            await _supabase.from('empresas').insert([{
+                id_usuario: idUser,
+                razao_social: document.getElementById('c-nome').value,
+                nome_fantasia: document.getElementById('c-nome').value,
+                cnpj: document.getElementById('c-doc').value,
+                inscricao_estadual: document.getElementById('c-ie').value,
+                telefone: document.getElementById('c-tel').value
+            }]);
+        }
+
+        // 3. Criar Endereço
+        await _supabase.from('enderecos').insert([{
+            tipo_vinculo: tipo,
+            id_referencia: idUser,
+            cep: document.getElementById('c-cep').value,
+            logradouro: document.getElementById('c-rua').value,
+            numero: document.getElementById('c-num').value,
+            bairro: document.getElementById('c-bairro').value,
+            cidade: document.getElementById('c-cidade').value,
+            estado: document.getElementById('c-uf').value
+        }]);
+
+        msg.innerText = "✅ Cadastro realizado! Agora faça login.";
+        msg.style.color = "green";
+        setTimeout(toggleCadastro, 2000);
+    }
+
+    async function realizarLogin() {
+        // ... (Mesma lógica de login anterior)
+    }
+</script>
+</body>
+</html>
+

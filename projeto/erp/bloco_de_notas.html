@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Codificação de caracteres -->
+    <meta charset="UTF-8">
+
+    <!-- Responsividade -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título da página -->
+    <title>Bloco de Notas - ERP ABP</title>
+
+    <!-- SDK do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Biblioteca para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- CSS específico do módulo -->
+    <link rel="stylesheet" href="css/bloco_de_notas.css">
+</head>
+<body>
+
+    <!-- Container principal do bloco de notas -->
+    <div class="container">
+
+        <!-- Título -->
+        <h2>Minhas Notas</h2>
+
+        <!-- Campo oculto para armazenar o ID da nota em edição -->
+        <input type="hidden" id="note-id">
+
+        <!-- Campo de título -->
+        <input type="text" id="title" placeholder="Título da nota...">
+
+        <!-- Campo de conteúdo -->
+        <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
+
+        <!-- Botão para salvar ou atualizar nota -->
+        <button class="btn-save" id="btn-save" onclick="saveNote()">
+            Salvar Nota
+        </button>
+
+        <!-- Área de busca e exportação -->
+        <div class="search-box">
+            <label>PESQUISAR OU EXPORTAR</label>
+
+            <!-- Campo de busca -->
+            <input
+                type="text"
+                id="search"
+                placeholder="🔍 Digite para buscar..."
+                onkeyup="filterNotes()"
+            >
+
+            <!-- Botão para exportar todas as notas -->
+            <button class="export-btn" onclick="exportAllToPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
+            </button>
+        </div>
+
+        <!-- Lista dinâmica de notas -->
+        <div id="notes-list"></div>
+    </div>
+
+    <!-- Script principal do módulo -->
+    <script src="js/bloco_de_notas.js"></script>
+
+    <!-- Menu/navbar padrão do sistema -->
+    <script src="js/navbar.js"></script>
+</body>
+</html>

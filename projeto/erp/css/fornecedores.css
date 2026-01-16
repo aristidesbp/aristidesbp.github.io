@@ -1,0 +1,147 @@
+/* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
+
+/* Container central */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Card padrão */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* Títulos de seção */
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Grid do formulário */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Botões principais */
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+/* Tabela */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+th {
+    background: #f8fafc;
+    padding: 15px;
+    color: #64748b;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 14px;
+}
+
+/* Botões de ação */
+.btn-edit {
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+}
+
+.btn-del {
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+}

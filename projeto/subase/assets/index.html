@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Master - Sistema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #1e3a8a; --secondary: #3b82f6; --bg: #f0f2f5; --sidebar-w: 260px; --success: #10b981; --danger: #ef4444; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; overflow-x: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { 
+            width: var(--sidebar-w); height: 100vh; background: var(--primary); color: white; 
+            position: fixed; left: -260px; transition: 0.3s; z-index: 1000; 
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { left: 0; }
+
+        .perfil-area { padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .foto-container { 
+            width: 90px; height: 90px; border-radius: 50%; background: #ddd; margin: 0 auto 15px; 
+            border: 3px solid var(--secondary); overflow: hidden; position: relative; cursor: pointer;
+        }
+        .foto-container img { width: 100%; height: 100%; object-fit: cover; }
+        .foto-container i { font-size: 40px; color: #666; line-height: 90px; }
+
+        .nav-links { flex-grow: 1; padding: 20px 0; }
+        .nav-links a { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: white; text-decoration: none; cursor: pointer; }
+        .nav-links a:hover { background: rgba(255,255,255,0.1); }
+
+        /* ÁREA PRINCIPAL */
+        .main-content { flex-grow: 1; transition: 0.3s; padding: 20px; width: 100%; }
+        header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+        .btn-menu { font-size: 24px; background: none; border: none; cursor: pointer; color: var(--primary); }
+
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 600px; margin: auto; text-align: center; }
+        .hidden { display: none; }
+
+        /* FORMULÁRIO (ESTILO LOGIN.HTML) */
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 13px; color: #555; text-align: left; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        .row { display: flex; gap: 10px; }
+        .row div { flex: 1; }
+        .secao-titulo { background: #f8fafc; padding: 8px; margin-top: 20px; font-weight: bold; border-left: 4px solid var(--primary); font-size: 14px; text-align: left; }
+        
+        .btn-principal { width: 100%; padding: 15px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        .btn-deletar { width: 100%; padding: 12px; background: transparent; color: var(--danger); border: 2px solid var(--danger); border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .overlay.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="perfil-area">
+            <div class="foto-container" onclick="abrirEdicaoPerfil(); toggleMenu();">
+                <img id="foto-sidebar" src="" style="display:none;">
+                <i id="foto-placeholder" class="fa-solid fa-user"></i>
+            </div>
+            <div id="email-sidebar" style="font-weight: bold; font-size: 12px; overflow: hidden;">Carregando...</div>
+        </div>
+
+        <div class="nav-links">
+            <a onclick="location.reload()"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="loja.html"><i class="fa-solid fa-cart-shopping"></i> Ver Produtos</a>
+        </div>
+
+        <div style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a onclick="sair()" style="color: #ff4444; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <i class="fa-solid fa-right-from-bracket"></i> SAIR
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <button class="btn-menu" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+            <div style="font-weight: bold; color: var(--primary);">SISTEMA MASTER</div>
+        </header>
+
+        <div class="card">
+            <div id="conteudo-home">
+                <h1>Olá, <span id="boas-vindas"></span>!</h1>
+                <p>O que você deseja fazer hoje?</p>
+                <button onclick="location.href='loja.html'" class="btn-principal" style="background: var(--secondary);">IR PARA A LOJA</button>
+            </div>
+
+            <div id="conteudo-perfil" class="hidden">
+                <h2 style="color: var(--primary);">Meus Dados</h2>
+                
+                <div class="foto-container" style="margin: auto;" onclick="document.getElementById('input-foto').click()">
+                    <img id="foto-form" src="" style="display:none;">
+                    <i id="foto-form-placeholder" class="fa-solid fa-camera"></i>
+                </div>
+                <input type="file" id="input-foto" accept="image/*" style="display:none;" onchange="previewFoto(this)">
+                
+                <div class="secao-titulo">Dados Pessoais</div>
+                <label>Nome Completo</label>
+                <input type="text" id="p-nome">
+
+                <div class="row">
+                    <div><label>CPF</label><input type="text" id="p-cpf"></div>
+                    <div><label>RG</label><input type="text" id="p-rg"></div>
+                </div>
+
+                <label>Data de Nascimento</label>
+                <input type="date" id="p-data">
+
+                <label>Telefone / WhatsApp</label>
+                <input type="text" id="p-tel">
+
+                <div class="secao-titulo">Endereço</div>
+                <label>CEP</label>
+                <input type="text" id="p-cep" maxlength="8" onblur="buscarCEP()">
+                <label>Rua</label>
+                <input type="text" id="p-rua">
+                <div class="row">
+                    <div><label>Número</label><input type="text" id="p-num"></div>
+                    <div><label>Bairro</label><input type="text" id="p-bairro"></div>
+                </div>
+                <div class="row">
+                    <div><label>Cidade</label><input type="text" id="p-cidade"></div>
+                    <div><label>UF</label><input type="text" id="p-uf" maxlength="2"></div>
+                </div>
+
+                <button class="btn-principal" onclick="atualizarDados()">SALVAR ALTERAÇÕES</button>
+                <button class="btn-deletar" onclick="deletarConta()">EXCLUIR MINHA CONTA</button>
+                <button onclick="location.reload()" style="background:none; border:none; color: gray; margin-top: 15px; cursor: pointer;">Cancelar</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://jrxntfnaraicsxeppoms.supabase.co';
+        const supabaseKey = 'sb_publishable_JJ1rPCDGhfECEGBkyJWZrQ_U7HNrZCB';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let dadosUsuario = null;
+        let fotoBase64Global = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const userSession = sessionStorage.getItem('usuario');
+            if (!userSession) { window.location.href = 'login.html'; return; }
+            
+            dadosUsuario = JSON.parse(userSession);
+            document.getElementById('boas-vindas').innerText = dadosUsuario.email.split('@')[0];
+            document.getElementById('email-sidebar').innerText = dadosUsuario.email;
+
+            // Busca a foto inicial do banco (READ do CRUD)
+            const { data } = await _supabase.from('clientes').select('foto_base64').eq('id_usuario', dadosUsuario.id_usuario).single();
+            if (data && data.foto_base64) {
+                fotoBase64Global = data.foto_base64;
+                mostrarFoto(data.foto_base64);
+            }
+        });
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        }
+
+        function mostrarFoto(base64) {
+            const ids = ['foto-sidebar', 'foto-form'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.src = base64; el.style.display = 'block'; }
+            });
+            document.getElementById('foto-placeholder').style.display = 'none';
+            document.getElementById('foto-form-placeholder').style.display = 'none';
+        }
+
+        async function abrirEdicaoPerfil() {
+            document.getElementById('conteudo-home').classList.add('hidden');
+            document.getElementById('conteudo-perfil').classList.remove('hidden');
+
+            // Carrega todos os dados do banco (READ)
+            const { data: c } = await _supabase.from('clientes').select('*').eq('id_usuario', dadosUsuario.id_usuario).single();
+            const { data: e } = await _supabase.from('enderecos').select('*').eq('id_referencia', dadosUsuario.id_usuario).single();
+
+            if (c) {
+                document.getElementById('p-nome').value = c.nome_completo || '';
+                document.getElementById('p-cpf').value = c.cpf || '';
+                document.getElementById('p-rg').value = c.rg || '';
+                document.getElementById('p-tel').value = c.telefone || '';
+                document.getElementById('p-data').value = c.data_nascimento || '';
+            }
+            if (e) {
+                document.getElementById('p-cep').value = e.cep || '';
+                document.getElementById('p-rua').value = e.logradouro || '';
+                document.getElementById('p-num').value = e.numero || '';
+                document.getElementById('p-bairro').value = e.bairro || '';
+                document.getElementById('p-cidade').value = e.cidade || '';
+                document.getElementById('p-uf').value = e.estado || '';
+            }
+        }
+
+        function previewFoto(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                fotoBase64Global = reader.result;
+                mostrarFoto(fotoBase64Global);
+            }
+            if (file) reader.readAsDataURL(file);
+        }
+
+        async function buscarCEP() {
+            const cep = document.getElementById('p-cep').value.replace(/\D/g, '');
+            if (cep.length !== 8) return;
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const d = await res.json();
+            if (!d.erro) {
+                document.getElementById('p-rua').value = d.logradouro;
+                document.getElementById('p-bairro').value = d.bairro;
+                document.getElementById('p-cidade').value = d.localidade;
+                document.getElementById('p-uf').value = d.uf;
+            }
+        }
+
+        // UPDATE do CRUD
+        async function atualizarDados() {
+            try {
+                // Atualiza Tabela Clientes
+                await _supabase.from('clientes').update({
+                    nome_completo: document.getElementById('p-nome').value,
+                    cpf: document.getElementById('p-cpf').value,
+                    rg: document.getElementById('p-rg').value,
+                    telefone: document.getElementById('p-tel').value,
+                    data_nascimento: document.getElementById('p-data').value,
+                    foto_base64: fotoBase64Global
+                }).eq('id_usuario', dadosUsuario.id_usuario);
+
+                // Atualiza Tabela Endereços
+                await _supabase.from('enderecos').update({
+                    cep: document.getElementById('p-cep').value,
+                    logradouro: document.getElementById('p-rua').value,
+                    numero: document.getElementById('p-num').value,
+                    bairro: document.getElementById('p-bairro').value,
+                    cidade: document.getElementById('p-cidade').value,
+                    estado: document.getElementById('p-uf').value
+                }).eq('id_referencia', dadosUsuario.id_usuario);
+
+                alert("✅ Seus dados foram atualizados com sucesso!");
+                location.reload();
+            } catch (err) { alert("Erro ao salvar: " + err.message); }
+        }
+
+        // DELETE do CRUD
+        async function deletarConta() {
+            const confirma = confirm("⚠️ Aristides, você tem certeza que deseja EXCLUIR sua conta permanentemente? Esta ação não pode ser desfeita.");
+            if (confirma) {
+                try {
+                    // O Supabase deleta em cascata se configurado, mas vamos garantir:
+                    await _supabase.from('enderecos').delete().eq('id_referencia', dadosUsuario.id_usuario);
+                    await _supabase.from('clientes').delete().eq('id_usuario', dadosUsuario.id_usuario);
+                    await _supabase.from('usuarios').delete().eq('id_usuario', dadosUsuario.id_usuario);
+
+                    alert("Sua conta foi removida do sistema.");
+                    sair();
+                } catch (err) { alert("Erro ao deletar: " + err.message); }
+            }
+        }
+
+        function sair() { sessionStorage.clear(); window.location.href = 'login.html'; }
+    </script>
+</body>
+</html>
+

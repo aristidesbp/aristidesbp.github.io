@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel da Loja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Minha Loja</h2>
+    <div class="card">
+        <h3>Cadastrar Produto</h3>
+        <input type="text" id="nomeP" placeholder="Nome">
+        <input type="number" id="precoP" placeholder="Preço">
+        <input type="file" id="fotoP" accept="image/*">
+        <button onclick="salvarProduto()">Salvar</button>
+    </div>
+    <div id="meusProdutos"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        async function salvarProduto() {
+            const file = document.getElementById('fotoP').files[0];
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const { error } = await _supabase.from('produtos').insert([{
+                    id_empresa: user.id_usuario,
+                    nome: document.getElementById('nomeP').value,
+                    preco: document.getElementById('precoP').value,
+                    imagem_base64: reader.result
+                }]);
+                if(!error) alert('Produto salvo!');
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
