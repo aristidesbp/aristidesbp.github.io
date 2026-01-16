@@ -1,81 +1,8 @@
-/**
- * js/financeiro.js
- */
-
-async function initFinanceiro() {
-    // Verifica conexão
-    if (typeof _supabase === 'undefined') {
-        console.error("Erro: _supabase não definido.");
-        return;
-    }
-
-    // Datas padrão (Mês atual)
-    const hoje = new Date();
-    const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
-    const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).toISOString().split('T')[0];
-    
-    document.getElementById('filtro_inicio').value = primeiroDia;
-    document.getElementById('filtro_fim').value = ultimoDia;
-
-    await carregarListasEntidades();
-    await loadFinanceiro();
-}
-
-async function carregarListasEntidades() {
-    const { data: clientes } = await _supabase.from('clientes').select('id, nome_completo').order('nome_completo');
-    const { data: forns } = await _supabase.from('fornecedores').select('id, razao_social').order('razao_social');
-
-    const selClie = document.getElementById('cliente_id');
-    const selForn = document.getElementById('fornecedor_id');
-
-    clientes?.forEach(c => selClie.innerHTML += `<option value="${c.id}">${c.nome_completo}</option>`);
-    forns?.forEach(f => selForn.innerHTML += `<option value="${f.id}">${f.razao_social}</option>`);
-}
-
-function toggleEntidade() {
-    const tipo = document.getElementById('tipo').value;
-    document.getElementById('campo-cliente').style.display = tipo === 'receber' ? 'block' : 'none';
-    document.getElementById('campo-fornecedor').style.display = tipo === 'pagar' ? 'block' : 'none';
-}
-
-async function salvarLancamento() {
-    const { data: { user } } = await _supabase.auth.getUser();
-    const parcelas = parseInt(document.getElementById('parcelas').value) || 1;
-    const dataVenc = document.getElementById('data_vencimento').value;
-    const valor = document.getElementById('valor').value;
-
-    if (!dataVenc || !valor) return alert("Preencha data e valor!");
-
-    let registros = [];
-    for (let i = 0; i < parcelas; i++) {
-        let dataRef = new Date(dataVenc + 'T00:00:00');
-        dataRef.setMonth(dataRef.getMonth() + i);
-
-        registros.push({
-            usuario_id: user.id,
-            tipo: document.getElementById('tipo').value,
-            descricao: document.getElementById('descricao').value + (parcelas > 1 ? ` (${i+1}/${parcelas})` : ''),
-            valor: valor,
-            data_vencimento: dataRef.toISOString().split('T')[0],
-            cliente_id: document.getElementById('cliente_id').value || null,
-            fornecedor_id: document.getElementById('fornecedor_id').value || null,
-            status: 'pendente'
-        });
-    }
-
-    const { error } = await _supabase.from('financeiro').insert(registros);
-    if (error) alert("Erro: " + error.message);
-    else {
-        alert("Lançado com sucesso!");
-        loadFinanceiro();
-    }
-}
-
-// FUNÇÃO DO BOTÃO FILTRAR
+// 1. Corrigindo o carregamento e filtros
 async function loadFinanceiro() {
-    const inicio = document.getElementById('filtro_inicio').value;
-    const fim = document.getElementById('filtro_fim').value;
-    const busca = document.getElementById('filtro_busca').value;
+    const inicio = document.getElementById('data_inicio').value;
+    const fim = document.getElementById('data_fim').value;
+    const busca = document.getElementById('busca_termo').value;
 
     let query = _supabase.from('financeiro').select('*, clientes(nome_completo), fornecedores(razao_social)');
 
@@ -85,57 +12,72 @@ async function loadFinanceiro() {
 
     const { data, error } = await query.order('data_vencimento', { ascending: true });
 
-    if (error) return console.error(error);
+    if (error) return alert("Erro ao carregar: " + error.message);
 
-    const tbody = document.getElementById('financeiro-list');
-    tbody.innerHTML = '';
-    let rec = 0, pag = 0;
+    renderTable(data);
+}
+
+// 2. Renderização com checkbox e cores de extrato
+function renderTable(data) {
+    const list = document.getElementById('financeiro-list');
+    list.innerHTML = '';
+    let saldoAcumulado = 0;
 
     data.forEach(item => {
-        const v = parseFloat(item.valor);
-        item.tipo === 'receber' ? rec += v : pag += v;
-        const entidade = item.clientes?.nome_completo || item.fornecedores?.razao_social || 'Geral';
+        const valor = parseFloat(item.valor);
+        const ehEntrada = item.tipo === 'receber';
+        saldoAcumulado += ehEntrada ? valor : -valor;
 
-        tbody.innerHTML += `
-            <tr>
+        list.innerHTML += `
+            <tr class="${item.status}">
+                <td><input type="checkbox" class="row-select" value="${item.id}" onclick="updateSelectedCount()"></td>
                 <td>${item.data_vencimento.split('-').reverse().join('/')}</td>
                 <td>${item.descricao}</td>
-                <td>${entidade}</td>
-                <td style="color: ${item.tipo === 'receber' ? '#2ecc71' : '#e74c3c'}">
-                    R$ ${v.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                <td>${item.clientes?.nome_completo || item.fornecedores?.razao_social || '-'}</td>
+                <td style="color: ${ehEntrada ? '#2ecc71' : '#e74c3c'}">
+                    ${ehEntrada ? '+' : '-'} R$ ${valor.toLocaleString('pt-BR')}
                 </td>
-                <td>${item.status}</td>
+                <td><span class="badge ${item.status}">${item.status}</span></td>
                 <td>
-                    <button onclick="darBaixa('${item.id}')">Pagar</button>
-                    <button onclick="excluir('${item.id}')" style="color:red">X</button>
+                    <button onclick="editarItem('${item.id}')"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteSingle('${item.id}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
         `;
     });
-
-    document.getElementById('resumo-receber').innerText = `R$ ${rec.toLocaleString('pt-BR')}`;
-    document.getElementById('resumo-pagar').innerText = `R$ ${pag.toLocaleString('pt-BR')}`;
-    document.getElementById('resumo-saldo').innerText = `R$ ${(rec - pag).toLocaleString('pt-BR')}`;
 }
 
-async function darBaixa(id) {
-    await _supabase.from('financeiro').update({ status: 'pago' }).eq('id', id);
-    loadFinanceiro();
-}
+// 3. Exclusão em Massa
+async function deleteSelected() {
+    const ids = Array.from(document.querySelectorAll('.row-select:checked')).map(cb => cb.value);
+    if (ids.length === 0 || !confirm(`Deseja excluir ${ids.length} lançamentos?`)) return;
 
-async function excluir(id) {
-    if (confirm("Excluir registro?")) {
-        await _supabase.from('financeiro').delete().eq('id', id);
+    const { error } = await _supabase.from('financeiro').delete().in('id', ids);
+    if (!error) {
+        alert("Excluído com sucesso!");
         loadFinanceiro();
     }
 }
 
+// 4. Exportação PDF Modelo Extrato
 function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("Extrato Financeiro", 14, 15);
-    doc.autoTable({ html: 'table', startY: 20 });
-    doc.save("financeiro.pdf");
-}
+    
+    doc.text("EXTRATO FINANCEIRO - ERP ABP", 14, 15);
+    
+    const rows = [];
+    document.querySelectorAll("#financeiro-list tr").forEach(tr => {
+        const cols = tr.querySelectorAll("td");
+        rows.push([cols[1].innerText, cols[2].innerText, cols[3].innerText, cols[4].innerText, cols[5].innerText]);
+    });
 
-document.addEventListener('DOMContentLoaded', initFinanceiro);
+    doc.autoTable({
+        head: [['Data', 'Descrição', 'Entidade', 'Valor', 'Status']],
+        body: rows,
+        startY: 20,
+        theme: 'striped'
+    });
+
+    doc.save(`extrato_${new Date().getTime()}.pdf`);
+}
