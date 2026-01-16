@@ -1194,6 +1194,16 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
+### EXEMPLOS DE CÓDIGO 
+baixar atualizações do repositório do github
+``` git pull origin main ```
+
+após fazer as alterações utilize os seguintes comandos para subir. 
+``` git status ```
+``` git add .  ```
+``` git commit -m "mensagem" ```
+``` git push origin main ```
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥
