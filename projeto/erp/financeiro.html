@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/conexao.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/financeiro.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-cards">
+            <div class="card-fin total-receber">
+                <h4><i class="fas fa-arrow-up"></i> A Receber</h4>
+                <span id="resumo-receber">R$ 0,00</span>
+            </div>
+            <div class="card-fin total-pagar">
+                <h4><i class="fas fa-arrow-down"></i> A Pagar</h4>
+                <span id="resumo-pagar">R$ 0,00</span>
+            </div>
+            <div class="card-fin saldo-atual">
+                <h4><i class="fas fa-wallet"></i> Saldo Previsto</h4>
+                <span id="resumo-saldo">R$ 0,00</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Lançamento Financeiro</h3>
+            <div class="form-grid">
+                <div>
+                    <label>Tipo</label>
+                    <select id="tipo" onchange="toggleRelacionamento()">
+                        <option value="receber">Receita (A Receber)</option>
+                        <option value="pagar">Despesa (A Pagar)</option>
+                    </select>
+                </div>
+                <div id="div-cliente">
+                    <label>Cliente</label>
+                    <select id="cliente_id"><option value="">Selecione...</option></select>
+                </div>
+                <div id="div-fornecedor" style="display:none;">
+                    <label>Fornecedor</label>
+                    <select id="fornecedor_id"><option value="">Selecione...</option></select>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label>Descrição</label>
+                    <input type="text" id="descricao" placeholder="Ex: Mensalidade Jan/26">
+                </div>
+                <div>
+                    <label>Valor (R$)</label>
+                    <input type="number" id="valor" step="0.01">
+                </div>
+                <div>
+                    <label>Vencimento</label>
+                    <input type="date" id="data_vencimento">
+                </div>
+                <div>
+                    <label>Repetir (Meses)</label>
+                    <input type="number" id="parcelas" value="1" min="1">
+                </div>
+            </div>
+            <button class="btn-add" onclick="handleSaveFinanceiro()">Lançar no Caixa</button>
+        </div>
+
+        <div class="filters">
+            <input type="month" id="filtro-mes" onchange="loadFinanceiro()">
+            <select id="filtro-tipo" onchange="loadFinanceiro()">
+                <option value="todos">Todos</option>
+                <option value="receber">Entradas</option>
+                <option value="pagar">Saídas</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Vencimento</th>
+                        <th>Descrição</th>
+                        <th>Entidade</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="financeiro-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/financeiro.js"></script>
+</body>
+</html>
