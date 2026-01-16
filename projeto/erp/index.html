@@ -1,47 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Define codificação de caracteres -->
     <meta charset="UTF-8">
 
-    <!-- Responsividade para dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Título exibido na aba do navegador -->
     <title>SISTEMA ERP ABP - Inicio</title>
 
-    <!-- Biblioteca oficial do Supabase (frontend) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Ícones do Font Awesome -->
+    <script src="js/conexao.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- CSS externo -->
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
-    <!-- Conteúdo central do dashboard -->
     <div class="content">
         
-        <!-- Grade de cards -->
         <div class="grid">
 
-            <!-- Card: Bloco de Notas -->
             <a href="bloco_de_notas.html" class="card">
                 <i class="fas fa-sticky-note"></i>
                 <h3>Bloco de Notas</h3>
                 <p>Anote e organize suas ideias na nuvem.</p>
             </a>
 
-            <!-- Card: Clientes -->
             <a href="clientes.html" class="card">
                 <i class="fas fa-users"></i>
                 <h3>Gestão de Clientes</h3>
                 <p>Cadastro e gerenciamento completo de clientes.</p>
             </a>
 
-            <!-- Card: Fornecedores -->
             <a href="fornecedores.html" class="card">
                 <i class="fas fa-users"></i>
                 <h3>fornecedores</h3>
@@ -49,14 +40,12 @@
             </a>
 
         </div>
-
-        
         
     </div>
 
-<!-- Script principal do index -->
-<script src="js/index.js"></script>
-<!-- Script do menu (externo) -->
 <script src="js/navbar.js"></script>
+
+<script src="js/index.js"></script>
+
 </body>
 </html>
