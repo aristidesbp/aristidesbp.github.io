@@ -184,3 +184,12 @@ async function fecharCaixa() {
 document.addEventListener('DOMContentLoaded', initPDV);
 // Atalho F2 para finalizar
 document.addEventListener('keydown', (e) => { if(e.key === 'F2') finalizarVenda(); });
+
+// Função para quando o usuário clica no (X) ou em Cancelar
+function desistirAbertura() {
+    // Se o usuário não quer abrir o caixa, mandamos ele de volta para o Dashboard
+    window.location.href = 'index.html';
+}
+
+// DICA: No seu initPDV(), certifique-se de que o modal só aparece 
+// se o usuário realmente estiver na página do PDV e o caixa estiver fechado.
