@@ -100,8 +100,964 @@ Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para cri
 [cole aqui o schema fica em: menu lateral/ Database/ no canto superior direi opção Copy as SQL]
 ```
 
+# CRIAR TABELAS PROJETO ERP
+```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.clientes (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  usuario_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  rg text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT clientes_pkey PRIMARY KEY (id),
+  CONSTRAINT clientes_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.fornecedores (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  usuario_id uuid,
+  razao_social text NOT NULL,
+  nome_fantasia text,
+  cnpj text,
+  inscricao_estadual text,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  CONSTRAINT fornecedores_pkey PRIMARY KEY (id),
+  CONSTRAINT fornecedores_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.notes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT notes_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.usuarios (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id uuid NOT NULL UNIQUE,
+  email text NOT NULL UNIQUE,
+  nivel_acesso text DEFAULT 'cliente'::text CHECK (nivel_acesso = ANY (ARRAY['master'::text, 'funcionario'::text, 'cliente'::text, 'fornecedor'::text])),
+  status text DEFAULT 'ativo'::text CHECK (status = ANY (ARRAY['ativo'::text, 'inativo'::text])),
+  CONSTRAINT usuarios_pkey PRIMARY KEY (id),
+  CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+```
+# INDEX
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SISTEMA ERP ABP - Inicio</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/conexao.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+    <div class="content">
+        
+        <div class="grid">
+
+            <a href="bloco_de_notas.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Bloco de Notas</h3>
+                <p>Anote e organize suas ideias na nuvem.</p>
+            </a>
+
+            <a href="clientes.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>Gestão de Clientes</h3>
+                <p>Cadastro e gerenciamento completo de clientes.</p>
+            </a>
+
+            <a href="fornecedores.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>fornecedores</h3>
+                <p>Gerencie dados e contatos dos fornecedores</p>
+            </a>
 
 
+            <a href="financeiro.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Financeiro</h3>
+                <p>Contas a pagar/receber/relatorios</p>
+            </a>
+            
+
+        </div>
+        
+    </div>
+
+<script src="js/navbar.js"></script>
+
+<script src="js/index.js"></script>
+
+</body>
+</html>
+```
+# LOGIN
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Codificação de caracteres -->
+    <meta charset="UTF-8">
+
+    <!-- Responsividade para dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título da aba -->
+    <title>Login - SISTEMA ERP ABP</title>
+
+    <!-- SDK do Supabase (frontend) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- CSS específico da tela de login -->
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <!-- Card central de autenticação -->
+    <div class="login-card">
+
+        <!-- Botão de retorno (usado em recuperação/cadastro) -->
+        <button id="btn-back" class="btn-back" onclick="toggleMode()">
+            ← Voltar para o Login
+        </button>
+
+        <!-- Título principal -->
+        <h1>SISTEMA ERP ABP</h1>
+
+        <!-- Subtítulo dinâmico -->
+        <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
+
+        <!-- Campo de e-mail -->
+        <div class="input-container" id="email-group">
+            <input type="email" id="email" placeholder="Seu e-mail">
+        </div>
+
+        <!-- Campo de senha -->
+        <div class="input-container" id="pass-group">
+            <input type="password" id="password" placeholder="Sua senha">
+
+            <!-- Botão para alternar visibilidade da senha -->
+            <button type="button" class="toggle-password" onclick="toggleVisibility()">
+                👁️
+            </button>
+        </div>
+
+        <!-- Botão principal (login / cadastro / salvar senha) -->
+        <button class="main-btn" id="btn-auth" onclick="handleAuth()">
+            Entrar
+        </button>
+
+        <!-- Links auxiliares -->
+        <div class="extra-links">
+            <span id="link-forgot" class="link" onclick="forgotPassword()">
+                Esqueci minha senha
+            </span>
+
+    <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
+    <h3>CONTATO: +55 91 99242-0981</h3>
+            
+        </div>
+    </div>
+
+    
+    
+    <!-- Script principal do login -->
+    <script src="js/login.js"></script>
+
+</body>
+</html>
+
+```
+# BLOCO_DE_NOTAS
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bloco de Notas - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- CONEXAO -->
+    <script>
+// Configurações do Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+   </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/bloco_de_notas.css">
+    <style>
+/* Variáveis globais */
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilo base da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    padding-top: 90px;
+}
+
+/* Container do bloco de notas */
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* Inputs e textarea */
+textarea,
+input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Botão de salvar/atualizar */
+.btn-save {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    filter: brightness(1.1);
+}
+
+/* Nota individual */
+.note {
+    border-bottom: 1px solid #f1f1f1;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Conteúdo da nota */
+.note-content strong {
+    color: #1e293b;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.note-content p {
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+/* Ações da nota */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+}
+
+/* Área de busca e exportação */
+.search-box {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+/* Botão de exportação */
+.export-btn {
+    width: 100%;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h2>Minhas Notas</h2>
+
+        <input type="hidden" id="note-id">
+
+        <input type="text" id="title" placeholder="Título da nota...">
+
+        <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
+
+        <button class="btn-save" id="btn-save" onclick="saveNote()">
+            Salvar Nota
+        </button>
+
+        <div class="search-box">
+            <label>PESQUISAR OU EXPORTAR</label>
+
+            <input
+                type="text"
+                id="search"
+                placeholder="🔍 Digite para buscar..."
+                onkeyup="filterNotes()"
+            >
+
+            <button class="export-btn" onclick="exportAllToPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
+            </button>
+        </div>
+
+        <div id="notes-list"></div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+
+    <script>
+/**
+ * js/bloco_de_notas.js
+ * Depende de: js/conexao.js (que fornece a variável _supabase)
+ */
+
+// Armazena todas as notas carregadas localmente para busca rápida
+let allNotes = [];
+
+/**
+ * Carrega as notas do banco (Iniciado automaticamente ao carregar a página)
+ */
+async function loadNotes() {
+    // Busca todas as notas ordenadas pela data de criação
+    const { data: notes, error } = await _supabase
+        .from('notes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar notas:", error.message);
+        return;
+    }
+
+    allNotes = notes || [];
+    renderNotes(allNotes);
+}
+
+/**
+ * Renderiza as notas na tela (HTML dinâmico)
+ */
+function renderNotes(notes) {
+    document.getElementById('notes-list').innerHTML =
+        notes.map(n => `
+            <div class="note">
+                <div class="note-content">
+                    <strong>${n.title}</strong>
+                    <p>${n.content}</p>
+                </div>
+                <div class="actions">
+                    <button style="background:#f1c40f"
+                        onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button style="background:#e74c3c"
+                        onclick="deleteNote('${n.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('') ||
+        '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
+}
+
+/**
+ * Salva ou atualiza uma nota (CRUD - Create/Update)
+ */
+async function saveNote() {
+    const id = document.getElementById('note-id').value;
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    if (!title || !content) {
+        return alert("Preencha título e conteúdo!");
+    }
+
+    // Obtém o usuário logado através da conexão ativa
+    const { data: { user } } = await _supabase.auth.getUser();
+
+    if (id) {
+        // Modo Edição (Update)
+        await _supabase.from('notes')
+            .update({ title, content })
+            .eq('id', id);
+    } else {
+        // Modo Novo (Insert)
+        await _supabase.from('notes')
+            .insert([{ title, content, user_id: user.id }]);
+    }
+
+    resetForm();
+    loadNotes();
+}
+
+/**
+ * Prepara o formulário para edição (Preenche os campos)
+ */
+function prepareEdit(id, title, content) {
+    document.getElementById('note-id').value = id;
+    document.getElementById('title').value = title;
+    document.getElementById('content').value = content;
+    document.getElementById('btn-save').innerText = "Atualizar Nota";
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Reseta o formulário para o estado original
+ */
+function resetForm() {
+    document.getElementById('note-id').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('content').value = '';
+    document.getElementById('btn-save').innerText = "Salvar Nota";
+}
+
+/**
+ * Exclui uma nota do banco (CRUD - Delete)
+ */
+async function deleteNote(id) {
+    if (confirm("Deseja excluir esta nota?")) {
+        await _supabase.from('notes').delete().eq('id', id);
+        loadNotes();
+    }
+}
+
+/**
+ * Filtra as notas carregadas pelo texto digitado na pesquisa
+ */
+function filterNotes() {
+    const q = document.getElementById('search').value.toLowerCase();
+
+    const filtered = allNotes.filter(n =>
+        n.title.toLowerCase().includes(q) ||
+        n.content.toLowerCase().includes(q)
+    );
+
+    renderNotes(filtered);
+}
+
+/**
+ * Exporta todas as notas presentes na lista para um arquivo PDF
+ */
+async function exportAllToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("Meu Bloco de Notas - ERP ABP", 10, 10);
+
+    let y = 20;
+
+    allNotes.forEach((n, i) => {
+        doc.setFont(undefined, 'bold');
+        doc.text(`${i + 1}. ${n.title}`, 10, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(n.content, 10, y + 7);
+        y += 25;
+    });
+
+    doc.save("minhas-notas.pdf");
+}
+
+/**
+ * Inicializa os dados assim que o documento estiver pronto
+ * A trava de segurança já foi executada no conexao.js
+ */
+document.addEventListener('DOMContentLoaded', loadNotes);
+
+
+
+</script>
+
+</body>
+</html>
+
+```
+
+
+
+# CLIENTES/FORNECEDORES
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- CONEXAO/VERIFICARLOG -->
+    <script>
+    // Configurações do Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+/* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
+
+/* Container central */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Card padrão */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* Títulos de seção */
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Grid do formulário */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Foco do input */
+input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 5px rgba(62, 207, 142, 0.2);
+}
+
+/* Botão salvar */
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Botão cancelar */
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+/* Tabela */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+th {
+    background: #f8fafc;
+    padding: 15px;
+    color: #64748b;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Botões da tabela */
+.btn-edit {
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+}
+
+.btn-del {
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="card">
+            <h3 id="form-title">Novo Cadastro de Cliente</h3>
+
+            <input type="hidden" id="edit-id">
+
+            <div class="section-title">Informações Pessoais</div>
+            <div class="form-grid">
+                <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
+                <div><label>CPF</label><input type="text" id="cpf"></div>
+                <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+                <div><label>E-mail</label><input type="email" id="email"></div>
+                <div><label>Telefone</label><input type="text" id="telefone"></div>
+                <div><label>RG</label><input type="text" id="rg"></div>
+            </div>
+
+            <div class="section-title">Endereço</div>
+            <div class="form-grid">
+                <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+                <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+                <div><label>Número</label><input type="text" id="numero"></div>
+                <div><label>Bairro</label><input type="text" id="bairro"></div>
+                <div><label>Cidade</label><input type="text" id="cidade"></div>
+                <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+            </div>
+
+            <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
+            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>CPF / Telefone</th>
+                        <th>Cidade/UF</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="clients-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+
+    <script>
+    /**
+ * js/clientes.js
+ * Depende de: js/conexao.js (que fornece a variável _supabase)
+ */
+
+// Busca endereço pelo CEP usando ViaCEP
+async function buscaCEP() {
+    const cepInput = document.getElementById('cep');
+    const cep = cepInput.value.replace(/\D/g, '');
+    
+    if (cep.length === 8) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('estado').value = data.uf;
+            }
+        } catch {
+            console.error("Erro ao buscar CEP");
+        }
+    }
+}
+
+// Carrega a lista de clientes do banco (CRUD - Read)
+async function loadClients() {
+    const { data, error } = await _supabase
+        .from('clientes')
+        .select('*')
+        .order('nome_completo');
+
+    if (error) {
+        console.error("Erro ao carregar clientes:", error.message);
+        return;
+    }
+
+    const list = document.getElementById('clients-list');
+    list.innerHTML = (data || []).map(c => `
+        <tr>
+            <td><b>${c.nome_completo}</b><br><small>${c.email || ''}</small></td>
+            <td>${c.cpf || '-'}<br><small>${c.telefone || ''}</small></td>
+            <td>${c.cidade || '-'}/${c.estado || ''}</td>
+            <td>
+                <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum cliente cadastrado.</td></tr>';
+}
+
+// Salva ou atualiza cliente (CRUD - Create/Update)
+async function handleSave() {
+    // Obtém o usuário logado através da conexão ativa
+    const { data: { user } } = await _supabase.auth.getUser();
+    const id = document.getElementById('edit-id').value;
+
+    const dados = {
+        usuario_id: user.id,
+        nome_completo: document.getElementById('nome_completo').value,
+        cpf: document.getElementById('cpf').value,
+        data_nascimento: document.getElementById('data_nascimento').value || null,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        rg: document.getElementById('rg').value,
+        cep: document.getElementById('cep').value,
+        logradouro: document.getElementById('logradouro').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        estado: document.getElementById('estado').value
+    };
+
+    if (!dados.nome_completo) return alert("Nome é obrigatório");
+
+    const { error } = id
+        ? await _supabase.from('clientes').update(dados).eq('id', id)
+        : await _supabase.from('clientes').insert([dados]);
+
+    if (error) {
+        alert("Erro ao salvar: " + error.message);
+    } else {
+        resetForm();
+        loadClients();
+    }
+}
+
+// Preenche o formulário para edição
+async function editFull(id) {
+    const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
+    
+    if (error || !data) return;
+
+    // Preenche cada campo automaticamente com base nas chaves do objeto
+    Object.keys(data).forEach(k => {
+        const el = document.getElementById(k);
+        if (el) el.value = data[k] || '';
+    });
+
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('form-title').innerText = "Editando Cliente";
+    document.getElementById('btn-save').innerText = "Atualizar Cadastro";
+    document.getElementById('btn-cancel').style.display = "block";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Reseta o formulário para o estado original
+function resetForm() {
+    document.querySelectorAll('input').forEach(i => i.value = '');
+    document.getElementById('edit-id').value = '';
+    document.getElementById('form-title').innerText = "Novo Cadastro de Cliente";
+    document.getElementById('btn-save').innerText = "Salvar Cadastro";
+    document.getElementById('btn-cancel').style.display = "none";
+}
+
+// Remove cliente do banco (CRUD - Delete)
+async function deleteClient(id) {
+    if (confirm("Excluir definitivamente este cliente?")) {
+        const { error } = await _supabase.from('clientes').delete().eq('id', id);
+        if (error) alert("Erro ao excluir: " + error.message);
+        loadClients();
+    }
+}
+
+/**
+ * Inicializa a lista de clientes ao carregar a página
+ * A trava de segurança já foi executada no conexao.js
+ */
+document.addEventListener('DOMContentLoaded', loadClients);
+    </script>
+
+</body>
+</html>
+
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
