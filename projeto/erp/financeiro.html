@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+    const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function validarAcesso() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (!session) { window.location.href = 'login.html'; }
+        return session;
+    }
+    validarAcesso();
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        /* Dashboard financeiro */
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { padding: 20px; border-radius: 10px; color: white; text-align: center; }
+        .bg-entrada { background: #10b981; }
+        .bg-saida { background: #f43f5e; }
+        .bg-saldo { background: #3b82f6; }
+
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .badge-entrada { background: #dcfce7; color: #166534; }
+        .badge-saida { background: #fee2e2; color: #991b1b; }
+        
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-logout-nav { background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP - FINANCEIRO</div>
+    <div>
+        <a href="index.html" style="text-decoration: none; color: #64748b; font-weight: bold; margin-right: 15px;"><i class="fas fa-home"></i> Voltar</a>
+        <button class="btn-logout-nav" onclick="sairDaConta()">Sair</button>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div class="dash-grid">
+        <div class="stat-card bg-entrada">
+            <small>Total Entradas</small>
+            <h2 id="total-entradas">R$ 0,00</h2>
+        </div>
+        <div class="stat-card bg-saida">
+            <small>Total Saídas</small>
+            <h2 id="total-saidas">R$ 0,00</h2>
+        </div>
+        <div class="stat-card bg-saldo">
+            <small>Saldo em Caixa</small>
+            <h2 id="total-saldo">R$ 0,00</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 id="form-title">Nova Movimentação</h3>
+        <input type="hidden" id="edit-id">
+        <div class="form-grid">
+            <div>
+                <label>Tipo</label>
+                <select id="tipo">
+                    <option value="entrada">Receita (Entrada)</option>
+                    <option value="saida">Despesa (Saída)</option>
+                </select>
+            </div>
+            <div style="grid-column: span 2;"><label>Descrição da Conta *</label><input type="text" id="descricao" placeholder="Ex: Aluguel, Venda de Produto..."></div>
+            <div><label>Valor (R$) *</label><input type="number" id="valor" step="0.01"></div>
+            <div><label>Vencimento</label><input type="date" id="vencimento"></div>
+            <div>
+                <label>Entidade Relacionada</label>
+                <select id="entidade_id">
+                    <option value="">Selecione um Cliente/Fornecedor</option>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="pendente">Pendente</option>
+                    <option value="pago">Confirmado/Pago</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Lançar no Caixa</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Data/Venc.</th>
+                    <th>Descrição / Entidade</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="finance-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+let financeData = [];
+
+async function loadEntidadesParaSelect() {
+    const { data } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo');
+    const select = document.getElementById('entidade_id');
+    data.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id;
+        opt.textContent = e.nome_completo;
+        select.appendChild(opt);
+    });
+}
+
+async function loadFinance() {
+    const { data, error } = await _supabase.from('financeiro').select('*, entidades(nome_completo)').order('vencimento', { ascending: false });
+    if (error) return console.error(error);
+    financeData = data || [];
+    renderTable();
+    atualizarDashboard();
+}
+
+function atualizarDashboard() {
+    let entradas = 0; let saidas = 0;
+    financeData.forEach(item => {
+        if(item.tipo === 'entrada') entradas += parseFloat(item.valor);
+        else saidas += parseFloat(item.valor);
+    });
+    document.getElementById('total-entradas').innerText = entradas.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    document.getElementById('total-saidas').innerText = saidas.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    document.getElementById('total-saldo').innerText = (entradas - saidas).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+}
+
+function renderTable() {
+    const list = document.getElementById('finance-list');
+    list.innerHTML = financeData.map(f => `
+        <tr>
+            <td>${new Date(f.vencimento).toLocaleDateString('pt-br')}</td>
+            <td><b>${f.descricao}</b><br><small>${f.entidades?.nome_completo || 'Avulso'}</small></td>
+            <td><span class="badge badge-${f.tipo}">${f.tipo}</span></td>
+            <td style="color: ${f.tipo === 'saida' ? 'red' : 'green'}"><b>R$ ${parseFloat(f.valor).toFixed(2)}</b></td>
+            <td><small>${f.status.toUpperCase()}</small></td>
+            <td>
+                <button onclick="deleteFinance('${f.id}')" style="border:none; background:none; color:red; cursor:pointer"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function handleSave() {
+    const dados = {
+        descricao: document.getElementById('descricao').value,
+        valor: document.getElementById('valor').value,
+        tipo: document.getElementById('tipo').value,
+        vencimento: document.getElementById('vencimento').value,
+        status: document.getElementById('status').value,
+        entidade_id: document.getElementById('entidade_id').value || null
+    };
+
+    if(!dados.descricao || !dados.valor) return alert("Preencha descrição e valor!");
+
+    const { error } = await _supabase.from('financeiro').insert([dados]);
+    if (error) alert("Erro: " + error.message);
+    else { 
+        location.reload(); 
+    }
+}
+
+async function deleteFinance(id) {
+    if(confirm("Excluir este lançamento?")) {
+        await _supabase.from('financeiro').delete().eq('id', id);
+        loadFinance();
+    }
+}
+
+async function sairDaConta() {
+    await _supabase.auth.signOut();
+    window.location.href = 'login.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadEntidadesParaSelect();
+    loadFinance();
+});
+</script>
+</body>
+</html>
