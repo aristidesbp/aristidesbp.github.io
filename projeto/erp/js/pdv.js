@@ -121,3 +121,21 @@ async function finalizarVenda() {
 }
 
 document.addEventListener('DOMContentLoaded', initPDV);
+
+
+// Função para alterar a quantidade diretamente no carrinho
+function alterarQtd(index, novaQtd) {
+    const qtd = parseInt(novaQtd);
+    if (qtd > 0) {
+        carrinho[index].qtd = qtd;
+    } else {
+        carrinho[index].qtd = 1; // Evita quantidade zero
+    }
+    renderCarrinho();
+}
+
+// Função para remover um item específico
+function removerDoCarrinho(index) {
+    carrinho.splice(index, 1);
+    renderCarrinho();
+}
