@@ -6,6 +6,9 @@
     <title>Clientes - ERP ABP</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
 <script>
     const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
@@ -126,8 +129,10 @@ table { width: 100%; border-collapse: collapse; min-width: 800px; }
 th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
 td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
-.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; }
-.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+/* Botões de Ação */
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; }
 
 /* NAVBAR FIXA */
 .navbar {
@@ -140,6 +145,21 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 .btn-logout-nav {
     background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
     font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+}
+
+/* Botão Exportar */
+.btn-export {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
 }
     </style>
 </head>
@@ -164,7 +184,7 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
             <div><label>CPF</label><input type="text" id="cpf"></div>
             <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
             <div><label>E-mail</label><input type="email" id="email"></div>
-            <div><label>Telefone</label><input type="text" id="telefone"></div>
+            <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone" placeholder="Ex: 5511999999999"></div>
             <div><label>Senha de Acesso</label><input type="password" id="senha_acesso"></div>
             
             <div>
@@ -208,7 +228,7 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
         <div class="section-title">Complementos</div>
         <div class="form-grid">
-            <div style="grid-column: span 2;"><label>URL de Arquivos (Fotos/Documentos)</label><input type="text" id="arquivos_url"></div>
+            <div style="grid-column: span 2;"><label>URL de Arquivos</label><input type="text" id="arquivos_url"></div>
             <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
         </div>
 
@@ -219,14 +239,18 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
     <div class="card" style="margin-bottom: 10px; padding: 15px;">
         <label><i class="fas fa-search"></i> BUSCAR REGISTRO</label>
         <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
+        
+        <button class="btn-export" onclick="exportarPDF()">
+            <i class="fas fa-file-pdf"></i> Exportar Listagem para PDF
+        </button>
     </div>
 
     <div class="table-container">
-        <table>
+        <table id="tabela-clientes">
             <thead>
                 <tr>
                     <th>Nome / Relacionamento</th>
-                    <th>CPF / Contato</th>
+                    <th>Telefone de Contato</th>
                     <th>Acesso / Status</th>
                     <th>Ações</th>
                 </tr>
@@ -237,6 +261,7 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 </div>
 
 <script>
+// Funções de Navegação
 async function sairDaConta() {
     if(confirm("Deseja sair?")) {
         await _supabase.auth.signOut();
@@ -244,6 +269,7 @@ async function sairDaConta() {
     }
 }
 
+// Busca CEP
 async function buscaCEP() {
     const cep = document.getElementById('cep').value.replace(/\D/g, '');
     if (cep.length === 8) {
@@ -260,24 +286,31 @@ async function buscaCEP() {
     }
 }
 
+// Carregar Dados
 async function loadClients() {
     const { data, error } = await _supabase.from('clientes').select('*').order('nome_completo');
     if (error) return;
 
     const list = document.getElementById('clients-list');
-    list.innerHTML = (data || []).map(c => `
+    list.innerHTML = (data || []).map(c => {
+        // Verifica se o telefone é link ou número para o WhatsApp
+        const wppLink = c.telefone && c.telefone.includes('http') ? c.telefone : `https://wa.me/${c.telefone ? c.telefone.replace(/\D/g, '') : ''}`;
+        
+        return `
         <tr>
             <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
-            <td>${c.cpf || '-'}<br><small>${c.email || ''}</small></td>
+            <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
             <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
             <td>
-                <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+                <button class="btn-edit" title="Editar" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" title="Excluir" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+                <a href="${wppLink}" target="_blank" class="btn-wpp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             </td>
         </tr>
-    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
+    `}).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
 }
 
+// Filtro em tempo real
 function filtrarTabela() {
     const filtro = document.getElementById("inputBusca").value.toLowerCase();
     const linhas = document.getElementById("clients-list").getElementsByTagName("tr");
@@ -290,6 +323,40 @@ function filtrarTabela() {
     }
 }
 
+// Exportar PDF do que está visível
+function exportarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    doc.text("Relatório de Clientes e Entidades - ERP ABP", 14, 15);
+    
+    // Pega apenas as linhas que não estão com display: none (estão filtradas)
+    const rows = [];
+    const tableRows = document.querySelectorAll("#clients-list tr");
+    
+    tableRows.forEach(tr => {
+        if (tr.style.display !== "none") {
+            const cells = tr.querySelectorAll("td");
+            if(cells.length > 0) {
+                rows.push([
+                    cells[0].innerText.replace('\n', ' - '), 
+                    cells[1].innerText.replace('\n', ' - '), 
+                    cells[2].innerText.replace('\n', ' - ')
+                ]);
+            }
+        }
+    });
+
+    doc.autoTable({
+        head: [['Nome / Relac.', 'Contato', 'Acesso / Status']],
+        body: rows,
+        startY: 20
+    });
+
+    doc.save("listagem_erp_abp.pdf");
+}
+
+// Salvar/Atualizar
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
@@ -321,6 +388,7 @@ async function handleSave() {
     else { resetForm(); loadClients(); }
 }
 
+// Edição
 async function editFull(id) {
     const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
     if (error || !data) return;
@@ -347,6 +415,7 @@ function resetForm() {
     document.getElementById('btn-cancel').style.display = "none";
 }
 
+// Excluir
 async function deleteClient(id) {
     if (confirm("Excluir definitivamente?")) {
         await _supabase.from('clientes').delete().eq('id', id);
