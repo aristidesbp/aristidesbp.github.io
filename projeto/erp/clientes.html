@@ -7,27 +7,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // Configurações do Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+    const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-async function validarAcesso() {
-    const { data: { session } } = await _supabase.auth.getSession();
-    if (!session) {
-        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
-        window.location.href = pathPrefix + 'login.html';
+    async function validarAcesso() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (!session) {
+            const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+            window.location.href = pathPrefix + 'login.html';
+        }
+        return session;
     }
-    return session;
-}
-validarAcesso();
+    validarAcesso();
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-/* Variáveis globais de cores */
 :root {
     --primary: #3ecf8e;
     --dark: #0f172a;
@@ -138,10 +135,11 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
     padding: 15px 25px; display: flex; justify-content: space-between;
     align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
 }
-.btn-nav {
+.nav-buttons { display: flex; gap: 15px; align-items: center; }
+.btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+.btn-logout-nav {
     background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
     font-weight: bold; font-size: 14px; border: none; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
 }
     </style>
 </head>
@@ -150,92 +148,97 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 <div class="navbar">
     <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
     <div class="nav-buttons">
-        <a href="index.html" style="text-decoration: none; color: #64748b; margin-right: 20px; font-weight: bold;">Voltar</a>
-        <button class="btn-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        <a href="index.html" class="btn-nav-back"><i class="fas fa-home"></i> Voltar</a>
+        <button class="btn-logout-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
     </div>
 </div>
 
-    <div class="container">
-        <div class="card">
-            <h3 id="form-title">Novo Cadastro de Usuário / Entidade</h3>
-            <input type="hidden" id="edit-id">
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Cadastro de Usuário / Entidade</h3>
+        <input type="hidden" id="edit-id">
 
-            <div class="section-title">Informações Pessoais e Acesso</div>
-            <div class="form-grid">
-                <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
-                <div><label>CPF</label><input type="text" id="cpf"></div>
-                <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
-                <div><label>E-mail</label><input type="email" id="email"></div>
-                <div><label>Telefone</label><input type="text" id="telefone"></div>
-                <div><label>Senha de Acesso</label><input type="password" id="senha_acesso" placeholder="Senha interna"></div>
-                
-                <div>
-                    <label>Nível de Acesso</label>
-                    <select id="acesso">
-                        <option value="cliente">Cliente</option>
-                        <option value="funcionario">Funcionário</option>
-                        <option value="comprador">Comprador</option>
-                        <option value="master">Master</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Relacionamento</label>
-                    <select id="relacionamento">
-                        <option value="cliente">Cliente</option>
-                        <option value="funcionario">Funcionário</option>
-                        <option value="fornecedor">Fornecedor</option>
-                        <option value="terceirizado">Terceirizado</option>
-                        <option value="outros">Outros</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Status</label>
-                    <select id="status">
-                        <option value="ativo">Ativo</option>
-                        <option value="desativado">Desativado</option>
-                    </select>
-                </div>
-                <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+        <div class="section-title">Informações Pessoais e Acesso</div>
+        <div class="form-grid">
+            <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
+            <div><label>CPF</label><input type="text" id="cpf"></div>
+            <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+            <div><label>E-mail</label><input type="email" id="email"></div>
+            <div><label>Telefone</label><input type="text" id="telefone"></div>
+            <div><label>Senha de Acesso</label><input type="password" id="senha_acesso"></div>
+            
+            <div>
+                <label>Nível de Acesso</label>
+                <select id="acesso">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="comprador">Comprador</option>
+                    <option value="master">Master</option>
+                </select>
             </div>
-
-            <div class="section-title">Endereço</div>
-            <div class="form-grid">
-                <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
-                <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
-                <div><label>Número</label><input type="text" id="numero"></div>
-                <div><label>Bairro</label><input type="text" id="bairro"></div>
-                <div><label>Cidade</label><input type="text" id="cidade"></div>
-                <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+            <div>
+                <label>Relacionamento</label>
+                <select id="relacionamento">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="terceirizado">Terceirizado</option>
+                    <option value="outros">Outros</option>
+                </select>
             </div>
-
-            <div class="section-title">Complementos</div>
-            <div class="form-grid">
-                <div style="grid-column: span 2;"><label>URL de Arquivos (Fotos/Documentos)</label><input type="text" id="arquivos_url" placeholder="Link da foto ou documento"></div>
-                <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="ativo">Ativo</option>
+                    <option value="desativado">Desativado</option>
+                </select>
             </div>
-
-            <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
-            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
         </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome / Relacionamento</th>
-                        <th>CPF / Contato</th>
-                        <th>Acesso / Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="clients-list"></tbody>
-            </table>
+        <div class="section-title">Endereço</div>
+        <div class="form-grid">
+            <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+            <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+            <div><label>Número</label><input type="text" id="numero"></div>
+            <div><label>Bairro</label><input type="text" id="bairro"></div>
+            <div><label>Cidade</label><input type="text" id="cidade"></div>
+            <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
         </div>
+
+        <div class="section-title">Complementos</div>
+        <div class="form-grid">
+            <div style="grid-column: span 2;"><label>URL de Arquivos (Fotos/Documentos)</label><input type="text" id="arquivos_url"></div>
+            <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+        </div>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
     </div>
 
-    <script>
+    <div class="card" style="margin-bottom: 10px; padding: 15px;">
+        <label><i class="fas fa-search"></i> BUSCAR REGISTRO</label>
+        <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome / Relacionamento</th>
+                    <th>CPF / Contato</th>
+                    <th>Acesso / Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="clients-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
 async function sairDaConta() {
-    if(confirm("Deseja realmente sair?")) {
+    if(confirm("Deseja sair?")) {
         await _supabase.auth.signOut();
         window.location.href = 'login.html';
     }
@@ -275,10 +278,21 @@ async function loadClients() {
     `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
 }
 
+function filtrarTabela() {
+    const filtro = document.getElementById("inputBusca").value.toLowerCase();
+    const linhas = document.getElementById("clients-list").getElementsByTagName("tr");
+    for (let i = 0; i < linhas.length; i++) {
+        const colunaNome = linhas[i].getElementsByTagName("td")[0];
+        if (colunaNome) {
+            const txt = colunaNome.textContent || colunaNome.innerText;
+            linhas[i].style.display = txt.toLowerCase().includes(filtro) ? "" : "none";
+        }
+    }
+}
+
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
-
     const dados = {
         usuario_id: user.id,
         nome_completo: document.getElementById('nome_completo').value,
@@ -298,16 +312,11 @@ async function handleSave() {
         bairro: document.getElementById('bairro').value,
         cidade: document.getElementById('cidade').value,
         estado: document.getElementById('estado').value,
-        // Converte string para array caso tenha algo escrito, ou envia array vazio
         arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
     };
 
     if (!dados.nome_completo) return alert("Nome é obrigatório");
-
-    const { error } = id
-        ? await _supabase.from('clientes').update(dados).eq('id', id)
-        : await _supabase.from('clientes').insert([dados]);
-
+    const { error } = id ? await _supabase.from('clientes').update(dados).eq('id', id) : await _supabase.from('clientes').insert([dados]);
     if (error) alert("Erro: " + error.message);
     else { resetForm(); loadClients(); }
 }
@@ -315,15 +324,10 @@ async function handleSave() {
 async function editFull(id) {
     const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
     if (error || !data) return;
-
     Object.keys(data).forEach(k => {
         const el = document.getElementById(k);
-        if (el) {
-            if (k === 'arquivos_url') el.value = data[k] ? data[k][0] : '';
-            else el.value = data[k] || '';
-        }
+        if (el) el.value = (k === 'arquivos_url' && data[k]) ? data[k][0] : (data[k] || '');
     });
-
     document.getElementById('edit-id').value = data.id;
     document.getElementById('form-title').innerText = "Editando Registro";
     document.getElementById('btn-save').innerText = "Atualizar Cadastro";
@@ -351,6 +355,6 @@ async function deleteClient(id) {
 }
 
 document.addEventListener('DOMContentLoaded', loadClients);
-    </script>
+</script>
 </body>
 </html>
