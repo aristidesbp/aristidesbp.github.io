@@ -51,6 +51,16 @@
         .tipo-pagar { color: #ef4444; }
         .tipo-receber { color: #3ecf8e; }
         .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
+
+        /* Estilos Novos: Saldo e Filtros */
+        .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .resumo-card { padding: 15px; border-radius: 10px; color: white; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .resumo-entradas { background: #10b981; }
+        .resumo-saidas { background: #ef4444; }
+        .resumo-saldo { background: #3b82f6; }
+        .resumo-card span { display: block; font-size: 11px; text-transform: uppercase; opacity: 0.9; margin-bottom: 5px; }
+        .resumo-card b { font-size: 20px; }
+        .filtros-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; align-items: end; }
     </style>
 </head>
 <body>
@@ -114,8 +124,35 @@
     </div>
 
     <div class="card">
-        <label><i class="fas fa-filter"></i> FILTRAR LANÇAMENTOS</label>
-        <input type="text" id="inputBusca" placeholder="Buscar por descrição ou entidade..." onkeyup="filtrarTabela()">
+        <div class="filtros-grid">
+            <div>
+                <label><i class="fas fa-search"></i> BUSCA GERAL</label>
+                <input type="text" id="inputBusca" placeholder="Descrição ou categoria..." onkeyup="filtrarTabela()">
+            </div>
+            <div>
+                <label>DATA INICIAL</label>
+                <input type="date" id="dataInicio" onchange="filtrarTabela()">
+            </div>
+            <div>
+                <label>DATA FINAL</label>
+                <input type="date" id="dataFim" onchange="filtrarTabela()">
+            </div>
+        </div>
+    </div>
+
+    <div class="resumo-financeiro">
+        <div class="resumo-card resumo-entradas">
+            <span>Total Entradas (+)</span>
+            <b id="total-receber">R$ 0,00</b>
+        </div>
+        <div class="resumo-card resumo-saidas">
+            <span>Total Saídas (-)</span>
+            <b id="total-pagar">R$ 0,00</b>
+        </div>
+        <div class="resumo-card resumo-saldo">
+            <span>Saldo Líquido</span>
+            <b id="total-saldo">R$ 0,00</b>
+        </div>
     </div>
 
     <div class="table-container">
@@ -123,7 +160,8 @@
             <thead>
                 <tr>
                     <th>Tipo/Descrição</th>
-                    <th>Entidade</th>
+                    <th>Categoria</th>
+                    <th>Forma Pagto</th>
                     <th>Vencimento</th>
                     <th>Valor</th>
                     <th>Status</th>
@@ -145,7 +183,6 @@ async function sairDaConta() {
     }
 }
 
-// Carrega as entidades para o Select do formulário
 async function loadEntidadesSelect() {
     const { data } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo');
     const select = document.getElementById('entidade_id');
@@ -160,38 +197,69 @@ async function loadEntidadesSelect() {
 }
 
 async function loadFinanceiro() {
-    // Busca financeiro trazendo o nome da entidade relacionada (Join)
     const { data, error } = await _supabase
         .from('financeiro')
         .select('*, entidades(nome_completo)')
         .order('data_vencimento', { ascending: true });
     
-    if (error) {
-        console.error(error);
-        return;
-    }
+    if (error) return console.error(error);
     currentFinanceData = data || [];
     renderTable(currentFinanceData);
 }
 
 function renderTable(data) {
     const list = document.getElementById('financeiro-list');
-    list.innerHTML = data.map(f => `
+    let somaPagar = 0;
+    let somaReceber = 0;
+
+    list.innerHTML = data.map(f => {
+        const valorNum = parseFloat(f.valor) || 0;
+        if(f.tipo === 'pagar') somaPagar += valorNum;
+        else somaReceber += valorNum;
+
+        return `
         <tr>
             <td>
                 <b class="tipo-${f.tipo}">${f.tipo === 'pagar' ? '[-] ' : '[+] '} ${f.tipo.toUpperCase()}</b><br>
                 <span>${f.descricao}</span>
             </td>
-            <td>${f.entidades ? f.entidades.nome_completo : '<small>Não informado</small>'}</td>
+            <td>${f.categoria || '<small>Sem cat.</small>'}</td>
+            <td>${f.forma_pagamento || '-'}</td>
             <td>${new Date(f.data_vencimento).toLocaleDateString('pt-BR')}</td>
-            <td><b>R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b></td>
+            <td><b>R$ ${valorNum.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b></td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
             <td>
                 <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
                 <button class="btn-action" style="color:#ef4444" onclick="deleteFinance('${f.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>
-    `).join('') || '<tr><td colspan="6" style="text-align:center">Nenhum registro encontrado.</td></tr>';
+    `}).join('') || '<tr><td colspan="7" style="text-align:center">Nenhum registro encontrado.</td></tr>';
+
+    // Atualiza o Saldo em cima da listagem
+    document.getElementById('total-receber').innerText = `R$ ${somaReceber.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    document.getElementById('total-pagar').innerText = `R$ ${somaPagar.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    document.getElementById('total-saldo').innerText = `R$ ${(somaReceber - somaPagar).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+}
+
+function filtrarTabela() {
+    const busca = document.getElementById('inputBusca').value.toLowerCase();
+    const dInicio = document.getElementById('dataInicio').value;
+    const dFim = document.getElementById('dataFim').value;
+
+    const filtrados = currentFinanceData.filter(f => {
+        // Filtro de texto (Descrição ou Categoria)
+        const matchTexto = f.descricao.toLowerCase().includes(busca) || 
+                           (f.categoria && f.categoria.toLowerCase().includes(busca));
+        
+        // Filtro de Datas
+        let matchData = true;
+        if(dInicio) matchData = matchData && (f.data_vencimento >= dInicio);
+        if(dFim) matchData = matchData && (f.data_vencimento <= dFim);
+
+        return matchTexto && matchData;
+    });
+
+    renderTable(filtrados);
 }
 
 async function handleSave() {
@@ -213,7 +281,7 @@ async function handleSave() {
     };
 
     if (!dados.descricao || !dados.valor || !dados.data_vencimento) {
-        return alert("Preencha os campos obrigatórios (Descrição, Valor e Vencimento)");
+        return alert("Campos obrigatórios: Descrição, Valor e Vencimento");
     }
 
     const { error } = id 
@@ -261,15 +329,6 @@ async function deleteFinance(id) {
         await _supabase.from('financeiro').delete().eq('id', id);
         loadFinanceiro();
     }
-}
-
-function filtrarTabela() {
-    const busca = document.getElementById('inputBusca').value.toLowerCase();
-    const filtrados = currentFinanceData.filter(f => 
-        f.descricao.toLowerCase().includes(busca) || 
-        (f.entidades && f.entidades.nome_completo.toLowerCase().includes(busca))
-    );
-    renderTable(filtrados);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
