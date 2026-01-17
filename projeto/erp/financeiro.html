@@ -3,109 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro - SISTEMA ERP ABP</title>
-    
+    <title>Gestão Financeira - ERP ABP</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script src="js/conexao.js"></script>
-    <script src="js/navbar.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+    const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function validarAcesso() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+        return session;
+    }
+    validarAcesso();
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/financeiro.css">
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .status-pago { background: #dcfce7; color: #166534; }
+        .status-pendente { background: #fef9c3; color: #854d0e; }
+        .tipo-pagar { color: #ef4444; }
+        .tipo-receber { color: #3ecf8e; }
+        .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
+    </style>
 </head>
 <body>
 
-    <div id="navbar-container"></div>
+<div class="navbar">
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP - FINANCEIRO</div>
+    <div class="nav-buttons">
+        <a href="index.html" class="btn-nav-back"><i class="fas fa-home"></i> Início</a>
+        <button onclick="sairDaConta()" style="background:#ef4444; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Sair</button>
+    </div>
+</div>
 
-    <div class="content">
-        <div class="container-financeiro">
-            <h2>Lançamento Financeiro</h2>
-            
-            <form id="form-financeiro" class="financeiro-grid">
-                <div class="input-group">
-                    <label>Tipo</label>
-                    <select id="tipo" required>
-                        <option value="pagar">Despesa (A Pagar)</option>
-                        <option value="receber">Receita (A Receber)</option>
-                    </select>
-                </div>
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Lançamento Financeiro</h3>
+        <input type="hidden" id="edit-id">
 
-                <div class="input-group">
-                    <label>Entidade (Cliente/Fornecedor)</label>
-                    <select id="entidade_id" required>
-                        <option value="">Carregando entidades...</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>Descrição</label>
-                    <input type="text" id="descricao" placeholder="Ex: Aluguel" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Valor (R$)</label>
-                    <input type="number" id="valor" step="0.01" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Vencimento</label>
-                    <input type="date" id="data_vencimento" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Repetir (Meses)</label>
-                    <input type="number" id="repetir_meses" value="1" min="1">
-                </div>
-
-                <button type="submit" class="btn-lancar">Lançar no Caixa</button>
-            </form>
-
-            <hr>
-
-            <div class="cards-resumo">
-                <div class="card entrada">
-                    <span>A RECEBER</span>
-                    <h3 id="total-receber">R$ 0,00</h3>
-                </div>
-                <div class="card saida">
-                    <span>A PAGAR</span>
-                    <h3 id="total-pagar">R$ 0,00</h3>
-                </div>
-                <div class="card saldo">
-                    <span>SALDO DO PERÍODO</span>
-                    <h3 id="total-saldo">R$ 0,00</h3>
-                </div>
+        <div class="section-title">Dados da Transação</div>
+        <div class="form-grid">
+            <div>
+                <label>Tipo *</label>
+                <select id="tipo">
+                    <option value="pagar">Conta a Pagar (Saída)</option>
+                    <option value="receber">Conta a Receber (Entrada)</option>
+                </select>
             </div>
-
-            <div class="busca-relatorio">
-                <h3>Busca e Relatórios</h3>
-                <div class="filtros">
-                    <input type="date" id="filtro-inicio">
-                    <input type="date" id="filtro-fim">
-                    <input type="text" id="busca-nome" placeholder="Digite para buscar...">
-                    <button id="btn-filtrar" class="btn-acao"><i class="fas fa-search"></i> Filtrar</button>
-                    <button id="btn-pdf" class="btn-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
-                </div>
-            </div>
-
-            <table class="tabela-financeiro">
-                <thead>
-                    <tr>
-                        <th>STATUS</th>
-                        <th>VENCIMENTO</th>
-                        <th>DESCRIÇÃO</th>
-                        <th>ENTIDADE</th>
-                        <th>VALOR</th>
-                        <th>AÇÕES</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-corpo">
-                    </tbody>
-            </table>
+            <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao" placeholder="Ex: Aluguel, Venda de Produto..."></div>
+            <div><label>Valor (R$) *</label><input type="number" id="valor" step="0.01"></div>
         </div>
+
+        <div class="section-title">Datas e Status</div>
+        <div class="form-grid">
+            <div><label>Vencimento</label><input type="date" id="data_vencimento"></div>
+            <div><label>Pagamento</label><input type="date" id="data_pagamento"></div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="pendente">Pendente</option>
+                    <option value="pago">Pago / Recebido</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">Relacionamentos e Categoria</div>
+        <div class="form-grid">
+            <div>
+                <label>Entidade (Cliente/Fornecedor)</label>
+                <select id="entidade_id">
+                    <option value="">Selecione uma entidade...</option>
+                </select>
+            </div>
+            <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Operacional, Marketing..."></div>
+            <div><label>Forma de Pagamento</label><input type="text" id="forma_pagamento" placeholder="Ex: Pix, Boleto, Cartão..."></div>
+        </div>
+
+        <div class="section-title">Observações</div>
+        <textarea id="observacoes" rows="2"></textarea>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
     </div>
 
-    <script src="js/financeiro.js"></script>
+    <div class="card">
+        <label><i class="fas fa-filter"></i> FILTRAR LANÇAMENTOS</label>
+        <input type="text" id="inputBusca" placeholder="Buscar por descrição ou entidade..." onkeyup="filtrarTabela()">
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo/Descrição</th>
+                    <th>Entidade</th>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="financeiro-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+let currentFinanceData = [];
+
+async function sairDaConta() {
+    if(confirm("Deseja sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+
+// Carrega as entidades para o Select do formulário
+async function loadEntidadesSelect() {
+    const { data } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo');
+    const select = document.getElementById('entidade_id');
+    if(data) {
+        data.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.id;
+            opt.textContent = e.nome_completo;
+            select.appendChild(opt);
+        });
+    }
+}
+
+async function loadFinanceiro() {
+    // Busca financeiro trazendo o nome da entidade relacionada (Join)
+    const { data, error } = await _supabase
+        .from('financeiro')
+        .select('*, entidades(nome_completo)')
+        .order('data_vencimento', { ascending: true });
+    
+    if (error) {
+        console.error(error);
+        return;
+    }
+    currentFinanceData = data || [];
+    renderTable(currentFinanceData);
+}
+
+function renderTable(data) {
+    const list = document.getElementById('financeiro-list');
+    list.innerHTML = data.map(f => `
+        <tr>
+            <td>
+                <b class="tipo-${f.tipo}">${f.tipo === 'pagar' ? '[-] ' : '[+] '} ${f.tipo.toUpperCase()}</b><br>
+                <span>${f.descricao}</span>
+            </td>
+            <td>${f.entidades ? f.entidades.nome_completo : '<small>Não informado</small>'}</td>
+            <td>${new Date(f.data_vencimento).toLocaleDateString('pt-BR')}</td>
+            <td><b>R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b></td>
+            <td><span class="status-badge status-${f.status}">${f.status}</span></td>
+            <td>
+                <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-action" style="color:#ef4444" onclick="deleteFinance('${f.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center">Nenhum registro encontrado.</td></tr>';
+}
+
+async function handleSave() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    const id = document.getElementById('edit-id').value;
+    
+    const dados = {
+        usuario_id: user.id,
+        tipo: document.getElementById('tipo').value,
+        descricao: document.getElementById('descricao').value,
+        valor: parseFloat(document.getElementById('valor').value) || 0,
+        data_vencimento: document.getElementById('data_vencimento').value,
+        data_pagamento: document.getElementById('data_pagamento').value || null,
+        status: document.getElementById('status').value,
+        entidade_id: document.getElementById('entidade_id').value || null,
+        categoria: document.getElementById('categoria').value,
+        forma_pagamento: document.getElementById('forma_pagamento').value,
+        observacoes: document.getElementById('observacoes').value
+    };
+
+    if (!dados.descricao || !dados.valor || !dados.data_vencimento) {
+        return alert("Preencha os campos obrigatórios (Descrição, Valor e Vencimento)");
+    }
+
+    const { error } = id 
+        ? await _supabase.from('financeiro').update(dados).eq('id', id) 
+        : await _supabase.from('financeiro').insert([dados]);
+
+    if (error) alert("Erro: " + error.message); 
+    else { resetForm(); loadFinanceiro(); }
+}
+
+async function editFinance(id) {
+    const item = currentFinanceData.find(f => f.id === id);
+    if (!item) return;
+
+    document.getElementById('edit-id').value = item.id;
+    document.getElementById('tipo').value = item.tipo;
+    document.getElementById('descricao').value = item.descricao;
+    document.getElementById('valor').value = item.valor;
+    document.getElementById('data_vencimento').value = item.data_vencimento;
+    document.getElementById('data_pagamento').value = item.data_pagamento || '';
+    document.getElementById('status').value = item.status;
+    document.getElementById('entidade_id').value = item.entidade_id || '';
+    document.getElementById('categoria').value = item.categoria || '';
+    document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
+    document.getElementById('observacoes').value = item.observacoes || '';
+
+    document.getElementById('form-title').innerText = "Editando Lançamento";
+    document.getElementById('btn-save').innerText = "Atualizar Lançamento";
+    document.getElementById('btn-cancel').style.display = "block";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetForm() {
+    document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
+    document.getElementById('tipo').value = 'pagar';
+    document.getElementById('status').value = 'pendente';
+    document.getElementById('edit-id').value = '';
+    document.getElementById('form-title').innerText = "Novo Lançamento Financeiro";
+    document.getElementById('btn-save').innerText = "Salvar Lançamento";
+    document.getElementById('btn-cancel').style.display = "none";
+}
+
+async function deleteFinance(id) {
+    if (confirm("Excluir este lançamento?")) {
+        await _supabase.from('financeiro').delete().eq('id', id);
+        loadFinanceiro();
+    }
+}
+
+function filtrarTabela() {
+    const busca = document.getElementById('inputBusca').value.toLowerCase();
+    const filtrados = currentFinanceData.filter(f => 
+        f.descricao.toLowerCase().includes(busca) || 
+        (f.entidades && f.entidades.nome_completo.toLowerCase().includes(busca))
+    );
+    renderTable(filtrados);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadEntidadesSelect();
+    loadFinanceiro();
+});
+</script>
 </body>
 </html>
