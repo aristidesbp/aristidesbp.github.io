@@ -3,117 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro - ERP ABP</title>
+    <title>Gestão Financeira - ERP ABP</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <script>
-        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function validarAcesso() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) window.location.href = 'login.html';
-            return session;
+    async function validarAcesso() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
         }
-        validarAcesso();
+        return session;
+    }
+    validarAcesso();
     </script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; --blue: #3b82f6; }
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
         .container { max-width: 1100px; margin: auto; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        
-        /* Dashboard de Saldo */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { padding: 20px; border-radius: 12px; color: white; display: flex; flex-direction: column; }
-        .stat-card.entradas { background: var(--primary); }
-        .stat-card.saidas { background: var(--danger); }
-        .stat-card.saldo { background: var(--dark); }
-        .stat-value { font-size: 22px; font-weight: bold; margin-top: 5px; }
-        .stat-label { font-size: 12px; opacity: 0.9; text-transform: uppercase; }
-
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 15px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-        label { display: block; margin-bottom: 5px; font-size: 12px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
-        .btn-add { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 8px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-        
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
         .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { background: #f8fafc; padding: 12px; color: #64748b; font-size: 11px; text-transform: uppercase; text-align: left; }
-        td { padding: 12px; border-top: 1px solid #f1f5f9; font-size: 14px; }
-        
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; }
         .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .status-badge { padding: 3px 7px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .status-pago { background: #dcfce7; color: #166534; }
         .status-pendente { background: #fef9c3; color: #854d0e; }
-        .tipo-pagar { color: var(--danger); font-weight: bold; }
-        .tipo-receber { color: var(--primary); font-weight: bold; }
+        .tipo-pagar { color: #ef4444; }
+        .tipo-receber { color: #3ecf8e; }
+        .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
     </style>
 </head>
 <body>
 
 <div class="navbar">
-    <div style="font-weight: bold; color: #0f172a;"><i class="fas fa-wallet"></i> FINANCEIRO</div>
-    <div>
-        <a href="index.html" style="text-decoration:none; color:#64748b; margin-right:15px; font-weight:bold;"><i class="fas fa-home"></i></a>
-        <button onclick="sairDaConta()" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Sair</button>
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP - FINANCEIRO</div>
+    <div class="nav-buttons">
+        <a href="index.html" class="btn-nav-back"><i class="fas fa-home"></i> Início</a>
+        <button onclick="sairDaConta()" style="background:#ef4444; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Sair</button>
     </div>
 </div>
 
 <div class="container">
-    <div class="dashboard-grid">
-        <div class="stat-card entradas">
-            <span class="stat-label">Total Recebidos</span>
-            <span class="stat-value" id="resumo-entradas">R$ 0,00</span>
-        </div>
-        <div class="stat-card saidas">
-            <span class="stat-label">Total Pagos</span>
-            <span class="stat-value" id="resumo-saidas">R$ 0,00</span>
-        </div>
-        <div class="stat-card saldo">
-            <span class="stat-label">Saldo Atual</span>
-            <span class="stat-value" id="resumo-saldo">R$ 0,00</span>
-        </div>
-    </div>
+    <div class="card">
+        <h3 id="form-title">Novo Lançamento Financeiro</h3>
+        <input type="hidden" id="edit-id">
 
-    <div class="card" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
-        <div><label>Data Início</label><input type="date" id="filtro-inicio"></div>
-        <div><label>Data Fim</label><input type="date" id="filtro-fim"></div>
-        <div style="flex-grow: 1;"><label>Descrição / Categoria</label><input type="text" id="inputBusca" placeholder="Pesquisar..." onkeyup="filtrarTabela()"></div>
-        <button onclick="loadFinanceiro()" style="background:var(--dark); color:white; padding:10px 20px; border-radius:6px; border:none; cursor:pointer;"><i class="fas fa-sync"></i></button>
+        <div class="section-title">Dados da Transação</div>
+        <div class="form-grid">
+            <div>
+                <label>Tipo *</label>
+                <select id="tipo">
+                    <option value="pagar">Conta a Pagar (Saída)</option>
+                    <option value="receber">Conta a Receber (Entrada)</option>
+                </select>
+            </div>
+            <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao" placeholder="Ex: Aluguel, Venda de Produto..."></div>
+            <div><label>Valor (R$) *</label><input type="number" id="valor" step="0.01"></div>
+        </div>
+
+        <div class="section-title">Datas e Status</div>
+        <div class="form-grid">
+            <div><label>Vencimento</label><input type="date" id="data_vencimento"></div>
+            <div><label>Pagamento</label><input type="date" id="data_pagamento"></div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="pendente">Pendente</option>
+                    <option value="pago">Pago / Recebido</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">Relacionamentos e Categoria</div>
+        <div class="form-grid">
+            <div>
+                <label>Entidade (Cliente/Fornecedor)</label>
+                <select id="entidade_id">
+                    <option value="">Selecione uma entidade...</option>
+                </select>
+            </div>
+            <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Operacional, Marketing..."></div>
+            <div><label>Forma de Pagamento</label><input type="text" id="forma_pagamento" placeholder="Ex: Pix, Boleto, Cartão..."></div>
+        </div>
+
+        <div class="section-title">Observações</div>
+        <textarea id="observacoes" rows="2"></textarea>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
     </div>
 
     <div class="card">
-        <h3 id="form-title" style="margin-top:0">Novo Lançamento</h3>
-        <input type="hidden" id="edit-id">
-        <div class="form-grid">
-            <div><label>Tipo *</label><select id="tipo"><option value="pagar">Pagar</option><option value="receber">Receber</option></select></div>
-            <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao"></div>
-            <div><label>Valor (R$) *</label><input type="number" id="valor" step="0.01"></div>
-            <div><label>Vencimento</label><input type="date" id="data_vencimento"></div>
-            <div><label>Categoria</label><input type="text" id="categoria"></div>
-            <div><label>Forma Pgto</label><input type="text" id="forma_pagamento"></div>
-            <div><label>Status</label><select id="status"><option value="pendente">Pendente</option><option value="pago">Pago</option></select></div>
-        </div>
-        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        <label><i class="fas fa-filter"></i> FILTRAR LANÇAMENTOS</label>
+        <input type="text" id="inputBusca" placeholder="Buscar por descrição ou entidade..." onkeyup="filtrarTabela()">
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Categoria</th>
-                    <th>Forma Pgto</th>
+                    <th>Tipo/Descrição</th>
+                    <th>Entidade</th>
+                    <th>Vencimento</th>
                     <th>Valor</th>
                     <th>Status</th>
                     <th>Ações</th>
@@ -127,110 +138,126 @@
 <script>
 let currentFinanceData = [];
 
-// Define datas padrão (mês atual) para os filtros ao abrir
-function setDefaultDates() {
-    const agora = new Date();
-    const primeiroDia = new Date(agora.getFullYear(), agora.getMonth(), 1).toISOString().split('T')[0];
-    const ultimoDia = new Date(agora.getFullYear(), agora.getMonth() + 1, 0).toISOString().split('T')[0];
-    document.getElementById('filtro-inicio').value = primeiroDia;
-    document.getElementById('filtro-fim').value = ultimoDia;
+async function sairDaConta() {
+    if(confirm("Deseja sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+
+// Carrega as entidades para o Select do formulário
+async function loadEntidadesSelect() {
+    const { data } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo');
+    const select = document.getElementById('entidade_id');
+    if(data) {
+        data.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.id;
+            opt.textContent = e.nome_completo;
+            select.appendChild(opt);
+        });
+    }
 }
 
 async function loadFinanceiro() {
-    const dtInicio = document.getElementById('filtro-inicio').value;
-    const dtFim = document.getElementById('filtro-fim').value;
-
-    let query = _supabase.from('financeiro').select('*').order('data_vencimento', { ascending: true });
+    // Busca financeiro trazendo o nome da entidade relacionada (Join)
+    const { data, error } = await _supabase
+        .from('financeiro')
+        .select('*, entidades(nome_completo)')
+        .order('data_vencimento', { ascending: true });
     
-    if (dtInicio) query = query.gte('data_vencimento', dtInicio);
-    if (dtFim) query = query.lte('data_vencimento', dtFim);
-
-    const { data, error } = await query;
-    if (error) return console.error(error);
-    
+    if (error) {
+        console.error(error);
+        return;
+    }
     currentFinanceData = data || [];
-    calcularSaldos(currentFinanceData);
     renderTable(currentFinanceData);
-}
-
-function calcularSaldos(data) {
-    let entradas = 0; let saidas = 0;
-    data.forEach(item => {
-        if (item.status === 'pago') {
-            if (item.tipo === 'receber') entradas += parseFloat(item.valor);
-            else saidas += parseFloat(item.valor);
-        }
-    });
-    document.getElementById('resumo-entradas').innerText = `R$ ${entradas.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('resumo-saidas').innerText = `R$ ${saidas.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('resumo-saldo').innerText = `R$ ${(entradas - saidas).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 }
 
 function renderTable(data) {
     const list = document.getElementById('financeiro-list');
     list.innerHTML = data.map(f => `
         <tr>
+            <td>
+                <b class="tipo-${f.tipo}">${f.tipo === 'pagar' ? '[-] ' : '[+] '} ${f.tipo.toUpperCase()}</b><br>
+                <span>${f.descricao}</span>
+            </td>
+            <td>${f.entidades ? f.entidades.nome_completo : '<small>Não informado</small>'}</td>
             <td>${new Date(f.data_vencimento).toLocaleDateString('pt-BR')}</td>
-            <td><span class="tipo-${f.tipo}">${f.tipo === 'pagar' ? '↓' : '↑'}</span> ${f.descricao}</td>
-            <td>${f.categoria || '-'}</td>
-            <td>${f.forma_pagamento || '-'}</td>
-            <td><b>R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
+            <td><b>R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b></td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
             <td>
-                <button style="border:none; background:none; color:var(--blue); cursor:pointer;" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
-                <button style="border:none; background:none; color:var(--danger); cursor:pointer;" onclick="deleteFinance('${f.id}')"><i class="fas fa-trash"></i></button>
+                <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-action" style="color:#ef4444" onclick="deleteFinance('${f.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>
-    `).join('') || '<tr><td colspan="7" style="text-align:center">Nenhum lançamento no período.</td></tr>';
+    `).join('') || '<tr><td colspan="6" style="text-align:center">Nenhum registro encontrado.</td></tr>';
 }
 
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
+    
     const dados = {
         usuario_id: user.id,
         tipo: document.getElementById('tipo').value,
         descricao: document.getElementById('descricao').value,
         valor: parseFloat(document.getElementById('valor').value) || 0,
         data_vencimento: document.getElementById('data_vencimento').value,
+        data_pagamento: document.getElementById('data_pagamento').value || null,
+        status: document.getElementById('status').value,
+        entidade_id: document.getElementById('entidade_id').value || null,
         categoria: document.getElementById('categoria').value,
         forma_pagamento: document.getElementById('forma_pagamento').value,
-        status: document.getElementById('status').value
+        observacoes: document.getElementById('observacoes').value
     };
 
-    if (!dados.descricao || !dados.valor || !dados.data_vencimento) return alert("Preencha Descrição, Valor e Vencimento");
+    if (!dados.descricao || !dados.valor || !dados.data_vencimento) {
+        return alert("Preencha os campos obrigatórios (Descrição, Valor e Vencimento)");
+    }
 
-    const { error } = id ? await _supabase.from('financeiro').update(dados).eq('id', id) : await _supabase.from('financeiro').insert([dados]);
-    if (error) alert(error.message); else { resetForm(); loadFinanceiro(); }
+    const { error } = id 
+        ? await _supabase.from('financeiro').update(dados).eq('id', id) 
+        : await _supabase.from('financeiro').insert([dados]);
+
+    if (error) alert("Erro: " + error.message); 
+    else { resetForm(); loadFinanceiro(); }
 }
 
-function editFinance(id) {
+async function editFinance(id) {
     const item = currentFinanceData.find(f => f.id === id);
     if (!item) return;
+
     document.getElementById('edit-id').value = item.id;
     document.getElementById('tipo').value = item.tipo;
     document.getElementById('descricao').value = item.descricao;
     document.getElementById('valor').value = item.valor;
     document.getElementById('data_vencimento').value = item.data_vencimento;
+    document.getElementById('data_pagamento').value = item.data_pagamento || '';
+    document.getElementById('status').value = item.status;
+    document.getElementById('entidade_id').value = item.entidade_id || '';
     document.getElementById('categoria').value = item.categoria || '';
     document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
-    document.getElementById('status').value = item.status;
+    document.getElementById('observacoes').value = item.observacoes || '';
+
     document.getElementById('form-title').innerText = "Editando Lançamento";
+    document.getElementById('btn-save').innerText = "Atualizar Lançamento";
     document.getElementById('btn-cancel').style.display = "block";
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function resetForm() {
-    document.querySelectorAll('.card input, .card select').forEach(i => i.value = '');
+    document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
     document.getElementById('tipo').value = 'pagar';
     document.getElementById('status').value = 'pendente';
     document.getElementById('edit-id').value = '';
-    document.getElementById('form-title').innerText = "Novo Lançamento";
+    document.getElementById('form-title').innerText = "Novo Lançamento Financeiro";
+    document.getElementById('btn-save').innerText = "Salvar Lançamento";
     document.getElementById('btn-cancel').style.display = "none";
 }
 
 async function deleteFinance(id) {
-    if (confirm("Excluir?")) {
+    if (confirm("Excluir este lançamento?")) {
         await _supabase.from('financeiro').delete().eq('id', id);
         loadFinanceiro();
     }
@@ -239,18 +266,14 @@ async function deleteFinance(id) {
 function filtrarTabela() {
     const busca = document.getElementById('inputBusca').value.toLowerCase();
     const filtrados = currentFinanceData.filter(f => 
-        f.descricao.toLowerCase().includes(busca) || (f.categoria && f.categoria.toLowerCase().includes(busca))
+        f.descricao.toLowerCase().includes(busca) || 
+        (f.entidades && f.entidades.nome_completo.toLowerCase().includes(busca))
     );
     renderTable(filtrados);
 }
 
-async function sairDaConta() {
-    await _supabase.auth.signOut();
-    window.location.href = 'login.html';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    setDefaultDates();
+    loadEntidadesSelect();
     loadFinanceiro();
 });
 </script>
