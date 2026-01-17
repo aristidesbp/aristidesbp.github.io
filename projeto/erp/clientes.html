@@ -96,17 +96,32 @@ input:focus, select:focus, textarea:focus {
 
 .btn-add {
     background: var(--primary);
-    color: white; padding: 15px; border: none; border-radius: 6px;
-    cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .btn-cancel {
-    background: #64748b; color: white; margin-top: 10px; border: none;
-    padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%;
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
 }
 
 .table-container {
-    background: white; border-radius: 12px; overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
@@ -114,13 +129,10 @@ table { width: 100%; border-collapse: collapse; min-width: 800px; }
 th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
 td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
-/* Botões de Ação */
-.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 8px;}
-.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 8px;}
-.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 8px;}
-.btn-ficha { color: #34495e; cursor: pointer; font-size: 18px; background: none; border: none; }
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; }
 
-/* NAVBAR */
 .navbar {
     position: fixed; top: 0; left: 0; width: 100%; background: white;
     padding: 15px 25px; display: flex; justify-content: space-between;
@@ -133,10 +145,29 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
     font-weight: bold; font-size: 14px; border: none; cursor: pointer;
 }
 
+/* Área de botões de exportação */
+.export-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
 .btn-export {
-    background: #2c3e50; color: white; border: none; padding: 10px 15px;
-    border-radius: 6px; cursor: pointer; font-weight: bold; display: flex;
-    align-items: center; gap: 8px; margin-top: 10px;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export-full {
+    background: #1e293b;
 }
     </style>
 </head>
@@ -164,23 +195,32 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
             <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
             <div><label>Senha de Acesso</label><input type="password" id="senha_acesso"></div>
             
-            <div><label>Nível de Acesso</label><select id="acesso">
-                <option value="cliente">Cliente</option>
-                <option value="funcionario">Funcionário</option>
-                <option value="comprador">Comprador</option>
-                <option value="master">Master</option>
-            </select></div>
-            <div><label>Relacionamento</label><select id="relacionamento">
-                <option value="cliente">Cliente</option>
-                <option value="funcionario">Funcionário</option>
-                <option value="fornecedor">Fornecedor</option>
-                <option value="terceirizado">Terceirizado</option>
-                <option value="outros">Outros</option>
-            </select></div>
-            <div><label>Status</label><select id="status">
-                <option value="ativo">Ativo</option>
-                <option value="desativado">Desativado</option>
-            </select></div>
+            <div>
+                <label>Nível de Acesso</label>
+                <select id="acesso">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="comprador">Comprador</option>
+                    <option value="master">Master</option>
+                </select>
+            </div>
+            <div>
+                <label>Relacionamento</label>
+                <select id="relacionamento">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="terceirizado">Terceirizado</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="ativo">Ativo</option>
+                    <option value="desativado">Desativado</option>
+                </select>
+            </div>
             <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
         </div>
 
@@ -207,11 +247,19 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
     <div class="card" style="margin-bottom: 10px; padding: 15px;">
         <label><i class="fas fa-search"></i> BUSCAR REGISTRO</label>
         <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
-        <button class="btn-export" onclick="exportarPDFListagem()"><i class="fas fa-list"></i> PDF da Listagem</button>
+        
+        <div class="export-area">
+            <button class="btn-export" onclick="exportarPDFListagem()">
+                <i class="fas fa-list"></i> Exportar Listagem (PDF)
+            </button>
+            <button class="btn-export btn-export-full" onclick="exportarPDFFichaCompleta()">
+                <i class="fas fa-file-invoice"></i> Exportar Fichas Completas (PDF)
+            </button>
+        </div>
     </div>
 
     <div class="table-container">
-        <table>
+        <table id="tabela-clientes">
             <thead>
                 <tr>
                     <th>Nome / Relacionamento</th>
@@ -226,8 +274,13 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 </div>
 
 <script>
+let currentData = []; // Armazena os dados carregados globalmente
+
 async function sairDaConta() {
-    if(confirm("Deseja sair?")) { await _supabase.auth.signOut(); window.location.href = 'login.html'; }
+    if(confirm("Deseja sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
 }
 
 async function buscaCEP() {
@@ -249,30 +302,37 @@ async function buscaCEP() {
 async function loadClients() {
     const { data, error } = await _supabase.from('clientes').select('*').order('nome_completo');
     if (error) return;
+    currentData = data || [];
+    renderTable(currentData);
+}
+
+function renderTable(data) {
     const list = document.getElementById('clients-list');
-    list.innerHTML = (data || []).map(c => {
+    list.innerHTML = data.map(c => {
         const wppLink = c.telefone && c.telefone.includes('http') ? c.telefone : `https://wa.me/${c.telefone ? c.telefone.replace(/\D/g, '') : ''}`;
         return `
-        <tr>
+        <tr data-id="${c.id}">
             <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
             <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
             <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
             <td>
-                <button class="btn-edit" title="Editar" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-del" title="Excluir" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
-                <a href="${wppLink}" target="_blank" class="btn-wpp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <button class="btn-ficha" title="Exportar Ficha Individual" onclick="exportarFichaIndividual('${c.id}')"><i class="fas fa-file-invoice"></i></button>
+                <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+                <a href="${wppLink}" target="_blank" class="btn-wpp"><i class="fab fa-whatsapp"></i></a>
             </td>
         </tr>
-    `}).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
+    `}).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro encontrado.</td></tr>';
 }
 
 function filtrarTabela() {
     const filtro = document.getElementById("inputBusca").value.toLowerCase();
     const linhas = document.getElementById("clients-list").getElementsByTagName("tr");
     for (let i = 0; i < linhas.length; i++) {
-        const txt = linhas[i].getElementsByTagName("td")[0].textContent.toLowerCase();
-        linhas[i].style.display = txt.includes(filtro) ? "" : "none";
+        const colunaNome = linhas[i].getElementsByTagName("td")[0];
+        if (colunaNome) {
+            const txt = colunaNome.textContent || colunaNome.innerText;
+            linhas[i].style.display = txt.toLowerCase().includes(filtro) ? "" : "none";
+        }
     }
 }
 
@@ -280,82 +340,83 @@ function filtrarTabela() {
 function exportarPDFListagem() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("Relatório Geral de Clientes - ERP ABP", 14, 15);
+    doc.text("Listagem de Clientes - ERP ABP", 14, 15);
     const rows = [];
     document.querySelectorAll("#clients-list tr").forEach(tr => {
         if (tr.style.display !== "none") {
             const cells = tr.querySelectorAll("td");
-            rows.push([cells[0].innerText.replace('\n', ' - '), cells[1].innerText.replace('\n', ' - '), cells[2].innerText.replace('\n', ' - ')]);
+            if(cells.length > 0) rows.push([cells[0].innerText.replace('\n', ' - '), cells[1].innerText.replace('\n', ' - '), cells[2].innerText.replace('\n', ' - ')]);
         }
     });
-    doc.autoTable({ head: [['Nome / Relac.', 'Contato', 'Status']], body: rows, startY: 20 });
+    doc.autoTable({ head: [['Nome / Relac.', 'Contato', 'Acesso / Status']], body: rows, startY: 20 });
     doc.save("listagem_clientes.pdf");
 }
 
-// PDF 2: FICHA INDIVIDUAL COMPLETA
-async function exportarFichaIndividual(id) {
-    const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
-    if (error || !data) return alert("Erro ao carregar dados da ficha.");
-
+// PDF 2: FICHA COMPLETA
+function exportarPDFFichaCompleta() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    
-    // Cabeçalho da Ficha
-    doc.setFillColor(62, 207, 142); doc.rect(0, 0, 210, 40, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(22); doc.text("FICHA DE CADASTRO", 14, 25);
-    doc.setFontSize(10); doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, 14, 32);
+    let y = 20;
 
-    // Dados Pessoais
-    doc.setTextColor(0, 0, 0); doc.setFontSize(14); doc.text("1. INFORMAÇÕES PESSOAIS", 14, 50);
-    doc.autoTable({
-        startY: 55, theme: 'grid', headStyles: {fillColor: [240, 240, 240], textColor: 0},
-        body: [
-            ["Nome Completo:", data.nome_completo, "CPF:", data.cpf || "-"],
-            ["E-mail:", data.email || "-", "Telefone:", data.telefone || "-"],
-            ["Nascimento:", data.data_nascimento || "-", "Relacionamento:", data.relacionamento.toUpperCase()]
-        ]
+    // Filtra apenas os dados que estão visíveis na tela
+    const filtro = document.getElementById("inputBusca").value.toLowerCase();
+    const dadosFiltrados = currentData.filter(c => c.nome_completo.toLowerCase().includes(filtro));
+
+    doc.setFontSize(16);
+    doc.text("FICHAS DETALHADAS DE CLIENTES", 14, y);
+    y += 10;
+
+    dadosFiltrados.forEach((c, index) => {
+        if (y > 250) { doc.addPage(); y = 20; }
+        
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text(`${index + 1}. ${c.nome_completo.toUpperCase()}`, 14, y);
+        y += 7;
+        
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        doc.text(`CPF: ${c.cpf || 'N/A'} | RG: ${c.rg || 'N/A'} | Nasc: ${c.data_nascimento || 'N/A'}`, 14, y);
+        y += 5;
+        doc.text(`Email: ${c.email || 'N/A'} | Telefone: ${c.telefone || 'N/A'}`, 14, y);
+        y += 5;
+        doc.text(`Endereço: ${c.logradouro || ''}, ${c.numero || ''} - ${c.bairro || ''}, ${c.cidade || ''}/${c.estado || ''}`, 14, y);
+        y += 5;
+        doc.text(`Relacionamento: ${c.relacionamento} | Acesso: ${c.acesso} | Status: ${c.status} | Nota: ${c.avaliacao}`, 14, y);
+        y += 5;
+        doc.text(`Obs: ${c.observacoes || 'Sem observações'}`, 14, y);
+        
+        y += 5;
+        doc.setLineWidth(0.1);
+        doc.line(14, y, 196, y); // Linha divisória
+        y += 10;
     });
 
-    // Endereço
-    doc.text("2. ENDEREÇO", 14, doc.lastAutoTable.finalY + 15);
-    doc.autoTable({
-        startY: doc.lastAutoTable.finalY + 20, theme: 'grid',
-        body: [
-            ["CEP:", data.cep || "-", "Cidade/UF:", `${data.cidade || "-"}/${data.estado || "-"}`],
-            ["Logradouro:", data.logradouro || "-", "Número/Bairro:", `${data.numero || "-"}/${data.bairro || "-"}`]
-        ]
-    });
-
-    // Administrativo e Observações
-    doc.text("3. DADOS ADMINISTRATIVOS", 14, doc.lastAutoTable.finalY + 15);
-    doc.autoTable({
-        startY: doc.lastAutoTable.finalY + 20, theme: 'grid',
-        body: [
-            ["Nível de Acesso:", data.acesso, "Status Atual:", data.status.toUpperCase()],
-            ["Avaliação (0-10):", data.avaliacao, "ID Registro:", data.id]
-        ]
-    });
-
-    doc.text("OBSERVAÇÕES:", 14, doc.lastAutoTable.finalY + 15);
-    doc.setFontSize(10);
-    const splitObs = doc.splitTextToSize(data.observacoes || "Nenhuma observação registrada.", 180);
-    doc.text(splitObs, 14, doc.lastAutoTable.finalY + 22);
-
-    doc.save(`FICHA_${data.nome_completo.replace(/ /g, '_')}.pdf`);
+    doc.save("fichas_completas_clientes.pdf");
 }
 
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
     const dados = {
-        usuario_id: user.id, nome_completo: document.getElementById('nome_completo').value, cpf: document.getElementById('cpf').value,
-        data_nascimento: document.getElementById('data_nascimento').value || null, email: document.getElementById('email').value,
-        telefone: document.getElementById('telefone').value, senha_acesso: document.getElementById('senha_acesso').value,
-        acesso: document.getElementById('acesso').value, relacionamento: document.getElementById('relacionamento').value,
-        status: document.getElementById('status').value, avaliacao: parseInt(document.getElementById('avaliacao').value),
-        observacoes: document.getElementById('observacoes').value, cep: document.getElementById('cep').value,
-        logradouro: document.getElementById('logradouro').value, numero: document.getElementById('numero').value,
-        bairro: document.getElementById('bairro').value, cidade: document.getElementById('cidade').value, estado: document.getElementById('estado').value,
+        usuario_id: user.id,
+        nome_completo: document.getElementById('nome_completo').value,
+        cpf: document.getElementById('cpf').value,
+        data_nascimento: document.getElementById('data_nascimento').value || null,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        senha_acesso: document.getElementById('senha_acesso').value,
+        acesso: document.getElementById('acesso').value,
+        relacionamento: document.getElementById('relacionamento').value,
+        status: document.getElementById('status').value,
+        avaliacao: parseInt(document.getElementById('avaliacao').value),
+        observacoes: document.getElementById('observacoes').value,
+        cep: document.getElementById('cep').value,
+        logradouro: document.getElementById('logradouro').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        estado: document.getElementById('estado').value,
         arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
     };
     if (!dados.nome_completo) return alert("Nome é obrigatório");
@@ -379,7 +440,9 @@ async function editFull(id) {
 
 function resetForm() {
     document.querySelectorAll('input, select, textarea').forEach(i => {
-        if(i.id === 'avaliacao') i.value = '5'; else if(i.tagName === 'SELECT') i.selectedIndex = 0; else i.value = '';
+        if(i.id === 'avaliacao') i.value = '5';
+        else if(i.tagName === 'SELECT') i.selectedIndex = 0;
+        else i.value = '';
     });
     document.getElementById('edit-id').value = '';
     document.getElementById('form-title').innerText = "Novo Cadastro de Usuário / Entidade";
@@ -388,7 +451,10 @@ function resetForm() {
 }
 
 async function deleteClient(id) {
-    if (confirm("Excluir definitivamente?")) { await _supabase.from('clientes').delete().eq('id', id); loadClients(); }
+    if (confirm("Excluir definitivamente?")) {
+        await _supabase.from('clientes').delete().eq('id', id);
+        loadClients();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', loadClients);
