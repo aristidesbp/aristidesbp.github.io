@@ -8,8 +8,7 @@
     <title>Bloco de Notas - ERP ABP</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- CONEXAO -->
-    <script>
+<script>
 // Configurações do Supabase
 const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
@@ -59,6 +58,52 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background: #f1f5f9;
     padding-top: 90px;
+}
+
+/* NAVBAR ADICIONADA */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-nav {
+    text-decoration: none;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-nav:hover {
+    background: #cbd5e1;
+}
+
+.btn-logout-nav {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-logout-nav:hover {
+    background: #dc2626;
 }
 
 /* Container do bloco de notas */
@@ -162,6 +207,14 @@ input {
 </head>
 <body>
 
+    <div class="navbar">
+        <div style="font-weight: bold; color: var(--dark);">ERP ABP</div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav"><i class="fas fa-home"></i> Voltar</a>
+            <button class="btn-nav btn-logout-nav" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </div>
+
     <div class="container">
 
         <h2>Minhas Notas</h2>
@@ -201,6 +254,12 @@ input {
  * js/bloco_de_notas.js
  * Depende de: js/conexao.js (que fornece a variável _supabase)
  */
+
+// FUNÇÃO DE LOGOUT ADICIONADA
+async function logout() {
+    await _supabase.auth.signOut();
+    window.location.href = 'login.html';
+}
 
 // Armazena todas as notas carregadas localmente para busca rápida
 let allNotes = [];
