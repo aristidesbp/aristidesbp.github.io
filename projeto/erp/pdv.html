@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV - ERP ABP</title>
+    <title>PDV Profissional - ERP ABP</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/produtos.css"> <script src="js/pdv.js" defer></script>
+    <link rel="stylesheet" href="css/produtos.css">
+    <style>
+        .caixa-fechado-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        .busca-grande { font-size: 1.5rem !important; padding: 20px !important; border: 2px solid #3ecf8e !important; }
+        .total-destaque { font-size: 2.5rem; color: #166534; font-weight: 800; }
+    </style>
 </head>
 <body>
 
+<div id="caixa-status-modal" class="caixa-fechado-overlay" style="display:none;">
+    <div class="card" style="width: 400px; color: #333;">
+        <h3>Abertura de Caixa</h3>
+        <p>Informe o valor inicial em fundo de caixa:</p>
+        <input type="number" id="valor_inicial" class="form-control" value="0.00" style="width: 100%; margin: 15px 0; padding: 10px;">
+        <button onclick="abrirCaixa()" class="btn-add" style="width: 100%;">ABRIR CAIXA</button>
+    </div>
+</div>
 
-
-<div class="container" style="display: grid; grid-template-columns: 1fr 400px; gap: 20px;">
+<div class="container" style="display: grid; grid-template-columns: 1fr 450px; gap: 20px; margin-top: 20px;">
     
     <div>
         <div class="card">
-            <h3>Buscar Produto</h3>
-            <div class="form-grid">
-                <div style="grid-column: span 3;">
-                    <input type="text" id="busca-pdv" placeholder="Nome ou Código de Barras..." onkeyup="buscarProdutoPDV(event)">
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3><i class="fas fa-shopping-cart"></i> Nova Venda</h3>
+                <span id="caixa-info" class="status-badge" style="background: #dcfce7; color: #166534;">Caixa Aberto</span>
             </div>
-            <div id="resultados-busca" style="margin-top:10px; border-radius:8px; overflow:hidden;"></div>
+            <input type="text" id="busca-pdv" class="busca-grande" placeholder="PASSE O LEITOR OU DIGITE O NOME..." onkeyup="buscarProdutoPDV(event)" autofocus>
+            <div id="resultados-busca" style="position: absolute; width: 50%; z-index: 100; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
         </div>
 
-        <div class="table-container">
+        <div class="table-container" style="max-height: 500px; overflow-y: auto;">
             <table>
-                <thead>
+                <thead style="position: sticky; top: 0; background: #f8fafc;">
                     <tr>
-                        <th>Item</th>
+                        <th>Produto</th>
                         <th>Qtd</th>
-                        <th>Unit.</th>
+                        <th>Unitário</th>
                         <th>Subtotal</th>
-                        <th>#</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="carrinho-corpo"></tbody>
@@ -41,36 +52,37 @@
         </div>
     </div>
 
-    <div class="card" style="height: fit-content;">
-        <h3>Resumo da Venda</h3>
+    <div class="card">
+        <h3>Finalização</h3>
         <hr>
-        <div style="margin: 20px 0;">
-            <label>Cliente (Entidade)</label>
-            <select id="cliente_id" style="margin-bottom:15px;"><option value="">Consumidor Final</option></select>
-            
-            <label>Forma de Pagamento</label>
-            <select id="forma_pagto" style="margin-bottom:15px;">
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Cartão de Débito">Cartão de Débito</option>
-            </select>
+        <label>Cliente</label>
+        <select id="cliente_id" style="width: 100%; margin-bottom: 15px;"><option value="">Consumidor Final</option></select>
+        
+        <label>Forma de Pagamento</label>
+        <select id="forma_pagto" style="width: 100%; margin-bottom: 20px; font-weight: bold; font-size: 1.1rem;">
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão Débito">Cartão Débito</option>
+            <option value="Cartão Crédito">Cartão Crédito</option>
+        </select>
+
+        <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; text-align: right;">
+            <p style="margin:0; color: #64748b;">Subtotal: <span id="total-bruto">R$ 0,00</span></p>
+            <p style="margin:5px 0; color: #ef4444;">Desconto: <input type="number" id="desconto" value="0" oninput="calcularTotalVenda()" style="width: 80px; text-align: right;"></p>
+            <div class="total-destaque" id="total-venda">R$ 0,00</div>
         </div>
 
-        <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
-            <div style="display:flex; justify-content: space-between;"><span>Subtotal:</span><b id="total-bruto">R$ 0,00</b></div>
-            <div style="display:flex; justify-content: space-between; color: #ef4444;"><span>Desconto:</span><input type="number" id="desconto" value="0" style="width:70px; text-align:right;" onchange="calcularTotalVenda()"></div>
-            <hr>
-            <div style="display:flex; justify-content: space-between; font-size: 1.5rem; font-weight: bold; color: var(--primary);">
-                <span>TOTAL:</span><span id="total-venda">R$ 0,00</span>
-            </div>
-        </div>
-
-        <button class="btn-add" onclick="finalizarVenda()" style="background: #22c55e; margin-top:20px;">
-            <i class="fas fa-check-circle"></i> FINALIZAR VENDA (F2)
+        <button class="btn-add" onclick="finalizarVenda()" style="background: #22c55e; height: 80px; font-size: 1.5rem; margin-top: 20px;">
+            <i class="fas fa-check-double"></i> FINALIZAR (F2)
+        </button>
+        
+        <button onclick="fecharCaixa()" style="background: #64748b; color: white; border: none; padding: 10px; width: 100%; margin-top: 15px; border-radius: 8px; cursor: pointer;">
+            FECHAR CAIXA DO DIA
         </button>
     </div>
 </div>
+
+<script src="js/pdv.js" defer></script>
 <script src="js/navbar.js"></script>
 </body>
 </html>
