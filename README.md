@@ -176,11 +176,106 @@ CREATE TABLE public.usuarios (
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="js/conexao.js"></script>
+<!-- CONEXAO -->
+    <script>
+// Configurações do Supabase
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+   </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <link rel="stylesheet" href="css/index.css">
+   <style>
+   /* Remove inconsistências de box model */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilo base do corpo da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    padding-top: 80px;
+}
+
+/* Container central do conteúdo */
+.content {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Grade responsiva dos cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilo dos cards clicáveis */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #334155;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Efeito visual ao passar o mouse */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #3ecf8e;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Ícones dos cards */
+.card i {
+    font-size: 45px;
+    color: #3ecf8e;
+    margin-bottom: 15px;
+}
+
+/* Título dos cards */
+.card h3 {
+    margin: 10px 0;
+}
+
+/* Texto auxiliar dos cards */
+.card p {
+    font-size: 0.9em;
+    color: #64748b;
+}
+   </style>
 </head>
 <body>
 
@@ -220,7 +315,33 @@ CREATE TABLE public.usuarios (
 
 <script src="js/navbar.js"></script>
 
-<script src="js/index.js"></script>
+<script>
+// URL do projeto Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+
+// Chave pública (publishable) para uso no frontend
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Cria o cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Função responsável por verificar se o usuário está autenticado
+async function checkUser() {
+    // Obtém a sessão atual
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    // Se não existir sessão, redireciona para o login
+    if (!session) {
+        window.location.href = 'login.html';
+    }
+}
+
+// Executa a verificação após o carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+    checkUser();
+});
+
+</script>
 
 </body>
 </html>
@@ -243,7 +364,128 @@ CREATE TABLE public.usuarios (
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- CSS específico da tela de login -->
-    <link rel="stylesheet" href="css/login.css">
+    <style>
+    /* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #1e293b;
+    --bg: #0f172a;
+}
+
+/* Estilo base da página */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Card central de login */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título principal */
+h1 {
+    color: var(--dark);
+    margin-bottom: 5px;
+    font-size: 24px;
+}
+
+/* Subtítulo */
+h2 {
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Container dos inputs */
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* Campos de entrada */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Botão para mostrar/ocultar senha */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Botão principal */
+button.main-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover do botão */
+button.main-btn:hover {
+    background-color: #34b27b;
+}
+
+/* Links extras */
+.extra-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* Estilo dos links */
+.link {
+    color: #4a90e2;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Botão de voltar */
+.btn-back {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: none;
+}
+    </style>
 </head>
 <body>
 
@@ -296,7 +538,93 @@ CREATE TABLE public.usuarios (
     
     
     <!-- Script principal do login -->
-    <script src="js/login.js"></script>
+    <script>
+    // URL do projeto Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+
+// Chave pública para uso no frontend
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Criação do cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Alterna a visibilidade da senha
+ */
+function toggleVisibility() {
+    const passInput = document.getElementById('password');
+    const toggleBtn = document.querySelector('.toggle-password');
+
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
+}
+
+/**
+ * Apenas Login
+ */
+async function handleAuth() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) alert("Erro: " + error.message);
+    else window.location.href = 'index.html';
+}
+
+/**
+ * Envio de e-mail para recuperação de senha
+ */
+async function forgotPassword() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite seu e-mail.");
+
+    const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+    });
+
+    if (error) alert(error.message);
+    else alert("Link de recuperação enviado!");
+}
+
+/**
+ * Detecta se o usuário chegou por link de recuperação
+ */
+async function checkRecovery() {
+    const hash = window.location.hash;
+
+    if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
+        document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
+        document.getElementById('email-group').style.display = 'none';
+        document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
+        document.getElementById('btn-auth').onclick = updatePassword;
+        document.getElementById('link-forgot').style.display = 'none';
+    }
+}
+
+/**
+ * Atualiza a senha do usuário
+ */
+async function updatePassword() {
+    const newPassword = document.getElementById('password').value;
+
+    if (newPassword.length < 6) {
+        return alert("Mínimo 6 caracteres.");
+    }
+
+    const { error } = await _supabase.auth.updateUser({ password: newPassword });
+
+    if (error) alert(error.message);
+    else {
+        alert("Senha atualizada!");
+        window.location.hash = "";
+        window.location.reload();
+    }
+}
+
+// Executa verificação de recuperação ao carregar a página
+window.onload = checkRecovery;
+    </script>
 
 </body>
 </html>
@@ -317,8 +645,9 @@ CREATE TABLE public.usuarios (
 <!-- CONEXAO -->
     <script>
 // Configurações do Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
 
 // Inicializa o cliente globalmente
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -685,8 +1014,8 @@ document.addEventListener('DOMContentLoaded', loadNotes);
 <!-- CONEXAO/VERIFICARLOG -->
     <script>
     // Configurações do Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
 
 // Inicializa o cliente globalmente
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
