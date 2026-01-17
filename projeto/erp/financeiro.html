@@ -137,6 +137,13 @@
 <script>
 let currentFinanceData = [];
 
+// Helper para formatar data sem erro de fuso horário na listagem
+function formatarDataBR(dataISO) {
+    if(!dataISO) return '---';
+    const partes = dataISO.split('-');
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
 async function loadEntidadesSelect() {
     const { data } = await _supabase.from('entidades').select('id, nome_completo');
     const select = document.getElementById('entidade_id');
@@ -162,8 +169,8 @@ function renderTable(data) {
             <td><span class="tipo-${f.tipo}">${f.tipo === 'pagar' ? '[-]' : '[+]'}</span> ${f.descricao}</td>
             <td>${f.categoria || '-'}</td>
             <td>${f.forma_pagamento || '-'}</td>
-            <td>${new Date(f.data_vencimento).toLocaleDateString('pt-BR')}</td>
-            <td>${f.data_pagamento ? new Date(f.data_pagamento).toLocaleDateString('pt-BR') : '<small style="color:#ccc">---</small>'}</td>
+            <td>${formatarDataBR(f.data_vencimento)}</td>
+            <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '<small style="color:#ccc">---</small>'}</td>
             <td><b>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
             <td>
@@ -210,22 +217,27 @@ async function handleSave() {
     const id = document.getElementById('edit-id').value;
     const numParcelas = parseInt(document.getElementById('parcelas').value) || 1;
     const valorParcela = parseFloat(document.getElementById('valor').value) || 0;
-    const dataBase = new Date(document.getElementById('data_vencimento').value + "T12:00:00");
+    
+    // CORREÇÃO DATA: Lendo a string pura do input sem converter para objeto Date local antes da hora
+    const dataString = document.getElementById('data_vencimento').value;
 
-    if(!document.getElementById('descricao').value || !valorParcela || isNaN(dataBase)) return alert("Preencha Descrição, Valor e Vencimento.");
+    if(!document.getElementById('descricao').value || !valorParcela || !dataString) return alert("Preencha Descrição, Valor e Vencimento.");
 
     if(id) {
         await _supabase.from('financeiro').update(getFormData(user.id)).eq('id', id);
     } else {
         const lancamentos = [];
         for(let i = 0; i < numParcelas; i++) {
-            let venc = new Date(dataBase);
-            venc.setMonth(venc.getMonth() + i);
+            // Lógica de incremento de mês respeitando a string original
+            let dt = new Date(dataString + "T12:00:00"); 
+            dt.setMonth(dt.getMonth() + i);
+            const vencFinal = dt.toISOString().split('T')[0];
+
             lancamentos.push({
                 ...getFormData(user.id),
                 valor: valorParcela,
                 descricao: numParcelas > 1 ? `${document.getElementById('descricao').value} (${i+1}/${numParcelas})` : document.getElementById('descricao').value,
-                data_vencimento: venc.toISOString().split('T')[0]
+                data_vencimento: vencFinal
             });
         }
         await _supabase.from('financeiro').insert(lancamentos);
