@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Financeira PRO - ERP ABP</title>
+    <title>Gestão Financeira - ERP ABP</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <script>
     const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
@@ -34,7 +34,7 @@
         .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
         .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
         .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
         td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
         .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
@@ -51,6 +51,7 @@
         .resumo-saldo { background: #3b82f6; }
         
         .bulk-actions { margin-bottom: 10px; display: none; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; }
+        .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -72,8 +73,8 @@
         <div class="form-grid">
             <div><label>Tipo *</label><select id="tipo"><option value="pagar">Pagar (Saída)</option><option value="receber">Receber (Entrada)</option></select></div>
             <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao"></div>
-            <div><label>Valor Total (R$) *</label><input type="number" id="valor" step="0.01"></div>
-            <div><label>Parcelas</label><input type="number" id="parcelas" value="1" min="1"></div>
+            <div><label>Valor da Parcela (R$) *</label><input type="number" id="valor" step="0.01"></div>
+            <div><label>Qtde Parcelas</label><input type="number" id="parcelas" value="1" min="1"></div>
         </div>
 
         <div class="section-title">Datas e Status</div>
@@ -97,19 +98,19 @@
     <div class="card">
         <div class="form-grid">
             <div><label>Busca</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Desc. ou Cat."></div>
-            <div><label>Início</label><input type="date" id="dataInicio" onchange="filtrarTabela()"></div>
-            <div><label>Fim</label><input type="date" id="dataFim" onchange="filtrarTabela()"></div>
+            <div><label>Data Início</label><input type="date" id="dataInicio" onchange="filtrarTabela()"></div>
+            <div><label>Data Fim</label><input type="date" id="dataFim" onchange="filtrarTabela()"></div>
         </div>
     </div>
 
     <div class="resumo-financeiro">
         <div class="resumo-card resumo-entradas"><span>Entradas</span><br><b id="total-receber">R$ 0,00</b></div>
         <div class="resumo-card resumo-saidas"><span>Saídas</span><br><b id="total-pagar">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saldo"><span>Saldo do Filtro</span><br><b id="total-saldo">R$ 0,00</b></div>
+        <div class="resumo-card resumo-saldo"><span>Saldo Filtrado</span><br><b id="total-saldo">R$ 0,00</b></div>
     </div>
 
     <div id="bulk-area" class="bulk-actions">
-        <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 itens selecionados</span>
+        <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
         <button onclick="deleteSelected()" style="background:var(--danger); color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:15px;"><i class="fas fa-trash"></i> Excluir Selecionados</button>
     </div>
 
@@ -162,20 +163,21 @@ function renderTable(data) {
             <td>${f.categoria || '-'}</td>
             <td>${f.forma_pagamento || '-'}</td>
             <td>${new Date(f.data_vencimento).toLocaleDateString('pt-BR')}</td>
-            <td>${f.data_pagamento ? new Date(f.data_pagamento).toLocaleDateString('pt-BR') : '<small style="color:#ccc">Pendente</small>'}</td>
+            <td>${f.data_pagamento ? new Date(f.data_pagamento).toLocaleDateString('pt-BR') : '<small style="color:#ccc">---</small>'}</td>
             <td><b>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
             <td>
-                <button onclick="editFinance('${f.id}')" style="color:#3b82f6; border:none; background:none; cursor:pointer;"><i class="fas fa-edit"></i></button>
+                <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-action" style="color:#ef4444" onclick="deleteSingle('${f.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>`;
-    }).join('');
+    }).join('') || '<tr><td colspan="9" style="text-align:center">Nenhum dado.</td></tr>';
+    
     document.getElementById('total-receber').innerText = `R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     document.getElementById('total-pagar').innerText = `R$ ${s.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     document.getElementById('total-saldo').innerText = `R$ ${(e-s).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 }
 
-// Funções de Seleção Múltipla
 function toggleSelectAll() {
     const isChecked = document.getElementById('select-all').checked;
     document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked);
@@ -185,42 +187,45 @@ function toggleSelectAll() {
 function updateBulkUI() {
     const selected = document.querySelectorAll('.row-checkbox:checked').length;
     document.getElementById('bulk-area').style.display = selected > 0 ? 'block' : 'none';
-    document.getElementById('selected-count').innerText = `${selected} itens selecionados`;
+    document.getElementById('selected-count').innerText = `${selected} selecionados`;
+}
+
+async function deleteSingle(id) {
+    if(confirm("Excluir este lançamento?")) {
+        await _supabase.from('financeiro').delete().eq('id', id);
+        loadFinanceiro();
+    }
 }
 
 async function deleteSelected() {
-    if(!confirm("Excluir lançamentos selecionados?")) return;
+    if(!confirm("Excluir selecionados?")) return;
     const ids = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
     await _supabase.from('financeiro').delete().in('id', ids);
     loadFinanceiro();
     updateBulkUI();
 }
 
-// Lógica de Parcelamento
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
     const numParcelas = parseInt(document.getElementById('parcelas').value) || 1;
-    const valorTotal = parseFloat(document.getElementById('valor').value) || 0;
-    const valorParcela = valorTotal / numParcelas;
+    const valorParcela = parseFloat(document.getElementById('valor').value) || 0;
     const dataBase = new Date(document.getElementById('data_vencimento').value + "T12:00:00");
 
-    if(!document.getElementById('descricao').value || !valorTotal || isNaN(dataBase)) return alert("Preencha os campos obrigatórios.");
+    if(!document.getElementById('descricao').value || !valorParcela || isNaN(dataBase)) return alert("Preencha Descrição, Valor e Vencimento.");
 
-    if(id) { // Edição única
-        const dados = getFormData(user.id);
-        await _supabase.from('financeiro').update(dados).eq('id', id);
-    } else { // Novo lançamento (com suporte a parcelas)
+    if(id) {
+        await _supabase.from('financeiro').update(getFormData(user.id)).eq('id', id);
+    } else {
         const lancamentos = [];
         for(let i = 0; i < numParcelas; i++) {
-            let vencimento = new Date(dataBase);
-            vencimento.setMonth(vencimento.getMonth() + i);
-            
+            let venc = new Date(dataBase);
+            venc.setMonth(venc.getMonth() + i);
             lancamentos.push({
                 ...getFormData(user.id),
                 valor: valorParcela,
                 descricao: numParcelas > 1 ? `${document.getElementById('descricao').value} (${i+1}/${numParcelas})` : document.getElementById('descricao').value,
-                data_vencimento: vencimento.toISOString().split('T')[0]
+                data_vencimento: venc.toISOString().split('T')[0]
             });
         }
         await _supabase.from('financeiro').insert(lancamentos);
@@ -243,20 +248,6 @@ function getFormData(uid) {
     };
 }
 
-function filtrarTabela() {
-    const busca = document.getElementById('inputBusca').value.toLowerCase();
-    const dIni = document.getElementById('dataInicio').value;
-    const dFim = document.getElementById('dataFim').value;
-    const filtrados = currentFinanceData.filter(f => {
-        const txt = f.descricao.toLowerCase().includes(busca) || (f.categoria && f.categoria.toLowerCase().includes(busca));
-        let dt = true;
-        if(dIni) dt = dt && (f.data_vencimento >= dIni);
-        if(dFim) dt = dt && (f.data_vencimento <= dFim);
-        return txt && dt;
-    });
-    renderTable(filtrados);
-}
-
 function editFinance(id) {
     const item = currentFinanceData.find(f => f.id === id);
     document.getElementById('edit-id').value = item.id;
@@ -269,7 +260,10 @@ function editFinance(id) {
     document.getElementById('entidade_id').value = item.entidade_id || '';
     document.getElementById('categoria').value = item.categoria || '';
     document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
-    document.getElementById('parcelas').disabled = true; // Não parcela na edição
+    document.getElementById('parcelas').value = 1;
+    document.getElementById('parcelas').disabled = true;
+    document.getElementById('form-title').innerText = "Editando Lançamento";
+    document.getElementById('btn-save').innerText = "Atualizar Lançamento";
     document.getElementById('btn-cancel').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -280,7 +274,23 @@ function resetForm() {
     document.getElementById('tipo').value = 'pagar';
     document.getElementById('status').value = 'pendente';
     document.getElementById('parcelas').disabled = false;
+    document.getElementById('form-title').innerText = "Novo Lançamento";
+    document.getElementById('btn-save').innerText = "Salvar Lançamento(s)";
     document.getElementById('btn-cancel').style.display = 'none';
+}
+
+function filtrarTabela() {
+    const busca = document.getElementById('inputBusca').value.toLowerCase();
+    const dIni = document.getElementById('dataInicio').value;
+    const dFim = document.getElementById('dataFim').value;
+    const filtrados = currentFinanceData.filter(f => {
+        const txt = f.descricao.toLowerCase().includes(busca) || (f.categoria && f.categoria.toLowerCase().includes(busca));
+        let dt = true;
+        if(dIni) dt = dt && (f.data_vencimento >= dIni);
+        if(dFim) dt = dt && (f.data_vencimento <= dFim);
+        return txt && dt;
+    });
+    renderTable(filtrados);
 }
 
 async function sairDaConta() { if(confirm("Sair?")) { await _supabase.auth.signOut(); window.location.href='login.html'; } }
