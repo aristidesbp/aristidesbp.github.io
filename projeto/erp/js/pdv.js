@@ -193,3 +193,17 @@ function desistirAbertura() {
 
 // DICA: No seu initPDV(), certifique-se de que o modal só aparece 
 // se o usuário realmente estiver na página do PDV e o caixa estiver fechado.
+// Função para o botão (X) do modal de abertura
+function desistirAbertura() {
+    window.location.href = 'index.html';
+}
+
+// Garante que o campo de busca receba foco ao fechar avisos
+function focarBusca() {
+    const busca = document.getElementById('busca-pdv');
+    if (busca) busca.focus();
+}
+
+// Atualize sua função finalizarVenda para focar na busca após o alert
+// Substitua o alert final por:
+// alert("VENDA FINALIZADA!"); focarBusca();
