@@ -89,6 +89,19 @@ input, select, textarea {
     font-size: 14px;
 }
 
+/* Estilo para o campo de senha com Olho */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper i {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #64748b;
+}
+
 input:focus, select:focus, textarea:focus {
     border-color: var(--primary);
     outline: none;
@@ -131,7 +144,8 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
 .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
 .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
-.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; }
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-mail { color: #ea4335; cursor: pointer; font-size: 18px; background: none; border: none; }
 
 .navbar {
     position: fixed; top: 0; left: 0; width: 100%; background: white;
@@ -192,7 +206,13 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
             <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
             <div><label>E-mail</label><input type="email" id="email"></div>
             <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
-            <div><label>Senha Interna</label><input type="password" id="senha_acesso"></div>
+            <div>
+                <label>Senha Interna</label>
+                <div class="password-wrapper">
+                    <input type="password" id="senha_acesso">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
             
             <div>
                 <label>Nível de Acesso</label>
@@ -262,7 +282,7 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
             <thead>
                 <tr>
                     <th>Nome / Tipo</th>
-                    <th>Telefone / WhatsApp</th>
+                    <th>Telefone / E-mail</th>
                     <th>Acesso / Status</th>
                     <th>Ações</th>
                 </tr>
@@ -274,6 +294,19 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
 <script>
 let currentData = [];
+
+// Função para mostrar/esconder senha
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('senha_acesso');
+    const toggleIcon = document.getElementById('togglePassword');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
 
 async function sairDaConta() {
     if(confirm("Deseja sair?")) {
@@ -309,15 +342,18 @@ function renderTable(data) {
     const list = document.getElementById('entities-list');
     list.innerHTML = data.map(c => {
         const wppLink = c.telefone && c.telefone.includes('http') ? c.telefone : `https://wa.me/${c.telefone ? c.telefone.replace(/\D/g, '') : ''}`;
+        const mailLink = c.email ? `https://mail.google.com/mail/?view=cm&fs=1&to=${c.email}` : '#';
+
         return `
         <tr>
             <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
             <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
             <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
             <td>
-                <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-del" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
-                <a href="${wppLink}" target="_blank" class="btn-wpp"><i class="fab fa-whatsapp"></i></a>
+                <button class="btn-edit" title="Editar" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" title="Excluir" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
+                <a href="${wppLink}" target="_blank" class="btn-wpp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="${mailLink}" target="_blank" class="btn-mail" title="Gmail"><i class="fas fa-envelope"></i></a>
             </td>
         </tr>
     `}).join('') || '<tr><td colspan="4" style="text-align:center">Nenhuma entidade encontrada.</td></tr>';
@@ -367,7 +403,7 @@ function exportarPDFFichaCompleta() {
         y += 6;
         doc.setFontSize(9);
         doc.setFont(undefined, 'normal');
-        doc.text(`Doc: ${c.cpf || 'N/A'} | RG: ${c.rg || 'N/A'} | Nasc: ${c.data_nascimento || 'N/A'}`, 14, y);
+        doc.text(`Doc: ${c.cpf || 'N/A'} | Nasc: ${c.data_nascimento || 'N/A'}`, 14, y);
         y += 4;
         doc.text(`Email: ${c.email || 'N/A'} | Tel: ${c.telefone || 'N/A'}`, 14, y);
         y += 4;
