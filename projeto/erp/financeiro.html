@@ -107,9 +107,9 @@
     </div>
 
     <div class="resumo-financeiro">
-        <div class="resumo-card resumo-entradas"><span>Entradas</span><br><b id="total-receber">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saidas"><span>Saídas</span><br><b id="total-pagar">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saldo"><span>Saldo Filtrado</span><br><b id="total-saldo">R$ 0,00</b></div>
+        <div class="resumo-card resumo-entradas"><span>Entradas (Pagas)</span><br><b id="total-receber">R$ 0,00</b></div>
+        <div class="resumo-card resumo-saidas"><span>Saídas (Pagas)</span><br><b id="total-pagar">R$ 0,00</b></div>
+        <div class="resumo-card resumo-saldo"><span>Saldo em Caixa</span><br><b id="total-saldo">R$ 0,00</b></div>
     </div>
 
     <div id="bulk-area" class="bulk-actions">
@@ -129,6 +129,7 @@
                     <th>Vencimento</th>
                     <th>Pagamento</th>
                     <th>Valor</th>
+                    <th>Saldo Acum.</th>
                     <th>Status</th>
                     <th>Ações</th>
                 </tr>
@@ -157,11 +158,19 @@ async function loadFinanceiro() {
 
 function renderTable(data) {
     const list = document.getElementById('financeiro-list');
-    let e = 0, s = 0;
+    let e_paga = 0, s_paga = 0, saldoAcumulado = 0;
+    
     list.innerHTML = data.map(f => {
         const val = parseFloat(f.valor) || 0;
         const tipoLabel = f.tipo === 'receber' ? 'Entrada' : 'Saída';
-        if(f.tipo === 'receber') e += val; else s += val;
+        
+        // CORREÇÃO: Soma nos cards apenas o que está PAGO
+        if(f.status === 'pago') {
+            if(f.tipo === 'receber') e_paga += val; else s_paga += val;
+        }
+
+        // Lógica de Extrato (Saldo linha a linha)
+        if(f.tipo === 'receber') saldoAcumulado += val; else saldoAcumulado -= val;
         
         return `
         <tr>
@@ -173,17 +182,20 @@ function renderTable(data) {
             <td>${formatarDataBR(f.data_vencimento)}</td>
             <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '<small style="color:#ccc">---</small>'}</td>
             <td><b>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
+            <td style="font-weight:bold; color: ${saldoAcumulado >= 0 ? '#10b981' : '#ef4444'}">
+                R$ ${saldoAcumulado.toLocaleString('pt-BR', {minimumFractionDigits:2})}
+            </td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
             <td>
                 <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
                 <button class="btn-action" style="color:#ef4444" onclick="deleteSingle('${f.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>`;
-    }).join('') || '<tr><td colspan="10" style="text-align:center">Nenhum resultado encontrado.</td></tr>';
+    }).join('') || '<tr><td colspan="11" style="text-align:center">Nenhum resultado encontrado.</td></tr>';
     
-    document.getElementById('total-receber').innerText = `R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('total-pagar').innerText = `R$ ${s.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('total-saldo').innerText = `R$ ${(e-s).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-receber').innerText = `R$ ${e_paga.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-pagar').innerText = `R$ ${s_paga.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-saldo').innerText = `R$ ${(e_paga - s_paga).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 }
 
 function filtrarTabela() {
@@ -193,59 +205,55 @@ function filtrarTabela() {
     
     filteredData = currentFinanceData.filter(f => {
         const valorFormatado = parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2});
-        const venc = formatarDataBR(f.data_vencimento);
-        const pagto = f.data_pagamento ? formatarDataBR(f.data_pagamento) : '---';
-        const tipoExtenso = f.tipo === 'receber' ? 'entrada' : 'saida saída';
-
-        // BUSCA GLOBAL: Verifica todos os campos
-        const matchBusca = 
-            f.descricao.toLowerCase().includes(busca) || 
-            (f.categoria && f.categoria.toLowerCase().includes(busca)) ||
-            (f.forma_pagamento && f.forma_pagamento.toLowerCase().includes(busca)) ||
-            f.status.toLowerCase().includes(busca) ||
-            valorFormatado.includes(busca) ||
-            venc.includes(busca) ||
-            pagto.includes(busca) ||
-            tipoExtenso.includes(busca);
+        const matchBusca = f.descricao.toLowerCase().includes(busca) || 
+                           (f.categoria && f.categoria.toLowerCase().includes(busca)) ||
+                           f.status.toLowerCase().includes(busca) || 
+                           valorFormatado.includes(busca);
 
         let matchData = true;
         if(dIni) matchData = matchData && (f.data_vencimento >= dIni);
         if(dFim) matchData = matchData && (f.data_vencimento <= dFim);
-
         return matchBusca && matchData;
     });
     renderTable(filteredData);
 }
 
-// PDF Ajustado com nomes Entrada/Saída
 function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('l', 'mm', 'a4');
-    doc.text("Extrato Financeiro - ERP ABP", 14, 15);
     
-    const body = filteredData.map(f => [
-        f.tipo === 'receber' ? 'ENTRADA' : 'SAÍDA',
-        f.descricao,
-        f.categoria || '-',
-        f.forma_pagamento || '-',
-        formatarDataBR(f.data_vencimento),
-        f.data_pagamento ? formatarDataBR(f.data_pagamento) : '-',
-        `R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
-        f.status.toUpperCase()
-    ]);
+    const tEnt = document.getElementById('total-receber').innerText;
+    const tSai = document.getElementById('total-pagar').innerText;
+    const tSal = document.getElementById('total-saldo').innerText;
+
+    doc.setFontSize(16);
+    doc.text("Extrato Financeiro - ERP ABP", 14, 15);
+    doc.setFontSize(10);
+    doc.text(`Totais Pagos -> Entradas: ${tEnt} | Saídas: ${tSai} | Saldo em Caixa: ${tSal}`, 14, 22);
+    
+    let acum = 0;
+    const body = filteredData.map(f => {
+        const val = parseFloat(f.valor);
+        if(f.tipo === 'receber') acum += val; else acum -= val;
+        return [
+            f.tipo.toUpperCase(), f.descricao, f.categoria || '-', 
+            formatarDataBR(f.data_vencimento), 
+            `R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
+            `R$ ${acum.toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
+            f.status.toUpperCase()
+        ];
+    });
 
     doc.autoTable({
-        head: [['TIPO', 'DESCRIÇÃO', 'CATEGORIA', 'FORMA', 'VENC.', 'PAGTO.', 'VALOR', 'STATUS']],
+        head: [['TIPO', 'DESCRIÇÃO', 'CATEGORIA', 'VENC.', 'VALOR', 'SALDO ACUM.', 'STATUS']],
         body: body,
-        startY: 25,
-        theme: 'striped',
-        styles: { fontSize: 8 }
+        startY: 28,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [62, 207, 142] }
     });
-    doc.save('extrato.pdf');
+    doc.save('extrato_erp_abp.pdf');
 }
 
-// Demais funções (handleSave, editFinance, resetForm, loadEntidadesSelect, delete...) 
-// permanecem idênticas para garantir o funcionamento do parcelamento e datas.
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
@@ -269,9 +277,11 @@ async function handleSave() {
     }
     resetForm(); loadFinanceiro();
 }
+
 function getFormData(uid) {
     return { usuario_id: uid, tipo: document.getElementById('tipo').value, descricao: document.getElementById('descricao').value, valor: parseFloat(document.getElementById('valor').value), data_vencimento: document.getElementById('data_vencimento').value, data_pagamento: document.getElementById('data_pagamento').value || null, status: document.getElementById('status').value, entidade_id: document.getElementById('entidade_id').value || null, categoria: document.getElementById('categoria').value, forma_pagamento: document.getElementById('forma_pagamento').value };
 }
+
 function editFinance(id) {
     const item = currentFinanceData.find(f => f.id === id);
     document.getElementById('edit-id').value = item.id;
@@ -285,12 +295,11 @@ function editFinance(id) {
     document.getElementById('categoria').value = item.categoria || '';
     document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
     document.getElementById('parcelas').disabled = true;
-    document.getElementById('form-title').innerText = "Editando Lançamento";
-    document.getElementById('btn-save').innerText = "Atualizar Lançamento";
     document.getElementById('btn-cancel').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
 }
-function resetForm() { document.querySelectorAll('input, select').forEach(i => i.value = (i.id==='parcelas'?1:'')); document.getElementById('edit-id').value = ''; document.getElementById('tipo').value = 'pagar'; document.getElementById('status').value = 'pendente'; document.getElementById('parcelas').disabled = false; document.getElementById('form-title').innerText = "Novo Lançamento"; document.getElementById('btn-save').innerText = "Salvar Lançamento(s)"; document.getElementById('btn-cancel').style.display = 'none'; }
+
+function resetForm() { document.querySelectorAll('input, select').forEach(i => i.value = (i.id==='parcelas'?1:'')); document.getElementById('edit-id').value = ''; document.getElementById('tipo').value = 'pagar'; document.getElementById('status').value = 'pendente'; document.getElementById('parcelas').disabled = false; document.getElementById('btn-cancel').style.display = 'none'; }
 async function deleteSingle(id) { if(confirm("Excluir este lançamento?")) { await _supabase.from('financeiro').delete().eq('id', id); loadFinanceiro(); } }
 async function loadEntidadesSelect() { const { data } = await _supabase.from('entidades').select('id, nome_completo'); const select = document.getElementById('entidade_id'); if(data) data.forEach(e => { select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`; }); }
 function toggleSelectAll() { const isChecked = document.getElementById('select-all').checked; document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked); updateBulkUI(); }
