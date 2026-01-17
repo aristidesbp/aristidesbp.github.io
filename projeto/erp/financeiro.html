@@ -24,112 +24,89 @@
     </script>
 
     <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; --info: #3b82f6; }
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        .container { max-width: 1300px; margin: auto; padding: 20px; }
         .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
         .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
         .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
-        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
-        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 11px; text-transform: uppercase; text-align: left; }
+        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 13px; }
         .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .status-pago { background: #dcfce7; color: #166534; }
-        .status-pendente { background: #fef9c3; color: #854d0e; }
-        .label-tipo { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 5px; }
-        .tipo-pagar { color: var(--danger); }
-        .tipo-receber { color: var(--primary); }
         
         .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .resumo-card { padding: 15px; border-radius: 10px; color: white; text-align: center; }
         .resumo-entradas { background: #10b981; }
         .resumo-saidas { background: #ef4444; }
         .resumo-saldo { background: #3b82f6; }
-        
-        .bulk-actions { margin-bottom: 10px; display: none; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; }
-        .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
-        .btn-pdf { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .resumo-previsto { background: #64748b; }
+
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .status-pago { background: #dcfce7; color: #166534; }
+        .status-pendente { background: #fef9c3; color: #854d0e; }
+        .tipo-saida { color: var(--danger); font-weight: bold; font-size: 10px; }
+        .tipo-entrada { color: var(--primary); font-weight: bold; font-size: 10px; }
+        .col-saldo { font-weight: bold; background: #f8fafc; }
     </style>
 </head>
 <body>
 
 <div class="navbar">
     <div style="font-weight: bold;">ERP ABP - FINANCEIRO</div>
-    <div>
-        <a href="index.html" style="text-decoration:none; color:#64748b; font-weight:bold; margin-right:15px;">Início</a>
-        <button onclick="sairDaConta()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Sair</button>
-    </div>
+    <button onclick="sairDaConta()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Sair</button>
 </div>
 
 <div class="container">
     <div class="card">
         <h3 id="form-title">Novo Lançamento</h3>
         <input type="hidden" id="edit-id">
-        <div class="section-title">Dados e Parcelamento</div>
         <div class="form-grid">
-            <div><label>Tipo *</label><select id="tipo"><option value="pagar">Saída</option><option value="receber">Entrada</option></select></div>
-            <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao"></div>
-            <div><label>Valor Parcela (R$) *</label><input type="number" id="valor" step="0.01"></div>
-            <div><label>Qtde Parcelas</label><input type="number" id="parcelas" value="1" min="1"></div>
-        </div>
-        <div class="section-title">Datas e Status</div>
-        <div class="form-grid">
-            <div><label>1º Vencimento *</label><input type="date" id="data_vencimento"></div>
-            <div><label>Data Pagamento</label><input type="date" id="data_pagamento"></div>
-            <div><label>Status</label><select id="status"><option value="pendente">Pendente</option><option value="pago">Pago/Recebido</option></select></div>
-        </div>
-        <div class="section-title">Classificação</div>
-        <div class="form-grid">
-            <div><label>Entidade</label><select id="entidade_id"><option value="">Selecione...</option></select></div>
-            <div><label>Categoria</label><input type="text" id="categoria"></div>
-            <div><label>Forma Pagto</label><input type="text" id="forma_pagamento"></div>
+            <div><label>Tipo</label><select id="tipo"><option value="pagar">Saída</option><option value="receber">Entrada</option></select></div>
+            <div style="grid-column: span 2;"><label>Descrição</label><input type="text" id="descricao"></div>
+            <div><label>Valor Parcela</label><input type="number" id="valor" step="0.01"></div>
+            <div><label>Parcelas</label><input type="number" id="parcelas" value="1" min="1"></div>
+            <div><label>Vencimento</label><input type="date" id="data_vencimento"></div>
+            <div><label>Pagamento</label><input type="date" id="data_pagamento"></div>
+            <div><label>Status</label><select id="status"><option value="pendente">Pendente</option><option value="pago">Pago</option></select></div>
         </div>
         <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento(s)</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
     </div>
 
     <div class="card">
         <div class="form-grid">
-            <div style="grid-column: span 2;"><label>Busca Inteligente (Tudo)</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Busque por descrição, categoria, valor, data ou status..."></div>
+            <div style="grid-column: span 2;"><label>Busca Global</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Filtrar extrato..."></div>
             <div><label>Início</label><input type="date" id="dataInicio" onchange="filtrarTabela()"></div>
             <div><label>Fim</label><input type="date" id="dataFim" onchange="filtrarTabela()"></div>
-            <div style="display: flex; align-items: flex-end;">
-                <button class="btn-pdf" onclick="exportarPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
-            </div>
+            <div style="display: flex; align-items: flex-end;"><button class="btn-add" onclick="exportarPDF()" style="margin:0; background:#334155"><i class="fas fa-file-pdf"></i> PDF</button></div>
         </div>
     </div>
 
     <div class="resumo-financeiro">
-        <div class="resumo-card resumo-entradas"><span>Entradas</span><br><b id="total-receber">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saidas"><span>Saídas</span><br><b id="total-pagar">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saldo"><span>Saldo Filtrado</span><br><b id="total-saldo">R$ 0,00</b></div>
-    </div>
-
-    <div id="bulk-area" class="bulk-actions">
-        <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
-        <button onclick="deleteSelected()" style="background:var(--danger); color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:15px;"><i class="fas fa-trash"></i> Excluir Selecionados</button>
+        <div class="resumo-card resumo-entradas"><span>Entradas (Pagas)</span><br><b id="total-entradas">R$ 0,00</b></div>
+        <div class="resumo-card resumo-saidas"><span>Saídas (Pagas)</span><br><b id="total-saidas">R$ 0,00</b></div>
+        <div class="resumo-card resumo-saldo"><span>Saldo Atual (Real)</span><br><b id="total-real">R$ 0,00</b></div>
+        <div class="resumo-card resumo-previsto"><span>Saldo Final (Previsto)</span><br><b id="total-previsto">R$ 0,00</b></div>
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th width="40"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
+                    <th width="30"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
                     <th>Tipo</th>
                     <th>Descrição</th>
                     <th>Categoria</th>
-                    <th>Forma Pagto</th>
                     <th>Vencimento</th>
                     <th>Pagamento</th>
                     <th>Valor</th>
                     <th>Status</th>
+                    <th style="background: #e2e8f0; color: #1e293b;">Saldo Acum.</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -144,160 +121,158 @@ let filteredData = [];
 
 function formatarDataBR(dataISO) {
     if(!dataISO) return '---';
-    const partes = dataISO.split('-');
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    const p = dataISO.split('-');
+    return `${p[2]}/${p[1]}/${p[0]}`;
 }
 
 async function loadFinanceiro() {
-    const { data, error } = await _supabase.from('financeiro').select('*, entidades(nome_completo)').order('data_vencimento', { ascending: true });
-    if (error) return;
+    const { data } = await _supabase.from('financeiro').select('*, entidades(nome_completo)').order('data_vencimento', { ascending: true });
     currentFinanceData = data || [];
     filtrarTabela();
 }
 
 function renderTable(data) {
     const list = document.getElementById('financeiro-list');
-    let e = 0, s = 0;
-    list.innerHTML = data.map(f => {
+    let saldoAcumulado = 0;
+    let tEntradas = 0;
+    let tSaidas = 0;
+    let tPrevisto = 0;
+
+    list.innerHTML = data.map((f, index) => {
         const val = parseFloat(f.valor) || 0;
-        const tipoLabel = f.tipo === 'receber' ? 'Entrada' : 'Saída';
-        if(f.tipo === 'receber') e += val; else s += val;
         
+        // Lógica de Saldo Acumulado (Extrato)
+        if (f.tipo === 'receber') {
+            saldoAcumulado += val;
+            if(f.status === 'pago') tEntradas += val;
+        } else {
+            saldoAcumulado -= val;
+            if(f.status === 'pago') tSaidas += val;
+        }
+
+        tPrevisto = saldoAcumulado;
+
         return `
         <tr>
-            <td><input type="checkbox" class="row-checkbox" value="${f.id}" onclick="updateBulkUI()"></td>
-            <td><span class="label-tipo tipo-${f.tipo}">${tipoLabel}</span></td>
+            <td><input type="checkbox" class="row-checkbox" value="${f.id}"></td>
+            <td><span class="tipo-${f.tipo}">${f.tipo === 'receber' ? 'ENTRADA' : 'SAÍDA'}</span></td>
             <td>${f.descricao}</td>
             <td>${f.categoria || '-'}</td>
-            <td>${f.forma_pagamento || '-'}</td>
             <td>${formatarDataBR(f.data_vencimento)}</td>
-            <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '<small style="color:#ccc">---</small>'}</td>
-            <td><b>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
+            <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '---'}</td>
+            <td>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
             <td><span class="status-badge status-${f.status}">${f.status}</span></td>
+            <td class="col-saldo">R$ ${saldoAcumulado.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
             <td>
-                <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-action" style="color:#ef4444" onclick="deleteSingle('${f.id}')"><i class="fas fa-trash"></i></button>
+                <button onclick="editFinance('${f.id}')" style="border:none; background:none; color:#3b82f6; cursor:pointer;"><i class="fas fa-edit"></i></button>
+                <button onclick="deleteSingle('${f.id}')" style="border:none; background:none; color:#ef4444; cursor:pointer;"><i class="fas fa-trash"></i></button>
             </td>
         </tr>`;
-    }).join('') || '<tr><td colspan="10" style="text-align:center">Nenhum resultado encontrado.</td></tr>';
-    
-    document.getElementById('total-receber').innerText = `R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('total-pagar').innerText = `R$ ${s.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-    document.getElementById('total-saldo').innerText = `R$ ${(e-s).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    }).join('');
+
+    document.getElementById('total-entradas').innerText = `R$ ${tEntradas.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-saidas').innerText = `R$ ${tSaidas.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-real').innerText = `R$ ${(tEntradas - tSaidas).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+    document.getElementById('total-previsto').innerText = `R$ ${saldoAcumulado.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 }
 
 function filtrarTabela() {
     const busca = document.getElementById('inputBusca').value.toLowerCase();
     const dIni = document.getElementById('dataInicio').value;
     const dFim = document.getElementById('dataFim').value;
-    
+
     filteredData = currentFinanceData.filter(f => {
-        const valorFormatado = parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2});
-        const venc = formatarDataBR(f.data_vencimento);
-        const pagto = f.data_pagamento ? formatarDataBR(f.data_pagamento) : '---';
-        const tipoExtenso = f.tipo === 'receber' ? 'entrada' : 'saida saída';
-
-        // BUSCA GLOBAL: Verifica todos os campos
-        const matchBusca = 
-            f.descricao.toLowerCase().includes(busca) || 
-            (f.categoria && f.categoria.toLowerCase().includes(busca)) ||
-            (f.forma_pagamento && f.forma_pagamento.toLowerCase().includes(busca)) ||
-            f.status.toLowerCase().includes(busca) ||
-            valorFormatado.includes(busca) ||
-            venc.includes(busca) ||
-            pagto.includes(busca) ||
-            tipoExtenso.includes(busca);
-
-        let matchData = true;
-        if(dIni) matchData = matchData && (f.data_vencimento >= dIni);
-        if(dFim) matchData = matchData && (f.data_vencimento <= dFim);
-
-        return matchBusca && matchData;
+        const matchTxt = f.descricao.toLowerCase().includes(busca) || (f.categoria && f.categoria.toLowerCase().includes(busca)) || f.status.includes(busca);
+        let matchDt = true;
+        if(dIni) matchDt = matchDt && (f.data_vencimento >= dIni);
+        if(dFim) matchDt = matchDt && (f.data_vencimento <= dFim);
+        return matchTxt && matchDt;
     });
     renderTable(filteredData);
 }
 
-// PDF Ajustado com nomes Entrada/Saída
 function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('l', 'mm', 'a4');
-    doc.text("Extrato Financeiro - ERP ABP", 14, 15);
     
-    const body = filteredData.map(f => [
-        f.tipo === 'receber' ? 'ENTRADA' : 'SAÍDA',
-        f.descricao,
-        f.categoria || '-',
-        f.forma_pagamento || '-',
-        formatarDataBR(f.data_vencimento),
-        f.data_pagamento ? formatarDataBR(f.data_pagamento) : '-',
-        `R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
-        f.status.toUpperCase()
-    ]);
+    doc.setFontSize(16);
+    doc.text("EXTRATO BANCÁRIO - ERP ABP", 14, 15);
+    
+    doc.setFontSize(10);
+    doc.text(`Resumo: Entradas ${document.getElementById('total-entradas').innerText} | Saídas ${document.getElementById('total-saidas').innerText} | Saldo Real: ${document.getElementById('total-real').innerText}`, 14, 22);
+
+    let acum = 0;
+    const body = filteredData.map(f => {
+        const val = parseFloat(f.valor);
+        f.tipo === 'receber' ? acum += val : acum -= val;
+        return [
+            f.tipo.toUpperCase(), f.descricao, formatarDataBR(f.data_vencimento), 
+            f.data_pagamento ? formatarDataBR(f.data_pagamento) : '-',
+            `R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
+            f.status.toUpperCase(),
+            `R$ ${acum.toLocaleString('pt-BR', {minimumFractionDigits:2})}`
+        ];
+    });
 
     doc.autoTable({
-        head: [['TIPO', 'DESCRIÇÃO', 'CATEGORIA', 'FORMA', 'VENC.', 'PAGTO.', 'VALOR', 'STATUS']],
+        head: [['TIPO', 'DESCRIÇÃO', 'VENC.', 'PAGTO.', 'VALOR', 'STATUS', 'SALDO ACUM.']],
         body: body,
-        startY: 25,
+        startY: 30,
         theme: 'striped',
-        styles: { fontSize: 8 }
+        headStyles: { fillColor: [62, 207, 142] }
     });
-    doc.save('extrato.pdf');
+
+    doc.save('extrato_completo.pdf');
 }
 
-// Demais funções (handleSave, editFinance, resetForm, loadEntidadesSelect, delete...) 
-// permanecem idênticas para garantir o funcionamento do parcelamento e datas.
+// Funções de apoio
 async function handleSave() {
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
-    const numParcelas = parseInt(document.getElementById('parcelas').value) || 1;
-    const valorParcela = parseFloat(document.getElementById('valor').value) || 0;
-    const dataString = document.getElementById('data_vencimento').value;
-    if(!document.getElementById('descricao').value || !valorParcela || !dataString) return alert("Preencha os campos obrigatórios.");
+    const num = parseInt(document.getElementById('parcelas').value) || 1;
+    const val = parseFloat(document.getElementById('valor').value);
+    const dtBase = document.getElementById('data_vencimento').value;
+
+    const getBase = () => ({
+        usuario_id: user.id,
+        tipo: document.getElementById('tipo').value,
+        status: document.getElementById('status').value,
+        data_pagamento: document.getElementById('data_pagamento').value || null,
+        categoria: document.getElementById('categoria').value,
+        descricao: document.getElementById('descricao').value
+    });
+
     if(id) {
-        await _supabase.from('financeiro').update(getFormData(user.id)).eq('id', id);
+        await _supabase.from('financeiro').update({...getBase(), valor: val, data_vencimento: dtBase}).eq('id', id);
     } else {
-        const lancamentos = [];
-        for(let i = 0; i < numParcelas; i++) {
-            let dt = new Date(dataString + "T12:00:00"); 
-            dt.setMonth(dt.getMonth() + i);
-            lancamentos.push({...getFormData(user.id), valor: valorParcela,
-                descricao: numParcelas > 1 ? `${document.getElementById('descricao').value} (${i+1}/${numParcelas})` : document.getElementById('descricao').value,
-                data_vencimento: dt.toISOString().split('T')[0]
-            });
+        const lot = [];
+        for(let i=0; i<num; i++){
+            let d = new Date(dtBase + "T12:00:00"); d.setMonth(d.getMonth() + i);
+            lot.push({...getBase(), valor: val, data_vencimento: d.toISOString().split('T')[0], 
+                descricao: num > 1 ? `${document.getElementById('descricao').value} (${i+1}/${num})` : document.getElementById('descricao').value});
         }
-        await _supabase.from('financeiro').insert(lancamentos);
+        await _supabase.from('financeiro').insert(lot);
     }
     resetForm(); loadFinanceiro();
 }
-function getFormData(uid) {
-    return { usuario_id: uid, tipo: document.getElementById('tipo').value, descricao: document.getElementById('descricao').value, valor: parseFloat(document.getElementById('valor').value), data_vencimento: document.getElementById('data_vencimento').value, data_pagamento: document.getElementById('data_pagamento').value || null, status: document.getElementById('status').value, entidade_id: document.getElementById('entidade_id').value || null, categoria: document.getElementById('categoria').value, forma_pagamento: document.getElementById('forma_pagamento').value };
-}
+
 function editFinance(id) {
     const item = currentFinanceData.find(f => f.id === id);
     document.getElementById('edit-id').value = item.id;
-    document.getElementById('tipo').value = item.tipo;
     document.getElementById('descricao').value = item.descricao;
     document.getElementById('valor').value = item.valor;
     document.getElementById('data_vencimento').value = item.data_vencimento;
     document.getElementById('data_pagamento').value = item.data_pagamento || '';
     document.getElementById('status').value = item.status;
-    document.getElementById('entidade_id').value = item.entidade_id || '';
-    document.getElementById('categoria').value = item.categoria || '';
-    document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
+    document.getElementById('tipo').value = item.tipo;
     document.getElementById('parcelas').disabled = true;
-    document.getElementById('form-title').innerText = "Editando Lançamento";
-    document.getElementById('btn-save').innerText = "Atualizar Lançamento";
-    document.getElementById('btn-cancel').style.display = 'block';
-    window.scrollTo({top:0, behavior:'smooth'});
+    window.scrollTo(0,0);
 }
-function resetForm() { document.querySelectorAll('input, select').forEach(i => i.value = (i.id==='parcelas'?1:'')); document.getElementById('edit-id').value = ''; document.getElementById('tipo').value = 'pagar'; document.getElementById('status').value = 'pendente'; document.getElementById('parcelas').disabled = false; document.getElementById('form-title').innerText = "Novo Lançamento"; document.getElementById('btn-save').innerText = "Salvar Lançamento(s)"; document.getElementById('btn-cancel').style.display = 'none'; }
-async function deleteSingle(id) { if(confirm("Excluir este lançamento?")) { await _supabase.from('financeiro').delete().eq('id', id); loadFinanceiro(); } }
-async function loadEntidadesSelect() { const { data } = await _supabase.from('entidades').select('id, nome_completo'); const select = document.getElementById('entidade_id'); if(data) data.forEach(e => { select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`; }); }
-function toggleSelectAll() { const isChecked = document.getElementById('select-all').checked; document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked); updateBulkUI(); }
-function updateBulkUI() { const selected = document.querySelectorAll('.row-checkbox:checked').length; document.getElementById('bulk-area').style.display = selected > 0 ? 'block' : 'none'; document.getElementById('selected-count').innerText = `${selected} selecionados`; }
-async function deleteSelected() { if(!confirm("Excluir selecionados?")) return; const ids = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value); await _supabase.from('financeiro').delete().in('id', ids); loadFinanceiro(); updateBulkUI(); }
-async function sairDaConta() { if(confirm("Sair?")) { await _supabase.auth.signOut(); window.location.href='login.html'; } }
-document.addEventListener('DOMContentLoaded', () => { loadEntidadesSelect(); loadFinanceiro(); });
+
+function resetForm() { document.querySelectorAll('input, select').forEach(i => i.value = (i.id==='parcelas'?1:'')); document.getElementById('parcelas').disabled=false; document.getElementById('edit-id').value=''; }
+async function deleteSingle(id) { if(confirm("Excluir?")) { await _supabase.from('financeiro').delete().eq('id', id); loadFinanceiro(); } }
+async function sairDaConta() { await _supabase.auth.signOut(); window.location.href='login.html'; }
+document.addEventListener('DOMContentLoaded', loadFinanceiro);
 </script>
 </body>
 </html>
