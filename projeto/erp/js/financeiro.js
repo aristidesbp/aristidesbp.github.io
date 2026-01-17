@@ -1,143 +1,172 @@
-/**
- * js/financeiro.js 
- * Meta: Realizar o lançamento no banco de dados
- */
+// js/financeiro.js
 
-// 1. Inicialização ao carregar a página
 async function initFinanceiro() {
-    console.log("Sistema pronto para lançamentos...");
+    // Definir datas padrão para o filtro (mês atual)
+    const agora = new Date();
+    const primeiroDia = new Date(agora.getFullYear(), agora.getMonth(), 1).toISOString().split('T')[0];
+    const ultimoDia = new Date(agora.getFullYear(), agora.getMonth() + 1, 0).toISOString().split('T')[0];
     
-    // Configura datas padrão (mês atual) nos inputs de filtro
-    const hoje = new Date();
-    const pDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
-    const uDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).toISOString().split('T')[0];
-    
-    if(document.getElementById('filtro_inicio')) document.getElementById('filtro_inicio').value = pDia;
-    if(document.getElementById('filtro_fim')) document.getElementById('filtro_fim').value = uDia;
+    document.getElementById('filtro_inicio').value = primeiroDia;
+    document.getElementById('filtro_fim').value = ultimoDia;
 
     await carregarListas();
-    await loadFinanceiro();
+    loadFinanceiro();
 }
 
-// 2. FUNÇÃO PARA SALVAR O LANÇAMENTO
-async function salvarLancamento() {
-    console.log("Tentando salvar lançamento...");
-
-    // Captura os dados do formulário
-    const tipo = document.getElementById('tipo').value;
-    const descricao = document.getElementById('descricao').value;
-    const valor = document.getElementById('valor').value;
-    const dataVenc = document.getElementById('data_vencimento').value;
-    const parcelas = parseInt(document.getElementById('parcelas').value) || 1;
-    
-    // Pega os IDs de cliente ou fornecedor
-    const clienteId = document.getElementById('cliente_id').value;
-    const fornecedorId = document.getElementById('fornecedor_id').value;
-
-    // Validação básica
-    if (!descricao || !valor || !dataVenc) {
-        alert("Por favor, preencha Descrição, Valor e Vencimento.");
-        return;
-    }
-
-    try {
-        // Pega o usuário logado para o usuario_id
-        const { data: { user }, error: userError } = await _supabase.auth.getUser();
-        
-        if (userError || !user) {
-            alert("Erro: Usuário não autenticado.");
-            return;
-        }
-
-        let lancamentos = [];
-
-        // Loop para gerar as parcelas (Repetir Meses)
-        for (let i = 0; i < parcelas; i++) {
-            let dataRef = new Date(dataVenc + 'T00:00:00');
-            dataRef.setMonth(dataRef.getMonth() + i);
-
-            lancamentos.push({
-                usuario_id: user.id,
-                tipo: tipo,
-                descricao: parcelas > 1 ? `${descricao} (${i + 1}/${parcelas})` : descricao,
-                valor: parseFloat(valor),
-                data_vencimento: dataRef.toISOString().split('T')[0],
-                status: 'pendente',
-                // Se for 'receber' envia cliente, se for 'pagar' envia fornecedor
-                cliente_id: tipo === 'receber' && clienteId ? clienteId : null,
-                fornecedor_id: tipo === 'pagar' && fornecedorId ? fornecedorId : null
-            });
-        }
-
-        // Insere no banco de dados
-        const { error } = await _supabase.from('financeiro').insert(lancamentos);
-
-        if (error) {
-            console.error("Erro Supabase:", error);
-            alert("Erro ao gravar no banco: " + error.message);
-        } else {
-            alert(parcelas > 1 ? `${parcelas} parcelas lançadas!` : "Lançamento realizado com sucesso!");
-            
-            // Limpa o formulário
-            document.getElementById('descricao').value = '';
-            document.getElementById('valor').value = '';
-            
-            // Recarrega a tabela para mostrar o novo item
-            await loadFinanceiro();
-        }
-
-    } catch (err) {
-        console.error("Erro inesperado:", err);
-        alert("Ocorreu um erro inesperado ao salvar.");
-    }
-}
-
-// 3. CARREGAR SELECTS (Você disse que já está funcionando, mantive a lógica)
+// Carregar Clientes e Fornecedores para os menus suspensos
 async function carregarListas() {
-    const { data: clie } = await _supabase.from('clientes').select('id, nome_completo').order('nome_completo');
-    const { data: forn } = await _supabase.from('fornecedores').select('id, razao_social').order('razao_social');
+    const { data: clientes } = await _supabase.from('clientes').select('id, nome_completo').order('nome_completo');
+    const { data: forns } = await _supabase.from('fornecedores').select('id, razao_social').order('razao_social');
 
-    const sClie = document.getElementById('cliente_id');
-    const sForn = document.getElementById('fornecedor_id');
+    const selClie = document.getElementById('cliente_id');
+    const selForn = document.getElementById('fornecedor_id');
 
-    if(sClie) clie?.forEach(c => sClie.innerHTML += `<option value="${c.id}">${c.nome_completo}</option>`);
-    if(sForn) forn?.forEach(f => sForn.innerHTML += `<option value="${f.id}">${f.razao_social}</option>`);
+    clientes?.forEach(c => selClie.innerHTML += `<option value="${c.id}">${c.nome_completo}</option>`);
+    forns?.forEach(f => selForn.innerHTML += `<option value="${f.id}">${f.razao_social}</option>`);
 }
 
-// 4. LISTAGEM (Para atualizar a tabela após salvar)
-async function loadFinanceiro() {
-    const list = document.getElementById('financeiro-list');
-    if(!list) return;
+function toggleRelacionamento() {
+    const tipo = document.getElementById('tipo').value;
+    document.getElementById('div-cliente').style.display = tipo === 'receber' ? 'block' : 'none';
+    document.getElementById('div-fornecedor').style.display = tipo === 'pagar' ? 'block' : 'none';
+}
 
-    let { data, error } = await _supabase
-        .from('financeiro')
-        .select('*, clientes(nome_completo), fornecedores(razao_social)')
-        .order('data_vencimento', { ascending: true });
+// Salvar e gerar parcelas
+async function handleSaveFinanceiro() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    const parcelas = parseInt(document.getElementById('parcelas').value) || 1;
+    const baseVencimento = document.getElementById('data_vencimento').value;
 
-    if (error) {
-        console.log("Erro ao listar:", error);
-        return;
+    if (!baseVencimento || !document.getElementById('valor').value) {
+        return alert("Preencha data e valor!");
     }
 
+    let lancamentos = [];
+    for (let i = 0; i < parcelas; i++) {
+        let dataParcela = new Date(baseVencimento + 'T00:00:00');
+        dataParcela.setMonth(dataParcela.getMonth() + i);
+
+        lancamentos.push({
+            usuario_id: user.id,
+            tipo: document.getElementById('tipo').value,
+            descricao: document.getElementById('descricao').value + (parcelas > 1 ? ` (${i + 1}/${parcelas})` : ''),
+            valor: document.getElementById('valor').value,
+            data_vencimento: dataParcela.toISOString().split('T')[0],
+            cliente_id: document.getElementById('cliente_id').value || null,
+            fornecedor_id: document.getElementById('fornecedor_id').value || null,
+            status: 'pendente'
+        });
+    }
+
+    const { error } = await _supabase.from('financeiro').insert(lancamentos);
+    if (error) alert("Erro: " + error.message);
+    else {
+        alert("Lançamento concluído!");
+        loadFinanceiro();
+    }
+}
+
+// Carregar com Busca e Filtros
+async function loadFinanceiro() {
+    const inicio = document.getElementById('filtro_inicio').value;
+    const fim = document.getElementById('filtro_fim').value;
+    const busca = document.getElementById('filtro_busca').value;
+
+    let query = _supabase.from('financeiro').select('*, clientes(nome_completo), fornecedores(razao_social)');
+
+    if (inicio) query = query.gte('data_vencimento', inicio);
+    if (fim) query = query.lte('data_vencimento', fim);
+    
+    // Busca por texto na descrição
+    if (busca) query = query.ilike('descricao', `%${busca}%`);
+
+    const { data, error } = await query.order('data_vencimento', { ascending: true });
+
+    if (error) return console.error(error);
+
+    let rec = 0, pag = 0;
+    const list = document.getElementById('financeiro-list');
     list.innerHTML = '';
+
     data.forEach(item => {
+        const valor = parseFloat(item.valor);
+        item.tipo === 'receber' ? rec += valor : pag += valor;
+
+        const dataFormatada = item.data_vencimento.split('-').reverse().join('/');
+        const entidade = item.clientes?.nome_completo || item.fornecedores?.razao_social || '-';
+
         list.innerHTML += `
-            <tr>
-                <td>${item.data_vencimento.split('-').reverse().join('/')}</td>
+            <tr style="border-left: 5px solid ${item.tipo === 'receber' ? '#2ecc71' : '#e74c3c'}">
+                <td><input type="checkbox" class="row-select" value="${item.id}" onchange="updateSelectedCount()"></td>
+                <td>${dataFormatada}</td>
                 <td>${item.descricao}</td>
-                <td>${item.clientes?.nome_completo || item.fornecedores?.razao_social || 'Geral'}</td>
-                <td>R$ ${parseFloat(item.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
-                <td>${item.status}</td>
-                <td><button onclick="deletar('${item.id}')">X</button></td>
+                <td>${entidade}</td>
+                <td><b>R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b></td>
+                <td><span class="status-badge ${item.status}">${item.status}</span></td>
+                <td>
+                    <button onclick="baixarTitulo('${item.id}')" title="Pagar/Receber"><i class="fas fa-check"></i></button>
+                    <button onclick="deletarTitulo('${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
+                </td>
             </tr>
         `;
     });
+
+    document.getElementById('resumo-receber').innerText = `R$ ${rec.toLocaleString('pt-BR')}`;
+    document.getElementById('resumo-pagar').innerText = `R$ ${pag.toLocaleString('pt-BR')}`;
+    document.getElementById('resumo-saldo').innerText = `R$ ${(rec - pag).toLocaleString('pt-BR')}`;
 }
 
-function toggleEntidade() {
-    const tipo = document.getElementById('tipo').value;
-    document.getElementById('campo-cliente').style.display = tipo === 'receber' ? 'block' : 'none';
-    document.getElementById('campo-fornecedor').style.display = tipo === 'pagar' ? 'block' : 'none';
+// Funções de Ação
+async function baixarTitulo(id) {
+    await _supabase.from('financeiro').update({ status: 'pago' }).eq('id', id);
+    loadFinanceiro();
+}
+
+async function deletarTitulo(id) {
+    if (confirm("Deseja apagar este registro?")) {
+        await _supabase.from('financeiro').delete().eq('id', id);
+        loadFinanceiro();
+    }
+}
+
+// Seleção Múltipla
+function toggleSelectAll() {
+    const master = document.getElementById('select-all');
+    document.querySelectorAll('.row-select').forEach(cb => cb.checked = master.checked);
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+    const checked = document.querySelectorAll('.row-select:checked');
+    document.getElementById('bulk-actions').style.display = checked.length > 0 ? 'block' : 'none';
+    document.getElementById('selected-count').innerText = checked.length;
+}
+
+async function deleteSelected() {
+    if (!confirm("Excluir registros selecionados?")) return;
+    const ids = Array.from(document.querySelectorAll('.row-select:checked')).map(cb => cb.value);
+    await _supabase.from('financeiro').delete().in('id', ids);
+    loadFinanceiro();
+}
+
+// Gerar PDF
+function exportarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("Relatório de Caixa - ERP ABP", 14, 15);
+    
+    const rows = [];
+    document.querySelectorAll("#financeiro-list tr").forEach(tr => {
+        const tds = tr.querySelectorAll("td");
+        rows.push([tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText]);
+    });
+
+    doc.autoTable({
+        head: [['Data', 'Descrição', 'Entidade', 'Valor', 'Status']],
+        body: rows,
+        startY: 25
+    });
+    doc.save("financeiro.pdf");
 }
 
 document.addEventListener('DOMContentLoaded', initFinanceiro);
