@@ -539,11 +539,9 @@ button.main-btn:hover {
     
     <!-- Script principal do login -->
     <script>
-    // URL do projeto Supabase
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
 
-// Chave pública para uso no frontend
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
 
 // Criação do cliente Supabase
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
