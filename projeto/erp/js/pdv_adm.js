@@ -2,18 +2,57 @@ const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Substitua a função carregarDadosAdm por esta:
 async function carregarDadosAdm() {
-    const { data: vendas, error } = await _supabase
+    let dataInicio = document.getElementById('data-inicio').value;
+    let dataFim = document.getElementById('data-fim').value;
+
+    let query = _supabase
         .from('vendas')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
+        .order('created_at', { ascending: false });
 
-    if (error) return console.error(error);
+    // Aplica filtros se as datas estiverem preenchidas
+    if (dataInicio) {
+        query = query.gte('created_at', `${dataInicio}T00:00:00`);
+    }
+    if (dataFim) {
+        query = query.lte('created_at', `${dataFim}T23:59:59`);
+    }
+
+    const { data: vendas, error } = await query;
+
+    if (error) {
+        console.error("Erro ao filtrar:", error);
+        return;
+    }
 
     renderizarVendas(vendas);
     atualizarResumos(vendas);
 }
+
+// Função para facilitar a busca do mês passado
+function definirMesPassado() {
+    const agora = new Date();
+    // Primeiro dia do mês passado
+    const primeiroDia = new Date(agora.getFullYear(), agora.getMonth() - 1, 1);
+    // Último dia do mês passado
+    const ultimoDia = new Date(agora.getFullYear(), agora.getMonth(), 0);
+
+    // Ajusta os inputs (formato YYYY-MM-DD)
+    document.getElementById('data-inicio').value = primeiroDia.toISOString().split('T')[0];
+    document.getElementById('data-fim').value = ultimoDia.toISOString().split('T')[0];
+
+    carregarDadosAdm();
+}
+
+// Inicializa as datas com o dia de hoje por padrão ao abrir a página
+document.addEventListener('DOMContentLoaded', () => {
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('data-inicio').value = hoje;
+    document.getElementById('data-fim').value = hoje;
+    carregarDadosAdm();
+});
 
 function renderizarVendas(vendas) {
     const corpo = document.getElementById('lista-vendas-adm');
