@@ -1078,32 +1078,22 @@ document.addEventListener('DOMContentLoaded', loadNotes);
     <title>Clientes - ERP ABP</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- CONEXAO/VERIFICARLOG -->
-    <script>
+<script>
     // Configurações do Supabase
-const SUPABASE_URL = 'SUA_URL_AQUI';
-const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
 
-// Inicializa o cliente globalmente
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/**
- * Bloqueia o acesso se não estiver logado
- */
 async function validarAcesso() {
     const { data: { session } } = await _supabase.auth.getSession();
-
     if (!session) {
-        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
         const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
         window.location.href = pathPrefix + 'login.html';
     }
     return session;
 }
-
-// Executa automaticamente ao carregar o script
 validarAcesso();
-
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -1116,12 +1106,8 @@ validarAcesso();
     --bg: #f1f5f9;
 }
 
-/* Reset básico */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-/* Corpo da página */
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -1129,14 +1115,12 @@ body {
     padding-top: 85px;
 }
 
-/* Container central */
 .container {
     max-width: 1100px;
     margin: auto;
     padding: 20px;
 }
 
-/* Card padrão */
 .card {
     background: white;
     padding: 25px;
@@ -1145,7 +1129,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Títulos de seção */
 .section-title {
     color: var(--primary);
     font-size: 14px;
@@ -1156,14 +1139,12 @@ body {
     font-weight: bold;
 }
 
-/* Grid do formulário */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
 }
 
-/* Labels */
 label {
     display: block;
     margin-bottom: 5px;
@@ -1172,8 +1153,7 @@ label {
     font-weight: bold;
 }
 
-/* Inputs */
-input {
+input, select, textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -1181,14 +1161,11 @@ input {
     font-size: 14px;
 }
 
-/* Foco do input */
-input:focus {
+input:focus, select:focus, textarea:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 5px rgba(62, 207, 142, 0.2);
 }
 
-/* Botão salvar */
 .btn-add {
     background: var(--primary);
     color: white;
@@ -1201,7 +1178,6 @@ input:focus {
     margin-top: 20px;
 }
 
-/* Botão cancelar */
 .btn-cancel {
     background: #64748b;
     color: white;
@@ -1214,7 +1190,6 @@ input:focus {
     width: 100%;
 }
 
-/* Tabela */
 .table-container {
     background: white;
     border-radius: 12px;
@@ -1222,67 +1197,77 @@ input:focus {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
-th {
-    background: #f8fafc;
-    padding: 15px;
-    color: #64748b;
-    font-size: 12px;
-    text-transform: uppercase;
-}
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; }
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
 
-td {
-    padding: 15px;
-    border-top: 1px solid #f1f5f9;
+/* NAVBAR FIXA */
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; background: white;
+    padding: 15px 25px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
 }
-
-/* Botões da tabela */
-.btn-edit {
-    color: #3b82f6;
-    cursor: pointer;
-    font-size: 18px;
-    background: none;
-    border: none;
-}
-
-.btn-del {
-    color: #ef4444;
-    cursor: pointer;
-    font-size: 18px;
-    background: none;
-    border: none;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+.btn-nav {
+    background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
+    font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
 }
     </style>
 </head>
 <body>
 
+<div class="navbar">
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
+    <div class="nav-buttons">
+        <a href="index.html" style="text-decoration: none; color: #64748b; margin-right: 20px; font-weight: bold;">Voltar</a>
+        <button class="btn-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+</div>
+
     <div class="container">
-
         <div class="card">
-            <h3 id="form-title">Novo Cadastro de Cliente</h3>
-
+            <h3 id="form-title">Novo Cadastro de Usuário / Entidade</h3>
             <input type="hidden" id="edit-id">
 
-            <div class="section-title">Informações Pessoais</div>
+            <div class="section-title">Informações Pessoais e Acesso</div>
             <div class="form-grid">
                 <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
                 <div><label>CPF</label><input type="text" id="cpf"></div>
                 <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
                 <div><label>E-mail</label><input type="email" id="email"></div>
                 <div><label>Telefone</label><input type="text" id="telefone"></div>
-                <div><label>RG</label><input type="text" id="rg"></div>
+                <div><label>Senha de Acesso</label><input type="password" id="senha_acesso" placeholder="Senha interna"></div>
+                
+                <div>
+                    <label>Nível de Acesso</label>
+                    <select id="acesso">
+                        <option value="cliente">Cliente</option>
+                        <option value="funcionario">Funcionário</option>
+                        <option value="comprador">Comprador</option>
+                        <option value="master">Master</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Relacionamento</label>
+                    <select id="relacionamento">
+                        <option value="cliente">Cliente</option>
+                        <option value="funcionario">Funcionário</option>
+                        <option value="fornecedor">Fornecedor</option>
+                        <option value="terceirizado">Terceirizado</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="ativo">Ativo</option>
+                        <option value="desativado">Desativado</option>
+                    </select>
+                </div>
+                <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
             </div>
 
             <div class="section-title">Endereço</div>
@@ -1295,6 +1280,12 @@ td {
                 <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
             </div>
 
+            <div class="section-title">Complementos</div>
+            <div class="form-grid">
+                <div style="grid-column: span 2;"><label>URL de Arquivos (Fotos/Documentos)</label><input type="text" id="arquivos_url" placeholder="Link da foto ou documento"></div>
+                <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+            </div>
+
             <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
             <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
         </div>
@@ -1303,9 +1294,9 @@ td {
             <table>
                 <thead>
                     <tr>
-                        <th>Cliente</th>
-                        <th>CPF / Telefone</th>
-                        <th>Cidade/UF</th>
+                        <th>Nome / Relacionamento</th>
+                        <th>CPF / Contato</th>
+                        <th>Acesso / Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -1314,19 +1305,16 @@ td {
         </div>
     </div>
 
-    <script src="js/navbar.js"></script>
-
     <script>
-    /**
- * js/clientes.js
- * Depende de: js/conexao.js (que fornece a variável _supabase)
- */
+async function sairDaConta() {
+    if(confirm("Deseja realmente sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
 
-// Busca endereço pelo CEP usando ViaCEP
 async function buscaCEP() {
-    const cepInput = document.getElementById('cep');
-    const cep = cepInput.value.replace(/\D/g, '');
-    
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
     if (cep.length === 8) {
         try {
             const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -1337,41 +1325,29 @@ async function buscaCEP() {
                 document.getElementById('cidade').value = data.localidade;
                 document.getElementById('estado').value = data.uf;
             }
-        } catch {
-            console.error("Erro ao buscar CEP");
-        }
+        } catch { console.error("Erro CEP"); }
     }
 }
 
-// Carrega a lista de clientes do banco (CRUD - Read)
 async function loadClients() {
-    const { data, error } = await _supabase
-        .from('clientes')
-        .select('*')
-        .order('nome_completo');
-
-    if (error) {
-        console.error("Erro ao carregar clientes:", error.message);
-        return;
-    }
+    const { data, error } = await _supabase.from('clientes').select('*').order('nome_completo');
+    if (error) return;
 
     const list = document.getElementById('clients-list');
     list.innerHTML = (data || []).map(c => `
         <tr>
-            <td><b>${c.nome_completo}</b><br><small>${c.email || ''}</small></td>
-            <td>${c.cpf || '-'}<br><small>${c.telefone || ''}</small></td>
-            <td>${c.cidade || '-'}/${c.estado || ''}</td>
+            <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
+            <td>${c.cpf || '-'}<br><small>${c.email || ''}</small></td>
+            <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
             <td>
                 <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
                 <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>
-    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum cliente cadastrado.</td></tr>';
+    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
 }
 
-// Salva ou atualiza cliente (CRUD - Create/Update)
 async function handleSave() {
-    // Obtém o usuário logado através da conexão ativa
     const { data: { user } } = await _supabase.auth.getUser();
     const id = document.getElementById('edit-id').value;
 
@@ -1382,13 +1358,20 @@ async function handleSave() {
         data_nascimento: document.getElementById('data_nascimento').value || null,
         email: document.getElementById('email').value,
         telefone: document.getElementById('telefone').value,
-        rg: document.getElementById('rg').value,
+        senha_acesso: document.getElementById('senha_acesso').value,
+        acesso: document.getElementById('acesso').value,
+        relacionamento: document.getElementById('relacionamento').value,
+        status: document.getElementById('status').value,
+        avaliacao: parseInt(document.getElementById('avaliacao').value),
+        observacoes: document.getElementById('observacoes').value,
         cep: document.getElementById('cep').value,
         logradouro: document.getElementById('logradouro').value,
         numero: document.getElementById('numero').value,
         bairro: document.getElementById('bairro').value,
         cidade: document.getElementById('cidade').value,
-        estado: document.getElementById('estado').value
+        estado: document.getElementById('estado').value,
+        // Converte string para array caso tenha algo escrito, ou envia array vazio
+        arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
     };
 
     if (!dados.nome_completo) return alert("Nome é obrigatório");
@@ -1397,62 +1380,52 @@ async function handleSave() {
         ? await _supabase.from('clientes').update(dados).eq('id', id)
         : await _supabase.from('clientes').insert([dados]);
 
-    if (error) {
-        alert("Erro ao salvar: " + error.message);
-    } else {
-        resetForm();
-        loadClients();
-    }
+    if (error) alert("Erro: " + error.message);
+    else { resetForm(); loadClients(); }
 }
 
-// Preenche o formulário para edição
 async function editFull(id) {
     const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
-    
     if (error || !data) return;
 
-    // Preenche cada campo automaticamente com base nas chaves do objeto
     Object.keys(data).forEach(k => {
         const el = document.getElementById(k);
-        if (el) el.value = data[k] || '';
+        if (el) {
+            if (k === 'arquivos_url') el.value = data[k] ? data[k][0] : '';
+            else el.value = data[k] || '';
+        }
     });
 
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('form-title').innerText = "Editando Cliente";
+    document.getElementById('form-title').innerText = "Editando Registro";
     document.getElementById('btn-save').innerText = "Atualizar Cadastro";
     document.getElementById('btn-cancel').style.display = "block";
-    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Reseta o formulário para o estado original
 function resetForm() {
-    document.querySelectorAll('input').forEach(i => i.value = '');
+    document.querySelectorAll('input, select, textarea').forEach(i => {
+        if(i.id === 'avaliacao') i.value = '5';
+        else if(i.tagName === 'SELECT') i.selectedIndex = 0;
+        else i.value = '';
+    });
     document.getElementById('edit-id').value = '';
-    document.getElementById('form-title').innerText = "Novo Cadastro de Cliente";
+    document.getElementById('form-title').innerText = "Novo Cadastro de Usuário / Entidade";
     document.getElementById('btn-save').innerText = "Salvar Cadastro";
     document.getElementById('btn-cancel').style.display = "none";
 }
 
-// Remove cliente do banco (CRUD - Delete)
 async function deleteClient(id) {
-    if (confirm("Excluir definitivamente este cliente?")) {
-        const { error } = await _supabase.from('clientes').delete().eq('id', id);
-        if (error) alert("Erro ao excluir: " + error.message);
+    if (confirm("Excluir definitivamente?")) {
+        await _supabase.from('clientes').delete().eq('id', id);
         loadClients();
     }
 }
 
-/**
- * Inicializa a lista de clientes ao carregar a página
- * A trava de segurança já foi executada no conexao.js
- */
 document.addEventListener('DOMContentLoaded', loadClients);
     </script>
-
 </body>
 </html>
-
 ```
 
 
