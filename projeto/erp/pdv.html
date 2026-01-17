@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/produtos.css"> <script src="js/pdv.js" defer></script>
+</head>
+<body>
+
+<div class="navbar">
+    <div style="font-weight: bold;">ERP ABP - PDV (VENDAS)</div>
+    <div>
+        <a href="index.html" class="nav-link">Início</a>
+        <a href="produtos.html" class="nav-link">Estoque</a>
+        <button onclick="sairDaConta()" class="btn-exit">Sair</button>
+    </div>
+</div>
+
+<div class="container" style="display: grid; grid-template-columns: 1fr 400px; gap: 20px;">
+    
+    <div>
+        <div class="card">
+            <h3>Buscar Produto</h3>
+            <div class="form-grid">
+                <div style="grid-column: span 3;">
+                    <input type="text" id="busca-pdv" placeholder="Nome ou Código de Barras..." onkeyup="buscarProdutoPDV(event)">
+                </div>
+            </div>
+            <div id="resultados-busca" style="margin-top:10px; border-radius:8px; overflow:hidden;"></div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qtd</th>
+                        <th>Unit.</th>
+                        <th>Subtotal</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody id="carrinho-corpo"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card" style="height: fit-content;">
+        <h3>Resumo da Venda</h3>
+        <hr>
+        <div style="margin: 20px 0;">
+            <label>Cliente (Entidade)</label>
+            <select id="cliente_id" style="margin-bottom:15px;"><option value="">Consumidor Final</option></select>
+            
+            <label>Forma de Pagamento</label>
+            <select id="forma_pagto" style="margin-bottom:15px;">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+            </select>
+        </div>
+
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+            <div style="display:flex; justify-content: space-between;"><span>Subtotal:</span><b id="total-bruto">R$ 0,00</b></div>
+            <div style="display:flex; justify-content: space-between; color: #ef4444;"><span>Desconto:</span><input type="number" id="desconto" value="0" style="width:70px; text-align:right;" onchange="calcularTotalVenda()"></div>
+            <hr>
+            <div style="display:flex; justify-content: space-between; font-size: 1.5rem; font-weight: bold; color: var(--primary);">
+                <span>TOTAL:</span><span id="total-venda">R$ 0,00</span>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="finalizarVenda()" style="background: #22c55e; margin-top:20px;">
+            <i class="fas fa-check-circle"></i> FINALIZAR VENDA (F2)
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
