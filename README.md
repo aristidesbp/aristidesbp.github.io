@@ -139,7 +139,142 @@ async function sairDaConta() {
 
 
 ```
-   
+ # segurança reforçada 
+ ```
+/**
+ * =======================================================
+ *  ERP ABP - GUARD GLOBAL
+ *  Segurança + Navbar + Controle de Sessão
+ *  Arquivo ÚNICO | Reutilizável | Defensivo
+ * =======================================================
+ */
+
+(() => {
+    "use strict";
+
+    // Evita execução duplicada
+    if (window.__ERP_GUARD_LOADED__) return;
+    window.__ERP_GUARD_LOADED__ = true;
+
+    // ---------------------------------------------------
+    // VERIFICA SUPABASE
+    // ---------------------------------------------------
+    if (typeof window._supabase === "undefined") {
+        console.error("Supabase não encontrado.");
+        window.location.replace("login.html");
+        return;
+    }
+
+    // ---------------------------------------------------
+    // CONFIGURAÇÃO CENTRAL
+    // ---------------------------------------------------
+    const CONFIG = Object.freeze({
+        LOGIN_PAGE: "login.html",
+        HOME_PAGE: "adm.html",
+        APP_NAME: "ERP ABP"
+    });
+
+    // ---------------------------------------------------
+    // VALIDA SESSÃO
+    // ---------------------------------------------------
+    async function validarSessao() {
+        try {
+            const { data, error } = await _supabase.auth.getSession();
+            if (error || !data || !data.session) {
+                throw new Error("Sessão inválida");
+            }
+            return data.session;
+        } catch (e) {
+            window.location.replace(CONFIG.LOGIN_PAGE);
+            return null;
+        }
+    }
+
+    // ---------------------------------------------------
+    // LOGOUT
+    // ---------------------------------------------------
+    async function logout() {
+        if (!confirm("Deseja sair do sistema?")) return;
+
+        try {
+            await _supabase.auth.signOut();
+        } catch (_) {
+            // Falha silenciosa proposital
+        } finally {
+            window.location.replace(CONFIG.LOGIN_PAGE);
+        }
+    }
+
+    // ---------------------------------------------------
+    // NAVBAR
+    // ---------------------------------------------------
+    function renderNavbar() {
+        if (document.querySelector(".erp-navbar")) return;
+
+        const style = `
+            <style>
+                .erp-navbar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    background: #fff;
+                    padding: 15px 25px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+                    z-index: 9999;
+                }
+                .erp-navbar .btn {
+                    background: #ef4444;
+                    color: #fff;
+                    border: none;
+                    padding: 8px 14px;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+                .erp-navbar .home {
+                    background: #3ecf8e;
+                }
+                body.erp-guard {
+                    padding-top: 80px;
+                }
+            </style>
+        `;
+
+        const html = `
+            <div class="erp-navbar">
+                <strong>${CONFIG.APP_NAME}</strong>
+                <div>
+                    <a href="${CONFIG.HOME_PAGE}" class="btn home">Início</a>
+                    <button class="btn" id="erpLogout">Sair</button>
+                </div>
+            </div>
+        `;
+
+        document.head.insertAdjacentHTML("beforeend", style);
+        document.body.insertAdjacentHTML("afterbegin", html);
+        document.body.classList.add("erp-guard");
+
+        document
+            .getElementById("erpLogout")
+            ?.addEventListener("click", logout);
+    }
+
+    // ---------------------------------------------------
+    // INICIALIZAÇÃO
+    // ---------------------------------------------------
+    document.addEventListener("DOMContentLoaded", async () => {
+        const session = await validarSessao();
+        if (!session) return;
+        renderNavbar();
+    });
+
+})();
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # 01
 # CRIANDO BANCO DE DADOS NO SUPABASE
