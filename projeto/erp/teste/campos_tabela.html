@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Buscar Campos da Tabela</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Buscar Campos da Tabela - Supabase</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            padding: 40px;
-        }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    padding: 40px;
+}
 
-        .box {
-            max-width: 520px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+.box {
+    max-width: 520px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-        h2 {
-            margin-top: 0;
-        }
+h2 {
+    margin-top: 0;
+    color: #0f172a;
+}
 
-        select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 12px;
-            font-size: 14px;
-        }
+select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+}
 
-        button {
-            background: #3ecf8e;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
+button {
+    background: #3ecf8e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        ul {
-            margin-top: 20px;
-            padding-left: 20px;
-        }
+button:hover {
+    opacity: 0.9;
+}
 
-        li {
-            margin-bottom: 6px;
-        }
+ul {
+    margin-top: 20px;
+    padding-left: 20px;
+}
 
-        .error {
-            color: red;
-            margin-top: 15px;
-        }
-    </style>
+li {
+    margin-bottom: 6px;
+}
+
+.error {
+    color: red;
+    margin-top: 15px;
+}
+</style>
 </head>
+
 <body>
 
 <div class="box">
@@ -76,17 +82,24 @@
         <option value="notes">notes</option>
     </select>
 
-    <button onclick="executar()">Buscar Campos</button>
+    <button onclick="buscar()">Buscar Campos</button>
 
     <ul id="resultado"></ul>
     <div id="erro" class="error"></div>
 </div>
 
-<!-- JS da função -->
-<script src="buscarCamposTabela.js"></script>
-
 <script>
-async function executar() {
+// ===============================
+// CONFIGURAÇÃO SUPABASE
+// ===============================
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX'
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+// ===============================
+// FUNÇÃO PRINCIPAL
+// ===============================
+async function buscar() {
     const tabela = document.getElementById('tabela').value
     const resultado = document.getElementById('resultado')
     const erro = document.getElementById('erro')
@@ -99,18 +112,31 @@ async function executar() {
         return
     }
 
-    const campos = await buscarCamposTabela(tabela)
+    try {
+        const { data, error } = await supabaseClient
+            .from(tabela)
+            .select('*')
+            .limit(1)
 
-    if (!campos.length) {
-        erro.innerText = 'Nenhum campo encontrado.'
-        return
+        if (error) throw error
+
+        if (!data || data.length === 0) {
+            erro.innerText = 'Tabela vazia. Não é possível identificar campos.'
+            return
+        }
+
+        const campos = Object.keys(data[0])
+
+        campos.forEach(campo => {
+            const li = document.createElement('li')
+            li.textContent = campo
+            resultado.appendChild(li)
+        })
+
+    } catch (err) {
+        erro.innerText = 'Erro: ' + err.message
+        console.error(err)
     }
-
-    campos.forEach(campo => {
-        const li = document.createElement('li')
-        li.textContent = campo
-        resultado.appendChild(li)
-    })
 }
 </script>
 
