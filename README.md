@@ -18,8 +18,8 @@ obs: projeto em andamento podendo conter erros!
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-
 # NAVBAR
+
 ```
 <!-- NAVBAR ################################## -->
 <style>    
@@ -63,7 +63,9 @@ obs: projeto em andamento podendo conter erros!
     background: #dc2626;
     transform: scale(1.05);
 }
-</style>  
+</style>
+
+
   <div class="navbar">
     <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
     <div class="nav-buttons">
@@ -72,19 +74,20 @@ obs: projeto em andamento podendo conter erros!
             <i class="fas fa-sign-out-alt"></i> Sair
         </button>
     </div>
-</div>  
+</div>
+
+
 <script>
-    /**
- * Função para Deslogar
- */
+/** Função para Deslogar */
 async function sairDaConta() {
     if(confirm("Deseja realmente sair do sistema?")) {
         await _supabase.auth.signOut();
         window.location.href = 'login.html';
     }
 }
+
 </script>
-<!-- FIM DA NAVBAR -->
+<!-- FIM DA NAVBAR ########################### -->
 ```
    
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
