@@ -13,6 +13,79 @@ obs: projeto em andamento podendo conter erros!
 5. [ BANCO DE DADOS ](#05)
 
 
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+
+# NAVBAR
+```
+<!-- NAVBAR ################################## -->
+<style>    
+    /* NAVBAR FIXA */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-nav {
+    background: #ef4444;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+</style>  
+  <div class="navbar">
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
+    <div class="nav-buttons">
+<a href="index.html" class="btn-nav"><i class="fas fa-home"></i> Voltar</a>
+        <button class="btn-nav btn-logout-nav" onclick="sairDaConta()">
+            <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+    </div>
+</div>  
+<script>
+    /**
+ * Função para Deslogar
+ */
+async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+</script>
+<!-- FIM DA NAVBAR -->
+```
    
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # 01
@@ -163,73 +236,7 @@ CREATE TABLE public.usuarios (
   CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
 ```
-# NAVBAR
-```
-<!-- NAVBAR ################################## -->
-<style>    
-    /* NAVBAR FIXA */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-}
 
-.nav-buttons {
-    display: flex;
-    gap: 15px;
-}
-
-.btn-nav {
-    background: #ef4444;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-nav:hover {
-    background: #dc2626;
-    transform: scale(1.05);
-}
-</style>  
-  <div class="navbar">
-    <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
-    <div class="nav-buttons">
-<a href="index.html" class="btn-nav"><i class="fas fa-home"></i> Voltar</a>
-        <button class="btn-nav btn-logout-nav" onclick="sairDaConta()">
-            <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-    </div>
-</div>  
-<script>
-    /**
- * Função para Deslogar
- */
-async function sairDaConta() {
-    if(confirm("Deseja realmente sair do sistema?")) {
-        await _supabase.auth.signOut();
-        window.location.href = 'login.html';
-    }
-}
-</script>
-<!-- FIM DA NAVBAR -->
-```
 
 
 # INDEX
