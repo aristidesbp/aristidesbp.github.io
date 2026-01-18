@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Campos da Tabela</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 40px;
+        }
+
+        .box {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #3ecf8e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        ul {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Buscar Campos da Tabela</h2>
+
+    <label>Nome da tabela no Supabase</label>
+    <input type="text" id="nomeTabela" placeholder="ex: entidades">
+
+    <button onclick="executarBusca()">Buscar Campos</button>
+
+    <ul id="resultado"></ul>
+    <div id="erro" class="error"></div>
+</div>
+
+<!-- JS da funcionalidade -->
+<script src="buscarCamposTabela.js"></script>
+
+<script>
+async function executarBusca() {
+    const tabela = document.getElementById('nomeTabela').value.trim()
+    const resultado = document.getElementById('resultado')
+    const erro = document.getElementById('erro')
+
+    resultado.innerHTML = ''
+    erro.innerText = ''
+
+    if (!tabela) {
+        erro.innerText = 'Informe o nome da tabela.'
+        return
+    }
+
+    const campos = await buscarCamposTabela(tabela)
+
+    if (campos.length === 0) {
+        erro.innerText = 'Nenhum campo encontrado.'
+        return
+    }
+
+    campos.forEach(campo => {
+        const li = document.createElement('li')
+        li.innerText = campo
+        resultado.appendChild(li)
+    })
+}
+</script>
+
+</body>
+</html>
