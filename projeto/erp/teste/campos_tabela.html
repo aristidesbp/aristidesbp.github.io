@@ -16,9 +16,9 @@
         }
 
         .box {
-            max-width: 500px;
+            max-width: 520px;
             margin: auto;
-            background: #fff;
+            background: white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -26,13 +26,12 @@
 
         h2 {
             margin-top: 0;
-            color: #0f172a;
         }
 
-        input, button {
+        select, button {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 14px;
         }
 
@@ -50,7 +49,7 @@
         }
 
         li {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .error {
@@ -64,21 +63,31 @@
 <div class="box">
     <h2>Buscar Campos da Tabela</h2>
 
-    <label>Nome da tabela no Supabase</label>
-    <input type="text" id="nomeTabela" placeholder="ex: entidades">
+    <label>Selecione a tabela</label>
+    <select id="tabela">
+        <option value="">-- escolha --</option>
+        <option value="entidades">entidades</option>
+        <option value="usuarios">usuarios</option>
+        <option value="produtos">produtos</option>
+        <option value="financeiro">financeiro</option>
+        <option value="vendas">vendas</option>
+        <option value="vendas_itens">vendas_itens</option>
+        <option value="controle_caixa">controle_caixa</option>
+        <option value="notes">notes</option>
+    </select>
 
-    <button onclick="executarBusca()">Buscar Campos</button>
+    <button onclick="executar()">Buscar Campos</button>
 
     <ul id="resultado"></ul>
     <div id="erro" class="error"></div>
 </div>
 
-<!-- JS da funcionalidade -->
+<!-- JS da função -->
 <script src="buscarCamposTabela.js"></script>
 
 <script>
-async function executarBusca() {
-    const tabela = document.getElementById('nomeTabela').value.trim()
+async function executar() {
+    const tabela = document.getElementById('tabela').value
     const resultado = document.getElementById('resultado')
     const erro = document.getElementById('erro')
 
@@ -86,20 +95,20 @@ async function executarBusca() {
     erro.innerText = ''
 
     if (!tabela) {
-        erro.innerText = 'Informe o nome da tabela.'
+        erro.innerText = 'Selecione uma tabela.'
         return
     }
 
     const campos = await buscarCamposTabela(tabela)
 
-    if (campos.length === 0) {
+    if (!campos.length) {
         erro.innerText = 'Nenhum campo encontrado.'
         return
     }
 
     campos.forEach(campo => {
         const li = document.createElement('li')
-        li.innerText = campo
+        li.textContent = campo
         resultado.appendChild(li)
     })
 }
