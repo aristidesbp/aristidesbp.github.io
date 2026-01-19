@@ -17,6 +17,7 @@
         SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX',
         LOGIN_PAGE: "login.html",
         HOME_PAGE: "index.html", // Conforme seu primeiro código
+        HUB_PAGE: "https://aristidesbp.github.io/", // PROJETOS DO HUB
         APP_NAME: "ERP ABP"
     });
 
@@ -136,6 +137,7 @@
                     <span style="color: #3ecf8e;">●</span> ${CONFIG.APP_NAME}
                 </div>
                 <div class="nav-right">
+                    <a href="${CONFIG.HUB_PAGE}" class="btn btn-home">Meus projetos</a>
                     <a href="${CONFIG.HOME_PAGE}" class="btn btn-home">Início</a>
                     <button class="btn btn-logout" id="btnSair">Sair</button>
                 </div>
