@@ -4,6 +4,25 @@
  * ADICIONE NO HTML:
  <div id="container-seletor-tabelas"></div>
  <script src="js/select_tabela.js"></script>  
+
+* ADICIONE SQL:
+-- Cria uma função para listar tabelas com segurança
+CREATE OR REPLACE FUNCTION get_tables()
+RETURNS TABLE (table_name text) 
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT tablename::text
+  FROM pg_tables
+  WHERE schemaname = 'public';
+END;
+$$;
+
+
+
+ 
  * ############################################################################## */
 
 
