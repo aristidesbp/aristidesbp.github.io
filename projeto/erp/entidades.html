@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Entidades - ERP ABP</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/entidades.css">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <link rel="stylesheet" href="css/entidades.css">
     <script src="js/conexao.js"></script>
 </head>
 <body>
@@ -107,7 +108,9 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="entities-list"></tbody>
+            <tbody id="entities-list">
+                <tr><td colspan="4" style="text-align:center">Carregando entidades...</td></tr>
+            </tbody>
         </table>
     </div>
 </div>
