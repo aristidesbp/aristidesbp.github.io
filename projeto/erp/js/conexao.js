@@ -78,7 +78,7 @@
                 <div class="erp-navbar">
                     <div class="brand"><span style="color: #3ecf8e;">●</span> ${CONFIG.APP_NAME}</div>
                     <div class="nav-right">
-                        <a href="${CONFIG.HUB_PAGE}" class="btn btn-home"><i class="fas fa-external-link-alt"></i> Meus Projetos</a>
+                        <a href="${CONFIG.HUB_PAGE}" class="btn btn-home"><i class="fas fa-external-link-alt"></i>Projetos</a>
                         <a href="${CONFIG.HOME_PAGE}" class="btn btn-home"><i class="fas fa-home"></i> Início</a>
                         <button class="btn btn-logout" id="btnSair"><i class="fas fa-sign-out-alt"></i> Sair</button>
                     </div>
