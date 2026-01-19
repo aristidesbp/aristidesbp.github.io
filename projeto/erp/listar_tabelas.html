@@ -1,105 +1,68 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP ABP - Gerenciar Tabelas</title>
-    
-    <script src="js/conexao.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
+<div id="container-seletor-tabelas">
+    <small style="color: #64748b;">Carregando tabelas...</small>
+</div>
 
-    <style>
-        .container { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .table-list { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; margin-top: 20px;}
-        .table-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px; border-bottom: 1px solid #eee; font-family: sans-serif;
-            transition: background 0.2s;
-        }
-        .table-item:hover { background: #f8fafc; }
-        .table-item:last-child { border-bottom: none; }
-        .table-name { font-weight: bold; color: #1e293b; font-size: 1.1rem; }
-        .badge { background: #3ecf8e; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .loader { text-align: center; padding: 40px; color: #64748b; font-size: 1.2rem; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header-area" style="text-align: center;">
-            <i class="fas fa-database" style="font-size: 3rem; color: #1e293b; margin-bottom: 15px;"></i>
-            <h1>Estrutura do Banco de Dados</h1>
-            <p>Listagem de tabelas públicas detectadas via RPC.</p>
-        </div>
+<script>
+    async function renderizarSeletorTabelas() {
+        const container = document.getElementById('container-seletor-tabelas');
 
-        <div class="table-list" id="listaTabelas">
-            <div class="loader">
-                <i class="fas fa-spinner fa-spin"></i> Consultando tabelas...
-            </div>
-        </div>
-    </div>
-
-    <script>
-       async function buscarTabelas() {
-    console.log("Iniciando busca de tabelas...");
-    const container = document.getElementById('listaTabelas');
-
-    // 1. Verifica se o SDK foi carregado pelo seu conexao_navbar.js
-    if (typeof window._supabase === "undefined") {
-        console.warn("Supabase ainda não definido. Aguardando 1 segundo...");
-        setTimeout(buscarTabelas, 1000);
-        return;
-    }
-
-    try {
-        console.log("Chamando RPC get_tables...");
-        
-        // 2. Chamada da função que você criou no SQL Editor
-        const { data, error } = await window._supabase.rpc('get_tables');
-
-        if (error) {
-            console.error("Erro na RPC:", error);
-            throw error;
+        // Aguarda o Supabase estar pronto
+        if (!window._supabase) {
+            setTimeout(renderizarSeletorTabelas, 500);
+            return;
         }
 
-        console.log("Dados recebidos:", data);
+        try {
+            // Busca as tabelas via RPC
+            const { data, error } = await _supabase.rpc('get_tables');
 
-        if (data && data.length > 0) {
-            container.innerHTML = '';
-            data.forEach(tabela => {
-                // table_name é o nome da coluna que sua função SQL retorna
-                container.innerHTML += `
-                    <div class="table-item">
-                        <span class="table-name">
-                            <i class="fas fa-table" style="color: #3ecf8e; margin-right: 10px;"></i> 
-                            ${tabela.table_name}
-                        </span>
-                        <span class="badge">Ativa</span>
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                // Cria o HTML do Select
+                let selectHtml = `
+                    <div style="display: flex; flex-direction: column; gap: 5px; font-family: sans-serif;">
+                        <label for="tabela_ativa" style="font-weight: bold; color: #1e293b; font-size: 14px;">
+                            <i class="fas fa-database"></i> Selecione a Tabela:
+                        </label>
+                        <select id="tabela_ativa" style="
+                            padding: 10px;
+                            border-radius: 6px;
+                            border: 1px solid #cbd5e1;
+                            background-color: #f8fafc;
+                            color: #334155;
+                            font-size: 16px;
+                            cursor: pointer;
+                            outline: none;
+                        ">
+                            <option value="">-- Escolha uma tabela --</option>
+                            ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
+                        </select>
                     </div>
                 `;
-            });
-        } else {
-            container.innerHTML = '<div class="loader">Nenhuma tabela encontrada no schema public.</div>';
+
+                container.innerHTML = selectHtml;
+
+                // Evento para capturar a troca de tabela
+                document.getElementById('tabela_ativa').addEventListener('change', (e) => {
+                    const tabelaSelecionada = e.target.value;
+                    if(tabelaSelecionada) {
+                        console.log("Tabela selecionada para o CRUD:", tabelaSelecionada);
+                        // Aqui você chamará sua função de carregar o formulário CRUD
+                        // Exemplo: carregarCamposDaTabela(tabelaSelecionada);
+                    }
+                });
+
+            } else {
+                container.innerHTML = '<p>Nenhuma tabela encontrada.</p>';
+            }
+
+        } catch (err) {
+            console.error("Erro no componente:", err);
+            container.innerHTML = '<p style="color:red;">Erro ao carregar seletor.</p>';
         }
-
-    } catch (err) {
-        console.error("Erro fatal ao listar:", err);
-        container.innerHTML = `
-            <div style="color: #ef4444; text-align: center; padding: 20px;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
-                <p><strong>Erro ao carregar dados</strong></p>
-                <p><small>${err.message}</small></p>
-                <button onclick="location.reload()" style="padding: 5px 15px; cursor: pointer;">Tentar Novamente</button>
-            </div>`;
     }
-}
 
-// Garante que o DOM está pronto antes de começar
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", buscarTabelas);
-} else {
-    buscarTabelas();
-}
-    </script>
-</body>
-</html>
+    // Inicializa
+    renderizarSeletorTabelas();
+</script>
