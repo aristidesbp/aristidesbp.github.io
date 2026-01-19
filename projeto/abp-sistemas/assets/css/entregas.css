@@ -1,9 +1,0 @@
-/* CSS do componente Entregas */
-.entregas-container { max-width: 600px; margin: 0 auto; }
-.entrega-card { padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; background: #f9f9f9; margin-bottom: 0.75rem; }
-.entrega-card img { width: 8rem; border-radius: 0.25rem; margin-top: 0.5rem; }
-.status-pendente { background: #facc15; color: #fff; }
-.status-entregue { background: #22c55e; color: #fff; }
-.status-problema { background: #ef4444; color: #fff; }
-input, textarea { width: 100%; border: 1px solid #ccc; border-radius: 0.25rem; padding: 0.5rem; }
-button { cursor: pointer; border: none; border-radius: 0.25rem; }
