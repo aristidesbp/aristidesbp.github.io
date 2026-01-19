@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP ABP - Gerenciar Tabelas</title>
+    
+    <script src="js/conexao.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <style>
+        .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+        .table-list { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; }
+        .table-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px; border-bottom: 1px solid #eee; font-family: sans-serif;
+        }
+        .table-item:last-child { border-bottom: none; }
+        .table-name { font-weight: bold; color: #1e293b; }
+        .badge { background: #3ecf8e; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
+        .loader { text-align: center; padding: 20px; color: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-area">
+            <h1><i class="fas fa-database"></i> Estrutura do Banco de Dados</h1>
+            <p>Listagem de tabelas públicas detectadas no sistema.</p>
+        </div>
+
+        <div class="table-list" id="listaTabelas">
+            <div class="loader">Consultando banco de dados...</div>
+        </div>
+    </div>
+
+    <script>
+        async function buscarTabelas() {
+            // Aguarda o carregamento do _supabase definido no seu conexao_navbar.js
+            if (!window._supabase) {
+                setTimeout(buscarTabelas, 500);
+                return;
+            }
+
+            try {
+                /** * No Supabase, a melhor forma de listar tabelas via JS é consultando 
+                 * a API de metadados ou tentando uma chamada RPC. 
+                 * Como padrão, listaremos as tabelas acessíveis na schema 'public'.
+                 */
+                const { data, error } = await _supabase
+                    .from('pg_catalog.pg_tables') // Tentativa de acesso via catálogo
+                    .select('tablename')
+                    .eq('schemaname', 'public');
+
+                // Nota: Se o seu banco tiver políticas de RLS restritas, 
+                // você pode precisar de uma função RPC criada no SQL Editor do Supabase.
+
+                const container = document.getElementById('listaTabelas');
+                
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    container.innerHTML = '';
+                    data.forEach(tabela => {
+                        container.innerHTML += `
+                            <div class="table-item">
+                                <span class="table-name"><i class="fas fa-table"></i> ${tabela.tablename}</span>
+                                <span class="badge">Ativa</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = '<p style="text-align:center">Nenhuma tabela encontrada ou acesso restrito.</p>';
+                }
+
+            } catch (err) {
+                console.error("Erro ao listar:", err);
+                document.getElementById('listaTabelas').innerHTML = `
+                    <div style="color: red; text-align: center;">
+                        <i class="fas fa-exclamation-triangle"></i> Erro ao buscar tabelas.<br>
+                        <small>Certifique-se de que as permissões de leitura estão ativas.</small>
+                    </div>`;
+            }
+        }
+
+        // Inicia a busca após carregar a página
+        document.addEventListener('DOMContentLoaded', buscarTabelas);
+    </script>
+</body>
+</html>
