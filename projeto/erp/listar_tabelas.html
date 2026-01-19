@@ -93,5 +93,104 @@
     // Inicializa
     renderizarSeletorTabelas();
 </script>
+
+<!-- #################################################################################### -->
+
+
+
+
+
+
+
+
+
+
+
+    <div style="max-width: 600px; margin: 20px auto; font-family: sans-serif; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    
+    <div style="margin-bottom: 20px;">
+        <label style="font-weight: bold; display: block; margin-bottom: 8px;">1. Selecione a Tabela para CRUD:</label>
+        <select id="seletor-tabelas-crud" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 16px;">
+            <option value="">Carregando tabelas...</option>
+        </select>
+    </div>
+
+    <div id="painel-colunas" style="display: none;">
+        <label style="font-weight: bold; display: block; margin-bottom: 10px; color: #1e293b;">
+            <i class="fas fa-microchip"></i> Estrutura Detectada:
+        </label>
+        <div id="lista-campos" style="display: flex; flex-direction: column; gap: 10px;">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Inicia assim que o Supabase estiver pronto
+    async function inicializarComponente() {
+        if (!window._supabase) {
+            setTimeout(inicializarComponente, 500);
+            return;
+        }
+        carregarListaTabelas();
+    }
+
+    // Preenche o Select inicial
+    async function carregarListaTabelas() {
+        const { data, error } = await _supabase.rpc('get_tables');
+        const select = document.getElementById('seletor-tabelas-crud');
+        
+        if (data) {
+            select.innerHTML = '<option value="">-- Escolha uma tabela --</option>' + 
+                data.map(t => `<option value="${t.table_name}">${t.table_name}</option>`).join('');
+            
+            select.addEventListener('change', (e) => lerEstruturaTabela(e.target.value));
+        }
+    }
+
+    // FUNÇÃO PRINCIPAL: Lê as colunas da tabela selecionada
+    async function lerEstruturaTabela(nomeTabela) {
+        if (!nomeTabela) return;
+
+        const painel = document.getElementById('painel-colunas');
+        const lista = document.getElementById('lista-campos');
+        painel.style.display = 'block';
+        lista.innerHTML = '<em>Lendo metadados...</em>';
+
+        try {
+            // Consulta o dicionário de dados do PostgreSQL
+            const { data, error } = await _supabase
+                .from('information_schema.columns')
+                .select('column_name, data_type, is_nullable, column_default')
+                .eq('table_name', nomeTabela)
+                .eq('table_schema', 'public')
+                .order('ordinal_position', { ascending: true });
+
+            if (error) throw error;
+
+            lista.innerHTML = '';
+            data.forEach(col => {
+                // Lógica de Identificação de Campos Técnicos
+                const ehTecnico = ['id', 'created_at', 'usuario_id', 'user_id', 'uuid'].includes(col.column_name.toLowerCase()) || col.column_default?.includes('gen_random_uuid');
+                
+                lista.innerHTML += `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; background: ${ehTecnico ? '#f1f5f9' : '#fff'}; border: 1px solid #e2e8f0; border-radius: 4px;">
+                        <div>
+                            <strong style="color: ${ehTecnico ? '#64748b' : '#0f172a'}">${col.column_name}</strong>
+                            <div style="font-size: 11px; color: #94a3b8;">Tipo: ${col.data_type}</div>
+                        </div>
+                        <span style="font-size: 10px; padding: 2px 6px; border-radius: 10px; background: ${ehTecnico ? '#cbd5e1' : '#dcfce7'}; color: ${ehTecnico ? '#475569' : '#166534'};">
+                            ${ehTecnico ? 'APENAS LEITURA' : 'EDITÁVEL'}
+                        </span>
+                    </div>
+                `;
+            });
+
+        } catch (err) {
+            lista.innerHTML = '<p style="color:red">Erro ao ler colunas. Verifique permissões.</p>';
+        }
+    }
+
+    inicializarComponente();
+</script>
 </body>
 </html>
