@@ -238,40 +238,39 @@ async function forgotPassword() {
 /**
  * Detecta se o usuário chegou por link de recuperação
  */
-async function checkRecovery() {
-    const hash = window.location.hash;
+/**
+ * Detecta se o usuário já está logado ou se veio por recuperação
+ */
+async function checkStatus() {
+    const { data } = await _supabase.auth.getSession();
+    
+    // Se já estiver logado, pula o login e vai para o ERP
+    if (data.session && !window.location.hash.includes("type=recovery")) {
+        window.location.href = 'index.html';
+        return;
+    }
 
+    const hash = window.location.hash;
     if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
         document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
         document.getElementById('email-group').style.display = 'none';
         document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
         document.getElementById('btn-auth').onclick = updatePassword;
         document.getElementById('link-forgot').style.display = 'none';
+        document.getElementById('btn-back').style.display = 'block'; // Mostra botão voltar
     }
 }
 
 /**
- * Atualiza a senha do usuário
+ * Função para resetar o formulário se o usuário quiser desistir da recuperação
  */
-async function updatePassword() {
-    const newPassword = document.getElementById('password').value;
-
-    if (newPassword.length < 6) {
-        return alert("Mínimo 6 caracteres.");
-    }
-
-    const { error } = await _supabase.auth.updateUser({ password: newPassword });
-
-    if (error) alert(error.message);
-    else {
-        alert("Senha atualizada!");
-        window.location.hash = "";
-        window.location.reload();
-    }
+function toggleMode() {
+    window.location.hash = "";
+    window.location.reload();
 }
 
-// Executa verificação de recuperação ao carregar a página
-window.onload = checkRecovery;
+// Inicialização
+window.onload = checkStatus;
     </script>
 
 </body>
