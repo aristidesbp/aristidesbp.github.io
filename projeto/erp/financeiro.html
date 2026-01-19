@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão Financeira - ERP ABP</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="css/financerio.css">
-    <script src="js/financeiro.js" defer></script>
+    <script src="js/conexao.js"></script>
 </head>
 <body>
-
-<div class="navbar">
-    <div style="font-weight: bold;">ERP ABP - FINANCEIRO</div>
-    <div>
-        <a href="index.html" class="nav-link">Início</a>
-        <button onclick="sairDaConta()" class="btn-exit">Sair</button>
-    </div>
-</div>
 
 <div class="container">
     <div class="card">
@@ -71,7 +62,7 @@
         <div class="resumo-card resumo-saldo"><span>Saldo Filtrado</span><br><b id="total-saldo">R$ 0,00</b></div>
     </div>
 
-    <div id="bulk-area" class="bulk-actions">
+    <div id="bulk-area" class="bulk-actions" style="display:none;">
         <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
         <button onclick="deleteSelected()" class="btn-delete-bulk"><i class="fas fa-trash"></i> Excluir Selecionados</button>
     </div>
@@ -97,5 +88,6 @@
     </div>
 </div>
 
+<script src="js/financeiro.js"></script>
 </body>
 </html>
