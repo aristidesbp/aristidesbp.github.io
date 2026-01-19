@@ -1,9 +1,11 @@
-/**
- * NAVBAR COMPONENTE - ERP ABP
- */
+/** ############################################################################## */
+/** ############################################################################## */
+/** ############################################################################## */
+/** NAVBAR COMPONENTE - ERP ABP */
 
 (function() {
-    // 1. Definição do CSS da Navbar
+
+    // 1. Constate que define o CSS da Navbar
     const styles = `
     <style>
         .navbar {
@@ -56,7 +58,8 @@
         }
     </style>`;
 
-    // 2. Estrutura HTML da Navbar
+    
+    // 2. Constate que define a Estrutura HTML da Navbar
     const navbarHtml = `
     <div class="navbar">
         <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
@@ -70,14 +73,22 @@
         </div>
     </div>`;
 
-    // 3. Inserir no início do Body
+
+
+
+    
+    // 3. Inserir no início do Body (responsavel pro criar a pagina)
     document.head.insertAdjacentHTML('beforeend', styles);
     document.body.insertAdjacentHTML('afterbegin', navbarHtml);
 })();
 
-/**
- * Função global para Deslogar
- */
+
+/** ############################################################################## */
+/** ############################################################################## */
+/** ############################################################################## */
+/** Função global para Deslogar (sair do sistema/ ir para pagina de login) */
+
+
 async function sairDaConta() {
     if(confirm("Deseja realmente sair do sistema?")) {
         try {
