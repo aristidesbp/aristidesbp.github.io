@@ -1,6 +1,29 @@
 /** ############################################################################## */
 /** ############################################################################## */
 /** ############################################################################## */
+// Funções de Autenticação e Segurança / config
+
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function checkUser() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) {
+        window.location.href = 'login.html';
+    }
+}
+
+async function sairDaConta() {
+    await _supabase.auth.signOut();
+    window.location.href = 'login.html';
+}
+
+document.addEventListener('DOMContentLoaded', checkUser);
+
+/** ############################################################################## */
+/** ############################################################################## */
+/** ############################################################################## */
 // Funções de Autenticação e Segurança
 
 async function validarAcesso() {
