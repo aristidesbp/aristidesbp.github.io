@@ -1,67 +1,62 @@
-
 /**
  * js/bloco_de_notas.js
- * Depende de: js/conexao.js (que fornece a variável _supabase)
+ * Desenvolvido por: Aristides BP
+ * Integração: Supabase + jsPDF
  */
-
-// FUNÇÃO DE LOGOUT ADICIONADA
-async function logout() {
-    await _supabase.auth.signOut();
-    window.location.href = 'login.html';
-}
 
 // Armazena todas as notas carregadas localmente para busca rápida
 let allNotes = [];
 
 /**
- * Carrega as notas do banco (Iniciado automaticamente ao carregar a página)
+ * Carrega as notas do banco vinculadas ao usuário logado
  */
 async function loadNotes() {
-    // Busca todas as notas ordenadas pela data de criação
-    const { data: notes, error } = await _supabase
-        .from('notes')
-        .select('*')
-        .order('created_at', { ascending: false });
+    try {
+        const { data: notes, error } = await _supabase
+            .from('notes')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-    if (error) {
-        console.error("Erro ao carregar notas:", error.message);
-        return;
+        if (error) throw error;
+
+        allNotes = notes || [];
+        renderNotes(allNotes);
+    } catch (err) {
+        console.error("Erro ao carregar notas:", err.message);
     }
-
-    allNotes = notes || [];
-    renderNotes(allNotes);
 }
 
-/**
- * Renderiza as notas na tela (HTML dinâmico)
- */
 /**
  * Renderiza as notas na tela (HTML dinâmico)
  */
 function renderNotes(notes) {
-    document.getElementById('notes-list').innerHTML =
-        notes.map(n => `
-            <div class="note">
-                <div class="note-content">
-                    <strong>${n.title}</strong>
-                    <p>${n.content}</p>
-                </div>
-                <div class="actions">
-                    <button style="background:#f1c40f" onclick="prepareEdit('${n.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button style="background:#e74c3c" onclick="deleteNote('${n.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
+    const listElement = document.getElementById('notes-list');
+    
+    if (notes.length === 0) {
+        listElement.innerHTML = '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
+        return;
+    }
+
+    listElement.innerHTML = notes.map(n => `
+        <div class="note">
+            <div class="note-content">
+                <strong>${n.title}</strong>
+                <p>${n.content}</p>
             </div>
-        `).join('') || '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
+            <div class="actions">
+                <button title="Editar" style="background:#f1c40f" onclick="prepareEdit('${n.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button title="Excluir" style="background:#e74c3c" onclick="deleteNote('${n.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
 }
 
-
-
 /**
- * Salva ou atualiza uma nota (CRUD - Create/Update)
+ * Salva ou atualiza uma nota
  */
 async function saveNote() {
     const id = document.getElementById('note-id').value;
@@ -72,26 +67,29 @@ async function saveNote() {
         return alert("Preencha título e conteúdo!");
     }
 
-    // Obtém o usuário logado através da conexão ativa
     const { data: { user } } = await _supabase.auth.getUser();
 
-    if (id) {
-        // Modo Edição (Update)
-        await _supabase.from('notes')
-            .update({ title, content })
-            .eq('id', id);
-    } else {
-        // Modo Novo (Insert)
-        await _supabase.from('notes')
-            .insert([{ title, content, user_id: user.id }]);
-    }
+    try {
+        if (id) {
+            // Modo Edição
+            await _supabase.from('notes')
+                .update({ title, content })
+                .eq('id', id);
+        } else {
+            // Modo Novo
+            await _supabase.from('notes')
+                .insert([{ title, content, user_id: user.id }]);
+        }
 
-    resetForm();
-    loadNotes();
+        resetForm();
+        loadNotes();
+    } catch (err) {
+        alert("Erro ao salvar: " + err.message);
+    }
 }
 
 /**
- * Prepara o formulário buscando a nota no array local pelo ID
+ * Prepara o formulário para edição (Busca no array local pelo ID)
  */
 function prepareEdit(id) {
     const note = allNotes.find(n => n.id === id);
@@ -106,7 +104,7 @@ function prepareEdit(id) {
 }
 
 /**
- * Reseta o formulário para o estado original
+ * Reseta o formulário
  */
 function resetForm() {
     document.getElementById('note-id').value = '';
@@ -116,56 +114,56 @@ function resetForm() {
 }
 
 /**
- * Exclui uma nota do banco (CRUD - Delete)
+ * Exclui uma nota
  */
 async function deleteNote(id) {
-    if (confirm("Deseja excluir esta nota?")) {
-        await _supabase.from('notes').delete().eq('id', id);
-        loadNotes();
+    if (confirm("Deseja realmente excluir esta nota?")) {
+        const { error } = await _supabase.from('notes').delete().eq('id', id);
+        if (error) alert(error.message);
+        else loadNotes();
     }
 }
 
 /**
- * Filtra as notas carregadas pelo texto digitado na pesquisa
+ * Filtro de busca em tempo real
  */
 function filterNotes() {
     const q = document.getElementById('search').value.toLowerCase();
-
     const filtered = allNotes.filter(n =>
         n.title.toLowerCase().includes(q) ||
         n.content.toLowerCase().includes(q)
     );
-
     renderNotes(filtered);
 }
 
 /**
- * Exporta todas as notas presentes na lista para um arquivo PDF
+ * Exporta as notas visíveis para PDF
  */
-async function exportAllToPDF() {
+function exportAllToPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    doc.text("Meu Bloco de Notas - ERP ABP", 10, 10);
+    doc.setFontSize(18);
+    doc.text("Relatório de Notas - ERP ABP", 10, 20);
+    doc.setFontSize(12);
 
-    let y = 20;
-
+    let y = 35;
     allNotes.forEach((n, i) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        
         doc.setFont(undefined, 'bold');
         doc.text(`${i + 1}. ${n.title}`, 10, y);
         doc.setFont(undefined, 'normal');
-        doc.text(n.content, 10, y + 7);
-        y += 25;
+        
+        // Quebra automática de texto para o conteúdo
+        const splitContent = doc.splitTextToSize(n.content, 180);
+        doc.text(splitContent, 10, y + 7);
+        
+        y += (splitContent.length * 7) + 15;
     });
 
-    doc.save("minhas-notas.pdf");
+    doc.save("notas_exportadas.pdf");
 }
 
-/**
- * Inicializa os dados assim que o documento estiver pronto
- * A trava de segurança já foi executada no conexao.js
- */
+// Inicializa o carregamento quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', loadNotes);
-
-
-
