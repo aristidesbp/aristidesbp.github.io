@@ -40,52 +40,66 @@
     </div>
 
     <script>
-        async function buscarTabelas() {
-            // Aguarda a inicialização do Supabase do seu conexao_navbar.js
-            if (!window._supabase) {
-                setTimeout(buscarTabelas, 500);
-                return;
-            }
+       async function buscarTabelas() {
+    console.log("Iniciando busca de tabelas...");
+    const container = document.getElementById('listaTabelas');
 
-            try {
-                // CHAMADA DA FUNÇÃO RPC QUE VOCÊ CRIOU
-                const { data, error } = await _supabase.rpc('get_tables');
+    // 1. Verifica se o SDK foi carregado pelo seu conexao_navbar.js
+    if (typeof window._supabase === "undefined") {
+        console.warn("Supabase ainda não definido. Aguardando 1 segundo...");
+        setTimeout(buscarTabelas, 1000);
+        return;
+    }
 
-                const container = document.getElementById('listaTabelas');
-                
-                if (error) throw error;
+    try {
+        console.log("Chamando RPC get_tables...");
+        
+        // 2. Chamada da função que você criou no SQL Editor
+        const { data, error } = await window._supabase.rpc('get_tables');
 
-                if (data && data.length > 0) {
-                    container.innerHTML = '';
-                    data.forEach(tabela => {
-                        // A função retorna 'table_name' conforme definido no seu SQL
-                        container.innerHTML += `
-                            <div class="table-item">
-                                <span class="table-name"><i class="fas fa-table" style="color: #3ecf8e; margin-right: 10px;"></i> ${tabela.table_name}</span>
-                                <span class="badge">TABELA PÚBLICA</span>
-                            </div>
-                        `;
-                    });
-                } else {
-                    container.innerHTML = `
-                        <div style="text-align:center; padding: 20px;">
-                            <i class="fas fa-folder-open" style="font-size: 2rem; color: #cbd5e1;"></i>
-                            <p>Nenhuma tabela encontrada no schema 'public'.</p>
-                        </div>`;
-                }
-
-            } catch (err) {
-                console.error("Erro ao chamar RPC:", err);
-                document.getElementById('listaTabelas').innerHTML = `
-                    <div style="color: #ef4444; text-align: center; padding: 20px; border: 2px dashed #fecaca; border-radius: 8px;">
-                        <i class="fas fa-exclamation-circle" style="font-size: 2rem;"></i>
-                        <p><strong>Erro na conexão RPC</strong></p>
-                        <p><small>${err.message || 'Verifique se a função get_tables existe no Supabase.'}</small></p>
-                    </div>`;
-            }
+        if (error) {
+            console.error("Erro na RPC:", error);
+            throw error;
         }
 
-        document.addEventListener('DOMContentLoaded', buscarTabelas);
+        console.log("Dados recebidos:", data);
+
+        if (data && data.length > 0) {
+            container.innerHTML = '';
+            data.forEach(tabela => {
+                // table_name é o nome da coluna que sua função SQL retorna
+                container.innerHTML += `
+                    <div class="table-item">
+                        <span class="table-name">
+                            <i class="fas fa-table" style="color: #3ecf8e; margin-right: 10px;"></i> 
+                            ${tabela.table_name}
+                        </span>
+                        <span class="badge">Ativa</span>
+                    </div>
+                `;
+            });
+        } else {
+            container.innerHTML = '<div class="loader">Nenhuma tabela encontrada no schema public.</div>';
+        }
+
+    } catch (err) {
+        console.error("Erro fatal ao listar:", err);
+        container.innerHTML = `
+            <div style="color: #ef4444; text-align: center; padding: 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                <p><strong>Erro ao carregar dados</strong></p>
+                <p><small>${err.message}</small></p>
+                <button onclick="location.reload()" style="padding: 5px 15px; cursor: pointer;">Tentar Novamente</button>
+            </div>`;
+    }
+}
+
+// Garante que o DOM está pronto antes de começar
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buscarTabelas);
+} else {
+    buscarTabelas();
+}
     </script>
 </body>
 </html>
