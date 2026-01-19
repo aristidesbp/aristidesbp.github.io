@@ -3,7 +3,7 @@
  * Gera o menu suspenso e armazena a escolha na variável global 'tabela_selecionada'
  * ADICIONE NO HTML:
  <div id="container-seletor-tabelas"></div>
- <script src="js/conexao.js"></script> <script src="js/select_tabela.js"></script>  
+ <script src="js/select_tabela.js"></script>  
  * ############################################################################## */
 
 (() => {
