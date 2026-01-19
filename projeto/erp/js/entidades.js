@@ -1,8 +1,10 @@
+/** ERP ABP - Módulo Entidades **/
 (function() {
     "use strict";
 
     let currentData = [];
 
+    // Expõe as funções para o HTML (onclick)
     window.togglePasswordVisibility = function() {
         const passwordInput = document.getElementById('senha_acesso');
         const toggleIcon = document.getElementById('togglePassword');
@@ -32,9 +34,17 @@
     };
 
     async function loadEntities() {
-        // Usa o _supabase definido no conexao.js
+        // Aguarda o _supabase ser inicializado pelo conexao.js se necessário
+        if (!window._supabase) {
+            setTimeout(loadEntities, 500);
+            return;
+        }
+
         const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
-        if (error) return;
+        if (error) {
+            console.error("Erro ao carregar:", error);
+            return;
+        }
         currentData = data || [];
         renderTable(currentData);
     }
@@ -47,7 +57,7 @@
 
             return `
             <tr>
-                <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
+                <td><b>${c.nome_completo}</b><br><small>${(c.relacionamento || '').toUpperCase()}</small></td>
                 <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
                 <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
                 <td>
@@ -97,7 +107,9 @@
         if (!dados.nome_completo) return alert("Nome é obrigatório");
         
         const { error } = id ? await _supabase.from('entidades').update(dados).eq('id', id) : await _supabase.from('entidades').insert([dados]);
-        if (error) alert("Erro: " + error.message); else { resetForm(); loadEntities(); }
+        
+        if (error) alert("Erro: " + error.message); 
+        else { resetForm(); loadEntities(); }
     };
 
     window.editFull = async function(id) {
@@ -133,7 +145,7 @@
         }
     };
 
-    // Exportações PDF
+    // Funções de PDF (Globais)
     window.exportarPDFListagem = function() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -142,7 +154,13 @@
         document.querySelectorAll("#entities-list tr").forEach(tr => {
             if (tr.style.display !== "none") {
                 const cells = tr.querySelectorAll("td");
-                if(cells.length > 0) rows.push([cells[0].innerText.replace('\n', ' - '), cells[1].innerText.replace('\n', ' - '), cells[2].innerText.replace('\n', ' - ')]);
+                if(cells.length > 3) {
+                    rows.push([
+                        cells[0].innerText.replace('\n', ' - '), 
+                        cells[1].innerText.replace('\n', ' - '), 
+                        cells[2].innerText.replace('\n', ' - ')
+                    ]);
+                }
             }
         });
         doc.autoTable({ head: [['Entidade / Tipo', 'Contato', 'Acesso / Status']], body: rows, startY: 20 });
@@ -154,24 +172,34 @@
         const doc = new jsPDF();
         let y = 20;
         const filtro = document.getElementById("inputBusca").value.toLowerCase();
-        const dadosFiltrados = currentData.filter(c => c.nome_completo.toLowerCase().includes(filtro));
+        const dadosFiltrados = currentData.filter(c => (c.nome_completo || '').toLowerCase().includes(filtro));
+        
         doc.setFontSize(16);
         doc.text("FICHAS DETALHADAS DE ENTIDADES", 14, y);
         y += 10;
+
         dadosFiltrados.forEach((c, index) => {
             if (y > 250) { doc.addPage(); y = 20; }
             doc.setFontSize(11); doc.setFont(undefined, 'bold');
-            doc.text(`${index + 1}. ${c.nome_completo.toUpperCase()}`, 14, y);
-            y += 6; doc.setFontSize(9); doc.setFont(undefined, 'normal');
+            doc.text(`${index + 1}. ${(c.nome_completo || '').toUpperCase()}`, 14, y);
+            y += 6; 
+            doc.setFontSize(9); doc.setFont(undefined, 'normal');
             doc.text(`Doc: ${c.cpf || 'N/A'} | Nasc: ${c.data_nascimento || 'N/A'}`, 14, y);
-            y += 4; doc.text(`Email: ${c.email || 'N/A'} | Tel: ${c.telefone || 'N/A'}`, 14, y);
-            y += 4; doc.text(`End: ${c.logradouro || ''}, ${c.numero || ''} - ${c.bairro || ''}, ${c.cidade || ''}/${c.estado || ''}`, 14, y);
-            y += 4; doc.text(`Tipo: ${c.relacionamento} | Acesso: ${c.acesso} | Status: ${c.status}`, 14, y);
-            y += 4; doc.text(`Obs: ${c.observacoes || 'Nenhuma'}`, 14, y);
-            y += 5; doc.line(14, y, 196, y); y += 8;
+            y += 4;
+            doc.text(`Email: ${c.email || 'N/A'} | Tel: ${c.telefone || 'N/A'}`, 14, y);
+            y += 4;
+            doc.text(`End: ${c.logradouro || ''}, ${c.numero || ''} - ${c.bairro || ''}, ${c.cidade || ''}/${c.estado || ''}`, 14, y);
+            y += 4;
+            doc.text(`Tipo: ${c.relacionamento} | Acesso: ${c.acesso} | Status: ${c.status}`, 14, y);
+            y += 4;
+            doc.text(`Obs: ${c.observacoes || 'Nenhuma'}`, 14, y);
+            y += 5;
+            doc.line(14, y, 196, y);
+            y += 8;
         });
         doc.save("fichas_entidades.pdf");
     };
 
+    // Inicia a carga
     document.addEventListener('DOMContentLoaded', loadEntities);
 })();
