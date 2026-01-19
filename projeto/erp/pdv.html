@@ -3,91 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Financeira - ERP ABP</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <title>PDV Profissional - ERP ABP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="css/financerio.css">
-    <script src="js/conexao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --primary: #3ecf8e; --dark: #1e293b; --danger: #ef4444; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
+        header { background: var(--dark); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .container { display: flex; flex: 1; overflow: hidden; gap: 20px; padding: 20px; }
+        
+        /* Área Principal */
+        .venda-area { flex: 3; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .busca-container { padding: 20px; border-bottom: 2px solid #f1f5f9; position: relative; }
+        #busca-pdv { width: 100%; padding: 15px; font-size: 1.2rem; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.3s; }
+        #busca-pdv:focus { border-color: var(--primary); }
+        
+        .tabela-carrinho { flex: 1; overflow-y: auto; padding: 0 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; color: #64748b; border-bottom: 2px solid #f1f5f9; }
+        
+        /* Lateral Direita */
+        .resumo-lateral { flex: 1; background: white; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .total-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: auto; }
+        .total-valor { font-size: 2.5rem; font-weight: 800; color: #0f172a; display: block; }
+        
+        .btn-finalizar { background: var(--primary); color: white; border: none; padding: 20px; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; transition: 0.3s; }
+        .btn-finalizar:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Modais e Listas */
+        #lista-resultados-cliente { display:none; position: absolute; width: 95%; background: white; border: 1px solid #ddd; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); z-index: 1000; border-radius: 8px; margin-top: 5px; max-height: 250px; overflow-y: auto; }
+        .item-cliente { padding: 12px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
+        .item-cliente:hover { background: #f8fafc; }
+
+        #caixa-status-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .modal-caixa { background: white; padding: 40px; border-radius: 15px; text-align: center; max-width: 400px; }
+    </style>
 </head>
 <body>
 
+<header>
+    <div style="font-weight: bold; font-size: 1.2rem;"><i class="fas fa-cash-register"></i> ERP ABP - PDV</div>
+    <div id="caixa-info">Verificando caixa...</div>
+    <div>
+        <button onclick="location.href='index.html'" style="background:#475569; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">Início</button>
+        <button onclick="fecharCaixa()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-left:10px;">Fechar Caixa</button>
+    </div>
+</header>
+
 <div class="container">
-    <div class="card">
-        <h3 id="form-title">Novo Lançamento</h3>
-        <input type="hidden" id="edit-id">
-        
-        <div class="section-title">Dados e Parcelamento</div>
-        <div class="form-grid">
-            <div><label>Tipo *</label><select id="tipo"><option value="pagar">Saída</option><option value="receber">Entrada</option></select></div>
-            <div style="grid-column: span 2;"><label>Descrição *</label><input type="text" id="descricao"></div>
-            <div><label>Valor Parcela (R$) *</label><input type="number" id="valor" step="0.01"></div>
-            <div><label>Qtde Parcelas</label><input type="number" id="parcelas" value="1" min="1"></div>
-        </div>
-
-        <div class="section-title">Datas e Status</div>
-        <div class="form-grid">
-            <div><label>1º Vencimento *</label><input type="date" id="data_vencimento"></div>
-            <div><label>Data Pagamento</label><input type="date" id="data_pagamento"></div>
-            <div><label>Status</label><select id="status"><option value="pendente">Pendente</option><option value="pago">Pago/Recebido</option></select></div>
-        </div>
-
-        <div class="section-title">Classificação</div>
-        <div class="form-grid">
-            <div><label>Entidade</label><select id="entidade_id"><option value="">Selecione...</option></select></div>
-            <div><label>Categoria</label><input type="text" id="categoria"></div>
-            <div><label>Forma Pagto</label><input type="text" id="forma_pagamento"></div>
+    <div class="venda-area">
+        <div class="busca-container">
+            <input type="text" id="busca-pdv" placeholder="PASSE O LEITOR OU DIGITE O NOME DO PRODUTO..." onkeyup="buscarProdutoPDV(event)">
+            <div id="resultados-busca" style="position:absolute; width:95%; z-index:100;"></div>
         </div>
         
-        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento(s)</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        <div class="tabela-carrinho">
+            <table>
+                <thead>
+                    <tr>
+                        <th>PRODUTO</th>
+                        <th>QTD</th>
+                        <th>UNITÁRIO</th>
+                        <th>SUBTOTAL</th>
+                        <th>AÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody id="carrinho-corpo"></tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="form-grid">
-            <div style="grid-column: span 2;"><label>Busca Inteligente (Tudo)</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Busque por descrição, categoria, valor..."></div>
-            <div><label>Início</label><input type="date" id="dataInicio" onchange="filtrarTabela()"></div>
-            <div><label>Fim</label><input type="date" id="dataFim" onchange="filtrarTabela()"></div>
-            <div style="display: flex; align-items: flex-end;">
-                <button class="btn-pdf" onclick="exportarPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+    <div class="resumo-lateral">
+        <h3 style="margin-top:0;">Finalização</h3>
+        
+        <label style="font-weight: bold; color: #64748b; font-size: 0.9rem;">CLIENTE (NOME OU CPF)</label>
+        <div style="display: flex; gap: 5px; margin-top: 8px; position: relative;">
+            <input type="text" id="cliente-busca" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" placeholder="Pesquisar...">
+            <button onclick="buscarClientePDVBotao()" style="background: var(--primary); color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer;">
+                <i class="fas fa-search"></i>
+            </button>
+            <div id="lista-resultados-cliente"></div>
+        </div>
+        <input type="hidden" id="cliente_id">
+        <div id="cliente-selecionado" style="font-size: 13px; color: #166534; font-weight: bold; margin: 12px 0;">
+            <i class="fas fa-user"></i> Consumidor Final
+        </div>
+
+        <label style="font-weight: bold; color: #64748b; font-size: 0.9rem;">FORMA DE PAGAMENTO</label>
+        <select id="forma_pagto" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:8px; font-size:1rem;">
+            <option value="Dinheiro">💵 Dinheiro</option>
+            <option value="Pix">📱 Pix</option>
+            <option value="Cartão">💳 Cartão</option>
+        </select>
+
+        <div style="margin-top: 20px; display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+            <input type="checkbox" id="imprimir-ticket" checked style="width: 18px; height: 18px;">
+            <label for="imprimir-ticket" style="font-size: 0.9rem; cursor: pointer;">Imprimir Cupom?</label>
+        </div>
+
+        <div class="total-box">
+            <span style="color:#64748b;">Subtotal: <span id="total-bruto">R$ 0,00</span></span><br>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0;">
+                <span>Desconto R$:</span>
+                <input type="number" id="desconto" value="0.00" step="0.50" oninput="calcularTotalVenda()" style="width:80px; padding:5px; border-radius:5px; border:1px solid #ddd;">
             </div>
+            <span style="color:#64748b; font-size:0.9rem;">TOTAL A RECEBER</span>
+            <span class="total-valor" id="total-venda">R$ 0,00</span>
         </div>
-    </div>
 
-    <div class="resumo-financeiro">
-        <div class="resumo-card resumo-entradas"><span>Entradas</span><br><b id="total-receber">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saidas"><span>Saídas</span><br><b id="total-pagar">R$ 0,00</b></div>
-        <div class="resumo-card resumo-saldo"><span>Saldo Filtrado</span><br><b id="total-saldo">R$ 0,00</b></div>
-    </div>
-
-    <div id="bulk-area" class="bulk-actions" style="display:none;">
-        <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
-        <button onclick="deleteSelected()" class="btn-delete-bulk"><i class="fas fa-trash"></i> Excluir Selecionados</button>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th width="40"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                    <th>Categoria</th>
-                    <th>Forma Pagto</th>
-                    <th>Vencimento</th>
-                    <th>Pagamento</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="financeiro-list"></tbody>
-        </table>
+        <button class="btn-finalizar" onclick="finalizarVenda()">
+            <i class="fas fa-check-circle"></i> FINALIZAR (F2)
+        </button>
     </div>
 </div>
 
-<script src="js/financeiro.js"></script>
+<div id="caixa-status-modal">
+    <div class="modal-caixa">
+        <i class="fas fa-cash-register" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+        <h2>Abertura de Caixa</h2>
+        <p>Informe o valor inicial em dinheiro:</p>
+        <input type="number" id="valor_inicial" value="0.00" style="width: 100%; padding: 15px; font-size: 1.5rem; text-align: center; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px;">
+        <button onclick="abrirCaixa()" class="btn-finalizar">ABRIR CAIXA AGORA</button>
+        <p><a href="index.html" style="color:#64748b; text-decoration:none;">Voltar para o Início</a></p>
+    </div>
+</div>
+
+<script src="js/pdv.js"></script>
 </body>
 </html>
