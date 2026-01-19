@@ -1,135 +1,136 @@
+separe este codigo para cada função um arquivo js, faça ele coerente com o codigo a baixo pois ele esta funcionado.
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV Profissional - ERP ABP</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Profissional - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/produtos.css">
+    <style>
+        /* Overlay para bloquear o PDV se o caixa estiver fechado */
+        .caixa-fechado-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); z-index: 9999; 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; text-align: center; 
+        }
+        .busca-grande { font-size: 1.5rem !important; padding: 20px !important; border: 2px solid #3ecf8e !important; width: 100%; border-radius: 8px; }
+        .total-destaque { font-size: 2.5rem; color: #166534; font-weight: 800; }
+        
+        /* Dropdowns de resultados */
+        #resultados-busca, #resultados-cliente { 
+            position: absolute; width: 100%; z-index: 100; 
+            background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            border-radius: 0 0 8px 8px; max-height: 300px; overflow-y: auto;
+        }
 
-    <style>
-        :root { --primary: #3ecf8e; --dark: #1e293b; --danger: #ef4444; }
-        body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; display: flex; flex-direction: column; height: 100vh; }
-        
-        /* Ajuste para acomodar a navbar injetada */
-        body { padding-top: 70px; }
-
-        .container { display: flex; flex: 1; overflow: hidden; gap: 20px; padding: 20px; }
-        
-        /* Área Principal */
-        .venda-area { flex: 3; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        .busca-container { padding: 20px; border-bottom: 2px solid #f1f5f9; position: relative; }
-        #busca-pdv { width: 100%; padding: 15px; font-size: 1.2rem; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.3s; box-sizing: border-box; }
-        #busca-pdv:focus { border-color: var(--primary); }
-        
-        .tabela-carrinho { flex: 1; overflow-y: auto; padding: 0 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; color: #64748b; border-bottom: 2px solid #f1f5f9; }
-        
-        /* Lateral Direita */
-        .resumo-lateral { flex: 1; background: white; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        .total-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: auto; }
-        .total-valor { font-size: 2.5rem; font-weight: 800; color: #0f172a; display: block; }
-        
-        .btn-finalizar { background: var(--primary); color: white; border: none; padding: 20px; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; transition: 0.3s; }
-        .btn-finalizar:hover { opacity: 0.9; transform: translateY(-2px); }
-
-        /* Modais e Listas */
-        #lista-resultados-cliente { display:none; position: absolute; width: 100%; background: white; border: 1px solid #ddd; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); z-index: 1000; border-radius: 8px; margin-top: 45px; max-height: 250px; overflow-y: auto; }
-        .item-cliente { padding: 12px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
-        .item-cliente:hover { background: #f8fafc; }
-
-        #caixa-status-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .modal-caixa { background: white; padding: 40px; border-radius: 15px; text-align: center; max-width: 400px; }
-        
-        .btn-del-item { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 1.1rem; }
-        #resultados-busca { position:absolute; width: 95%; background: white; z-index: 100; border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .item-busca { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
-        .item-busca:hover { background: #f0fdf4; }
-    </style>
-
-    <script src="js/conexao.js"></script>
+        /* Estilo para o Checkbox de Impressão */
+        .print-option {
+            background: #f0fdf4; border: 2px solid #bbf7d0;
+            padding: 15px; border-radius: 12px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            transition: 0.2s;
+        }
+        .print-option:hover { background: #dcfce7; }
+        .print-option input { transform: scale(1.5); cursor: pointer; }
+    </style>
 </head>
 <body>
 
-<div id="caixa-banner" style="background: #1e293b; color: #3ecf8e; text-align: center; padding: 5px; font-size: 0.8rem; font-weight: bold;">
-    <span id="caixa-info">Verificando caixa...</span>
+<div id="caixa-status-modal" class="caixa-fechado-overlay" style="display:none;">
+    <div class="card" style="width: 400px; color: #333; position: relative; padding: 30px; background: white; border-radius: 15px;">
+        <button onclick="desistirAbertura()" style="position: absolute; top: 10px; right: 15px; border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;">&times;</button>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <i class="fas fa-cash-register" style="font-size: 3rem; color: #3ecf8e;"></i>
+            <h3 style="margin-top: 10px;">Abertura de Caixa</h3>
+        </div>
+        <p style="font-size: 14px; color: #64748b;">Informe o valor inicial em dinheiro (Troco):</p>
+        <input type="number" id="valor_inicial" class="form-control" value="0.00" step="0.01" style="width: 100%; margin: 15px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1.2rem; text-align: center;">
+        <button onclick="abrirCaixa()" class="btn-add" style="width: 100%; background: #3ecf8e; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">ABRIR CAIXA AGORA</button>
+    </div>
 </div>
 
-<div class="container">
-    <div class="venda-area">
-        <div class="busca-container">
-            <input type="text" id="busca-pdv" placeholder="PASSE O LEITOR OU DIGITE O PRODUTO..." onkeyup="buscarProdutoPDV(event)">
-            <div id="resultados-busca"></div>
-        </div>
-        
-        <div class="tabela-carrinho">
-            <table>
-                <thead>
-                    <tr>
-                        <th>PRODUTO</th>
-                        <th>QTD</th>
-                        <th>UNITÁRIO</th>
-                        <th>SUBTOTAL</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="carrinho-corpo"></tbody>
-            </table>
-        </div>
-    </div>
+<div class="container" style="display: grid; grid-template-columns: 1fr 450px; gap: 20px; margin-top: 20px; padding: 0 20px;">
+    
+    <div>
+        <div class="card" style="position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin:0;"><i class="fas fa-shopping-cart"></i> Carrinho de Vendas</h3>
+                <span id="caixa-info" class="status-badge" style="background: #dcfce7; color: #166534; padding: 5px 15px; border-radius: 20px; font-weight: bold;">Verificando caixa...</span>
+            </div>
+            <input type="text" id="busca-pdv" class="busca-grande" placeholder="PASSE O LEITOR OU DIGITE O NOME DO PRODUTO..." onkeyup="buscarProdutoPDV(event)" autofocus>
+            <div id="resultados-busca"></div>
+        </div>
 
-    <div class="resumo-lateral">
-        <h3 style="margin-top:0;">Finalização</h3>
-        
-        <label style="font-weight: bold; color: #64748b; font-size: 0.8rem;">CLIENTE</label>
-        <div style="display: flex; gap: 5px; margin-top: 5px; position: relative; flex-direction: column;">
-            <input type="text" id="cliente-busca" onkeyup="buscarClientePDV(event)" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd;" placeholder="Nome ou CPF...">
-            <div id="lista-resultados-cliente"></div>
-        </div>
-        <input type="hidden" id="cliente_id">
-        <div id="cliente-selecionado" style="font-size: 13px; color: #166534; font-weight: bold; margin: 10px 0;">
-            <i class="fas fa-user"></i> Consumidor Final
-        </div>
+        <div class="table-container" style="max-height: 550px; overflow-y: auto; margin-top: 10px; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #f8fafc; border-bottom: 2px solid #eee;">
+                    <tr>
+                        <th style="padding: 15px; text-align: left;">Produto</th>
+                        <th style="padding: 15px;">Qtd</th>
+                        <th style="padding: 15px;">Unitário</th>
+                        <th style="padding: 15px;">Subtotal</th>
+                        <th style="padding: 15px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="carrinho-corpo"></tbody>
+            </table>
+        </div>
+    </div>
 
-        <label style="font-weight: bold; color: #64748b; font-size: 0.8rem; margin-top: 10px;">PAGAMENTO</label>
-        <select id="forma_pagto" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:5px; font-size:1rem;">
-            <option value="Dinheiro">💵 Dinheiro</option>
-            <option value="Pix">📱 Pix</option>
-            <option value="Cartão">💳 Cartão</option>
-        </select>
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; height: fit-content;">
+        <div>
+            <h3 style="margin-top:0;">Finalização da Venda</h3>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            
+            <label style="font-weight: bold; color: #64748b;">Cliente (Nome ou CPF)</label>
+            <div style="position: relative; margin: 8px 0 15px 0;">
+                <input type="text" id="cliente-busca" class="form-control" placeholder="Digite para buscar cliente..." onkeyup="buscarClientePDV(event)" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd;">
+                <div id="resultados-cliente"></div>
+                <input type="hidden" id="cliente_id"> <div id="cliente-selecionado" style="font-size: 13px; color: #166534; font-weight: bold; margin-top: 5px;">👤 Consumidor Final</div>
+            </div>
+            
+            <label style="font-weight: bold; color: #64748b;">Forma de Pagamento</label>
+            <select id="forma_pagto" style="width: 100%; margin: 8px 0 20px 0; font-weight: bold; font-size: 1.1rem; padding: 12px; border-radius: 8px; border: 1px solid #3ecf8e; background: #f0fff4;">
+                <option value="Dinheiro">💵 Dinheiro</option>
+                <option value="Pix">⚡ Pix</option>
+                <option value="Cartão Débito">💳 Cartão Débito</option>
+                <option value="Cartão Crédito">💳 Cartão Crédito</option>
+            </select>
 
-        <div class="total-box">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-                <span style="color:#64748b;">Subtotal:</span>
-                <span id="total-bruto">R$ 0,00</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                <span style="color:#64748b;">Desconto:</span>
-                <input type="number" id="desconto" value="0.00" step="0.50" oninput="calcularTotalVenda()" style="width:70px; padding:5px; border-radius:5px; border:1px solid #ddd; text-align: right;">
-            </div>
-            <span style="color:#64748b; font-size:0.8rem; font-weight: bold;">TOTAL</span>
-            <span class="total-valor" id="total-venda">R$ 0,00</span>
-        </div>
+            <label class="print-option">
+                <input type="checkbox" id="imprimir-ticket" checked>
+                <span style="font-weight: bold; color: #166534;">Deseja imprimir o cupom?</span>
+            </label>
 
-        <button class="btn-finalizar" onclick="finalizarVenda()">
-            <i class="fas fa-check-circle"></i> FINALIZAR (F2)
-        </button>
-        <button onclick="fecharCaixa()" style="background:none; color:var(--danger); border:none; margin-top:15px; cursor:pointer; font-weight:bold;">Fechar Caixa</button>
-    </div>
+            <div style="background: #f8fafc; padding: 20px; border-radius: 15px; text-align: right; border: 1px solid #e2e8f0;">
+                <p style="margin:0; color: #64748b;">Subtotal: <span id="total-bruto">R$ 0,00</span></p>
+                <div style="margin: 10px 0; color: #ef4444;">
+                    Desconto: R$ <input type="number" id="desconto" value="0.00" step="0.01" oninput="calcularTotalVenda()" style="width: 90px; text-align: right; font-weight: bold; border: 1px solid #fecaca; border-radius: 5px; padding: 5px;">
+                </div>
+                <div style="border-top: 2px solid #e2e8f0; padding-top: 10px;">
+                    <span style="font-size: 0.9rem; color: #166534; font-weight: bold;">TOTAL A RECEBER</span>
+                    <div class="total-destaque" id="total-venda">R$ 0,00</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn-add" onclick="finalizarVenda()" style="background: #22c55e; height: 85px; font-size: 1.6rem; width: 100%; border-radius: 15px; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);">
+                <i class="fas fa-check-double"></i> FINALIZAR (F2)
+            </button>
+            
+            <button onclick="fecharCaixa()" style="background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; padding: 12px; width: 100%; margin-top: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                <i class="fas fa-lock"></i> FECHAR CAIXA DO DIA
+            </button>
+        </div>
+    </div>
 </div>
 
-<div id="caixa-status-modal">
-    <div class="modal-caixa">
-        <i class="fas fa-cash-register" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-        <h2>Abertura de Caixa</h2>
-        <p>Informe o valor inicial em dinheiro:</p>
-        <input type="number" id="valor_inicial" value="0.00" style="width: 100%; padding: 15px; font-size: 1.5rem; text-align: center; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px;">
-        <button onclick="abrirCaixa()" class="btn-finalizar">ABRIR CAIXA AGORA</button>
-    </div>
-</div>
-
-<script src="js/pdv.js"></script>
+<script src="js/pdv.js" defer></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>
