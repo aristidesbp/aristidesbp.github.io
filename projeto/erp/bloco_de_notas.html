@@ -14,11 +14,8 @@
 
     <div class="container">
         <h2>Minhas Notas</h2>
-
         <input type="hidden" id="note-id">
-
         <input type="text" id="title" placeholder="Título da nota...">
-
         <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
 
         <button class="btn-save" id="btn-save" onclick="saveNote()">
@@ -27,14 +24,7 @@
 
         <div class="search-box">
             <label>PESQUISAR OU EXPORTAR</label>
-
-            <input
-                type="text"
-                id="search"
-                placeholder="🔍 Digite para buscar..."
-                onkeyup="filterNotes()"
-            >
-
+            <input type="text" id="search" placeholder="🔍 Digite para buscar..." onkeyup="filterNotes()">
             <button class="export-btn" onclick="exportAllToPDF()">
                 <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
             </button>
@@ -44,7 +34,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
     <script src="js/bloco_de_notas.js"></script>
 </body>
 </html>
