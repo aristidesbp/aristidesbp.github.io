@@ -1,4 +1,4 @@
-<style>
+
    /* SEU CSS ORIGINAL MANTIDO */
 * {
     box-sizing: border-box;
@@ -70,6 +70,11 @@ body {
     font-size: 0.9em;
     color: #64748b;
 }
-   </style>
-</head>
-<body>
+
+.input-form {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+.input-form:focus { border-color: #3ecf8e; }
