@@ -35,6 +35,9 @@ async function loadNotes() {
 /**
  * Renderiza as notas na tela (HTML dinâmico)
  */
+/**
+ * Renderiza as notas na tela (HTML dinâmico)
+ */
 function renderNotes(notes) {
     document.getElementById('notes-list').innerHTML =
         notes.map(n => `
@@ -44,20 +47,18 @@ function renderNotes(notes) {
                     <p>${n.content}</p>
                 </div>
                 <div class="actions">
-                    <button style="background:#f1c40f"
-                        onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)">
+                    <button style="background:#f1c40f" onclick="prepareEdit('${n.id}')">
                         <i class="fas fa-edit"></i>
                     </button>
-
-                    <button style="background:#e74c3c"
-                        onclick="deleteNote('${n.id}')">
+                    <button style="background:#e74c3c" onclick="deleteNote('${n.id}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
             </div>
-        `).join('') ||
-        '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
+        `).join('') || '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
 }
+
+
 
 /**
  * Salva ou atualiza uma nota (CRUD - Create/Update)
@@ -90,12 +91,15 @@ async function saveNote() {
 }
 
 /**
- * Prepara o formulário para edição (Preenche os campos)
+ * Prepara o formulário buscando a nota no array local pelo ID
  */
-function prepareEdit(id, title, content) {
-    document.getElementById('note-id').value = id;
-    document.getElementById('title').value = title;
-    document.getElementById('content').value = content;
+function prepareEdit(id) {
+    const note = allNotes.find(n => n.id === id);
+    if (!note) return;
+
+    document.getElementById('note-id').value = note.id;
+    document.getElementById('title').value = note.title;
+    document.getElementById('content').value = note.content;
     document.getElementById('btn-save').innerText = "Atualizar Nota";
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
