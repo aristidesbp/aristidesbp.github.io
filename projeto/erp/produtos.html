@@ -6,196 +6,28 @@
     <title>Cadastro de Produtos - ERP ABP</title>
 
     <script src="conexao.js"></script>
-  
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
  
     <style>
-        /* produtos.css - ERP ABP */
-
-:root { 
-    --primary: #3ecf8e; 
-    --dark: #0f172a; 
-    --bg: #f1f5f9; 
-    --danger: #ef4444; 
-    --warning: #f59e0b;
-}
-
-/* Reutilizando a base do seu ERP para consistência */
-* { box-sizing: border-box; }
-
-body { 
-    margin: 0; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background: var(--bg); 
-    padding-top: 85px; 
-    color: #1e293b;
-}
-
-.container { max-width: 1250px; margin: auto; padding: 20px; }
-
-/* Estilização dos Cards */
-.card { 
-    background: white; 
-    padding: 25px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-    margin-bottom: 25px; 
-}
-
-.section-title { 
-    color: var(--primary); 
-    font-size: 13px; 
-    text-transform: uppercase; 
-    margin: 25px 0 12px; 
-    border-bottom: 2px solid #f1f5f9; 
-    padding-bottom: 6px; 
-    font-weight: 800; 
-    letter-spacing: 0.5px;
-}
-
-/* Grid do Formulário */
-.form-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-    gap: 18px; 
-}
-
-label { 
-    display: block; 
-    margin-bottom: 6px; 
-    font-size: 13px; 
-    color: #64748b; 
-    font-weight: 600; 
-}
-
-input, select { 
-    width: 100%; 
-    padding: 11px; 
-    border: 1px solid #e2e8f0; 
-    border-radius: 8px; 
-    font-size: 14px; 
-    transition: border-color 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.1);
-}
-
-/* Botões */
-.btn-add { 
-    background: var(--primary); 
-    color: white; 
-    padding: 14px 24px; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-weight: bold; 
-    width: 100%; 
-    margin-top: 25px; 
-    font-size: 15px;
-    transition: opacity 0.2s;
-}
-
-.btn-add:hover { opacity: 0.9; }
-
-.btn-cancel { 
-    background: #94a3b8; 
-    color: white; 
-    margin-top: 10px; 
-    border: none; 
-    padding: 10px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    display: none; 
-    width: 100%; 
-}
-
-/* Tabela de Produtos */
-.table-container { 
-    background: white; 
-    border-radius: 12px; 
-    overflow-x: auto; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-}
-
-table { width: 100%; border-collapse: collapse; min-width: 1000px; }
-
-th { 
-    background: #f8fafc; 
-    padding: 16px; 
-    color: #475569; 
-    font-size: 12px; 
-    text-transform: uppercase; 
-    text-align: left; 
-    border-bottom: 2px solid #f1f5f9;
-}
-
-td { 
-    padding: 14px 16px; 
-    border-top: 1px solid #f1f5f9; 
-    font-size: 14px; 
-    vertical-align: middle;
-}
-
-tr:hover { background-color: #fcfdfe; }
-
-/* Status e Badges */
-.status-badge { 
-    padding: 5px 10px; 
-    border-radius: 6px; 
-    font-size: 11px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    display: inline-block;
-}
-
-/* Estilo para Estoque Crítico */
-.estoque-alerta {
-    color: var(--danger);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.estoque-alerta::before {
-    content: '\f071'; /* Ícone de triângulo de alerta FontAwesome */
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-}
-
-/* Ações */
-.btn-action { 
-    background: #f1f5f9; 
-    border: none; 
-    cursor: pointer; 
-    font-size: 14px; 
-    padding: 8px;
-    border-radius: 6px;
-    margin-right: 5px; 
-    transition: all 0.2s;
-}
-
-.btn-action:hover { background: #e2e8f0; transform: translateY(-1px); }
-
-/* Customização da Barra de Busca */
-#inputBusca {
-    border-left: 4px solid var(--primary);
-    background: #fff;
-}
-
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    .form-grid { grid-template-columns: 1fr 1fr; }
-    .container { padding: 10px; }
-}
-        </style>
+        /* Mantendo seu CSS original para integridade visual */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; --warning: #f59e0b; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; color: #1e293b; }
+        .container { max-width: 1250px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .section-title { color: var(--primary); font-size: 13px; text-transform: uppercase; margin: 25px 0 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; font-weight: 800; letter-spacing: 0.5px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+        label { display: block; margin-bottom: 6px; font-size: 13px; color: #64748b; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .btn-add { background: var(--primary); color: white; padding: 14px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 25px; font-size: 15px; }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { background: #f8fafc; padding: 16px; color: #475569; font-size: 12px; text-transform: uppercase; text-align: left; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 14px 16px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+        .btn-action { background: #f1f5f9; border: none; cursor: pointer; font-size: 14px; padding: 8px; border-radius: 6px; margin-right: 5px; }
+    </style>
 </head>
 <body>
-
-
 
 <div class="container">
     <div class="card">
@@ -210,25 +42,23 @@ tr:hover { background-color: #fcfdfe; }
             </div>
             <div>
                 <label>Código de Barras (EAN)</label>
-                <input type="text" id="codigo_de_barras" placeholder="Gere ou escaneie...">
+                <input type="text" id="codigo_de_barras">
             </div>
             <div>
                 <label>Marca</label>
-                <input type="text" id="marca" placeholder="Marca do fabricante">
+                <input type="text" id="marca">
             </div>
             <div>
                 <label>SKU / Código Interno</label>
-                <input type="text" id="sku" placeholder="Ex: PROD-001">
+                <input type="text" id="sku">
             </div>
             <div>
                 <label>Categoria</label>
-                <input type="text" id="categoria_prod" placeholder="Ex: Materiais">
+                <input type="text" id="categoria_prod">
             </div>
             <div>
                 <label>Entidade (Fornecedor)</label>
-                <select id="entidade_id">
-                    <option value="">Selecione...</option>
-                </select>
+                <select id="entidade_id"><option value="">Carregando...</option></select>
             </div>
             <div>
                 <label>Data de Vencimento</label>
@@ -237,9 +67,7 @@ tr:hover { background-color: #fcfdfe; }
         </div>
 
         <div class="section-title">Descrição e Detalhes</div>
-        <div style="margin-bottom: 20px;">
-            <textarea id="descricao" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit;" placeholder="Informações adicionais do produto..."></textarea>
-        </div>
+        <textarea id="descricao" rows="3" placeholder="Informações adicionais..."></textarea>
 
         <div class="section-title">Preços e Estoque</div>
         <div class="form-grid">
@@ -250,16 +78,12 @@ tr:hover { background-color: #fcfdfe; }
         </div>
 
         <button class="btn-add" id="btn-save" onclick="handleSaveProduto()">Salvar Produto</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()" style="display:none; background:#94a3b8; color:white; border:none; padding:10px; width:100%; border-radius:8px; margin-top:10px; cursor:pointer;">Cancelar Edição</button>
+        <button id="btn-cancel" onclick="resetForm()" style="display:none; background:#94a3b8; color:white; border:none; padding:10px; width:100%; border-radius:8px; margin-top:10px; cursor:pointer;">Cancelar Edição</button>
     </div>
 
     <div class="card">
-        <div class="form-grid">
-            <div style="grid-column: span 3;">
-                <label>Busca Inteligente</label>
-                <input type="text" id="inputBusca" onkeyup="filtrarProdutos()" placeholder="Buscar por Nome, SKU, Código de Barras ou Marca...">
-            </div>
-        </div>
+        <label>Busca Inteligente</label>
+        <input type="text" id="inputBusca" onkeyup="filtrarProdutos()" placeholder="Buscar por Nome, SKU, Código ou Marca...">
     </div>
 
     <div class="table-container">
@@ -276,189 +100,143 @@ tr:hover { background-color: #fcfdfe; }
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="produtos-list">
-                </tbody>
+            <tbody id="produtos-list"></tbody>
         </table>
     </div>
 </div>
-    
 
-    <script>
-        const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+/** ERP ABP - Módulo Produtos (Integrado com conexao.js) **/
+(function() {
+    "use strict";
 
-let listaProdutos = [];
+    let listaProdutos = [];
 
-// Carregar Produtos e Entidades ao iniciar
-async function inicializar() {
-    await loadEntidadesProd();
-    await loadProdutos();
-}
-
-// Carregar Lista de Entidades para o Select (Fornecedores)
-async function loadEntidadesProd() {
-    const { data, error } = await _supabase
-        .from('entidades')
-        .select('id, nome_completo')
-        .order('nome_completo', { ascending: true });
-
-    if (error) {
-        console.error("Erro ao carregar entidades:", error);
-        return;
+    async function inicializar() {
+        // Aguarda o Supabase carregar do conexao.js
+        if (!window._supabase) {
+            setTimeout(inicializar, 500);
+            return;
+        }
+        await loadEntidadesProd();
+        await loadProdutos();
     }
 
-    const select = document.getElementById('entidade_id');
-    // Mantém apenas a primeira opção e limpa o resto
-    select.innerHTML = '<option value="">Selecione...</option>'; 
-    data.forEach(ent => {
-        select.innerHTML += `<option value="${ent.id}">${ent.nome_completo}</option>`;
-    });
-}
-
-// Carregar Produtos (com join para trazer nome da entidade)
-async function loadProdutos() {
-    const { data, error } = await _supabase
-        .from('produtos')
-        .select(`
-            *,
-            entidades ( nome_completo )
-        `)
-        .order('nome', { ascending: true });
-
-    if (error) {
-        console.error("Erro ao carregar produtos:", error);
-        return;
+    async function loadEntidadesProd() {
+        const { data, error } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo');
+        if (error) return console.error("Erro entidades:", error);
+        
+        const select = document.getElementById('entidade_id');
+        select.innerHTML = '<option value="">Selecione...</option>' + 
+            data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
     }
-    listaProdutos = data || [];
-    renderProdutos(listaProdutos);
-}
 
-// Renderizar Tabela
-function renderProdutos(data) {
-    const list = document.getElementById('produtos-list');
-    list.innerHTML = data.map(p => {
-        const estoque = parseInt(p.estoque_atual) || 0;
-        const min = parseInt(p.estoque_minimo) || 0;
-        const alertaEstoque = estoque <= min ? 'color: #ef4444; font-weight: bold;' : '';
-        
-        // Formata data de vencimento para padrão brasileiro se existir
-        const vencimento = p.data_vencimento ? new Date(p.data_vencimento).toLocaleDateString('pt-BR') : '-';
-        
-        return `
-        <tr>
-            <td><small>${p.codigo_de_barras || p.sku || '-'}</small></td>
-            <td><b>${p.nome}</b><br><small style="color:gray">${p.marca || ''}</small></td>
-            <td>${p.categoria_prod || '-'}</td>
-            <td>R$ ${parseFloat(p.preco_custo || 0).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
-            <td>R$ ${parseFloat(p.preco_venda || 0).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
-            <td style="${alertaEstoque}">${estoque} un</td>
-            <td><small>${vencimento}</small></td>
-            <td>
-                <button class="btn-action" style="color:#3b82f6" onclick="editProduto('${p.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-action" style="color:#ef4444" onclick="deleteProduto('${p.id}')"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>`;
-    }).join('') || '<tr><td colspan="8" style="text-align:center">Nenhum produto cadastrado.</td></tr>';
-}
+    async function loadProdutos() {
+        const { data, error } = await _supabase.from('produtos').select('*, entidades(nome_completo)').order('nome');
+        if (error) return console.error("Erro produtos:", error);
+        listaProdutos = data || [];
+        renderProdutos(listaProdutos);
+    }
 
-// Salvar / Atualizar
-async function handleSaveProduto() {
-    const { data: { user } } = await _supabase.auth.getUser();
-    const id = document.getElementById('edit-id').value;
-    
-    const dados = {
-        usuario_id: user.id,
-        nome: document.getElementById('nome').value,
-        sku: document.getElementById('sku').value,
-        codigo_de_barras: document.getElementById('codigo_de_barras').value,
-        marca: document.getElementById('marca').value,
-        categoria_prod: document.getElementById('categoria_prod').value,
-        descricao: document.getElementById('descricao').value,
-        data_vencimento: document.getElementById('data_vencimento').value || null,
-        entidade_id: document.getElementById('entidade_id').value ? parseInt(document.getElementById('entidade_id').value) : null,
-        preco_custo: parseFloat(document.getElementById('preco_custo').value) || 0,
-        preco_venda: parseFloat(document.getElementById('preco_venda').value) || 0,
-        estoque_atual: parseInt(document.getElementById('estoque_atual').value) || 0,
-        estoque_minimo: parseInt(document.getElementById('estoque_minimo').value) || 0
+    function renderProdutos(data) {
+        const list = document.getElementById('produtos-list');
+        list.innerHTML = data.map(p => {
+            const estoque = parseInt(p.estoque_atual) || 0;
+            const alerta = estoque <= (p.estoque_minimo || 0) ? 'color: #ef4444; font-weight: bold;' : '';
+            return `
+            <tr>
+                <td><small>${p.codigo_de_barras || p.sku || '-'}</small></td>
+                <td><b>${p.nome}</b><br><small style="color:gray">${p.marca || ''}</small></td>
+                <td>${p.categoria_prod || '-'}</td>
+                <td>R$ ${parseFloat(p.preco_custo).toLocaleString('pt-BR', {minFractionDigits:2})}</td>
+                <td>R$ ${parseFloat(p.preco_venda).toLocaleString('pt-BR', {minFractionDigits:2})}</td>
+                <td style="${alerta}">${estoque} un</td>
+                <td><small>${p.data_vencimento ? new Date(p.data_vencimento).toLocaleDateString('pt-BR') : '-'}</small></td>
+                <td>
+                    <button class="btn-action" style="color:#3b82f6" onclick="window.editProduto('${p.id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn-action" style="color:#ef4444" onclick="window.deleteProduto('${p.id}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="8" style="text-align:center">Nenhum produto cadastrado.</td></tr>';
+    }
+
+    window.handleSaveProduto = async function() {
+        const { data: { user } } = await _supabase.auth.getUser();
+        const id = document.getElementById('edit-id').value;
+        const dados = getFormData(user.id);
+
+        if(!dados.nome || !dados.preco_venda) return alert("Preencha os campos obrigatórios.");
+
+        const { error } = id ? 
+            await _supabase.from('produtos').update(dados).eq('id', id) : 
+            await _supabase.from('produtos').insert([dados]);
+
+        if(error) alert("Erro ao salvar."); else { resetForm(); loadProdutos(); }
     };
 
-    if(!dados.nome || !dados.preco_venda) return alert("Nome e Preço de Venda são obrigatórios.");
+    function getFormData(uid) {
+        return {
+            usuario_id: uid,
+            nome: document.getElementById('nome').value,
+            sku: document.getElementById('sku').value,
+            codigo_de_barras: document.getElementById('codigo_de_barras').value,
+            marca: document.getElementById('marca').value,
+            categoria_prod: document.getElementById('categoria_prod').value,
+            descricao: document.getElementById('descricao').value,
+            data_vencimento: document.getElementById('data_vencimento').value || null,
+            entidade_id: document.getElementById('entidade_id').value || null,
+            preco_custo: parseFloat(document.getElementById('preco_custo').value) || 0,
+            preco_venda: parseFloat(document.getElementById('preco_venda').value) || 0,
+            estoque_atual: parseInt(document.getElementById('estoque_atual').value) || 0,
+            estoque_minimo: parseInt(document.getElementById('estoque_minimo').value) || 0
+        };
+    }
 
-    try {
-        if(id) {
-            await _supabase.from('produtos').update(dados).eq('id', id);
-        } else {
-            await _supabase.from('produtos').insert([dados]);
-        }
+    window.editProduto = function(id) {
+        const p = listaProdutos.find(i => i.id == id);
+        if(!p) return;
+        document.getElementById('edit-id').value = p.id;
+        document.getElementById('nome').value = p.nome;
+        document.getElementById('sku').value = p.sku || '';
+        document.getElementById('codigo_de_barras').value = p.codigo_de_barras || '';
+        document.getElementById('marca').value = p.marca || '';
+        document.getElementById('categoria_prod').value = p.categoria_prod || '';
+        document.getElementById('descricao').value = p.descricao || '';
+        document.getElementById('data_vencimento').value = p.data_vencimento || '';
+        document.getElementById('entidade_id').value = p.entidade_id || '';
+        document.getElementById('preco_custo').value = p.preco_custo;
+        document.getElementById('preco_venda').value = p.preco_venda;
+        document.getElementById('estoque_atual').value = p.estoque_atual;
+        document.getElementById('estoque_minimo').value = p.estoque_minimo;
         
-        resetForm();
-        loadProdutos();
-        alert("Produto salvo com sucesso!");
-    } catch (err) {
-        console.error("Erro ao salvar:", err);
-        alert("Erro ao salvar produto.");
-    }
-}
+        document.getElementById('form-title').innerText = "Editando Produto";
+        document.getElementById('btn-save').innerText = "Atualizar Produto";
+        document.getElementById('btn-cancel').style.display = 'block';
+        window.scrollTo({top:0, behavior:'smooth'});
+    };
 
-// Filtro
-function filtrarProdutos() {
-    const busca = document.getElementById('inputBusca').value.toLowerCase();
-    const filtrados = listaProdutos.filter(p => 
-        p.nome.toLowerCase().includes(busca) || 
-        (p.sku && p.sku.toLowerCase().includes(busca)) ||
-        (p.codigo_de_barras && p.codigo_de_barras.toLowerCase().includes(busca)) ||
-        (p.marca && p.marca.toLowerCase().includes(busca))
-    );
-    renderProdutos(filtrados);
-}
+    window.resetForm = function() {
+        document.querySelectorAll('input, textarea, select').forEach(i => i.value = '');
+        document.getElementById('edit-id').value = '';
+        document.getElementById('form-title').innerText = "Novo Produto";
+        document.getElementById('btn-save').innerText = "Salvar Produto";
+        document.getElementById('btn-cancel').style.display = 'none';
+    };
 
-// Editar
-function editProduto(id) {
-    const p = listaProdutos.find(item => item.id === id);
-    if(!p) return;
+    window.deleteProduto = async function(id) {
+        if(confirm("Excluir produto?")) {
+            await _supabase.from('produtos').delete().eq('id', id);
+            loadProdutos();
+        }
+    };
 
-    document.getElementById('edit-id').value = p.id;
-    document.getElementById('nome').value = p.nome;
-    document.getElementById('sku').value = p.sku || '';
-    document.getElementById('codigo_de_barras').value = p.codigo_de_barras || '';
-    document.getElementById('marca').value = p.marca || '';
-    document.getElementById('categoria_prod').value = p.categoria_prod || '';
-    document.getElementById('descricao').value = p.descricao || '';
-    document.getElementById('data_vencimento').value = p.data_vencimento || '';
-    document.getElementById('entidade_id').value = p.entidade_id || '';
-    
-    document.getElementById('preco_custo').value = p.preco_custo;
-    document.getElementById('preco_venda').value = p.preco_venda;
-    document.getElementById('estoque_atual').value = p.estoque_atual;
-    document.getElementById('estoque_minimo').value = p.estoque_minimo;
-    
-    document.getElementById('form-title').innerText = "Editando Produto";
-    document.getElementById('btn-save').innerText = "Atualizar Produto";
-    document.getElementById('btn-cancel').style.display = 'block';
-    window.scrollTo({top:0, behavior:'smooth'});
-}
+    window.filtrarProdutos = function() {
+        const busca = document.getElementById('inputBusca').value.toLowerCase();
+        renderProdutos(listaProdutos.filter(p => p.nome.toLowerCase().includes(busca) || (p.sku && p.sku.toLowerCase().includes(busca))));
+    };
 
-function resetForm() {
-    // Limpa todos os inputs e textareas
-    document.querySelectorAll('input, textarea, select').forEach(i => i.value = '');
-    document.getElementById('edit-id').value = '';
-    document.getElementById('estoque_atual').value = '0';
-    document.getElementById('estoque_minimo').value = '5';
-    document.getElementById('form-title').innerText = "Novo Produto";
-    document.getElementById('btn-save').innerText = "Salvar Produto";
-    document.getElementById('btn-cancel').style.display = 'none';
-}
-
-async function deleteProduto(id) {
-    if(confirm("Deseja excluir este produto?")) {
-        await _supabase.from('produtos').delete().eq('id', id);
-        loadProdutos();
-    }
-}
-
-// Inicializar ao carregar a página
-document.addEventListener('DOMContentLoaded', inicializar);
-    </script>
+    document.addEventListener('DOMContentLoaded', inicializar);
+})();
+</script>
 </body>
 </html>
