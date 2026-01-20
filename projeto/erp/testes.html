@@ -1,1 +1,299 @@
-oi
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP ABP</title>
+    <script src="conexao.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); }
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 13px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper i { position: absolute; right: 10px; cursor: pointer; color: #64748b; }
+        
+        /* Estilos Novos: Permissões e Upload */
+        .permissions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1; }
+        .perm-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: #475569; }
+        .perm-item input { width: auto; cursor: pointer; }
+        .upload-group { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
+        .btn-upload { background: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-upload:hover { background: #2563eb; }
+
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; }
+        .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+        .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+        /* No seu CSS */
+#arquivos_url {
+    background: #f1f5f9;
+    font-size: 11px;
+    color: #475569;
+    cursor: not-allowed;
+}
+    
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Cadastro de Entidade</h3>
+        <input type="hidden" id="edit-id">
+
+        <div class="section-title">Informações e Acesso</div>
+        <div class="form-grid">
+            <div><label>Nome Completo / Razão *</label><input type="text" id="nome_completo"></div>
+            <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
+            <div><label>E-mail</label><input type="email" id="email"></div>
+            <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
+            <div>
+                <label>Senha Interna</label>
+                <div class="password-wrapper">
+                    <input type="password" id="senha_acesso">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
+            <div>
+                <label>Nível de Acesso</label>
+                <select id="acesso">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="master">Master</option>
+                </select>
+            </div>
+            <div>
+                <label>Relacionamento</label>
+                <select id="relacionamento">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="fornecedor">Fornecedor</option>
+                </select>
+            </div>
+            <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+        </div>
+
+        <div class="section-title">Permissões de Acesso (Funcionários)</div>
+        <div class="permissions-grid" id="permissoes-container">
+            <label class="perm-item"><input type="checkbox" class="perm-check" value="vendas"> Vendas</label>
+            <label class="perm-item"><input type="checkbox" class="perm-check" value="estoque"> Estoque</label>
+            <label class="perm-item"><input type="checkbox" class="perm-check" value="financeiro"> Financeiro</label>
+            <label class="perm-item"><input type="checkbox" class="perm-check" value="entidades"> Entidades</label>
+            <label class="perm-item"><input type="checkbox" class="perm-check" value="config"> Configurações</label>
+        </div>
+
+        <div class="section-title">Endereço</div>
+        <div class="form-grid">
+            <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+            <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+            <div><label>Bairro</label><input type="text" id="bairro"></div>
+            <div><label>Cidade</label><input type="text" id="cidade"></div>
+        </div>
+
+        <div class="section-title">Documentos e Arquivos (PDF, DOC, TXT)</div>
+        <div class="form-grid">
+            <div style="grid-column: span 2;">
+                <label>Upload de Arquivo</label>
+                <div class="upload-group">
+                    <input type="file" id="arquivo_input">
+                    <button type="button" class="btn-upload" onclick="handleUploadDoc()">Upload</button>
+                </div>
+            </div>
+            <div style="grid-column: span 2;"><label>Link do Arquivo</label><input type="text" id="arquivos_url" readonly placeholder="O link aparecerá aqui..."></div>
+            <div style="grid-column: span 4;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+        </div>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+    </div>
+
+    <div class="card" style="padding: 15px;">
+        <input type="text" id="inputBusca" placeholder="🔍 Buscar entidade..." onkeyup="filtrarTabela()">
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Entidade</th>
+                    <th>Contato</th>
+                    <th>Acesso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="entities-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+(function() {
+    "use strict";
+
+    let currentData = [];
+
+    window.togglePasswordVisibility = function() {
+        const passwordInput = document.getElementById('senha_acesso');
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    };
+
+    window.buscaCEP = async function() {
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+            }
+        }
+    };
+
+    // --- FUNÇÃO DE UPLOAD DE DOCUMENTOS ---
+   window.handleUploadDoc = async function() {
+    const fileInput = document.getElementById('arquivo_input');
+    const urlInput = document.getElementById('arquivos_url');
+    
+    if (!fileInput.files.length) return alert("Selecione um arquivo!");
+
+    const file = fileInput.files[0];
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const filePath = `docs/${fileName}`;
+
+    try {
+        const { error } = await _supabase.storage.from('documentos').upload(filePath, file);
+        if (error) throw error;
+
+        const { data } = _supabase.storage.from('documentos').getPublicUrl(filePath);
+        
+        // LÓGICA PARA MÚLTIPLOS:
+        // Se já tiver algo no campo, adiciona uma vírgula antes do novo link
+        if (urlInput.value) {
+            urlInput.value += ", " + data.publicUrl;
+        } else {
+            urlInput.value = data.publicUrl;
+        }
+        
+        fileInput.value = ""; // Limpa o seletor para o próximo arquivo
+        alert("Arquivo adicionado à lista!");
+    } catch (err) { 
+        alert("Erro: " + err.message); 
+    }
+};
+
+    async function loadEntities() {
+        if (!window._supabase) return setTimeout(loadEntities, 500);
+        const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
+        if (!error) {
+            currentData = data;
+            renderTable(data);
+        }
+    }
+
+    function renderTable(data) {
+        const list = document.getElementById('entities-list');
+        list.innerHTML = data.map(c => `
+            <tr>
+                <td><b>${c.nome_completo}</b><br><small>${c.relacionamento}</small></td>
+                <td>${c.telefone || ''}</td>
+                <td>${c.acesso}</td>
+                <td>
+                    <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn-del" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
+    }
+
+    window.handleSave = async function() {
+        const { data: { user } } = await _supabase.auth.getUser();
+        const id = document.getElementById('edit-id').value;
+        
+        // Coleta Permissões (Checkboxes)
+        const permissoes = Array.from(document.querySelectorAll('.perm-check:checked')).map(cb => cb.value);
+
+        const dados = {
+            usuario_id: user.id,
+            nome_completo: document.getElementById('nome_completo').value,
+            cpf: document.getElementById('cpf').value,
+            email: document.getElementById('email').value,
+            telefone: document.getElementById('telefone').value,
+            senha_acesso: document.getElementById('senha_acesso').value,
+            acesso: document.getElementById('acesso').value,
+            relacionamento: document.getElementById('relacionamento').value,
+            avaliacao: parseInt(document.getElementById('avaliacao').value),
+            observacoes: document.getElementById('observacoes').value,
+            cep: document.getElementById('cep').value,
+            logradouro: document.getElementById('logradouro').value,
+            bairro: document.getElementById('bairro').value,
+            cidade: document.getElementById('cidade').value,
+            arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : [],
+            permissoes: permissoes // Salva a lista de acessos
+        };
+
+        const { error } = id ? await _supabase.from('entidades').update(dados).eq('id', id) : await _supabase.from('entidades').insert([dados]);
+        if (error) alert(error.message); else { resetForm(); loadEntities(); }
+    };
+
+    window.editFull = async function(id) {
+        const item = currentData.find(c => c.id === id);
+        if (!item) return;
+
+        // Preenche campos simples
+        Object.keys(item).forEach(k => {
+            const el = document.getElementById(k);
+            if (el) el.value = (k === 'arquivos_url' && item[k]) ? item[k][0] : (item[k] || '');
+        });
+
+        // Preenche Checkboxes de permissões
+        document.querySelectorAll('.perm-check').forEach(cb => {
+            cb.checked = item.permissoes ? item.permissoes.includes(cb.value) : false;
+        });
+
+        document.getElementById('edit-id').value = item.id;
+        document.getElementById('form-title').innerText = "Editando Entidade";
+        document.getElementById('btn-cancel').style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetForm = function() {
+        document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
+        document.querySelectorAll('.perm-check').forEach(cb => cb.checked = false);
+        document.getElementById('edit-id').value = '';
+        document.getElementById('btn-cancel').style.display = "none";
+        document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
+    };
+
+    window.deleteEntity = async function(id) {
+        if (confirm("Excluir?")) {
+            await _supabase.from('entidades').delete().eq('id', id);
+            loadEntities();
+        }
+    };
+
+    window.filtrarTabela = function() {
+        const v = document.getElementById("inputBusca").value.toLowerCase();
+        renderTable(currentData.filter(c => c.nome_completo.toLowerCase().includes(v)));
+    };
+
+    document.addEventListener('DOMContentLoaded', loadEntities);
+})();
+</script>
+</body>
+</html>
