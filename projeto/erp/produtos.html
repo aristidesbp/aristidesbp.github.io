@@ -269,7 +269,8 @@ td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
 
                 const imagemBlob = await comprimirImagem(file);
                 const fileName = `prod_${Date.now()}.jpg`;
-                const filePath = `${user.id}/${fileName}`;
+                // Altere esta linha no seu handleSaveProduto:
+const filePath = `fotos/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
 
                 const { error: uploadError } = await _supabase.storage
                     .from('produtos')
