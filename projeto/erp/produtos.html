@@ -26,6 +26,35 @@ th { background: #f8fafc; padding: 15px; font-size: 12px; text-align: left; colo
 td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
 .img-prod { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; background: #eee; }
 #reader { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+
+
+    .actions-flex {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.btn-action {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-edit {
+    background-color: var(--dark); /* Cor escura que você já usa */
+}
+
+.btn-delete {
+    background-color: var(--danger); /* Vermelho para exclusão */
+}
+
+.btn-action:hover {
+    filter: brightness(1.2);
+}
     
     </style>
 
@@ -123,68 +152,154 @@ td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
     </div>
 </div>
     <script>
-        (function() {
+
+(function() {
     "use strict";
+
     let listaProdutos = [];
     let html5QrCode;
 
-    async function init() {
-        if (!window._supabase) { setTimeout(init, 500); return; }
-        await loadFornecedores();
+    /**
+     * INICIALIZAÇÃO
+     */
+    async function inicializar() {
+        // Aguarda o Supabase ser injetado pelo conexao.js
+        if (!window._supabase) {
+            setTimeout(inicializar, 500);
+            return;
+        }
+        await loadEntidadesFornecedores();
         await loadProdutos();
     }
 
-    async function loadFornecedores() {
-        const { data } = await _supabase.from('entidades')
-            .select('id, nome_completo')
-            .eq('relacionamento', 'fornecedor');
-        const select = document.getElementById('entidade_id');
-        select.innerHTML = '<option value="">Selecione...</option>' + 
-            data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
+    /**
+     * CARREGAMENTO DE DADOS
+     */
+    
+    // Carrega apenas entidades marcadas como 'fornecedor'
+    async function loadEntidadesFornecedores() {
+        try {
+            const { data, error } = await _supabase
+                .from('entidades')
+                .select('id, nome_completo')
+                .eq('relacionamento', 'fornecedor')
+                .order('nome_completo');
+
+            if (error) throw error;
+
+            const select = document.getElementById('entidade_id');
+            select.innerHTML = '<option value="">Selecione o Fornecedor...</option>' + 
+                data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
+        } catch (err) {
+            console.error("Erro ao carregar fornecedores:", err.message);
+        }
     }
 
     async function loadProdutos() {
-        const { data } = await _supabase.from('produtos').select('*, entidades(nome_completo)');
-        listaProdutos = data || [];
-        renderProdutos(listaProdutos);
-        popularCategorias(listaProdutos);
+        try {
+            const { data, error } = await _supabase
+                .from('produtos')
+                .select('*, entidades(nome_completo)')
+                .order('nome');
+
+            if (error) throw error;
+            
+            listaProdutos = data || [];
+            renderProdutos(listaProdutos);
+            atualizarFiltrosCategorias(listaProdutos);
+        } catch (err) {
+            console.error("Erro ao carregar produtos:", err.message);
+        }
     }
 
-    function popularCategorias(dados) {
-        const cats = [...new Set(dados.map(p => p.categoria_prod).filter(Boolean))];
-        document.getElementById('lista-categorias').innerHTML = cats.map(c => `<option value="${c}">`).join('');
-        document.getElementById('filtro_categoria').innerHTML = '<option value="">Todas</option>' + 
-            cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    /**
+     * INTERFACE E RENDERIZAÇÃO
+     */
+
+    function renderProdutos(dados) {
+        const list = document.getElementById('produtos-list');
+        list.innerHTML = dados.map(p => {
+            const estoqueBaixo = p.estoque_atual <= (p.estoque_minimo || 0);
+            return `
+            <tr>
+                <td><img src="${p.imagem_url || ''}" class="img-prod" onerror="this.src='https://via.placeholder.com/50'"></td>
+                <td><b>${p.nome}</b><br><small style="color:gray">${p.marca || ''}</small></td>
+                <td><span style="background:#e2e8f0; padding:2px 8px; border-radius:4px; font-size:12px;">${p.categoria_prod || '-'}</span></td>
+                <td style="${estoqueBaixo ? 'color:red; font-weight:bold' : ''}">${p.estoque_atual} un</td>
+                <td>R$ ${parseFloat(p.preco_venda).toLocaleString('pt-BR', {minFractionDigits:2})}</td>
+                <td><small>NF: ${p.numero_nota || '-'}<br>${p.data_compra ? new Date(p.data_compra).toLocaleDateString('pt-BR') : ''}</small></td>
+                <td>
+                    <div class="actions-flex" style="display:flex; gap:8px;">
+                        <button class="btn-action btn-edit" style="background:#0f172a; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;" onclick="window.editProduto('${p.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-action btn-delete" style="background:#ef4444; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;" onclick="window.deleteProduto('${p.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="7" style="text-align:center">Nenhum produto encontrado.</td></tr>';
     }
 
-    window.previewImage = (input) => {
-        if (input.files[0]) {
+    function atualizarFiltrosCategorias(produtos) {
+        const categorias = [...new Set(produtos.map(p => p.categoria_prod).filter(Boolean))];
+        
+        // Atualiza o datalist do formulário
+        const dataList = document.getElementById('lista-categorias');
+        dataList.innerHTML = categorias.map(c => `<option value="${c}">`).join('');
+        
+        // Atualiza o select de filtro da busca
+        const selectFiltro = document.getElementById('filtro_categoria');
+        selectFiltro.innerHTML = '<option value="">Todas as Categorias</option>' + 
+            categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    /**
+     * FUNCIONALIDADES (CÂMERA E IMAGEM)
+     */
+
+    window.previewImage = function(input) {
+        if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = e => {
+            reader.onload = function(e) {
                 document.getElementById('img-preview').src = e.target.result;
                 document.getElementById('preview-container').style.display = 'block';
-            };
+            }
             reader.readAsDataURL(input.files[0]);
         }
     };
 
-    window.abrirScanner = () => {
+    window.abrirScanner = function() {
         document.getElementById('reader-container').style.display = 'block';
         html5QrCode = new Html5Qrcode("reader");
-        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, 
-            (text) => { document.getElementById('codigo_de_barras').value = text; fecharScanner(); }
-        );
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            { fps: 10, qrbox: { width: 250, height: 150 } },
+            (decodedText) => {
+                document.getElementById('codigo_de_barras').value = decodedText;
+                window.fecharScanner();
+            }
+        ).catch(err => console.error("Erro na câmera:", err));
     };
 
-    window.fecharScanner = () => {
-        if (html5QrCode) html5QrCode.stop().then(() => {
-            document.getElementById('reader-container').style.display = 'none';
-        });
+    window.fecharScanner = function() {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => {
+                document.getElementById('reader-container').style.display = 'none';
+            });
+        }
     };
 
-    window.handleSaveProduto = async () => {
+    /**
+     * CRUD - SALVAR, EDITAR, EXCLUIR
+     */
+
+    window.handleSaveProduto = async function() {
         const { data: { user } } = await _supabase.auth.getUser();
         const id = document.getElementById('edit-id').value;
+        const imgPrevia = document.getElementById('img-preview').src;
+
         const dados = {
             usuario_id: user.id,
             nome: document.getElementById('nome').value,
@@ -197,62 +312,83 @@ td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
             preco_venda: parseFloat(document.getElementById('preco_venda').value) || 0,
             estoque_atual: parseInt(document.getElementById('estoque_atual').value) || 0,
             estoque_minimo: parseInt(document.getElementById('estoque_minimo').value) || 0,
-            imagem_url: document.getElementById('img-preview').src.startsWith('data:') ? document.getElementById('img-preview').src : null
+            imagem_url: imgPrevia.startsWith('data:') ? imgPrevia : (id ? undefined : null)
         };
 
-        if (id) await _supabase.from('produtos').update(dados).eq('id', id);
-        else await _supabase.from('produtos').insert([dados]);
-        
-        resetForm(); loadProdutos();
+        if (!dados.nome || !dados.preco_venda) return alert("Nome e Preço de Venda são obrigatórios!");
+
+        const { error } = id ? 
+            await _supabase.from('produtos').update(dados).eq('id', id) : 
+            await _supabase.from('produtos').insert([dados]);
+
+        if (error) {
+            alert("Erro ao salvar: " + error.message);
+        } else {
+            resetForm();
+            loadProdutos();
+        }
     };
 
-    window.renderProdutos = (dados) => {
-        document.getElementById('produtos-list').innerHTML = dados.map(p => `
-            <tr>
-                <td><img src="${p.imagem_url || ''}" class="img-prod" onerror="this.src='https://via.placeholder.com/50'"></td>
-                <td><b>${p.nome}</b></td>
-                <td>${p.categoria_prod || '-'}</td>
-                <td style="${p.estoque_atual <= p.estoque_minimo ? 'color:red; font-weight:bold' : ''}">${p.estoque_atual} un</td>
-                <td>R$ ${p.preco_venda.toFixed(2)}</td>
-                <td><small>NF: ${p.numero_nota || '-'}<br>${p.data_compra || ''}</small></td>
-                <td>
-                    <button class="btn-scan" onclick="editProduto('${p.id}')"><i class="fas fa-edit"></i></button>
-                </td>
-            </tr>
-        `).join('');
-    };
+    window.editProduto = function(id) {
+        const p = listaProdutos.find(i => i.id === id);
+        if (!p) return;
 
-    window.filtrarProdutos = () => {
-        const busca = document.getElementById('inputBusca').value.toLowerCase();
-        const cat = document.getElementById('filtro_categoria').value;
-        const filtrados = listaProdutos.filter(p => 
-            (p.nome.toLowerCase().includes(busca) || (p.codigo_de_barras && p.codigo_de_barras.includes(busca))) &&
-            (cat === "" || p.categoria_prod === cat)
-        );
-        renderProdutos(filtrados);
-    };
-
-    window.editProduto = (id) => {
-        const p = listaProdutos.find(i => i.id == id);
-        if(!p) return;
         document.getElementById('edit-id').value = p.id;
         document.getElementById('nome').value = p.nome;
         document.getElementById('codigo_de_barras').value = p.codigo_de_barras || '';
+        document.getElementById('data_compra').value = p.data_compra || '';
+        document.getElementById('numero_nota').value = p.numero_nota || '';
         document.getElementById('categoria_prod').value = p.categoria_prod || '';
+        document.getElementById('entidade_id').value = p.entidade_id || '';
+        document.getElementById('preco_custo').value = p.preco_custo;
         document.getElementById('preco_venda').value = p.preco_venda;
+        document.getElementById('estoque_atual').value = p.estoque_atual;
+        document.getElementById('estoque_minimo').value = p.estoque_minimo;
+
+        if (p.imagem_url) {
+            document.getElementById('img-preview').src = p.imagem_url;
+            document.getElementById('preview-container').style.display = 'block';
+        }
+
+        document.getElementById('form-title').innerText = "Editando Produto";
+        document.getElementById('btn-save').innerText = "Atualizar Produto";
         document.getElementById('btn-cancel').style.display = 'block';
-        window.scrollTo({top:0, behavior:'smooth'});
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    window.resetForm = () => {
-        document.querySelectorAll('input, select').forEach(i => i.value = '');
-        document.getElementById('preview-container').style.display = 'none';
-        document.getElementById('btn-cancel').style.display = 'none';
+    window.deleteProduto = async function(id) {
+        if (confirm("Deseja realmente excluir este produto?")) {
+            const { error } = await _supabase.from('produtos').delete().eq('id', id);
+            if (error) alert("Erro ao excluir!"); else loadProdutos();
+        }
+    };
+
+    window.resetForm = function() {
         document.getElementById('edit-id').value = '';
+        document.querySelectorAll('input, select').forEach(i => i.value = '');
+        document.getElementById('img-preview').src = '';
+        document.getElementById('preview-container').style.display = 'none';
+        document.getElementById('form-title').innerText = "Novo Produto";
+        document.getElementById('btn-save').innerText = "Salvar Produto";
+        document.getElementById('btn-cancel').style.display = 'none';
     };
 
-    document.addEventListener('DOMContentLoaded', init);
+    window.filtrarProdutos = function() {
+        const busca = document.getElementById('inputBusca').value.toLowerCase();
+        const categoria = document.getElementById('filtro_categoria').value;
+
+        const filtrados = listaProdutos.filter(p => {
+            const matchTexto = p.nome.toLowerCase().includes(busca) || 
+                               (p.codigo_de_barras && p.codigo_de_barras.includes(busca));
+            const matchCategoria = categoria === "" || p.categoria_prod === categoria;
+            return matchTexto && matchCategoria;
+        });
+        renderProdutos(filtrados);
+    };
+
+    document.addEventListener('DOMContentLoaded', inicializar);
 })();
+            
         
     </script>
 </body>
