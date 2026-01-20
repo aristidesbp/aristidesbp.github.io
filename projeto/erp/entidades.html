@@ -38,6 +38,15 @@
         td { padding: 15px; border-top: 1px solid #f1f5f9; }
         .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
         .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+        /* No seu CSS */
+#arquivos_url {
+    background: #f1f5f9;
+    font-size: 11px;
+    color: #475569;
+    cursor: not-allowed;
+}
+    
     </style>
 </head>
 <body>
@@ -157,23 +166,36 @@
     };
 
     // --- FUNÇÃO DE UPLOAD DE DOCUMENTOS ---
-    window.handleUploadDoc = async function() {
-        const fileInput = document.getElementById('arquivo_input');
-        if (!fileInput.files.length) return alert("Selecione um arquivo!");
+   window.handleUploadDoc = async function() {
+    const fileInput = document.getElementById('arquivo_input');
+    const urlInput = document.getElementById('arquivos_url');
+    
+    if (!fileInput.files.length) return alert("Selecione um arquivo!");
 
-        const file = fileInput.files[0];
-        const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-        const filePath = `docs/${fileName}`;
+    const file = fileInput.files[0];
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const filePath = `docs/${fileName}`;
 
-        try {
-            const { error } = await _supabase.storage.from('documentos').upload(filePath, file);
-            if (error) throw error;
+    try {
+        const { error } = await _supabase.storage.from('documentos').upload(filePath, file);
+        if (error) throw error;
 
-            const { data } = _supabase.storage.from('documentos').getPublicUrl(filePath);
-            document.getElementById('arquivos_url').value = data.publicUrl;
-            alert("Arquivo pronto!");
-        } catch (err) { alert("Erro: " + err.message); }
-    };
+        const { data } = _supabase.storage.from('documentos').getPublicUrl(filePath);
+        
+        // LÓGICA PARA MÚLTIPLOS:
+        // Se já tiver algo no campo, adiciona uma vírgula antes do novo link
+        if (urlInput.value) {
+            urlInput.value += ", " + data.publicUrl;
+        } else {
+            urlInput.value = data.publicUrl;
+        }
+        
+        fileInput.value = ""; // Limpa o seletor para o próximo arquivo
+        alert("Arquivo adicionado à lista!");
+    } catch (err) { 
+        alert("Erro: " + err.message); 
+    }
+};
 
     async function loadEntities() {
         if (!window._supabase) return setTimeout(loadEntities, 500);
