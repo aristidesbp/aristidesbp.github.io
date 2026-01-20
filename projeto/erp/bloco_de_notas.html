@@ -10,127 +10,143 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-    --primary: #3ecf8e;
-    --dark: #0f172a;
-    --bg: #f1f5f9;
-}
+            --primary: #3ecf8e;
+            --dark: #0f172a;
+            --bg: #f1f5f9;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --gray: #94a3b8;
+        }
 
-* { box-sizing: border-box; }
+        * { box-sizing: border-box; }
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg);
-}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            padding: 20px;
+        }
 
-.container {
-    max-width: 700px;
-    margin: 40px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
 
-textarea, input[type="text"] {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-}
+        h2 { color: var(--dark); margin-top: 0; }
 
-.btn-save {
-    background: var(--primary);
-    color: white;
-    padding: 15px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: 0.3s;
-}
+        textarea, input[type="text"] {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
 
-.btn-save:hover { filter: brightness(1.1); }
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
 
-.note {
-    border-bottom: 1px solid #f1f1f1;
-    padding: 20px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
 
-.note-content strong {
-    color: #1e293b;
-    font-size: 1.1em;
-    display: block;
-    margin-bottom: 5px;
-}
+        .btn-save:hover { filter: brightness(1.1); }
 
-.note-content p {
-    color: #64748b;
-    margin: 0;
-    line-height: 1.5;
-    white-space: pre-wrap;
-}
-
-.actions {
-    display: flex;
-    gap: 8px;
-}
-
-.actions button {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    color: white;
-}
-
-.search-box {
-    margin-top: 30px;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-}
-
-.export-btn {
-    width: 100%;
-    background: #2c3e50;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
+        /* Estilo do Novo Botão de Cancelar */
         .btn-cancel {
-    background: #94a3b8; /* Cor cinza azulada */
-    color: white;
-    padding: 12px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: 0.3s;
-}
+            background: var(--gray);
+            color: white;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none; /* Escondido por padrão */
+            transition: 0.3s;
+        }
 
-.btn-cancel:hover { background: #64748b; }
-        
+        .btn-cancel:hover { background: #64748b; }
+
+        .note {
+            border-bottom: 1px solid #f1f1f1;
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .note-content strong {
+            color: #1e293b;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .note-content p {
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .actions button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .actions button:hover { opacity: 0.8; }
+
+        .search-box {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .export-btn {
+            width: 100%;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Minhas Notas</h2>
+        <h2 id="form-title">Minhas Notas</h2>
         <input type="hidden" id="note-id">
         <input type="text" id="title" placeholder="Título da nota...">
         <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
@@ -138,13 +154,13 @@ textarea, input[type="text"] {
         <button class="btn-save" id="btn-save" onclick="saveNote()">
             Salvar Nota
         </button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()" style="display:none;">
-    Cancelar Edição
-        </button>
         
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">
+            Cancelar Edição
+        </button>
 
         <div class="search-box">
-            <label>PESQUISAR OU EXPORTAR</label>
+            <label style="font-size: 12px; font-weight: bold; color: #64748b;">PESQUISAR OU EXPORTAR</label>
             <input type="text" id="search" placeholder="🔍 Digite para buscar..." onkeyup="filterNotes()">
             <button class="export-btn" onclick="exportAllToPDF()">
                 <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
@@ -155,144 +171,136 @@ textarea, input[type="text"] {
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
-        /**
- * js/bloco_de_notas.js - Versão Corrigida para Sincronismo
- */
+        /** ERP ABP - Bloco de Notas Integrado **/
+        (function() {
+            "use strict";
 
-let allNotes = [];
+            let allNotes = [];
 
-// Função para garantir que o _supabase foi definido pelo conexao.js
-async function waitSupabase() {
-    let attempts = 0;
-    while (!window._supabase && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Espera 100ms
-        attempts++;
-    }
-    if (window._supabase) {
-        loadNotes();
-    } else {
-        console.error("Supabase não carregou a tempo.");
-    }
-}
+            // 1. Aguarda a conexão com Supabase do conexao.js
+            async function init() {
+                if (!window._supabase) {
+                    setTimeout(init, 200);
+                    return;
+                }
+                loadNotes();
+            }
 
-async function loadNotes() {
-    try {
-        const { data: notes, error } = await _supabase
-            .from('notes')
-            .select('*')
-            .order('created_at', { ascending: false });
+            // 2. Carregar Notas
+            async function loadNotes() {
+                const { data, error } = await _supabase
+                    .from('notes')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-        if (error) throw error;
-        allNotes = notes || [];
-        renderNotes(allNotes);
-    } catch (err) {
-        console.error("Erro ao carregar:", err.message);
-    }
-}
+                if (error) return console.error("Erro:", error);
+                allNotes = data || [];
+                renderNotes(allNotes);
+            }
 
-function renderNotes(notes) {
-    const list = document.getElementById('notes-list');
-    if (!notes.length) {
-        list.innerHTML = '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
-        return;
-    }
-    list.innerHTML = notes.map(n => `
-        <div class="note">
-            <div class="note-content">
-                <strong>${n.title}</strong>
-                <p>${n.content}</p>
-            </div>
-            <div class="actions">
-                <button style="background:#f1c40f" onclick="prepareEdit('${n.id}')"><i class="fas fa-edit"></i></button>
-                <button style="background:#e74c3c" onclick="deleteNote('${n.id}')"><i class="fas fa-trash"></i></button>
-            </div>
-        </div>
-    `).join('');
-}
+            // 3. Renderizar Lista
+            function renderNotes(notes) {
+                const list = document.getElementById('notes-list');
+                list.innerHTML = notes.map(n => `
+                    <div class="note">
+                        <div class="note-content">
+                            <strong>${n.title}</strong>
+                            <p>${n.content}</p>
+                        </div>
+                        <div class="actions">
+                            <button style="background:var(--warning)" onclick="window.prepareEdit('${n.id}')"><i class="fas fa-edit"></i></button>
+                            <button style="background:var(--danger)" onclick="window.deleteNote('${n.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('') || '<p style="text-align:center; color:#94a3b8;">Nenhuma nota encontrada.</p>';
+            }
 
-async function saveNote() {
-    const id = document.getElementById('note-id').value;
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
+            // 4. Salvar ou Atualizar
+            window.saveNote = async function() {
+                const id = document.getElementById('note-id').value;
+                const title = document.getElementById('title').value;
+                const content = document.getElementById('content').value;
 
-    if (!title || !content) return alert("Preencha tudo!");
+                if (!title || !content) return alert("Por favor, preencha o título e o conteúdo.");
 
-    const { data: { user } } = await _supabase.auth.getUser();
+                const { data: { user } } = await _supabase.auth.getUser();
 
-    if (id) {
-        await _supabase.from('notes').update({ title, content }).eq('id', id);
-    } else {
-        await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
-    }
+                if (id) {
+                    await _supabase.from('notes').update({ title, content }).eq('id', id);
+                } else {
+                    await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+                }
 
-    resetForm();
-    loadNotes();
-}
+                resetForm();
+                loadNotes();
+            };
 
-function prepareEdit(id) {
-    const note = allNotes.find(n => n.id === id);
-    if (!note) return;
-    
-    document.getElementById('note-id').value = note.id;
-    document.getElementById('title').value = note.title;
-    document.getElementById('content').value = note.content;
-    
-    // Altera o texto do botão salvar e mostra o botão cancelar
-    document.getElementById('btn-save').innerText = "Atualizar Nota";
-    document.getElementById('btn-cancel').style.display = 'block';
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+            // 5. Preparar Edição
+            window.prepareEdit = function(id) {
+                const note = allNotes.find(n => n.id === id);
+                if (!note) return;
 
-function resetForm() {
-    document.getElementById('note-id').value = '';
-    document.getElementById('title').value = '';
-    document.getElementById('content').value = '';
-    
-    // Volta o botão ao estado original e esconde o cancelar
-    document.getElementById('btn-save').innerText = "Salvar Nota";
-    document.getElementById('btn-cancel').style.display = 'none';
-}
+                document.getElementById('note-id').value = note.id;
+                document.getElementById('title').value = note.title;
+                document.getElementById('content').value = note.content;
+                
+                document.getElementById('form-title').innerText = "Editando Nota";
+                document.getElementById('btn-save').innerText = "Atualizar Nota";
+                document.getElementById('btn-cancel').style.display = 'block';
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
 
+            // 6. Resetar Formulário (Função Cancelar)
+            window.resetForm = function() {
+                document.getElementById('note-id').value = '';
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                
+                document.getElementById('form-title').innerText = "Minhas Notas";
+                document.getElementById('btn-save').innerText = "Salvar Nota";
+                document.getElementById('btn-cancel').style.display = 'none';
+            };
 
+            // 7. Excluir Nota
+            window.deleteNote = async function(id) {
+                if (confirm("Tem certeza que deseja excluir esta nota?")) {
+                    await _supabase.from('notes').delete().eq('id', id);
+                    loadNotes();
+                }
+            };
 
-        
+            // 8. Busca
+            window.filterNotes = function() {
+                const q = document.getElementById('search').value.toLowerCase();
+                renderNotes(allNotes.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)));
+            };
 
-async function deleteNote(id) {
-    if (confirm("Excluir nota?")) {
-        await _supabase.from('notes').delete().eq('id', id);
-        loadNotes();
-    }
-}
+            // 9. PDF
+            window.exportAllToPDF = function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFontSize(18);
+                doc.text("Relatório de Notas - ERP ABP", 10, 20);
+                
+                doc.setFontSize(12);
+                let y = 35;
+                allNotes.forEach((n, i) => {
+                    if (y > 270) { doc.addPage(); y = 20; }
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${i + 1}. ${n.title}`, 10, y);
+                    doc.setFont(undefined, 'normal');
+                    const textLines = doc.splitTextToSize(n.content, 180);
+                    doc.text(textLines, 10, y + 7);
+                    y += (textLines.length * 7) + 15;
+                });
+                doc.save("notas_erp_abp.pdf");
+            };
 
-function filterNotes() {
-    const q = document.getElementById('search').value.toLowerCase();
-    renderNotes(allNotes.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)));
-}
-
-function exportAllToPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text("Relatório de Notas - ERP ABP", 10, 10);
-    let y = 20;
-    allNotes.forEach((n, i) => {
-        doc.setFont(undefined, 'bold');
-        doc.text(`${i + 1}. ${n.title}`, 10, y);
-        doc.setFont(undefined, 'normal');
-        doc.text(n.content, 10, y + 7);
-        y += 25;
-    });
-    doc.save("notas.pdf");
-}
-
-// Inicialização segura
-document.addEventListener('DOMContentLoaded', waitSupabase);
-    
-    
-    
-    
-    
+            document.addEventListener('DOMContentLoaded', init);
+        })();
     </script>
 </body>
 </html>
