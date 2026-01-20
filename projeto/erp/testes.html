@@ -38,15 +38,6 @@
         td { padding: 15px; border-top: 1px solid #f1f5f9; }
         .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
         .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
-
-        /* No seu CSS */
-#arquivos_url {
-    background: #f1f5f9;
-    font-size: 11px;
-    color: #475569;
-    cursor: not-allowed;
-}
-    
     </style>
 </head>
 <body>
@@ -147,39 +138,27 @@
 
     let currentData = [];
 
-    // --- FUNÇÕES DE INTERFACE ---
     window.togglePasswordVisibility = function() {
         const passwordInput = document.getElementById('senha_acesso');
-        const toggleIcon = document.getElementById('togglePassword');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
     };
 
     window.buscaCEP = async function() {
         const cep = document.getElementById('cep').value.replace(/\D/g, '');
         if (cep.length === 8) {
-            try {
-                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                const data = await res.json();
-                if (!data.erro) {
-                    document.getElementById('logradouro').value = data.logradouro;
-                    document.getElementById('bairro').value = data.bairro;
-                    document.getElementById('cidade').value = data.localidade;
-                }
-            } catch { console.error("Erro CEP"); }
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+            }
         }
     };
 
-    // --- UPLOAD SIMPLES (IGUAL PRODUTOS) ---
+    // --- FUNÇÃO DE UPLOAD DE DOCUMENTOS ---
     window.handleUploadDoc = async function() {
         const fileInput = document.getElementById('arquivo_input');
-        const urlInput = document.getElementById('arquivos_url');
-        
         if (!fileInput.files.length) return alert("Selecione um arquivo!");
 
         const file = fileInput.files[0];
@@ -191,48 +170,42 @@
             if (error) throw error;
 
             const { data } = _supabase.storage.from('documentos').getPublicUrl(filePath);
-            urlInput.value = data.publicUrl; // Define o link único no campo
-            
-            alert("Upload concluído!");
-        } catch (err) { alert("Erro no upload: " + err.message); }
+            document.getElementById('arquivos_url').value = data.publicUrl;
+            alert("Arquivo pronto!");
+        } catch (err) { alert("Erro: " + err.message); }
     };
 
-    // --- CARREGAMENTO E TABELA ---
     async function loadEntities() {
-        if (!window._supabase) {
-            setTimeout(loadEntities, 500);
-            return;
-        }
+        if (!window._supabase) return setTimeout(loadEntities, 500);
         const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
         if (!error) {
-            currentData = data || [];
-            renderTable(currentData);
+            currentData = data;
+            renderTable(data);
         }
     }
 
     function renderTable(data) {
         const list = document.getElementById('entities-list');
-        list.innerHTML = data.map(c => {
-            const wpp = c.telefone ? `https://wa.me/${c.telefone.replace(/\D/g, '')}` : '#';
-            return `
+        list.innerHTML = data.map(c => `
             <tr>
-                <td><b>${c.nome_completo}</b><br><small>${(c.relacionamento || '')}</small></td>
+                <td><b>${c.nome_completo}</b><br><small>${c.relacionamento}</small></td>
                 <td>${c.telefone || ''}</td>
                 <td>${c.acesso}</td>
                 <td>
                     <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
                     <button class="btn-del" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
-                    <a href="${wpp}" target="_blank" style="color:#25d366; margin-left:10px;"><i class="fab fa-whatsapp"></i></a>
                 </td>
-            </tr>`;
-        }).join('') || '<tr><td colspan="4">Nenhuma entidade.</td></tr>';
+            </tr>
+        `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
     }
 
-    // --- SALVAMENTO CORRIGIDO (SEM ERRO DE ARRAY) ---
     window.handleSave = async function() {
         const { data: { user } } = await _supabase.auth.getUser();
         const id = document.getElementById('edit-id').value;
         
+        // Coleta Permissões (Checkboxes)
+        const permissoes = Array.from(document.querySelectorAll('.perm-check:checked')).map(cb => cb.value);
+
         const dados = {
             usuario_id: user.id,
             nome_completo: document.getElementById('nome_completo').value,
@@ -242,52 +215,47 @@
             senha_acesso: document.getElementById('senha_acesso').value,
             acesso: document.getElementById('acesso').value,
             relacionamento: document.getElementById('relacionamento').value,
-            avaliacao: parseInt(document.getElementById('avaliacao').value) || 5,
+            avaliacao: parseInt(document.getElementById('avaliacao').value),
             observacoes: document.getElementById('observacoes').value,
             cep: document.getElementById('cep').value,
             logradouro: document.getElementById('logradouro').value,
             bairro: document.getElementById('bairro').value,
             cidade: document.getElementById('cidade').value,
-            arquivos_url: document.getElementById('arquivos_url').value // Salva apenas o texto do link
+            arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : [],
+            permissoes: permissoes // Salva a lista de acessos
         };
-        
-        if (!dados.nome_completo) return alert("Nome é obrigatório");
-        
-        // Removido o campo 'permissoes' para evitar erro de coluna inexistente
-        const { error } = id ? 
-            await _supabase.from('entidades').update(dados).eq('id', id) : 
-            await _supabase.from('entidades').insert([dados]);
-        
-        if (error) {
-            alert("Erro ao salvar: " + error.message);
-        } else {
-            alert("Salvo com sucesso!");
-            resetForm(); 
-            loadEntities();
-        }
+
+        const { error } = id ? await _supabase.from('entidades').update(dados).eq('id', id) : await _supabase.from('entidades').insert([dados]);
+        if (error) alert(error.message); else { resetForm(); loadEntities(); }
     };
 
     window.editFull = async function(id) {
-        const { data, error } = await _supabase.from('entidades').select('*').eq('id', id).single();
-        if (data) {
-            Object.keys(data).forEach(k => {
-                const el = document.getElementById(k);
-                if (el) el.value = data[k] || '';
-            });
-            document.getElementById('edit-id').value = data.id;
-            document.getElementById('form-title').innerText = "Editando Entidade";
-            document.getElementById('btn-save').innerText = "Atualizar Entidade";
-            document.getElementById('btn-cancel').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        const item = currentData.find(c => c.id === id);
+        if (!item) return;
+
+        // Preenche campos simples
+        Object.keys(item).forEach(k => {
+            const el = document.getElementById(k);
+            if (el) el.value = (k === 'arquivos_url' && item[k]) ? item[k][0] : (item[k] || '');
+        });
+
+        // Preenche Checkboxes de permissões
+        document.querySelectorAll('.perm-check').forEach(cb => {
+            cb.checked = item.permissoes ? item.permissoes.includes(cb.value) : false;
+        });
+
+        document.getElementById('edit-id').value = item.id;
+        document.getElementById('form-title').innerText = "Editando Entidade";
+        document.getElementById('btn-cancel').style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.resetForm = function() {
         document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
+        document.querySelectorAll('.perm-check').forEach(cb => cb.checked = false);
         document.getElementById('edit-id').value = '';
-        document.getElementById('form-title').innerText = "Novo Cadastro";
-        document.getElementById('btn-save').innerText = "Salvar Entidade";
         document.getElementById('btn-cancel').style.display = "none";
+        document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
     };
 
     window.deleteEntity = async function(id) {
@@ -295,6 +263,11 @@
             await _supabase.from('entidades').delete().eq('id', id);
             loadEntities();
         }
+    };
+
+    window.filtrarTabela = function() {
+        const v = document.getElementById("inputBusca").value.toLowerCase();
+        renderTable(currentData.filter(c => c.nome_completo.toLowerCase().includes(v)));
     };
 
     document.addEventListener('DOMContentLoaded', loadEntities);
