@@ -175,7 +175,7 @@
         }
     };
 
-    // --- LÓGICA DE UPLOAD (APENAS 1 ARQUIVO - IGUAL PRODUTOS) ---
+    // --- UPLOAD SIMPLES (IGUAL PRODUTOS) ---
     window.handleUploadDoc = async function() {
         const fileInput = document.getElementById('arquivo_input');
         const urlInput = document.getElementById('arquivos_url');
@@ -191,12 +191,9 @@
             if (error) throw error;
 
             const { data } = _supabase.storage.from('documentos').getPublicUrl(filePath);
+            urlInput.value = data.publicUrl; // Define o link único no campo
             
-            // Define o link direto (substitui o anterior)
-            urlInput.value = data.publicUrl;
-            
-            fileInput.value = ""; 
-            alert("Documento carregado com sucesso!");
+            alert("Upload concluído!");
         } catch (err) { alert("Erro no upload: " + err.message); }
     };
 
@@ -206,45 +203,36 @@
             setTimeout(loadEntities, 500);
             return;
         }
-
         const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
-        if (error) {
-            console.error("Erro ao carregar:", error);
-            return;
+        if (!error) {
+            currentData = data || [];
+            renderTable(currentData);
         }
-        currentData = data || [];
-        renderTable(currentData);
     }
 
     function renderTable(data) {
         const list = document.getElementById('entities-list');
         list.innerHTML = data.map(c => {
-            const wppLink = c.telefone ? `https://wa.me/${c.telefone.replace(/\D/g, '')}` : '#';
-            const mailLink = c.email ? `https://mail.google.com/mail/?view=cm&fs=1&to=${c.email}` : '#';
-
+            const wpp = c.telefone ? `https://wa.me/${c.telefone.replace(/\D/g, '')}` : '#';
             return `
             <tr>
-                <td><b>${c.nome_completo}</b><br><small>${(c.relacionamento || '').toUpperCase()}</small></td>
-                <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
-                <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
+                <td><b>${c.nome_completo}</b><br><small>${(c.relacionamento || '')}</small></td>
+                <td>${c.telefone || ''}</td>
+                <td>${c.acesso}</td>
                 <td>
-                    <button class="btn-edit" title="Editar" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                    <button class="btn-del" title="Excluir" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
-                    <a href="${wppLink}" target="_blank" class="btn-wpp" title="WhatsApp" style="color:#25d366; margin-left:10px;"><i class="fab fa-whatsapp"></i></a>
-                    <a href="${mailLink}" target="_blank" class="btn-mail" title="Gmail" style="color:#ea4335; margin-left:10px;"><i class="fas fa-envelope"></i></a>
+                    <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn-del" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
+                    <a href="${wpp}" target="_blank" style="color:#25d366; margin-left:10px;"><i class="fab fa-whatsapp"></i></a>
                 </td>
             </tr>`;
-        }).join('') || '<tr><td colspan="4" style="text-align:center">Nenhuma entidade encontrada.</td></tr>';
+        }).join('') || '<tr><td colspan="4">Nenhuma entidade.</td></tr>';
     }
 
-    // --- SALVAMENTO E EDIÇÃO CORRIGIDOS ---
+    // --- SALVAMENTO CORRIGIDO (SEM ERRO DE ARRAY) ---
     window.handleSave = async function() {
         const { data: { user } } = await _supabase.auth.getUser();
         const id = document.getElementById('edit-id').value;
         
-        // Captura as permissões marcadas (Array)
-        const permissoes = Array.from(document.querySelectorAll('.perm-check:checked')).map(cb => cb.value);
-
         const dados = {
             usuario_id: user.id,
             nome_completo: document.getElementById('nome_completo').value,
@@ -260,78 +248,53 @@
             logradouro: document.getElementById('logradouro').value,
             bairro: document.getElementById('bairro').value,
             cidade: document.getElementById('cidade').value,
-            arquivos_url: document.getElementById('arquivos_url').value, // SALVA COMO TEXTO SIMPLES
-            permissoes: permissoes // Salva o array de permissões
+            arquivos_url: document.getElementById('arquivos_url').value // Salva apenas o texto do link
         };
         
         if (!dados.nome_completo) return alert("Nome é obrigatório");
         
-        try {
-            const { error } = id ? 
-                await _supabase.from('entidades').update(dados).eq('id', id) : 
-                await _supabase.from('entidades').insert([dados]);
-            
-            if (error) throw error;
-            
+        // Removido o campo 'permissoes' para evitar erro de coluna inexistente
+        const { error } = id ? 
+            await _supabase.from('entidades').update(dados).eq('id', id) : 
+            await _supabase.from('entidades').insert([dados]);
+        
+        if (error) {
+            alert("Erro ao salvar: " + error.message);
+        } else {
             alert("Salvo com sucesso!");
             resetForm(); 
             loadEntities();
-        } catch (err) {
-            alert("Erro ao salvar: " + err.message);
         }
     };
 
     window.editFull = async function(id) {
         const { data, error } = await _supabase.from('entidades').select('*').eq('id', id).single();
-        if (error || !data) return;
-
-        // Preenche campos normais
-        Object.keys(data).forEach(k => {
-            const el = document.getElementById(k);
-            if (el && k !== 'permissoes') {
-                el.value = data[k] || '';
-            }
-        });
-
-        // Preenche as permissões (Checkboxes)
-        document.querySelectorAll('.perm-check').forEach(cb => {
-            cb.checked = data.permissoes && data.permissoes.includes(cb.value);
-        });
-
-        document.getElementById('edit-id').value = data.id;
-        document.getElementById('form-title').innerText = "Editando Entidade";
-        document.getElementById('btn-save').innerText = "Atualizar Entidade";
-        document.getElementById('btn-cancel').style.display = "block";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (data) {
+            Object.keys(data).forEach(k => {
+                const el = document.getElementById(k);
+                if (el) el.value = data[k] || '';
+            });
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('form-title').innerText = "Editando Entidade";
+            document.getElementById('btn-save').innerText = "Atualizar Entidade";
+            document.getElementById('btn-cancel').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     window.resetForm = function() {
-        document.querySelectorAll('input, select, textarea').forEach(i => {
-            if(i.id === 'avaliacao') i.value = '5';
-            else if(i.tagName === 'SELECT') i.selectedIndex = 0;
-            else if(i.type === 'checkbox') i.checked = false;
-            else i.value = '';
-        });
+        document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
         document.getElementById('edit-id').value = '';
-        document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
+        document.getElementById('form-title').innerText = "Novo Cadastro";
         document.getElementById('btn-save').innerText = "Salvar Entidade";
         document.getElementById('btn-cancel').style.display = "none";
     };
 
     window.deleteEntity = async function(id) {
-        if (confirm("Excluir definitivamente?")) {
-            const { error } = await _supabase.from('entidades').delete().eq('id', id);
-            if (error) alert("Erro ao excluir: " + error.message);
-            else loadEntities();
+        if (confirm("Excluir?")) {
+            await _supabase.from('entidades').delete().eq('id', id);
+            loadEntities();
         }
-    };
-
-    window.filtrarTabela = function() {
-        const termo = document.getElementById('inputBusca').value.toLowerCase();
-        const linhas = document.querySelectorAll('#entities-list tr');
-        linhas.forEach(linha => {
-            linha.style.display = linha.innerText.toLowerCase().includes(termo) ? '' : 'none';
-        });
     };
 
     document.addEventListener('DOMContentLoaded', loadEntities);
