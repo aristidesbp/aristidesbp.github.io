@@ -108,6 +108,23 @@ textarea, input[type="text"] {
     margin-top: 10px;
     font-weight: bold;
 }
+
+        .btn-cancel {
+    background: #94a3b8; /* Cor cinza azulada */
+    color: white;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-cancel:hover { background: #64748b; }
+        
     </style>
 </head>
 <body>
@@ -121,6 +138,10 @@ textarea, input[type="text"] {
         <button class="btn-save" id="btn-save" onclick="saveNote()">
             Salvar Nota
         </button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()" style="display:none;">
+    Cancelar Edição
+        </button>
+        
 
         <div class="search-box">
             <label>PESQUISAR OU EXPORTAR</label>
@@ -212,10 +233,15 @@ async function saveNote() {
 function prepareEdit(id) {
     const note = allNotes.find(n => n.id === id);
     if (!note) return;
+    
     document.getElementById('note-id').value = note.id;
     document.getElementById('title').value = note.title;
     document.getElementById('content').value = note.content;
+    
+    // Altera o texto do botão salvar e mostra o botão cancelar
     document.getElementById('btn-save').innerText = "Atualizar Nota";
+    document.getElementById('btn-cancel').style.display = 'block';
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -223,8 +249,15 @@ function resetForm() {
     document.getElementById('note-id').value = '';
     document.getElementById('title').value = '';
     document.getElementById('content').value = '';
+    
+    // Volta o botão ao estado original e esconde o cancelar
     document.getElementById('btn-save').innerText = "Salvar Nota";
+    document.getElementById('btn-cancel').style.display = 'none';
 }
+
+
+
+        
 
 async function deleteNote(id) {
     if (confirm("Excluir nota?")) {
@@ -255,6 +288,11 @@ function exportAllToPDF() {
 
 // Inicialização segura
 document.addEventListener('DOMContentLoaded', waitSupabase);
+    
+    
+    
+    
+    
     </script>
 </body>
 </html>
