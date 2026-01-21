@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Experiência VR - WebXR</title>
+
+    <!-- Garante compatibilidade mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #info {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="info">
+    Toque no botão de óculos para entrar em VR
+</div>
+
+<a-scene
+    embedded
+    vr-mode-ui="enabled: true"
+    renderer="colorManagement: true"
+    webxr="optionalFeatures: hit-test, local-floor, bounded-floor"
+>
+
+    <!-- Assets -->
+    <a-assets>
+        <!-- Troque o src pela sua imagem 360 -->
+        <img id="imagem360" src="sua-imagem-360.jpg">
+    </a-assets>
+
+    <!-- Câmera -->
+    <a-entity position="0 1.6 0">
+        <a-camera look-controls="enabled: true"></a-camera>
+    </a-entity>
+
+    <!-- Ambiente 360 -->
+    <a-sky src="#imagem360" rotation="0 -90 0"></a-sky>
+
+</a-scene>
+
+</body>
+</html>
