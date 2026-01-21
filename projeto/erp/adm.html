@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+    <script src="js/conexao_supabase.js" defer></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <style>
+       /* Reset e Box-sizing conforme seu padrão */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f1f5f9;
+    /* Removido o padding fixo para deixar o conexao.js (Guard) controlar via classe .erp-guard-active */
+}
+
+.content {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header-area {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-area h1 {
+    color: #1e293b;
+    font-size: 1.8rem;
+    letter-spacing: -0.5px;
+}
+
+/* Grid Responsivo Inteligente */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Estilização dos Cards */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #334155;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #3ecf8e;
+    box-shadow: 0 10px 25px rgba(62, 207, 142, 0.1);
+}
+
+.card i {
+    font-size: 40px;
+    color: #3ecf8e;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    margin: 10px 0 5px 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.card p {
+    font-size: 0.9em;
+    color: #64748b;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Responsividade Extra para Celulares Pequenos */
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .card {
+        padding: 20px;
+    }
+}
+   </style>
+    
+    
+   
+</head>
+<body>
+ <div class="content">
+        <div class="header-area">
+            <h1>SISTEMA ERP ABP</h1>
+        </div>
+     <div class="grid">
+
+         
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+         
+ <div class="grid">
+
+     <a href="testes.html" class="card">
+        <i class="fas fa-chart-line"></i> <h3>Testes</h3>
+        <p>NÃO BAGUNCE SEU SISTEMA! salve os codigos no BLOCO DE NOTAS</p>
+    </a>
+    
+  
+     
+    <a href="bloco_de_notas.html" class="card">
+        <i class="fas fa-sticky-note"></i>
+        <h3>Bloco de Notas</h3>
+        <p>Anote e organize suas ideias na nuvem.</p>
+    </a>
+    
+    <a href="produtos.html" class="card">
+        <i class="fas fa-box"></i> <h3>Produtos</h3>
+        <p>Gestão de estoque e catálogo.</p> </a>
+
+    <a href="entidades.html" class="card">
+        <i class="fas fa-users"></i>
+        <h3>Entidades</h3>
+        <p>Clientes, Fornecedores e Colaboradores.</p>
+    </a>
+
+    <a href="financeiro.html" class="card">
+        <i class="fas fa-chart-line"></i> <h3>Financeiro</h3>
+        <p>Fluxo de caixa e controle de contas.</p>
+    </a>
+
+     
+     
+</div>
+          
+
+         
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+
+        </div>
+    </div>
+</body>
+</html>
