@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controlo - ERP ABP</title>
+    <script src="conexao.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .welcome-header { margin-bottom: 40px; }
+        .welcome-header h1 { color: #1e293b; font-size: 2rem; margin-bottom: 8px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); }
+        .stat-card i { font-size: 1.5rem; color: var(--primary); margin-bottom: 15px; }
+        .stat-card .value { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
+        .stat-card .label { color: #64748b; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .menu-item { background: white; padding: 30px 20px; border-radius: 12px; text-align: center; text-decoration: none; transition: 0.3s; border: 1px solid #e2e8f0; }
+        .menu-item:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .menu-item i { font-size: 2.5rem; color: var(--dark); margin-bottom: 15px; display: block; }
+        .menu-item span { font-weight: 600; color: #1e293b; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="welcome-header">
+            <h1>Olá, Aristides</h1>
+            <p>Aqui está o resumo do seu negócio hoje.</p>
+        </div>
+
+        <div class="menu-grid">
+            <a href="entidades.html" class="menu-item">
+                <i class="fas fa-users-cog"></i>
+                <span>Entidades</span>
+            </a>
+            <a href="produtos.html" class="menu-item">
+                <i class="fas fa-box-open"></i>
+                <span>Inventário</span>
+            </a>
+            <a href="financeiro.html" class="menu-item">
+                <i class="fas fa-wallet"></i>
+                <span>Financeiro</span>
+            </a>
+            <a href="bloco_de_notas.html" class="menu-item">
+                <i class="fas fa-sticky-note"></i>
+                <span>Notas Cloud</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para carregar contadores reais do Supabase pode ser adicionada aqui
+    </script>
+</body>
+</html>
