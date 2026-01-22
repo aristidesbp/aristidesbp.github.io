@@ -27,7 +27,7 @@ obs: projeto em andamento podendo conter erros!
 * criar tabelas individuais (otimizar com chave estrangeira);
 * Usar localStorag (Brawser), indexedb, para armazenar dados;
 * crud_supabase.js  manda dados tratados do Brawser para supabase; 
-  
+* sincronizar_dbs.js (compara os dois brancos e cadastro que não for repetido);
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # NAVBAR
