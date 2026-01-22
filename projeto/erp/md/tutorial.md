@@ -462,3 +462,165 @@ CREATE TABLE funcionarios (
     departamento TEXT,
     data_admissao DATE
 );
+```
+
+## clientes.sql
+```
+CREATE TABLE clientes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL,
+    cpf_cnpj TEXT UNIQUE,
+    telefone TEXT,
+    email TEXT,
+    endereco JSONB,
+    criado_em TIMESTAMP DEFAULT now()
+);
+```
+
+## fornecedores.sql
+```
+CREATE TABLE fornecedores (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL,
+    cnpj TEXT UNIQUE,
+    contato TEXT,
+    telefone TEXT,
+    email TEXT,
+    endereco JSONB
+);
+```
+# 📦 3️⃣ PRODUTOS E SERVIÇOS
+##  produtos.sql
+```
+CREATE TABLE produtos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fornecedor_id UUID REFERENCES fornecedores(id),
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    preco NUMERIC(10,2) NOT NULL,
+    estoque INTEGER DEFAULT 0,
+    ativo BOOLEAN DEFAULT true
+);
+```
+
+## servicos.sql
+```
+CREATE TABLE servicos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    preco NUMERIC(10,2),
+    ativo BOOLEAN DEFAULT true
+);
+```
+# 🛒 4️⃣ VENDAS (COM ITENS)
+## vendas.sql
+```
+CREATE TABLE vendas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cliente_id UUID REFERENCES clientes(id),
+    usuario_id UUID REFERENCES usuarios(id),
+    data_venda TIMESTAMP DEFAULT now(),
+    valor_total NUMERIC(10,2),
+    status TEXT
+);
+```
+ ## vendas_itens.sql
+```
+CREATE TABLE vendas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cliente_id UUID REFERENCES clientes(id),
+    usuario_id UUID REFERENCES usuarios(id),
+    data_venda TIMESTAMP DEFAULT now(),
+    valor_total NUMERIC(10,2),
+    status TEXT
+);
+```
+# 💰 5️⃣ FINANCEIRO (ERP REAL)
+## financeiro_lancamentos.sql
+```
+CREATE TABLE financeiro_lancamentos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tipo TEXT CHECK (tipo IN ('receita','despesa')),
+    valor NUMERIC(10,2) NOT NULL,
+    data_lancamento DATE NOT NULL,
+    descricao TEXT,
+    venda_id UUID REFERENCES vendas(id)
+);
+```
+## financeiro_contas.sql
+```
+CREATE TABLE financeiro_contas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL,
+    tipo TEXT,
+    ativo BOOLEAN DEFAULT true
+);
+```
+
+# 💬 6️⃣ CHAT, CONVERSAS E MENSAGENS
+Conversas (WhatsApp / Redes)
+## conversas.sql
+```
+CREATE TABLE conversas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    canal TEXT,
+    cliente_id UUID REFERENCES clientes(id),
+    ultima_atualizacao TIMESTAMP
+);
+```
+## mensagens.sql
+```
+CREATE TABLE mensagens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversa_id UUID REFERENCES conversas(id) ON DELETE CASCADE,
+    remetente TEXT,
+    conteudo TEXT,
+    data_envio TIMESTAMP DEFAULT now()
+);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
