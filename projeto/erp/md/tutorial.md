@@ -193,6 +193,119 @@ Pode guardar documentos ou links para documentos.
 | financeiro | tipo, data           |
 | conversas  | chatTipo, usuarioId  |
 ```
+Índices aceleram consultas sem precisar varrer todo o objeto.
 
+# 📌 RELACIONAMENTOS (CONCEITUAIS)
+## Mesmo em IndexedDB (não relacional), pense como se fosse relacional:
+* Usuário → Clientes/Funcionários → um usuário pode ter zero ou muitos clientes/funcionários registrados.
+* Venda → Cliente → cada venda pertence a um cliente.
+* Produto → Fornecedor → cada produto tem um fornecedor.
+* Financeiro → Venda → opcionalmente vincula lançamentos a vendas.
+* Relacionamentos N-N podem ser modelados por stores de junction ou arrays de IDs.
+
+# 🔹 PARTE 1 — DIAGRAMA CONCEITUAL (ER) — VISÃO PROFISSIONAL
+Mesmo usando IndexedDB, ERP sério pensa relacionalmente.
+```
+USUARIOS
+ ├─ id (PK)
+ ├─ nome
+ ├─ email
+ ├─ senhaHash
+ ├─ role
+ └─ criadoEm
+      │
+      ├───────────────┐
+      │               │
+CLIENTES          FUNCIONARIOS
+ ├─ id (PK)        ├─ id (PK)
+ ├─ usuarioId (FK) ├─ usuarioId (FK)
+ ├─ nome           ├─ nome
+ ├─ cpfCnpj        ├─ cpf
+ ├─ contato        ├─ cargo
+ └─ endereco       └─ departamento
+
+FORNECEDORES
+ ├─ id (PK)
+ ├─ nome
+ ├─ cnpj
+ └─ contato
+      │
+      ▼
+PRODUTOS
+ ├─ id (PK)
+ ├─ fornecedorId (FK)
+ ├─ nome
+ ├─ preco
+ └─ estoque
+      │
+      ▼
+VENDAS
+ ├─ id (PK)
+ ├─ clienteId (FK)
+ ├─ dataVenda
+ ├─ valorTotal
+ └─ status
+      │
+      ▼
+ITENS_VENDA
+ ├─ id (PK)
+ ├─ vendaId (FK)
+ ├─ produtoId (FK)
+ ├─ quantidade
+ └─ precoUnitario
+
+FINANCEIRO
+ ├─ id (PK)
+ ├─ tipo (receita/despesa)
+ ├─ valor
+ ├─ data
+ ├─ descricao
+ └─ vendaId (FK opcional)
+
+SERVICOS
+ ├─ id (PK)
+ ├─ nome
+ ├─ preco
+ └─ descricao
+
+CHATBOTS
+ ├─ id (PK)
+ ├─ pergunta
+ ├─ resposta
+ └─ categoria
+
+CONVERSAS
+ ├─ id (PK)
+ ├─ canal (whatsapp, insta…)
+ ├─ clienteId (FK)
+ └─ ultimaAtualizacao
+
+MENSAGENS
+ ├─ id (PK)
+ ├─ conversaId (FK)
+ ├─ remetente
+ ├─ conteudo
+ └─ dataEnvio
+
+NOTAS
+ ├─ id (PK)
+ ├─ usuarioId (FK)
+ ├─ titulo
+ └─ conteudo
+
+POLITICAS
+ ├─ id (PK)
+ ├─ titulo
+ └─ conteudo
+
+DOCUMENTACAO
+ ├─ id (PK)
+ ├─ titulo
+ ├─ conteudo
+ └─ tags
+```
+* 📌 Isso é ERP real
+* 📌 Essa estrutura escala para Supabase depois sem retrabalho
+* 📌 Nada aqui é amador
 
 
