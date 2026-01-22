@@ -304,8 +304,161 @@ DOCUMENTACAO
  ├─ conteudo
  └─ tags
 ```
-* 📌 Isso é ERP real
-* 📌 Essa estrutura escala para Supabase depois sem retrabalho
-* 📌 Nada aqui é amador
 
+# 🔹 PARTE 2 — MODELAGEM INDEXEDDB (PRONTA PARA USO)
+Agora vem :
+* Schema pronto, usando padrão de mercado (Dexie.js, usado em ERPs web reais).
+* Mesmo que você não use Dexie, isso serve como documentação oficial do banco.
 
+# 📦 SCHEMA INDEXEDDB — erp_db.js
+* ✔ Separação correta de entidades
+* ✔ Nada duplicado
+* ✔ Relacionamentos claros
+* ✔ Funciona offline-first
+* ✔ Sincroniza com Supabase sem conflitos
+* ✔ Suporta multiusuário, chat, financeiro e vendas reais
+
+```
+import Dexie from "dexie";
+
+export const db = new Dexie("ERP_APB");
+
+db.version(1).stores({
+  usuarios: `
+    id,
+    email,
+    role,
+    criadoEm
+  `,
+
+  clientes: `
+    id,
+    usuarioId,
+    cpfCnpj,
+    nome
+  `,
+
+  funcionarios: `
+    id,
+    usuarioId,
+    cpf,
+    cargo
+  `,
+
+  fornecedores: `
+    id,
+    cnpj,
+    nome
+  `,
+
+  produtos: `
+    id,
+    fornecedorId,
+    nome
+  `,
+
+  vendas: `
+    id,
+    clienteId,
+    dataVenda,
+    status
+  `,
+
+  itens_venda: `
+    id,
+    vendaId,
+    produtoId
+  `,
+
+  financeiro: `
+    id,
+    tipo,
+    data,
+    vendaId
+  `,
+
+  servicos: `
+    id,
+    nome
+  `,
+
+  chatbots: `
+    id,
+    categoria
+  `,
+
+  conversas: `
+    id,
+    canal,
+    clienteId
+  `,
+
+  mensagens: `
+    id,
+    conversaId,
+    dataEnvio
+  `,
+
+  notas: `
+    id,
+    usuarioId
+  `,
+
+  politicas: `
+    id,
+    titulo
+  `,
+
+  documentacao: `
+    id,
+    titulo,
+    tags
+  `
+});
+```
+
+# 🧱 BANCO DE DADOS COMPLETO — ERP APB (SQL)
+* 👉 Compatível com PostgreSQL / Supabase
+* 👉 Estrutura usada em ERPs reais (Odoo-like)
+
+# 🔐 1️⃣ USUÁRIOS, PAPÉIS E SENHAS (BASE DE SEGURANÇA)
+## Papéis (níveis de acesso)
+### Exemplos:
+* admin
+* financeiro
+* vendas
+* suporte
+* operador
+
+## usuarios.sql
+```
+CREATE TABLE usuarios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    ativo BOOLEAN DEFAULT true,
+    criado_em TIMESTAMP DEFAULT now()
+);
+```
+## usuario_senhas.sql  (Tipos de Senha, nível de acesso)
+```
+CREATE TABLE usuario_senhas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    role_id UUID REFERENCES roles(id),
+    senha_hash TEXT NOT NULL,
+    criada_em TIMESTAMP DEFAULT now(),
+    ativa BOOLEAN DEFAULT true
+);
+```
+# 🧑‍💼 2️⃣ FUNCIONÁRIOS, CLIENTES E FORNECEDORES
+## funcionarios.sql
+```
+CREATE TABLE funcionarios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID REFERENCES usuarios(id),
+    cpf TEXT UNIQUE,
+    cargo TEXT,
+    departamento TEXT,
+    data_admissao DATE
+);
