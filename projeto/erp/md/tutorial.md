@@ -109,14 +109,90 @@ Lançamentos
   "categoria": "string"
 }
 ```
-## Chatbot
+## Chatbot.json
 Salvar perguntas/respostas automáticas.
+```
+{
+  "id": "string",
+  "pergunta": "string",
+  "resposta": "string",
+  "categoria": "string"
+}
+```
+## bloco_de_notas.json
+Simples e útil para usuários.
+```
+{
+  "id": "string",
+  "usuarioId": "string",
+  "titulo": "string",
+  "conteudo": "string",
+  "criadoEm": "date"
+}
+```
+## conversas_whatsApp_RedesSociais.json
+IndexedDB pode armazenar conversas como JSON.
+```
+{
+  "id": "string",
+  "chatTipo": "string", // ex: whatsapp, instagram
+  "usuarioId": "string",
+  "mensagens": "array" // cada item com texto, data, remetente
+}
+```
+## Mensagens_Envio.json
+Mensagens que você planeja enviar (SMS, WhatsApp, e-mail etc.)
+```
+{
+  "id": "string",
+  "destinatario": "string",
+  "conteudo": "string",
+  "statusEnvio": "string",
+  "tentativas": "number"
+}
+```
+## politicas_de_servico.json
+Texto de políticas/termos.
+```
+{
+  "id": "string",
+  "titulo": "string",
+  "descricao": "string",
+  "ativo": "boolean"
+}
+```
+## documentacao.json
+Pode guardar documentos ou links para documentos.
+```
+{
+  "id": "string",
+  "titulo": "string",
+  "conteudo": "string", // pode ser markdown ou HTML
+  "tags": "array",
+  "criadoEm": "date"
+}
+```
+## servicos
+```
+{
+  "id": "string",
+  "nome": "string",
+  "descricao": "string",
+  "preco": "number"
+}
+```
 
-
-
-
-
-
+# 📊 Índices recomendados (IndexedDB)
+```
+| Store      | Índices úteis        |
+| ---------- | -------------------- |
+| usuários   | email                |
+| clientes   | usuarioId, cpfCnpj   |
+| produtos   | fornecedorId         |
+| vendas     | clienteId, dataVenda |
+| financeiro | tipo, data           |
+| conversas  | chatTipo, usuarioId  |
+```
 
 
 
