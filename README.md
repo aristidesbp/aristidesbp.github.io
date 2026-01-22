@@ -14,8 +14,20 @@ obs: projeto em andamento podendo conter erros!
 
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# ORDEM CRONOLÓGICA DO PROJETO APB.
+## Criar paginas html:
+* Criar páginas HTML completas;
+* Os formulários devem alimentar variáveis;
+* Utilizar variáveis de arquivos externos do crud.js;
+* Invocar o arquivo  conexao_supabe_navbar.js;
+* O index.html será utilizado como menu (card_links_paginas);
 
-
+# CRIAR BANCO DE DADOS E TABELAS:
+* criar tabelas individuais (otimizar com chave estrangeira);
+* Usar localStorag (Brawser), indexedb, para armazenar dados;
+* crud_supabase.js  manda dados tratados do Brawser para supabase; 
+  
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # NAVBAR
