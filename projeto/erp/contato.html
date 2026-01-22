@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Inquilino - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/conexao_supabase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="app-inquilino" class="container">
+        <header class="header-portal">
+            <h1><i class="fas fa-building"></i> Portal do Inquilino</h1>
+            <p>Bem-vindo ao sistema de gestão do Edifício</p>
+        </header>
+
+        <section class="card">
+            <h2 class="section-title"><i class="fas fa-bullhorn"></i> Quadro de Avisos</h2>
+            <div id="lista-avisos" class="avisos-grid">
+                <p class="loading">Carregando avisos...</p>
+            </div>
+        </section>
+
+        <div class="grid-acoes">
+            <div class="card action-card" onclick="abrirInterfone()">
+                <i class="fab fa-whatsapp"></i>
+                <h3>Interfone Digital</h3>
+                <p>Falar com a Portaria</p>
+            </div>
+
+            <div class="card action-card" onclick="abrirModal('servico')">
+                <i class="fas fa-tools"></i>
+                <h3>Agendar Serviço</h3>
+                <p>Manutenção e Reparos</p>
+            </div>
+
+            <div class="card action-card" onclick="abrirModal('reclamacao')">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Reclame Aqui</h3>
+                <p>Sugestões e Críticas</p>
+            </div>
+            
+            <div class="card action-card" onclick="abrirModal('visitante')">
+                <i class="fas fa-user-plus"></i>
+                <h3>Autorizar Entrada</h3>
+                <p>Visitantes e Entregas</p>
+            </div>
+        </div>
+
+        <section class="card">
+            <h2 class="section-title"><i class="fas fa-history"></i> Minha Unidade (Últimos Acessos)</h2>
+            <div class="table-responsive">
+                <table id="tabela-acessos">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Nome</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-acessos">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="modal-portal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Estilos Dinâmicos (Padrão Aristides)
+            const style = document.createElement('style');
+            style.innerHTML = `
+                :root {
+                    --primary: #3ecf8e;
+                    --dark: #0f172a;
+                    --bg: #f1f5f9;
+                    --danger: #ef4444;
+                    --whatsapp: #25d366;
+                }
+                body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; }
+                .container { max-width: 1100px; margin: auto; padding: 20px; }
+                .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+                .header-portal { text-align: center; margin-bottom: 30px; }
+                .section-title { color: var(--dark); border-left: 4px solid var(--primary); padding-left: 10px; margin-bottom: 20px; }
+                
+                .grid-acoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+                .action-card { text-align: center; cursor: pointer; transition: transform 0.2s; }
+                .action-card:hover { transform: translateY(-5px); border: 1px solid var(--primary); }
+                .action-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+                .action-card i.fa-whatsapp { color: var(--whatsapp); }
+
+                .avisos-grid { display: flex; flex-direction: column; gap: 10px; }
+                .aviso-item { padding: 15px; border-radius: 8px; background: #fff9c4; border-left: 5px solid #fbc02d; }
+                
+                .table-responsive { overflow-x: auto; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+                th { background: #f8fafc; color: var(--dark); }
+
+                .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+                .modal-content { background: white; margin: 10% auto; padding: 25px; width: 90%; max-width: 500px; border-radius: 12px; }
+                .close { float: right; font-size: 28px; cursor: pointer; }
+                
+                form input, form textarea, form select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; }
+                .btn-save { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; cursor: pointer; font-weight: bold; }
+            `;
+            document.head.appendChild(style);
+
+            // Lógica do Sistema
+            const init = async () => {
+                await carregarAvisos();
+                await carregarAcessos();
+            };
+
+            async function carregarAvisos() {
+                const { data } = await _supabase.from('avisos_predio').select('*').order('created_at', { ascending: false }).limit(3);
+                const container = document.getElementById('lista-avisos');
+                if (data && data.length > 0) {
+                    container.innerHTML = data.map(aviso => `
+                        <div class="aviso-item">
+                            <strong>${aviso.titulo}</strong>
+                            <p>${aviso.mensagem}</p>
+                            <small>${new Date(aviso.created_at).toLocaleDateString()}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p>Nenhum aviso importante no momento.</p>';
+                }
+            }
+
+            async function carregarAcessos() {
+                const { data } = await _supabase.from('fluxo_entrada_saida').select('*').limit(5);
+                const corpo = document.getElementById('corpo-acessos');
+                if (data) {
+                    corpo.innerHTML = data.map(a => `
+                        <tr>
+                            <td>${new Date(a.data_hora).toLocaleString()}</td>
+                            <td>${a.tipo === 'E' ? '🟢 Entrada' : '🔴 Saída'}</td>
+                            <td>${a.nome_pessoa}</td>
+                            <td><span class="badge">${a.status}</span></td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            window.abrirInterfone = function() {
+                const numPortaria = "5599999999999"; // Pegar do banco futuramente
+                const msg = encodeURIComponent("Olá Portaria, sou o inquilino da sala [SALA] e gostaria de falar sobre...");
+                window.open(`https://wa.me/${numPortaria}?text=${msg}`, '_blank');
+            };
+
+            window.abrirModal = function(tipo) {
+                const modal = document.getElementById('modal-portal');
+                const body = document.getElementById('modal-body');
+                modal.style.display = 'block';
+
+                if(tipo === 'servico') {
+                    body.innerHTML = `
+                        <h3>Agendar Serviço</h3>
+                        <form onsubmit="salvarSolicitacao(event, 'servico')">
+                            <input type="text" placeholder="Tipo de serviço (Ex: Ar condicionado)" required id="f_assunto">
+                            <input type="datetime-local" required id="f_data">
+                            <textarea placeholder="Detalhes do serviço..." id="f_detalhe"></textarea>
+                            <button class="btn-save">Solicitar Agendamento</button>
+                        </form>
+                    `;
+                } else if (tipo === 'reclamacao') {
+                    body.innerHTML = `
+                        <h3>Reclame Aqui / Sugestão</h3>
+                        <form onsubmit="salvarSolicitacao(event, 'reclamacao')">
+                            <select id="f_assunto">
+                                <option value="Limpeza">Limpeza</option>
+                                <option value="Barulho">Barulho</option>
+                                <option value="Segurança">Segurança</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                            <textarea placeholder="Descreva o ocorrido..." required id="f_detalhe"></textarea>
+                            <button class="btn-save" style="background: var(--danger)">Enviar Reclamação</button>
+                        </form>
+                    `;
+                }
+            };
+
+            window.fecharModal = () => document.getElementById('modal-portal').style.display = 'none';
+
+            window.salvarSolicitacao = async (e, tipo) => {
+                e.preventDefault();
+                const dados = {
+                    tipo: tipo,
+                    assunto: document.getElementById('f_assunto').value,
+                    detalhe: document.getElementById('f_detalhe').value,
+                    data_prevista: document.getElementById('f_data')?.value || null,
+                    inquilino_id: (await _supabase.auth.getUser()).data.user.id
+                };
+
+                const { error } = await _supabase.from('solicitacoes_predio').insert([dados]);
+                if(!error) {
+                    alert("Enviado com sucesso!");
+                    fecharModal();
+                }
+            };
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
+</body>
+</html>
