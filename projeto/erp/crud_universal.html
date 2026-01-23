@@ -3,185 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal do Inquilino - ERP ABP</title>
+    <title>Universal CRUD - ERP ABP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Estilização seguindo o padrão do seu produtos.html */
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; color: #1e293b; }
-        
-        #container-seletor-tabelas { padding: 15px; background: white; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
-        
-        .card { 
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            max-width: 600px; margin: auto; 
-        }
-
-        .form-grid-vertical { display: flex; flex-direction: column; gap: 15px; }
-        
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 85px 15px 20px; color: #1e293b; }
+        .container { max-width: 1200px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .form-grid-vertical { display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: auto; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        input, select { width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .input-readonly { background: #f8fafc; color: #94a3b8; cursor: not-allowed; border-style: dashed; }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         
-        .input-form { 
-            width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; 
-            background: #fff; font-size: 14px;
-        }
-
-        /* Estilo para campo ID (Não editável) */
-        .input-readonly { 
-            background: #f8fafc; 
-            color: #94a3b8; 
-            cursor: not-allowed; 
-            border-style: dashed;
-        }
-
-        .btn-add { 
-            background: var(--primary); color: white; padding: 15px; 
-            border: none; border-radius: 8px; cursor: pointer; 
-            width: 100%; margin-top: 20px; font-weight: bold; 
-            transition: 0.3s;
-        }
-        .btn-add:hover { filter: brightness(1.1); }
+        /* Estilos da Tabela */
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #f8fafc; padding: 15px; font-size: 12px; text-align: left; color: #475569; text-transform: uppercase; }
+        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+        .btn-action { border: none; border-radius: 6px; padding: 8px; cursor: pointer; color: white; transition: 0.2s; }
+        .btn-delete { background-color: var(--danger); }
     </style>
 </head>
 <body>
 
-    <div id="container-seletor-tabelas"></div>
-    
-    <div class="container">
-        <div id="area-dinamica">
-            </div>
+<div class="container">
+    <div id="container-seletor-tabelas" class="card">
+        <label>Selecione o Módulo de Gerenciamento</label>
+        </div>
+
+    <div id="area-formulario"></div>
+
+    <div id="area-listagem" style="display:none;">
+        <div class="card">
+            <label>Busca Inteligente na Tabela</label>
+            <input type="text" id="inputBuscaUniversal" onkeyup="CriarFormulario.filtrar()" placeholder="Digite para filtrar registros...">
+        </div>
+        <div class="table-container">
+            <table id="tabela-dados">
+                <thead id="cabecalho-gerado"></thead>
+                <tbody id="corpo-gerado"></tbody>
+            </table>
+        </div>
     </div>
+</div>
 
 <script src="js/conexao_supabase.js"></script>
 
 <script>
 /** ############################################################################## */
-/** ERP ABP - SELETOR E GERADOR UNIVERSAL (Versão Aristides - ID Automático) */
-(() => {
-    "use strict";
-
-    window.tabela_selecionada = "";
-
-    const inicializarSeletor = async () => {
-        if (typeof window._supabase === "undefined") {
-            setTimeout(inicializarSeletor, 500);
-            return;
-        }
-
-        try {
-            const { data, error } = await _supabase.rpc('get_tables');
-            if (error) throw error;
-
-            const container = document.getElementById('container-seletor-tabelas');
-            container.innerHTML = `
-                <select id="tabela_ativa" class="input-form" style="max-width:300px;">
-                    <option value="">-- Selecione a Tabela --</option>
-                    ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
-                </select>
-            `;
-
-            document.getElementById('tabela_ativa').addEventListener('change', (e) => {
-                window.tabela_selecionada = e.target.value;
-                CriarFormulario.carregar();
-            });
-        } catch (err) { console.error(err); }
-    };
-
-    inicializarSeletor();
-})();
-
+/** ENGINE UNIVERSAL ERP ABP [cite: 2026-01-21] */
 const CriarFormulario = {
     ignorar: ['created_at', 'usuario_id', 'user_id'],
+    dadosLocais: [],
 
-    async carregar() {
-        const area = document.getElementById('area-dinamica');
-        const tabela = window.tabela_selecionada;
-        if (!tabela) return area.innerHTML = "";
+    async init() {
+        if (typeof window._supabase === "undefined") { return setTimeout(() => this.init(), 500); }
+        const { data } = await _supabase.rpc('get_tables');
+        if (data) {
+            document.getElementById('container-seletor-tabelas').innerHTML += `
+                <select id="tabela_ativa" onchange="CriarFormulario.carregar(this.value)">
+                    <option value="">-- Escolha uma tabela --</option>
+                    ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
+                </select>`;
+        }
+    },
 
-        area.innerHTML = `<div class="card"><i class="fas fa-sync fa-spin"></i> Lendo ${tabela}...</div>`;
+    async carregar(tabela) {
+        if (!tabela) return;
+        window.tabela_selecionada = tabela;
+        const areaForm = document.getElementById('area-formulario');
+        areaForm.innerHTML = `<div class="card">Carregando estrutura...</div>`;
 
         try {
-            const { data: colunas, error } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
-            if (error) throw error;
-
-            let formHtml = `<div class="card">
-                <h3 style="margin-top:0; color:var(--primary)">Cadastro: ${tabela.toUpperCase()}</h3>
-                <form id="form-universal" class="form-grid-vertical">`;
+            const { data: colunas } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
+            
+            // 1. GERAR FORMULÁRIO (ID COMO LABEL)
+            let html = `<div class="card"><form id="form-universal" class="form-grid-vertical">
+                        <h3 style="color:var(--primary); margin:0;">Cadastro: ${tabela.toUpperCase()}</h3>`;
 
             for (const col of colunas) {
                 if (this.ignorar.includes(col.column_name)) continue;
-
                 const ehId = col.column_name.toLowerCase() === 'id';
 
-                formHtml += `<div>
-                    <label>${col.column_name.replace(/_/g, ' ')}</label>`;
-
-                if (col.foreign_table) {
-                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required></select>`;
-                    this.preencherSelectEstrangeiro(col.column_name, col.foreign_table);
+                html += `<div><label>${col.column_name.replace(/_/g, ' ')}</label>`;
+                
+                if (ehId) {
+                    // REQUISITO: ID como Label/Input Readonly (não Select)
+                    html += `<input type="text" name="id" class="input-form input-readonly" value="Automático" readonly>`;
+                } else if (col.foreign_table) {
+                    html += `<select name="${col.column_name}" id="ref_${col.column_name}" required></select>`;
+                    this.preencherRelacao(col.column_name, col.foreign_table);
                 } else {
-                    const type = col.data_type.includes('date') ? 'date' : (col.data_type.includes('int') || col.data_type.includes('numeric') ? 'number' : 'text');
-                    
-                    // REQUISITO: Campo ID visível mas NÃO editável
-                    if (ehId) {
-                        formHtml += `<input type="text" name="${col.column_name}" class="input-form input-readonly" value="GERADO AUTOMATICAMENTE" readonly>`;
-                    } else {
-                        formHtml += `<input type="${type}" name="${col.column_name}" class="input-form" step="any" required>`;
-                    }
+                    const type = col.data_type.includes('int') || col.data_type.includes('num') ? 'number' : (col.data_type.includes('date') ? 'date' : 'text');
+                    html += `<input type="${type}" name="${col.column_name}" required step="any">`;
                 }
-                formHtml += `</div>`;
+                html += `</div>`;
             }
+            html += `<button type="submit" class="btn-add">Salvar Registro</button></form></div>`;
+            areaForm.innerHTML = html;
 
-            formHtml += `<button type="submit" class="btn-add">Salvar no ERP</button></form></div>`;
-            area.innerHTML = formHtml;
-
-            // Lógica de Salvamento (Baseada no seu produtos.html)
+            // LÓGICA DE SALVAMENTO
             document.getElementById('form-universal').onsubmit = async (e) => {
                 e.preventDefault();
-                const btn = e.target.querySelector('button');
-                btn.disabled = true;
-                btn.innerText = "Processando...";
-
                 const formData = new FormData(e.target);
-                const dadosParaSalvar = Object.fromEntries(formData.entries());
+                const dados = Object.fromEntries(formData.entries());
+                delete dados.id; // Garante geração automática no banco
 
-                // EXCLUSÃO DO ID: Garante que o banco gere o próximo número serial automaticamente
-                delete dadosParaSalvar.id;
-
-                // Adiciona o usuario_id se a tabela exigir (como em produtos.html)
-                const { data: { user } } = await _supabase.auth.getUser();
-                if (user) dadosParaSalvar.usuario_id = user.id;
-
-                const { error: insertErr } = await _supabase.from(tabela).insert([dadosParaSalvar]);
-
-                if (insertErr) {
-                    alert("Erro ao salvar: " + insertErr.message);
-                } else {
-                    alert("Registro cadastrado com sucesso!");
-                    e.target.reset();
-                }
-                btn.disabled = false;
-                btn.innerText = "Salvar no ERP";
+                const { error } = await _supabase.from(tabela).insert([dados]);
+                if (error) alert("Erro: " + error.message);
+                else { alert("Sucesso!"); e.target.reset(); this.listarDados(); }
             };
 
-        } catch (err) { area.innerHTML = "Erro ao mapear tabela."; }
+            this.listarDados();
+        } catch (e) { console.error(e); }
     },
 
-    async preencherSelectEstrangeiro(campoId, tabelaDestino) {
+    async listarDados() {
+        const tabela = window.tabela_selecionada;
+        const { data, error } = await _supabase.from(tabela).select('*').order('id', { ascending: false });
+        if (error) return;
+
+        this.dadosLocais = data;
+        document.getElementById('area-listagem').style.display = 'block';
+        this.renderizarTabela(data);
+    },
+
+    renderizarTabela(dados) {
+        if (dados.length === 0) return;
+        const colunas = Object.keys(dados[0]).filter(c => !this.ignorar.includes(c) || c === 'id');
+        
+        // Cabeçalho
+        document.getElementById('cabecalho-gerado').innerHTML = `<tr>
+            ${colunas.map(c => `<th>${c.replace(/_/g, ' ')}</th>`).join('')}
+            <th>Ações</th>
+        </tr>`;
+
+        // Corpo
+        document.getElementById('corpo-gerado').innerHTML = dados.map(row => `
+            <tr>
+                ${colunas.map(c => `<td>${row[c] || '-'}</td>`).join('')}
+                <td>
+                    <button class="btn-action btn-delete" onclick="CriarFormulario.deletar('${row.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    },
+
+    filtrar() {
+        const termo = document.getElementById('inputBuscaUniversal').value.toLowerCase();
+        const filtrados = this.dadosLocais.filter(d => 
+            JSON.stringify(d).toLowerCase().includes(termo)
+        );
+        this.renderizarTabela(filtrados);
+    },
+
+    async deletar(id) {
+        if (!confirm("Excluir registro permanentemente?")) return;
+        const { error } = await _supabase.from(window.tabela_selecionada).delete().eq('id', id);
+        if (!error) this.listarDados();
+    },
+
+    async preencherRelacao(campo, tabelaDestino) {
         const { data } = await _supabase.from(tabelaDestino).select('*');
-        const select = document.getElementById(`ref_${campoId}`);
-        if (data && select) {
-            let opt = `<option value="">-- Selecione --</option>`;
-            data.forEach(i => {
-                const label = i.nome || i.nome_completo || i.descricao || i.id;
-                opt += `<option value="${i.id}">${label}</option>`;
-            });
-            select.innerHTML = opt;
+        const select = document.getElementById(`ref_${campo}`);
+        if (select && data) {
+            select.innerHTML = '<option value="">-- Selecione --</option>' + 
+                data.map(i => `<option value="${i.id}">${i.nome || i.descricao || i.id}</option>`).join('');
         }
     }
 };
+
+document.addEventListener('DOMContentLoaded', () => CriarFormulario.init());
 </script>
 </body>
 </html>
