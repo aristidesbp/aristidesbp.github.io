@@ -5,82 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Inquilino - ERP ABP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset e Estilos de Base */
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f1f5f9; 
+            padding-top: 70px !important; 
+        }
+        #container-seletor-tabelas { padding: 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+        #area-dinamica { padding: 20px; display: flex; justify-content: center; }
+
+        /* Estilos do Formulário */
+        .card-form {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px; /* Mantém estreito e elegante */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .campo-grupo { display: flex; flex-direction: column; gap: 5px; }
+        .campo-grupo label { 
+            font-weight: 600; 
+            color: #475569; 
+            font-size: 13px; 
+            text-transform: uppercase; 
+        }
+        .input-form { 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            outline: none;
+            transition: border 0.2s;
+        }
+        .input-form:focus { border-color: #3ecf8e; }
+        .input-readonly { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+
+        .btn-save { 
+            background: #3ecf8e; 
+            color: white; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .btn-save:hover { background: #2fb37a; }
+        .btn-save:disabled { background: #94a3b8; }
+    </style>
 </head>
-<body class="erp-guard-active">
+<body>
 
-    <div id="container-seletor-tabelas" style="padding: 20px; background: #f8fafc;"></div>
+    <div id="container-seletor-tabelas"></div>
     
-    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0;">
-
-    <div id="area-dinamica" style="padding: 20px; min-height: 200px;">
-        <p style="color: #64748b;">Selecione uma tabela acima para gerar o formulário de inserção.</p>
+    <div id="area-dinamica">
+        <p style="color: #64748b;">Aguardando seleção de tabela...</p>
     </div>
 
 <script>
-/** ############################################################################## 
- * ERP ABP - GUARD GLOBAL & ENGINE UNIVERSAL
- * ############################################################################## */
+/** ############################################################################## */
+/** ERP ABP - GUARD & CORE (IIFE) [cite: 2026-01-18] */
 (async () => {
     "use strict";
 
     const CONFIG = Object.freeze({
         SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Sua chave atualizada [cite: 2026-01-21]
+        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Chave atualizada [cite: 2026-01-21]
         LOGIN_PAGE: "login.html",
-        HOME_PAGE: "index.html",
-        APP_NAME: "ERP ABP",
+        APP_NAME: "ERP ABP Profissional",
         SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     });
 
-    // 1. Carregamento do SDK e Sessão
-    async function init() {
-        if (!window.supabase) {
-            await new Promise(r => {
-                const s = document.createElement('script');
-                s.src = CONFIG.SDK_URL;
-                s.onload = r;
-                document.head.appendChild(s);
-            });
-        }
+    async function carregarSDK() {
+        if (window.supabase) return true;
+        return new Promise(r => {
+            const s = document.createElement('script');
+            s.src = CONFIG.SDK_URL;
+            s.onload = r;
+            document.head.appendChild(s);
+        });
+    }
+
+    try {
+        await carregarSDK();
         window._supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-        
+
         const { data } = await _supabase.auth.getSession();
         if (!data?.session) {
             window.location.replace(CONFIG.LOGIN_PAGE);
             return;
         }
+
         renderNavbar();
-        carregarSeletor();
-    }
+        inicializarSeletor();
 
-    // 2. Navbar Padrão [cite: 2026-01-18]
+    } catch (err) { console.error("Erro de inicialização:", err); }
+
     function renderNavbar() {
-        const style = `<style>
-            .erp-navbar { position: fixed; top: 0; left: 0; width: 100%; background: #fff; padding: 10px 20px; 
-                          display: flex; justify-content: space-between; align-items: center; 
-                          box-shadow: 0 2px 10px rgba(0,0,0,.1); z-index: 9999; font-family: sans-serif; }
-            body { padding-top: 70px !important; margin: 0; background: #f1f5f9; }
-            .btn-save { background: #3ecf8e; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-            .input-form { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; }
-        </style>`;
-        document.head.insertAdjacentHTML("beforeend", style);
-        document.body.insertAdjacentHTML("afterbegin", `
-            <div class="erp-navbar">
+        const html = `
+            <div style="position:fixed; top:0; left:0; width:100%; height:60px; background:#1e293b; color:white; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:10000; box-shadow:0 2px 5px rgba(0,0,0,0.2);">
                 <div style="font-weight:bold;"><span style="color:#3ecf8e">●</span> ${CONFIG.APP_NAME}</div>
-                <button onclick="_supabase.auth.signOut().then(()=>location.reload())" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Sair</button>
-            </div>
-        `);
+                <button onclick="_supabase.auth.signOut().then(()=>location.reload())" style="background:#ef4444; border:none; color:white; padding:8px 15px; border-radius:5px; cursor:pointer;">Sair</button>
+            </div>`;
+        document.body.insertAdjacentHTML("afterbegin", html);
     }
 
-    // 3. Seletor de Tabelas
-    async function carregarSeletor() {
+    async function inicializarSeletor() {
         const { data } = await _supabase.rpc('get_tables');
         const container = document.getElementById('container-seletor-tabelas');
         if (!data) return;
 
         container.innerHTML = `
-            <select id="tabela_ativa" style="padding:10px; border-radius:6px; min-width:250px;">
-                <option value="">-- Selecione uma Tabela --</option>
+            <select id="tabela_ativa" class="input-form" style="width:100%; max-width:300px;">
+                <option value="">-- Escolha uma Tabela --</option>
                 ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
             </select>
         `;
@@ -90,91 +135,91 @@
             CriarFormulario.carregar();
         });
     }
-
-    init();
 })();
 
-/** ############################################################################## 
- * GERADOR DE FORMULÁRIO COM LÓGICA DE SALVAMENTO
- * ############################################################################## */
+/** ############################################################################## */
+/** GERADOR DE FORMULÁRIO DINÂMICO */
 const CriarFormulario = {
-    ignorar: ['id', 'created_at', 'usuario_id', 'user_id'],
+    ignorar: ['created_at', 'usuario_id', 'user_id', 'perfil'],
 
     async carregar() {
         const area = document.getElementById('area-dinamica');
         const tabela = window.tabela_selecionada;
         if (!tabela) return;
 
-        area.innerHTML = `<div style="padding:20px;"><i class="fas fa-sync fa-spin"></i> Lendo estrutura de ${tabela}...</div>`;
+        area.innerHTML = `<div><i class="fas fa-spinner fa-spin"></i> Mapeando ${tabela}...</div>`;
 
         try {
             const { data: colunas, error } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
             if (error) throw error;
 
-            let formHtml = `<form id="form-universal" style="background:white; padding:25px; border-radius:8px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">`;
-            formHtml += `<h2 style="grid-column: span 2; margin: 0 0 10px 0; color: #1e293b; font-size: 1.2rem;">Novo Registro em: ${tabela}</h2>`;
+            let formHtml = `<form id="form-universal" class="card-form">`;
+            formHtml += `<h2>Novo: ${tabela}</h2>`;
 
             for (const col of colunas) {
+                // Se for ID, forçamos o modo readonly
+                const ehId = col.column_name.toLowerCase() === 'id';
                 if (this.ignorar.includes(col.column_name)) continue;
 
-                formHtml += `<div style="display: flex; flex-direction: column;">
-                                <label style="font-weight: 600; color: #475569; font-size: 14px;">${col.column_name.replace(/_/g, ' ')}</label>`;
+                formHtml += `<div class="campo-grupo">
+                                <label>${col.column_name.replace(/_/g, ' ')}</label>`;
 
                 if (col.foreign_table) {
-                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required><option value="">Carregando...</option></select>`;
+                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required><option>Carregando...</option></select>`;
                     this.preencherSelectEstrangeiro(col.column_name, col.foreign_table);
                 } else {
                     const type = col.data_type.includes('date') ? 'date' : (col.data_type.includes('int') || col.data_type.includes('numeric') ? 'number' : 'text');
-                    formHtml += `<input type="${type}" name="${col.column_name}" class="input-form" step="any" required>`;
+                    
+                    // REQUISITO: Campo ID não editável
+                    const attr = ehId ? 'readonly class="input-form input-readonly" placeholder="Automático"' : 'class="input-form"';
+                    const req = (col.is_nullable === 'NO' && !ehId) ? 'required' : '';
+                    
+                    formHtml += `<input type="${type}" name="${col.column_name}" ${attr} ${req} step="any">`;
                 }
                 formHtml += `</div>`;
             }
 
-            formHtml += `<div style="grid-column: span 2; text-align: right; border-top: 1px solid #eee; pt: 20px;">
-                            <button type="submit" class="btn-save"><i class="fas fa-save"></i> Salvar Registro</button>
-                         </div></form>`;
-
+            formHtml += `<button type="submit" class="btn-save" id="btnSalvar"><i class="fas fa-save"></i> Salvar Registro</button></form>`;
             area.innerHTML = formHtml;
 
             // Lógica de Submit
             document.getElementById('form-universal').onsubmit = async (e) => {
                 e.preventDefault();
-                const formData = new FormData(e.target);
-                const objetoParaSalvar = Object.fromEntries(formData.entries());
-                
-                const btn = e.target.querySelector('button');
+                const btn = document.getElementById('btnSalvar');
                 btn.disabled = true;
-                btn.innerHTML = "Salvando...";
+                btn.innerHTML = "Gravando...";
 
-                const { error: insertError } = await _supabase.from(tabela).insert([objetoParaSalvar]);
+                const formData = new FormData(e.target);
+                const dados = Object.fromEntries(formData.entries());
+                
+                // Remove o ID antes de enviar para o Supabase não tentar sobrescrever
+                delete dados.id;
 
-                if (insertError) {
-                    alert("Erro ao salvar: " + insertError.message);
-                    btn.disabled = false;
-                    btn.innerHTML = "Salvar Registro";
+                const { error: insertErr } = await _supabase.from(tabela).insert([dados]);
+
+                if (insertErr) {
+                    alert("Erro de Segurança (RLS) ou Banco:\n" + insertErr.message);
                 } else {
-                    alert("Sucesso! Registro inserido em " + tabela);
+                    alert("Salvo com sucesso!");
                     e.target.reset();
-                    btn.disabled = false;
-                    btn.innerHTML = "Salvar Registro";
                 }
+                btn.disabled = false;
+                btn.innerHTML = "<i class='fas fa-save'></i> Salvar Registro";
             };
 
-        } catch (err) {
-            area.innerHTML = `<p style="color:red">Erro ao carregar estrutura.</p>`;
-        }
+        } catch (err) { area.innerHTML = "Erro ao carregar estrutura."; }
     },
 
     async preencherSelectEstrangeiro(campoId, tabelaDestino) {
         const { data } = await _supabase.from(tabelaDestino).select('*');
         const select = document.getElementById(`ref_${campoId}`);
-        if (data) {
-            let opt = `<option value="">-- Selecione --</option>`;
-            data.forEach(i => {
-                const label = i.nome || i.descricao || i.razao_social || i.id;
-                opt += `<option value="${i.id}">${label}</option>`;
+        if (data && select) {
+            let options = `<option value="">-- Selecione --</option>`;
+            data.forEach(item => {
+                const label = item.nome || item.descricao || item.id;
+                options += `<option value="${item.id}">${label}</option>`;
             });
-            select.innerHTML = opt;
+            select.innerHTML = options;
         }
     }
 };
