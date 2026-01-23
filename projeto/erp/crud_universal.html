@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Inquilino - ERP ABP</title>
+</head>
+<body>
+<div id="container-seletor-tabelas"></div>
+<script src="js/criar_formulario.js"></script>
+    
+<script>
+/** ############################################################################## */
+/** ERP ABP - GUARD GLOBAL (Versão Final Corrigida - Responsiva)
+* Segurança + SDK Auto-load + Navbar + Controle de Sessão */
+
+(async () => {
+    "use strict";
+
+    if (window.__ERP_GUARD_LOADED__) return;
+    window.__ERP_GUARD_LOADED__ = true;
+
+    const CONFIG = Object.freeze({
+        SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
+        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX',
+        LOGIN_PAGE: "login.html",
+        HOME_PAGE: "index.html",
+        HUB_PAGE: "https://aristidesbp.github.io/",
+        APP_NAME: "ERP ABP",
+        SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    });
+
+    async function carregarSDK() {
+        if (window.supabase) return true;
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = CONFIG.SDK_URL;
+            script.onload = () => resolve(true);
+            script.onerror = () => reject(new Error("Falha ao carregar SDK do Supabase"));
+            document.head.appendChild(script);
+        });
+    }
+
+    try {
+        await carregarSDK();
+        if (!window._supabase) {
+            window._supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+        }
+
+        async function validarSessao() {
+            try {
+                const { data, error } = await _supabase.auth.getSession();
+                if (error || !data || !data.session) throw new Error();
+                return data.session;
+            } catch (e) {
+                window.location.replace(CONFIG.LOGIN_PAGE);
+                return null;
+            }
+        }
+
+        async function logout() {
+            if (!confirm("Deseja realmente sair do sistema?")) return;
+            try { await _supabase.auth.signOut(); } finally { window.location.replace(CONFIG.LOGIN_PAGE); }
+        }
+
+        function renderNavbar() {
+            if (document.querySelector(".erp-navbar")) return;
+            const style = `
+                <style>
+                    /* Reset básico para a Navbar */
+                    .erp-navbar, .erp-navbar * { box-sizing: border-box; }
+
+                    .erp-navbar { 
+                        position: fixed; top: 0; left: 0; width: 100%; 
+                        background: #fff; padding: 10px 15px; 
+                        display: flex; justify-content: space-between; align-items: center; 
+                        box-shadow: 0 2px 10px rgba(0,0,0,.1); z-index: 9999; 
+                        font-family: sans-serif; 
+                    }
+                    .erp-navbar .brand { 
+                        font-weight: bold; color: #0f172a; font-size: 1.1rem; 
+                        display: flex; align-items: center; gap: 5px; 
+                        white-space: nowrap;
+                    }
+                    .erp-navbar .nav-right { display: flex; gap: 8px; flex-wrap: nowrap; }
+                    
+                    .erp-navbar .btn { 
+                        padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; border: none; 
+                        cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; 
+                        gap: 5px; transition: 0.3s; white-space: nowrap; color: white;
+                    }
+                    .erp-navbar .btn-logout { background: #ef4444; }
+                    .erp-navbar .btn-home { background: #3ecf8e; }
+                    
+                    /* Ajustes para Celular */
+                    @media (max-width: 600px) {
+                        .erp-navbar { padding: 8px 10px; }
+                        .erp-navbar .brand { font-size: 0.9rem; }
+                        .erp-navbar .btn span { display: none; } /* Esconde o texto, deixa só o ícone no celular se ficar apertado */
+                        .erp-navbar .btn { padding: 8px 12px; font-size: 14px; }
+                    }
+
+                    body.erp-guard-active { padding-top: 70px !important; }
+                </style>`;
+
+            const html = `
+                <div class="erp-navbar">
+                    <div class="brand"><span style="color: #3ecf8e;">●</span> ${CONFIG.APP_NAME}</div>
+                    <div class="nav-right">
+                        <a href="${CONFIG.HUB_PAGE}" class="btn btn-home"><i class="fas fa-external-link-alt"></i> <span>Projetos</span></a>
+                        <a href="${CONFIG.HOME_PAGE}" class="btn btn-home"><i class="fas fa-home"></i> <span>Início</span></a>
+                        <button class="btn btn-logout" id="btnSair"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></button>
+                    </div>
+                </div>`;
+
+            document.head.insertAdjacentHTML("beforeend", style);
+            document.body.insertAdjacentHTML("afterbegin", html);
+            document.body.classList.add("erp-guard-active");
+            document.getElementById("btnSair")?.addEventListener("click", logout);
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", async () => {
+                const session = await validarSessao();
+                if (session) renderNavbar();
+            });
+        } else {
+            const session = await validarSessao();
+            if (session) renderNavbar();
+        }
+
+    } catch (err) {
+        console.error("Erro crítico no Guard:", err);
+    }
+})();
+</script>
+
+    
+<script>  
+/** ############################################################################## */
+/** ERP ABP - SELETOR DE TABELAS (Componente Modular)
+ * Gera o menu suspenso e armazena a escolha na variável global 'tabela_selecionada'
+ * ADICIONE NO HTML:
+ <div id="container-seletor-tabelas"></div>
+ <script src="js/select_tabela.js"></script>  
+
+* ADICIONE SQL:
+-- Cria uma função para listar tabelas com segurança
+CREATE OR REPLACE FUNCTION get_tables()
+RETURNS TABLE (table_name text) 
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT tablename::text
+  FROM pg_tables
+  WHERE schemaname = 'public';
+END;
+$$;
+ 
+ * ############################################################################## */
+(() => {
+    "use strict";
+
+    // Variável Global solicitada
+    window.tabela_selecionada = "";
+
+    const inicializarComponente = async () => {
+        const container = document.getElementById('container-seletor-tabelas');
+        if (!container) return;
+
+        if (typeof window._supabase === "undefined") {
+            setTimeout(inicializarComponente, 500);
+            return;
+        }
+
+        try {
+            const { data, error } = await _supabase.rpc('get_tables');
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                const html = `
+                    <div id="wrapper-select-erp" style="display: flex; align-items: center; gap: 12px; font-family: sans-serif; padding: 10px 0;">
+                        <select id="tabela_ativa" style="
+                            padding: 8px 12px;
+                            border-radius: 6px;
+                            border: 1px solid #cbd5e1;
+                            background: #fff;
+                            font-size: 14px;
+                            color: #1e293b;
+                            cursor: pointer;
+                            outline: none;
+                            min-width: 220px;
+                            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                        ">
+                            <option value="">-- Selecione a Tabela --</option>
+                            ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
+                        </select>
+                        <span id="status-tabela" style="font-size: 13px; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 5px;"></span>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+
+                const selectElement = document.getElementById('tabela_ativa');
+                const statusTexto = document.getElementById('status-tabela');
+
+                selectElement.addEventListener('change', (e) => {
+                    const valor = e.target.value;
+                    window.tabela_selecionada = valor;
+
+                    if (valor) {
+                        // Mensagem personalizada para lembrar o nome da variável
+                        statusTexto.innerHTML = `
+                            <i class="fas fa-check-circle" style="color: #3ecf8e;"></i> 
+                            <span style="color: #059669;">${valor}</span> 
+                            <span style="color: #94a3b8; font-style: italic;">(tabela_selecionada)</span>
+                        `;
+                    } else {
+                        statusTexto.innerText = "";
+                    }
+                });
+            }
+        } catch (err) {
+            console.error("Erro ao carregar seletor:", err);
+        }
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", inicializarComponente);
+    } else {
+        inicializarComponente();
+    }
+})();
+</script>
+
+
+<script>  
+/** ############################################################################## */
+/** ERP ABP - GERADOR DE FORMULÁRIO DINÂMICO
+ * Baseado na variável 'tabela_selecionada'
+ 
+<script src="js/criar_formulario.js"></script>
+
+CREATE OR REPLACE FUNCTION get_column_metadata(t_name text)
+RETURNS TABLE (
+    column_name text,
+    data_type text,
+    is_nullable text,
+    foreign_table text,
+    foreign_column text
+) 
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        cols.column_name::text,
+        cols.data_type::text,
+        cols.is_nullable::text,
+        fk.foreign_table_name::text AS foreign_table,
+        fk.foreign_column_name::text AS foreign_column
+    FROM information_schema.columns cols
+    LEFT JOIN (
+        SELECT 
+            kcu.column_name, 
+            ccu.table_name AS foreign_table_name,
+            ccu.column_name AS foreign_column_name
+        FROM information_schema.key_column_usage kcu
+        JOIN information_schema.constraint_column_usage ccu 
+          ON kcu.constraint_name = ccu.constraint_name
+        WHERE kcu.table_name = t_name
+    ) fk ON cols.column_name = fk.column_name
+    WHERE cols.table_name = t_name 
+      AND cols.table_schema = 'public'
+    ORDER BY cols.ordinal_position;
+END;
+$$;
+
+ * ############################################################################## */
+
+const CriarFormulario = {
+    // Colunas que não devem aparecer no formulário de inserção
+    ignorar: ['id', 'created_at', 'usuario_id', 'user_id'],
+
+    async carregar() {
+        const area = document.getElementById('area-dinamica');
+        const tabela = window.tabela_selecionada;
+
+        if (!tabela) return;
+
+        area.innerHTML = `<div class="loader"><i class="fas fa-sync fa-spin"></i> Mapeando estrutura de ${tabela}...</div>`;
+
+        try {
+            // 1. Busca metadados da tabela
+            const { data: colunas, error } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
+            if (error) throw error;
+
+            let formHtml = `<form id="form-universal" style="width: 100%; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">`;
+
+            for (const col of colunas) {
+                if (this.ignorar.includes(col.column_name)) continue;
+
+                formHtml += `<div class="campo-grupo" style="display: flex; flex-direction: column;">
+                                <label style="font-weight: bold; margin-bottom: 5px; text-transform: capitalize;">${col.column_name.replace('_', ' ')}</label>`;
+
+                // 2. Lógica de tipo de Input
+                if (col.foreign_table) {
+                    // Caso seja Chave Estrangeira (Select de outra tabela)
+                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form">
+                                    <option value="">Carregando ${col.foreign_table}...</option>
+                                 </select>`;
+                    this.preencherSelectEstrangeiro(col.column_name, col.foreign_table);
+                } 
+                else if (col.data_type.includes('date') || col.data_type.includes('timestamp')) {
+                    formHtml += `<input type="date" name="${col.column_name}" class="input-form">`;
+                } 
+                else if (col.data_type.includes('numeric') || col.data_type.includes('integer')) {
+                    formHtml += `<input type="number" step="0.01" name="${col.column_name}" class="input-form">`;
+                } 
+                else {
+                    formHtml += `<input type="text" name="${col.column_name}" class="input-form">`;
+                }
+
+                formHtml += `</div>`;
+            }
+
+            formHtml += `<div style="grid-column: span 2; text-align: right; margin-top: 20px;">
+                            <button type="submit" class="btn btn-home" style="width: 200px;">
+                                <i class="fas fa-save"></i> Salvar em ${tabela}
+                            </button>
+                         </div></form>`;
+
+            area.innerHTML = formHtml;
+            area.style.borderStyle = "solid";
+
+        } catch (err) {
+            console.error("Erro ao criar form:", err);
+            area.innerHTML = `<p style="color:red">Erro ao carregar estrutura da tabela.</p>`;
+        }
+    },
+
+    // Busca dados da tabela relacionada (ex: nomes das entidades)
+    async preencherSelectEstrangeiro(campoId, tabelaDestino) {
+        const { data, error } = await _supabase.from(tabelaDestino).select('*');
+        const select = document.getElementById(`ref_${campoId}`);
+        
+        if (!error && data) {
+            let options = `<option value="">-- Selecione --</option>`;
+            data.forEach(item => {
+                // Tenta achar uma coluna de nome para exibir, se não usa o ID
+                const rotulo = item.nome || item.nome_completo || item.descricao || item.id;
+                options += `<option value="${item.id}">${rotulo}</option>`;
+            });
+            select.innerHTML = options;
+        }
+    }
+};
+
+// Escuta o componente select_tabela.js
+document.addEventListener('change', (e) => {
+    if (e.target.id === 'tabela_ativa') {
+        CriarFormulario.carregar();
+    }
+});
+</script>
+
+
+
+
+    
+</body>
+</html>
