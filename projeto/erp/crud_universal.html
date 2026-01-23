@@ -6,220 +6,179 @@
     <title>Portal do Inquilino - ERP ABP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Reset e Estilos de Base */
+        /* Estilização seguindo o padrão do seu produtos.html */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
         * { box-sizing: border-box; }
-        body { 
-            margin: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f1f5f9; 
-            padding-top: 70px !important; 
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; color: #1e293b; }
+        
+        #container-seletor-tabelas { padding: 15px; background: white; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
+        
+        .card { 
+            background: white; padding: 25px; border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            max-width: 600px; margin: auto; 
         }
-        #container-seletor-tabelas { padding: 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
-        #area-dinamica { padding: 20px; display: flex; justify-content: center; }
 
-        /* Estilos do Formulário */
-        .card-form {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px; /* Mantém estreito e elegante */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .campo-grupo { display: flex; flex-direction: column; gap: 5px; }
-        .campo-grupo label { 
-            font-weight: 600; 
-            color: #475569; 
-            font-size: 13px; 
-            text-transform: uppercase; 
-        }
+        .form-grid-vertical { display: flex; flex-direction: column; gap: 15px; }
+        
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        
         .input-form { 
-            padding: 12px; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 8px; 
-            font-size: 14px; 
-            outline: none;
-            transition: border 0.2s;
+            width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; 
+            background: #fff; font-size: 14px;
         }
-        .input-form:focus { border-color: #3ecf8e; }
-        .input-readonly { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
 
-        .btn-save { 
-            background: #3ecf8e; 
-            color: white; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 10px;
-            transition: background 0.3s;
+        /* Estilo para campo ID (Não editável) */
+        .input-readonly { 
+            background: #f8fafc; 
+            color: #94a3b8; 
+            cursor: not-allowed; 
+            border-style: dashed;
         }
-        .btn-save:hover { background: #2fb37a; }
-        .btn-save:disabled { background: #94a3b8; }
+
+        .btn-add { 
+            background: var(--primary); color: white; padding: 15px; 
+            border: none; border-radius: 8px; cursor: pointer; 
+            width: 100%; margin-top: 20px; font-weight: bold; 
+            transition: 0.3s;
+        }
+        .btn-add:hover { filter: brightness(1.1); }
     </style>
 </head>
 <body>
 
     <div id="container-seletor-tabelas"></div>
     
-    <div id="area-dinamica">
-        <p style="color: #64748b;">Aguardando seleção de tabela...</p>
+    <div class="container">
+        <div id="area-dinamica">
+            </div>
     </div>
+
+<script src="js/conexao_supabase.js"></script>
 
 <script>
 /** ############################################################################## */
-/** ERP ABP - GUARD & CORE (IIFE) [cite: 2026-01-18] */
-(async () => {
+/** ERP ABP - SELETOR E GERADOR UNIVERSAL (Versão Aristides - ID Automático) */
+(() => {
     "use strict";
 
-    const CONFIG = Object.freeze({
-        SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Chave atualizada [cite: 2026-01-21]
-        LOGIN_PAGE: "login.html",
-        APP_NAME: "ERP ABP Profissional",
-        SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    });
+    window.tabela_selecionada = "";
 
-    async function carregarSDK() {
-        if (window.supabase) return true;
-        return new Promise(r => {
-            const s = document.createElement('script');
-            s.src = CONFIG.SDK_URL;
-            s.onload = r;
-            document.head.appendChild(s);
-        });
-    }
-
-    try {
-        await carregarSDK();
-        window._supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-
-        const { data } = await _supabase.auth.getSession();
-        if (!data?.session) {
-            window.location.replace(CONFIG.LOGIN_PAGE);
+    const inicializarSeletor = async () => {
+        if (typeof window._supabase === "undefined") {
+            setTimeout(inicializarSeletor, 500);
             return;
         }
 
-        renderNavbar();
-        inicializarSeletor();
+        try {
+            const { data, error } = await _supabase.rpc('get_tables');
+            if (error) throw error;
 
-    } catch (err) { console.error("Erro de inicialização:", err); }
+            const container = document.getElementById('container-seletor-tabelas');
+            container.innerHTML = `
+                <select id="tabela_ativa" class="input-form" style="max-width:300px;">
+                    <option value="">-- Selecione a Tabela --</option>
+                    ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
+                </select>
+            `;
 
-    function renderNavbar() {
-        const html = `
-            <div style="position:fixed; top:0; left:0; width:100%; height:60px; background:#1e293b; color:white; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:10000; box-shadow:0 2px 5px rgba(0,0,0,0.2);">
-                <div style="font-weight:bold;"><span style="color:#3ecf8e">●</span> ${CONFIG.APP_NAME}</div>
-                <button onclick="_supabase.auth.signOut().then(()=>location.reload())" style="background:#ef4444; border:none; color:white; padding:8px 15px; border-radius:5px; cursor:pointer;">Sair</button>
-            </div>`;
-        document.body.insertAdjacentHTML("afterbegin", html);
-    }
+            document.getElementById('tabela_ativa').addEventListener('change', (e) => {
+                window.tabela_selecionada = e.target.value;
+                CriarFormulario.carregar();
+            });
+        } catch (err) { console.error(err); }
+    };
 
-    async function inicializarSeletor() {
-        const { data } = await _supabase.rpc('get_tables');
-        const container = document.getElementById('container-seletor-tabelas');
-        if (!data) return;
-
-        container.innerHTML = `
-            <select id="tabela_ativa" class="input-form" style="width:100%; max-width:300px;">
-                <option value="">-- Escolha uma Tabela --</option>
-                ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
-            </select>
-        `;
-
-        document.getElementById('tabela_ativa').addEventListener('change', (e) => {
-            window.tabela_selecionada = e.target.value;
-            CriarFormulario.carregar();
-        });
-    }
+    inicializarSeletor();
 })();
 
-/** ############################################################################## */
-/** GERADOR DE FORMULÁRIO DINÂMICO */
 const CriarFormulario = {
-    ignorar: ['created_at', 'usuario_id', 'user_id', 'perfil'],
+    ignorar: ['created_at', 'usuario_id', 'user_id'],
 
     async carregar() {
         const area = document.getElementById('area-dinamica');
         const tabela = window.tabela_selecionada;
-        if (!tabela) return;
+        if (!tabela) return area.innerHTML = "";
 
-        area.innerHTML = `<div><i class="fas fa-spinner fa-spin"></i> Mapeando ${tabela}...</div>`;
+        area.innerHTML = `<div class="card"><i class="fas fa-sync fa-spin"></i> Lendo ${tabela}...</div>`;
 
         try {
             const { data: colunas, error } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
             if (error) throw error;
 
-            let formHtml = `<form id="form-universal" class="card-form">`;
-            formHtml += `<h2>Novo: ${tabela}</h2>`;
+            let formHtml = `<div class="card">
+                <h3 style="margin-top:0; color:var(--primary)">Cadastro: ${tabela.toUpperCase()}</h3>
+                <form id="form-universal" class="form-grid-vertical">`;
 
             for (const col of colunas) {
-                // Se for ID, forçamos o modo readonly
-                const ehId = col.column_name.toLowerCase() === 'id';
                 if (this.ignorar.includes(col.column_name)) continue;
 
-                formHtml += `<div class="campo-grupo">
-                                <label>${col.column_name.replace(/_/g, ' ')}</label>`;
+                const ehId = col.column_name.toLowerCase() === 'id';
+
+                formHtml += `<div>
+                    <label>${col.column_name.replace(/_/g, ' ')}</label>`;
 
                 if (col.foreign_table) {
-                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required><option>Carregando...</option></select>`;
+                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required></select>`;
                     this.preencherSelectEstrangeiro(col.column_name, col.foreign_table);
                 } else {
                     const type = col.data_type.includes('date') ? 'date' : (col.data_type.includes('int') || col.data_type.includes('numeric') ? 'number' : 'text');
                     
-                    // REQUISITO: Campo ID não editável
-                    const attr = ehId ? 'readonly class="input-form input-readonly" placeholder="Automático"' : 'class="input-form"';
-                    const req = (col.is_nullable === 'NO' && !ehId) ? 'required' : '';
-                    
-                    formHtml += `<input type="${type}" name="${col.column_name}" ${attr} ${req} step="any">`;
+                    // REQUISITO: Campo ID visível mas NÃO editável
+                    if (ehId) {
+                        formHtml += `<input type="text" name="${col.column_name}" class="input-form input-readonly" value="GERADO AUTOMATICAMENTE" readonly>`;
+                    } else {
+                        formHtml += `<input type="${type}" name="${col.column_name}" class="input-form" step="any" required>`;
+                    }
                 }
                 formHtml += `</div>`;
             }
 
-            formHtml += `<button type="submit" class="btn-save" id="btnSalvar"><i class="fas fa-save"></i> Salvar Registro</button></form>`;
+            formHtml += `<button type="submit" class="btn-add">Salvar no ERP</button></form></div>`;
             area.innerHTML = formHtml;
 
-            // Lógica de Submit
+            // Lógica de Salvamento (Baseada no seu produtos.html)
             document.getElementById('form-universal').onsubmit = async (e) => {
                 e.preventDefault();
-                const btn = document.getElementById('btnSalvar');
+                const btn = e.target.querySelector('button');
                 btn.disabled = true;
-                btn.innerHTML = "Gravando...";
+                btn.innerText = "Processando...";
 
                 const formData = new FormData(e.target);
-                const dados = Object.fromEntries(formData.entries());
-                
-                // Remove o ID antes de enviar para o Supabase não tentar sobrescrever
-                delete dados.id;
+                const dadosParaSalvar = Object.fromEntries(formData.entries());
 
-                const { error: insertErr } = await _supabase.from(tabela).insert([dados]);
+                // EXCLUSÃO DO ID: Garante que o banco gere o próximo número serial automaticamente
+                delete dadosParaSalvar.id;
+
+                // Adiciona o usuario_id se a tabela exigir (como em produtos.html)
+                const { data: { user } } = await _supabase.auth.getUser();
+                if (user) dadosParaSalvar.usuario_id = user.id;
+
+                const { error: insertErr } = await _supabase.from(tabela).insert([dadosParaSalvar]);
 
                 if (insertErr) {
-                    alert("Erro de Segurança (RLS) ou Banco:\n" + insertErr.message);
+                    alert("Erro ao salvar: " + insertErr.message);
                 } else {
-                    alert("Salvo com sucesso!");
+                    alert("Registro cadastrado com sucesso!");
                     e.target.reset();
                 }
                 btn.disabled = false;
-                btn.innerHTML = "<i class='fas fa-save'></i> Salvar Registro";
+                btn.innerText = "Salvar no ERP";
             };
 
-        } catch (err) { area.innerHTML = "Erro ao carregar estrutura."; }
+        } catch (err) { area.innerHTML = "Erro ao mapear tabela."; }
     },
 
     async preencherSelectEstrangeiro(campoId, tabelaDestino) {
         const { data } = await _supabase.from(tabelaDestino).select('*');
         const select = document.getElementById(`ref_${campoId}`);
         if (data && select) {
-            let options = `<option value="">-- Selecione --</option>`;
-            data.forEach(item => {
-                const label = item.nome || item.descricao || item.id;
-                options += `<option value="${item.id}">${label}</option>`;
+            let opt = `<option value="">-- Selecione --</option>`;
+            data.forEach(i => {
+                const label = i.nome || i.nome_completo || i.descricao || i.id;
+                opt += `<option value="${i.id}">${label}</option>`;
             });
-            select.innerHTML = options;
+            select.innerHTML = opt;
         }
     }
 };
