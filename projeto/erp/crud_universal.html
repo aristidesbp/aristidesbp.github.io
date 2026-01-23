@@ -2,294 +2,182 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>CRUD Universal - ERP ABP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SUPABASE -->
-    <script src="js/conexao_supabase.js"></script>
-
-    <!-- Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- CSS -->
-    <style>
-        :root {
-    --primary: #3ecf8e;
-    --dark: #0f172a;
-    --danger: #ef4444;
-    --bg: #f1f5f9;
-}
-
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    background: var(--bg);
-    font-family: 'Segoe UI', sans-serif;
-    padding: 20px;
-}
-
-.container {
-    max-width: 1300px;
-    margin: auto;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-}
-
-.toolbar {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0;
-}
-
-.toolbar input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-}
-
-.btn {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn.primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn.danger {
-    background: var(--danger);
-    color: white;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 14px;
-}
-
-th {
-    background: #f8fafc;
-    text-align: left;
-}
-
-.actions {
-    display: flex;
-    gap: 8px;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-    gap: 15px;
-}
-
-.form-actions {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-}
-    </style>
+    <title>Portal do Inquilino - ERP ABP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="erp-guard-active">
 
-<div class="container">
+    <div id="container-seletor-tabelas" style="padding: 20px; background: #f8fafc;"></div>
+    
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0;">
 
-    <!-- SELETOR DE TABELA -->
-    <div id="container-seletor-tabelas"></div>
-
-    <!-- AÇÕES -->
-    <div class="toolbar">
-        <button class="btn primary" onclick="CRUD.novo()">
-            <i class="fas fa-plus"></i> Novo Registro
-        </button>
-
-        <input type="text" id="buscaGlobal" placeholder="Buscar..." onkeyup="CRUD.filtrar()">
+    <div id="area-dinamica" style="padding: 20px; min-height: 200px;">
+        <p style="color: #64748b;">Selecione uma tabela acima para gerar o formulário de inserção.</p>
     </div>
-
-    <!-- FORMULÁRIO -->
-    <div class="card" id="formCard" style="display:none">
-        <h3 id="formTitle">Novo Registro</h3>
-        <form id="formUniversal"></form>
-
-        <div class="form-actions">
-            <button class="btn primary" type="submit">
-                <i class="fas fa-save"></i> Salvar
-            </button>
-            <button class="btn" type="button" onclick="CRUD.cancelar()">Cancelar</button>
-        </div>
-    </div>
-
-    <!-- LISTAGEM -->
-    <div class="card">
-        <div class="table-container">
-            <table>
-                <thead id="thead"></thead>
-                <tbody id="tbody"></tbody>
-            </table>
-        </div>
-    </div>
-
-</div>
 
 <script>
-const CRUD = (() => {
-    let tabela = '';
-    let dados = [];
-    let colunas = [];
-    let editId = null;
+/** ############################################################################## 
+ * ERP ABP - GUARD GLOBAL & ENGINE UNIVERSAL
+ * ############################################################################## */
+(async () => {
+    "use strict";
 
-    const ignorar = ['id', 'created_at', 'usuario_id', 'user_id'];
-
-    async function carregarTabela() {
-        tabela = window.tabela_selecionada;
-        if (!tabela) return;
-
-        await carregarColunas();
-        await listar();
-    }
-
-    async function carregarColunas() {
-        const { data, error } = await _supabase
-            .rpc('get_column_metadata', { t_name: tabela });
-
-        if (error) return alert(error.message);
-        colunas = data.filter(c => !ignorar.includes(c.column_name));
-    }
-
-    async function listar() {
-        const { data, error } = await _supabase.from(tabela).select('*');
-        if (error) return alert(error.message);
-
-        dados = data || [];
-        renderTabela(dados);
-    }
-
-    function renderTabela(lista) {
-        const thead = document.getElementById('thead');
-        const tbody = document.getElementById('tbody');
-
-        thead.innerHTML = `
-            <tr>
-                ${colunas.map(c => `<th>${c.column_name}</th>`).join('')}
-                <th>Ações</th>
-            </tr>
-        `;
-
-        tbody.innerHTML = lista.map(l => `
-            <tr>
-                ${colunas.map(c => `<td>${l[c.column_name] ?? ''}</td>`).join('')}
-                <td class="actions">
-                    <button class="btn" onclick="CRUD.editar('${l.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn danger" onclick="CRUD.excluir('${l.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    function montarFormulario(registro = {}) {
-        const form = document.getElementById('formUniversal');
-        form.innerHTML = `
-            <div class="form-grid">
-                ${colunas.map(c => `
-                    <div>
-                        <label>${c.column_name}</label>
-                        <input name="${c.column_name}" value="${registro[c.column_name] ?? ''}">
-                    </div>
-                `).join('')}
-            </div>
-        `;
-
-        form.onsubmit = salvar;
-    }
-
-    async function salvar(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const obj = Object.fromEntries(formData.entries());
-
-        const query = editId
-            ? _supabase.from(tabela).update(obj).eq('id', editId)
-            : _supabase.from(tabela).insert([obj]);
-
-        const { error } = await query;
-        if (error) return alert(error.message);
-
-        cancelar();
-        listar();
-    }
-
-    function novo() {
-        editId = null;
-        document.getElementById('formTitle').innerText = 'Novo Registro';
-        document.getElementById('formCard').style.display = 'block';
-        montarFormulario();
-    }
-
-    function editar(id) {
-        editId = id;
-        const registro = dados.find(d => d.id === id);
-        document.getElementById('formTitle').innerText = 'Editar Registro';
-        document.getElementById('formCard').style.display = 'block';
-        montarFormulario(registro);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    async function excluir(id) {
-        if (!confirm('Confirma exclusão?')) return;
-        const { error } = await _supabase.from(tabela).delete().eq('id', id);
-        if (error) alert(error.message);
-        listar();
-    }
-
-    function cancelar() {
-        editId = null;
-        document.getElementById('formCard').style.display = 'none';
-    }
-
-    function filtrar() {
-        const termo = document.getElementById('buscaGlobal').value.toLowerCase();
-        const filtrados = dados.filter(d =>
-            Object.values(d).some(v =>
-                String(v).toLowerCase().includes(termo)
-            )
-        );
-        renderTabela(filtrados);
-    }
-
-    document.addEventListener('change', e => {
-        if (e.target.id === 'tabela_ativa') carregarTabela();
+    const CONFIG = Object.freeze({
+        SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
+        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Sua chave atualizada [cite: 2026-01-21]
+        LOGIN_PAGE: "login.html",
+        HOME_PAGE: "index.html",
+        APP_NAME: "ERP ABP",
+        SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     });
 
-    return { novo, editar, excluir, cancelar, filtrar };
+    // 1. Carregamento do SDK e Sessão
+    async function init() {
+        if (!window.supabase) {
+            await new Promise(r => {
+                const s = document.createElement('script');
+                s.src = CONFIG.SDK_URL;
+                s.onload = r;
+                document.head.appendChild(s);
+            });
+        }
+        window._supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+        
+        const { data } = await _supabase.auth.getSession();
+        if (!data?.session) {
+            window.location.replace(CONFIG.LOGIN_PAGE);
+            return;
+        }
+        renderNavbar();
+        carregarSeletor();
+    }
+
+    // 2. Navbar Padrão [cite: 2026-01-18]
+    function renderNavbar() {
+        const style = `<style>
+            .erp-navbar { position: fixed; top: 0; left: 0; width: 100%; background: #fff; padding: 10px 20px; 
+                          display: flex; justify-content: space-between; align-items: center; 
+                          box-shadow: 0 2px 10px rgba(0,0,0,.1); z-index: 9999; font-family: sans-serif; }
+            body { padding-top: 70px !important; margin: 0; background: #f1f5f9; }
+            .btn-save { background: #3ecf8e; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+            .input-form { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; }
+        </style>`;
+        document.head.insertAdjacentHTML("beforeend", style);
+        document.body.insertAdjacentHTML("afterbegin", `
+            <div class="erp-navbar">
+                <div style="font-weight:bold;"><span style="color:#3ecf8e">●</span> ${CONFIG.APP_NAME}</div>
+                <button onclick="_supabase.auth.signOut().then(()=>location.reload())" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Sair</button>
+            </div>
+        `);
+    }
+
+    // 3. Seletor de Tabelas
+    async function carregarSeletor() {
+        const { data } = await _supabase.rpc('get_tables');
+        const container = document.getElementById('container-seletor-tabelas');
+        if (!data) return;
+
+        container.innerHTML = `
+            <select id="tabela_ativa" style="padding:10px; border-radius:6px; min-width:250px;">
+                <option value="">-- Selecione uma Tabela --</option>
+                ${data.map(t => `<option value="${t.table_name}">${t.table_name.toUpperCase()}</option>`).join('')}
+            </select>
+        `;
+
+        document.getElementById('tabela_ativa').addEventListener('change', (e) => {
+            window.tabela_selecionada = e.target.value;
+            CriarFormulario.carregar();
+        });
+    }
+
+    init();
 })();
-    
+
+/** ############################################################################## 
+ * GERADOR DE FORMULÁRIO COM LÓGICA DE SALVAMENTO
+ * ############################################################################## */
+const CriarFormulario = {
+    ignorar: ['id', 'created_at', 'usuario_id', 'user_id'],
+
+    async carregar() {
+        const area = document.getElementById('area-dinamica');
+        const tabela = window.tabela_selecionada;
+        if (!tabela) return;
+
+        area.innerHTML = `<div style="padding:20px;"><i class="fas fa-sync fa-spin"></i> Lendo estrutura de ${tabela}...</div>`;
+
+        try {
+            const { data: colunas, error } = await _supabase.rpc('get_column_metadata', { t_name: tabela });
+            if (error) throw error;
+
+            let formHtml = `<form id="form-universal" style="background:white; padding:25px; border-radius:8px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">`;
+            formHtml += `<h2 style="grid-column: span 2; margin: 0 0 10px 0; color: #1e293b; font-size: 1.2rem;">Novo Registro em: ${tabela}</h2>`;
+
+            for (const col of colunas) {
+                if (this.ignorar.includes(col.column_name)) continue;
+
+                formHtml += `<div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; color: #475569; font-size: 14px;">${col.column_name.replace(/_/g, ' ')}</label>`;
+
+                if (col.foreign_table) {
+                    formHtml += `<select name="${col.column_name}" id="ref_${col.column_name}" class="input-form" required><option value="">Carregando...</option></select>`;
+                    this.preencherSelectEstrangeiro(col.column_name, col.foreign_table);
+                } else {
+                    const type = col.data_type.includes('date') ? 'date' : (col.data_type.includes('int') || col.data_type.includes('numeric') ? 'number' : 'text');
+                    formHtml += `<input type="${type}" name="${col.column_name}" class="input-form" step="any" required>`;
+                }
+                formHtml += `</div>`;
+            }
+
+            formHtml += `<div style="grid-column: span 2; text-align: right; border-top: 1px solid #eee; pt: 20px;">
+                            <button type="submit" class="btn-save"><i class="fas fa-save"></i> Salvar Registro</button>
+                         </div></form>`;
+
+            area.innerHTML = formHtml;
+
+            // Lógica de Submit
+            document.getElementById('form-universal').onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const objetoParaSalvar = Object.fromEntries(formData.entries());
+                
+                const btn = e.target.querySelector('button');
+                btn.disabled = true;
+                btn.innerHTML = "Salvando...";
+
+                const { error: insertError } = await _supabase.from(tabela).insert([objetoParaSalvar]);
+
+                if (insertError) {
+                    alert("Erro ao salvar: " + insertError.message);
+                    btn.disabled = false;
+                    btn.innerHTML = "Salvar Registro";
+                } else {
+                    alert("Sucesso! Registro inserido em " + tabela);
+                    e.target.reset();
+                    btn.disabled = false;
+                    btn.innerHTML = "Salvar Registro";
+                }
+            };
+
+        } catch (err) {
+            area.innerHTML = `<p style="color:red">Erro ao carregar estrutura.</p>`;
+        }
+    },
+
+    async preencherSelectEstrangeiro(campoId, tabelaDestino) {
+        const { data } = await _supabase.from(tabelaDestino).select('*');
+        const select = document.getElementById(`ref_${campoId}`);
+        if (data) {
+            let opt = `<option value="">-- Selecione --</option>`;
+            data.forEach(i => {
+                const label = i.nome || i.descricao || i.razao_social || i.id;
+                opt += `<option value="${i.id}">${label}</option>`;
+            });
+            select.innerHTML = opt;
+        }
+    }
+};
 </script>
 </body>
-    </html>
+</html>
