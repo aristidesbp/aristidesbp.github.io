@@ -1,3 +1,4 @@
+```
 -- =====================================================================
 -- ERP APB — PASSO 4: FUNÇÕES CRÍTICAS (REGRAS DE NEGÓCIO ATÔMICAS)
 -- Versão reforçada — Janeiro / 2026
@@ -172,3 +173,4 @@ $$;
 -- • Adicionar trigger para impedir novos lançamentos em caixa fechado
 -- • Próximo: funções de fechamento de caixa e relatórios
 -- =====================================================================
+```
