@@ -79,7 +79,6 @@ CREATE TABLE public.produtos (
 );
 
 
-
 CREATE TABLE public.controle_caixa (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   usuario_id uuid,
@@ -94,8 +93,6 @@ CREATE TABLE public.controle_caixa (
   CONSTRAINT controle_caixa_pkey PRIMARY KEY (id),
   CONSTRAINT controle_caixa_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
 );
-
-
 
 
 CREATE TABLE public.financeiro (
@@ -118,7 +115,7 @@ CREATE TABLE public.financeiro (
 );
 
 
-CREATE TABLE public.notes (
+CREATE TABLE public.tarefas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   title text NOT NULL,
@@ -153,7 +150,17 @@ CREATE TABLE public.produtos (
   CONSTRAINT produtos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
 );
 
-
+CREATE TABLE public.vendas_itens (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  venda_id uuid,
+  produto_id uuid,
+  quantidade integer,
+  preco_unitario numeric,
+  total_item numeric,
+  CONSTRAINT vendas_itens_pkey PRIMARY KEY (id),
+  CONSTRAINT vendas_itens_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id),
+  CONSTRAINT vendas_itens_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
+);
 
 CREATE TABLE public.vendas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -172,18 +179,6 @@ CREATE TABLE public.vendas (
   CONSTRAINT vendas_caixa_id_fkey FOREIGN KEY (caixa_id) REFERENCES public.controle_caixa(id)
 );
 
-
-CREATE TABLE public.vendas_itens (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  venda_id uuid,
-  produto_id uuid,
-  quantidade integer,
-  preco_unitario numeric,
-  total_item numeric,
-  CONSTRAINT vendas_itens_pkey PRIMARY KEY (id),
-  CONSTRAINT vendas_itens_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id),
-  CONSTRAINT vendas_itens_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
-);
 ```
 
 
