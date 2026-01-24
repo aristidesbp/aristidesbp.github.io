@@ -451,6 +451,7 @@ CREATE TABLE usuarios (
 ```
 ## usuario_senhas.sql  (Tipos de Senha, nível de acesso)
 ```
+/* Permite várias senhas por usuário (ex: senha admin, senha financeira)*/
 CREATE TABLE usuario_senhas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
@@ -471,6 +472,7 @@ CREATE TABLE funcionarios (
     departamento TEXT,
     data_admissao DATE
 );
+
 ```
 
 ## clientes.sql
@@ -484,6 +486,7 @@ CREATE TABLE clientes (
     endereco JSONB,
     criado_em TIMESTAMP DEFAULT now()
 );
+
 ```
 
 ## fornecedores.sql
@@ -497,6 +500,7 @@ CREATE TABLE fornecedores (
     email TEXT,
     endereco JSONB
 );
+
 ```
 # 📦 3️⃣ PRODUTOS E SERVIÇOS
 ##  produtos.sql
@@ -510,6 +514,7 @@ CREATE TABLE produtos (
     estoque INTEGER DEFAULT 0,
     ativo BOOLEAN DEFAULT true
 );
+
 ```
 
 ## servicos.sql
@@ -521,6 +526,7 @@ CREATE TABLE servicos (
     preco NUMERIC(10,2),
     ativo BOOLEAN DEFAULT true
 );
+
 ```
 # 🛒 4️⃣ VENDAS (COM ITENS)
 ## vendas.sql
@@ -533,17 +539,19 @@ CREATE TABLE vendas (
     valor_total NUMERIC(10,2),
     status TEXT
 );
+
 ```
  ## vendas_itens.sql
 ```
-CREATE TABLE vendas (
+/*itens das vendas*/
+CREATE TABLE vendas_itens (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    cliente_id UUID REFERENCES clientes(id),
-    usuario_id UUID REFERENCES usuarios(id),
-    data_venda TIMESTAMP DEFAULT now(),
-    valor_total NUMERIC(10,2),
-    status TEXT
+    venda_id UUID REFERENCES vendas(id) ON DELETE CASCADE,
+    produto_id UUID REFERENCES produtos(id),
+    quantidade INTEGER NOT NULL,
+    preco_unitario NUMERIC(10,2) NOT NULL
 );
+
 ```
 # 💰 5️⃣ FINANCEIRO (ERP REAL)
 ## financeiro_lancamentos.sql
@@ -556,6 +564,7 @@ CREATE TABLE financeiro_lancamentos (
     descricao TEXT,
     venda_id UUID REFERENCES vendas(id)
 );
+
 ```
 ## financeiro_contas.sql
 ```
@@ -565,6 +574,7 @@ CREATE TABLE financeiro_contas (
     tipo TEXT,
     ativo BOOLEAN DEFAULT true
 );
+
 ```
 
 # 💬 6️⃣ CHAT, CONVERSAS E MENSAGENS
@@ -577,6 +587,7 @@ CREATE TABLE conversas (
     cliente_id UUID REFERENCES clientes(id),
     ultima_atualizacao TIMESTAMP
 );
+
 ```
 ## mensagens.sql
 ```
@@ -587,16 +598,57 @@ CREATE TABLE mensagens (
     conteudo TEXT,
     data_envio TIMESTAMP DEFAULT now()
 );
+
+```
+## chatbot_respostas.sql
+```
+CREATE TABLE chatbot_respostas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    pergunta TEXT,
+    resposta TEXT,
+    categoria TEXT
+);
+```
+## notas.sql
+```
+CREATE TABLE notas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID REFERENCES usuarios(id),
+    titulo TEXT,
+    conteudo TEXT,
+    criado_em TIMESTAMP DEFAULT now()
+);
+
+```
+## politicas_servico.sql
+```
+CREATE TABLE politicas_servico (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    titulo TEXT,
+    conteudo TEXT,
+    ativo BOOLEAN DEFAULT true
+);
 ```
 
+## documentacao.sql
+```
+CREATE TABLE documentacao (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    titulo TEXT,
+    conteudo TEXT,
+    tags TEXT[],
+    criado_em TIMESTAMP DEFAULT now()
+);
 
-
-
-
-
-
-
-
+```
+## ✅ STATUS ATUAL DO BANCO (RESUMO)
+Você já tem:
+* Modelagem sólida (nível mercado)
+* Separação de domínios (usuários, vendas, financeiro, chat, docs)
+* Suporte a múltiplas senhas por nível
+* Pronto para Supabase / PostgreSQL
+### 👉 Base estrutural: OK
+### Agora entramos na camada de GOVERNANÇA, SEGURANÇA e PERFORMANCE.
 
 
 
