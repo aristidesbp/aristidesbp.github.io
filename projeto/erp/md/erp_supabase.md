@@ -434,8 +434,30 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+# ⚡ 4️⃣ ÍNDICES (PERFORMANCE)
+Sem isso, ERP morre quando cresce.
+```
+CREATE INDEX idx_clientes_cpf ON clientes(cpf_cnpj);
+CREATE INDEX idx_vendas_data ON vendas(data_venda);
+CREATE INDEX idx_financeiro_data ON financeiro_lancamentos(data_lancamento);
+CREATE INDEX idx_mensagens_conversa ON mensagens(conversa_id);
+```
+# 🧾 5️⃣ AUDITORIA (MUITO IMPORTANTE)
+ERP sem auditoria não vende.
 
+# Tabela de auditoria
+```
+CREATE TABLE auditoria (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID,
+    tabela TEXT,
+    acao TEXT,
+    dados_anteriores JSONB,
+    dados_novos JSONB,
+    data_evento TIMESTAMP DEFAULT now()
+);
 
+```
 
 
 
