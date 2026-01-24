@@ -1,3 +1,4 @@
+```
 -- =====================================================================
 -- ERP APB — PASSO 3: COMPORTAMENTO AUTOMÁTICO (TRIGGERS & LOGIC)
 -- Objetivo: Garantir integridade de estoque, financeiro, auditoria e soft-delete
@@ -205,3 +206,4 @@ FOR EACH ROW EXECUTE FUNCTION fn_soft_delete();
 -- 2. Criar índice em auditoria: (empresa_id, data_evento DESC)
 -- 3. Próximo: Passo 4 — Funções atômicas (ex: fn_criar_venda completa)
 -- =====================================================================
+```
