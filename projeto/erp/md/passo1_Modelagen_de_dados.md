@@ -778,7 +778,7 @@ CREATE TABLE whatsapp_config (
 
 
 
-## ✅ STATUS ATUAL DO BANCO (RESUMO)
+## Sugestões de Ajustes Rápidos (faça antes de criar policies RLS)
 ```
 -- Correções / melhorias recomendadas (resumo)
 
