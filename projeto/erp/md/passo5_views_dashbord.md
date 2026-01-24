@@ -1,3 +1,4 @@
+```
 -- =====================================================================
 -- ERP APB — PASSO 5: VIEWS DE DASHBOARD E RELATÓRIOS (VERSÃO REFORÇADA)
 -- Objetivo: Dados seguros, performáticos e multi-tenant para frontend
@@ -101,3 +102,4 @@ ON vendas_itens (venda_id, produto_id);
 -- • Materialized views para relatórios pesados
 -- • Gráficos no frontend consumindo essas views via Supabase JS
 -- =====================================================================
+```
