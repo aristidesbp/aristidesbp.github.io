@@ -41,17 +41,24 @@ CREATE TABLE public.entidades (
   bairro text,
   cidade text,
   estado text,
-  status text DEFAULT 'ativo'::text CHECK (status = ANY (ARRAY['ativo'::text, 'desativado'::text])),
-  acesso text DEFAULT 'cliente'::text CHECK (acesso = ANY (ARRAY['master'::text, 'funcionario'::text, 'comprador'::text, 'cliente'::text])),
+  status text DEFAULT 'ativo'
+    CHECK (status IN ('ativo', 'desativado')),
+  acesso text DEFAULT 'cliente'
+    CHECK (acesso IN ('master', 'funcionario', 'comprador', 'cliente')),
   senha_acesso text,
-  relacionamento text DEFAULT 'cliente'::text CHECK (relacionamento = ANY (ARRAY['cliente'::text, 'funcionario'::text, 'fornecedor'::text, 'terceirizado'::text, 'outros'::text])),
-  arquivos_url ARRAY,
+  relacionamento text DEFAULT 'cliente'
+    CHECK (relacionamento IN ('cliente', 'funcionario', 'fornecedor', 'terceirizado', 'outros')),
+  arquivos_url jsonb DEFAULT '[]'::jsonb,
   observacoes text,
-  avaliacao integer DEFAULT 5 CHECK (avaliacao >= 0 AND avaliacao <= 10),
-  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
-  permissoes ARRAY,
+  avaliacao integer DEFAULT 5
+    CHECK (avaliacao BETWEEN 0 AND 10),
+  permissoes jsonb DEFAULT '{}'::jsonb,
+  created_at timestamp with time zone
+    DEFAULT timezone('utc', now()),
   CONSTRAINT entidades_pkey PRIMARY KEY (id),
-  CONSTRAINT clientes_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+  CONSTRAINT entidades_usuario_id_fkey
+    FOREIGN KEY (usuario_id)
+    REFERENCES auth.users(id)
 );
 
 CREATE TABLE public.produtos (
