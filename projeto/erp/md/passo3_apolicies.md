@@ -1,6 +1,6 @@
 
 
-# 🔐 1️⃣ POLICIES (RLS) — OBRIGATÓRIO EM ERP REAL
+# 🔐 POLICIES (RLS) — OBRIGATÓRIO EM ERP REAL
 Se você for usar Supabase, Row Level Security (RLS) é obrigatório.
 Sem isso, não é ERP profissional.
 * 📌 O que são Policies?
