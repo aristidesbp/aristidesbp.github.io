@@ -818,7 +818,58 @@ FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
 ```
 
 
+# 🏛️ Script de Transição: Infraestrutura Multi-Empresa
+Este script deve ser executado antes de qualquer inserção de dados. Ele cria a base para o controle de acesso e aplica o empresa_id nas tabelas de negócio.
+```
+-- 1. Criação da tabela mestre de Empresas
+CREATE TABLE empresas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome_fantasia TEXT NOT NULL,
+    razao_social TEXT,
+    cnpj TEXT UNIQUE,
+    plano TEXT DEFAULT 'free', -- Para controle de cobrança futuro
+    ativo BOOLEAN DEFAULT true,
+    criado_em TIMESTAMP DEFAULT now()
+);
 
+-- 2. Adicionando a coluna de vínculo em todas as tabelas principais
+-- NOTA: Começamos permitindo NULL para não quebrar tabelas existentes, 
+-- mas o ideal é que todo registro tenha uma empresa_id.
 
+DO $$ 
+DECLARE 
+    tabela_nome TEXT;
+BEGIN 
+    FOR tabela_nome IN 
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+        AND table_name IN ('usuarios', 'clientes', 'fornecedores', 'funcionarios', 
+                           'produtos', 'servicos', 'vendas', 'financeiro_lancamentos', 
+                           'financeiro_contas', 'conversas', 'notas', 'categorias', 'controle_caixa')
+    LOOP 
+        EXECUTE format('ALTER TABLE %I ADD COLUMN empresa_id UUID REFERENCES empresas(id)', tabela_nome);
+    END LOOP;
+END $$;
+
+-- 3. Aplicando as melhorias de consistência (Grok + Refinamentos)
+ALTER TABLE vendas_itens 
+    ADD COLUMN quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+    ADD COLUMN preco_unitario NUMERIC(10,2) NOT NULL,
+    ADD COLUMN subtotal NUMERIC(10,2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED;
+
+ALTER TABLE financeiro_lancamentos 
+    ADD COLUMN conta_id UUID REFERENCES financeiro_contas(id),
+    ADD COLUMN caixa_id UUID REFERENCES controle_caixa(id);
+
+ALTER TABLE usuarios 
+    ADD COLUMN ultimo_login TIMESTAMP;
+
+ALTER TABLE auditoria 
+    ADD COLUMN ip TEXT, 
+    ADD COLUMN user_agent TEXT,
+    ADD COLUMN empresa_id UUID REFERENCES empresas(id);
+
+```
 
 
