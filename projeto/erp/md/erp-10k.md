@@ -430,6 +430,15 @@ db.version(1).stores({
 * suporte
 * operador
 
+## roles.sql
+```
+/*NIVES DE ACESSO (admin,financeiro,vendas,suporte,operador)*/
+CREATE TABLE roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL UNIQUE,
+    descricao TEXT
+);
+```
 ## usuarios.sql
 ```
 CREATE TABLE usuarios (
