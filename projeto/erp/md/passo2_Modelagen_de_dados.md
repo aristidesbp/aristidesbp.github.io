@@ -642,6 +642,97 @@ CREATE TABLE documentacao (
 );
 
 ```
+
+# 🛠️ Atualização da Tabela de Produtos
+```
+-- 1. Adiciona a coluna unidade_medida à tabela de produtos
+ALTER TABLE produtos 
+ADD COLUMN unidade_medida TEXT NOT NULL DEFAULT 'UN';
+
+-- 2. Adiciona uma restrição para aceitar apenas siglas padrão de mercado
+-- Você pode expandir esta lista conforme a necessidade do ERP
+ALTER TABLE produtos 
+ADD CONSTRAINT chk_unidade_medida 
+CHECK (unidade_medida IN ('UN', 'KG', 'LT', 'CX', 'MT', 'PC', 'DZ', 'GR'));
+
+-- 3. (Opcional) Adicionar comentário para documentação no banco
+COMMENT ON COLUMN produtos.unidade_medida IS 'Unidade de medida comercial (ex: UN, KG, LT)';
+```
+
+## 💡 Por que fizemos assim?
+ Integridade: O uso do CHECK impede que alguém insira "Unidade" ou "Quilo" por extenso, o que quebraria relatórios e exportações de XML para notas fiscais.
+* Valor Padrão: Definimos 'UN' como padrão (DEFAULT) para evitar erros em registros já existentes ou novos cadastros rápidos.
+* Escalabilidade: Caso o cliente precise de "Toneladas (TN)" no futuro, basta um comando ALTER TABLE para atualizar a constraint.
+
+
+# 📦 1. Controle de Estoque Mínimo
+Adicionamos o campo à tabela de produtos para permitir que o Dashboard identifique itens que precisam de reposição.
+```
+-- Adiciona estoque_minimo para controle de reposição
+ALTER TABLE produtos 
+ADD COLUMN estoque_minimo INTEGER DEFAULT 0;
+
+-- Opcional: Criar uma View para facilitar o alerta no Dashboard
+CREATE VIEW view_alerta_estoque AS
+SELECT id, nome, estoque, estoque_minimo
+FROM produtos
+WHERE estoque <= estoque_minimo AND ativo = true;
+```
+
+# 💳 2. Métodos de Pagamento (Financeiro)
+Expandimos a tabela de lançamentos para rastrear a origem do dinheiro, essencial para o fechamento de caixa.
+```
+-- Adiciona a coluna com restrição de valores (Check Constraint)
+ALTER TABLE financeiro_lancamentos 
+ADD COLUMN metodo_pagamento TEXT;
+
+ALTER TABLE financeiro_lancamentos 
+ADD CONSTRAINT chk_metodo_pagamento 
+CHECK (metodo_pagamento IN ('Dinheiro', 'Pix', 'Cartão de Crédito', 'Cartão de Débito', 'Boleto', 'Transferência'));
+
+-- Comentário para clareza
+COMMENT ON COLUMN financeiro_lancamentos.metodo_pagamento IS 'Forma de recebimento ou pagamento da transação';
+```
+
+# 🛒 3. Status de Pagamento na Venda
+Isso cria a ponte necessária entre o setor de Vendas e o Financeiro, permitindo saber se um pedido faturado já foi liquidado.
+```
+-- Adiciona status_pagamento à tabela de vendas
+ALTER TABLE vendas 
+ADD COLUMN status_pagamento TEXT DEFAULT 'Pendente';
+
+ALTER TABLE vendas 
+ADD CONSTRAINT chk_status_pagamento 
+CHECK (status_pagamento IN ('Pendente', 'Pago', 'Parcial', 'Cancelado', 'Estornado'));
+```
+
+# 🛡️ 1. Tabela de Auditoria (Estrutura)
+Conforme planejado no Passo 3, mas implementando agora a tabela para que ela já exista no banco.
+```
+CREATE TABLE auditoria (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID, -- Quem fez a alteração
+    tabela TEXT NOT NULL,
+    acao TEXT NOT NULL, -- INSERT, UPDATE, DELETE
+    dados_anteriores JSONB,
+    dados_novos JSONB,
+    data_evento TIMESTAMP DEFAULT now()
+);
+
+COMMENT ON TABLE auditoria IS 'Registro histórico de todas as alterações manuais no ERP';
+```
+
+🗑️ 2. Implementação do Soft Delete (Não exclusão física)
+Para um ERP profissional, é perigoso deletar um cliente ou produto que já tem histórico de vendas. Adicione estas colunas às tabelas principais:
+```
+-- Adicionando controle de exclusão lógica
+ALTER TABLE clientes ADD COLUMN excluido_em TIMESTAMP;
+ALTER TABLE produtos ADD COLUMN excluido_em TIMESTAMP;
+ALTER TABLE fornecedores ADD COLUMN excluido_em TIMESTAMP;
+ALTER TABLE usuarios ADD COLUMN excluido_em TIMESTAMP;
+
+```
+
 ## ✅ STATUS ATUAL DO BANCO (RESUMO)
 Você já tem:
 * Modelagem sólida (nível mercado)
@@ -650,4 +741,13 @@ Você já tem:
 * Pronto para Supabase / PostgreSQL
 ### 👉 Base estrutural: OK
 ### Agora entramos na camada de GOVERNANÇA, SEGURANÇA e PERFORMANCE.
+
+
+
+
+
+
+
+
+
 
