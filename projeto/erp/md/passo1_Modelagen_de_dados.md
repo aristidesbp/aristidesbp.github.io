@@ -24,6 +24,7 @@ Guarda dados de login e controle de acesso. Serve como base para todos os cadast
   "criadoEm": "date"
 }
 ```
+
 ## clientes.json
 ```
 {
@@ -805,8 +806,16 @@ ALTER TABLE auditoria
     ADD COLUMN user_agent TEXT;
 ```
 
+## 1. Relacionamento na Auditoria
+Na tabela auditoria, o campo usuario_id deve ser uma Foreign Key para garantir que você saiba exatamente quem fez a alteração.
+SQL
 
-
+```
+-- Sugestão de ajuste:
+ALTER TABLE auditoria 
+ADD CONSTRAINT fk_auditoria_usuario 
+FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
+```
 
 
 
