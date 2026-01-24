@@ -428,7 +428,6 @@ CREATE POLICY auditoria_gestor_policy ON auditoria
 
 -- ======================================================
 -- FIM DAS POLICIES
--- Próximos passos: Testar com Supabase auth; implementar set current_setting no login (via função ou trigger).
 -- ======================================================
 
 
