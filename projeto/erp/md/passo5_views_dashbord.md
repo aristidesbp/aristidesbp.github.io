@@ -1,3 +1,17 @@
+
+```
+-- 1. Adiciona a coluna faltante na tabela de lançamentos financeiros
+ALTER TABLE financeiro_lancamentos 
+ADD COLUMN IF NOT EXISTS excluido_em TIMESTAMPTZ;
+
+-- 2. Aplica o Trigger de Soft Delete (o mesmo usado em Clientes/Produtos no Passo 3)
+-- Isso garante que ao dar um "DELETE" no SQL, ele apenas preencha a data de exclusão
+DROP TRIGGER IF EXISTS tr_soft_delete_financeiro ON financeiro_lancamentos;
+CREATE TRIGGER tr_soft_delete_financeiro 
+BEFORE DELETE ON financeiro_lancamentos 
+FOR EACH ROW EXECUTE FUNCTION fn_soft_delete();
+
+```
 ```
 -- =====================================================================
 -- ERP APB — PASSO 5: VIEWS DE DASHBOARD E RELATÓRIOS (VERSÃO REFORÇADA)
