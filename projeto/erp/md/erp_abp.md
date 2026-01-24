@@ -1,5 +1,15 @@
 
 # BANCO DE DADOS:
+## APAGAR TODO BANCO DE DADOS:
+```
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO anon;
+GRANT ALL ON SCHEMA public TO authenticated;
+GRANT ALL ON SCHEMA public TO service_role;
+```
+## CRIAR BANCO DE DADOS:
 
 ```
 -- WARNING: This schema is for context only and is not meant to be run.
