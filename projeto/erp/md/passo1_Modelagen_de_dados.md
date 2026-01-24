@@ -871,5 +871,284 @@ ALTER TABLE auditoria
     ADD COLUMN empresa_id UUID REFERENCES empresas(id);
 
 ```
+# CODIGO FINAL
+```
+-- =====================================================================
+-- SCRIPT SQL FINAL E COMPLETO - ERP APB (Multi-Tenant SaaS)
+-- Versão consolidada com todas as tabelas, constraints, índices e views
+-- PostgreSQL / Supabase compatível
+-- Data de referência: Janeiro 2026
+-- =====================================================================
 
+-- 1. Tabelas GLOBAIS (sem empresa_id)
+CREATE TABLE IF NOT EXISTS roles (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome        TEXT NOT NULL UNIQUE,
+    descricao   TEXT
+);
 
+CREATE TABLE IF NOT EXISTS empresas (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome_fantasia   TEXT NOT NULL,
+    razao_social    TEXT,
+    cnpj            TEXT UNIQUE,
+    plano           TEXT DEFAULT 'free',
+    ativo           BOOLEAN DEFAULT true,
+    criado_em       TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome        TEXT NOT NULL,
+    email       TEXT NOT NULL UNIQUE,
+    ativo       BOOLEAN DEFAULT true,
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    ultimo_login TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS usuario_senhas (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id  UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    role_id     UUID REFERENCES roles(id),
+    senha_hash  TEXT NOT NULL,
+    criada_em   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    ativa       BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS politicas_servico (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    titulo      TEXT,
+    conteudo    TEXT,
+    ativo       BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS documentacao (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    titulo      TEXT,
+    conteudo    TEXT,
+    tags        TEXT[],
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 2. Junção usuário ↔ empresa (multi-tenant por usuário)
+CREATE TABLE IF NOT EXISTS usuario_empresas (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id  UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    empresa_id  UUID REFERENCES empresas(id) ON DELETE CASCADE,
+    role_id     UUID REFERENCES roles(id),
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    UNIQUE (usuario_id, empresa_id)
+);
+
+-- 3. Tabelas de NEGÓCIO (todas com empresa_id NOT NULL)
+CREATE TABLE IF NOT EXISTS clientes (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    nome        TEXT NOT NULL,
+    cpf_cnpj    TEXT UNIQUE,
+    telefone    TEXT,
+    email       TEXT,
+    endereco    JSONB,
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    excluido_em TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS fornecedores (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    nome        TEXT NOT NULL,
+    cnpj        TEXT UNIQUE,
+    contato     TEXT,
+    telefone    TEXT,
+    email       TEXT,
+    endereco    JSONB,
+    excluido_em TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS funcionarios (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id      UUID REFERENCES empresas(id) NOT NULL,
+    usuario_id      UUID REFERENCES usuarios(id),
+    cpf             TEXT UNIQUE,
+    cargo           TEXT,
+    departamento    TEXT,
+    data_admissao   DATE
+);
+
+CREATE TABLE IF NOT EXISTS categorias (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    nome        TEXT NOT NULL,
+    descricao   TEXT,
+    ativo       BOOLEAN DEFAULT true,
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    UNIQUE (empresa_id, nome)
+);
+
+CREATE TABLE IF NOT EXISTS produtos (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id      UUID REFERENCES empresas(id) NOT NULL,
+    fornecedor_id   UUID REFERENCES fornecedores(id),
+    categoria_id    UUID REFERENCES categorias(id),
+    nome            TEXT NOT NULL,
+    descricao       TEXT,
+    preco           NUMERIC(12,2) NOT NULL,
+    estoque         INTEGER DEFAULT 0,
+    estoque_minimo  INTEGER DEFAULT 0,
+    unidade_medida  TEXT NOT NULL DEFAULT 'UN',
+    ativo           BOOLEAN DEFAULT true,
+    excluido_em     TIMESTAMP WITH TIME ZONE,
+
+    CONSTRAINT chk_unidade_medida CHECK (unidade_medida IN ('UN','KG','LT','CX','MT','PC','DZ','GR','CX','PCT','CJ','FD','BL','RO','CX12','CX6','LT','ML','G','MG','TN'))
+);
+
+CREATE TABLE IF NOT EXISTS servicos (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    nome        TEXT NOT NULL,
+    descricao   TEXT,
+    preco       NUMERIC(12,2),
+    ativo       BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS vendas (
+    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id          UUID REFERENCES empresas(id) NOT NULL,
+    cliente_id          UUID REFERENCES clientes(id),
+    usuario_id          UUID REFERENCES usuarios(id),
+    data_venda          TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    valor_total         NUMERIC(12,2),
+    status              TEXT,
+    status_pagamento    TEXT DEFAULT 'Pendente',
+
+    CONSTRAINT chk_status_pagamento 
+    CHECK (status_pagamento IN ('Pendente','Pago','Parcial','Cancelado','Estornado'))
+);
+
+CREATE TABLE IF NOT EXISTS vendas_itens (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    venda_id        UUID REFERENCES vendas(id) ON DELETE CASCADE,
+    produto_id      UUID REFERENCES produtos(id),
+    quantidade      INTEGER NOT NULL CHECK (quantidade > 0),
+    preco_unitario  NUMERIC(12,2) NOT NULL,
+    subtotal        NUMERIC(12,2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED
+);
+
+CREATE TABLE IF NOT EXISTS financeiro_contas (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    nome        TEXT NOT NULL,
+    tipo        TEXT,
+    ativo       BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS financeiro_lancamentos (
+    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id          UUID REFERENCES empresas(id) NOT NULL,
+    tipo                TEXT NOT NULL CHECK (tipo IN ('receita','despesa')),
+    valor               NUMERIC(12,2) NOT NULL,
+    data_lancamento     DATE NOT NULL,
+    descricao           TEXT,
+    venda_id            UUID REFERENCES vendas(id),
+    conta_id            UUID REFERENCES financeiro_contas(id),
+    caixa_id            UUID REFERENCES controle_caixa(id),
+    metodo_pagamento    TEXT,
+
+    CONSTRAINT chk_metodo_pagamento 
+    CHECK (metodo_pagamento IN ('Dinheiro','Pix','Cartão Crédito','Cartão Débito','Boleto','Transferência','Outros'))
+);
+
+CREATE TABLE IF NOT EXISTS controle_caixa (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id      UUID REFERENCES empresas(id) NOT NULL,
+    usuario_id      UUID REFERENCES usuarios(id),
+    data_abertura   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    data_fechamento TIMESTAMP WITH TIME ZONE,
+    saldo_inicial   NUMERIC(12,2) NOT NULL DEFAULT 0,
+    saldo_final     NUMERIC(12,2),
+    status          TEXT CHECK (status IN ('aberto','fechado')) DEFAULT 'aberto'
+);
+
+CREATE TABLE IF NOT EXISTS conversas (
+    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id          UUID REFERENCES empresas(id) NOT NULL,
+    canal               TEXT,
+    cliente_id          UUID REFERENCES clientes(id),
+    ultima_atualizacao  TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS mensagens (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversa_id UUID REFERENCES conversas(id) ON DELETE CASCADE,
+    remetente   TEXT,
+    conteudo    TEXT,
+    data_envio  TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS chatbot_respostas (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    pergunta    TEXT,
+    resposta    TEXT,
+    categoria   TEXT
+);
+
+CREATE TABLE IF NOT EXISTS notas (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id  UUID REFERENCES empresas(id) NOT NULL,
+    usuario_id  UUID REFERENCES usuarios(id),
+    titulo      TEXT,
+    conteudo    TEXT,
+    criado_em   TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS whatsapp_config (
+    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    empresa_id          UUID REFERENCES empresas(id) NOT NULL,
+    instancia_nome      TEXT NOT NULL,
+    apikey              TEXT NOT NULL,
+    url_base            TEXT NOT NULL,
+    ativo               BOOLEAN DEFAULT true,
+    ultima_sincronizacao TIMESTAMP WITH TIME ZONE
+);
+
+-- 4. Auditoria
+CREATE TABLE IF NOT EXISTS auditoria (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id      UUID REFERENCES usuarios(id),
+    empresa_id      UUID REFERENCES empresas(id),
+    tabela          TEXT NOT NULL,
+    acao            TEXT NOT NULL,
+    dados_anteriores JSONB,
+    dados_novos     JSONB,
+    data_evento     TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    ip              TEXT,
+    user_agent      TEXT
+);
+
+-- 5. Views úteis
+CREATE OR REPLACE VIEW view_alerta_estoque AS
+SELECT id, empresa_id, nome, estoque, estoque_minimo
+FROM produtos
+WHERE estoque <= estoque_minimo AND ativo = true AND excluido_em IS NULL;
+
+CREATE OR REPLACE VIEW view_usuario_empresas AS
+SELECT 
+    ue.usuario_id,
+    ue.empresa_id,
+    e.nome_fantasia,
+    r.nome AS role_nome
+FROM usuario_empresas ue
+JOIN empresas e ON ue.empresa_id = e.id
+JOIN roles r ON ue.role_id = r.id;
+
+-- 6. Índices recomendados (performance + RLS)
+CREATE INDEX IF NOT EXISTS idx_vendas_empresa_data         ON vendas              (empresa_id, data_venda DESC);
+CREATE INDEX IF NOT EXISTS idx_produtos_empresa_nome       ON produtos            (empresa_id, nome);
+CREATE INDEX IF NOT EXISTS idx_clientes_empresa_nome       ON clientes            (empresa_id, nome);
+CREATE INDEX IF NOT EXISTS idx_financeiro_empresa_data     ON financeiro_lancamentos (empresa_id, data_lancamento);
+CREATE INDEX IF NOT EXISTS idx_usuario_empresas_usuario    ON usuario_empresas    (usuario_id);
+CREATE INDEX IF NOT EXISTS idx_usuario_empresas_empresa    ON usuario_empresas    (empresa_id);
+CREATE INDEX IF NOT EXISTS idx_conversas_empresa_cliente   ON conversas           (empresa_id, cliente_id);
+CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data     ON mensagens           (conversa_id, data_envio);
+```
