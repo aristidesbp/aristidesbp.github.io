@@ -871,6 +871,24 @@ ALTER TABLE auditoria
     ADD COLUMN empresa_id UUID REFERENCES empresas(id);
 
 ```
+# LIMPANDO O BANCO DE DADOS
+```
+-- 1. Remove o esquema público e tudo o que há nele (tabelas, views, etc)
+DROP SCHEMA public CASCADE;
+
+-- 2. Recria o esquema público para receber o novo script
+CREATE SCHEMA public;
+
+-- 3. Restaura as permissões padrão para o Supabase funcionar corretamente
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO anon;
+GRANT ALL ON SCHEMA public TO authenticated;
+GRANT ALL ON SCHEMA public TO service_role;
+
+-- 4. (Opcional) Se você criou extensões específicas, pode ser necessário reativá-las
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+```
 # CODIGO FINAL
 ```
 -- =====================================================================
