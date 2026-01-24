@@ -111,11 +111,89 @@ Segurança por níveis de acesso (multi-senha por usuário)
 * Deploy final
 * Precificação e empacotamento
 
+# 🗂️ SEPARAÇÃO EM ARQUIVOS (PASSOS)
+# ESTRUTURA RECOMENDADA DO PROJETO SQL
+```
+/database
+│
+├── passo_1_modelagem_sql/
+│   ├── 01_roles.sql
+│   ├── 02_usuarios.sql
+│   ├── 03_usuario_senhas.sql
+│   ├── 04_funcionarios.sql
+│   ├── 05_clientes.sql
+│   ├── 06_fornecedores.sql
+│   ├── 07_categorias.sql
+│   ├── 08_produtos.sql
+│   ├── 09_servicos.sql
+│   ├── 10_vendas.sql
+│   ├── 11_vendas_itens.sql
+│   ├── 12_financeiro_contas.sql
+│   ├── 13_financeiro_lancamentos.sql
+│   ├── 14_controle_caixa.sql
+│   ├── 15_chat_conversas.sql
+│   ├── 16_chat_mensagens.sql
+│   ├── 17_chatbot.sql
+│   ├── 18_notas.sql
+│   ├── 19_politicas.sql
+│   ├── 20_documentacao.sql
+│   └── 99_auditoria.sql
+```
+## 👉Passo 1 é só estrutura:
+* Sem RLS, sem trigger, sem função.
+```
+├── passo_2_policies_rls/
+│   ├── 01_enable_rls.sql
+│   ├── 02_policies_usuarios.sql
+│   ├── 03_policies_clientes.sql
+│   ├── 04_policies_funcionarios.sql
+│   ├── 05_policies_produtos.sql
+│   ├── 06_policies_vendas.sql
+│   ├── 07_policies_financeiro.sql
+│   ├── 08_policies_caixa.sql
+│   ├── 09_policies_chat.sql
+│   └── 99_policies_admin_full.sql
+```
+## 👉 Passo 2 = governança de acesso
+Nada de função aqui ainda.
+```
+├── passo_3_triggers/
+│   ├── 01_trigger_auditoria.sql
+│   ├── 02_trigger_soft_delete.sql
+│   ├── 03_trigger_estoque.sql
+│   ├── 04_trigger_financeiro.sql
+│   ├── 05_trigger_caixa.sql
+│   └── 99_trigger_utils.sql
+```
+# 👉 Passo 3 = comportamento automático
+* log
+* estoque
+* consistência
+```
+├── passo_4_funcoes_criticas/
+│   ├── 01_fn_criar_venda.sql
+│   ├── 02_fn_cancelar_venda.sql
+│   ├── 03_fn_baixar_estoque.sql
+│   ├── 04_fn_lancar_financeiro.sql
+│   ├── 05_fn_abrir_caixa.sql
+│   ├── 06_fn_fechar_caixa.sql
+│   └── 99_fn_utils.sql
+```
+# 👉 Passo 4 = regras de negócio
+Frontend nunca fala direto com tabelas sensíveis.
+```
+├── passo_5_indices_views/
+│   ├── 01_indices.sql
+│   ├── 02_views_relatorios.sql
+│   └── 03_materialized_views.sql
+```
 
-
-
-
-
-
-
+# 🧠 POR QUE ESSA SEPARAÇÃO ?
+*  Facilita manutenção
+* Facilita deploy
+* Facilita auditoria
+* Facilita versionamento
+* Facilita vender o ERP
+* Facilita escalar equipe
+* Facilita migrar Supabase → PostgreSQL puro
 
