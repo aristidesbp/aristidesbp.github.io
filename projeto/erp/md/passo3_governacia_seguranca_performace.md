@@ -107,7 +107,7 @@ CREATE INDEX idx_vendas_data ON vendas(data_venda);
 CREATE INDEX idx_financeiro_data ON financeiro_lancamentos(data_lancamento);
 CREATE INDEX idx_mensagens_conversa ON mensagens(conversa_id);
 ```
-# 🧾 5️⃣ AUDITORIA (MUITO IMPORTANTE)
+# 🧾 5️⃣ AUDITORIA/SEGURANÇA  (MUITO IMPORTANTE)
 ERP sem auditoria não vende.
 
 # Tabela de auditoria
