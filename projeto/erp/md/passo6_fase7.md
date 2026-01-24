@@ -36,10 +36,10 @@ Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da c
 * No MVC tradicional (como no PHP/Laravel ou Java/Spring), o servidor controla tudo. No seu projeto ERP ABP, estamos buscando uma evolução disso. Vamos comparar:
 
 # 🔄 Comparação: MVC Tradicional vs. Sua Arquitetura
-```
+
 Componente,No MVC Tradicional,No Seu ERP APB
 Model (Dados),Tabelas no Banco SQL.,Híbrido: Supabase (Nuvem) + IndexedDB (Local).
 View (Interface),HTML gerado pelo servidor.,Dinâmico: HTML + JS injetado (IIFE) no navegador.
 Controller (Lógica),Código no servidor (PHP/Python).,Descentralizado: SQL Functions (no banco) + JS Modules (no navegador).
-```
+
 
