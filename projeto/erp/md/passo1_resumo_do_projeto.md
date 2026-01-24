@@ -63,7 +63,6 @@ Segurança por níveis de acesso (multi-senha por usuário)
 * Base para transações seguras
 * Estrutura pronta para Supabase
 
-# 🟡 O QUE AINDA FALTA PARA CONCLUIR O ERP
 
 # 🔐 5️⃣ SEGURANÇA (SQL — AINDA FALTA)
 * Policies RLS completas para todas as tabelas
