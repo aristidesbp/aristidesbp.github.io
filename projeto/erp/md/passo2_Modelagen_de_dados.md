@@ -733,6 +733,51 @@ ALTER TABLE usuarios ADD COLUMN excluido_em TIMESTAMP;
 
 ```
 
+
+
+## 📑 1. Categorias de Produtos (categories)
+```
+CREATE TABLE categorias (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome TEXT NOT NULL UNIQUE,
+    descricao TEXT,
+    ativo BOOLEAN DEFAULT true,
+    criado_em TIMESTAMP DEFAULT now()
+);
+
+-- Adicionando a FK na tabela de produtos para vincular à categoria
+ALTER TABLE produtos ADD COLUMN categoria_id UUID REFERENCES categorias(id);
+```
+
+## 🏪 2. Controle de Caixa (cash_register)
+Garante a segurança do PDV, registrando a abertura e o fechamento diário realizado pelos operadores.
+```
+CREATE TABLE controle_caixa (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID REFERENCES usuarios(id), -- Operador que abriu o caixa
+    data_abertura TIMESTAMP DEFAULT now(),
+    data_fechamento TIMESTAMP,
+    saldo_inicial NUMERIC(10,2) NOT NULL DEFAULT 0,
+    saldo_final NUMERIC(10,2),
+    status TEXT CHECK (status IN ('aberto', 'fechado')) DEFAULT 'aberto'
+);
+```
+## 📱 3. Configurações de Integração (whatsapp_config)
+Espaço seguro para armazenar as credenciais da Evolution API e os tokens necessários para automação
+Essencial para organizar a vitrine do seu E-commerce e facilitar filtros no PDV.
+```
+CREATE TABLE whatsapp_config (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    instancia_nome TEXT NOT NULL, -- Nome da instância na Evolution API
+    apikey TEXT NOT NULL, -- Token de segurança
+    url_base TEXT NOT NULL, -- URL do servidor Evolution
+    ativo BOOLEAN DEFAULT true,
+    ultima_sincronizacao TIMESTAMP
+);
+```
+
+
+
 ## ✅ STATUS ATUAL DO BANCO (RESUMO)
 Você já tem:
 * Modelagem sólida (nível mercado)
