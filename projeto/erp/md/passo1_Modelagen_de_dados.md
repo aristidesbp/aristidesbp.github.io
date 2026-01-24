@@ -779,14 +779,31 @@ CREATE TABLE whatsapp_config (
 
 
 ## ✅ STATUS ATUAL DO BANCO (RESUMO)
-Você já tem:
-* Modelagem sólida (nível mercado)
-* Separação de domínios (usuários, vendas, financeiro, chat, docs)
-* Suporte a múltiplas senhas por nível
-* Pronto para Supabase / PostgreSQL
-### 👉 Base estrutural: OK
-### Agora entramos na camada de GOVERNANÇA, SEGURANÇA e PERFORMANCE.
+```
+-- Correções / melhorias recomendadas (resumo)
 
+-- 1. Completar itens_venda
+ALTER TABLE vendas_itens
+    ADD COLUMN quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+    ADD COLUMN preco_unitario NUMERIC(10,2) NOT NULL,
+    ADD COLUMN subtotal NUMERIC(10,2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED;
+
+-- 2. Vincular lançamentos financeiros ao caixa (opcional, mas muito útil)
+ALTER TABLE financeiro_lancamentos
+    ADD COLUMN caixa_id UUID REFERENCES controle_caixa(id);
+
+-- 3. Adicionar tenant (se for escalar para multi-empresa)
+ALTER TABLE ... -- fazer em todas as tabelas de negócio
+    ADD COLUMN empresa_id UUID REFERENCES empresas(id);
+
+-- 4. Melhorar rastreabilidade
+ALTER TABLE usuarios
+    ADD COLUMN ultimo_login TIMESTAMP;
+
+ALTER TABLE auditoria
+    ADD COLUMN ip TEXT,
+    ADD COLUMN user_agent TEXT;
+```
 
 
 
