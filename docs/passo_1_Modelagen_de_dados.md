@@ -802,45 +802,13 @@ CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data
 -- ======================================================
 ```
 
-# popular tabelas
+# Login com google
 ```
-DO $$
-DECLARE
-    -- SEU ID REAL SINCRONIZADO
-    v_usuario_id_real UUID := 'cole o UDI do usuario criado em autetications '; 
-    
-    v_empresa_id UUID := gen_random_uuid();
-    v_role_id UUID;
-BEGIN
-    -- 1. LIMPEZA DE SEGURANÇA (Para evitar erros de duplicidade)
-    DELETE FROM public.usuario_empresas WHERE usuario_id = v_usuario_id_real;
-    DELETE FROM public.usuarios WHERE email = 'aristidesbp@gmail.com' OR id = v_usuario_id_real;
+-- Adiciona suporte para o ID de autenticação externa (Supabase Auth)
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS auth_user_id UUID UNIQUE;
 
-    -- 2. CRIAR EMPRESA MESTRE
-    INSERT INTO public.empresas (id, nome_fantasia) 
-    VALUES (v_empresa_id, 'ERP ABP - MATRIZ')
-    ON CONFLICT DO NOTHING;
-
-    -- 3. INSERIR VOCÊ NA TABELA PÚBLICA
-    INSERT INTO public.usuarios (id, nome, email, ativo)
-    VALUES (v_usuario_id_real, 'Aristides', 'aristidesbp@gmail.com', true);
-
-    -- 4. VINCULAR COMO ADMINISTRADOR
-    -- Busca o ID da role admin (certifique-se que ela existe ou crie-a)
-    INSERT INTO public.roles (nome) VALUES ('admin') ON CONFLICT DO NOTHING;
-    SELECT id INTO v_role_id FROM public.roles WHERE nome = 'admin';
-
-    INSERT INTO public.usuario_empresas (usuario_id, empresa_id, role_id)
-    VALUES (v_usuario_id_real, v_empresa_id, v_role_id);
-
-    -- 5. DADOS DE TESTE PARA O DASHBOARD (Melhorado)
-    INSERT INTO public.produtos (empresa_id, nome, preco, estoque, estoque_minimo)
-    VALUES 
-        (v_empresa_id, 'Sistema ERP ABP Profissional', 1500.00, 10, 2),
-        (v_empresa_id, 'Consultoria VIP Aristides', 500.00, 1, 5); -- Este vai aparecer como estoque baixo
-
-    RAISE NOTICE 'Sincronização concluída para o ID: %', v_usuario_id_real;
-END $$;
+-- Permite que o campo de senha seja opcional (já que usuários Google não terão hash local inicialmente)
+ALTER TABLE usuario_senhas ALTER COLUMN senha_hash DROP NOT NULL;
 
 ```
 
