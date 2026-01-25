@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos e Cadastro | ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --primary: #2563eb; --dark: #1e293b; --gray: #64748b; --light: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--light); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        
+        /* Planos */
+        .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .plan-card { background: white; padding: 25px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; transition: 0.3s; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .plan-card.selected { border-color: var(--primary); background: #eff6ff; }
+        .plan-card h3 { margin: 0; color: var(--dark); }
+        .plan-card .price { font-size: 1.5rem; font-weight: bold; margin: 15px 0; color: var(--primary); }
+        
+        /* Formulário */
+        .form-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; display: none; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem; }
+        input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Escolha seu Plano</h1>
+        <p>Selecione a melhor opção para o seu negócio</p>
+    </div>
+
+    <div class="plans-grid">
+        <div class="plan-card" onclick="selectPlan('Bronze', 'Grátis')">
+            <h3>Bronze</h3>
+            <div class="price">R$ 0,00</div>
+            <p>Até 50 produtos<br>1 Usuário</p>
+        </div>
+        <div class="plan-card" onclick="selectPlan('Prata', 'R$ 49,90')">
+            <h3>Prata</h3>
+            <div class="price">R$ 49,90</div>
+            <p>Produtos Ilimitados<br>3 Usuários</p>
+        </div>
+        <div class="plan-card" onclick="selectPlan('Ouro', 'R$ 99,90')">
+            <h3>Ouro</h3>
+            <div class="price">R$ 99,90</div>
+            <p>Suporte 24h<br>Usuários Ilimitados</p>
+        </div>
+    </div>
+
+    <div id="registration-form" class="form-card">
+        <h2 id="selected-plan-title" style="text-align:center; margin-top:0;">Cadastro</h2>
+        <form id="form-signup">
+            <div class="form-group">
+                <label>Nome da Empresa</label>
+                <input type="text" id="empresa_nome" placeholder="Ex: Minha Loja LTDA" required>
+            </div>
+            <div class="form-group">
+                <label>Seu Nome</label>
+                <input type="text" id="user_nome" placeholder="Como quer ser chamado?" required>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" minlength="6" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <button type="submit" id="btn-submit">Finalizar Cadastro</button>
+        </form>
+    </div>
+</div>
+
+<script src="js/core/conexao.js"></script>
+<script>
+    let planoSelecionado = "";
+
+    function selectPlan(nome, preco) {
+        planoSelecionado = nome;
+        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        
+        document.getElementById('registration-form').style.display = 'block';
+        document.getElementById('selected-plan-title').innerText = `Cadastro - Plano ${nome}`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    document.getElementById('form-signup').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerText = 'Processando...';
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const empresaNome = document.getElementById('empresa_nome').value;
+        const userNome = document.getElementById('user_nome').value;
+
+        try {
+            // 1. Criar Usuário no Auth
+            const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
+                email, password
+            });
+            if (authError) throw authError;
+
+            const userId = authData.user.id;
+
+            // 2. Chamar a Função de Inicialização de Empresa (via RPC ou Logica Direta)
+            // Aqui simulamos a criação para o novo Tenant
+            const { error: dbError } = await window.supabaseClient.rpc('inicializar_novo_cliente', {
+                p_user_id: userId,
+                p_user_nome: userNome,
+                p_empresa_nome: empresaNome,
+                p_plano: planoSelecionado
+            });
+
+            if (dbError) throw dbError;
+
+            alert('Cadastro realizado com sucesso! Verifique seu e-mail.');
+            window.location.href = 'login.html';
+
+        } catch (err) {
+            alert('Erro no cadastro: ' + err.message);
+            btn.disabled = false;
+            btn.innerText = 'Finalizar Cadastro';
+        }
+    });
+</script>
+</body>
+</html>
