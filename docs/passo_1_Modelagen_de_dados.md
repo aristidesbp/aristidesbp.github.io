@@ -802,15 +802,22 @@ CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data
 -- ======================================================
 ```
 
-# Login com google
-```
--- Adiciona suporte para o ID de autenticação externa (Supabase Auth)
-ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS auth_user_id UUID UNIQUE;
 
--- Permite que o campo de senha seja opcional (já que usuários Google não terão hash local inicialmente)
-ALTER TABLE usuario_senhas ALTER COLUMN senha_hash DROP NOT NULL;
 
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
