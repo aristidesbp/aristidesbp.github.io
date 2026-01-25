@@ -4,51 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ERP ABP Profissional</title>
-    
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/core/conexao.js"></script>
     <script src="js/core/auth.js"></script>
-    
     <style>
         :root { --primary: #2563eb; --dark: #1e293b; --error: #ef4444; }
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; }
-        .login-header { text-align: center; margin-bottom: 2rem; }
-        .login-header h1 { color: var(--dark); font-size: 1.5rem; margin: 0; font-weight: bold; }
         .form-group { margin-bottom: 1.2rem; position: relative; }
         label { display: block; margin-bottom: 0.5rem; color: #475569; font-size: 0.9rem; }
-        input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
-        
-        /* Estilo do Olhinho */
-        .btn-eye {
-            position: absolute;
-            right: 12px;
-            top: 38px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #64748b;
-            font-size: 1.2rem;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-
+        input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        .btn-eye { position: absolute; right: 12px; top: 38px; background: none; border: none; cursor: pointer; color: #64748b; font-size: 1.2rem; }
         button#btn-login { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 1rem; }
-        button:disabled { background: #94a3b8; }
         .error-box { background: #fee2e2; color: var(--error); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem; display: none; border: 1px solid #fecaca; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <div class="login-header">
-            <h1>ERP ABP</h1>
-            <p style="color: #64748b; font-size: 0.9rem;">Acesse sua conta profissional</p>
+        <div class="login-header" style="text-align:center; margin-bottom:20px;">
+            <h1 style="font-size: 1.5rem; color: var(--dark);">ERP ABP</h1>
         </div>
-
         <div id="error-msg" class="error-box"></div>
-
         <form id="login-form">
             <div class="form-group">
                 <label>E-mail</label>
@@ -62,45 +39,28 @@
             <button type="submit" id="btn-login">Entrar no Sistema</button>
         </form>
     </div>
-
     <script>
         (function() {
-            const form = document.getElementById('login-form');
-            const btnLogin = document.getElementById('btn-login');
-            const errorMsg = document.getElementById('error-msg');
             const passInput = document.getElementById('password');
             const btnEye = document.getElementById('togglePassword');
-
-            // Lógica do Olhinho
             btnEye.addEventListener('click', () => {
-                const isPassword = passInput.type === 'password';
-                passInput.type = isPassword ? 'text' : 'password';
-                btnEye.innerText = isPassword ? '🙈' : '👁️';
+                const isPass = passInput.type === 'password';
+                passInput.type = isPass ? 'text' : 'password';
+                btnEye.innerText = isPass ? '🙈' : '👁️';
             });
 
-            form.addEventListener('submit', async (e) => {
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                btnLogin.disabled = true;
-                btnLogin.innerText = 'Autenticando...';
-                errorMsg.style.display = 'none';
-
-                const email = document.getElementById('email').value.trim();
-                const password = passInput.value;
-
-                const result = await window.AppAuth.login(email, password);
-
+                const btn = document.getElementById('btn-login');
+                btn.disabled = true;
+                const result = await window.AppAuth.login(document.getElementById('email').value, passInput.value);
                 if (result.success) {
                     window.location.href = 'dashboard.html';
                 } else {
-                    let msg = result.message;
-                    // Amigável para o usuário
-                    if (msg === "Invalid login credentials") {
-                        msg = "E-mail ou senha incorretos. Verifique o cadastro no painel Supabase.";
-                    }
-                    errorMsg.innerText = msg;
-                    errorMsg.style.display = 'block';
-                    btnLogin.disabled = false;
-                    btnLogin.innerText = 'Entrar no Sistema';
+                    const errEl = document.getElementById('error-msg');
+                    errEl.innerText = result.message;
+                    errEl.style.display = 'block';
+                    btn.disabled = false;
                 }
             });
         })();
