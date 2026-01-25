@@ -801,7 +801,7 @@ CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data
 -- Próximos passos: Ativar RLS (Passo 2), Triggers (Passo 3), etc.
 -- ======================================================
 ```
-```
+
 # popular tabelas
 ```
 DO $$
@@ -882,8 +882,9 @@ BEGIN
     RAISE NOTICE 'Banco populado com sucesso e IDs verificados!';
 END $$;
 
-
 ```
+# user senha
+
 ```
 DO $$
 DECLARE
@@ -891,7 +892,7 @@ DECLARE
     v_role_id UUID;
 BEGIN
     -- Busca o ID do seu usuário que já existe (visto no seu print)
-    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'Aristidesbp@gmail.com' LIMIT 1;
+    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'aristidesbp@gmail.com' LIMIT 1;
     
     -- Busca ou cria a role admin
     SELECT id INTO v_role_id FROM roles WHERE nome = 'admin' LIMIT 1;
