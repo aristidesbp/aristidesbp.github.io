@@ -1,31 +1,27 @@
-
 /**
  * ERP ABP Profissional - Core: Conexão e Sincronização Híbrida
  * Desenvolvido por: Aristides & Gemini AI (2026)
  * Descrição: Inicializa Supabase (Nuvem) e Dexie (Local)
-
- 📝 Instruções de Uso:
-    Dependências: Para este arquivo funcionar, você deve incluir estas duas linhas no <head> do seu index.html ou login.html:
-   
-    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ * * 📝 Instruções de Uso:
+ * Dependências (incluir no <head>):
+ * <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+ * <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
  */
 
 (function() {
     // 1. CONFIGURAÇÕES DE ACESSO (SUPABASE)
-const SUPABASE_URL = "https://kjhjeaiwjilkgocwvbwi.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtqaGplYWl3amlsa2dvY3d2YndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNDMzNjAsImV4cCI6MjA4MzkxOTM2MH0.SeipI48HNyljhthEvBQM0iC6sT6Np63wrT4KJ9Eqx-Q";
+    const SUPABASE_URL = "https://kjhjeaiwjilkgocwvbwi.supabase.co"; 
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtqaGplYWl3amlsa2dvY3d2YndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNDMzNjAsImV4cCI6MjA4MzkxOTM2MH0.SeipI48HNyljhthEvBQM0iC6sT6Np63wrT4KJ9Eqx-Q";
 
     // Inicializa o Cliente Supabase globalmente
     if (typeof supabase !== 'undefined') {
-        window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+        window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log("🌐 Supabase: Cliente inicializado.");
     } else {
         console.error("❌ Erro: Biblioteca Supabase não encontrada.");
     }
 
     // 2. CONFIGURAÇÃO DO BANCO LOCAL (INDEXEDDB COM DEXIE)
-    // O schema abaixo espelha exatamente o seu SQL consolidado
     const db = new Dexie("ERP_APB_Local");
 
     db.version(1).stores({
@@ -56,9 +52,6 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
         notas: 'id, empresa_id, usuario_id, titulo',
         
         // MOTOR DE SINCRONIZAÇÃO (A Fila de Outbox)
-        // tabela: qual tabela vai atualizar
-        // acao: 'INSERT', 'UPDATE' ou 'DELETE'
-        // status: 'pendente', 'concluido', 'erro'
         fila_sincronizacao: '++id, tabela, acao, registro_id, status, timestamp'
     });
 
@@ -81,11 +74,10 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
             const statusMsg = online ? "🌐 ONLINE: Sincronizando dados..." : "📵 OFFLINE: Usando banco local.";
             console.log(statusMsg);
             
-            // Dispara um evento customizado para os módulos (Fase 8)
+            // Dispara um evento customizado para os outros módulos
             document.dispatchEvent(new CustomEvent('statusConexao', { detail: { online } }));
         }
     };
 
     MonitorRede.init();
-
 })();
