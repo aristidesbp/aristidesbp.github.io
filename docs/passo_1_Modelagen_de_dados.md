@@ -806,75 +806,40 @@ CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data
 ```
 DO $$
 DECLARE
-    v_empresa_id UUID;
-    v_usuario_id UUID;
+    -- SEU ID REAL SINCRONIZADO
+    v_usuario_id_real UUID := 'cole o UDI do usuario criado em autetications '; 
+    
+    v_empresa_id UUID := gen_random_uuid();
     v_role_id UUID;
-    v_fornecedor_id UUID;
-    v_cliente_id UUID;
-    v_produto_id UUID;
-    v_categoria_id UUID;
-    v_venda_id UUID;
-    v_caixa_id UUID;
-    v_conta_id UUID;
-    v_email_correto TEXT := 'aristidesbp@gmail.com';
-    v_senha_plana TEXT := 'admin12344321';
 BEGIN
-    -- 1. LIMPEZA PREVENTIVA (Para evitar duplicados de testes anteriores)
-    DELETE FROM usuarios WHERE email = v_email_correto OR email LIKE 'aristidesbp@gmail.com%';
+    -- 1. LIMPEZA DE SEGURANÇA (Para evitar erros de duplicidade)
+    DELETE FROM public.usuario_empresas WHERE usuario_id = v_usuario_id_real;
+    DELETE FROM public.usuarios WHERE email = 'aristidesbp@gmail.com' OR id = v_usuario_id_real;
 
-    -- 2. GARANTIR ROLE ADMIN
-    SELECT id INTO v_role_id FROM roles WHERE nome = 'admin' LIMIT 1;
-    IF v_role_id IS NULL THEN
-        INSERT INTO roles (nome, descricao) VALUES ('admin', 'Acesso Total') RETURNING id INTO v_role_id;
-    END IF;
+    -- 2. CRIAR EMPRESA MESTRE
+    INSERT INTO public.empresas (id, nome_fantasia) 
+    VALUES (v_empresa_id, 'ERP ABP - MATRIZ')
+    ON CONFLICT DO NOTHING;
 
-    -- 3. GARANTIR EMPRESA
-    SELECT id INTO v_empresa_id FROM empresas WHERE cnpj = '00.000.000/0001-00' LIMIT 1;
-    IF v_empresa_id IS NULL THEN
-        INSERT INTO empresas (nome_fantasia, razao_social, cnpj, plano)
-        VALUES ('ERP ABP MATRIZ', 'Aristides BP Negocios LTDA', '00.000.000/0001-00', 'pro')
-        RETURNING id INTO v_empresa_id;
-    END IF;
+    -- 3. INSERIR VOCÊ NA TABELA PÚBLICA
+    INSERT INTO public.usuarios (id, nome, email, ativo)
+    VALUES (v_usuario_id_real, 'Aristides', 'aristidesbp@gmail.com', true);
 
-    -- 4. CRIAR USUÁRIO MASTER CORRETO
-    INSERT INTO usuarios (nome, email, ativo)
-    VALUES ('Aristides Master', v_email_correto, true)
-    RETURNING id INTO v_usuario_id;
+    -- 4. VINCULAR COMO ADMINISTRADOR
+    -- Busca o ID da role admin (certifique-se que ela existe ou crie-a)
+    INSERT INTO public.roles (nome) VALUES ('admin') ON CONFLICT DO NOTHING;
+    SELECT id INTO v_role_id FROM public.roles WHERE nome = 'admin';
 
-    -- 5. VINCULAR USUÁRIO À EMPRESA (Essencial para o AppAuth.js)
-    INSERT INTO usuario_empresas (usuario_id, empresa_id, role_id)
-    VALUES (v_usuario_id, v_empresa_id, v_role_id);
+    INSERT INTO public.usuario_empresas (usuario_id, empresa_id, role_id)
+    VALUES (v_usuario_id_real, v_empresa_id, v_role_id);
 
-    -- 6. DEFINIR SENHA (admin12344321)
-    INSERT INTO usuario_senhas (usuario_id, role_id, senha_hash)
-    VALUES (v_usuario_id, v_role_id, crypt(v_senha_plana, gen_salt('bf')));
+    -- 5. DADOS DE TESTE PARA O DASHBOARD (Melhorado)
+    INSERT INTO public.produtos (empresa_id, nome, preco, estoque, estoque_minimo)
+    VALUES 
+        (v_empresa_id, 'Sistema ERP ABP Profissional', 1500.00, 10, 2),
+        (v_empresa_id, 'Consultoria VIP Aristides', 500.00, 1, 5); -- Este vai aparecer como estoque baixo
 
-    -- 7. POPULAR DADOS DE NEGÓCIO (Para o Dashboard não ficar vazio)
-    INSERT INTO categorias (empresa_id, nome, descricao)
-    VALUES (v_empresa_id, 'Eletrônicos', 'Produtos tecnológicos')
-    RETURNING id INTO v_categoria_id;
-
-    INSERT INTO fornecedores (empresa_id, nome, cnpj, email)
-    VALUES (v_empresa_id, 'Tech Supply', '11.222.333/0001-99', v_email_correto)
-    RETURNING id INTO v_fornecedor_id;
-
-    INSERT INTO produtos (empresa_id, fornecedor_id, categoria_id, nome, preco, estoque)
-    VALUES (v_empresa_id, v_fornecedor_id, v_categoria_id, 'Notebook Ultra', 4500.00, 10)
-    RETURNING id INTO v_produto_id;
-
-    INSERT INTO clientes (empresa_id, nome, cpf_cnpj, email)
-    VALUES (v_empresa_id, 'Cliente Teste', '99.888.777/0001-55', v_email_correto)
-    RETURNING id INTO v_cliente_id;
-
-    INSERT INTO controle_caixa (empresa_id, usuario_id, saldo_inicial, status)
-    VALUES (v_empresa_id, v_usuario_id, 1000.00, 'aberto')
-    RETURNING id INTO v_caixa_id;
-
-    INSERT INTO financeiro_contas (empresa_id, nome, tipo)
-    VALUES (v_empresa_id, 'Caixa Principal', 'Corrente')
-    RETURNING id INTO v_conta_id;
-
-    RAISE NOTICE 'SISTEMA RESETADO E POPULADO! Login: % | Senha: %', v_email_correto, v_senha_plana;
+    RAISE NOTICE 'Sincronização concluída para o ID: %', v_usuario_id_real;
 END $$;
 
 ```
