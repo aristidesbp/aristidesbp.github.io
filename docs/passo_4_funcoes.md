@@ -174,3 +174,40 @@ $$;
 -- • Próximo: funções de fechamento de caixa e relatórios
 -- =====================================================================
 ```
+
+
+
+```
+CREATE OR REPLACE FUNCTION public.inicializar_novo_cliente(
+    p_user_id UUID,
+    p_user_nome TEXT,
+    p_empresa_nome TEXT,
+    p_plano TEXT
+)
+RETURNS VOID AS $$
+DECLARE
+    v_empresa_id UUID;
+BEGIN
+    -- 1. Criar a nova empresa para o cliente
+    INSERT INTO public.empresas (id, nome_fantasia, plano_ativo)
+    VALUES (gen_random_uuid(), p_empresa_nome, p_plano)
+    RETURNING id INTO v_empresa_id;
+
+    -- 2. Criar o perfil do usuário na tabela pública
+    INSERT INTO public.usuarios (id, email, nome)
+    SELECT id, email, p_user_nome
+    FROM auth.users
+    WHERE id = p_user_id;
+
+    -- 3. Vincular o usuário como dono desta nova empresa
+    INSERT INTO public.usuario_empresas (usuario_id, empresa_id)
+    VALUES (p_user_id, v_empresa_id);
+
+    -- 4. Opcional: Criar uma nota de boas-vindas automática
+    INSERT INTO public.notes (user_id, title, content)
+    VALUES (p_user_id, 'Bem-vindo!', 'Obrigado por escolher o ERP ABP Profissional no plano ' || p_plano);
+
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+```
