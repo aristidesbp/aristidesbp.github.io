@@ -44,6 +44,8 @@ JOIN roles r ON r.id = ue.role_id;
 # 💡 O que isso muda no seu projeto?
 Esses comandos foram os "ajustes finos" para transformar uma teoria de banco de dados em um sistema funcional via web.
 
+# ⚠️⚠️ OBSERVAÇÃO PARA AS PÁGINAS ABAIXO VOCÊ VAI PRECISAR DA URL DA CHAVE ANON !!!!!⚠️⚠️
+
 # Tela de login
 ```
 
