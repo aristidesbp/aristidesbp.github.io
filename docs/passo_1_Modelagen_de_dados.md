@@ -826,11 +826,11 @@ BEGIN
     END IF;
 
     -- 2. Tenta pegar o usuário, se não existir, cria!
-    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'Aristidesbp@gmail.com' LIMIT 1;
+    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'aristidesbp@gmail.com' LIMIT 1;
 
     IF v_usuario_id IS NULL THEN
         INSERT INTO usuarios (nome, email)
-        VALUES ('Aristides Master', 'Aristidesbp@gmail.com')
+        VALUES ('Aristides Master', 'aristidesbp@gmail.com.com')
         RETURNING id INTO v_usuario_id;
     END IF;
 
@@ -841,7 +841,7 @@ BEGIN
 
     -- 4. Fornecedores
     INSERT INTO fornecedores (empresa_id, nome, cnpj, contato, email)
-    VALUES (v_empresa_id, 'Tech Supply Brasil', '11.222.333/0001-99', 'Carlos Tech', 'contato@techsupply.com')
+    VALUES (v_empresa_id, 'Tech Supply Brasil', '11.222.333/0001-99', 'Carlos Tech', 'aristidesbp@gmail.com')
     RETURNING id INTO v_fornecedor_id;
 
     -- 5. Produtos
@@ -851,7 +851,7 @@ BEGIN
 
     -- 6. Clientes
     INSERT INTO clientes (empresa_id, nome, cpf_cnpj, email, telefone)
-    VALUES (v_empresa_id, 'Cliente Exemplo LTDA', '99.888.777/0001-55', 'comercial@exemplo.com', '11999999999')
+    VALUES (v_empresa_id, 'Cliente Exemplo LTDA', '99.888.777/0001-55', 'aristidesbp@gmail.com', '11999999999')
     RETURNING id INTO v_cliente_id;
 
     -- 7. Controle de Caixa
