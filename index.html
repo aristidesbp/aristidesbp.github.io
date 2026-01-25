@@ -3,113 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setup Inicial - ERP ABP Profissional</title>
+    <title>ERP ABP Profissional - Setup</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root { --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: var(--dark); margin-top: 0; text-align: center; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; color: #64748b; font-size: 0.9rem; }
-        input { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 1rem; }
-        button:hover { background: #1d4ed8; }
-        #mensagem { margin-top: 1rem; padding: 1rem; border-radius: 6px; display: none; font-size: 0.9rem; }
-        .success { background: #dcfce7; color: #166534; display: block !important; }
-        .error { background: #fee2e2; color: #991b1b; display: block !important; }
-    </style>
 </head>
 <body>
+    <div id="app">
+        <div class="container">
+            <header>
+                <h1>ERP ABP <span class="badge">v1.0</span></h1>
+                <div id="status-conexao" class="status-box">Verificando conexão com Supabase...</div>
+            </header>
 
-<div class="card">
-    <h2>🚀 Setup ERP ABP</h2>
-    <p style="text-align: center; color: #64748b; font-size: 0.8rem;">Cadastre o administrador e a empresa master</p>
-    
-    <div id="mensagem"></div>
+            <main id="main-content">
+                <div id="setup-section">
+                    <h2>🚀 Primeiro Acesso</h2>
+                    <p>Crie sua conta administrativa para configurar o banco de dados.</p>
+                    
+                    <form id="form-setup">
+                        <input type="text" id="nome" placeholder="Seu Nome Completo" required>
+                        <input type="text" id="empresa" placeholder="Nome da sua Empresa" required>
+                        <input type="email" id="email" placeholder="E-mail de Login" required>
+                        <input type="password" id="senha" placeholder="Senha (mín. 6 caracteres)" required>
+                        <button type="submit" id="btn-submit">Finalizar Instalação</button>
+                    </form>
+                </div>
 
-    <form id="setupForm">
-        <div class="form-group">
-            <label>Seu Nome</label>
-            <input type="text" id="nome" placeholder="Ex: Aristides" required>
+                <div id="debug-console">
+                    <h3>🔍 Console de Diagnóstico:</h3>
+                    <div id="log-output">Iniciando sistema...</div>
+                </div>
+            </main>
         </div>
-        <div class="form-group">
-            <label>Nome da Empresa</label>
-            <input type="text" id="empresa" placeholder="Ex: Minha Empresa LTDA" required>
-        </div>
-        <div class="form-group">
-            <label>E-mail (Login)</label>
-            <input type="email" id="email" placeholder="admin@email.com" required>
-        </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="senha" minlength="6" required>
-        </div>
-        <button type="submit" id="btnInstalar">Criar Conta Master</button>
-    </form>
-</div>
+    </div>
 
 <script>
+/**
+ * ERP ABP PROFISSIONAL
+ * Arquivo: index.html (Setup & Diagnóstico)
+ */
 (function() {
-    // Configurações fornecidas
-    const SUPABASE_URL = "https://ueaprmzmlkfrbmibdnro.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w";
+    // Configurações fornecidas por Aristides
+    const CONFIG = {
+        URL: "https://ueaprmzmlkfrbmibdnro.supabase.co",
+        ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w"
+    };
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Injeção de CSS Direta (Conforme padrão do projeto)
+    const style = document.createElement('style');
+    style.innerHTML = `
+        body { font-family: sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        .badge { font-size: 0.5em; background: #3b82f6; padding: 4px 8px; border-radius: 4px; vertical-align: middle; }
+        .status-box { padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .online { background: #065f46; color: #34d399; border: 1px solid #059669; }
+        .offline { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+        
+        #setup-section { background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:disabled { background: #475569; cursor: not-allowed; }
 
-    const form = document.getElementById('setupForm');
-    const msgDiv = document.getElementById('mensagem');
-    const btn = document.getElementById('btnInstalar');
+        #debug-console { margin-top: 30px; background: #000; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; border: 1px solid #334155; }
+        #log-output { color: #10b981; white-space: pre-wrap; word-break: break-all; }
+        .log-error { color: #ef4444 !important; }
+    `;
+    document.head.appendChild(style);
 
-    form.addEventListener('submit', async (e) => {
+    // Inicialização do Supabase
+    const supabaseClient = supabase.createClient(CONFIG.URL, CONFIG.ANON_KEY);
+
+    // Helper para Log no Celular
+    function logger(msg, isError = false) {
+        const out = document.getElementById('log-output');
+        const span = document.createElement('div');
+        if(isError) span.className = 'log-error';
+        span.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        out.prepend(span);
+        console.log(msg);
+    }
+
+    async function testarConexao() {
+        const statusDiv = document.getElementById('status-conexao');
+        try {
+            logger("Testando comunicação com Supabase...");
+            // Tenta ler uma tabela pública simples (ex: empresas) apenas para ver se responde
+            const { data, error } = await supabaseClient.from('empresas').select('id').limit(1);
+            
+            if (error && error.code !== 'PGRST116') { // Ignora erro de tabela vazia
+                throw error;
+            }
+
+            statusDiv.innerText = "● CONECTADO AO SUPABASE";
+            statusDiv.className = "status-box online";
+            logger("Conexão estabelecida com sucesso!");
+        } catch (err) {
+            statusDiv.innerText = "● ERRO DE CONEXÃO";
+            statusDiv.className = "status-box offline";
+            logger(`FALHA: ${err.message || JSON.stringify(err)}`, true);
+            logger("Dica: Verifique se a URL e a KEY estão corretas ou se o banco está ativo.", true);
+        }
+    }
+
+    // Lógica de Cadastro
+    document.getElementById('form-setup').addEventListener('submit', async (e) => {
         e.preventDefault();
+        const btn = document.getElementById('btn-submit');
         btn.disabled = true;
-        btn.innerText = "Processando...";
-        msgDiv.className = "";
-        msgDiv.innerText = "";
+        btn.innerText = "Processando Registro...";
 
-        const nome = document.getElementById('nome').value;
-        const empresa = document.getElementById('empresa').value;
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
+        const dados = {
+            nome: document.getElementById('nome').value,
+            empresa: document.getElementById('empresa').value,
+            email: document.getElementById('email').value,
+            senha: document.getElementById('senha').value
+        };
 
         try {
-            // 1. Criar usuário no Auth do Supabase
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email: email,
-                password: senha,
+            logger(`Iniciando SignUp para: ${dados.email}`);
+            
+            // 1. Criar usuário no Auth
+            const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                email: dados.email,
+                password: dados.senha
             });
 
             if (authError) throw authError;
+            logger("Usuário criado no Auth! ID: " + authData.user.id);
 
-            if (authData.user) {
-                // 2. Chamar a função SQL do Passo 4 para vincular empresa e perfil
-                // A função no seu banco é: inicializar_novo_cliente(p_user_id, p_user_nome, p_empresa_nome, p_plano)
-                const { error: funcError } = await supabase.rpc('inicializar_novo_cliente', {
-                    p_user_id: authData.user.id,
-                    p_user_nome: nome,
-                    p_empresa_nome: empresa,
-                    p_plano: 'Master'
-                });
+            // 2. Chamar a RPC para inicializar tabelas (Passo 4)
+            logger("Chamando rpc.inicializar_novo_cliente...");
+            const { error: rpcError } = await supabaseClient.rpc('inicializar_novo_cliente', {
+                p_user_id: authData.user.id,
+                p_user_nome: dados.nome,
+                p_empresa_nome: dados.empresa,
+                p_plano: 'Master'
+            });
 
-                if (funcError) throw funcError;
+            if (rpcError) throw rpcError;
 
-                msgDiv.classList.add('success');
-                msgDiv.innerHTML = `<b>Sucesso!</b> Usuário criado. <br>Verifique seu e-mail para confirmar a conta (se o Auth do Supabase exigir) e depois faça login.`;
-                form.reset();
-            }
-
+            logger("INSTALAÇÃO CONCLUÍDA COM SUCESSO!", false);
+            alert("Sucesso! Verifique seu e-mail e confirme a conta para logar.");
+            
         } catch (err) {
-            msgDiv.classList.add('error');
-            msgDiv.innerText = "Erro: " + (err.message || "Falha ao conectar");
-            console.error(err);
+            logger(`ERRO NO PROCESSO: ${err.message}`, true);
         } finally {
             btn.disabled = false;
-            btn.innerText = "Criar Conta Master";
+            btn.innerText = "Finalizar Instalação";
         }
     });
+
+    // Iniciar teste ao carregar
+    testarConexao();
+
 })();
 </script>
-
 </body>
 </html>
