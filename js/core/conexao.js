@@ -13,8 +13,8 @@
 
 (function() {
     // 1. CONFIGURAÇÕES DE ACESSO (SUPABASE)
-    const SB_URL = "https://SEU_PROJETO_ID.supabase.co"; // <-- Substituir pelo seu URL do Supabase
-    const SB_KEY = "sb_publishable_QFcFrpO1NJCI3-gkyYqkQA_P5qQ5w1J";
+const SUPABASE_URL = "https://kjhjeaiwjilkgocwvbwi.supabase.co"; 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtqaGplYWl3amlsa2dvY3d2YndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNDMzNjAsImV4cCI6MjA4MzkxOTM2MH0.SeipI48HNyljhthEvBQM0iC6sT6Np63wrT4KJ9Eqx-Q";
 
     // Inicializa o Cliente Supabase globalmente
     if (typeof supabase !== 'undefined') {
