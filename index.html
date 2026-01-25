@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ERP ABP - Cadastro</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -128,85 +127,85 @@
   <div class="link" id="goToLogin">Já tem conta? Faça login</div>
 </div>
 
-<script>
-// Configuração Supabase
-const SUPABASE_URL = 'https://ueaprmzmlkfrbmibdnro.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w';
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// Cria o cliente Supabase (sem redeclarar variável global)
-const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Configuração Supabase
+  const SUPABASE_URL = 'https://ueaprmzmlkfrbmibdnro.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w';
 
-// Toggle senha
-const toggleBtn = document.getElementById('togglePassword');
-const senhaInput = document.getElementById('password');
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-if (toggleBtn && senhaInput) {
-  toggleBtn.addEventListener('click', function() {
-    const tipoAtual = senhaInput.type;
-    senhaInput.type = tipoAtual === 'password' ? 'text' : 'password';
-    toggleBtn.textContent = tipoAtual === 'password' ? '🙈' : '👁️';
-  });
-}
+  // Toggle senha
+  const toggleBtn = document.getElementById('togglePassword');
+  const senhaInput = document.getElementById('password');
 
-// Formulário
-const formCadastro = document.getElementById('cadastroForm');
-const btnCadastrar = document.getElementById('btnCadastrar');
-const divMensagem = document.getElementById('message');
+  if (toggleBtn && senhaInput) {
+    toggleBtn.addEventListener('click', () => {
+      const tipoAtual = senhaInput.type;
+      senhaInput.type = tipoAtual === 'password' ? 'text' : 'password';
+      toggleBtn.textContent = tipoAtual === 'password' ? '🙈' : '👁️';
+    });
+  }
 
-if (formCadastro) {
-  formCadastro.addEventListener('submit', async function(e) {
-    e.preventDefault();
+  // Formulário
+  const formCadastro = document.getElementById('cadastroForm');
+  const btnCadastrar = document.getElementById('btnCadastrar');
+  const divMensagem = document.getElementById('message');
 
-    const email = document.getElementById('email').value.trim();
-    const senha = document.getElementById('password').value;
+  if (formCadastro) {
+    formCadastro.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    btnCadastrar.disabled = true;
-    divMensagem.textContent = 'Processando cadastro...';
-    divMensagem.className = '';
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('password').value;
 
-    if (!email || senha.length < 6) {
-      divMensagem.textContent = 'Preencha email válido e senha com pelo menos 6 caracteres.';
-      divMensagem.className = 'error';
-      btnCadastrar.disabled = false;
-      return;
-    }
+      btnCadastrar.disabled = true;
+      divMensagem.textContent = 'Processando cadastro...';
+      divMensagem.className = '';
 
-    try {
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: senha,
-        options: {
-          data: { nome: email.split('@')[0] || 'Usuário' }
-        }
-      });
-
-      if (error) throw error;
-
-      divMensagem.textContent = 'Cadastro realizado com sucesso! Verifique seu email para confirmar.';
-      divMensagem.className = 'success';
-
-      setTimeout(() => {
-        window.location.href = 'login.html'; // ou outra página
-      }, 4000);
-    } catch (err) {
-      let msg = 'Erro ao cadastrar. Tente novamente.';
-      if (err.message.includes('already registered')) {
-        msg = 'Este email já está cadastrado.';
-      } else if (err.message) {
-        msg = err.message;
+      if (!email || senha.length < 6) {
+        divMensagem.textContent = 'Preencha email válido e senha com pelo menos 6 caracteres.';
+        divMensagem.className = 'error';
+        btnCadastrar.disabled = false;
+        return;
       }
-      divMensagem.textContent = msg;
-      divMensagem.className = 'error';
-    } finally {
-      btnCadastrar.disabled = false;
-    }
-  });
-}
 
-// Link para login
-document.getElementById('goToLogin')?.addEventListener('click', function() {
-  window.location.href = 'login.html';
-});
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password: senha,
+          options: {
+            data: { nome: email.split('@')[0] || 'Usuário' }
+          }
+        });
+
+        if (error) throw error;
+
+        divMensagem.textContent = 'Cadastro realizado! Verifique seu email para confirmar (se necessário).';
+        divMensagem.className = 'success';
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 4000);
+      } catch (err) {
+        let msg = 'Erro ao cadastrar. Tente novamente.';
+        if (err.message?.includes('already registered')) {
+          msg = 'Este email já está cadastrado.';
+        } else if (err.message) {
+          msg = err.message;
+        }
+        divMensagem.textContent = msg;
+        divMensagem.className = 'error';
+      } finally {
+        btnCadastrar.disabled = false;
+      }
+    });
+  }
+
+  document.getElementById('goToLogin')?.addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
 </script>
 
 </body>
