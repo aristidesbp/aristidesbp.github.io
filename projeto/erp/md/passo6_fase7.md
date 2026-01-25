@@ -27,9 +27,18 @@ Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da c
 │   │
 │   └── /utils         # Funções genéricas (formatar data, moeda, etc.)
 │
-├── index.html         # Dashboard
+├── index.html         # site
 ├── login.html         # Tela de entrada
+├── dashboard.html     # Dashboard
+├── Clientes.html      # adm/Crud
+├── Fornecedores.html  # adm/Crud
+├── Funcionarios.html  # adm/Crud
+├── Tercerisados.html  # adm/Crud
+├── financeiro.html    # adm/Crud
+├── produtos.html      # adm/Crud
+├── cahtbot.html       # Cadm/Crud
 └── entidades.html     # Gestão de Clientes/Fornecedores
+
 ``` 
 ## 🗺️ Mapeamento das Fases na Estrutura de Pastas:
 ### erp-abp
@@ -38,6 +47,7 @@ Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da c
 * index.html (sera a pagina inicial, nosso Dashboard).
 * login.html ( Tela de entrada).
 * entidades.html ( Gestão de Clientes/Fornecedores).
+* etc...
 ### /js/core/
 #### Fase 7 (Offline): 
 * Aqui ficam o conexao.js (IndexedDB) e o sync.js (Fila de sincronização e conflitos).
