@@ -7,57 +7,57 @@
     
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script src="js/core/conexao.js"></script>
     <script src="js/core/auth.js"></script>
     
     <style>
         :root { --primary: #2563eb; --dark: #1e293b; --error: #ef4444; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); width: 100%; max-width: 360px; }
-        .login-header { text-align: center; margin-bottom: 1.5rem; }
-        .login-header h1 { color: var(--dark); font-size: 1.25rem; margin: 0; font-weight: 700; }
-        .form-group { margin-bottom: 1rem; position: relative; }
-        label { display: block; margin-bottom: 0.4rem; color: #475569; font-size: 0.85rem; font-weight: 500; }
-        input { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-header h1 { color: var(--dark); font-size: 1.5rem; margin: 0; font-weight: bold; }
+        .form-group { margin-bottom: 1.2rem; position: relative; }
+        label { display: block; margin-bottom: 0.5rem; color: #475569; font-size: 0.9rem; }
+        input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
         
-        /* O Olhinho */
+        /* Estilo do Olhinho */
         .btn-eye {
             position: absolute;
-            right: 8px;
-            top: 28px;
+            right: 12px;
+            top: 38px;
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px;
-            font-size: 1.1rem;
             color: #64748b;
+            font-size: 1.2rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
         }
 
-        button#btn-login { width: 100%; padding: 0.7rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 1rem; transition: background 0.2s; }
-        button#btn-login:hover { background: #1d4ed8; }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
-        .error-box { background: #fef2f2; color: var(--error); padding: 0.6rem; border-radius: 6px; font-size: 0.8rem; margin-bottom: 1rem; display: none; border: 1px solid #fee2e2; line-height: 1.4; }
+        button#btn-login { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 1rem; }
+        button:disabled { background: #94a3b8; }
+        .error-box { background: #fee2e2; color: var(--error); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem; display: none; border: 1px solid #fecaca; }
     </style>
 </head>
 <body>
     <div class="login-card">
         <div class="login-header">
-            <h1>ERP ABP Profissional</h1>
-            <p style="color: #64748b; font-size: 0.8rem; margin-top: 5px;">Acesse sua conta</p>
+            <h1>ERP ABP</h1>
+            <p style="color: #64748b; font-size: 0.9rem;">Acesse sua conta profissional</p>
         </div>
 
         <div id="error-msg" class="error-box"></div>
 
         <form id="login-form">
             <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" required placeholder="exemplo@email.com">
+                <label>E-mail</label>
+                <input type="email" id="email" required placeholder="seu@email.com">
             </div>
             <div class="form-group">
-                <label for="password">Senha</label>
+                <label>Senha</label>
                 <input type="password" id="password" required placeholder="••••••••">
-                <button type="button" class="btn-eye" id="togglePassword" title="Mostrar/Esconder">👁️</button>
+                <button type="button" class="btn-eye" id="togglePassword">👁️</button>
             </div>
             <button type="submit" id="btn-login">Entrar no Sistema</button>
         </form>
@@ -71,39 +71,33 @@
             const passInput = document.getElementById('password');
             const btnEye = document.getElementById('togglePassword');
 
-            // Lógica do Olhinho (Toggle)
+            // Lógica do Olhinho
             btnEye.addEventListener('click', () => {
-                const isPass = passInput.type === 'password';
-                passInput.type = isPass ? 'text' : 'password';
-                btnEye.innerText = isPass ? '🙈' : '👁️';
+                const isPassword = passInput.type === 'password';
+                passInput.type = isPassword ? 'text' : 'password';
+                btnEye.innerText = isPassword ? '🙈' : '👁️';
             });
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 btnLogin.disabled = true;
-                btnLogin.innerText = 'Verificando...';
+                btnLogin.innerText = 'Autenticando...';
                 errorMsg.style.display = 'none';
 
                 const email = document.getElementById('email').value.trim();
                 const password = passInput.value;
 
-                try {
-                    const result = await window.AppAuth.login(email, password);
+                const result = await window.AppAuth.login(email, password);
 
-                    if (result.success) {
-                        window.location.href = 'dashboard.html';
-                    } else {
-                        let msg = result.message;
-                        if (msg.includes("Invalid login credentials")) {
-                            msg = "<strong>Credenciais Inválidas.</strong><br>Certifique-se de que este usuário foi criado na aba 'Authentication' do painel Supabase.";
-                        }
-                        errorMsg.innerHTML = msg;
-                        errorMsg.style.display = 'block';
-                        btnLogin.disabled = false;
-                        btnLogin.innerText = 'Entrar no Sistema';
+                if (result.success) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    let msg = result.message;
+                    // Amigável para o usuário
+                    if (msg === "Invalid login credentials") {
+                        msg = "E-mail ou senha incorretos. Verifique o cadastro no painel Supabase.";
                     }
-                } catch (err) {
-                    errorMsg.innerText = "Erro ao conectar com o servidor.";
+                    errorMsg.innerText = msg;
                     errorMsg.style.display = 'block';
                     btnLogin.disabled = false;
                     btnLogin.innerText = 'Entrar no Sistema';
