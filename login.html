@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ERP ABP Profissional</title>
+    
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --error: #ef4444;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header h1 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .login-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        #error-msg {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <h1>ERP ABP Profissional</h1>
+            <p>Entre para gerenciar sua empresa</p>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" id="btn-login">Entrar</button>
+            <div id="error-msg">Usuário ou senha inválidos.</div>
+        </form>
+    </div>
+
+    <script src="js/core/conexao.js"></script>
+    <script src="js/core/auth.js"></script>
+
+    <script>
+        // Lógica de Interface (Controller da View)
+        (function() {
+            const form = document.getElementById('login-form');
+            const errorMsg = document.getElementById('error-msg');
+            const btn = document.getElementById('btn-login');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                btn.innerText = 'Autenticando...';
+                btn.disabled = true;
+                errorMsg.style.display = 'none';
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                // Chama a função global do AppAuth
+                const result = await AppAuth.login(email, password);
+
+                if (!result.success) {
+                    errorMsg.innerText = result.error;
+                    errorMsg.style.display = 'block';
+                    btn.innerText = 'Entrar';
+                    btn.disabled = false;
+                }
+                // Se sucesso, o próprio auth.js redireciona para dashboard.html
+            });
+        })();
+    </script>
+</body>
+</html>
