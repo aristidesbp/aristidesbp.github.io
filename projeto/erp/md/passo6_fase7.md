@@ -58,4 +58,15 @@ Isso é para manter o Desacoplamento (um dos pilares do MVC):
 * Modules: É onde o ERP cresce. Se amanhã você quiser criar um módulo de "Frota de Veículos", você apenas cria um novo arquivo em /modules sem quebrar o resto do sistema.
 ###    Veredito: Estamos construindo algo mais avançado que um MVC simples; é uma Arquitetura Distribuída Offline-First.
 
-
+# 🗺️ Mapeamento das Fases na Estrutura de Pastas
+Pasta,"O que ela resolve (Fases 7, 8, 9 e 10)"
+## /js/core/,Fase 7 (Offline): 
+* Aqui ficam o conexao.js (IndexedDB) e o sync.js (Fila de sincronização e conflitos).
+* Fase 8 (Auth): O auth.js controla a sessão e as permissões de quem pode ver o quê.
+## /js/modules/,Fase 8 (Frontend): 
+* Cada arquivo aqui (ex: vendas.js) cuidará do seu próprio CRUD e Dashboard.
+* Fase 9 (Integrações): Criaremos o chat.js e notificacoes.js aqui dentro.
+## /js/utils/,Fase 10 (Qualidade): 
+* Funções de logs, formatadores de moeda/data e validadores que garantem a qualidade técnica.
+## /docs/ (Nova),Fase 10 (Entrega):
+* Local para salvar o manual do usuário e a documentação técnica que você pretende vender.
