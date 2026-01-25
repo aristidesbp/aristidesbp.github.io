@@ -3,86 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP ABP - Diagnóstico</title>
+    <title>ERP ABP - Setup e Diagnóstico</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="app">
-        <header>
-            <h1 style="text-align:center; color:#3b82f6;">ERP ABP <small style="font-size:12px; color:#64748b;">v1.0</small></h1>
-            
-            <div id="status-conexao" class="status-box">Iniciando...</div>
-            
-            <div id="debug-console">
-                <div style="font-weight:bold; color:#94a3b8; margin-bottom:5px; font-size:10px;">LOG DO SISTEMA:</div>
-                <div id="log-output">Aguardando conexão...</div>
-            </div>
-        </header>
 
-        <main>
-            <div id="setup-section">
-                <h2 style="margin-top:0; font-size:18px;">🚀 Criar Usuário Master</h2>
-                <form id="form-setup">
-                    <input type="text" id="nome" placeholder="Nome Completo" required>
-                    <input type="text" id="empresa" placeholder="Nome da Empresa" required>
-                    <input type="email" id="email" placeholder="E-mail" required>
-                    <input type="password" id="senha" placeholder="Senha (mín. 6 chars)" required>
-                    <button type="submit" id="btn-submit">Finalizar Instalação</button>
-                </form>
-            </div>
-        </main>
-    </div>
+<div id="app">
+    <header class="header-diag">
+        <h1>ERP ABP <span class="v-badge">v2.0</span></h1>
+        
+        <div id="status-box" class="status-msg">
+            <i class="fas fa-spinner fa-spin"></i> Verificando banco de dados...
+        </div>
+
+        <div id="debug-log">
+            <div class="log-header">LOG DE SISTEMA:</div>
+            <div id="log-content">Iniciando handshake...</div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="card-setup">
+            <h2><i class="fas fa-rocket"></i> Instalação Inicial</h2>
+            <p>Crie o usuário administrador e a empresa master abaixo.</p>
+            
+            <form id="form-setup">
+                <div class="input-group">
+                    <label><i class="fas fa-user"></i> Seu Nome</label>
+                    <input type="text" id="nome" placeholder="Ex: Aristides" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-building"></i> Nome da Empresa</label>
+                    <input type="text" id="empresa" placeholder="Ex: Minha Empresa" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-envelope"></i> E-mail de Acesso</label>
+                    <input type="email" id="email" placeholder="admin@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-lock"></i> Senha (mín. 6 chars)</label>
+                    <input type="password" id="senha" required>
+                </div>
+                <button type="submit" id="btn-submit">FINALIZAR E CADASTRAR</button>
+            </form>
+        </div>
+    </main>
+</div>
 
 <script>
 (function() {
+    // Configurações Atuais do Projeto (Aristides - Janeiro 2026)
     const CONFIG = {
         URL: "https://ueaprmzmlkfrbmibdnro.supabase.co",
         KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w"
     };
 
-    // Estilização Instantânea
+    // Injeção de Estilo Profissional
     const style = document.createElement('style');
     style.innerHTML = `
-        body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 15px; margin: 0; }
-        .status-box { padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 10px; font-size: 14px; border: 2px solid transparent; }
-        .online { background: #064e3b; color: #34d399; border-color: #059669; }
-        .offline { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
-        #debug-console { background: #000; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 20px; font-family: monospace; font-size: 11px; max-height: 120px; overflow-y: auto; }
-        #log-output { color: #22c55e; white-space: pre-wrap; }
-        .error-msg { color: #f87171 !important; font-weight: bold; }
-        #setup-section { background: #1e293b; padding: 20px; border-radius: 12px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; }
+        :root { --primary: #3ecf8e; --danger: #ef4444; --dark: #0f172a; --bg: #1e293b; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding: 20px; }
+        .header-diag { max-width: 500px; margin: 0 auto 20px; text-align: center; }
+        .v-badge { font-size: 10px; background: var(--primary); color: #000; padding: 2px 6px; border-radius: 4px; vertical-align: top; }
+        
+        .status-msg { padding: 15px; border-radius: 8px; font-weight: bold; margin: 15px 0; background: #334155; }
+        .online { background: #065f46; color: #34d399; border: 1px solid #059669; }
+        .offline { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+
+        #debug-log { background: #000; border: 1px solid #334155; border-radius: 8px; padding: 10px; text-align: left; font-family: monospace; font-size: 11px; }
+        .log-header { color: #64748b; margin-bottom: 5px; border-bottom: 1px solid #1e293b; }
+        #log-content { color: #3ecf8e; white-space: pre-wrap; max-height: 100px; overflow-y: auto; }
+        .log-err { color: var(--danger) !important; }
+
+        .main-container { display: flex; justify-content: center; }
+        .card-setup { background: #1e293b; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #2fb579; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
     `;
     document.head.appendChild(style);
 
     const logger = (msg, isErr = false) => {
-        const out = document.getElementById('log-output');
-        const d = document.createElement('div');
-        if(isErr) d.className = 'error-msg';
-        d.innerText = `> ${msg}`;
-        out.prepend(d);
+        const div = document.createElement('div');
+        if(isErr) div.className = 'log-err';
+        div.innerText = `> ${msg}`;
+        document.getElementById('log-content').prepend(div);
     };
 
     const supabaseClient = supabase.createClient(CONFIG.URL, CONFIG.KEY);
 
-    async function init() {
-        const statusDiv = document.getElementById('status-conexao');
+    async function checkConnection() {
+        const box = document.getElementById('status-box');
         try {
-            logger("Testando conexão com Supabase...");
-            // Teste simples para ver se o banco responde
-            const { data, error } = await supabaseClient.from('empresas').select('id').limit(1);
-            
+            logger("Verificando Tabelas...");
+            // Teste de leitura simples
+            const { error } = await supabaseClient.from('empresas').select('id').limit(1);
             if (error) throw error;
 
-            statusDiv.innerText = "● BANCO CONECTADO";
-            statusDiv.className = "status-box online";
-            logger("Sucesso: Comunicação estabelecida!");
+            box.innerHTML = '<i class="fas fa-check-circle"></i> BANCO DE DADOS CONECTADO';
+            box.className = "status-msg online";
+            logger("Conexão estabelecida com sucesso!");
         } catch (err) {
-            statusDiv.innerText = "● ERRO DE CONEXÃO";
-            statusDiv.className = "status-box offline";
-            logger(`FALHA TÉCNICA: ${err.message}`, true);
-            logger(`DETALHE: ${err.hint || 'Verifique as chaves e se o projeto está ativo.'}`, true);
+            box.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ERRO DE CONEXÃO';
+            box.className = "status-msg offline";
+            logger("ERRO: " + err.message, true);
+            logger("DICA: Verifique se o projeto no Supabase não está PAUSADO.", true);
         }
     }
 
@@ -90,39 +119,50 @@
         e.preventDefault();
         const btn = document.getElementById('btn-submit');
         btn.disabled = true;
-        btn.innerText = "Gravando...";
+        btn.innerText = "CADASTRANDO...";
+
+        const dados = {
+            nome: document.getElementById('nome').value,
+            empresa: document.getElementById('empresa').value,
+            email: document.getElementById('email').value,
+            senha: document.getElementById('senha').value
+        };
 
         try {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            const nome = document.getElementById('nome').value;
-            const empresa = document.getElementById('empresa').value;
+            logger(`Tentando criar Auth para ${dados.email}`);
+            const { data: auth, error: authErr } = await supabaseClient.auth.signUp({
+                email: dados.email,
+                password: dados.senha
+            });
 
-            logger(`Registrando usuário: ${email}`);
-            const { data, error: authErr } = await supabaseClient.auth.signUp({ email, password: senha });
             if (authErr) throw authErr;
+            logger("Usuário Auth criado! ID: " + auth.user.id);
 
-            logger("Usuário Auth OK. Criando tabelas de negócio...");
+            logger("Chamando inicializar_novo_cliente...");
             const { error: rpcErr } = await supabaseClient.rpc('inicializar_novo_cliente', {
-                p_user_id: data.user.id,
-                p_user_nome: nome,
-                p_empresa_nome: empresa,
+                p_user_id: auth.user.id,
+                p_user_nome: dados.nome,
+                p_empresa_nome: dados.empresa,
                 p_plano: 'Master'
             });
 
             if (rpcErr) throw rpcErr;
-            logger("INSTALAÇÃO COMPLETA!", false);
-            alert("Sucesso! Verifique seu e-mail.");
+
+            logger("SUCESSO TOTAL! Sistema pronto.", false);
+            alert("Cadastro realizado! Você já pode logar.");
+            
         } catch (err) {
-            logger("ERRO: " + err.message, true);
+            logger("FALHA NO CADASTRO: " + err.message, true);
+            if (err.message.includes("function")) logger("Atenção: A função SQL do Passo 4 não foi encontrada no banco!", true);
         } finally {
             btn.disabled = false;
-            btn.innerText = "Finalizar Instalação";
+            btn.innerText = "FINALIZAR E CADASTRAR";
         }
     });
 
-    init();
+    checkConnection();
 })();
 </script>
+
 </body>
 </html>
