@@ -12,11 +12,11 @@
         :root {
             --primary: #2563eb;
             --dark: #1e293b;
-            --light: #f8fafc;
+            --gray: #64748b;
             --error: #ef4444;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #f1f5f9;
             display: flex;
             align-items: center;
@@ -30,43 +30,45 @@
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
         }
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .login-header h1 {
-            color: var(--dark);
-            font-size: 1.5rem;
-            margin: 0;
-        }
-        .login-header p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            font-weight: 500;
-        }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-header h1 { color: var(--dark); font-size: 1.5rem; margin: 0; }
+        
+        .form-group { margin-bottom: 1.2rem; position: relative; }
+        label { display: block; margin-bottom: 0.5rem; color: var(--dark); font-weight: 500; font-size: 0.9rem; }
+        
         input {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             box-sizing: border-box;
-            transition: border-color 0.2s;
         }
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+        /* Container da senha para posicionar o olho */
+        .pass-container { position: relative; }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 1.2rem;
+            user-select: none;
         }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-top: 0.5rem;
+        }
+        .forgot-password:hover { text-decoration: underline; }
+
         button {
             width: 100%;
             padding: 0.75rem;
@@ -75,12 +77,11 @@
             border: none;
             border-radius: 6px;
             font-weight: 600;
+            margin-top: 1.5rem;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        button:hover {
-            background-color: #1d4ed8;
-        }
+        button:disabled { background-color: #94a3b8; }
+
         #error-msg {
             color: var(--error);
             font-size: 0.85rem;
@@ -95,20 +96,26 @@
     <div class="login-card">
         <div class="login-header">
             <h1>ERP ABP Profissional</h1>
-            <p>Entre para gerenciar sua empresa</p>
+            <p style="color: var(--gray); font-size: 0.9rem;">Acesse sua conta</p>
         </div>
 
         <form id="login-form">
             <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="seu@email.com" required>
+                <label>E-mail</label>
+                <input type="email" id="email" placeholder="exemplo@email.com" required>
             </div>
+
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <label>Senha</label>
+                <div class="pass-container">
+                    <input type="password" id="password" placeholder="••••••••" required>
+                    <span class="toggle-password" id="btn-toggle">👁️</span>
+                </div>
+                <a href="#" class="forgot-password" id="btn-forgot">Esqueci minha senha</a>
             </div>
-            <button type="submit" id="btn-login">Entrar</button>
-            <div id="error-msg">Usuário ou senha inválidos.</div>
+
+            <button type="submit" id="btn-login">Entrar no Sistema</button>
+            <div id="error-msg"></div>
         </form>
     </div>
 
@@ -116,32 +123,51 @@
     <script src="js/core/auth.js"></script>
 
     <script>
-        // Lógica de Interface (Controller da View)
         (function() {
             const form = document.getElementById('login-form');
+            const passInput = document.getElementById('password');
+            const btnToggle = document.getElementById('btn-toggle');
+            const btnForgot = document.getElementById('btn-forgot');
             const errorMsg = document.getElementById('error-msg');
-            const btn = document.getElementById('btn-login');
+            const btnLogin = document.getElementById('btn-login');
 
+            // 1. Lógica do Olho (Ver Senha)
+            btnToggle.addEventListener('click', () => {
+                const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passInput.setAttribute('type', type);
+                btnToggle.textContent = type === 'password' ? '👁️' : '🔒';
+            });
+
+            // 2. Lógica Esqueci Senha
+            btnForgot.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                if (!email) {
+                    alert('Por favor, digite seu e-mail primeiro.');
+                    return;
+                }
+                const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/redefinir-senha.html',
+                });
+                if (error) alert('Erro: ' + error.message);
+                else alert('Link de recuperação enviado para seu e-mail!');
+            });
+
+            // 3. Submissão do Login
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
-                btn.innerText = 'Autenticando...';
-                btn.disabled = true;
+                btnLogin.disabled = true;
+                btnLogin.innerText = 'Aguarde...';
                 errorMsg.style.display = 'none';
 
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                // Chama a função global do AppAuth
-                const result = await AppAuth.login(email, password);
+                const result = await AppAuth.login(document.getElementById('email').value, passInput.value);
 
                 if (!result.success) {
-                    errorMsg.innerText = result.error;
+                    errorMsg.innerText = "Falha no acesso: " + result.error;
                     errorMsg.style.display = 'block';
-                    btn.innerText = 'Entrar';
-                    btn.disabled = false;
+                    btnLogin.disabled = false;
+                    btnLogin.innerText = 'Entrar no Sistema';
                 }
-                // Se sucesso, o próprio auth.js redireciona para dashboard.html
             });
         })();
     </script>
