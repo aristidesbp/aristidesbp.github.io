@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ERP ABP Profissional</title>
+    
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --bg: #f1f5f9;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Navbar Simples (Será movida para js/ui/componentes futuramente) */
+        nav {
+            background: var(--dark);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .card h3 { margin: 0; color: #64748b; font-size: 0.9rem; text-transform: uppercase; }
+        .card .value { font-size: 1.8rem; font-weight: bold; margin-top: 0.5rem; color: var(--dark); }
+        .status-online { color: var(--success); font-weight: bold; }
+        .status-offline { color: var(--danger); font-weight: bold; }
+        
+        .alert-box {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: none; /* Só aparece se houver estoque baixo */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <strong>ERP ABP Profissional</strong>
+        <div>
+            <span id="user-name">Carregando...</span> | 
+            <a href="#" onclick="AppAuth.logout()" style="color: #cbd5e1; text-decoration: none;">Sair</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header style="margin-bottom: 2rem;">
+            <h2>Bem-vindo ao Painel Geral</h2>
+            <p>Status do Sistema: <span id="connection-status">Verificando...</span></p>
+        </header>
+
+        <div id="estoque-alerta" class="alert-box">
+            <strong>⚠️ Atenção:</strong> Existem produtos abaixo do estoque mínimo!
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Vendas Hoje</h3>
+                <div class="value" id="vendas-hoje">R$ 0,00</div>
+            </div>
+            <div class="card">
+                <h3>Vendas no Mês</h3>
+                <div class="value" id="vendas-mes">R$ 0,00</div>
+            </div>
+            <div class="card">
+                <h3>Caixa Atual</h3>
+                <div class="value" id="caixa-status">Fechado</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Atalhos Rápidos</h3>
+            <div style="margin-top: 1rem; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="window.location.href='pdv.html'" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">Nova Venda (PDV)</button>
+                <button onclick="window.location.href='clientes.html'" style="padding: 10px 20px; background: #64748b; color: white; border: none; border-radius: 4px; cursor: pointer;">Clientes</button>
+                <button onclick="window.location.href='produtos.html'" style="padding: 10px 20px; background: #64748b; color: white; border: none; border-radius: 4px; cursor: pointer;">Estoque</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/core/conexao.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/sync.js"></script>
+
+    <script>
+        (function() {
+            /**
+             * Lógica do Dashboard
+             * Responsável por atualizar os KPIs da tela
+             */
+            const Dashboard = {
+                init: async function() {
+                    this.atualizarInterface();
+                    this.ouvirConexao();
+                    this.carregarDados();
+                },
+
+                atualizarInterface: function() {
+                    const user = AppAuth.user;
+                    if (user) {
+                        document.getElementById('user-name').innerText = user.email;
+                    }
+                },
+
+                ouvirConexao: function() {
+                    const statusEl = document.getElementById('connection-status');
+                    const atualizar = (online) => {
+                        statusEl.innerText = online ? 'Online' : 'Offline';
+                        statusEl.className = online ? 'status-online' : 'status-offline';
+                    };
+                    
+                    atualizar(window.isOnline);
+                    document.addEventListener('statusConexao', (e) => atualizar(e.detail.online));
+                },
+
+                carregarDados: async function() {
+                    // Aqui entra a lógica de buscar no dbLocal (Offline-first)
+                    // Exemplo: Buscar estoque crítico
+                    const produtosCriticos = await window.dbLocal.produtos
+                        .filter(p => p.estoque <= p.estoque_minimo)
+                        .toArray();
+
+                    if (produtosCriticos.length > 0) {
+                        document.getElementById('estoque-alerta').style.display = 'block';
+                    }
+                }
+            };
+
+            // Inicia quando o Auth estiver pronto
+            setTimeout(() => Dashboard.init(), 500);
+        })();
+    </script>
+</body>
+</html>
