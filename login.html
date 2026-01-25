@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div id="login-container">
+        <div class="login-card">
+            <h1>ERP ABP</h1>
+            <p>Acesse sua conta profissional</p>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="E-mail" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit" id="btn-entrar">ENTRAR NO SISTEMA</button>
+            </form>
+            <div id="msg"></div>
+        </div>
+    </div>
+
+<script>
+(function() {
+    const URL = "https://ueaprmzmlkfrbmibdnro.supabase.co";
+    const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w";
+    const supabaseClient = supabase.createClient(URL, KEY);
+
+    // CSS Injetado
+    const style = document.createElement('style');
+    style.innerHTML = `
+        body { margin:0; background:#0f172a; font-family:sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; color:white; }
+        .login-card { background:#1e293b; padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); }
+        h1 { color:#3ecf8e; margin-bottom:10px; }
+        input { width:100%; padding:12px; margin:10px 0; border-radius:6px; border:1px solid #334155; background:#0f172a; color:white; box-sizing:border-box; }
+        button { width:100%; padding:14px; background:#3ecf8e; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        #msg { margin-top:15px; font-size:13px; color:#f87171; }
+    `;
+    document.head.appendChild(style);
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const msg = document.getElementById('msg');
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            msg.innerText = "Erro: " + error.message;
+        } else {
+            msg.style.color = "#3ecf8e";
+            msg.innerText = "Login realizado! Redirecionando...";
+            // Após logar, ele vai para o dashboard
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        }
+    });
+})();
+</script>
+</body>
+</html>
