@@ -1,221 +1,114 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ERP ABP - Cadastro</title>
-  
-  <!-- Supabase UMD (versão estável, cria global 'supabase') -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: white;
-      padding: 2.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
-    }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 1.5rem;
-    }
-    .form-group {
-      margin-bottom: 1.2rem;
-      position: relative;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #34495e;
-      font-weight: 500;
-    }
-    input {
-      width: 100%;
-      padding: 0.9rem;
-      border: 1px solid #d1d9e0;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    input:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
-    }
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.3rem;
-      color: #7f8c8d;
-      user-select: none;
-    }
-    button {
-      width: 100%;
-      padding: 1rem;
-      background: #3498db;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 1rem;
-      transition: background 0.2s;
-    }
-    button:hover:not(:disabled) {
-      background: #2980b9;
-    }
-    button:disabled {
-      background: #95a5a6;
-      cursor: not-allowed;
-    }
-    #message {
-      margin-top: 1.2rem;
-      text-align: center;
-      font-weight: 500;
-      min-height: 1.5em;
-    }
-    .success { color: #27ae60; }
-    .error   { color: #e74c3c; }
-    .link {
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #3498db;
-      cursor: pointer;
-    }
-    .link:hover { text-decoration: underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Inicial - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: var(--dark); margin-top: 0; text-align: center; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #64748b; font-size: 0.9rem; }
+        input { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 1rem; }
+        button:hover { background: #1d4ed8; }
+        #mensagem { margin-top: 1rem; padding: 1rem; border-radius: 6px; display: none; font-size: 0.9rem; }
+        .success { background: #dcfce7; color: #166534; display: block !important; }
+        .error { background: #fee2e2; color: #991b1b; display: block !important; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>ERP ABP - Cadastro</h1>
+<div class="card">
+    <h2>🚀 Setup ERP ABP</h2>
+    <p style="text-align: center; color: #64748b; font-size: 0.8rem;">Cadastre o administrador e a empresa master</p>
+    
+    <div id="mensagem"></div>
 
-  <form id="cadastroForm">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="seuemail@exemplo.com" required autocomplete="email"/>
-    </div>
-
-    <div class="form-group">
-      <label for="password">Senha</label>
-      <div class="password-wrapper">
-        <input type="password" id="password" placeholder="Mínimo 6 caracteres" required autocomplete="new-password"/>
-        <span class="toggle-password" id="togglePassword">👁️</span>
-      </div>
-    </div>
-
-    <button type="submit" id="btnCadastrar">Cadastrar</button>
-  </form>
-
-  <div id="message"></div>
-
-  <div class="link" id="goToLogin">Já tem conta? Faça login</div>
+    <form id="setupForm">
+        <div class="form-group">
+            <label>Seu Nome</label>
+            <input type="text" id="nome" placeholder="Ex: Aristides" required>
+        </div>
+        <div class="form-group">
+            <label>Nome da Empresa</label>
+            <input type="text" id="empresa" placeholder="Ex: Minha Empresa LTDA" required>
+        </div>
+        <div class="form-group">
+            <label>E-mail (Login)</label>
+            <input type="email" id="email" placeholder="admin@email.com" required>
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="senha" minlength="6" required>
+        </div>
+        <button type="submit" id="btnInstalar">Criar Conta Master</button>
+    </form>
 </div>
 
 <script>
-// ================================================
-// CONEXÃO SUPABASE EMBUTIDA (sem arquivo separado)
-// ================================================
-const SUPABASE_URL    = 'https://ueaprmzmlkfrbmibdnro.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w';
+(function() {
+    // Configurações fornecidas
+    const SUPABASE_URL = "https://ueaprmzmlkfrbmibdnro.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w";
 
-// O CDN UMD cria a variável global 'supabase'
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ================================================
-// TOGGLE SENHA (olhinho)
-// ================================================
-const toggleBtn = document.getElementById('togglePassword');
-const senhaInput = document.getElementById('password');
+    const form = document.getElementById('setupForm');
+    const msgDiv = document.getElementById('mensagem');
+    const btn = document.getElementById('btnInstalar');
 
-if (toggleBtn && senhaInput) {
-  toggleBtn.addEventListener('click', () => {
-    const tipoAtual = senhaInput.type;
-    senhaInput.type = tipoAtual === 'password' ? 'text' : 'password';
-    toggleBtn.textContent = tipoAtual === 'password' ? '🙈' : '👁️';
-  });
-}
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = "Processando...";
+        msgDiv.className = "";
+        msgDiv.innerText = "";
 
-// ================================================
-// CADASTRO
-// ================================================
-const form = document.getElementById('cadastroForm');
-const btn = document.getElementById('btnCadastrar');
-const msg = document.getElementById('message');
+        const nome = document.getElementById('nome').value;
+        const empresa = document.getElementById('empresa').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
 
-if (form) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+        try {
+            // 1. Criar usuário no Auth do Supabase
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: email,
+                password: senha,
+            });
 
-    const email = document.getElementById('email').value.trim();
-    const senha = document.getElementById('password').value;
+            if (authError) throw authError;
 
-    btn.disabled = true;
-    msg.textContent = 'Processando...';
-    msg.className = '';
+            if (authData.user) {
+                // 2. Chamar a função SQL do Passo 4 para vincular empresa e perfil
+                // A função no seu banco é: inicializar_novo_cliente(p_user_id, p_user_nome, p_empresa_nome, p_plano)
+                const { error: funcError } = await supabase.rpc('inicializar_novo_cliente', {
+                    p_user_id: authData.user.id,
+                    p_user_nome: nome,
+                    p_empresa_nome: empresa,
+                    p_plano: 'Master'
+                });
 
-    if (!email || senha.length < 6) {
-      msg.textContent = 'Email inválido ou senha muito curta (mínimo 6 caracteres).';
-      msg.className = 'error';
-      btn.disabled = false;
-      return;
-    }
+                if (funcError) throw funcError;
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password: senha,
-        options: {
-          data: { nome: email.split('@')[0] || 'Usuário' }
+                msgDiv.classList.add('success');
+                msgDiv.innerHTML = `<b>Sucesso!</b> Usuário criado. <br>Verifique seu e-mail para confirmar a conta (se o Auth do Supabase exigir) e depois faça login.`;
+                form.reset();
+            }
+
+        } catch (err) {
+            msgDiv.classList.add('error');
+            msgDiv.innerText = "Erro: " + (err.message || "Falha ao conectar");
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Criar Conta Master";
         }
-      });
-
-      if (error) throw error;
-
-      msg.textContent = 'Cadastro realizado! Verifique seu email para confirmar.';
-      msg.className = 'success';
-
-      setTimeout(() => {
-        window.location.href = 'login.html'; // crie essa página depois
-      }, 4000);
-    } catch (err) {
-      let textoErro = 'Erro ao cadastrar. Tente novamente.';
-      if (err.message?.includes('already registered')) {
-        textoErro = 'Este email já está cadastrado.';
-      } else if (err.message) {
-        textoErro = err.message;
-      }
-      msg.textContent = textoErro;
-      msg.className = 'error';
-    } finally {
-      btn.disabled = false;
-    }
-  });
-}
-
-// Link para login (quando você criar login.html)
-document.getElementById('goToLogin')?.addEventListener('click', () => {
-  window.location.href = 'login.html';
-});
+    });
+})();
 </script>
 
 </body>
