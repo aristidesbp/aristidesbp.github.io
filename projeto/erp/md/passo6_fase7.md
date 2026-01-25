@@ -1,153 +1,133 @@
-Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da coluna excluido_em que fizemos agora), nós concluímos com sucesso praticamente todos os pontos que você listou.
-# Aqui está o status real do projeto agora:
-## ✅ Concluído (Eventos realizados com os arquivos enviados)
-* 1️⃣ CONCEPÇÃO E ARQUITETURA: 100% concluído. O escopo e a estratégia SQL + IndexedDB estão definidos.
-* 2️⃣ MODELAGEM DE DADOS: 100% concluído. Todas as tabelas que você listou (Usuários, Clientes, Vendas, Financeiro, Auditoria, etc.) foram criadas no Passo 1.
-* 3️⃣ SEGURANÇA E GOVERNANÇA: 100% concluído. A estrutura de roles e o suporte a múltiplas senhas/empresas foram implementados.
-* 4️⃣ INFRAESTRUTURA SQL: 100% concluído. As PKs, FKs e índices de performance foram aplicados.
-* 5️⃣ SEGURANÇA (SQL): 100% concluído. O Passo 2 (Policies) e o Passo 3 (Triggers) cobriram o RLS, Auditoria e Hardening de permissões.
-* 6️⃣ BACKEND AVANÇADO (SQL): 100% concluído. O Passo 4 (Funções) trouxe a lógica de finalizar_venda e cancelar_venda, e o Passo 5 (Views) entregou a base para os relatórios.
+# ERP ABP – Guia de Organização e Próximas Fases (2026)
+Nome do Projeto: ERP ABP (Aristides & Parceiros Brasil)
+Última atualização deste documento: Janeiro 2026
+Objetivo: Documento de referência único para orientar o desenvolvimento das fases restantes (6 a 10)
+Status Atual do Projeto (após Passos 1–5 + coluna excluido_em)
+100% concluído nas camadas de backend SQL / Supabase
 
-# 📂 1. Estrutura de Pastas Recomendada para o projeto
-* No servidor ou pasta do projeto, organize assim:
-``` 
-/erp-abp
+# Modelagem completa de todas as tabelas
+RLS + Policies enterprise-grade (multi-tenant, multi-role)
+Triggers (auditoria universal, controle de estoque, financeiro automático, soft-delete)
+Funções críticas (finalizar_venda, cancelar_venda, abrir_caixa, etc.)
+Views de dashboard e relatórios (financeiro, vendas diárias, top produtos, estoque crítico)
+
+# Pendentes (fases principais que faltam implementar)
+
+Fase 6–7 → Offline-first completo (IndexedDB + Dexie + fila de sincronização + resolução de conflitos)
+Fase 8   → Frontend completo (HTML + JS vanilla + módulos desacoplados + dashboard)
+Fase 9   → Integrações externas (WhatsApp Business API, redes sociais, chatbot, notificações)
+Fase 10  → Qualidade, testes automatizados, documentação final e deploy
+
+# Estrutura de Pastas Recomendada (GitHub / repositório local)
+```
+erp-abp/
+├── README.md
+├── LICENSE                 # Sugestão: MIT ou licença comercial restrita
+├── .gitignore
 │
-├── /css               # Estilos (embora usemos injeção direta, guarde os globais aqui)
-├── /js
-│   ├── /core          # O coração do sistema
-│   │   ├── conexao.js    # Configuração Supabase + Dexie (IndexedDB)
-│   │   ├── auth.js       # Lógica de login e permissões
-│   │   └── sync.js       # O motor de sincronização (Fila de Outbox)
+├── /docs/                  # Toda a documentação final
+│   ├── manual_usuario.md
+│   ├── documentacao_tecnica.md
+│   ├── arquitetura.md
+│   └── changelog.md
+│
+├── /css/                   # Estilos (globais e modulares)
+│   ├── reset.css
+│   ├── main.css
+│   └── modules/
+│       ├── pdv.css
+│       ├── vendas.css
+│       ├── financeiro.css
+│       └── dashboard.css
+│
+├── /js/
+│   ├── /core/                  # Camada essencial – regras que não mudam
+│   │   ├── conexao.js          # Supabase client + Dexie (IndexedDB)
+│   │   ├── auth.js             # Login, sessão, roles, current_empresa_id
+│   │   ├── sync.js             # Sincronização bidirecional + outbox pattern
+│   │   ├── ui.js               # Modais, toasts, loaders, confirmações
+│   │   └── config.js           # Constantes, feature flags, endpoints
 │   │
-│   ├── /modules       # Lógica específica de cada tela
+│   ├── /modules/               # Lógica de cada tela/entidade
+│   │   ├── dashboard.js
+│   │   ├── pdv.js              # Frente de caixa / vendas rápidas
+│   │   ├── vendas.js
+│   │   ├── vendas_detalhe.js
 │   │   ├── clientes.js
+│   │   ├── fornecedores.js
+│   │   ├── funcionarios.js
 │   │   ├── produtos.js
-│   │   └── vendas.js
+│   │   ├── servicos.js
+│   │   ├── financeiro.js
+│   │   ├── caixa.js
+│   │   ├── mensagens.js        # WhatsApp + redes sociais
+│   │   ├── chatbot.js
+│   │   └── minha_empresa.js
 │   │
-│   └── /utils         # Funções genéricas (formatar data, moeda, etc.)
+│   └── /utils/                 # Funções reutilizáveis em todo o sistema
+│       ├── format.js           # moeda, data, cpf/cnpj, telefone
+│       ├── validators.js       # validações de formulário
+│       ├── logger.js           # log local + eventual envio para sentry
+│       └── helpers.js          # funções genéricas (delay, debounce, etc.)
 │
-├── index.html         # site
-├── login.html         # Tela de entrada
-├── dashboard.html     # Dashboard
-├── Clientes.html      # adm/Crud
-├── Fornecedores.html  # adm/Crud
-├── Funcionarios.html  # adm/Crud
-├── Tercerisados.html  # adm/Crud
-├── financeiro.html    # adm/Crud
-├── produtos.html      # adm/Crud
-├── cahtbot.html       # Cadm/Crud
-├── mensagen_redsocial.html       # Cadm/Crud
-├── minha_empresa.html       # Cadm/Crud
-└── etc ...
-
-```
-📂 Estrutura de Arquivos: ERP ABP Profissional
-1. Núcleo e Autenticação
-
-    index.html: Landing page / Portal de entrada.
-
-    login.html: Acesso ao sistema (Valida em usuario_senhas).
-
-    dashboard.html: Visão geral (Consome as views do Passo 5).
-
-2. Módulo de Vendas e Frente de Caixa (PDV)
-
-    pdv.html: Interface de vendas rápida (foco em teclado e bipador). Consome produtos e dispara fn_finalizar_venda.
-
-    vendas_lista.html: Histórico de vendas e orçamentos (Tabela vendas).
-
-    vendas_detalhe.html: Visualização de uma venda específica e itens (vendas_itens).
-
-3. Módulo de Entidades (Cadastros Base)
-
-    clientes.html: Gestão de Clientes.
-
-    fornecedores.html: Gestão de Fornecedores.
-
-    funcionarios.html: RH e permissões (Tabela funcionarios).
-
-    terceirizados.html: Prestadores de serviço.
-
-4. Módulo de Estoque e Catálogo
-
-    produtos.html: Cadastro e controle de estoque.
-
-    categorias.html: Organização de produtos.
-
-    servicos.html: Cadastro de serviços (mão de obra).
-
-5. Módulo Financeiro
-
-    financeiro_fluxo.html: Entradas e saídas (Tabela financeiro_lancamentos).
-
-    contas_pagar_receber.html: Gestão de vencimentos.
-
-    caixas.html: Controle de abertura/fechamento (Tabela controle_caixa).
-
-    contas_bancarias.html: Gestão das contas da empresa (financeiro_contas).
-
-6. Módulo de Comunicação e IA (Fase 9)
-
-    mensagens.html: Central multicanal (WhatsApp/Social - Tabela conversas).
-
-    chatbot_config.html: Treinamento da IA (Tabela chatbot_respostas).
-
-7. Configurações e Perfil
-
-    minha_empresa.html: Dados do Tenant (CNPJ, Plano, Logo).
-
-    configuracoes_api.html: Chaves do WhatsApp e Integrações.
-
-    meu_perfil.html: Dados do usuário logado.
-   
-## 🗺️ Mapeamento das Fases na Estrutura de Pastas:
-### erp-abp
-* /css  (Estilos/layoute das paginas ,embora usemos injeção direta, guarde os globais aqui).
-* /js   (todos os scripts , codigos javascript). 
-* index.html (sera a pagina inicial, nosso Dashboard).
-* login.html ( Tela de entrada).
-* entidades.html ( Gestão de Clientes/Fornecedores).
-* etc...
-### /js/core/
-#### Fase 7 (Offline): 
-* Aqui ficam o conexao.js (IndexedDB) e o sync.js (Fila de sincronização e conflitos).
-* Fase 8 (Auth): O auth.js controla a sessão e as permissões de quem pode ver o quê.
-### /js/modules/
-#### Fase 8 (Frontend): 
-* Cada arquivo aqui (ex: vendas.js) cuidará do seu próprio CRUD e Dashboard.
-* Fase 9 (Integrações): Criaremos o chat.js e notificacoes.js aqui dentro.
-### /js/utils/
-#### Fase 10 (Qualidade): 
-* Funções de logs, formatadores de moeda/data e validadores que garantem a qualidade técnica.
-### /docs/ 
-#### Fase 10 (Entrega):
-* Local para salvar o manual do usuário e a documentação técnica que você pretende vender.
-
-## Conclusao:
-* Utiliza os princípios do MVC adaptados para uma arquitetura moderna de Single Page Application (SPA) com Offline-First.
-* No MVC tradicional (como no PHP/Laravel ou Java/Spring), o servidor controla tudo. No seu projeto ERP ABP, estamos buscando uma evolução disso. Vamos comparar:
-
-# 🔄 Comparação: MVC Tradicional vs. Sua Arquitetura
-```
-|-------------------------|---------------------------------|----------------------------------------------------------------------|
-|COMPONENTE               |NO MVC TRADICIONAl               |No ERP APB                                                            |
-|-------------------------|---------------------------------|----------------------------------------------------------------------|
-|Model (Dados)            |Tabelas no Banco SQL.            |Híbrido: Supabase (Nuvem) + IndexedDB (Local).                        |
-|View (Interface)         |HTML gerado pelo servidor.       |Dinâmico: HTML + JS injetado (IIFE) no navegador.                     |
-|Controller (Lógica)      |Código no servidor (PHP/Python). |Descentralizado: SQL Functions (no banco) + JS Modules (no navegador).|
-|-------------------------|---------------------------------|----------------------------------------------------------------------|
+├── /assets/
+│   ├── images/             # logos, ícones, placeholders
+│   ├── icons/              # ícones SVG / PNG
+│   └── fonts/              # fontes customizadas (opcional)
+│
+├── index.html                  # Portal / redireciona para login ou dashboard
+├── login.html
+├── dashboard.html
+├── pdv.html                    # Ponto de venda (foco em usabilidade rápida)
+├── vendas_lista.html
+├── vendas_detalhe.html
+├── clientes.html
+├── fornecedores.html
+├── funcionarios.html
+├── produtos.html
+├── servicos.html
+├── financeiro_fluxo.html
+├── caixas.html
+├── mensagens.html
+├── chatbot_config.html
+├── minha_empresa.html
+├── configuracoes_api.html
+└── meu_perfil.html
 ```
 
-# 🏗️ Como cassificamos nossa estrutura ?
-A estrutura que estamos montando é mais próxima de uma Arquitetura Baseada em Serviços (API-First) com um padrão Client-Side Controller.
-* O "Model" é Inteligente: Diferente de um MVC comum onde o banco é "burro", nosso banco (Supabase) tem RLS e Triggers. Ele se protege sozinho.
-* Controller no Front: Quando você cria um arquivo js/modules/vendas.js, ele atua como o Controller. Ele decide quando buscar dados no IndexedDB e quando enviar para o Supabase.
-* A Camada de Sincronização: Esta é a "mágica" que não existe no MVC padrão. É uma camada extra que garante que o Model Local e o Model Remoto estejam sempre iguais.
+# Mapeamento das Fases Restantes × Pastas / Arquivos Principais
+Fase     Foco Principal                              Pastas/Arquivos Mais Impactados
+6–7      Offline-first + Sincronização               js/core/conexao.js, js/core/sync.js, js/core/config.js
+8        Frontend + CRUD + Dashboard + UX            /js/modules/* , todas as páginas *.html, /css/modules/
+9        Integrações (WhatsApp, redes, chatbot, push) js/modules/mensagens.js, js/modules/chatbot.js, configuracoes_api.html
+10       Testes, docs, monitoramento, deploy         /docs/, /tests/ (futuro), README.md, .github/workflows/
 
-# 📁 Por que a pasta /core e /modules?
-Isso é para manter o Desacoplamento (um dos pilares do MVC):
-* Core: São as regras que nunca mudam (conexão, segurança, sincronização).
-* Modules: É onde o ERP cresce. Se amanhã você quiser criar um módulo de "Frota de Veículos", você apenas cria um novo arquivo em /modules sem quebrar o resto do sistema.
-###    Veredito: Estamos construindo algo mais avançado que um MVC simples; é uma Arquitetura Distribuída Offline-First.
+# Princípios de Arquitetura Adotados no ERP ABP
+Offline-First real (IndexedDB é a fonte primária quando offline)
+API-First + Banco Inteligente (todas operações críticas via funções SQL)
+Client-Side Controller (lógica de tela em /modules/)
+Desacoplamento forte (core não conhece detalhes de negócio)
+Single Responsibility Principle (um módulo = uma entidade/tela)
+Progressive Web App readiness (futuro service-worker + manifest)
+Segurança herdada do backend (RLS + current_empresa_id/)
+
+# Próximos Passos Recomendados (ordem sugerida – Jan/2026)
+Criar repositório GitHub privado ou público com a estrutura acima
+Implementar js/core/conexao.js + schema Dexie (espelhando tabelas SQL)
+Implementar js/core/sync.js (outbox pattern + fila simples de ações pendentes)
+Criar login.html + auth.js (autenticação + sessão + multi-empresa)
+Implementar dashboard.html consumindo views do Passo 5
+Desenvolver um módulo completo de exemplo (ex: clientes.html + clientes.js)
+Testar fluxo completo: offline → ações → online → sincronização → conflito
+Iniciar integração WhatsApp (envio simples + config)
+Documentar enquanto desenvolve (evitar dívida de documentação)
+
+# Dicas Práticas de Desenvolvimento
+Nomenclatura JS: minúsculo + camelCase para funções, kebab-case para arquivos HTML/CSS
+Eventos custom: document.dispatchEvent(new CustomEvent('vendaFinalizada', { detail: {...} }))
+CSS: use BEM ou utility classes (Tailwind opcional para acelerar)
+Comentários úteis no código:
+// @sync-critical   → código que afeta a sincronização
+// @todo            → pendência clara
+// @important       → não mexer sem revisar impacto
 
