@@ -45,6 +45,8 @@ JOIN roles r ON r.id = ue.role_id;
 Esses comandos foram os "ajustes finos" para transformar uma teoria de banco de dados em um sistema funcional via web.
 
 # ⚠️⚠️ OBSERVAÇÃO PARA AS PÁGINAS ABAIXO VOCÊ VAI PRECISAR DA URL DA CHAVE ANON !!!!!⚠️⚠️
+# ⚠️⚠️ O PRIMEIRO USUÁRIO DEVE SER CRIADO PELO PAINEL DO SUPERBASE EM USER !!!!!⚠️⚠️
+
 
 # Tela de login
 ```
