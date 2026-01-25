@@ -801,3 +801,113 @@ CREATE INDEX IF NOT EXISTS idx_mensagens_conversa_data
 -- Próximos passos: Ativar RLS (Passo 2), Triggers (Passo 3), etc.
 -- ======================================================
 ```
+```
+# popular tabelas
+```
+DO $$
+DECLARE
+    v_empresa_id UUID;
+    v_usuario_id UUID;
+    v_fornecedor_id UUID;
+    v_cliente_id UUID;
+    v_produto_id UUID;
+    v_categoria_id UUID;
+    v_venda_id UUID;
+    v_caixa_id UUID;
+    v_conta_id UUID;
+BEGIN
+    -- 1. Tenta pegar a empresa, se não existir, cria!
+    SELECT id INTO v_empresa_id FROM empresas WHERE cnpj = '00.000.000/0001-00' LIMIT 1;
+    
+    IF v_empresa_id IS NULL THEN
+        INSERT INTO empresas (nome_fantasia, razao_social, cnpj, plano)
+        VALUES ('ERP ABP MATRIZ', 'Aristides BP Negocios LTDA', '00.000.000/0001-00', 'pro')
+        RETURNING id INTO v_empresa_id;
+    END IF;
+
+    -- 2. Tenta pegar o usuário, se não existir, cria!
+    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'Aristidesbp@gmail.com' LIMIT 1;
+
+    IF v_usuario_id IS NULL THEN
+        INSERT INTO usuarios (nome, email)
+        VALUES ('Aristides Master', 'Aristidesbp@gmail.com')
+        RETURNING id INTO v_usuario_id;
+    END IF;
+
+    -- 3. Categorias (Agora com v_empresa_id garantido)
+    INSERT INTO categorias (empresa_id, nome, descricao)
+    VALUES (v_empresa_id, 'Eletrônicos', 'Produtos tecnológicos e gadgets')
+    RETURNING id INTO v_categoria_id;
+
+    -- 4. Fornecedores
+    INSERT INTO fornecedores (empresa_id, nome, cnpj, contato, email)
+    VALUES (v_empresa_id, 'Tech Supply Brasil', '11.222.333/0001-99', 'Carlos Tech', 'contato@techsupply.com')
+    RETURNING id INTO v_fornecedor_id;
+
+    -- 5. Produtos
+    INSERT INTO produtos (empresa_id, fornecedor_id, categoria_id, nome, preco, estoque, estoque_minimo)
+    VALUES (v_empresa_id, v_fornecedor_id, v_categoria_id, 'Notebook Ultra Pro', 4500.00, 15, 5)
+    RETURNING id INTO v_produto_id;
+
+    -- 6. Clientes
+    INSERT INTO clientes (empresa_id, nome, cpf_cnpj, email, telefone)
+    VALUES (v_empresa_id, 'Cliente Exemplo LTDA', '99.888.777/0001-55', 'comercial@exemplo.com', '11999999999')
+    RETURNING id INTO v_cliente_id;
+
+    -- 7. Controle de Caixa
+    INSERT INTO controle_caixa (empresa_id, usuario_id, saldo_inicial, status)
+    VALUES (v_empresa_id, v_usuario_id, 1000.00, 'aberto')
+    RETURNING id INTO v_caixa_id;
+
+    -- 8. Vendas e Itens
+    INSERT INTO vendas (empresa_id, cliente_id, usuario_id, valor_total, status, status_pagamento)
+    VALUES (v_empresa_id, v_cliente_id, v_usuario_id, 4500.00, 'Faturada', 'Pago')
+    RETURNING id INTO v_venda_id;
+
+    INSERT INTO vendas_itens (venda_id, produto_id, quantidade, preco_unitario)
+    VALUES (v_venda_id, v_produto_id, 1, 4500.00);
+
+    -- 9. Financeiro
+    INSERT INTO financeiro_contas (empresa_id, nome, tipo)
+    VALUES (v_empresa_id, 'Itaú Principal', 'Corrente')
+    RETURNING id INTO v_conta_id;
+
+    INSERT INTO financeiro_lancamentos (empresa_id, tipo, valor, data_lancamento, descricao, venda_id, conta_id, caixa_id, metodo_pagamento)
+    VALUES (v_empresa_id, 'receita', 4500.00, CURRENT_DATE, 'Venda Notebook Ultra Pro', v_venda_id, v_conta_id, v_caixa_id, 'Pix');
+
+    -- 10. Notas
+    INSERT INTO notas (empresa_id, usuario_id, titulo, conteudo)
+    VALUES (v_empresa_id, v_usuario_id, 'Lembrete de Expansão', 'Verificar novos fornecedores de componentes.');
+
+    RAISE NOTICE 'Banco populado com sucesso e IDs verificados!';
+END $$;
+
+
+```
+```
+DO $$
+DECLARE
+    v_usuario_id UUID;
+    v_role_id UUID;
+BEGIN
+    -- Busca o ID do seu usuário que já existe (visto no seu print)
+    SELECT id INTO v_usuario_id FROM usuarios WHERE email = 'Aristidesbp@gmail.com' LIMIT 1;
+    
+    -- Busca ou cria a role admin
+    SELECT id INTO v_role_id FROM roles WHERE nome = 'admin' LIMIT 1;
+    IF v_role_id IS NULL THEN
+        INSERT INTO roles (nome, descricao) VALUES ('admin', 'Acesso Total') RETURNING id INTO v_role_id;
+    END IF;
+
+    -- INSERE A SENHA: Aristidesbp12344321
+    -- O comando 'crypt' transforma o texto na hash que o banco exige
+    INSERT INTO usuario_senhas (usuario_id, role_id, senha_hash)
+    VALUES (v_usuario_id, v_role_id, crypt('admin12344321', gen_salt('bf')));
+
+    RAISE NOTICE 'Senha vinculada com sucesso ao usuário Aristides!';
+END $$;
+
+```
+
+
+
