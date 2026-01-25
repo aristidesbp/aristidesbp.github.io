@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entidades - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app" style="display: none;">
+        <nav class="navbar">
+            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <div class="brand">Clientes & Fornecedores</div>
+            <button id="btn-novo" class="btn-add"><i class="fas fa-plus"></i></button>
+        </nav>
+
+        <main class="content">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="input-busca" placeholder="Buscar por nome ou CPF/CNPJ...">
+            </div>
+
+            <div id="lista-entidades" class="list-container">
+                <div class="loading">Carregando dados...</div>
+            </div>
+        </main>
+
+        <div id="modal-entidade" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-titulo">Nova Entidade</h2>
+                    <button class="btn-close" onclick="fecharModal()">&times;</button>
+                </div>
+                <form id="form-entidade">
+                    <div class="input-group">
+                        <label>Tipo</label>
+                        <select id="tipo" required>
+                            <option value="cliente">Cliente</option>
+                            <option value="fornecedor">Fornecedor</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Nome / Razão Social</label>
+                        <input type="text" id="nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label>CPF / CNPJ</label>
+                        <input type="text" id="documento">
+                    </div>
+                    <div class="input-group">
+                        <label>Telefone / WhatsApp</label>
+                        <input type="tel" id="telefone">
+                    </div>
+                    <div class="input-group">
+                        <label>E-mail</label>
+                        <input type="email" id="email">
+                    </div>
+                    <button type="submit" class="btn-save">SALVAR ENTIDADE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+(function() {
+    const CONFIG = {
+        URL: "https://ueaprmzmlkfrbmibdnro.supabase.co",
+        KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXBybXptbGtmcmJtaWJkbnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTg3OTQsImV4cCI6MjA4NDkzNDc5NH0.Nl_W2v3JN_uQLfz4eAqV3goDVFernnGi2A7L9kszX3w"
+    };
+
+    const supabaseClient = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+    let dadosUsuario = null;
+
+    // Injeção de CSS
+    const style = document.createElement('style');
+    style.innerHTML = `
+        :root { --primary: #3ecf8e; --dark: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        body { margin: 0; font-family: sans-serif; background: var(--dark); color: var(--text); }
+        .navbar { display: flex; align-items: center; padding: 15px; background: var(--card); border-bottom: 1px solid #334155; position: sticky; top:0; z-index:10; }
+        .btn-back { color: white; text-decoration: none; font-size: 1.2rem; margin-right: 15px; }
+        .brand { font-weight: bold; flex-grow: 1; font-size: 1.1rem; }
+        .btn-add { background: var(--primary); border: none; width: 35px; height: 35px; border-radius: 50%; color: #000; cursor: pointer; }
+
+        .content { padding: 15px; }
+        .search-bar { background: var(--card); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border: 1px solid #334155; }
+        .search-bar input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+
+        .entidade-card { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .entidade-info h4 { margin: 0; font-size: 1rem; color: var(--primary); }
+        .entidade-info p { margin: 5px 0 0; font-size: 0.8rem; color: #94a3b8; }
+        .badge-tipo { font-size: 9px; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: #334155; }
+
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 100; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: var(--card); margin: 10% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 400px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-close { background: none; border: none; color: white; font-size: 1.5rem; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; box-sizing: border-box; }
+        .btn-save { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    `;
+    document.head.appendChild(style);
+
+    async function init() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) { window.location.href = "login.html"; return; }
+
+        // Pega os dados da empresa do usuário logado
+        const { data: perfil } = await supabaseClient.from('view_usuario_empresas').select('*').eq('usuario_id', session.user.id).single();
+        if (perfil) {
+            dadosUsuario = perfil;
+            document.getElementById('app').style.display = 'block';
+            carregarEntidades();
+        }
+    }
+
+    async function carregarEntidades() {
+        const container = document.getElementById('lista-entidades');
+        // Buscamos tanto na tabela 'clientes' quanto 'fornecedores' ou apenas na centralizada se você unificou
+        // Aqui vou usar a tabela 'clientes' como base principal conforme seu Passo 1
+        const { data, error } = await supabaseClient
+            .from('clientes')
+            .select('*')
+            .eq('empresa_id', dadosUsuario.empresa_id)
+            .order('nome', { ascending: true });
+
+        if (error) {
+            container.innerHTML = `<div class="err">Erro ao carregar: ${error.message}</div>`;
+            return;
+        }
+
+        if (data.length === 0) {
+            container.innerHTML = `<div style="text-align:center; color:#64748b;">Nenhum registro encontrado.</div>`;
+            return;
+        }
+
+        container.innerHTML = data.map(item => `
+            <div class="entidade-card">
+                <div class="entidade-info">
+                    <span class="badge-tipo">${item.tipo || 'Cliente'}</span>
+                    <h4>${item.nome}</h4>
+                    <p><i class="fas fa-phone"></i> ${item.telefone || 'Sem telefone'}</p>
+                </div>
+                <button class="btn-icon" onclick="alert('ID: ${item.id}')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        `).join('');
+    }
+
+    // Modal e Cadastro
+    const modal = document.getElementById('modal-entidade');
+    document.getElementById('btn-novo').onclick = () => modal.style.display = 'block';
+    window.fecharModal = () => modal.style.display = 'none';
+
+    document.getElementById('form-entidade').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('.btn-save');
+        btn.innerText = "Salvando...";
+        btn.disabled = true;
+
+        const payload = {
+            empresa_id: dadosUsuario.empresa_id,
+            nome: document.getElementById('nome').value,
+            cpf_cnpj: document.getElementById('documento').value,
+            telefone: document.getElementById('telefone').value,
+            email: document.getElementById('email').value,
+            ativo: true
+        };
+
+        const { error } = await supabaseClient.from('clientes').insert([payload]);
+
+        if (error) {
+            alert("Erro ao salvar: " + error.message);
+        } else {
+            alert("Cadastrado com sucesso!");
+            fecharModal();
+            carregarEntidades();
+            e.target.reset();
+        }
+        btn.innerText = "SALVAR ENTIDADE";
+        btn.disabled = false;
+    };
+
+    init();
+})();
+</script>
+</body>
+</html>
