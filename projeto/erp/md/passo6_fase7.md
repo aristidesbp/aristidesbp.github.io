@@ -46,3 +46,16 @@ Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da c
 |-------------------------|---------------------------------|----------------------------------------------------------------------|
 ```
 
+# 🏗️ Como cassificamos nossa estrutura ?
+A estrutura que estamos montando é mais próxima de uma Arquitetura Baseada em Serviços (API-First) com um padrão Client-Side Controller.
+* O "Model" é Inteligente: Diferente de um MVC comum onde o banco é "burro", nosso banco (Supabase) tem RLS e Triggers. Ele se protege sozinho.
+* Controller no Front: Quando você cria um arquivo js/modules/vendas.js, ele atua como o Controller. Ele decide quando buscar dados no IndexedDB e quando enviar para o Supabase.
+* A Camada de Sincronização: Esta é a "mágica" que não existe no MVC padrão. É uma camada extra que garante que o Model Local e o Model Remoto estejam sempre iguais.
+
+# 📁 Por que a pasta /core e /modules?
+Isso é para manter o Desacoplamento (um dos pilares do MVC):
+* Core: São as regras que nunca mudam (conexão, segurança, sincronização).
+* Modules: É onde o ERP cresce. Se amanhã você quiser criar um módulo de "Frota de Veículos", você apenas cria um novo arquivo em /modules sem quebrar o resto do sistema.
+###    Veredito: Estamos construindo algo mais avançado que um MVC simples; é uma Arquitetura Distribuída Offline-First.
+
+
