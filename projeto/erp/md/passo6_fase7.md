@@ -37,9 +37,70 @@ Com a execução dos Passos 1 a 5 que acabamos realizar (incluindo o ajuste da c
 ├── financeiro.html    # adm/Crud
 ├── produtos.html      # adm/Crud
 ├── cahtbot.html       # Cadm/Crud
-└── entidades.html     # Gestão de Clientes/Fornecedores
+├── mensagen_redsocial.html       # Cadm/Crud
+├── minha_empresa.html       # Cadm/Crud
+└── etc ...
 
-``` 
+```
+📂 Estrutura de Arquivos: ERP ABP Profissional
+1. Núcleo e Autenticação
+
+    index.html: Landing page / Portal de entrada.
+
+    login.html: Acesso ao sistema (Valida em usuario_senhas).
+
+    dashboard.html: Visão geral (Consome as views do Passo 5).
+
+2. Módulo de Vendas e Frente de Caixa (PDV)
+
+    pdv.html: Interface de vendas rápida (foco em teclado e bipador). Consome produtos e dispara fn_finalizar_venda.
+
+    vendas_lista.html: Histórico de vendas e orçamentos (Tabela vendas).
+
+    vendas_detalhe.html: Visualização de uma venda específica e itens (vendas_itens).
+
+3. Módulo de Entidades (Cadastros Base)
+
+    clientes.html: Gestão de Clientes.
+
+    fornecedores.html: Gestão de Fornecedores.
+
+    funcionarios.html: RH e permissões (Tabela funcionarios).
+
+    terceirizados.html: Prestadores de serviço.
+
+4. Módulo de Estoque e Catálogo
+
+    produtos.html: Cadastro e controle de estoque.
+
+    categorias.html: Organização de produtos.
+
+    servicos.html: Cadastro de serviços (mão de obra).
+
+5. Módulo Financeiro
+
+    financeiro_fluxo.html: Entradas e saídas (Tabela financeiro_lancamentos).
+
+    contas_pagar_receber.html: Gestão de vencimentos.
+
+    caixas.html: Controle de abertura/fechamento (Tabela controle_caixa).
+
+    contas_bancarias.html: Gestão das contas da empresa (financeiro_contas).
+
+6. Módulo de Comunicação e IA (Fase 9)
+
+    mensagens.html: Central multicanal (WhatsApp/Social - Tabela conversas).
+
+    chatbot_config.html: Treinamento da IA (Tabela chatbot_respostas).
+
+7. Configurações e Perfil
+
+    minha_empresa.html: Dados do Tenant (CNPJ, Plano, Logo).
+
+    configuracoes_api.html: Chaves do WhatsApp e Integrações.
+
+    meu_perfil.html: Dados do usuário logado.
+   
 ## 🗺️ Mapeamento das Fases na Estrutura de Pastas:
 ### erp-abp
 * /css  (Estilos/layoute das paginas ,embora usemos injeção direta, guarde os globais aqui).
