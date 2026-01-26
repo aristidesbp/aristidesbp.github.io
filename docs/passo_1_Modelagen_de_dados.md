@@ -254,6 +254,244 @@ GRANT ALL ON SCHEMA public TO service_role;
 * 👉 Compatível com PostgreSQL / Supabase
   
 ```
+-- ==========================================
+-- ERP ABP PROFISSIONAL - SCRIPT DE CRIAÇÃO
+-- ==========================================
+
+-- 1. EXTENSÕES (Caso não estejam ativas)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 2. TABELA PRINCIPAL: USUARIOS
+CREATE TABLE public.usuarios (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    nome TEXT NOT NULL,
+    cpf VARCHAR(14) UNIQUE,
+    data_nascimento DATE,
+    email TEXT UNIQUE NOT NULL,
+    senhaHash TEXT NOT NULL,
+    contato TEXT,
+    cep VARCHAR(9),
+    endereco TEXT,
+    avata_url TEXT,
+    role TEXT DEFAULT 'user'
+);
+
+-- 3. ENTIDADES (Clientes, Funcionários, Fornecedores)
+CREATE TABLE public.clientes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    cpfCnpj VARCHAR(20),
+    contato TEXT,
+    email TEXT,
+    cep VARCHAR(9),
+    endereco TEXT,
+    status TEXT DEFAULT 'ativo',
+    avata_url TEXT,
+    senha TEXT -- Para acesso ao portal do cliente
+);
+
+CREATE TABLE public.funcionarios (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    cpf VARCHAR(14),
+    contato TEXT,
+    email TEXT,
+    cep VARCHAR(9),
+    endereco TEXT,
+    cargo TEXT,
+    departamento TEXT,
+    status TEXT DEFAULT 'ativo',
+    avata_url TEXT,
+    senha TEXT
+);
+
+CREATE TABLE public.fornecedores (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    cnpj VARCHAR(20),
+    inscricao_estadual TEXT,
+    inscricao_municipal TEXT,
+    cep VARCHAR(9),
+    endereco TEXT,
+    email TEXT,
+    contato TEXT,
+    status TEXT DEFAULT 'ativo',
+    avata_url TEXT,
+    senha TEXT
+);
+
+-- 4. CATEGORIZAÇÃO
+CREATE TABLE public.categoria (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    nome TEXT NOT NULL,
+    status TEXT DEFAULT 'ativo',
+    foto_url TEXT
+);
+
+CREATE TABLE public.sub_categoria (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    categoriaId UUID REFERENCES public.categoria(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    status TEXT DEFAULT 'ativo',
+    foto_url TEXT
+);
+
+-- 5. PRODUTOS E SERVIÇOS
+CREATE TABLE public.produtos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    fornecedorId UUID REFERENCES public.fornecedores(id),
+    categoriaID UUID REFERENCES public.categoria(id),
+    sub_categoriaID UUID REFERENCES public.sub_categoria(id),
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    preco_compra DECIMAL(10,2),
+    preco_venda DECIMAL(10,2),
+    estoque INTEGER DEFAULT 0,
+    estoque_minimo INTEGER DEFAULT 0,
+    codigo_barras TEXT,
+    nota_fiscal TEXT,
+    data_compra DATE,
+    data_vencimento DATE,
+    foto_url TEXT,
+    status TEXT DEFAULT 'ativo'
+);
+
+CREATE TABLE public.servicos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    categoriaID UUID REFERENCES public.categoria(id),
+    sub_categoriaID UUID REFERENCES public.sub_categoria(id),
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2),
+    preco_estimado TEXT, -- Ex: "por hora", "diária"
+    foto_url TEXT,
+    status TEXT DEFAULT 'ativo'
+);
+
+-- 6. VENDAS E PAGAMENTOS
+CREATE TABLE public.formas_de_pagamento (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    tipo TEXT, -- pix, credito, dinheiro
+    modo TEXT, -- parcelado, avista
+    valorTotal DECIMAL(10,2),
+    status TEXT DEFAULT 'concluido'
+);
+
+CREATE TABLE public.vendas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    clienteId UUID REFERENCES public.clientes(id),
+    f_pagamentoId UUID REFERENCES public.formas_de_pagamento(id),
+    dataVenda TIMESTAMPTZ DEFAULT NOW(),
+    valorTotal DECIMAL(10,2),
+    status TEXT DEFAULT 'finalizada'
+);
+
+CREATE TABLE public.itens_venda (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    vendaId UUID REFERENCES public.vendas(id) ON DELETE CASCADE,
+    produtoId UUID REFERENCES public.produtos(id),
+    quantidade INTEGER NOT NULL,
+    precoUnitario DECIMAL(10,2) NOT NULL
+);
+
+-- 7. FINANCEIRO E FEEDBACK
+CREATE TABLE public.financeiro (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    vendaId UUID REFERENCES public.vendas(id) ON DELETE SET NULL,
+    tipo TEXT NOT NULL, -- receita / despesa
+    valor DECIMAL(10,2) NOT NULL,
+    parcelas INTEGER DEFAULT 1,
+    data_vencimento DATE,
+    data_pagamento DATE,
+    descricao TEXT
+);
+
+CREATE TABLE public.avaliacoes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id),
+    clienteId UUID REFERENCES public.clientes(id),
+    produtoId UUID REFERENCES public.produtos(id),
+    servicosId UUID REFERENCES public.servicos(id),
+    nota INTEGER CHECK (nota >= 1 AND nota <= 5),
+    comentario TEXT
+);
+
+-- 8. COMUNICAÇÃO E UTILITÁRIOS
+CREATE TABLE public.conversas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    canal TEXT, -- whatsapp, instagram
+    clienteId UUID REFERENCES public.clientes(id),
+    ultimaAtualizacao TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE public.mensagens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    conversaId UUID REFERENCES public.conversas(id) ON DELETE CASCADE,
+    remetente TEXT,
+    conteudo TEXT,
+    dataEnvio TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE public.notas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuarioId UUID REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    titulo TEXT,
+    conteudo TEXT,
+    criadoEm TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 9. CONTEÚDO E POLÍTICAS
+CREATE TABLE public.documentacao (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    titulo TEXT,
+    conteudo TEXT,
+    tags TEXT[]
+);
+
+CREATE TABLE public.politicas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    titulo TEXT,
+    conteudo TEXT
+);
+
+
+CREATE TABLE public.agendar_servicos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    criadoEm TIMESTAMPTZ DEFAULT NOW(),
+    usuarioId UUID REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    servicoId UUID REFERENCES public.servicos(id) ON DELETE CASCADE,
+    clienteId UUID REFERENCES public.clientes(id) ON DELETE CASCADE,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    status TEXT DEFAULT 'agendado', -- agendado, concluido, cancelado
+    estoque_minimo INTEGER DEFAULT 0, -- Mantido conforme sua solicitação de modelagem
+    
+    -- Opcional: Impedir agendamentos duplicados para o mesmo profissional/serviço no mesmo horário
+    CONSTRAINT agendamento_unico UNIQUE (servicoId, data, hora)
+);
 
 ```
 
