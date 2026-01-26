@@ -13,6 +13,7 @@
 USUARIOS
  ├─ id (PK)
  ├─ criadoEm
+ ├─ user_auth_user_id 
  ├─ nome
  ├─ cpf
  ├─ data_nascimento
