@@ -9,8 +9,9 @@
     window.__ERP_GUARD_LOADED__ = true;
 
     const CONFIG = Object.freeze({
-        SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX',
+        SUPABASE_URL: 'https://gowbbmxogydotprcaonz.supabase.co',
+        SUPABASE_KEY: 'sb_publishable__ViVgb3sEWhOB_wKKGWEGw_bGauBWNg',
+        SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdvd2JibXhvZ3lkb3RwcmNhb256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzODI3NTAsImV4cCI6MjA4NDk1ODc1MH0.-MZnJltABt-6sN4WP9HUp7lw_9mdiMdhpvsAP1Kzmk8',
         LOGIN_PAGE: "login.html",
         HOME_PAGE: "index.html",
         HUB_PAGE: "https://aristidesbp.github.io/",
