@@ -1,4 +1,133 @@
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# 01
+# CRIANDO BANCO DE DADOS NO SUPABASE
+https://supabase.com
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# CRIAR TABELAS PROJETO ERP
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.clientes (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  usuario_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  rg text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT clientes_pkey PRIMARY KEY (id),
+  CONSTRAINT clientes_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.fornecedores (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  usuario_id uuid,
+  razao_social text NOT NULL,
+  nome_fantasia text,
+  cnpj text,
+  inscricao_estadual text,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  CONSTRAINT fornecedores_pkey PRIMARY KEY (id),
+  CONSTRAINT fornecedores_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.notes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT notes_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.usuarios (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id uuid NOT NULL UNIQUE,
+  email text NOT NULL UNIQUE,
+  nivel_acesso text DEFAULT 'cliente'::text CHECK (nivel_acesso = ANY (ARRAY['master'::text, 'funcionario'::text, 'cliente'::text, 'fornecedor'::text])),
+  status text DEFAULT 'ativo'::text CHECK (status = ANY (ARRAY['ativo'::text, 'inativo'::text])),
+  CONSTRAINT usuarios_pkey PRIMARY KEY (id),
+  CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+## FUNCTION TRIGGER
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+``` 
+-- 1. Criar a função que insere os dados na tabela public.usuarios
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.usuarios (user_id, nome_completo, avatar_url)
+  values (
+    new.id, 
+    new.raw_user_meta_data->>'full_name', -- Tenta pegar o nome dos metadados (ex: Google Login)
+    new.raw_user_meta_data->>'avatar_url' -- Tenta pegar a foto dos metadados
+  );
+  return new;
+end;
+$$;
+
+-- 2. Criar o gatilho (trigger) que dispara após um novo registro em auth.users
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# CRIAR APOLICE 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+```
+-- Cria a política que permite ao usuário gerenciar apenas os seus fornecedores
+CREATE POLICY "Acesso total aos próprios fornecedores" 
+ON public.fornecedores 
+FOR ALL 
+USING (auth.uid() = usuario_id);
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# CRIANDO UMA VISUALIZAÇÃO COM VIEWS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+## PROMPT PARA CRIAR VIEWS:
+```
+Crie uma view chamada "v_sevicos_destaque" que liste os serviços com o nome
+da categoria e detalhes do autor que esta na tabela de usuarios. Alem disso, 
+caucule a media das notas (use ) se nao houver) e o total de avaliçoes recebidas por cada serviço.
+Conforme o schema do banco de dados que vou te passar abaixo:
+
+Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para criar uma segurança.
+
+[cole aqui o schema fica em: menu lateral/ Database/ no canto superior direi opção Copy as SQL]
+```
+
+
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # conexao.js
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 /** ############################################################################## */
 /** ERP ABP - GUARD GLOBAL (Versão Final Corrigida - Responsiva)
@@ -125,7 +254,9 @@
 })();
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # bloco_de_notas
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -435,7 +566,9 @@
 </html>
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # entidades.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -906,7 +1039,9 @@
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # finaceiro.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -1319,9 +1454,9 @@ td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
 
 
 ```
-
-```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # index.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -1491,7 +1626,9 @@ body {
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # login.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -1772,7 +1909,9 @@ window.onload = checkStatus;
 </html>
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # produtos.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 ```
 
 <!DOCTYPE html>
@@ -2228,130 +2367,9 @@ const filePath = `fotos/${Date.now()}_${Math.random().toString(36).substring(7)}
 </html>
 
 ```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# NAVBAR
-
-```
-// Funções de Autenticação e Segurança
-async function validarAcesso() {
-    const { data: { session } } = await _supabase.auth.getSession();
-    if (!session) window.location.href = 'login.html';
-}
-
-async function sairDaConta() {
-    if(confirm("Sair?")) {
-        await _supabase.auth.signOut();
-        window.location.href = 'login.html';
-    }
-}
-
-
-
-
-
-
-/** ##### NAVBAR COMPONENTE - ERP ABP ####### */
-(function() {
-const styles = `
-
-
-<style>
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-nav {
-            background: #ef4444;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-nav:hover {
-            background: #dc2626;
-            transform: scale(1.05);
-        }
-
-        .btn-home {
-            background: #3ecf8e !important; /* Verde padrão do seu ERP */
-        }
-
-        /* Ajuste para o conteúdo não ficar embaixo da navbar fixa */
-        body {
-            padding-top: 80px;
-        }
-    </style>
-
-
-
-`; const navbarHtml = `
-
-
-<div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-            <a href="adm.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>`;
-
-
-
-//  Inserir no início do Body
-document.head.insertAdjacentHTML('beforeend', styles);
-document.body.insertAdjacentHTML('afterbegin', navbarHtml);
-})();
-
-
-
-/** Função global para Deslogar do supabase */
-async function sairDaConta() {
-    if(confirm("Deseja realmente sair do sistema?")) {
-        try {
-            // Verifica se o cliente supabase existe antes de tentar deslogar
-            if (typeof _supabase !== 'undefined') {
-                await _supabase.auth.signOut();
-            }
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error("Erro ao sair:", error);
-            window.location.href = 'login.html';
-        }
-    }
-}
-
-
-```
  # segurança reforçada 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
  ```
 /**
  * =======================================================
@@ -2487,155 +2505,7 @@ async function sairDaConta() {
 })();
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# 01
-# CRIANDO BANCO DE DADOS NO SUPABASE
-https://supabase.com
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 
-
-## CRIANDO TABELA USUARIOS VIA SQL
-```
-create table public.usuarios (
-  id bigint generated by default as identity not null,
-  created_at timestamp with time zone not null default now(),
-  user_id uuid null,
-  nome_completo text null,
-  bio text null,
-  avatar_url text null,
-  constraint usuarios_pkey primary key (id),
-  constraint usuarios_user_id_fkey foreign KEY (user_id) references auth.users (id)
-) TABLESPACE pg_default;
-```
-
-## FUNCTION TRIGGER
-``` 
--- 1. Criar a função que insere os dados na tabela public.usuarios
-create or replace function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-begin
-  insert into public.usuarios (user_id, nome_completo, avatar_url)
-  values (
-    new.id, 
-    new.raw_user_meta_data->>'full_name', -- Tenta pegar o nome dos metadados (ex: Google Login)
-    new.raw_user_meta_data->>'avatar_url' -- Tenta pegar a foto dos metadados
-  );
-  return new;
-end;
-$$;
-
--- 2. Criar o gatilho (trigger) que dispara após um novo registro em auth.users
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
-
-```
-
-# CRIAR APOLICE 
-```
--- Cria a política que permite ao usuário gerenciar apenas os seus fornecedores
-CREATE POLICY "Acesso total aos próprios fornecedores" 
-ON public.fornecedores 
-FOR ALL 
-USING (auth.uid() = usuario_id);
-```
-
-# POPULAR TABELA USUARIOS
-
-```
-insert into public.usuarios (nome_completo, bio, avatar_url) values
-('João da Silva', 'Usuário padrão do sistema', null),
-('Maria Oliveira', 'Perfil de testes internos', null),
-('Carlos Pereira', 'Cliente cadastrado manualmente', null),
-('Ana Souza', 'Usuária ativa da plataforma', null),
-('Lucas Fernandes', 'Conta criada para homologação', null),
-('Juliana Costa', 'Usuária administrativa', null),
-('Rafael Martins', 'Perfil comercial', null),
-('Patrícia Almeida', 'Usuária visitante', null),
-('Bruno Rocha', 'Conta de demonstração', null),
-('Fernanda Lima', 'Usuária comum do sistema', null);
-```
-
-# CRIANDO UMA VISUALIZAÇÃO COM VIEWS
-
-## PROMPT PARA CRIAR VIEWS:
-```
-Crie uma view chamada "v_sevicos_destaque" que liste os serviços com o nome
-da categoria e detalhes do autor que esta na tabela de usuarios. Alem disso, 
-caucule a media das notas (use ) se nao houver) e o total de avaliçoes recebidas por cada serviço.
-Conforme o schema do banco de dados que vou te passar abaixo:
-
-Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para criar uma segurança.
-
-[cole aqui o schema fica em: menu lateral/ Database/ no canto superior direi opção Copy as SQL]
-```
-
-# CRIAR TABELAS PROJETO ERP
-```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
-
-CREATE TABLE public.clientes (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  usuario_id uuid,
-  nome_completo text NOT NULL,
-  cpf text,
-  data_nascimento date,
-  email text,
-  telefone text,
-  rg text,
-  cep text,
-  logradouro text,
-  numero text,
-  bairro text,
-  cidade text,
-  estado text,
-  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
-  CONSTRAINT clientes_pkey PRIMARY KEY (id),
-  CONSTRAINT clientes_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
-);
-CREATE TABLE public.fornecedores (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
-  usuario_id uuid,
-  razao_social text NOT NULL,
-  nome_fantasia text,
-  cnpj text,
-  inscricao_estadual text,
-  email text,
-  telefone text,
-  cep text,
-  logradouro text,
-  numero text,
-  bairro text,
-  cidade text,
-  estado text,
-  CONSTRAINT fornecedores_pkey PRIMARY KEY (id),
-  CONSTRAINT fornecedores_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
-);
-CREATE TABLE public.notes (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL,
-  title text NOT NULL,
-  content text,
-  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
-  CONSTRAINT notes_pkey PRIMARY KEY (id),
-  CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-CREATE TABLE public.usuarios (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  user_id uuid NOT NULL UNIQUE,
-  email text NOT NULL UNIQUE,
-  nivel_acesso text DEFAULT 'cliente'::text CHECK (nivel_acesso = ANY (ARRAY['master'::text, 'funcionario'::text, 'cliente'::text, 'fornecedor'::text])),
-  status text DEFAULT 'ativo'::text CHECK (status = ANY (ARRAY['ativo'::text, 'inativo'::text])),
-  CONSTRAINT usuarios_pkey PRIMARY KEY (id),
-  CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-```
 
 
 
