@@ -119,135 +119,127 @@ ALTER VIEW public.listar_usuarios OWNER TO postgres;
 
 ```
 
-# conexao_navbar.js
+# conexao.js
 ```
-/** ############################################################################## */
-/** ERP ABP - GUARD GLOBAL (Versão Final Corrigida - Responsiva)
- * Segurança + SDK Auto-load + Navbar + Controle de Sessão */
-
+/** ERP ABP - Conexão Supabase */
 (async () => {
     "use strict";
-
-    if (window.__ERP_GUARD_LOADED__) return;
-    window.__ERP_GUARD_LOADED__ = true;
-
-    const CONFIG = Object.freeze({
-        SUPABASE_URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX',
-        LOGIN_PAGE: "login.html",
-        HOME_PAGE: "index.html",
-        HUB_PAGE: "https://aristidesbp.github.io/",
-        APP_NAME: "ERP ABP",
+    
+    const CONFIG = {
+        URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
+        KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Sua chave do projeto
         SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    });
+    };
 
-    async function carregarSDK() {
+    async function loadSDK() {
         if (window.supabase) return true;
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = CONFIG.SDK_URL;
             script.onload = () => resolve(true);
-            script.onerror = () => reject(new Error("Falha ao carregar SDK do Supabase"));
+            script.onerror = () => reject(new Error("Erro ao carregar SDK"));
             document.head.appendChild(script);
         });
     }
 
     try {
-        await carregarSDK();
+        await loadSDK();
+        // Definindo globalmente como _supabase para uso nos outros arquivos
         if (!window._supabase) {
-            window._supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+            window._supabase = supabase.createClient(CONFIG.URL, CONFIG.KEY);
         }
-
-        async function validarSessao() {
-            try {
-                const { data, error } = await _supabase.auth.getSession();
-                if (error || !data || !data.session) throw new Error();
-                return data.session;
-            } catch (e) {
-                window.location.replace(CONFIG.LOGIN_PAGE);
-                return null;
-            }
-        }
-
-        async function logout() {
-            if (!confirm("Deseja realmente sair do sistema?")) return;
-            try { await _supabase.auth.signOut(); } finally { window.location.replace(CONFIG.LOGIN_PAGE); }
-        }
-
-        function renderNavbar() {
-            if (document.querySelector(".erp-navbar")) return;
-            const style = `
-                <style>
-                    /* Reset básico para a Navbar */
-                    .erp-navbar, .erp-navbar * { box-sizing: border-box; }
-
-                    .erp-navbar { 
-                        position: fixed; top: 0; left: 0; width: 100%; 
-                        background: #fff; padding: 10px 15px; 
-                        display: flex; justify-content: space-between; align-items: center; 
-                        box-shadow: 0 2px 10px rgba(0,0,0,.1); z-index: 9999; 
-                        font-family: sans-serif; 
-                    }
-                    .erp-navbar .brand { 
-                        font-weight: bold; color: #0f172a; font-size: 1.1rem; 
-                        display: flex; align-items: center; gap: 5px; 
-                        white-space: nowrap;
-                    }
-                    .erp-navbar .nav-right { display: flex; gap: 8px; flex-wrap: nowrap; }
-                    
-                    .erp-navbar .btn { 
-                        padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; border: none; 
-                        cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; 
-                        gap: 5px; transition: 0.3s; white-space: nowrap; color: white;
-                    }
-                    .erp-navbar .btn-logout { background: #ef4444; }
-                    .erp-navbar .btn-home { background: #3ecf8e; }
-                    
-                    /* Ajustes para Celular */
-                    @media (max-width: 600px) {
-                        .erp-navbar { padding: 8px 10px; }
-                        .erp-navbar .brand { font-size: 0.9rem; }
-                        .erp-navbar .btn span { display: none; } /* Esconde o texto, deixa só o ícone no celular se ficar apertado */
-                        .erp-navbar .btn { padding: 8px 12px; font-size: 14px; }
-                    }
-
-                    body.erp-guard-active { padding-top: 70px !important; }
-                </style>`;
-
-            const html = `
-                <div class="erp-navbar">
-                    <div class="brand"><span style="color: #3ecf8e;">●</span> ${CONFIG.APP_NAME}</div>
-                    <div class="nav-right">
-                        <a href="${CONFIG.HUB_PAGE}" class="btn btn-home"><i class="fas fa-external-link-alt"></i> <span>Projetos</span></a>
-                        <a href="${CONFIG.HOME_PAGE}" class="btn btn-home"><i class="fas fa-home"></i> <span>Início</span></a>
-                        <button class="btn btn-logout" id="btnSair"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></button>
-                    </div>
-                </div>`;
-
-            document.head.insertAdjacentHTML("beforeend", style);
-            document.body.insertAdjacentHTML("afterbegin", html);
-            document.body.classList.add("erp-guard-active");
-            document.getElementById("btnSair")?.addEventListener("click", logout);
-        }
-
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", async () => {
-                const session = await validarSessao();
-                if (session) renderNavbar();
-            });
-        } else {
-            const session = await validarSessao();
-            if (session) renderNavbar();
-        }
-
     } catch (err) {
-        console.error("Erro crítico no Guard:", err);
+        console.error("Erro na conexão:", err);
     }
 })();
 ```
 
+# navbar.js
+```
+/** ERP ABP - Navbar Dinâmica */
+(() => {
+    "use strict";
 
+    function injectNavbar() {
+        if (document.querySelector(".erp-navbar")) return;
 
+        const style = `
+        <style>
+            .erp-navbar { 
+                position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+                background: #1e293b; color: white; display: flex; 
+                justify-content: space-between; align-items: center; 
+                padding: 0 20px; z-index: 10000; font-family: sans-serif;
+            }
+            .erp-navbar .brand { font-weight: bold; color: #3ecf8e; }
+            .erp-navbar .menu { display: flex; gap: 15px; }
+            .erp-navbar button, .erp-navbar a { 
+                background: #334155; color: white; border: none; 
+                padding: 8px 15px; border-radius: 4px; cursor: pointer;
+                text-decoration: none; font-size: 13px;
+            }
+            .erp-navbar .btn-logout { background: #ef4444; }
+            body { padding-top: 70px !important; }
+        </style>`;
+
+        const html = `
+        <nav class="erp-navbar">
+            <div class="brand">ERP ABP Profissional</div>
+            <div class="menu">
+                <a href="index.html">Início</a>
+                <button id="nav-btn-sair" class="btn-logout">Sair</button>
+            </div>
+        </nav>`;
+
+        document.head.insertAdjacentHTML("beforeend", style);
+        document.body.insertAdjacentHTML("afterbegin", html);
+
+        document.getElementById("nav-btn-sair")?.addEventListener("click", async () => {
+            if (confirm("Deseja sair?")) {
+                await window._supabase.auth.signOut();
+                window.location.replace("login.html");
+            }
+        });
+    }
+
+    // Aguarda o DOM estar pronto para injetar
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", injectNavbar);
+    } else {
+        injectNavbar();
+    }
+})();
+```
+
+# validar_user.js
+```
+/** ERP ABP - Validador de Sessão */
+(async () => {
+    "use strict";
+
+    // Função para checar se a conexão já foi estabelecida (polling rápido)
+    const checkSupabase = setInterval(async () => {
+        if (window._supabase) {
+            clearInterval(checkSupabase);
+            
+            const { data: { session }, error } = await window._supabase.auth.getSession();
+
+            if (error || !session) {
+                console.warn("Sessão inválida, redirecionando...");
+                window.location.replace("login.html");
+            }
+
+            // Opcional: Escuta mudanças na autenticação (ex: deslogar em outra aba)
+            window._supabase.auth.onAuthStateChange((event) => {
+                if (event === "SIGNED_OUT") window.location.replace("login.html");
+            });
+        }
+    }, 100);
+
+    // Timeout de segurança: se após 5s o supabase não carregar, algo deu errado
+    setTimeout(() => clearInterval(checkSupabase), 5000);
+})();
+```
 
 
 
