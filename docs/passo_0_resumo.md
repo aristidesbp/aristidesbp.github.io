@@ -1,6 +1,7 @@
-# 📘 RESUMO GERAL — PROJETO ERP APB
+# 📘 RESUMO GERAL — PROJETO ARISTIDESBP_ERP
 ## 🎯 Objetivo do Projeto
-Desenvolver um ERP Web profissional, offline-first, modular, seguro e escalável, com valor de mercado estimado em R$ 20.000+, inspirado em ERPs modernos (Odoo, Dynamics, Bling, Tiny), utilizando:
+Desenvolver um ERP Web profissional, offline-first, modular, seguro e escalável, com valor de mercado estimado em R$ 20.000+, inspirado em ERPs modernos 
+(Odoo, Dynamics, Bling, Tiny), utilizando:
 * PostgreSQL / Supabase como fonte da verdade
 * IndexedDB como cache e operação offline
 * Frontend web (HTML + JS) modular
@@ -9,8 +10,9 @@ Segurança por níveis de acesso (multi-senha por usuário)
 # 🧱 ARQUITETURA DEFINIDA
 ## 🔹 Backend (Dados)
 * PostgreSQL (SQL profissional)
-* Row Level Security (RLS)
 * Funções SQL (PL/pgSQL)
+* View (PL/pgSQL)
+* Row Level Security (RLS)
 * Auditoria e integridade
 
 ## 🔹 Frontend (Planejado)
@@ -42,7 +44,8 @@ Segurança por níveis de acesso (multi-senha por usuário)
 * Financeiro (lançamentos e contas)
 * Conversas (WhatsApp / redes)
 * Mensagens
-* Chatbot
+* Chatbot (automação)
+* Adm mensagens
 * Bloco de notas
 * Políticas de serviço
 * Documentação
@@ -63,8 +66,7 @@ Segurança por níveis de acesso (multi-senha por usuário)
 * Base para transações seguras
 * Estrutura pronta para Supabase
 
-
-# 🔐 5️⃣ SEGURANÇA (SQL — AINDA FALTA)
+# 🔐 5️⃣ SEGURANÇA (SQL )
 * Policies RLS completas para todas as tabelas
 * Triggers automáticos de auditoria
 * Hardening de permissões (REVOKE / GRANT)
@@ -138,10 +140,6 @@ Segurança por níveis de acesso (multi-senha por usuário)
 │   ├── 19_politicas.sql
 │   ├── 20_documentacao.sql
 │   └── 99_auditoria.sql
-```
-## 👉Passo 1 é só estrutura:
-* Sem RLS, sem trigger, sem função.
-```
 ├── passo_2_policies_rls/
 │   ├── 01_enable_rls.sql
 │   ├── 02_policies_usuarios.sql
@@ -153,10 +151,6 @@ Segurança por níveis de acesso (multi-senha por usuário)
 │   ├── 08_policies_caixa.sql
 │   ├── 09_policies_chat.sql
 │   └── 99_policies_admin_full.sql
-```
-## 👉 Passo 2 = governança de acesso
-Nada de função aqui ainda.
-```
 ├── passo_3_triggers/
 │   ├── 01_trigger_auditoria.sql
 │   ├── 02_trigger_soft_delete.sql
@@ -164,12 +158,6 @@ Nada de função aqui ainda.
 │   ├── 04_trigger_financeiro.sql
 │   ├── 05_trigger_caixa.sql
 │   └── 99_trigger_utils.sql
-```
-# 👉 Passo 3 = comportamento automático
-* log
-* estoque
-* consistência
-```
 ├── passo_4_funcoes_criticas/
 │   ├── 01_fn_criar_venda.sql
 │   ├── 02_fn_cancelar_venda.sql
@@ -178,22 +166,9 @@ Nada de função aqui ainda.
 │   ├── 05_fn_abrir_caixa.sql
 │   ├── 06_fn_fechar_caixa.sql
 │   └── 99_fn_utils.sql
-```
-# 👉 Passo 4 = regras de negócio
-Frontend nunca fala direto com tabelas sensíveis.
-```
 ├── passo_5_indices_views/
 │   ├── 01_indices.sql
 │   ├── 02_views_relatorios.sql
 │   └── 03_materialized_views.sql
-```
 
-# 🧠 POR QUE ESSA SEPARAÇÃO ?
-*  Facilita manutenção
-* Facilita deploy
-* Facilita auditoria
-* Facilita versionamento
-* Facilita vender o ERP
-* Facilita escalar equipe
-* Facilita migrar Supabase → PostgreSQL puro
 
