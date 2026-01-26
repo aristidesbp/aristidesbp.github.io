@@ -21,6 +21,7 @@ USUARIOS
  ├─ contato
  ├─ cep
  ├─ endereco
+ ├─ avata_url
  └─ role (espelho)
       │
       ├───────────────|─────────────────────┐
@@ -29,19 +30,26 @@ CLIENTES          FUNCIONARIOS           CATEGORIA
  ├─ id (PK)        ├─ id (PK)              ├─ id (PK)
  ├─ criadoEm       ├─ criadoEm             ├─ criadoEm 
  ├─ usuarioId (FK) ├─ usuarioId (FK)       ├─ usuarioId (FK)
+ ├─ status         ├─ status               ├─ status 
+ ├─ avata_url      ├─ avata_url            ├─ foto_url 
  ├─ nome           ├─ nome                 └─ categorias
  ├─ cpfCnpj        ├─ cpf                     |
  ├─ contato        ├─ contato                 ▼
  ├─ email          ├─ email               SUB_CATEGORIA
  ├─ cep            ├─ cep                  ├─ id (PK)
  ├─ endereco       ├─ endereco             ├─ criadoEm 
- └─ senha          ├─ senha                ├─ usuarioId (FK)
-                   ├─ cargo                └─ sub_categorias
-                   └─ departamento
+ ├─ status         ├─ status               ├─ usuarioId (FK)
+ └─ senha          ├─ cargo                ├─ status 
+                   ├─ departamento         ├─ foto_url        
+                   └─ senha                └─ sub_categorias
+
+
 FORNECEDORES
  ├─ id (PK)
  ├─ criadoEm 
  ├─ usuarioId (FK)
+ ├─ status
+ ├─ avata_url
  ├─ nome
  ├─ cnpj
  ├─ inscricao_estadual
@@ -55,9 +63,13 @@ FORNECEDORES
       ▼
 PRODUTOS
  ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ foto_url
  ├─ fornecedorId (FK)
  ├─ nota_fiscal
- ├─ nome
+ ├─ titulo
  ├─ descricao
  ├─ categoriaID (FK)
  ├─ sub_categoriaID (FK)
@@ -66,39 +78,106 @@ PRODUTOS
  ├─ data_compra
  ├─ data_vencimento
  ├─ estoque
- ├─ estoque_minimo
- ├─ comentario
- └─ avaliacao
+ └─ estoque_minimo
+
       │
       ▼
+
+SERVICOS
+ ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ titulo
+ ├─ descricao
+ ├─ categoriaID (FK)
+ ├─ sub_categoriaID (FK)
+ ├─ preco
+ ├─ preco_estimado (tipo text/ diaria/hora)
+ ├─ foto_url
+ └─ estoque_minimo
+
+      │
+      ▼
+
+AVALIACOES
+ ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ clienteId (FK)
+ ├─ produtoId (FK)
+ ├─ servicosId (FK)
+ ├─ nota
+ └─ comentario
+
+      │
+      ▼
+
+FAVORITOS
+ ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ clienteId (FK)
+ ├─ fornecedoresId (FK)
+ ├─ produtoId (FK)
+ ├─ servicosId (FK)
+ ├─ nota
+ └─ comentario
+
+      │
+      ▼
+
+FORMAS_DE_PAGAMENTO
+ ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ dataVenda
+ ├─ tipo (pix, credito, dinheiro)
+ ├─ modo (parcelado, avista)
+ └─ valorTotal
+
+      │
+      ▼
+
 VENDAS
  ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
  ├─ clienteId (FK)
+ ├─ f_pagamentoId (FK)
  ├─ dataVenda
  ├─ valorTotal
  └─ status
+
       │
       ▼
+
 ITENS_VENDA
  ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
  ├─ vendaId (FK)
  ├─ produtoId (FK)
  ├─ quantidade
  └─ precoUnitario
 
+
 FINANCEIRO
  ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
  ├─ tipo (receita/despesa)
  ├─ valor
- ├─ data
+ ├─ parcelas
+ ├─ data_vencimento
+ ├─ data_pagamento
  ├─ descricao
  └─ vendaId (FK opcional)
-
-SERVICOS
- ├─ id (PK)
- ├─ nome
- ├─ preco
- └─ descricao
 
 CHATBOTS
  ├─ id (PK)
