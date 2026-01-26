@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Local - SISTEMA ERP ABP</title>
+
+    <style>
+        :root {
+            --primary: #3ecf8e;
+            --dark: #1e293b;
+            --bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 { color: var(--dark); margin-bottom: 5px; font-size: 24px; }
+        h2 { color: #64748b; margin-bottom: 25px; font-size: 14px; font-weight: normal; }
+
+        .input-container { position: relative; margin-bottom: 15px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button.main-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.main-btn:hover { background-color: #34b27b; }
+
+        .dev-info { margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+        .dev-info h3 { font-size: 12px; color: #94a3b8; margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h1>SISTEMA ERP ABP</h1>
+        <h2 id="msg-diretriz">Defina ou digite sua senha de acesso local</h2>
+
+        <div class="input-container">
+            <input type="password" id="local-pass" placeholder="Senha de acesso">
+        </div>
+
+        <button class="main-btn" onclick="handleLocalAuth()">Acessar Sistema</button>
+
+        <div class="dev-info">
+            <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
+            <h3>CONTATO: +55 91 99242-0981</h3>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Lógica de Autenticação Local (Simulada via localStorage para persistência simples)
+         */
+        function handleLocalAuth() {
+            const passInput = document.getElementById('local-pass').value;
+            const savedPass = localStorage.getItem('erp_local_password');
+
+            if (!passInput) {
+                alert("Por favor, digite uma senha.");
+                return;
+            }
+
+            // Se é o primeiro acesso, define a senha
+            if (!savedPass) {
+                if (confirm("Esta será sua senha de acesso neste navegador. Confirmar?")) {
+                    localStorage.setItem('erp_local_password', passInput);
+                    sessionStorage.setItem('erp_is_logged', 'true');
+                    alert("Senha definida com sucesso!");
+                    window.location.href = 'index.html';
+                }
+                return;
+            }
+
+            // Validação de senha existente
+            if (passInput === savedPass) {
+                sessionStorage.setItem('erp_is_logged', 'true');
+                window.location.href = 'index.html';
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        // Verifica se já existe uma senha para mudar o subtítulo
+        window.onload = () => {
+            if (localStorage.getItem('erp_local_password')) {
+                document.getElementById('msg-diretriz').innerText = "Digite sua senha para desbloquear os dados locais.";
+            } else {
+                document.getElementById('msg-diretriz').innerText = "Primeiro Acesso: Crie uma senha de segurança local.";
+            }
+            
+            // Se já estiver logado na sessão atual, redireciona
+            if (sessionStorage.getItem('erp_is_logged') === 'true') {
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+</body>
+</html>
