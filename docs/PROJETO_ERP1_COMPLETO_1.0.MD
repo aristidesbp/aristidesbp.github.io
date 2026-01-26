@@ -44,6 +44,37 @@ A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuar
 (entre na tabela/ cantoinferio direto/ definitions (codigo da tabela criada acima))
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+## FUNCTION TRIGGER
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+``` 
+-- 1. Criar a função que será executada pelo gatilho
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.entidades (
+    user_id,
+    email,
+    nome_completo,
+    status,
+    relacionamento -- Definido como 'Usuário' ou 'Colaborador' por padrão
+  )
+  values (
+    new.id,
+    new.email,
+    new.raw_user_meta_data->>'full_name', -- Tenta pegar o nome se vier do metadata (ex: Google Auth)
+    'Ativo',
+    'Usuário'
+  );
+  return new;
+end;
+$$ language plpgsql security definer;
+
+-- 2. Criar o gatilho na tabela auth.users
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # CRIAR APOLICE 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 ```
