@@ -1,57 +1,55 @@
-(async () => {
+/** * ERP ABP PROFISSIONAL - CONEXÃO AUTO-GERENCIÁVEL
+ */
+(function() {
     "use strict";
-    if (window.__ERP_GUARD_LOADED__) return;
-    window.__ERP_GUARD_LOADED__ = true;
 
-    const DB_NAME = "ERP_ABP_Local";
-    const DB_VERSION = 1;
+    const DB_NAME = "ERP_ABP_PROFISSIONAL_LOCAL";
+    const DB_VERSION = 1; 
 
-    // Inicializa o IndexedDB
-    const initDB = () => {
+    // LISTA DE TABELAS (Já deixamos todas prontas para você não ter que voltar aqui)
+    const TABELAS = [
+        "produtos", 
+        "entidades", 
+        "financeiro", 
+        "vendas", 
+        "configuracoes",
+        "notas"
+    ];
+
+    window.getDB = function() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(DB_NAME, DB_VERSION);
-            request.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains("entidades")) db.createObjectStore("entidades", { keyPath: "id", autoIncrement: true });
-                if (!db.objectStoreNames.contains("produtos")) db.createObjectStore("produtos", { keyPath: "id", autoIncrement: true });
-                if (!db.objectStoreNames.contains("notes")) db.createObjectStore("notes", { keyPath: "id", autoIncrement: true });
-                if (!db.objectStoreNames.contains("financeiro")) db.createObjectStore("financeiro", { keyPath: "id", autoIncrement: true });
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                // LOOP INTELIGENTE: Cria cada tabela se ela ainda não existir
+                TABELAS.forEach(nomeTabela => {
+                    if (!db.objectStoreNames.contains(nomeTabela)) {
+                        db.createObjectStore(nomeTabela, { keyPath: "id" });
+                        console.log(`Tabela [${nomeTabela}] criada com sucesso.`);
+                    }
+                });
             };
+
             request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject("Erro ao abrir IndexedDB");
+            request.onerror = () => reject("Erro ao acessar banco local.");
         });
     };
 
-    window.getDB = initDB;
-
-    // Injeção de CSS e Navbar (Mantendo seu padrão)
+    // Injeção de CSS para o Menu (Padrão Profissional)
     const style = document.createElement('style');
-    style.textContent = `
-        :root { --primary: #2c3e50; --accent: #3498db; --light: #ecf0f1; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--light); }
-        .nav-bar { background: var(--primary); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .nav-bar a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
-        .container { padding: 20px; max-width: 1200px; margin: auto; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        button { cursor: pointer; padding: 10px 15px; border: none; border-radius: 4px; background: var(--accent); color: white; }
+    style.innerHTML = `
+        .navbar-abp { background: #0f172a; padding: 15px; display: flex; gap: 20px; position: fixed; top: 0; width: 100%; z-index: 1000; }
+        .navbar-abp a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; opacity: 0.8; }
+        .navbar-abp a:hover { opacity: 1; }
     `;
     document.head.appendChild(style);
 
-    const renderNavbar = () => {
-        const nav = document.createElement('nav');
-        nav.className = 'nav-bar';
-        nav.innerHTML = `
-            <div style="font-size: 1.2rem;">ERP ABP Profissional (Modo Local)</div>
-            <div>
-                <a href="index.html">Home</a>
-                <a href="entidades.html">Entidades</a>
-                <a href="produtos.html">Produtos</a>
-                <a href="financeiro.html">Financeiro</a>
-                <a href="notas.html">Notas</a>
-            </div>
-        `;
-        document.body.prepend(nav);
-    };
+    // Proteção de Login
+    if (!sessionStorage.getItem('erp_is_logged') && !window.location.href.includes('login.html')) {
+        window.location.href = 'login.html';
+    }
 
-    renderNavbar();
+    console.log("🚀 ERP ABP: Banco de dados local pronto para uso.");
 })();
