@@ -131,9 +131,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA ERP ABP - Inicio</title>
     
-    <script src="conexao.js" defer></script>
-    <script src="navbar.js" defer></script>
-    <script src="validar_user.js" defer></script>
+    <script src="js/conexao.js" defer></script>
+    <script src="js/navbar.js" defer></script>
+    <script src="js/validar_user.js" defer></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -286,17 +286,12 @@ body {
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Codificação de caracteres -->
     <meta charset="UTF-8">
-
-    <!-- Responsividade para dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Título da aba -->
     <title>Login - SISTEMA ERP ABP</title>
 
-    <!-- SDK do Supabase (frontend) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/conexao.js" defer></script>
+  
 
     <!-- CSS específico da tela de login -->
     <style>
