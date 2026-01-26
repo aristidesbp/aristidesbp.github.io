@@ -12,35 +12,63 @@ Mesmo usando IndexedDB, ERP sério pensa relacionalmente.
 ```
 USUARIOS
  ├─ id (PK)
+ ├─ criadoEm
  ├─ nome
+ ├─ cpf
+ ├─ data_nascimento
  ├─ email
  ├─ senhaHash
- ├─ role
- └─ criadoEm
+ ├─ contato
+ ├─ cep
+ ├─ endereco
+ └─ role (espelho)
       │
-      ├───────────────┐
-      │               │
-CLIENTES          FUNCIONARIOS
- ├─ id (PK)        ├─ id (PK)
- ├─ usuarioId (FK) ├─ usuarioId (FK)
- ├─ nome           ├─ nome
- ├─ cpfCnpj        ├─ cpf
- ├─ contato        ├─ cargo
- └─ endereco       └─ departamento
-
+      ├───────────────|─────────────────────┐
+      │               │                     |
+CLIENTES          FUNCIONARIOS           CATEGORIA
+ ├─ id (PK)        ├─ id (PK)              ├─ id (PK)
+ ├─ criadoEm       ├─ criadoEm             ├─ criadoEm 
+ ├─ usuarioId (FK) ├─ usuarioId (FK)       ├─ usuarioId (FK)
+ ├─ nome           ├─ nome                 └─ categorias
+ ├─ cpfCnpj        ├─ cpf                     |
+ ├─ contato        ├─ contato                 ▼
+ ├─ email          ├─ email               SUB_CATEGORIA
+ ├─ cep            ├─ cep                  ├─ id (PK)
+ ├─ endereco       ├─ endereco             ├─ criadoEm 
+ └─ senha          ├─ senha                ├─ usuarioId (FK)
+                   ├─ cargo                └─ sub_categorias
+                   └─ departamento
 FORNECEDORES
  ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
  ├─ nome
  ├─ cnpj
+ ├─ inscricao_estadual
+ ├─ inscricao_municipal
+ ├─ cep
+ ├─ endereco  
+ ├─ senha  
+ ├─ email  
  └─ contato
       │
       ▼
 PRODUTOS
  ├─ id (PK)
  ├─ fornecedorId (FK)
+ ├─ nota_fiscal
  ├─ nome
- ├─ preco
- └─ estoque
+ ├─ descricao
+ ├─ categoriaID (FK)
+ ├─ sub_categoriaID (FK)
+ ├─ preco_compra
+ ├─ preco_venda
+ ├─ data_compra
+ ├─ data_vencimento
+ ├─ estoque
+ ├─ estoque_minimo
+ ├─ comentario
+ └─ avaliacao
       │
       ▼
 VENDAS
