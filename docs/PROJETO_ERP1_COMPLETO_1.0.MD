@@ -72,27 +72,10 @@ CREATE TABLE public.usuarios (
 ## FUNCTION TRIGGER
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 ``` 
--- 1. Criar a função que insere os dados na tabela public.usuarios
-create or replace function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-begin
-  insert into public.usuarios (user_id, nome_completo, avatar_url)
-  values (
-    new.id, 
-    new.raw_user_meta_data->>'full_name', -- Tenta pegar o nome dos metadados (ex: Google Login)
-    new.raw_user_meta_data->>'avatar_url' -- Tenta pegar a foto dos metadados
-  );
-  return new;
-end;
-$$;
+crie uma função trigger para ser implementada no Supabase com o seguinte objetivo:
+A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo.
 
--- 2. Criar o gatilho (trigger) que dispara após um novo registro em auth.users
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+(entre na tabela/ cantoinferio direto/ schema)
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # CRIAR APOLICE 
