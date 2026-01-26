@@ -502,4 +502,6 @@ body {
 </html>
 
 ```
-
+# CONFIGURAÇÃO NO SUPABASE
+* Authentication/ Site Url = http://Sua_hopegagem.io
+* Authentication/ Redirect URLs = http://Sua_hopegagem.io
