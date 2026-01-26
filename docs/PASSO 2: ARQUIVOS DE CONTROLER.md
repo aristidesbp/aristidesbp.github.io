@@ -1,3 +1,11 @@
+# CONFIGURAÇÃO DO SUPABASE
+* Authentication/ Site Url = http: //Sua_hospegagem.io
+* Authentication/ Redirect URLs = http: //Sua_hospegagem.io
+* Project Settings/ Data API/ Project URL = (url do projeto)
+* Project Settings/ API Keys/ Legacy anon, service_role API keys / anon
+public = (chave do seu projeto)
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # conexao.js
 ```
@@ -502,6 +510,4 @@ body {
 </html>
 
 ```
-# CONFIGURAÇÃO NO SUPABASE
-* Authentication/ Site Url = http://Sua_hopegagem.io
-* Authentication/ Redirect URLs = http://Sua_hopegagem.io
+
