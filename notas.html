@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloco de Notas - ERP ABP</title>
+    <script src="conexao.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Minhas Notas</h2>
+            <input type="text" id="notaTitulo" placeholder="Título da Nota">
+            <textarea id="notaConteudo" placeholder="Escreva aqui..."></textarea>
+            <button id="btnSalvar">Salvar Nota</button>
+        </div>
+        <div id="gridNotas" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+    </div>
+
+    <script>
+        (async () => {
+            const db = await window.getDB();
+            
+            const renderNotas = () => {
+                const store = db.transaction("notes", "readonly").objectStore("notes");
+                store.getAll().onsuccess = (e) => {
+                    const notas = e.target.result;
+                    document.getElementById('gridNotas').innerHTML = notas.map(n => `
+                        <div class="card">
+                            <h4>${n.title}</h4>
+                            <p>${n.content}</p>
+                        </div>
+                    `).join('');
+                };
+            };
+
+            document.getElementById('btnSalvar').onclick = () => {
+                const title = document.getElementById('notaTitulo').value;
+                const content = document.getElementById('notaConteudo').value;
+                
+                const tx = db.transaction("notes", "readwrite");
+                tx.objectStore("notes").add({ title, content, date: new Date() });
+                tx.oncomplete = () => {
+                    renderNotas();
+                    document.getElementById('notaTitulo').value = '';
+                    document.getElementById('notaConteudo').value = '';
+                };
+            };
+
+            renderNotas();
+        })();
+    </script>
+</body>
+</html>
