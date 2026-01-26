@@ -12,18 +12,17 @@
 ```
 USUARIOS
  ├─ id (PK)
- ├─ criadoEm
- ├─ user_auth_users_id (criar o espelho)
- ├─ nome
- ├─ cpf
- ├─ data_nascimento
- ├─ email
- ├─ senhaHash
- ├─ contato
- ├─ cep
- ├─ endereco
- ├─ avata_url
- └─ role (espelho)
+ ├─ criadoEm (timestamp)
+ ├─ user_auth_users_id (uui) //criar espelho
+ ├─ nome (text)
+ ├─ cpf (text)
+ ├─ data_nascimento (timestamp)
+ ├─ email (text)
+ ├─ senhaHash (text)
+ ├─ contato (text)
+ ├─ cep (text)
+ ├─ endereco (text)
+ └─ avata_url(text)
       │
       ├───────────────|─────────────────────┐
       │               │                     |
