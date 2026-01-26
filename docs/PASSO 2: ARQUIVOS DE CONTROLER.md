@@ -7,7 +7,7 @@ public = (chave do seu projeto)
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# conexao.js
+# js/conexao.js
 ```
 /** ERP ABP - Conexão Supabase */
 (async () => {
@@ -43,7 +43,7 @@ public = (chave do seu projeto)
 })();
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# navbar.js
+# js/navbar.js
 ```
 /** ERP ABP - Navbar Dinâmica */
 (() => {
@@ -100,7 +100,7 @@ public = (chave do seu projeto)
 })();
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# validar_user.js
+# js/validar_user.js
 ```
 /** ERP ABP - Validador de Sessão */
 (async () => {
