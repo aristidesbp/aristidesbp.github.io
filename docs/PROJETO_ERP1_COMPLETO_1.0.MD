@@ -35,7 +35,7 @@ create table public.entidades (
 ) TABLESPACE pg_default;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-## FUNCTION TRIGGER
+## FUNCTION TRIGGER (data base/funcoes)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 ``` 
 crie uma função trigger para ser implementada no Supabase com o seguinte objetivo:
