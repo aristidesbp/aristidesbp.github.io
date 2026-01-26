@@ -46,7 +46,7 @@ create table public.usuarios (
 
 
 
-# FUNCTION TRIGGER (resposta)
+# FUNCTION TRIGGER (codigo)
 ```
 -- 1. Criação da função que será disparada
 create or replace function public.handle_new_user()
@@ -73,7 +73,7 @@ create trigger on_auth_user_created
 
 
 
-# VIEWS (PROMPT)
+# VIEWS (prompt)
 ```
 Crie uma view chamada listar_usuarios que liste os usuarios cadastrados, com todos os campos da tabela usuarios. 
 conforme o esquema abaixo:
@@ -95,8 +95,29 @@ create table public.usuarios (
 ) TABLESPACE pg_default;
 ```
 
+# VIEWS (codigo)
+```
+-- Criação da View listar_usuarios
+CREATE OR REPLACE VIEW public.listar_usuarios AS
+SELECT 
+    id,
+    created_at,
+    user_auth_users_id,
+    nome,
+    cpf,
+    data_nascimento,
+    email,
+    senha_hash,
+    contato,
+    endereco,
+    avata_url
+FROM 
+    public.usuarios;
 
+-- Garantir que a View seja acessível via API (opcional, dependendo das suas RLS)
+ALTER VIEW public.listar_usuarios OWNER TO postgres;
 
+```
 
 
 
