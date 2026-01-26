@@ -290,269 +290,214 @@ body {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SISTEMA ERP ABP</title>
 
-    <script src="js/conexao.js" defer></script>
-  
+    <script src="js/conexao.js"></script>
 
-    <!-- CSS específico da tela de login -->
     <style>
-    /* Variáveis globais de cores */
-:root {
-    --primary: #3ecf8e;
-    --dark: #1e293b;
-    --bg: #0f172a;
-}
+        :root {
+            --primary: #3ecf8e;
+            --dark: #1e293b;
+            --bg: #0f172a;
+        }
 
-/* Estilo base da página */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: var(--bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-/* Card central de login */
-.login-card {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
 
-/* Título principal */
-h1 {
-    color: var(--dark);
-    margin-bottom: 5px;
-    font-size: 24px;
-}
+        h1 { color: var(--dark); margin-bottom: 5px; font-size: 24px; }
+        h2 { color: #64748b; margin-bottom: 25px; font-size: 16px; font-weight: normal; }
 
-/* Subtítulo */
-h2 {
-    color: #64748b;
-    margin-bottom: 25px;
-    font-size: 16px;
-    font-weight: normal;
-}
+        .input-container { position: relative; margin-bottom: 15px; }
 
-/* Container dos inputs */
-.input-container {
-    position: relative;
-    margin-bottom: 15px;
-}
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
 
-/* Campos de entrada */
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #666;
+        }
 
-/* Botão para mostrar/ocultar senha */
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: #666;
-}
+        button.main-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-/* Botão principal */
-button.main-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    background-color: var(--primary);
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        button.main-btn:hover { background-color: #34b27b; }
 
-/* Hover do botão */
-button.main-btn:hover {
-    background-color: #34b27b;
-}
+        .extra-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 14px;
+        }
 
-/* Links extras */
-.extra-links {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 14px;
-}
+        .link { color: #4a90e2; text-decoration: none; cursor: pointer; font-weight: 500; }
 
-/* Estilo dos links */
-.link {
-    color: #4a90e2;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-/* Botão de voltar */
-.btn-back {
-    background: #e2e8f0;
-    color: #475569;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    margin-bottom: 20px;
-    cursor: pointer;
-    display: none;
-}
+        .btn-back {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            margin-bottom: 20px;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .footer-info h3 { font-size: 12px; color: #94a3b8; margin: 5px 0; }
     </style>
 </head>
 <body>
 
-    <!-- Card central de autenticação -->
     <div class="login-card">
+        <button id="btn-back" class="btn-back" onclick="toggleMode()">← Voltar para o Login</button>
 
-        <!-- Botão de retorno (usado em recuperação/cadastro) -->
-        <button id="btn-back" class="btn-back" onclick="toggleMode()">
-            ← Voltar para o Login
-        </button>
-
-        <!-- Título principal -->
         <h1>SISTEMA ERP ABP</h1>
-
-        <!-- Subtítulo dinâmico -->
         <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
 
-        <!-- Campo de e-mail -->
         <div class="input-container" id="email-group">
             <input type="email" id="email" placeholder="Seu e-mail">
         </div>
 
-        <!-- Campo de senha -->
         <div class="input-container" id="pass-group">
             <input type="password" id="password" placeholder="Sua senha">
-
-            <!-- Botão para alternar visibilidade da senha -->
-            <button type="button" class="toggle-password" onclick="toggleVisibility()">
-                👁️
-            </button>
+            <button type="button" class="toggle-password" onclick="toggleVisibility()">👁️</button>
         </div>
 
-        <!-- Botão principal (login / cadastro / salvar senha) -->
-        <button class="main-btn" id="btn-auth" onclick="handleAuth()">
-            Entrar
-        </button>
+        <button class="main-btn" id="btn-auth" onclick="handleAuth()">Entrar</button>
 
-        <!-- Links auxiliares -->
         <div class="extra-links">
-            <span id="link-forgot" class="link" onclick="forgotPassword()">
-                Esqueci minha senha
-            </span>
-
-    <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
-    <h3>CONTATO: +55 91 99242-0981</h3>
+            <span id="link-forgot" class="link" onclick="forgotPassword()">Esqueci minha senha</span>
             
+            <div class="footer-info">
+                <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
+                <h3>CONTATO: +55 91 99242-0981</h3>
+            </div>
         </div>
     </div>
 
-    
-    
-    <!-- Script principal do login -->
     <script>
+        /**
+         * Aguarda o _supabase ser inicializado pelo conexao.js
+         */
+        const getSupabase = () => {
+            return new Promise((resolve) => {
+                const check = setInterval(() => {
+                    if (window._supabase) {
+                        clearInterval(check);
+                        resolve(window._supabase);
+                    }
+                }, 100);
+            });
+        };
 
-const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+        async function handleAuth() {
+            const supabase = await getSupabase();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-// Criação do cliente Supabase
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-/**
- * Alterna a visibilidade da senha
- */
-function toggleVisibility() {
-    const passInput = document.getElementById('password');
-    const toggleBtn = document.querySelector('.toggle-password');
+            if (error) alert("Erro: " + error.message);
+            else window.location.href = 'index.html';
+        }
 
-    passInput.type = passInput.type === 'password' ? 'text' : 'password';
-    toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
-}
+        async function forgotPassword() {
+            const supabase = await getSupabase();
+            const email = document.getElementById('email').value;
+            if (!email) return alert("Digite seu e-mail.");
 
-/**
- * Apenas Login
- */
-async function handleAuth() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href
+            });
 
-    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) alert(error.message);
+            else alert("Link de recuperação enviado!");
+        }
 
-    if (error) alert("Erro: " + error.message);
-    else window.location.href = 'index.html';
-}
+        function toggleVisibility() {
+            const passInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.toggle-password');
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
+            toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
+        }
 
-/**
- * Envio de e-mail para recuperação de senha
- */
-async function forgotPassword() {
-    const email = document.getElementById('email').value;
-    if (!email) return alert("Digite seu e-mail.");
+        async function checkStatus() {
+            const supabase = await getSupabase();
+            const { data } = await supabase.auth.getSession();
+            
+            if (data.session && !window.location.hash.includes("type=recovery")) {
+                window.location.href = 'index.html';
+                return;
+            }
 
-    const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href
-    });
+            const hash = window.location.hash;
+            if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
+                document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
+                document.getElementById('email-group').style.display = 'none';
+                document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
+                document.getElementById('btn-auth').onclick = updatePassword;
+                document.getElementById('link-forgot').style.display = 'none';
+                document.getElementById('btn-back').style.display = 'block';
+            }
+        }
 
-    if (error) alert(error.message);
-    else alert("Link de recuperação enviado!");
-}
+        async function updatePassword() {
+            const supabase = await getSupabase();
+            const newPassword = document.getElementById('password').value;
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) alert(error.message);
+            else {
+                alert("Senha atualizada com sucesso!");
+                window.location.hash = "";
+                window.location.href = 'index.html';
+            }
+        }
 
-/**
- * Detecta se o usuário chegou por link de recuperação
- */
-/**
- * Detecta se o usuário já está logado ou se veio por recuperação
- */
-async function checkStatus() {
-    const { data } = await _supabase.auth.getSession();
-    
-    // Se já estiver logado, pula o login e vai para o ERP
-    if (data.session && !window.location.hash.includes("type=recovery")) {
-        window.location.href = 'index.html';
-        return;
-    }
+        function toggleMode() {
+            window.location.hash = "";
+            window.location.reload();
+        }
 
-    const hash = window.location.hash;
-    if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
-        document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
-        document.getElementById('email-group').style.display = 'none';
-        document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
-        document.getElementById('btn-auth').onclick = updatePassword;
-        document.getElementById('link-forgot').style.display = 'none';
-        document.getElementById('btn-back').style.display = 'block'; // Mostra botão voltar
-    }
-}
-
-/**
- * Função para resetar o formulário se o usuário quiser desistir da recuperação
- */
-function toggleMode() {
-    window.location.hash = "";
-    window.location.reload();
-}
-
-// Inicialização
-window.onload = checkStatus;
+        window.onload = checkStatus;
     </script>
-
 </body>
 </html>
 
