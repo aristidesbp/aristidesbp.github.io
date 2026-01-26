@@ -1,4 +1,3 @@
-
 # 🧱 BANCO DE DADOS NO SUPABASE (USUARIOS)
 * 👉 Compatível com PostgreSQL / Supabase
   
@@ -119,9 +118,19 @@ ALTER VIEW public.listar_usuarios OWNER TO postgres;
 
 ```
 
+# AUTORIZANDO O DELETE DE USUARIOS
+```
+-- 1. Remove a trava atual
+ALTER TABLE public.usuarios 
+DROP CONSTRAINT usuarios_user_auth_users_id_fkey;
 
-
-
+-- 2. Recria a trava permitindo a deleção automática
+ALTER TABLE public.usuarios 
+ADD CONSTRAINT usuarios_user_auth_users_id_fkey 
+FOREIGN KEY (user_auth_users_id) 
+REFERENCES auth.users (id) 
+ON DELETE CASCADE;
+```
 
 
 
