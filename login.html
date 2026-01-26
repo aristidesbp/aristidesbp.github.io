@@ -3,215 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SISTEMA ERP ABP</title>
-
-    <script src="js/conexao.js"></script>
-
-    <style>
-        :root {
-            --primary: #3ecf8e;
-            --dark: #1e293b;
-            --bg: #0f172a;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        h1 { color: var(--dark); margin-bottom: 5px; font-size: 24px; }
-        h2 { color: #64748b; margin-bottom: 25px; font-size: 16px; font-weight: normal; }
-
-        .input-container { position: relative; margin-bottom: 15px; }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #666;
-        }
-
-        button.main-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button.main-btn:hover { background-color: #34b27b; }
-
-        .extra-links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 14px;
-        }
-
-        .link { color: #4a90e2; text-decoration: none; cursor: pointer; font-weight: 500; }
-
-        .btn-back {
-            background: #e2e8f0;
-            color: #475569;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: none;
-            margin-bottom: 20px;
-            cursor: pointer;
-            display: none;
-        }
-        
-        .footer-info h3 { font-size: 12px; color: #94a3b8; margin: 5px 0; }
-    </style>
+    <title>Login - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <div class="login-card">
-        <button id="btn-back" class="btn-back" onclick="toggleMode()">← Voltar para o Login</button>
-
-        <h1>SISTEMA ERP ABP</h1>
-        <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
-
-        <div class="input-container" id="email-group">
-            <input type="email" id="email" placeholder="Seu e-mail">
-        </div>
-
-        <div class="input-container" id="pass-group">
-            <input type="password" id="password" placeholder="Sua senha">
-            <button type="button" class="toggle-password" onclick="toggleVisibility()">👁️</button>
-        </div>
-
-        <button class="main-btn" id="btn-auth" onclick="handleAuth()">Entrar</button>
-
-        <div class="extra-links">
-            <span id="link-forgot" class="link" onclick="forgotPassword()">Esqueci minha senha</span>
-            
-            <div class="footer-info">
-                <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
-                <h3>CONTATO: +55 91 99242-0981</h3>
-            </div>
+    <div id="app">
+        <div class="login-container">
+            <h2>ERP ABP Profissional</h2>
+            <p>Acesse sua conta para continuar</p>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Seu e-mail" required>
+                <input type="password" id="password" placeholder="Sua senha" required>
+                <button type="submit" id="btnLogin">Entrar</button>
+            </form>
+            <div id="message"></div>
         </div>
     </div>
 
     <script>
-        /**
-         * Aguarda o _supabase ser inicializado pelo conexao.js
-         */
-        const getSupabase = () => {
-            return new Promise((resolve) => {
-                const check = setInterval(() => {
-                    if (window._supabase) {
-                        clearInterval(check);
-                        resolve(window._supabase);
-                    }
-                }, 100);
+        (function() {
+            // Configurações do Supabase (Usando suas chaves fornecidas)
+            const SUPABASE_URL = 'https://ndpvspnwzosvpniycapc.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_WOox2Nn_6B1zjrRtD3mrrQ_TyI93EJH';
+            const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            // Injeção de CSS Direta (Layout Integrity)
+            const style = document.createElement('style');
+            style.textContent = `
+                body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+                .login-container { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+                h2 { color: #1a73e8; margin-bottom: 0.5rem; }
+                p { color: #5f6368; margin-bottom: 2rem; font-size: 0.9rem; }
+                input { width: 100%; padding: 12px; margin-bottom: 1rem; border: 1px solid #dadce0; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+                button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
+                button:hover { background: #1557b0; }
+                #message { margin-top: 1rem; font-size: 0.85rem; }
+                .error { color: #d93025; }
+                .success { color: #188038; }
+            `;
+            document.head.appendChild(style);
+
+            // Lógica de Autenticação
+            const loginForm = document.getElementById('loginForm');
+            const messageDiv = document.getElementById('message');
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const btn = document.getElementById('btnLogin');
+
+                btn.disabled = true;
+                btn.innerText = 'Autenticando...';
+                messageDiv.innerText = '';
+
+                try {
+                    const { data, error } = await _supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password,
+                    });
+
+                    if (error) throw error;
+
+                    messageDiv.className = 'success';
+                    messageDiv.innerText = 'Login realizado com sucesso! Redirecionando...';
+                    
+                    // Redireciona para o Dashboard após 1.5s
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+
+                } catch (error) {
+                    messageDiv.className = 'error';
+                    messageDiv.innerText = 'Erro ao entrar: ' + error.message;
+                    btn.disabled = false;
+                    btn.innerText = 'Entrar';
+                }
             });
-        };
 
-        async function handleAuth() {
-            const supabase = await getSupabase();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-            if (error) alert("Erro: " + error.message);
-            else window.location.href = 'index.html';
-        }
-
-        async function forgotPassword() {
-            const supabase = await getSupabase();
-            const email = document.getElementById('email').value;
-            if (!email) return alert("Digite seu e-mail.");
-
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href
-            });
-
-            if (error) alert(error.message);
-            else alert("Link de recuperação enviado!");
-        }
-
-        function toggleVisibility() {
-            const passInput = document.getElementById('password');
-            const toggleBtn = document.querySelector('.toggle-password');
-            passInput.type = passInput.type === 'password' ? 'text' : 'password';
-            toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
-        }
-
-        async function checkStatus() {
-            const supabase = await getSupabase();
-            const { data } = await supabase.auth.getSession();
-            
-            if (data.session && !window.location.hash.includes("type=recovery")) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            const hash = window.location.hash;
-            if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
-                document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
-                document.getElementById('email-group').style.display = 'none';
-                document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
-                document.getElementById('btn-auth').onclick = updatePassword;
-                document.getElementById('link-forgot').style.display = 'none';
-                document.getElementById('btn-back').style.display = 'block';
-            }
-        }
-
-        async function updatePassword() {
-            const supabase = await getSupabase();
-            const newPassword = document.getElementById('password').value;
-            const { error } = await supabase.auth.updateUser({ password: newPassword });
-            if (error) alert(error.message);
-            else {
-                alert("Senha atualizada com sucesso!");
-                window.location.hash = "";
-                window.location.href = 'index.html';
-            }
-        }
-
-        function toggleMode() {
-            window.location.hash = "";
-            window.location.reload();
-        }
-
-        window.onload = checkStatus;
+        })();
     </script>
 </body>
 </html>
