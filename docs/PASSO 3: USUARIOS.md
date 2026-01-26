@@ -98,7 +98,7 @@ create table public.usuarios (
 # VIEWS (codigo)
 ```
 -- Criação da View listar_usuarios
-CREATE OR REPLACE VIEW public.listar_usuarios AS
+CREATE OR REPLACE VIEW public.listar_usuarios with (security_invoker)AS
 SELECT 
     id,
     created_at,
