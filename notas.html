@@ -2,51 +2,304 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloco de Notas - ERP ABP</title>
+    
     <script src="conexao.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3ecf8e;
+            --dark: #0f172a;
+            --bg: #f1f5f9;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --gray: #94a3b8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--dark); margin-top: 0; }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover { filter: brightness(1.1); }
+
+        /* Estilo do Novo Botão de Cancelar */
+        .btn-cancel {
+            background: var(--gray);
+            color: white;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none; /* Escondido por padrão */
+            transition: 0.3s;
+        }
+
+        .btn-cancel:hover { background: #64748b; }
+
+        .note {
+            border-bottom: 1px solid #f1f1f1;
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .note-content strong {
+            color: #1e293b;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .note-content p {
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .actions button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .actions button:hover { opacity: 0.8; }
+
+        .search-box {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .export-btn {
+            width: 100%;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
-        <div class="card">
-            <h2>Minhas Notas</h2>
-            <input type="text" id="notaTitulo" placeholder="Título da Nota">
-            <textarea id="notaConteudo" placeholder="Escreva aqui..."></textarea>
-            <button id="btnSalvar">Salvar Nota</button>
+        <h2 id="form-title">Minhas Notas</h2>
+        <input type="hidden" id="note-id">
+        <input type="text" id="title" placeholder="Título da nota...">
+        <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
+
+        <button class="btn-save" id="btn-save" onclick="saveNote()">
+            Salvar Nota
+        </button>
+        
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">
+            Cancelar Edição
+        </button>
+
+        <div class="search-box">
+            <label style="font-size: 12px; font-weight: bold; color: #64748b;">PESQUISAR OU EXPORTAR</label>
+            <input type="text" id="search" placeholder="🔍 Digite para buscar..." onkeyup="filterNotes()">
+            <button class="export-btn" onclick="exportAllToPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
+            </button>
         </div>
-        <div id="gridNotas" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+
+        <div id="notes-list"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
-        (async () => {
-            const db = await window.getDB();
-            
-            const renderNotas = () => {
-                const store = db.transaction("notes", "readonly").objectStore("notes");
-                store.getAll().onsuccess = (e) => {
-                    const notas = e.target.result;
-                    document.getElementById('gridNotas').innerHTML = notas.map(n => `
-                        <div class="card">
-                            <h4>${n.title}</h4>
+        /** ERP ABP - Bloco de Notas Integrado **/
+        (function() {
+            "use strict";
+
+            let allNotes = [];
+
+            // 1. Aguarda a conexão com Supabase do conexao.js
+            async function init() {
+                if (!window._supabase) {
+                    setTimeout(init, 200);
+                    return;
+                }
+                loadNotes();
+            }
+
+            // 2. Carregar Notas
+            async function loadNotes() {
+                const { data, error } = await _supabase
+                    .from('notes')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) return console.error("Erro:", error);
+                allNotes = data || [];
+                renderNotes(allNotes);
+            }
+
+            // 3. Renderizar Lista
+            function renderNotes(notes) {
+                const list = document.getElementById('notes-list');
+                list.innerHTML = notes.map(n => `
+                    <div class="note">
+                        <div class="note-content">
+                            <strong>${n.title}</strong>
                             <p>${n.content}</p>
                         </div>
-                    `).join('');
-                };
+                        <div class="actions">
+                            <button style="background:var(--warning)" onclick="window.prepareEdit('${n.id}')"><i class="fas fa-edit"></i></button>
+                            <button style="background:var(--danger)" onclick="window.deleteNote('${n.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('') || '<p style="text-align:center; color:#94a3b8;">Nenhuma nota encontrada.</p>';
+            }
+
+            // 4. Salvar ou Atualizar
+            window.saveNote = async function() {
+                const id = document.getElementById('note-id').value;
+                const title = document.getElementById('title').value;
+                const content = document.getElementById('content').value;
+
+                if (!title || !content) return alert("Por favor, preencha o título e o conteúdo.");
+
+                const { data: { user } } = await _supabase.auth.getUser();
+
+                if (id) {
+                    await _supabase.from('notes').update({ title, content }).eq('id', id);
+                } else {
+                    await _supabase.from('notes').insert([{ title, content, user_id: user.id }]);
+                }
+
+                resetForm();
+                loadNotes();
             };
 
-            document.getElementById('btnSalvar').onclick = () => {
-                const title = document.getElementById('notaTitulo').value;
-                const content = document.getElementById('notaConteudo').value;
+            // 5. Preparar Edição
+            window.prepareEdit = function(id) {
+                const note = allNotes.find(n => n.id === id);
+                if (!note) return;
+
+                document.getElementById('note-id').value = note.id;
+                document.getElementById('title').value = note.title;
+                document.getElementById('content').value = note.content;
                 
-                const tx = db.transaction("notes", "readwrite");
-                tx.objectStore("notes").add({ title, content, date: new Date() });
-                tx.oncomplete = () => {
-                    renderNotas();
-                    document.getElementById('notaTitulo').value = '';
-                    document.getElementById('notaConteudo').value = '';
-                };
+                document.getElementById('form-title').innerText = "Editando Nota";
+                document.getElementById('btn-save').innerText = "Atualizar Nota";
+                document.getElementById('btn-cancel').style.display = 'block';
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             };
 
-            renderNotas();
+            // 6. Resetar Formulário (Função Cancelar)
+            window.resetForm = function() {
+                document.getElementById('note-id').value = '';
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                
+                document.getElementById('form-title').innerText = "Minhas Notas";
+                document.getElementById('btn-save').innerText = "Salvar Nota";
+                document.getElementById('btn-cancel').style.display = 'none';
+            };
+
+            // 7. Excluir Nota
+            window.deleteNote = async function(id) {
+                if (confirm("Tem certeza que deseja excluir esta nota?")) {
+                    await _supabase.from('notes').delete().eq('id', id);
+                    loadNotes();
+                }
+            };
+
+            // 8. Busca
+            window.filterNotes = function() {
+                const q = document.getElementById('search').value.toLowerCase();
+                renderNotes(allNotes.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)));
+            };
+
+            // 9. PDF
+            window.exportAllToPDF = function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFontSize(18);
+                doc.text("Relatório de Notas - ERP ABP", 10, 20);
+                
+                doc.setFontSize(12);
+                let y = 35;
+                allNotes.forEach((n, i) => {
+                    if (y > 270) { doc.addPage(); y = 20; }
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${i + 1}. ${n.title}`, 10, y);
+                    doc.setFont(undefined, 'normal');
+                    const textLines = doc.splitTextToSize(n.content, 180);
+                    doc.text(textLines, 10, y + 7);
+                    y += (textLines.length * 7) + 15;
+                });
+                doc.save("notas_erp_abp.pdf");
+            };
+
+            document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
 </body>
