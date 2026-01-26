@@ -106,6 +106,7 @@ SERVICOS
  ├─ usuarioId (FK)
  ├─ status
  ├─ servicoId (FK)
+ ├─ clienteId (FK)
  ├─ data
  ├─ hora
  └─ estoque_minimo
