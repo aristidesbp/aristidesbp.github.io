@@ -18,7 +18,7 @@ USUARIOS
  ├─ cpf (text)
  ├─ data_nascimento (text)
  ├─ email (text)
- ├─ senhaHash (text)
+ ├─ senha_hash (text)
  ├─ contato (text)
  ├─ cep (text)
  ├─ endereco (text)
