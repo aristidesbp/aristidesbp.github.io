@@ -95,7 +95,7 @@ create table public.usuarios (
 ) TABLESPACE pg_default;
 ```
 
-# VIEWS (codigo)
+# VIEWS (codigo,public.listar_usuarios with (security_invoker)AS)
 ```
 -- Criação da View listar_usuarios
 CREATE OR REPLACE VIEW public.listar_usuarios with (security_invoker)AS
