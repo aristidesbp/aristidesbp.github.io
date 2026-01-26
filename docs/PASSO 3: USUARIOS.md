@@ -1,5 +1,5 @@
 
-# 🔹 PARTE 2 — 🧱 BANCO DE DADOS NO SUPABASE (USUARIOS)
+# 🧱 BANCO DE DADOS NO SUPABASE (USUARIOS)
 * 👉 Compatível com PostgreSQL / Supabase
   
 # usuarios.sql
