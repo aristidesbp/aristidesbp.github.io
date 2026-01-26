@@ -16,7 +16,7 @@ USUARIOS
  ├─ user_auth_users_id (uui) //criar espelho
  ├─ nome (text)
  ├─ cpf (text)
- ├─ data_nascimento (timestamp)
+ ├─ data_nascimento (text)
  ├─ email (text)
  ├─ senhaHash (text)
  ├─ contato (text)
