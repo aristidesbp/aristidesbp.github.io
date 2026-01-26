@@ -1,7 +1,7 @@
 
 # 📌 RELACIONAMENTOS (CONCEITUAIS)
 ## Mesmo em IndexedDB (não relacional), pense como se fosse relacional:
-* Usuário → Clientes/Funcionários → um usuário pode ter zero ou muitos clientes/funcionários registrados.
+* Usuário → Clientes/Funcionários/Fornecedores/Tercerisados → um usuário pode ter zero ou muitos Clientes/Funcionários/Fornecedores/Tercerisados registrados.
 * Venda → Cliente → cada venda pertence a um cliente.
 * Produto → Fornecedor → cada produto tem um fornecedor.
 * Financeiro → Venda → opcionalmente vincula lançamentos a vendas.
