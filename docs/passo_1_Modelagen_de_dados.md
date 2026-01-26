@@ -13,7 +13,7 @@
 USUARIOS
  ├─ id (PK)
  ├─ criadoEm
- ├─ user_auth_user_id (criar o espelho)
+ ├─ user_auth_users_id (criar o espelho)
  ├─ nome
  ├─ cpf
  ├─ data_nascimento
