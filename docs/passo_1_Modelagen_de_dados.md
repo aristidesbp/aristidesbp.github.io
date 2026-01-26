@@ -273,10 +273,30 @@ create table public.usuarios (
   constraint usuarios_user_auth_users_id_fkey foreign KEY (user_auth_users_id) references auth.users (id)
 ) TABLESPACE pg_default;
 ```
+# FUNCTION TRIGGER (resposta)
+```
+-- 1. Criação da função que será disparada
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.usuarios (user_auth_users_id, email, nome)
+  values (
+    new.id, 
+    new.email, 
+    new.raw_user_meta_data->>'full_name' -- Captura o nome se enviado via metadata
+  );
+  return new;
+end;
+$$;
 
-
-
-
+-- 2. Criação do Trigger propriamente dito
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
 
 
 
