@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos (Local) - ERP ABP</title>
+    <script src="conexao.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 85px 15px 20px; color: #1e293b; }
+        .container { max-width: 1250px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .section-title { color: var(--primary); font-size: 13px; text-transform: uppercase; margin: 25px 0 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; font-weight: 800; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: 600; }
+        input, select { width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 20px; font-weight: bold; }
+        .btn-cancel { background: #94a3b8; color: white; padding: 12px; border: none; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        .btn-scan { background: var(--dark); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { background: #f8fafc; padding: 15px; font-size: 12px; text-align: left; color: #475569; }
+        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+        .img-prod { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; background: #eee; }
+        #reader { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+        .actions-flex { display: flex; gap: 8px; justify-content: flex-start; }
+        .btn-action { border: none; border-radius: 6px; padding: 10px 12px; cursor: pointer; color: white; font-size: 14px; transition: 0.2s; }
+        .btn-edit { background-color: var(--dark); }
+        .btn-delete { background-color: var(--danger); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Produto (Local)</h3>
+        <input type="hidden" id="edit-id">
+        
+        <div class="section-title">Identificação e Foto</div>
+        <div class="form-grid">
+            <div style="grid-column: span 2;">
+                <label>Foto do Produto</label>
+                <input type="file" id="foto_produto" accept="image/*" onchange="previewImage(this)">
+                <div id="preview-container" style="margin-top:10px; display:none;">
+                    <img id="img-preview" src="" style="max-height: 120px; border: 2px solid #3ecf8e; border-radius: 8px;">
+                </div>
+            </div>
+            <div style="grid-column: span 2;">
+                <label>Nome do Produto *</label>
+                <input type="text" id="nome" placeholder="Ex: Porcelanato 60x60">
+            </div>
+            <div>
+                <label>Código de Barras (EAN)</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="codigo_de_barras" placeholder="0000000000000">
+                    <button type="button" class="btn-scan" onclick="abrirScanner()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="reader-container" style="display:none;">
+            <div id="reader"></div>
+            <button class="btn-cancel" onclick="fecharScanner()">Fechar Câmera</button>
+        </div>
+
+        <div class="section-title">Dados da Compra</div>
+        <div class="form-grid">
+            <div><label>Data da Compra</label><input type="date" id="data_compra"></div>
+            <div><label>Nº Nota Fiscal</label><input type="text" id="numero_nota"></div>
+            <div><label>Categoria</label><input type="text" id="categoria_prod" list="lista-categorias"></div>
+            <datalist id="lista-categorias"></datalist>
+        </div>
+
+        <div class="section-title">Preços e Estoque</div>
+        <div class="form-grid">
+            <div><label>Custo (R$)</label><input type="number" id="preco_custo" step="0.01"></div>
+            <div><label>Venda (R$) *</label><input type="number" id="preco_venda" step="0.01"></div>
+            <div><label>Estoque Atual</label><input type="number" id="estoque_atual"></div>
+            <div><label>Mínimo</label><input type="number" id="estoque_minimo"></div>
+        </div>
+
+        <button class="btn-add" id="btn-save" onclick="handleSaveProduto()">Salvar Produto Localmente</button>
+        <button id="btn-cancel" class="btn-cancel" onclick="resetForm()" style="display:none;">Cancelar Edição</button>
+    </div>
+
+    <div class="card">
+        <div class="form-grid">
+            <div style="grid-column: span 2;">
+                <label>Busca Inteligente</label>
+                <input type="text" id="inputBusca" onkeyup="filtrarProdutos()" placeholder="Nome ou Código...">
+            </div>
+            <div>
+                <label>Filtrar Categoria</label>
+                <select id="filtro_categoria" onchange="filtrarProdutos()">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Estoque</th>
+                    <th>Venda</th>
+                    <th>NF</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="produtos-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+(function() {
+    "use strict";
+
+    let listaProdutos = [];
+    let html5QrCode;
+
+    // Inicialização do Módulo
+    async function inicializar() {
+        try {
+            await loadProdutos();
+        } catch (err) {
+            console.error("Erro ao inicializar produtos:", err);
+        }
+    }
+
+    // Carrega produtos do IndexedDB
+    async function loadProdutos() {
+        const db = await window.getDB();
+        const transaction = db.transaction("produtos", "readonly");
+        const store = transaction.objectStore("produtos");
+        const request = store.getAll();
+
+        request.onsuccess = () => {
+            listaProdutos = request.result || [];
+            renderProdutos(listaProdutos);
+            atualizarFiltrosCategorias(listaProdutos);
+        };
+    }
+
+    // Processa a imagem: Comprime e converte para Blob (Binário)
+    async function processarImagemParaBlob(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 600; // Resolução máxima para equilíbrio de espaço
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                    } else {
+                        if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Salva como JPEG 70% (Muito mais leve que PNG)
+                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.7);
+                };
+            };
+        });
+    }
+
+    // Preview da imagem antes de salvar
+    window.previewImage = async function(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('img-preview').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    // Salvar ou Atualizar Produto
+    window.handleSaveProduto = async function() {
+        const id = document.getElementById('edit-id').value;
+        const nome = document.getElementById('nome').value;
+        const fotoInput = document.getElementById('foto_produto');
+
+        if (!nome || !document.getElementById('preco_venda').value) {
+            return alert("Nome e Preço de Venda são obrigatórios!");
+        }
+
+        let imagemFinal = null;
+
+        // Lógica de Imagem
+        if (fotoInput.files && fotoInput.files[0]) {
+            imagemFinal = await processarImagemParaBlob(fotoInput.files[0]);
+        } else if (id) {
+            const prodAntigo = listaProdutos.find(p => p.id == id);
+            imagemFinal = prodAntigo ? prodAntigo.imagem_blob : null;
+        }
+
+        const produto = {
+            id: id || Date.now().toString(),
+            nome: nome,
+            codigo_de_barras: document.getElementById('codigo_de_barras').value,
+            data_compra: document.getElementById('data_compra').value,
+            numero_nota: document.getElementById('numero_nota').value,
+            categoria_prod: document.getElementById('categoria_prod').value,
+            preco_custo: parseFloat(document.getElementById('preco_custo').value) || 0,
+            preco_venda: parseFloat(document.getElementById('preco_venda').value) || 0,
+            estoque_atual: parseInt(document.getElementById('estoque_atual').value) || 0,
+            estoque_minimo: parseInt(document.getElementById('estoque_minimo').value) || 0,
+            imagem_blob: imagemFinal, // Armazenamento binário
+            updated_at: new Date().toISOString()
+        };
+
+        const db = await window.getDB();
+        const transaction = db.transaction("produtos", "readwrite");
+        const store = transaction.objectStore("produtos");
+        
+        const request = store.put(produto);
+
+        request.onsuccess = () => {
+            alert("Produto salvo com sucesso no banco local!");
+            resetForm();
+            loadProdutos();
+        };
+    };
+
+    // Renderizar Tabela
+    window.renderProdutos = function(dados) {
+        const list = document.getElementById('produtos-list');
+        list.innerHTML = dados.map(p => {
+            // Cria URL temporária para o Blob binário
+            const urlFoto = p.imagem_blob ? URL.createObjectURL(p.imagem_blob) : 'https://via.placeholder.com/50';
+            const estoqueBaixo = p.estoque_atual <= (p.estoque_minimo || 0);
+
+            return `
+                <tr>
+                    <td><img src="${urlFoto}" class="img-prod" onload="if(this.src.startsWith('blob:')) URL.revokeObjectURL(this.src)"></td>
+                    <td><b>${p.nome}</b></td>
+                    <td><span style="background:#e2e8f0; padding:2px 8px; border-radius:4px;">${p.categoria_prod || '-'}</span></td>
+                    <td style="${estoqueBaixo ? 'color:red; font-weight:bold' : ''}">${p.estoque_atual} un</td>
+                    <td>R$ ${p.preco_venda.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+                    <td>${p.numero_nota || '-'}</td>
+                    <td>
+                        <div class="actions-flex">
+                            <button class="btn-action btn-edit" onclick="editProduto('${p.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete" onclick="deleteProduto('${p.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+        }).join('') || '<tr><td colspan="7" style="text-align:center">Nenhum produto local encontrado.</td></tr>';
+    };
+
+    // Editar Produto
+    window.editProduto = function(id) {
+        const p = listaProdutos.find(i => i.id == id);
+        if (!p) return;
+
+        document.getElementById('edit-id').value = p.id;
+        document.getElementById('nome').value = p.nome;
+        document.getElementById('codigo_de_barras').value = p.codigo_de_barras || '';
+        document.getElementById('data_compra').value = p.data_compra || '';
+        document.getElementById('numero_nota').value = p.numero_nota || '';
+        document.getElementById('categoria_prod').value = p.categoria_prod || '';
+        document.getElementById('preco_custo').value = p.preco_custo;
+        document.getElementById('preco_venda').value = p.preco_venda;
+        document.getElementById('estoque_atual').value = p.estoque_atual;
+        document.getElementById('estoque_minimo').value = p.estoque_minimo;
+
+        if (p.imagem_blob) {
+            const url = URL.createObjectURL(p.imagem_blob);
+            document.getElementById('img-preview').src = url;
+            document.getElementById('preview-container').style.display = 'block';
+        }
+
+        document.getElementById('form-title').innerText = "Editando Produto (Local)";
+        document.getElementById('btn-save').innerText = "Atualizar Produto";
+        document.getElementById('btn-cancel').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Eliminar Produto
+    window.deleteProduto = async function(id) {
+        if (!confirm("Tem a certeza que deseja eliminar este produto do banco local?")) return;
+        const db = await window.getDB();
+        const transaction = db.transaction("produtos", "readwrite");
+        transaction.objectStore("produtos").delete(id);
+        transaction.oncomplete = () => loadProdutos();
+    };
+
+    // Reset do Formulário
+    window.resetForm = function() {
+        document.getElementById('edit-id').value = '';
+        document.querySelectorAll('input').forEach(i => i.value = '');
+        document.getElementById('img-preview').src = '';
+        document.getElementById('preview-container').style.display = 'none';
+        document.getElementById('form-title').innerText = "Novo Produto (Local)";
+        document.getElementById('btn-save').innerText = "Salvar Produto Localmente";
+        document.getElementById('btn-cancel').style.display = 'none';
+    };
+
+    // Filtros e Busca
+    window.filtrarProdutos = function() {
+        const busca = document.getElementById('inputBusca').value.toLowerCase();
+        const categoria = document.getElementById('filtro_categoria').value;
+        const filtrados = listaProdutos.filter(p => {
+            const matchTexto = p.nome.toLowerCase().includes(busca) || (p.codigo_de_barras && p.codigo_de_barras.includes(busca));
+            const matchCategoria = categoria === "" || p.categoria_prod === categoria;
+            return matchTexto && matchCategoria;
+        });
+        renderProdutos(filtrados);
+    };
+
+    function atualizarFiltrosCategorias(prods) {
+        const cats = [...new Set(prods.map(p => p.categoria_prod).filter(Boolean))];
+        const dataList = document.getElementById('lista-categorias');
+        if(dataList) dataList.innerHTML = cats.map(c => `<option value="${c}">`).join('');
+        const selectFiltro = document.getElementById('filtro_categoria');
+        if(selectFiltro) selectFiltro.innerHTML = '<option value="">Todas</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    // Scanner de Código de Barras
+    window.abrirScanner = function() {
+        document.getElementById('reader-container').style.display = 'block';
+        html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (txt) => {
+            document.getElementById('codigo_de_barras').value = txt;
+            window.fecharScanner();
+        }).catch(err => console.error(err));
+    };
+
+    window.fecharScanner = function() {
+        if (html5QrCode) html5QrCode.stop().then(() => {
+            document.getElementById('reader-container').style.display = 'none';
+        });
+    };
+
+    document.addEventListener('DOMContentLoaded', inicializar);
+})();
+</script>
+</body>
+</html>
