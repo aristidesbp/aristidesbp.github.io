@@ -1,3 +1,4 @@
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # conexao.js
 ```
 /** ERP ABP - Conexão Supabase */
@@ -32,7 +33,7 @@
     }
 })();
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # navbar.js
 ```
 /** ERP ABP - Navbar Dinâmica */
@@ -89,7 +90,7 @@
     }
 })();
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # validar_user.js
 ```
 /** ERP ABP - Validador de Sessão */
@@ -119,7 +120,7 @@
     setTimeout(() => clearInterval(checkSupabase), 5000);
 })();
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
 ```
 <!DOCTYPE html>
@@ -221,24 +222,22 @@ body {
     }
 }
    </style>
-    
-    
-   
+
 </head>
 <body>
  <div class="content">
         <div class="header-area">
             <h1>SISTEMA ERP ABP</h1>
         </div>
-     <div class="grid">
-
-         
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-         
+     <div class="grid">       
  <div class="grid">
+
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+
+
  <a href="adm_usuario.html" class="card">
         <i class="fas fa-sticky-note"></i>
         <h3>Conta do usuario</h3>
@@ -266,21 +265,297 @@ body {
         <p>Fluxo de caixa e controle de contas.</p>
     </a>
 
-     
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->
+<!-- ################################################################ -->   
      
 </div>
-          
-
-         
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-<!-- ################################################################ -->
-
-        </div>
-    </div>
+</div>
+</div>
 </body>
 </html>
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# login.html
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Codificação de caracteres -->
+    <meta charset="UTF-8">
 
+    <!-- Responsividade para dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título da aba -->
+    <title>Login - SISTEMA ERP ABP</title>
+
+    <!-- SDK do Supabase (frontend) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- CSS específico da tela de login -->
+    <style>
+    /* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #1e293b;
+    --bg: #0f172a;
+}
+
+/* Estilo base da página */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Card central de login */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título principal */
+h1 {
+    color: var(--dark);
+    margin-bottom: 5px;
+    font-size: 24px;
+}
+
+/* Subtítulo */
+h2 {
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Container dos inputs */
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* Campos de entrada */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Botão para mostrar/ocultar senha */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Botão principal */
+button.main-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover do botão */
+button.main-btn:hover {
+    background-color: #34b27b;
+}
+
+/* Links extras */
+.extra-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* Estilo dos links */
+.link {
+    color: #4a90e2;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Botão de voltar */
+.btn-back {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: none;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Card central de autenticação -->
+    <div class="login-card">
+
+        <!-- Botão de retorno (usado em recuperação/cadastro) -->
+        <button id="btn-back" class="btn-back" onclick="toggleMode()">
+            ← Voltar para o Login
+        </button>
+
+        <!-- Título principal -->
+        <h1>SISTEMA ERP ABP</h1>
+
+        <!-- Subtítulo dinâmico -->
+        <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
+
+        <!-- Campo de e-mail -->
+        <div class="input-container" id="email-group">
+            <input type="email" id="email" placeholder="Seu e-mail">
+        </div>
+
+        <!-- Campo de senha -->
+        <div class="input-container" id="pass-group">
+            <input type="password" id="password" placeholder="Sua senha">
+
+            <!-- Botão para alternar visibilidade da senha -->
+            <button type="button" class="toggle-password" onclick="toggleVisibility()">
+                👁️
+            </button>
+        </div>
+
+        <!-- Botão principal (login / cadastro / salvar senha) -->
+        <button class="main-btn" id="btn-auth" onclick="handleAuth()">
+            Entrar
+        </button>
+
+        <!-- Links auxiliares -->
+        <div class="extra-links">
+            <span id="link-forgot" class="link" onclick="forgotPassword()">
+                Esqueci minha senha
+            </span>
+
+    <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
+    <h3>CONTATO: +55 91 99242-0981</h3>
+            
+        </div>
+    </div>
+
+    
+    
+    <!-- Script principal do login -->
+    <script>
+
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Criação do cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Alterna a visibilidade da senha
+ */
+function toggleVisibility() {
+    const passInput = document.getElementById('password');
+    const toggleBtn = document.querySelector('.toggle-password');
+
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
+}
+
+/**
+ * Apenas Login
+ */
+async function handleAuth() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) alert("Erro: " + error.message);
+    else window.location.href = 'index.html';
+}
+
+/**
+ * Envio de e-mail para recuperação de senha
+ */
+async function forgotPassword() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite seu e-mail.");
+
+    const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+    });
+
+    if (error) alert(error.message);
+    else alert("Link de recuperação enviado!");
+}
+
+/**
+ * Detecta se o usuário chegou por link de recuperação
+ */
+/**
+ * Detecta se o usuário já está logado ou se veio por recuperação
+ */
+async function checkStatus() {
+    const { data } = await _supabase.auth.getSession();
+    
+    // Se já estiver logado, pula o login e vai para o ERP
+    if (data.session && !window.location.hash.includes("type=recovery")) {
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const hash = window.location.hash;
+    if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
+        document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
+        document.getElementById('email-group').style.display = 'none';
+        document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
+        document.getElementById('btn-auth').onclick = updatePassword;
+        document.getElementById('link-forgot').style.display = 'none';
+        document.getElementById('btn-back').style.display = 'block'; // Mostra botão voltar
+    }
+}
+
+/**
+ * Função para resetar o formulário se o usuário quiser desistir da recuperação
+ */
+function toggleMode() {
+    window.location.hash = "";
+    window.location.reload();
+}
+
+// Inicialização
+window.onload = checkStatus;
+    </script>
+
+</body>
+</html>
+
+```
 
