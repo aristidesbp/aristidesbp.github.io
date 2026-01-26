@@ -3,8 +3,11 @@
     "use strict";
     
     const CONFIG = {
-        URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co',
+        
+        URL: 'https://kjhjeaiwjilkgocwvbwi.supabase.co', // Sua url do projeto
         KEY: 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX', // Sua chave do projeto
+
+        
         SDK_URL: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     };
 
