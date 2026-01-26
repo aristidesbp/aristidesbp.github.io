@@ -6,7 +6,7 @@
         // Sua url do projeto
         URL: 'https://ndpvspnwzosvpniycapc.supabase.co', 
         // Sua chave do projeto
-        KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcHZzcG53em9zdnBuaXljYXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjkwNDksImV4cCI6MjA4NTAwNTA0OX0.hYgXJXn3CuvNJkbDyVkJNq6xREV-1OSohB1hhoetibk', 
+        KEY: 'sb_publishable_WOox2Nn_6B1zjrRtD3mrrQ_TyI93EJH', 
        
 
         
