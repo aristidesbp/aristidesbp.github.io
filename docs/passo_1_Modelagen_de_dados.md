@@ -59,8 +59,10 @@ FORNECEDORES
  ├─ senha  
  ├─ email  
  └─ contato
+
       │
       ▼
+
 PRODUTOS
  ├─ id (PK)
  ├─ criadoEm 
@@ -77,6 +79,7 @@ PRODUTOS
  ├─ preco_venda
  ├─ data_compra
  ├─ data_vencimento
+ ├─ codigo_barras
  ├─ estoque
  └─ estoque_minimo
 
