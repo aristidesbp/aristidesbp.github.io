@@ -132,8 +132,11 @@
     <title>SISTEMA ERP ABP - Inicio</title>
     
     <script src="conexao.js" defer></script>
+    <script src="navbar.js" defer></script>
+    <script src="validar_user.js" defer></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
    <style>
        /* Reset e Box-sizing conforme seu padrão */
 * {
