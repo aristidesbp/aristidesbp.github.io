@@ -241,6 +241,8 @@ GRANT ALL ON SCHEMA public TO service_role;
 
 # 🧱 BANCO DE DADOS COMPLETO — ERP APB (SQL)
 * 👉 Compatível com PostgreSQL / Supabase
+  
+## usuarios.sql
 ```
 
 ```
