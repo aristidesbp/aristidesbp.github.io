@@ -100,6 +100,16 @@ SERVICOS
  ├─ foto_url
  └─ estoque_minimo
 
+ AGENDAR_SERVICOS
+ ├─ id (PK)
+ ├─ criadoEm 
+ ├─ usuarioId (FK)
+ ├─ status
+ ├─ servicoId (FK)
+ ├─ data
+ ├─ hora
+ └─ estoque_minimo
+
       │
       ▼
 
@@ -242,7 +252,6 @@ GRANT ALL ON SCHEMA public TO service_role;
 # 🧱 BANCO DE DADOS COMPLETO — ERP APB (SQL)
 * 👉 Compatível com PostgreSQL / Supabase
   
-## usuarios.sql
 ```
 
 ```
