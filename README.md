@@ -1,5 +1,6 @@
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # 🧱 Criar o projeto no Supabase
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
@@ -52,10 +53,10 @@ end $$;
 
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅1️
 # 1️⃣ CRIANDO TABELAS NO SUPABASE
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 * Vá em Table Editor
 * Clique em New Table
 * Nome da tabela: usuarios
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
 -- ==========================================
 -- 1. TABELA DE PERFIS (ESTENDE O AUTH.USERS)
@@ -152,7 +153,7 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# 2️⃣ POLICIES
+# 2️⃣ POLICIES (GERAL)
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
 -- ==========================================
@@ -242,7 +243,7 @@ USING (auth.uid() = usuario_id);
 ```
 
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# 3️⃣ TRIGGER AUTOMÁTICA (PADRÃO PROFISSIONAL)
+# 3️TRIGGER (GERAL)
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
 -- ==========================================
@@ -333,6 +334,24 @@ CREATE TRIGGER on_auth_user_deleted
   FOR EACH ROW EXECUTE PROCEDURE public.handle_user_deletion();
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# Log de Auditoria (Quem logou e quando)
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+```
+-- Tabela de Logs de Acesso
+CREATE TABLE public.logs_acesso (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  data_login TIMESTAMPTZ DEFAULT NOW(),
+  ip_address TEXT,
+  user_agent TEXT -- Guarda se foi pelo Chrome, Celular, etc.
+);
+
+-- RLS: Usuário só vê seus próprios logs
+ALTER TABLE public.logs_acesso ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Usuários veem seus próprios logs" 
+ON public.logs_acesso FOR SELECT USING (auth.uid() = usuario_id);
+```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # Controle de Usuário Ativo (Status)
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
@@ -353,22 +372,15 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# Log de Auditoria (Quem logou e quando)
+# Ajustando as Policies para Respeitar o Status
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
--- Tabela de Logs de Acesso
-CREATE TABLE public.logs_acesso (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
-  data_login TIMESTAMPTZ DEFAULT NOW(),
-  ip_address TEXT,
-  user_agent TEXT -- Guarda se foi pelo Chrome, Celular, etc.
-);
+-- Exemplo para a tabela de produtos (repetir a lógica para as outras)
+DROP POLICY IF EXISTS "Produtos: Ver próprios" ON public.produtos;
 
--- RLS: Usuário só vê seus próprios logs
-ALTER TABLE public.logs_acesso ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Usuários veem seus próprios logs" 
-ON public.logs_acesso FOR SELECT USING (auth.uid() = usuario_id);
+CREATE POLICY "Produtos: Ver próprios (Apenas se Ativo)" 
+ON public.produtos FOR SELECT 
+USING (auth.uid() = usuario_id AND public.usuario_esta_ativo());
 ```
 
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
@@ -501,6 +513,21 @@ async function login() {
   window.location.href = 'index.html'
 }
 
+// Exemplo de como usar no seu login.js
+const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+if (data.user) {
+    // Registra o log de auditoria
+    await supabase.from('logs_acesso').insert([
+        { 
+            usuario_id: data.user.id, 
+            ip_address: 'IP_DO_CLIENTE', // Opcional
+            user_agent: navigator.userAgent 
+        }
+    ]);
+    window.location.href = 'dashboard.html';
+
+}
 /* ===============================
    RESET DE SENHA
 ================================ */
