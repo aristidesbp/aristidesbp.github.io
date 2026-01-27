@@ -262,7 +262,11 @@ async function deletar(id) {
 </body>
 </html>
 ```
-## TUDO CERTO ATE AQUI, VAMOS DAR UM PASSO ADIANTE!
+# PARABÉNS VOCÊ JÁ TEM O SEU PRIMEIRO CRUD🥳🥳
+# FASE 2:
+
+
+
 
 
 
