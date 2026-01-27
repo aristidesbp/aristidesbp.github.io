@@ -114,7 +114,21 @@ end $$;
 | Apenas dono do registro  | `user_id = auth.uid()`          |
 | Público total (seu caso) | `true`                          |
  ```
-
+Você pegou os três pilares fundamentais, mas no ecossistema do Supabase (e do PostgreSQL), existem variações estratégicas dessas regras que são o que separam um sistema amador de um ERP Profissional.
+Para o ERP ABP Profissional, além desses três, existem mais 2 conceitos cruciais que você precisa dominar para garantir a escalabilidade do projeto.
+# O Conceito de "Admin" ou "Nível de Acesso"
+No seu ERP, não basta estar logado; alguns usuários poderão ver tudo, enquanto outros apenas o que lhes cabe.
+A Situação: "Apenas gerentes podem excluir produtos".
+* O USING: (auth.jwt() ->> 'user_metadata')::jsonb ->> 'role' = 'admin'.
+* Por que aprender: Isso permite que você use a própria autenticação do Supabase para guardar se o usuário é um "Vendedor" ou "Dono", sem precisar de tabelas extras complexas no início.
+# Diferença entre SELECT e UPDATE (Controle de Fluxo)
+Muitas vezes, a regra para ver é diferente da regra para mudar.
+## A Situação:
+* "Todos na empresa podem ver os clientes, mas apenas o criador pode editar".
+## A Estratégia:
+* Para o SELECT: Você usaria auth.role() = 'authenticated'.
+* Para o UPDATE: Você usaria user_id = auth.uid().
+* Por que aprender: Isso evita que um funcionário altere acidentalmente os dados de outro, mantendo a integridade do banco.
 # 🔑 2. Pegar as chaves do Supabase
 ## Vá em Settings
 *  DATA API/Project URL/copiar
@@ -249,23 +263,8 @@ async function deletar(id) {
 </html>
 ```
 ## TUDO CERTO ATE AQUI, VAMOS DAR UM PASSO ADIANTE!
-Você pegou os três pilares fundamentais, mas no ecossistema do Supabase (e do PostgreSQL), existem variações estratégicas dessas regras que são o que separam um sistema amador de um ERP Profissional.
-Para o ERP ABP Profissional, além desses três, existem mais 2 conceitos cruciais que você precisa dominar para garantir a escalabilidade do projeto.
-# O Conceito de "Admin" ou "Nível de Acesso"
-No seu ERP, não basta estar logado; alguns usuários poderão ver tudo, enquanto outros apenas o que lhes cabe.
-A Situação: "Apenas gerentes podem excluir produtos".
-* O USING: (auth.jwt() ->> 'user_metadata')::jsonb ->> 'role' = 'admin'.
-* Por que aprender: Isso permite que você use a própria autenticação do Supabase para guardar se o usuário é um "Vendedor" ou "Dono", sem precisar de tabelas extras complexas no início.
-# Diferença entre SELECT e UPDATE (Controle de Fluxo)
-Muitas vezes, a regra para ver é diferente da regra para mudar.
-## A Situação:
-* "Todos na empresa podem ver os clientes, mas apenas o criador pode editar".
-## A Estratégia:
-* Para o SELECT: Você usaria auth.role() = 'authenticated'.
-* Para o UPDATE: Você usaria user_id = auth.uid().
-* Por que aprender: Isso evita que um funcionário altere acidentalmente os dados de outro, mantendo a integridade do banco.
-## 🎓 Tabela Atualizada de RLS (Row Level Security)
-Aqui está a sua "colinha" definitiva para configurar o Supabase do ERP:
+
+
 
 
 
