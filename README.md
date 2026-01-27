@@ -297,6 +297,25 @@ async function cadastrar() {
 </html>
 
 ```
-
-
-
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# usuarios.sql
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
+```
+create table public.usuarios (
+  id uuid not null,
+  email text not null,
+  nome_completo text null,
+  avatar_url text null,
+  criado_em timestamp with time zone null default now(),
+  status text null default 'ativo'::text,
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_id_fkey foreign KEY (id) references auth.users (id) on delete CASCADE,
+  constraint usuarios_status_check check (
+    (
+      status = any (
+        array['ativo'::text, 'suspenso'::text, 'pendente'::text]
+      )
+    )
+  )
+) TABLESPACE pg_default;
+```
