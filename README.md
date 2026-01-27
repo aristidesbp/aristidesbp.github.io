@@ -1,3 +1,12 @@
+# 🧱 1. Criar o projeto no Supabase
+## 1.1 Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto
+* Senha do banco
+* Região
 # 🧨 RESET TOTAL DO SUPABASE (DADOS + AUTH + STORAGE)
 @ 👉 Isso é o mais próximo possível de um banco novo.
 ``` 
@@ -11,16 +20,8 @@ begin
   end loop;
 end $$;
 ```
-# 🧱 1. Criar o projeto no Supabase
-## 1.1 Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto
-* Senha do banco
-* Região
-# 1.2 Criar a tabela No Supabase:
+
+# CRIANDO TABELAS NO SUPABASE
 * Vá em Table Editor
 * Clique em New Table
 * Nome da tabela: usuarios 
