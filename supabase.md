@@ -48,6 +48,165 @@ end $$;
 | nome       | text      | obrigatório                 |
 | email      | text      | obrigatório                 |
 ```
+# 1.3 Liberar acesso público (IMPORTANTE)
+* Vá em Authentication → Policies
+## Para a tabela usuarios, crie políticas:
+* SELECT → Allow public
+* INSERT → Allow public
+* UPDATE → Allow public
+* DELETE → Allow public
+### Isso é necessário para funcionar no GitHub Pages (front-end puro).
+
+# 🔑 2. Pegar as chaves do Supabase
+*  Vá em Settings → API
+### Você vai copiar:
+* Project URL
+* anon public key
+## Exemplo:
+* URL: https://xxxxx.supabase.co
+* EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# 🧩 3. HTML (index.html)
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD Supabase</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+form input, form button {
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+</style>
+</head>
+<body>
+
+  <h1>CRUD com Supabase</h1>
+
+  <form id="form">
+    <input type="hidden" id="id">
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <button type="submit">Salvar</button>
+  </form>
+
+  <ul id="lista"></ul>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script">
+//CONFIGURAÇÃO DO SUPABASE
+const supabaseUrl = 'https://SEU-PROJETO.supabase.co'
+const supabaseKey = 'SUA-ANON-KEY'
+const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+
+//lISTAR
+async function listar() {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .order('id', { ascending: false })
+
+  const lista = document.getElementById('lista')
+  lista.innerHTML = ''
+
+  data.forEach(user => {
+    const li = document.createElement('li')
+    li.innerHTML = `
+      ${user.nome} - ${user.email}
+      <div>
+        <button onclick="editar(${user.id}, '${user.nome}', '${user.email}')">Editar</button>
+        <button onclick="deletar(${user.id})">Excluir</button>
+      </div>
+    `
+    lista.appendChild(li)
+  })
+}
+
+listar()
+
+//CRIAR E ATUALIZAR
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault()
+
+  const id = document.getElementById('id').value
+  const nome = document.getElementById('nome').value
+  const email = document.getElementById('email').value
+
+  if (id) {
+    await supabase
+      .from('usuarios')
+      .update({ nome, email })
+      .eq('id', id)
+  } else {
+    await supabase
+      .from('usuarios')
+      .insert([{ nome, email }])
+  }
+
+  e.target.reset()
+  document.getElementById('id').value = ''
+  listar()
+})
+
+
+// EDITAR
+function editar(id, nome, email) {
+  document.getElementById('id').value = id
+  document.getElementById('nome').value = nome
+  document.getElementById('email').value = email
+}
+
+
+//DELETAR
+async function deletar(id) {
+  await supabase
+    .from('usuarios')
+    .delete()
+    .eq('id', id)
+
+  listar()
+}
+
+
+</script>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
