@@ -59,7 +59,7 @@ create table public.usuarios (
 * WITH CHECK => Que dados podem ser salvos após o UPDATE;
 *  Se qualquer um pode editar qualquer linha, ambos ficam "true";
 *  Isso é necessário para funcionar no GitHub Pages (front-end puro);
-# SQL PARA CRIAR APÓLICES DA TABELA USUARIOS:
+# 📌 2️⃣ SQL – Criar tabela de apólices usuarios 
 ```
 create table public.apolices (
   id bigint generated always as identity primary key,
@@ -80,6 +80,19 @@ create table public.apolices (
     on delete cascade
 );
 ```
+# 🧠 Explicação didática (importante)
+🔗 Relacionamento
+usuario_id aponta para usuarios.id
+on delete cascade:
+Se o usuário for apagado → apólices dele também são
+📄 Campos da apólice
+numero_apolice → identificador da seguradora
+tipo → ex: Auto, Vida, Residencial
+valor → valor segurado
+data_inicio / data_fim → vigência
+status → ativa, cancelada, vencida
+🔐 (Opcional, mas recomendado) – RLS básico
+Ativar segurança por linha:
 
 ## 🧠 Regras mentais importantes (grave isso)
 * ❌ RLS ativado + policy sem USING = bloqueia tudo
