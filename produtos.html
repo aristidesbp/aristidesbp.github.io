@@ -1,81 +1,133 @@
-const SUPABASE_URL = 'https://ndpvspnwzosvpniycapc.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcHZzcG53em9zdnBuaXljYXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjkwNDksImV4cCI6MjA4NTAwNTA0OX0.hYgXJXn3CuvNJkbDyVkJNq6xREV-1OSohB1hhoetibk'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="conexao.js"></script>
+    <style>
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .grid-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #2c3e50; color: white; }
+        .btn-add { background: #27ae60; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+        .btn-del { background: #c0392b; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gestão de Produtos / Estoque</h2>
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+        <div class="card">
+            <form id="produto-form" class="grid-form">
+                <div style="display: flex; flex-direction: column;">
+                    <label>Descrição do Produto</label>
+                    <input type="text" id="nome" placeholder="Ex: Cadeira Escritório" required>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>SKU/Ref</label>
+                    <input type="text" id="sku" placeholder="Cod-001">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>Preço Venda</label>
+                    <input type="text" id="preco" placeholder="R$ 0,00" oninput="mascaraMoeda(this)">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>Estoque</label>
+                    <input type="number" id="estoque" value="0" min="0">
+                </div>
+                <button type="submit" class="btn-add">Salvar</button>
+            </form>
+        </div>
 
-// 🔒 Proteção
-async function checkAuth() {
-  const { data } = await supabase.auth.getSession()
-  if (!data.session) {
-    window.location.href = 'index.html'
-  }
-}
-checkAuth()
+        <div class="card" style="padding: 0;">
+            <table id="tabela-produtos">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 
-// 🚪 Logout
-document.getElementById('logout').addEventListener('click', async () => {
-  await supabase.auth.signOut()
-  window.location.href = 'index.html'
-})
+    <script>
+    (function() {
+        // --- VALIDAÇÕES E MÁSCARAS ---
+        window.mascaraMoeda = (i) => {
+            let v = i.value.replace(/\D/g, "");
+            v = (v / 100).toFixed(2) + "";
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+            v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+            i.value = "R$ " + v;
+        };
 
-// 📄 Listar
-async function listar() {
-  const { data } = await supabase
-    .from('usuarios')
-    .select('*')
-    .order('id', { ascending: false })
+        const sanitizar = (str) => {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        };
 
-  const lista = document.getElementById('lista')
-  lista.innerHTML = ''
+        const parsePreco = (str) => {
+            return parseFloat(str.replace("R$ ", "").replace(".", "").replace(",", ".")) || 0;
+        };
 
-  data.forEach(u => {
-    const li = document.createElement('li')
-    li.innerHTML = `
-      ${u.nome} - ${u.email}
-      <div>
-        <button onclick="editar(${u.id}, '${u.nome}', '${u.email}')">Editar</button>
-        <button onclick="deletar(${u.id})">Excluir</button>
-      </div>
-    `
-    lista.appendChild(li)
-  })
-}
-listar()
+        // --- LÓGICA CRUD ---
+        const listarProdutos = async () => {
+            const { data, error } = await db.from('produtos').select('*').order('nome');
+            if (error) return console.error(error);
 
-// ➕ Criar / ✏️ Atualizar
-document.getElementById('form').addEventListener('submit', async e => {
-  e.preventDefault()
+            const tbody = document.querySelector('#tabela-produtos tbody');
+            tbody.innerHTML = data.map(p => `
+                <tr>
+                    <td>${sanitizar(p.nome)}</td>
+                    <td>${sanitizar(p.sku || '')}</td>
+                    <td>R$ ${p.preco_venda.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td>${p.estoque_atual}</td>
+                    <td>
+                        <button class="btn-del" onclick="deletarProduto(${p.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        };
 
-  const id = document.getElementById('id').value
-  const nome = document.getElementById('nome').value
-  const email = document.getElementById('email').value
+        document.getElementById('produto-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { data: { user } } = await db.auth.getUser();
 
-  if (id) {
-    await supabase.from('usuarios')
-      .update({ nome, email })
-      .eq('id', id)
-  } else {
-    await supabase.from('usuarios')
-      .insert([{ nome, email }])
-  }
+            const payload = {
+                user_id: user.id,
+                nome: document.getElementById('nome').value.trim(),
+                sku: document.getElementById('sku').value.trim(),
+                preco_venda: parsePreco(document.getElementById('preco').value),
+                estoque_atual: parseInt(document.getElementById('estoque').value)
+            };
 
-  e.target.reset()
-  document.getElementById('id').value = ''
-  listar()
-})
+            const { error } = await db.from('produtos').insert([payload]);
+            if (error) alert(error.message);
+            else {
+                e.target.reset();
+                listarProdutos();
+            }
+        });
 
-// ✏️ Editar
-function editar(id, nome, email) {
-  document.getElementById('id').value = id
-  document.getElementById('nome').value = nome
-  document.getElementById('email').value = email
-}
+        window.deletarProduto = async (id) => {
+            if (!confirm("Excluir produto?")) return;
+            await db.from('produtos').delete().eq('id', id);
+            listarProdutos();
+        };
 
-// ❌ Deletar
-async function deletar(id) {
-  await supabase.from('usuarios')
-    .delete()
-    .eq('id', id)
-
-  listar()
-}
+        document.addEventListener('DOMContentLoaded', listarProdutos);
+    })();
+    </script>
+</body>
+</html>
