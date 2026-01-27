@@ -1,44 +1,5 @@
-# 📘 Dominando o Supabase: Do Zero ao ERP Profissional
-## tutorial completo, do zero, didático, direto ao ponto, pensado para rodar 100% no front-end usando Supabase + GitHub Pages:
-## A ideia é:
-👉 GitHub Pages hospeda o site
-👉 Supabase vira o banco de dados + API
-👉 HTML + CSS + JavaScript puro
-# 🎯 O que você vai construir
-* CRUD completo 
-* e-comerce completo 
-* ERP completo focado em segurança e performace
-# 📂 o que vamos ver neste curso tutorial?
-## A Fundação (O Banco de Dados)
-* Modelagem de Dados: tipos de dados e quano usar.
-* Relacionamentos: Como conectar tabelas (Chaves Estrangeiras).
-* Segurança e Apólices (RLS)
-* O conceito de RLS: O muro de Berlim dos seus dados.
-### Apólices de Acesso:
-* Público Total vs. Usuários Autenticados.
-* Propriedade de Dados (auth.uid()).
-* Níveis de Acesso (Admin vs. Usuário).
-* Controle de Fluxo: Diferenciando permissões de Leitura (SELECT) e Escrita (INSERT/UPDATE).
-## Inteligência com Triggers e Funções
-* Introdução às Functions (PL/pgSQL): Criando lógica dentro do banco.
-* Trigger (Gatilhos):
-* Automatizando o updated_at.
-* Sincronizando estoque ao realizar uma venda.
-* Criando perfis de usuário automaticamente após o cadastro.
-## Views e Consultas Avançadas
-* Database Views: Como simplificar relatórios financeiros complexos.
-* Consultas no Front-end: Filtros, ordenação e paginação eficiente.
-## Integração e Interface (O ERP na Prática)
-* Conexão Segura: Protegendo chaves e gerenciando sessões.
-*  Módulo de Dashboard: Gráficos e indicadores em tempo real.
-*  Deploy Profissional: Hospedagem no GitHub Pages com integridade total.
-# REQUISITOS 
-* Criar conta no github
-* Cirar github page
-* Criar conta no Supabase
-* Criar ou limpar um projeto do supabase
 # 🧨 RESET TOTAL DO SUPABASE (DADOS + AUTH + STORAGE)
-* 👉 Isso é o mais próximo possível de um banco novo.
+@ 👉 Isso é o mais próximo possível de um banco novo.
 ``` 
 -- Apagar tabelas públicas
 do $$
