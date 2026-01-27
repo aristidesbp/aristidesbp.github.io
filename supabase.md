@@ -94,15 +94,15 @@ end $$;
  ```
 
 # 🔑 2. Pegar as chaves do Supabase
-*  Vá em Settings → API
-  
-### Você vai copiar:
-* Project URL
-* anon public key
-  
+## Vá em Settings
+*  DATA API/Project URL/copiar
+*  API Keis/anon public key/copiar
+
 ## Exemplo:
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+* NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
+    
 # 🧩 3. HTML (index.html)
 ```
 <!DOCTYPE html>
