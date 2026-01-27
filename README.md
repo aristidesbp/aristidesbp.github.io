@@ -22,25 +22,6 @@ begin
   end loop;
 end $$;
 ```
-
-# 🔑 Pegar as chaves do Supabase
-## Vá em Settings
-*  DATA API/Project URL/copiar
-*  API Keis/anon public key/copiar
-*  Altentication/url config/ coloque o endereço de onde está hospedado
-### Exemplo:
-* URL: https://xxxxx.supabase.co
-* EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-* NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
-  
-# LOGIN do jeito certo, seguro e profissional, usando Supabase Auth (login proficional).
-# 🧠 ARQUITETURA FINAL DO LOGIN
-* Autenticação → Supabase Auth
-* Senhas → hash + sal (automático)
-* Identidade → auth.users
-* Dados do app → public.usuarios
-* Segurança → RLS + policies
-* Automação → trigger
   
 # ✅ ORDEM CORRETA DE EXECUÇÃO
 * 1️⃣ Criar tabela usuarios
@@ -74,22 +55,6 @@ end $$;
 * Vá em Table Editor
 * Clique em New Table
 * Nome da tabela: usuarios
-
-# TABELA DE PERFIL DO USUÁRIO
-```
-create table public.usuarios (
-  id bigint generated always as identity primary key,
-  auth_id uuid not null unique,
-  nome text not null,
-  email text not null unique,
-  ativo boolean default true,
-  created_at timestamp with time zone default now()
-);
-```
-# ATIVAR RLS
-```
-alter table public.usuarios enable row level security;
-```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
 -- ==========================================
@@ -188,162 +153,247 @@ CREATE TRIGGER on_auth_user_created
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # 2️⃣ POLICIES
-* Vá em Authentication → Policie
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
-## CRIAR 4 APOLICES:         ## EXEMPLO (UPDATE)
-* SELECT → Allow public      * Policy UPDATE
-* INSERT → Allow public.     * Role: defalt...(public)
-* UPDATE → Allow public.     * USING: true
-* DELETE → Allow public.     * WITH CHECK: true
-                              * Salvar
-```
-## 🧠 USING e WITH CHECK ?
-* USING => Quem pode ATUALIZAR a linha;
-* WITH CHECK => Que dados podem ser salvos após o UPDATE;
-*  Se qualquer um pode editar qualquer linha, ambos ficam "true";
-*  Isso é necessário para funcionar no GitHub Pages (front-end puro);
+-- ==========================================
+-- 1. POLICIES PARA: usuarios (Perfil)
+-- ==========================================
+ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
 
-## 🧠 Regras mentais importantes (grave isso)
-* ❌ RLS ativado + policy sem USING = bloqueia tudo
-* ✅ USING (true) = acesso liberado
-* anon key ≠ bypass de segurança
-* Policy manda mais que a chave
-  
-## 🔒 Quando NÃO usar true
-* Só para contexto futuro:
- ```
-| Situação                 | USING correto                   |
-| ------------------------ | ------------------------------- |
-| Apenas usuários logados  | `auth.role() = 'authenticated'` |
-| Apenas dono do registro  | `user_id = auth.uid()`          |
-| Público total (seu caso) | `true`                          |
- ```
-Você pegou os três pilares fundamentais, mas no ecossistema do Supabase
-(e do PostgreSQL), existem variações estratégicas dessas regras que são
-o que separam um sistema amador de um ERP Profissional. Para Profissional, 
-além desses três, existem mais 2 conceitos cruciais que você precisa 
-dominar para garantir a escalabilidade do projeto.
+CREATE POLICY "Perfis: usuários podem ver apenas o seu" 
+ON public.usuarios FOR SELECT 
+USING (auth.uid() = id);
 
-# O Conceito de "Admin" ou "Nível de Acesso"
-No seu ERP, não basta estar logado; alguns usuários poderão ver tudo, 
-enquanto outros apenas o que lhes cabe.
-## Situação:
-" Apenas gerentes podem excluir produtos".
-* O USING: (auth.jwt() ->> 'user_metadata')::jsonb ->> 'role' = 'admin'.
-* Isso permite que você use a própria autenticação do
-  Supabase para guardar se o usuário é um "Vendedor" ou "Dono", sem
-  precisar de tabelas extras complexas no início.
-  
-# Diferença entre SELECT e UPDATE (Controle de Fluxo)
-Muitas vezes, a regra para ver é diferente da regra para mudar.
+CREATE POLICY "Perfis: usuários podem atualizar apenas o seu" 
+ON public.usuarios FOR UPDATE 
+USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);
 
-## A Situação:
-* "Todos na empresa podem ver os clientes, mas apenas o criador pode editar".
-## A Estratégia:
-* Para o SELECT: Você usaria auth.role() = 'authenticated'.
-* Para o UPDATE: Você usaria user_id = auth.uid().
-* Isso evita que um funcionário altere acidentalmente os dados de outro,
-  mantendo a integridade do banco.
+-- Nota: O INSERT é feito via Trigger (Security Definer), então não precisa de policy de insert.
 
-  
-#  POLICIES DE SEGURANÇA (ESSENCIAIS)
-* 🔐 Inserir apenas o próprio usuário
-```
-create policy "insert own profile"
-on public.usuarios
-for insert
-with check (auth.uid() = auth_id);
-```
-# 👁️ Ler apenas o próprio perfil
-```
-create policy "select own profile"
-on public.usuarios
-for select
-using (auth.uid() = auth_id);
-```
-# ✏️ Atualizar apenas o próprio perfil
-```
-create policy "update own profile"
-on public.usuarios
-for update
-using (auth.uid() = auth_id);
+
+-- ==========================================
+-- 2. POLICIES PARA: entidades (Notas)
+-- ==========================================
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Entidades: Ver próprias" 
+ON public.entidades FOR SELECT 
+USING (auth.uid() = usuario_id);
+
+CREATE POLICY "Entidades: Inserir próprias" 
+ON public.entidades FOR INSERT 
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Entidades: Atualizar próprias" 
+ON public.entidades FOR UPDATE 
+USING (auth.uid() = usuario_id)
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Entidades: Apagar próprias" 
+ON public.entidades FOR DELETE 
+USING (auth.uid() = usuario_id);
+
+
+-- ==========================================
+-- 3. POLICIES PARA: produtos
+-- ==========================================
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Produtos: Ver próprios" 
+ON public.produtos FOR SELECT 
+USING (auth.uid() = usuario_id);
+
+CREATE POLICY "Produtos: Inserir próprios" 
+ON public.produtos FOR INSERT 
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Produtos: Atualizar próprios" 
+ON public.produtos FOR UPDATE 
+USING (auth.uid() = usuario_id)
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Produtos: Apagar próprios" 
+ON public.produtos FOR DELETE 
+USING (auth.uid() = usuario_id);
+
+
+-- ==========================================
+-- 4. POLICIES PARA: financeiro
+-- ==========================================
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Financeiro: Ver próprio" 
+ON public.financeiro FOR SELECT 
+USING (auth.uid() = usuario_id);
+
+CREATE POLICY "Financeiro: Inserir próprio" 
+ON public.financeiro FOR INSERT 
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Financeiro: Atualizar próprio" 
+ON public.financeiro FOR UPDATE 
+USING (auth.uid() = usuario_id)
+WITH CHECK (auth.uid() = usuario_id);
+
+CREATE POLICY "Financeiro: Apagar próprio" 
+ON public.financeiro FOR DELETE 
+USING (auth.uid() = usuario_id);
 ```
 
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # 3️⃣ TRIGGER AUTOMÁTICA (PADRÃO PROFISSIONAL)
-* 🔥 ESSA É A PARTE MAIS IMPORTANTE
-* Cria o registro automaticamente após o cadastro no Auth.
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
-create or replace function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.usuarios (
-    auth_id,
-    email,
-    nome
-  )
-  values (
-    new.id,
-    new.email,
-    split_part(new.email, '@', 1)
+-- ==========================================
+-- 1. FUNÇÃO: CRIAÇÃO AUTOMÁTICA DE PERFIL (AUTH)
+-- ==========================================
+-- Esta função garante que todo utilizador registado no Supabase Auth 
+-- tenha automaticamente uma entrada na sua tabela pública de 'usuarios'.
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.usuarios (id, email, nome_completo)
+  VALUES (
+    new.id, 
+    new.email, 
+    COALESCE(new.raw_user_meta_data->>'full_name', 'Novo Utilizador')
   );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-  return new;
-end;
-$$ language plpgsql security definer;
-```
+-- Trigger para a função acima
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
-# CRIAR O TRIGGER
-```
-create trigger on_auth_user_created
-after insert on auth.users
-for each row
-execute function public.handle_new_user();
+-- ==========================================
+-- 2. FUNÇÃO: ATUALIZAÇÃO AUTOMÁTICA DE TIMESTAMP
+-- ==========================================
+-- Esta função atualiza o campo 'atualizado_em' sempre que um registo muda,
+-- permitindo saber quando um produto ou nota foi editado pela última vez.
+
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS trigger AS $$
+BEGIN
+    NEW.atualizado_em = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Aplicar a trigger de timestamp nas tabelas existentes (exemplo: produtos e entidades)
+-- Nota: Certifique-se de que a coluna 'atualizado_em' existe nestas tabelas.
+
+CREATE TRIGGER update_produtos_timestamp BEFORE UPDATE ON public.produtos
+    FOR EACH ROW EXECUTE PROCEDURE public.update_updated_at_column();
+
+CREATE TRIGGER update_entidades_timestamp BEFORE UPDATE ON public.entidades
+    FOR EACH ROW EXECUTE PROCEDURE public.update_updated_at_column();
+
+-- ==========================================
+-- 3. FUNÇÃO: VALIDAÇÃO DE SALDO (FINANCEIRO)
+-- ==========================================
+-- Impede que o utilizador insira um valor negativo ou inválido no financeiro 
+-- (Segurança extra além do front-end).
+
+CREATE OR REPLACE FUNCTION public.check_financeiro_valor()
+RETURNS trigger AS $$
+BEGIN
+    IF NEW.valor <= 0 THEN
+        RAISE EXCEPTION 'O valor do lançamento deve ser maior que zero.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_financeiro_valor BEFORE INSERT OR UPDATE ON public.financeiro
+    FOR EACH ROW EXECUTE PROCEDURE public.check_financeiro_valor();
+
+-- ==========================================
+-- 4. FUNÇÃO: LIMPEZA DE DADOS AO ELIMINAR CONTA
+-- ==========================================
+-- Embora tenhamos o 'ON DELETE CASCADE', esta função pode ser usada para 
+-- registar auditoria ou logs antes de um utilizador ser removido.
+
+CREATE OR REPLACE FUNCTION public.handle_user_deletion()
+RETURNS trigger AS $$
+BEGIN
+  -- Aqui pode adicionar lógica de logs, se necessário
+  DELETE FROM public.usuarios WHERE id = old.id;
+  RETURN old;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_deleted ON auth.users;
+CREATE TRIGGER on_auth_user_deleted
+  BEFORE DELETE ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_user_deletion();
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# 4️⃣ (OPCIONAL) CONTROLE DE USUÁRIO ATIVO
-* Permite bloquear acesso sem deletar conta.
+# Controle de Usuário Ativo (Status)
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
-create or replace function public.is_user_active()
-returns boolean as $$
-  select exists (
-    select 1
-    from public.usuarios
-    where auth_id = auth.uid()
-    and ativo = true
+-- Adicionar coluna de status na tabela de usuários
+ALTER TABLE public.usuarios 
+ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'ativo' CHECK (status IN ('ativo', 'suspenso', 'pendente'));
+
+-- Criar uma View que só mostra dados se o usuário estiver ATIVO
+-- Isso impede que um usuário "suspenso" puxe dados da API mesmo logado
+CREATE OR REPLACE FUNCTION public.usuario_esta_ativo() 
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.usuarios 
+    WHERE id = auth.uid() AND status = 'ativo'
   );
-$$ language sql stable;
-```
-# Uso futuro em policies:
-```
-using (auth.uid() = auth_id and is_user_active());
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# 5️⃣ (OPCIONAL) LOG DE LOGIN (AUDITORIA)
+# Log de Auditoria (Quem logou e quando)
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ```
-create table public.login_logs (
-  id bigint generated always as identity primary key,
-  auth_id uuid not null,
-  ip text,
-  user_agent text,
-  created_at timestamp with time zone default now()
+-- Tabela de Logs de Acesso
+CREATE TABLE public.logs_acesso (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  data_login TIMESTAMPTZ DEFAULT NOW(),
+  ip_address TEXT,
+  user_agent TEXT -- Guarda se foi pelo Chrome, Celular, etc.
 );
+
+-- RLS: Usuário só vê seus próprios logs
+ALTER TABLE public.logs_acesso ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Usuários veem seus próprios logs" 
+ON public.logs_acesso FOR SELECT USING (auth.uid() = usuario_id);
 ```
-```
-alter table public.login_logs enable row level security;
-create policy "user sees own logs"
-on public.login_logs
-for select
-using (auth.uid() = auth_id);
-```
-
-
- 
-
-
 
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ## login.html
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+#  Pegar as chaves do Supabase
+## Vá em Settings
+*  🧱 DATA API/Project URL/copiar🧱 
+*  🔑 API Keis/anon public key/copiar🔑
+*  🧠 Altentication/url config/ coloque o endereço de onde está hospedado
+### Exemplo:
+* URL: https://xxxxx.supabase.co
+* EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+* NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
+  
+# LOGIN do jeito certo, seguro e profissional, usando Supabase Auth (login proficional).
+#  ARQUITETURA FINAL DO LOGIN
+* Autenticação → Supabase Auth
+* Senhas → hash + sal (automático)
+* Identidade → auth.users
+* Dados do app → public.usuarios
+* Segurança → RLS + policies
+* Automação → trigger
+
+  
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -413,13 +463,14 @@ p {
 <!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 /* ===============================
    SUPABASE CONFIG
 ================================ */
 const dbsupabase = supabase.createClient(
-  'https://tlhxtsanevvbpbyedmgv.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsaHh0c2FuZXZ2YnBieWVkbWd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MTg0ODQsImV4cCI6MjA4NTA5NDQ4NH0.E7ZplcLusSKK78ME-aO12mwOKEw1XV1FYmWx7GYP_sU'
+  '🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱 DATA API/Project URL/copiar🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱',
+  '🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑 API Keis/anon public key/copiar🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑'
 )
 
 /* ===============================
