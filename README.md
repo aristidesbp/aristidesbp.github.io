@@ -299,29 +299,35 @@ Copie TUDO abaixo.
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
+
 <style>
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   max-width: 400px;
   margin: 60px auto;
 }
+
 input, button {
   width: 100%;
   padding: 10px;
   margin: 6px 0;
 }
+
 .senha {
   position: relative;
 }
+
 .senha span {
   position: absolute;
   right: 10px;
   top: 12px;
   cursor: pointer;
 }
+
 a {
   cursor: pointer;
   color: blue;
+  text-decoration: underline;
 }
 </style>
 </head>
@@ -329,77 +335,114 @@ a {
 
 <h2 id="titulo">Login</h2>
 
-<input id="email" type="email" placeholder="Email">
+<input id="email" type="email" placeholder="Email" required>
 
 <div class="senha">
-  <input id="senha" type="password" placeholder="Senha">
+  <input id="senha" type="password" placeholder="Senha" required>
   <span onclick="toggleSenha()">👁️</span>
 </div>
 
-<button onclick="login()">Entrar</button>
+<button id="btnAcao" onclick="login()">Entrar</button>
 
 <p>
   <a onclick="mostrarCadastro()">Criar conta</a> |
   <a onclick="resetSenha()">Esqueci minha senha</a>
 </p>
 
+<!-- Supabase CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const supabase = supabase.createClient(
+/* ================================
+   CONFIGURAÇÃO
+================================ */
+const dbsupabase = supabase.createClient(
   'https://SEU-PROJETO.supabase.co',
   'SUA-ANON-KEY'
 )
 
+/* ================================
+   FUNÇÕES DE UI
+================================ */
 function toggleSenha() {
   const input = document.getElementById('senha')
   input.type = input.type === 'password' ? 'text' : 'password'
 }
 
+/* ================================
+   LOGIN
+================================ */
 async function login() {
-  const email = email.value
-  const password = senha.value
+  const email = document.getElementById('email').value
+  const senha = document.getElementById('senha').value
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email, password
+  const { error } = await dbsupabase.auth.signInWithPassword({
+    email: email,
+    password: senha
   })
 
-  if (error) return alert(error.message)
+  if (error) {
+    alert(error.message)
+    return
+  }
 
   window.location.href = 'dashboard.html'
 }
 
+/* ================================
+   RESET DE SENHA
+================================ */
 async function resetSenha() {
-  const emailValue = email.value
-  if (!emailValue) return alert('Digite seu email')
+  const email = document.getElementById('email').value
 
-  await supabase.auth.resetPasswordForEmail(emailValue, {
+  if (!email) {
+    alert('Digite seu email')
+    return
+  }
+
+  const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin
   })
+
+  if (error) {
+    alert(error.message)
+    return
+  }
 
   alert('Email de recuperação enviado!')
 }
 
+/* ================================
+   TELA DE CADASTRO
+================================ */
 function mostrarCadastro() {
   document.getElementById('titulo').innerText = 'Cadastro'
-  document.querySelector('button').innerText = 'Cadastrar'
-  document.querySelector('button').onclick = cadastrar
+  const btn = document.getElementById('btnAcao')
+  btn.innerText = 'Cadastrar'
+  btn.onclick = cadastrar
 }
 
+/* ================================
+   CADASTRO SEGURO
+================================ */
 async function cadastrar() {
-  const emailValue = email.value
-  const password = senha.value
+  const email = document.getElementById('email').value
+  const senha = document.getElementById('senha').value
 
-  const { data, error } = await supabase.auth.signUp({
-    email: emailValue,
-    password
+  const { data, error } = await dbsupabase.auth.signUp({
+    email: email,
+    password: senha
   })
 
-  if (error) return alert(error.message)
+  if (error) {
+    alert(error.message)
+    return
+  }
 
-  // cria registro seguro na tabela usuarios
-  await supabase.from('usuarios').insert({
-    email: emailValue,
-    nome: emailValue.split('@')[0],
+  // cria vínculo seguro no banco
+  await dbsupabase.from('usuarios').insert({
+    email: email,
+    nome: email.split('@')[0],
     auth_id: data.user.id
   })
 
@@ -409,6 +452,7 @@ async function cadastrar() {
 
 </body>
 </html>
+
 ```
 4️⃣ TELA PROTEGIDA (CRUD / DASHBOARD)
 🧩 dashboard.html
@@ -445,8 +489,31 @@ async function logout() {
 
 </body>
 </html>
-
 ```
+
+# O QUE VOCÊ GANHOU AQUI 🚀
+* ✅ Login real (Supabase Auth)
+* ✅ Cadastro seguro
+* ✅ Reset de senha funcional
+* ✅ Olhinho da senha
+* ✅ CRUD protegido por usuário
+* ✅ GitHub Pages compatível
+* ✅ Padrão profissional (igual SaaS real)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
