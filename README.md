@@ -237,62 +237,149 @@ async function deletar(id) {
 </html>
 ```
 # PARABÉNS VOCÊ JÁ TEM O SEU PRIMEIRO CRUD🥳🥳
-# FASE 2:Vamos fazer isso do jeito certo, seguro e profissional, usando Supabase Auth (não login “caseiro”).
-## A partir de agora:
-* 🔐 Login seguro
-* 👁️ Olho para mostrar/ocultar senha
-* 🔁 Esqueci minha senha (real, por e-mail)
-* 🆕 Novo cadastro
-* 📄 CRUD protegido (somente usuário logado)
-* 🌐 Compatível com GitHub Pages
+# FASE 2:Vamos fazer isso do jeito certo, seguro e profissional, usando Supabase Auth (login proficional).
+* criar novo projeto, ou apagar anterior
+# 🧠 ARQUITETURA FINAL DO LOGIN
+* Autenticação → Supabase Auth
+* Senhas → hash + sal (automático)
+* Identidade → auth.users
+* Dados do app → public.usuarios
+* Segurança → RLS + policies
+* Automação → trigger
 
-## 🧠 ARQUITETURA FINAL
+# 1️⃣ TABELA DE PERFIL DO USUÁRIO
 ```
-GitHub Pages (HTML + JS)
-        ↓
-Supabase Auth (login, cadastro, reset)
-        ↓
-Supabase Database (CRUD com RLS)
-
+create table public.usuarios (
+  id bigint generated always as identity primary key,
+  auth_id uuid not null unique,
+  nome text not null,
+  email text not null unique,
+  ativo boolean default true,
+  created_at timestamp with time zone default now()
+);
 ```
-# 1️⃣ CONFIGURAÇÃO NO SUPABASE (OBRIGATÓRIO)
-## Ativar Auth por e-mail
-* Supabase → Authentication → Providers
-* Ative Email
-* Desative SMS (se quiser simplicidade)
-  
-# URL de redirecionamento (reset de senha)
-* Supabase → Authentication → URL Configuration
+# 2️⃣ ATIVAR RLS
 ```
- Adicione: https://SEU-USUARIO.github.io/SEU-REPO/
+alter table public.usuarios enable row level security;
 ```
-## Isso permite:
-* Reset de senha
-* Login funcionando no GitHub Pages
-
-## SEGURANÇA DO BANCO (RLS REAL)
-* Vamos proteger os dados por usuário autenticado.
-* Ajustar tabela usuarios
+# 3️⃣ POLICIES DE SEGURANÇA (ESSENCIAIS)
+* 🔐 Inserir apenas o próprio usuário
 ```
-alter table usuarios
-add column auth_id uuid;
-create unique index on usuarios(auth_id);
-```
-## Política segura (usuários só veem seus dados)
-```
-alter table usuarios enable row level security;
-
-create policy "Usuário vê só seus dados"
-on usuarios
-for all
-using (auth.uid() = auth_id)
+create policy "insert own profile"
+on public.usuarios
+for insert
 with check (auth.uid() = auth_id);
 ```
-👉 Agora ninguém acessa dados sem login.
+# 👁️ Ler apenas o próprio perfil
+```
+create policy "select own profile"
+on public.usuarios
+for select
+using (auth.uid() = auth_id);
+```
+# ✏️ Atualizar apenas o próprio perfil
+```
+create policy "update own profile"
+on public.usuarios
+for update
+using (auth.uid() = auth_id);
+```
+# 4️⃣ TRIGGER AUTOMÁTICA (PADRÃO PROFISSIONAL)
+* 🔥 ESSA É A PARTE MAIS IMPORTANTE
+* Cria o registro automaticamente após o cadastro no Auth.
+```
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.usuarios (
+    auth_id,
+    email,
+    nome
+  )
+  values (
+    new.id,
+    new.email,
+    split_part(new.email, '@', 1)
+  );
 
-# NOVA TELA: LOGIN + CADASTRO + RESET
-👉 Arquivo único: index.html
-Copie TUDO abaixo.
+  return new;
+end;
+$$ language plpgsql security definer;
+```
+
+# 5️⃣ CRIAR O TRIGGER
+```
+create trigger on_auth_user_created
+after insert on auth.users
+for each row
+execute function public.handle_new_user();
+```
+
+# 6️⃣ (OPCIONAL) CONTROLE DE USUÁRIO ATIVO
+* Permite bloquear acesso sem deletar conta.
+```
+create or replace function public.is_user_active()
+returns boolean as $$
+  select exists (
+    select 1
+    from public.usuarios
+    where auth_id = auth.uid()
+    and ativo = true
+  );
+$$ language sql stable;
+```
+# Uso futuro em policies:
+```
+using (auth.uid() = auth_id and is_user_active());
+```
+# 7️⃣ (OPCIONAL) LOG DE LOGIN (AUDITORIA)
+```
+create table public.login_logs (
+  id bigint generated always as identity primary key,
+  auth_id uuid not null,
+  ip text,
+  user_agent text,
+  created_at timestamp with time zone default now()
+);
+
+```
+```
+alter table public.login_logs enable row level security;
+
+create policy "user sees own logs"
+on public.login_logs
+for select
+using (auth.uid() = auth_id);
+```
+
+# ✅ ORDEM CORRETA DE EXECUÇÃO
+* 1️⃣ Criar tabela usuarios
+* 2️⃣ Ativar RLS
+* 3️⃣ Criar policies
+* 4️⃣ Criar function
+* 5️⃣ Criar trigger
+
+# 🧠 O QUE VOCÊ GANHOU COM ISSO
+* ✔️ Senhas nunca passam pelo seu código
+* ✔️ Hash + salt automáticos
+* ✔️ Login por token JWT
+* ✔️ Reset de senha seguro
+* ✔️ Sessão validada por auth.uid()
+* ✔️ Banco blindado contra acesso indevido
+* ✔️ Padrão SaaS real (produção)
+
+# 🧠 O QUE NÃO EXISTE (E NÃO DEVE EXISTIR)
+* ❌ SQL de login
+* ❌ SELECT com senha
+* ❌ Função de autenticação
+* ❌ Hash manual
+* ❌ Campo password
+* ❌ Tabela de credenciais
+* 👉 Login NÃO é feito em SQL
+* 👉 Login é 100% Supabase Auth
+* O banco só valida identidade via auth.uid().
+
+## login.html
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -300,11 +387,17 @@ Copie TUDO abaixo.
 <meta charset="UTF-8">
 <title>Login</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
   font-family: Arial, sans-serif;
   max-width: 400px;
-  margin: 60px auto;
+  margin: 80px auto;
+}
+
+h2 {
+  text-align: center;
 }
 
 input, button {
@@ -326,8 +419,12 @@ input, button {
 
 a {
   cursor: pointer;
-  color: blue;
+  color: #0066cc;
   text-decoration: underline;
+}
+
+p {
+  text-align: center;
 }
 </style>
 </head>
@@ -338,7 +435,7 @@ a {
 <input id="email" type="email" placeholder="Email" required>
 
 <div class="senha">
-  <input id="senha" type="password" placeholder="Senha" required>
+  <input id="senha" type="password" placeholder="Senha (mín. 6 caracteres)" required>
   <span onclick="toggleSenha()">👁️</span>
 </div>
 
@@ -349,27 +446,27 @@ a {
   <a onclick="resetSenha()">Esqueci minha senha</a>
 </p>
 
-<!-- Supabase CDN -->
+<!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* ================================
-   CONFIGURAÇÃO
+/* ===============================
+   SUPABASE CONFIG
 ================================ */
 const dbsupabase = supabase.createClient(
-  'https://SEU-PROJETO.supabase.co',
-  'SUA-ANON-KEY'
+  'https://tlhxtsanevvbpbyedmgv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsaHh0c2FuZXZ2YnBieWVkbWd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MTg0ODQsImV4cCI6MjA4NTA5NDQ4NH0.E7ZplcLusSKK78ME-aO12mwOKEw1XV1FYmWx7GYP_sU'
 )
 
-/* ================================
-   FUNÇÕES DE UI
+/* ===============================
+   UI
 ================================ */
 function toggleSenha() {
   const input = document.getElementById('senha')
   input.type = input.type === 'password' ? 'text' : 'password'
 }
 
-/* ================================
+/* ===============================
    LOGIN
 ================================ */
 async function login() {
@@ -377,7 +474,7 @@ async function login() {
   const senha = document.getElementById('senha').value
 
   const { error } = await dbsupabase.auth.signInWithPassword({
-    email: email,
+    email,
     password: senha
   })
 
@@ -386,10 +483,10 @@ async function login() {
     return
   }
 
-  window.location.href = 'dashboard.html'
+  window.location.href = 'index.html'
 }
 
-/* ================================
+/* ===============================
    RESET DE SENHA
 ================================ */
 async function resetSenha() {
@@ -401,7 +498,7 @@ async function resetSenha() {
   }
 
   const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin
+    redirectTo: 'http://aristidesbp.github.io'
   })
 
   if (error) {
@@ -412,8 +509,8 @@ async function resetSenha() {
   alert('Email de recuperação enviado!')
 }
 
-/* ================================
-   TELA DE CADASTRO
+/* ===============================
+   TROCAR PARA CADASTRO
 ================================ */
 function mostrarCadastro() {
   document.getElementById('titulo').innerText = 'Cadastro'
@@ -422,15 +519,20 @@ function mostrarCadastro() {
   btn.onclick = cadastrar
 }
 
-/* ================================
-   CADASTRO SEGURO
+/* ===============================
+   CADASTRO
 ================================ */
 async function cadastrar() {
   const email = document.getElementById('email').value
   const senha = document.getElementById('senha').value
 
-  const { data, error } = await dbsupabase.auth.signUp({
-    email: email,
+  if (senha.length < 6) {
+    alert('A senha deve ter no mínimo 6 caracteres')
+    return
+  }
+
+  const { error } = await dbsupabase.auth.signUp({
+    email,
     password: senha
   })
 
@@ -439,14 +541,7 @@ async function cadastrar() {
     return
   }
 
-  // cria vínculo seguro no banco
-  await dbsupabase.from('usuarios').insert({
-    email: email,
-    nome: email.split('@')[0],
-    auth_id: data.user.id
-  })
-
-  alert('Cadastro realizado! Verifique seu email.')
+  alert('Cadastro realizado! Verifique seu email (se exigido).')
 }
 </script>
 
@@ -454,70 +549,6 @@ async function cadastrar() {
 </html>
 
 ```
-4️⃣ TELA PROTEGIDA (CRUD / DASHBOARD)
-🧩 dashboard.html
-```
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
-</head>
-<body>
-
-<h1>Área protegida</h1>
-<button onclick="logout()">Sair</button>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabase = supabase.createClient(
-  'https://SEU-PROJETO.supabase.co',
-  'SUA-ANON-KEY'
-)
-
-async function check() {
-  const { data } = await supabase.auth.getUser()
-  if (!data.user) location.href = 'index.html'
-}
-check()
-
-async function logout() {
-  await supabase.auth.signOut()
-  location.href = 'index.html'
-}
-</script>
-
-</body>
-</html>
-```
-
-# O QUE VOCÊ GANHOU AQUI 🚀
-* ✅ Login real (Supabase Auth)
-* ✅ Cadastro seguro
-* ✅ Reset de senha funcional
-* ✅ Olhinho da senha
-* ✅ CRUD protegido por usuário
-* ✅ GitHub Pages compatível
-* ✅ Padrão profissional (igual SaaS real)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
