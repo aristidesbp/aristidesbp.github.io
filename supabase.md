@@ -60,13 +60,13 @@ end $$;
   
 ### EXEMPLO_1 (SELECT) 
 * Policy SELECT
-* Role: public anon
+* Role: defalt...(public) 
 * USING: true
 * Salvar
 
 ### EXEMPLO_2 (UPDATE)
 * Policy UPDATE
-* Role: public anon
+* Role: defalt...(public) 
 * USING: true
 * WITH CHECK: true
 * Salvar
