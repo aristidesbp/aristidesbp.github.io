@@ -41,8 +41,81 @@ const dbsupabase = supabase.createClient(
   'SUA_KEY_AQUI'
 )
 ```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# como ler o codigo de barras com a camera
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>codigo de barras</title>
+ </head>
+<body>
+ <label>Código de Barras (EAN)</label>
+   <div style="display: flex; gap: 5px;">
+      <input type="text" id="codigo_de_barras" placeholder="0000000000000">
+         <button type="button" class="btn-scan" onclick="abrirScanner()">
+           <i class="fas fa-camera"></i>
+           </button>
+                </div>
+            </div>
+        </div>
+        <div id="reader-container" style="display:none;">
+            <div id="reader"></div>
+            <button class="btn-cancel" onclick="fecharScanner()" style="margin-bottom: 20px;">Fechar Câmera</button>
+        </div>
+<script>
+let html5QrCode; // Variável global para controlar a instância da câmera
+/** Inicia a câmera e o processamento de imagem para ler códigos */
+window.abrirScanner = function() {
+    // Exibe o container onde o vídeo da câmera aparecerá
+    const container = document.getElementById('reader-container');
+    if (container) container.style.display = 'block';
+    // Cria a instância do leitor apontando para o ID 'reader' no HTML
+    html5QrCode = new Html5Qrcode("reader");
+    // Configurações do Scanner
+    const config = { 
+        fps: 10,    // Quadros por segundo
+        qrbox: 250  // Área de foco da leitura
+    };
+    // Inicia a câmera traseira ("environment")
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        config,
+        (decodedText) => {
+            // AÇÃO AO LER COM SUCESSO:
+            // Preenche o campo de código de barras e fecha a câmera
+            const inputCodigo = document.getElementById('codigo_de_barras');
+            if (inputCodigo) {
+                inputCodigo.value = decodedText;
+                // Opcional: emitir um sinal sonoro aqui
+                console.log("Código lido: " + decodedText);
+            }
+            fecharScanner();
+        }
+    ).catch(err => {
+        console.error("Erro ao iniciar câmera: ", err);
+        alert("Não foi possível acessar a câmera. Verifique as permissões.");
+    });
+};
 
-
+/**  * Para a câmera e limpa a memória  */
+window.fecharScanner = function() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            const container = document.getElementById('reader-container');
+            if (container) container.style.display = 'none';
+            console.log("Câmera desligada.");
+        }).catch(err => {
+            console.warn("Erro ao parar a câmera: ", err);
+        });
+    }};
+</script>
+</body>
+</html>
+```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # login.html
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
