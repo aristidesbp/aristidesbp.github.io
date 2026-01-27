@@ -550,13 +550,515 @@ async function cadastrar() {
 
 ```
 
-# 📌 Próximos passos naturais (quando você quiser)
-* 🔐 Proteger o index.html (só entra logado)
-* 📄 Criar CRUD por usuário (ex: apólices)
-* 🧱 Separar admin vs usuário comum
-* 🔁 Criar logout global
-* 📱 Transformar em PWA
-* 🎨 Melhorar layout (Tailwind / UI)
+# 📌 PROJETO ERP ABP
+# CONEXAO.JS
+```
+(function() {
+    // 1. Configurações de Conexão (Chaves de 21/01/2026)
+    const supabaseUrl = 'https://tlhxtsanevvbpbyedmgv.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsaHh0c2FuZXZ2YnBieWVkbWd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MTg0ODQsImV4cCI6MjA4NTA5NDQ4NH0.E7ZplcLusSKK78ME-aO12mwOKEw1XV1FYmWx7GYP_sU';
+    
+    // Inicializa o cliente globalmente para uso nos outros scripts do ERP
+    window.db = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // 2. Injeção de CSS Padrão (Layout Integridade)
+    const style = document.createElement('style');
+    style.textContent = `
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding-top: 60px; background: #f4f7f6; }
+        .navbar { position: fixed; top: 0; width: 100%; height: 60px; background: #2c3e50; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .nav-brand { font-weight: bold; font-size: 1.2rem; }
+        .nav-links button { background: transparent; border: 1px solid white; color: white; padding: 5px 15px; cursor: pointer; border-radius: 4px; margin-left: 10px; transition: 0.3s; }
+        .nav-links button:hover { background: white; color: #2c3e50; }
+        .container { padding: 20px; max-width: 1200px; margin: auto; }
+    `;
+    document.head.appendChild(style);
+
+    // 3. Segurança de Sessão e Injeção de Navbar
+    window.checkSession = async () => {
+        const { data: { session } } = await db.auth.getSession();
+        
+        // Se não estiver logado e não estiver na página de login, redireciona
+        if (!session && !window.location.pathname.includes('login.html')) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (session) {
+            injectNavbar();
+        }
+    };
+
+    function injectNavbar() {
+        if (document.getElementById('main-nav')) return;
+
+        const nav = document.createElement('nav');
+        nav.id = 'main-nav';
+        nav.className = 'navbar';
+        nav.innerHTML = `
+            <div class="nav-brand">ERP ABP Profissional</div>
+            <div class="nav-links">
+                <button onclick="location.href='index.html'">Home</button>
+                <button onclick="location.href='entidades.html'">Entidades</button>
+                <button onclick="logout()">Sair</button>
+            </div>
+        `;
+        document.body.prepend(nav);
+    }
+
+    window.logout = async () => {
+        await db.auth.signOut();
+        window.location.href = 'login.html';
+    };
+
+    // Executa a verificação ao carregar
+    document.addEventListener('DOMContentLoaded', checkSession);
+})();
+```
+# Estrutura do Banco de Dados (SQL Profissional)
+```
+-- 1. Tabela de Perfis vinculada ao Auth
+create table public.usuarios (
+  id uuid references auth.users on delete cascade primary key,
+  nome text not null,
+  email text not null unique,
+  nivel_acesso text default 'user', -- 'admin' ou 'user'
+  created_at timestamp with time zone default now()
+);
+
+-- 2. Tabela de Entidades (Clientes/Fornecedores)
+create table public.entidades (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users not null,
+  nome_razao text not null,
+  documento text,
+  tipo text check (tipo in ('cliente', 'fornecedor', 'ambos')),
+  created_at timestamp with time zone default now()
+);
+
+-- 3. Ativar RLS (Segurança de Linha)
+alter table public.usuarios enable row level security;
+alter table public.entidades enable row level security;
+
+-- 4. Policies: Usuário só vê seus próprios dados
+create policy "Usuários veem apenas seus perfis" on public.usuarios
+  for select using (auth.uid() = id);
+
+create policy "Usuários gerenciam suas próprias entidades" on public.entidades
+  for all using (auth.uid() = user_id);
+```
+# INDEX.HTML
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="conexao.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Painel de Controle</h1>
+            <p id="welcome-msg">Carregando informações...</p>
+        </header>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #3498db;">
+                <h3>Total Entidades</h3>
+                <p id="count-entidades" style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #2ecc71;">
+                <h3>Saldo Financeiro</h3>
+                <p id="total-financeiro" style="font-size: 2rem; font-weight: bold; margin: 0;">R$ 0,00</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #e67e22;">
+                <h3>Produtos em Estoque</h3>
+                <p id="count-produtos" style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h3>Visão Geral Financeira (Entradas vs Saídas)</h3>
+            <canvas id="financeChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        // Aguarda a conexão do Supabase estar pronta
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verifica sessão via conexao.js
+            const { data: { session } } = await db.auth.getSession();
+            if (!session) return;
+
+            document.getElementById('welcome-msg').innerText = `Bem-vindo, ${session.user.email}`;
+
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                // 1. Contagem de Entidades
+                const { count: countEntidades } = await db
+                    .from('entidades')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('count-entidades').innerText = countEntidades || 0;
+
+                // 2. Contagem de Produtos
+                const { count: countProdutos } = await db
+                    .from('produtos')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('count-produtos').innerText = countProdutos || 0;
+
+                // 3. Resumo Financeiro Simulado (Integrar com sua tabela financeiro depois)
+                renderChart();
+                
+            } catch (error) {
+                console.error("Erro ao carregar dashboard:", error);
+            }
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+                    datasets: [{
+                        label: 'Fluxo de Caixa',
+                        data: [1200, 1900, 3000, 2500, 4200],
+                        borderColor: '#2c3e50',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+        }
+    })();
+    </script>
+</body>
+</html>
+```
+# ENTIDADES.JS
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entidades - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="conexao.js"></script>
+    <style>
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .grid-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #2c3e50; color: white; }
+        .btn-add { background: #27ae60; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+        .btn-del { background: #c0392b; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gestão de Entidades (Clientes/Fornecedores)</h2>
+
+        <div class="card">
+            <form id="entidade-form" class="grid-form">
+                <div style="display: flex; flex-direction: column;">
+                    <label>Nome / Razão Social</label>
+                    <input type="text" id="nome" placeholder="Ex: João Silva ou Empresa LTDA" required>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>CPF/CNPJ</label>
+                    <input type="text" id="documento" placeholder="00.000.000/0000-00" oninput="mascaraDocumento(this)">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>Tipo</label>
+                    <select id="tipo">
+                        <option value="cliente">Cliente</option>
+                        <option value="fornecedor">Fornecedor</option>
+                        <option value="ambos">Ambos</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add">Salvar</button>
+            </form>
+        </div>
+
+        <div class="card" style="padding: 0;">
+            <table id="tabela-entidades">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Documento</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        // --- UTILITÁRIOS DE SEGURANÇA E MÁSCARA ---
+        
+        // Máscara dinâmica para CPF/CNPJ
+        window.mascaraDocumento = (i) => {
+            let v = i.value.replace(/\D/g, "");
+            if (v.length <= 11) { // CPF
+                v = v.replace(/(\={3})(\={3})(\={3})(\={2})/g, "$1.$2.$3-$4");
+                i.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            } else { // CNPJ
+                i.value = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+            }
+        };
+
+        // Sanitização básica contra Injeção de Código (XSS)
+        const limparTexto = (str) => {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        };
+
+        // --- LÓGICA DO CRUD ---
+
+        const carregarEntidades = async () => {
+            const { data, error } = await db
+                .from('entidades')
+                .select('*')
+                .order('nome_razao', { ascending: true });
+
+            if (error) return alert("Erro ao carregar: " + error.message);
+
+            const tbody = document.querySelector('#tabela-entidades tbody');
+            tbody.innerHTML = data.map(ent => `
+                <tr>
+                    <td>${limparTexto(ent.nome_razao)}</td>
+                    <td>${ent.documento || '---'}</td>
+                    <td><span style="text-transform: capitalize">${ent.tipo}</span></td>
+                    <td>
+                        <button class="btn-del" onclick="deletarEntidade(${ent.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        document.getElementById('entidade-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const { data: { user } } = await db.auth.getUser();
+            
+            const payload = {
+                user_id: user.id, // Vincula ao usuário logado (Segurança RLS)
+                nome_razao: document.getElementById('nome').value.trim(),
+                documento: document.getElementById('documento').value.replace(/\D/g, ""), // Salva apenas números
+                tipo: document.getElementById('tipo').value
+            };
+
+            const { error } = await db.from('entidades').insert([payload]);
+
+            if (error) {
+                alert("Erro ao salvar: " + error.message);
+            } else {
+                document.getElementById('entidade-form').reset();
+                carregarEntidades();
+            }
+        });
+
+        window.deletarEntidade = async (id) => {
+            if (!confirm("Deseja realmente excluir esta entidade?")) return;
+            
+            const { error } = await db.from('entidades').delete().eq('id', id);
+            if (error) alert(error.message);
+            else carregarEntidades();
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', carregarEntidades);
+    })();
+    </script>
+</body>
+</html>
+
+```
+
+# (produtos.html)
+```
+create table public.produtos (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users not null,
+  nome text not null,
+  sku text, -- Código de barras ou referência
+  preco_venda decimal(10,2) default 0.00,
+  estoque_atual int default 0,
+  created_at timestamp with time zone default now()
+);
+
+-- Ativar RLS
+alter table public.produtos enable row level security;
+
+-- Criar Policy para o usuário ver/editar apenas seus próprios produtos
+create policy "Usuários gerenciam seus próprios produtos" 
+on public.produtos for all 
+using (auth.uid() = user_id);
+```
+
+
+# (produtos.html)
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="conexao.js"></script>
+    <style>
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .grid-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #2c3e50; color: white; }
+        .btn-add { background: #27ae60; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+        .btn-del { background: #c0392b; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gestão de Produtos / Estoque</h2>
+
+        <div class="card">
+            <form id="produto-form" class="grid-form">
+                <div style="display: flex; flex-direction: column;">
+                    <label>Descrição do Produto</label>
+                    <input type="text" id="nome" placeholder="Ex: Cadeira Escritório" required>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>SKU/Ref</label>
+                    <input type="text" id="sku" placeholder="Cod-001">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>Preço Venda</label>
+                    <input type="text" id="preco" placeholder="R$ 0,00" oninput="mascaraMoeda(this)">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <label>Estoque</label>
+                    <input type="number" id="estoque" value="0" min="0">
+                </div>
+                <button type="submit" class="btn-add">Salvar</button>
+            </form>
+        </div>
+
+        <div class="card" style="padding: 0;">
+            <table id="tabela-produtos">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        // --- VALIDAÇÕES E MÁSCARAS ---
+        window.mascaraMoeda = (i) => {
+            let v = i.value.replace(/\D/g, "");
+            v = (v / 100).toFixed(2) + "";
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+            v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+            i.value = "R$ " + v;
+        };
+
+        const sanitizar = (str) => {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        };
+
+        const parsePreco = (str) => {
+            return parseFloat(str.replace("R$ ", "").replace(".", "").replace(",", ".")) || 0;
+        };
+
+        // --- LÓGICA CRUD ---
+        const listarProdutos = async () => {
+            const { data, error } = await db.from('produtos').select('*').order('nome');
+            if (error) return console.error(error);
+
+            const tbody = document.querySelector('#tabela-produtos tbody');
+            tbody.innerHTML = data.map(p => `
+                <tr>
+                    <td>${sanitizar(p.nome)}</td>
+                    <td>${sanitizar(p.sku || '')}</td>
+                    <td>R$ ${p.preco_venda.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td>${p.estoque_atual}</td>
+                    <td>
+                        <button class="btn-del" onclick="deletarProduto(${p.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        document.getElementById('produto-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { data: { user } } = await db.auth.getUser();
+
+            const payload = {
+                user_id: user.id,
+                nome: document.getElementById('nome').value.trim(),
+                sku: document.getElementById('sku').value.trim(),
+                preco_venda: parsePreco(document.getElementById('preco').value),
+                estoque_atual: parseInt(document.getElementById('estoque').value)
+            };
+
+            const { error } = await db.from('produtos').insert([payload]);
+            if (error) alert(error.message);
+            else {
+                e.target.reset();
+                listarProdutos();
+            }
+        });
+
+        window.deletarProduto = async (id) => {
+            if (!confirm("Excluir produto?")) return;
+            await db.from('produtos').delete().eq('id', id);
+            listarProdutos();
+        };
+
+        document.addEventListener('DOMContentLoaded', listarProdutos);
+    })();
+    </script>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
 
 
 
