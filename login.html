@@ -1,164 +1,199 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
+    <meta charset="UTF-8">
+    <title>Acesso ao Sistema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  max-width: 400px;
-  margin: 80px auto;
-}
+        h2 { text-align: center; color: #333; margin-top: 0; }
 
-h2 {
-  text-align: center;
-}
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Garante que o padding não estoure a largura */
+        }
 
-input, button {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
-}
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-.senha {
-  position: relative;
-}
+        button:hover { background-color: #004d99; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
 
-.senha span {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  cursor: pointer;
-}
+        .senha-container { position: relative; }
 
-a {
-  cursor: pointer;
-  color: #0066cc;
-  text-decoration: underline;
-}
+        .senha-container span {
+            position: absolute;
+            right: 12px;
+            top: 15px;
+            cursor: pointer;
+            user-select: none;
+        }
 
-p {
-  text-align: center;
-}
-</style>
+        .links-auxiliares {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        a {
+            cursor: pointer;
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
 
-<h2 id="titulo">Login</h2>
+<div class="card">
+    <h2 id="titulo">Login</h2>
 
-<input id="email" type="email" placeholder="Email" required>
+    <input id="email" type="email" placeholder="Seu melhor e-mail" required>
 
-<div class="senha">
-  <input id="senha" type="password" placeholder="Senha (mín. 6 caracteres)" required>
-  <span onclick="toggleSenha()">👁️</span>
+    <div class="senha-container">
+        <input id="senha" type="password" placeholder="Sua senha" required>
+        <span onclick="toggleSenha()" id="toggleIcon">👁️</span>
+    </div>
+
+    <button id="btnAcao" onclick="login()">Entrar</button>
+
+    <div class="links-auxiliares">
+        <span id="containerTroca">
+            Novo por aqui? <a onclick="mostrarCadastro()">Criar conta</a>
+        </span>
+        <br><br>
+        <a onclick="resetSenha()">Esqueci minha senha</a>
+    </div>
 </div>
 
-<button id="btnAcao" onclick="login()">Entrar</button>
-
-<p>
-  <a onclick="mostrarCadastro()">Criar conta</a> |
-  <a onclick="resetSenha()">Esqueci minha senha</a>
-</p>
-
-<!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 /* ===============================
-   SUPABASE CONFIG
+   CONFIGURAÇÃO SUPABASE
 ================================ */
-const dbsupabase = supabase.createClient(
-  'https://vgrcqrplwgdyzzrhfzlb.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZncmNxcnBsd2dkeXp6cmhmemxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MzA0MTEsImV4cCI6MjA4NTEwNjQxMX0.ZCE9Lj8cQHNcxwXmBRz_qlY0xNkt9DfR6ezs4wDbol8'
-)
+const _url = 'https://vgrcqrplwgdyzzrhfzlb.supabase.co';
+const _key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZncmNxcnBsd2dkeXp6cmhmemxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MzA0MTEsImV4cCI6MjA4NTEwNjQxMX0.ZCE9Lj8cQHNcxwXmBRz_qlY0xNkt9DfR6ezs4wDbol8';
+const dbsupabase = supabase.createClient(_url, _key);
 
 /* ===============================
-   UI
+   UTILITÁRIOS DE UI
 ================================ */
 function toggleSenha() {
-  const input = document.getElementById('senha')
-  input.type = input.type === 'password' ? 'text' : 'password'
+    const input = document.getElementById('senha');
+    const icon = document.getElementById('toggleIcon');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerText = '🙈';
+    } else {
+        input.type = 'password';
+        icon.innerText = '👁️';
+    }
 }
 
-/* ===============================
-   LOGIN
-================================ */
-async function login() {
-  const email = document.getElementById('email').value
-  const senha = document.getElementById('senha').value
-
-  const { error } = await dbsupabase.auth.signInWithPassword({
-    email,
-    password: senha
-  })
-
-  if (error) {
-    alert(error.message)
-    return
-  }
-
-  window.location.href = 'index.html'
+function setCarregando(estado) {
+    const btn = document.getElementById('btnAcao');
+    btn.disabled = estado;
+    btn.innerText = estado ? 'Processando...' : (document.getElementById('titulo').innerText);
 }
 
-/* ===============================
-   RESET DE SENHA
-================================ */
-async function resetSenha() {
-  const email = document.getElementById('email').value
-
-  if (!email) {
-    alert('Digite seu email')
-    return
-  }
-
-  const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'http://aristidesbp.github.io'
-  })
-
-  if (error) {
-    alert(error.message)
-    return
-  }
-
-  alert('Email de recuperação enviado!')
+// Volta para o estado inicial de login
+function mostrarLogin() {
+    document.getElementById('titulo').innerText = 'Login';
+    const btn = document.getElementById('btnAcao');
+    btn.innerText = 'Entrar';
+    btn.onclick = login;
+    document.getElementById('containerTroca').innerHTML = 'Novo por aqui? <a onclick="mostrarCadastro()">Criar conta</a>';
 }
 
-/* ===============================
-   TROCAR PARA CADASTRO
-================================ */
 function mostrarCadastro() {
-  document.getElementById('titulo').innerText = 'Cadastro'
-  const btn = document.getElementById('btnAcao')
-  btn.innerText = 'Cadastrar'
-  btn.onclick = cadastrar
+    document.getElementById('titulo').innerText = 'Cadastro';
+    const btn = document.getElementById('btnAcao');
+    btn.innerText = 'Cadastrar';
+    btn.onclick = cadastrar;
+    document.getElementById('containerTroca').innerHTML = 'Já tem conta? <a onclick="mostrarLogin()">Fazer Login</a>';
 }
 
 /* ===============================
-   CADASTRO
+   AÇÕES DE AUTENTICAÇÃO
 ================================ */
+
+async function login() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
+
+    if (!email || !senha) return alert('Preencha todos os campos.');
+
+    setCarregando(true);
+    const { error } = await dbsupabase.auth.signInWithPassword({ email, password: senha });
+
+    if (error) {
+        alert("Erro no login: " + error.message);
+        setCarregando(false);
+    } else {
+        window.location.href = 'index.html';
+    }
+}
+
 async function cadastrar() {
-  const email = document.getElementById('email').value
-  const senha = document.getElementById('senha').value
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
 
-  if (senha.length < 6) {
-    alert('A senha deve ter no mínimo 6 caracteres')
-    return
-  }
+    if (!email || senha.length < 6) {
+        return alert('E-mail inválido ou senha muito curta (mín. 6 caracteres).');
+    }
 
-  const { error } = await dbsupabase.auth.signUp({
-    email,
-    password: senha
-  })
+    setCarregando(true);
+    const { data, error } = await dbsupabase.auth.signUp({ email, password: senha });
 
-  if (error) {
-    alert(error.message)
-    return
-  }
+    if (error) {
+        alert("Erro no cadastro: " + error.message);
+        setCarregando(false);
+    } else {
+        alert('Cadastro realizado com sucesso! Agora você já pode fazer login.');
+        setCarregando(false);
+        mostrarLogin(); // Volta para a tela de login
+        document.getElementById('senha').value = ''; // Limpa a senha por segurança
+    }
+}
 
-  alert('Cadastro realizado! Verifique seu email (se exigido).')
+async function resetSenha() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) return alert('Digite seu e-mail para recuperar a senha.');
+
+    setCarregando(true);
+    const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://aristidesbp.github.io'
+    });
+
+    setCarregando(false);
+    if (error) alert(error.message);
+    else alert('E-mail de recuperação enviado! Verifique sua caixa de entrada.');
 }
 </script>
 
