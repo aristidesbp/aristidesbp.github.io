@@ -3,443 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Entidades - ERP ABP</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <title>Gestão Financeira - ERP ABP</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-  <script src="conexao_supabase.js"></script>
- 
+    
+    <script src="conexao_supabase.js"></script>
+    
     <style>
-        :root {
-            --primary: #3ecf8e;
-            --dark: #0f172a;
-            --bg: #f1f5f9;
-        }
-
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
         * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--bg);
-            /* O padding-top agora é controlado pelo conexao_supabase.js automaticamente */
-        }
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        /* Dashboard de Saldos */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { padding: 20px; border-radius: 12px; color: white; display: flex; flex-direction: column; }
+        .stat-card.receber { background: #10b981; }
+        .stat-card.pagar { background: #ef4444; }
+        .stat-card.saldo { background: #3b82f6; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 20px;
-        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; }
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; }
+        .btn-cancel { background: #94a3b8; color: white; padding: 10px; border: none; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; }
 
-        .section-title {
-            color: var(--primary);
-            font-size: 14px;
-            text-transform: uppercase;
-            margin: 20px 0 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            font-weight: bold;
-        }
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { background: #f8fafc; padding: 15px; font-size: 12px; text-align: left; color: #475569; }
+        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 13px;
-            color: #64748b;
-            font-weight: bold;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .password-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .password-wrapper i {
-            position: absolute;
-            right: 10px;
-            cursor: pointer;
-            color: #64748b;
-        }
-
-        .btn-add {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .btn-cancel {
-            background: #64748b;
-            color: white;
-            margin-top: 10px;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: none;
-            width: 100%;
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            overflow-x: auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
-        td { padding: 15px; border-top: 1px solid #f1f5f9; }
-
-        .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
-        .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
-        .btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
-        .btn-mail { color: #ea4335; cursor: pointer; font-size: 18px; background: none; border: none; }
-
-        .export-area {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        .btn-export {
-            background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-export-full { background: #1e293b; }
+        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .status-pago { background: #dcfce7; color: #166534; }
+        .status-pendente { background: #fef9c3; color: #854d0e; }
+        
+        .bulk-actions { background: #334155; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="card">
-        <h3 id="form-title">Novo Cadastro de Entidade</h3>
-        <input type="hidden" id="edit-id">
+    <div class="stats-grid">
+        <div class="stat-card receber">
+            <span>A Receber</span>
+            <div class="stat-value" id="total-receber">R$ 0,00</div>
+        </div>
+        <div class="stat-card pagar">
+            <span>A Pagar</span>
+            <div class="stat-value" id="total-pagar">R$ 0,00</div>
+        </div>
+        <div class="stat-card saldo">
+            <span>Saldo Previsto</span>
+            <div class="stat-value" id="total-saldo">R$ 0,00</div>
+        </div>
+    </div>
 
-        <div class="section-title">Informações e Acesso</div>
+    <div class="card">
+        <h3 id="form-title">Lançamento Financeiro</h3>
+        <input type="hidden" id="edit-id">
         <div class="form-grid">
-            <div><label>Nome Completo / Razão *</label><input type="text" id="nome_completo"></div>
-            <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
-            <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
-            <div><label>E-mail</label><input type="email" id="email"></div>
-            <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
+            <div><label>Descrição *</label><input type="text" id="descricao" placeholder="Ex: Venda de Piso"></div>
             <div>
-                <label>Senha Interna</label>
-                <div class="password-wrapper">
-                    <input type="password" id="senha_acesso">
-                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
-                </div>
-            </div>
-            
-            <div>
-                <label>Nível de Acesso</label>
-                <select id="acesso">
-                    <option value="cliente">Cliente</option>
-                    <option value="funcionario">Funcionário</option>
-                    <option value="comprador">Comprador</option>
-                    <option value="master">Master</option>
+                <label>Tipo *</label>
+                <select id="tipo">
+                    <option value="receita">Receita (+)</option>
+                    <option value="despesa">Despesa (-)</option>
                 </select>
             </div>
+            <div><label>Valor (R$) *</label><input type="number" id="valor" step="0.01"></div>
+            <div><label>Vencimento</label><input type="date" id="data_vencimento"></div>
             <div>
-                <label>Relacionamento</label>
-                <select id="relacionamento">
-                    <option value="cliente">Cliente</option>
-                    <option value="funcionario">Funcionário</option>
-                    <option value="fornecedor">Fornecedor</option>
-                    <option value="terceirizado">Terceirizado</option>
-                    <option value="outros">Outros</option>
-                </select>
+                <label>Entidade (Cliente/Fornecedor)</label>
+                <select id="entidade_id"><option value="">Carregando...</option></select>
             </div>
             <div>
                 <label>Status</label>
                 <select id="status">
-                    <option value="ativo">Ativo</option>
-                    <option value="desativado">Desativado</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="pago">Pago / Recebido</option>
                 </select>
             </div>
-            <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+            <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="1"></textarea></div>
         </div>
-
-        <div class="section-title">Endereço</div>
-        <div class="form-grid">
-            <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
-            <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
-            <div><label>Número</label><input type="text" id="numero"></div>
-            <div><label>Bairro</label><input type="text" id="bairro"></div>
-            <div><label>Cidade</label><input type="text" id="cidade"></div>
-            <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
-        </div>
-
-        <div class="section-title">Complementos</div>
-        <div class="form-grid">
-            <div style="grid-column: span 2;"><label>URL de Arquivos</label><input type="text" id="arquivos_url"></div>
-            <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
-        </div>
-
-        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        <button class="btn-add" onclick="handleSaveFinanceiro()">Salvar Lançamento</button>
+        <button id="btn-cancel" class="btn-cancel" onclick="resetForm()" style="display:none;">Cancelar Edição</button>
     </div>
 
-    <div class="card" style="margin-bottom: 10px; padding: 15px;">
-        <label><i class="fas fa-search"></i> BUSCAR ENTIDADE</label>
-        <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
-        
-        <div class="export-area">
-            <button class="btn-export" onclick="exportarPDFListagem()">
-                <i class="fas fa-list"></i> Exportar Listagem (PDF)
-            </button>
-            <button class="btn-export btn-export-full" onclick="exportarPDFFichaCompleta()">
-                <i class="fas fa-file-invoice"></i> Exportar Fichas Detalhadas (PDF)
-            </button>
-        </div>
+    <div id="bulk-area" class="bulk-actions">
+        <span id="selected-count">0 selecionados</span>
+        <button onclick="deleteSelected()" style="background:red; color:white; border:none; padding:5px 10px; border-radius:4px; margin-left:15px; cursor:pointer;">
+            Excluir Selecionados
+        </button>
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>Nome / Tipo</th>
-                    <th>Telefone / E-mail</th>
-                    <th>Acesso / Status</th>
+                    <th width="30"><input type="checkbox" id="select-all" onclick="toggleAll()"></th>
+                    <th>Vencimento</th>
+                    <th>Descrição / Entidade</th>
+                    <th>Valor</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="entities-list"></tbody>
+            <tbody id="financeiro-list"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-let currentData = [];
+    let dadosFinanceiros = [];
 
-// Função para mostrar/esconder senha
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('senha_acesso');
-    const toggleIcon = document.getElementById('togglePassword');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    async function inicializar() {
+        if (!window._supabase) {
+            setTimeout(inicializar, 500);
+            return;
+        }
+        await loadEntidadesSelect();
+        await loadFinanceiro();
     }
-}
 
-async function buscaCEP() {
-    const cep = document.getElementById('cep').value.replace(/\D/g, '');
-    if (cep.length === 8) {
-        try {
-            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await res.json();
-            if (!data.erro) {
-                document.getElementById('logradouro').value = data.logradouro;
-                document.getElementById('bairro').value = data.bairro;
-                document.getElementById('cidade').value = data.localidade;
-                document.getElementById('estado').value = data.uf;
-            }
-        } catch { console.error("Erro CEP"); }
-    }
-}
-
-async function loadEntities() {
-    // Usando window._supabase injetado pelo conexao_supabase.js
-    const { data, error } = await window._supabase.from('entidades').select('*').order('nome_completo');
-    if (error) return;
-    currentData = data || [];
-    renderTable(currentData);
-}
-
-function renderTable(data) {
-    const list = document.getElementById('entities-list');
-    list.innerHTML = data.map(c => {
-        const wppLink = c.telefone && c.telefone.includes('http') ? c.telefone : `https://wa.me/${c.telefone ? c.telefone.replace(/\D/g, '') : ''}`;
-        const mailLink = c.email ? `https://mail.google.com/mail/?view=cm&fs=1&to=${c.email}` : '#';
-
-        return `
-        <tr>
-            <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
-            <td>${c.telefone || 'Sem contato'}<br><small>${c.email || ''}</small></td>
-            <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
-            <td>
-                <button class="btn-edit" title="Editar" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-del" title="Excluir" onclick="deleteEntity('${c.id}')"><i class="fas fa-trash"></i></button>
-                <a href="${wppLink}" target="_blank" class="btn-wpp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="${mailLink}" target="_blank" class="btn-mail" title="Gmail"><i class="fas fa-envelope"></i></a>
-            </td>
-        </tr>
-    `}).join('') || '<tr><td colspan="4" style="text-align:center">Nenhuma entidade encontrada.</td></tr>';
-}
-
-function filtrarTabela() {
-    const filtro = document.getElementById("inputBusca").value.toLowerCase();
-    const linhas = document.getElementById("entities-list").getElementsByTagName("tr");
-    for (let i = 0; i < linhas.length; i++) {
-        const colunaNome = linhas[i].getElementsByTagName("td")[0];
-        if (colunaNome) {
-            const txt = colunaNome.textContent || colunaNome.innerText;
-            linhas[i].style.display = txt.toLowerCase().includes(filtro) ? "" : "none";
+    async function loadEntidadesSelect() {
+        const { data } = await window._supabase.from('entidades').select('id, nome_completo').order('nome_completo');
+        if(data) {
+            document.getElementById('entidade_id').innerHTML = '<option value="">Selecione...</option>' + 
+                data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
         }
     }
-}
 
-function exportarPDFListagem() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text("Listagem de Entidades - ERP ABP", 14, 15);
-    const rows = [];
-    document.querySelectorAll("#entities-list tr").forEach(tr => {
-        if (tr.style.display !== "none") {
-            const cells = tr.querySelectorAll("td");
-            if(cells.length > 0) rows.push([cells[0].innerText.replace('\n', ' - '), cells[1].innerText.replace('\n', ' - '), cells[2].innerText.replace('\n', ' - ')]);
+    async function loadFinanceiro() {
+        const { data, error } = await window._supabase
+            .from('financeiro')
+            .select('*, entidades(nome_completo)')
+            .order('data_vencimento', { ascending: true });
+
+        if (!error) {
+            dadosFinanceiros = data || [];
+            renderFinanceiro(dadosFinanceiros);
+            calcularResumo(dadosFinanceiros);
         }
-    });
-    doc.autoTable({ head: [['Entidade / Tipo', 'Contato', 'Acesso / Status']], body: rows, startY: 20 });
-    doc.save("listagem_entidades.pdf");
-}
+    }
 
-function exportarPDFFichaCompleta() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 20;
-    const filtro = document.getElementById("inputBusca").value.toLowerCase();
-    const dadosFiltrados = currentData.filter(c => c.nome_completo.toLowerCase().includes(filtro));
-    doc.setFontSize(16);
-    doc.text("FICHAS DETALHADAS DE ENTIDADES", 14, y);
-    y += 10;
-    dadosFiltrados.forEach((c, index) => {
-        if (y > 250) { doc.addPage(); y = 20; }
-        doc.setFontSize(11);
-        doc.setFont(undefined, 'bold');
-        doc.text(`${index + 1}. ${c.nome_completo.toUpperCase()}`, 14, y);
-        y += 6;
-        doc.setFontSize(9);
-        doc.setFont(undefined, 'normal');
-        doc.text(`Doc: ${c.cpf || 'N/A'} | Nasc: ${c.data_nascimento || 'N/A'}`, 14, y);
-        y += 4;
-        doc.text(`Email: ${c.email || 'N/A'} | Tel: ${c.telefone || 'N/A'}`, 14, y);
-        y += 4;
-        doc.text(`End: ${c.logradouro || ''}, ${c.numero || ''} - ${c.bairro || ''}, ${c.cidade || ''}/${c.estado || ''}`, 14, y);
-        y += 4;
-        doc.text(`Tipo: ${c.relacionamento} | Acesso: ${c.acesso} | Status: ${c.status}`, 14, y);
-        y += 4;
-        doc.text(`Obs: ${c.observacoes || 'Nenhuma'}`, 14, y);
-        y += 5;
-        doc.line(14, y, 196, y);
-        y += 8;
-    });
-    doc.save("fichas_entidades.pdf");
-}
+    function calcularResumo(dados) {
+        let rec = 0, pag = 0;
+        dados.forEach(d => {
+            if (d.tipo === 'receita') rec += d.valor;
+            else pag += d.valor;
+        });
+        document.getElementById('total-receber').innerText = `R$ ${rec.toLocaleString('pt-BR', {minFractionDigits:2})}`;
+        document.getElementById('total-pagar').innerText = `R$ ${pag.toLocaleString('pt-BR', {minFractionDigits:2})}`;
+        document.getElementById('total-saldo').innerText = `R$ ${(rec - pag).toLocaleString('pt-BR', {minFractionDigits:2})}`;
+    }
 
-async function handleSave() {
-    const { data: { user } } = await window._supabase.auth.getUser();
-    const id = document.getElementById('edit-id').value;
-    const dados = {
-        usuario_id: user.id,
-        nome_completo: document.getElementById('nome_completo').value,
-        cpf: document.getElementById('cpf').value,
-        data_nascimento: document.getElementById('data_nascimento').value || null,
-        email: document.getElementById('email').value,
-        telefone: document.getElementById('telefone').value,
-        senha_acesso: document.getElementById('senha_acesso').value,
-        acesso: document.getElementById('acesso').value,
-        relacionamento: document.getElementById('relacionamento').value,
-        status: document.getElementById('status').value,
-        avaliacao: parseInt(document.getElementById('avaliacao').value),
-        observacoes: document.getElementById('observacoes').value,
-        cep: document.getElementById('cep').value,
-        logradouro: document.getElementById('logradouro').value,
-        numero: document.getElementById('numero').value,
-        bairro: document.getElementById('bairro').value,
-        cidade: document.getElementById('cidade').value,
-        estado: document.getElementById('estado').value,
-        arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
+    function renderFinanceiro(dados) {
+        const list = document.getElementById('financeiro-list');
+        list.innerHTML = dados.map(d => `
+            <tr>
+                <td><input type="checkbox" class="row-checkbox" value="${d.id}" onclick="updateBulkUI()"></td>
+                <td>${d.data_vencimento ? new Date(d.data_vencimento).toLocaleDateString('pt-BR') : '-'}</td>
+                <td><b>${d.descricao}</b><br><small>${d.entidades?.nome_completo || 'Geral'}</small></td>
+                <td style="color: ${d.tipo === 'receita' ? '#10b981' : '#ef4444'}; font-weight:bold">
+                    ${d.tipo === 'receita' ? '+' : '-'} R$ ${d.valor.toLocaleString('pt-BR', {minFractionDigits:2})}
+                </td>
+                <td><span class="status-badge ${d.status === 'pago' ? 'status-pago' : 'status-pendente'}">${d.status}</span></td>
+                <td>
+                    <button class="btn-edit" style="border:none; background:none; color:#3b82f6; cursor:pointer;" onclick="editFinanceiro('${d.id}')"><i class="fas fa-edit"></i></button>
+                    <button style="border:none; background:none; color:red; cursor:pointer;" onclick="deleteFinanceiro('${d.id}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('') || '<tr><td colspan="6" style="text-align:center">Sem lançamentos.</td></tr>';
+    }
+
+    window.handleSaveFinanceiro = async function() {
+        const { data: { user } } = await window._supabase.auth.getUser();
+        const id = document.getElementById('edit-id').value;
+        const dados = {
+            usuario_id: user.id,
+            descricao: document.getElementById('descricao').value,
+            tipo: document.getElementById('tipo').value,
+            valor: parseFloat(document.getElementById('valor').value),
+            data_vencimento: document.getElementById('data_vencimento').value || null,
+            entidade_id: document.getElementById('entidade_id').value || null,
+            status: document.getElementById('status').value,
+            observacoes: document.getElementById('observacoes').value
+        };
+
+        if(!dados.descricao || !dados.valor) return alert("Preencha descrição e valor!");
+
+        const { error } = id ? 
+            await window._supabase.from('financeiro').update(dados).eq('id', id) : 
+            await window._supabase.from('financeiro').insert([dados]);
+
+        if(!error) { resetForm(); loadFinanceiro(); } else { alert(error.message); }
     };
-    if (!dados.nome_completo) return alert("Nome é obrigatório");
-    
-    const { error } = id ? 
-        await window._supabase.from('entidades').update(dados).eq('id', id) : 
-        await window._supabase.from('entidades').insert([dados]);
-    
-    if (error) alert("Erro: " + error.message); else { resetForm(); loadEntities(); }
-}
 
-async function editFull(id) {
-    const { data, error } = await window._supabase.from('entidades').select('*').eq('id', id).single();
-    if (error || !data) return;
-    Object.keys(data).forEach(k => {
-        const el = document.getElementById(k);
-        if (el) el.value = (k === 'arquivos_url' && data[k]) ? data[k][0] : (data[k] || '');
-    });
-    document.getElementById('edit-id').value = data.id;
-    document.getElementById('form-title').innerText = "Editando Entidade";
-    document.getElementById('btn-save').innerText = "Atualizar Entidade";
-    document.getElementById('btn-cancel').style.display = "block";
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    window.editFinanceiro = function(id) {
+        const d = dadosFinanceiros.find(i => i.id === id);
+        if(!d) return;
+        document.getElementById('edit-id').value = d.id;
+        document.getElementById('descricao').value = d.descricao;
+        document.getElementById('tipo').value = d.tipo;
+        document.getElementById('valor').value = d.valor;
+        document.getElementById('data_vencimento').value = d.data_vencimento;
+        document.getElementById('entidade_id').value = d.entidade_id || '';
+        document.getElementById('status').value = d.status;
+        document.getElementById('observacoes').value = d.observacoes || '';
+        
+        document.getElementById('form-title').innerText = "Editando Lançamento";
+        document.getElementById('btn-cancel').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-function resetForm() {
-    document.querySelectorAll('input, select, textarea').forEach(i => {
-        if(i.id === 'avaliacao') i.value = '5';
-        else if(i.tagName === 'SELECT') i.selectedIndex = 0;
-        else i.value = '';
-    });
-    document.getElementById('edit-id').value = '';
-    document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
-    document.getElementById('btn-save').innerText = "Salvar Entidade";
-    document.getElementById('btn-cancel').style.display = "none";
-}
+    window.resetForm = function() {
+        document.getElementById('edit-id').value = '';
+        document.querySelectorAll('input, select, textarea').forEach(i => i.value = '');
+        document.getElementById('form-title').innerText = "Lançamento Financeiro";
+        document.getElementById('btn-cancel').style.display = 'none';
+    };
 
-async function deleteEntity(id) {
-    if (confirm("Excluir definitivamente?")) {
-        await window._supabase.from('entidades').delete().eq('id', id);
-        loadEntities();
-    }
-}
+    window.deleteFinanceiro = async function(id) {
+        if(confirm("Excluir lançamento?")) {
+            await window._supabase.from('financeiro').delete().eq('id', id);
+            loadFinanceiro();
+        }
+    };
 
-// O Guard global cuida do redirecionamento, basta carregar os dados
-document.addEventListener('DOMContentLoaded', () => {
-    // Pequeno delay para garantir que o _supabase foi inicializado pelo Guard
-    setTimeout(loadEntities, 500);
-});
+    // Lógica Bulk (Massa)
+    window.toggleAll = function() {
+        const isChecked = document.getElementById('select-all').checked;
+        document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked);
+        updateBulkUI();
+    };
+
+    window.updateBulkUI = function() {
+        const selected = document.querySelectorAll('.row-checkbox:checked').length;
+        document.getElementById('bulk-area').style.display = selected > 0 ? 'block' : 'none';
+        document.getElementById('selected-count').innerText = `${selected} selecionado(s)`;
+    };
+
+    window.deleteSelected = async function() {
+        if(!confirm("Excluir selecionados?")) return;
+        const ids = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+        await window._supabase.from('financeiro').delete().in('id', ids);
+        loadFinanceiro();
+        updateBulkUI();
+    };
+
+    document.addEventListener('DOMContentLoaded', inicializar);
 </script>
 </body>
 </html>
