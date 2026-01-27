@@ -73,8 +73,11 @@ end $$;
 | email      | text      | obrigatório                 |
 ```
 # 1.3 Liberar acesso público (IMPORTANTE)
+# TAREFA 1: Crie 4 polícies para tabela usuário 
+
+```
 * Vá em Authentication → Policie
-## Para a tabela usuarios, crie 4 políticas:
+### Crie:
 * SELECT → Allow public
 * INSERT → Allow public
 * UPDATE → Allow public
@@ -92,7 +95,7 @@ end $$;
 * USING: true
 * WITH CHECK: true
 * Salvar
-
+```
 ## 🧠 Primeiro: o que é USING e WITH CHECK
 #### 🔹 USING : 👉 Quem pode ATUALIZAR a linha
 #### 🔹 WITH CHECK: 👉 Que dados podem ser salvos após o UPDATE
@@ -133,12 +136,13 @@ Muitas vezes, a regra para ver é diferente da regra para mudar.
 ## Vá em Settings
 *  DATA API/Project URL/copiar
 *  API Keis/anon public key/copiar
+*  Altentication/url config/ coloque o endereço de onde está hospedado
 ### Exemplo:
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 * NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
     
-# 🧩 3. HTML (index.html)
+# TAREFA 2: Criar (index.html)
 ```<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
