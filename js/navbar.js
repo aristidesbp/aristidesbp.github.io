@@ -3,7 +3,11 @@
     "use strict";
 
     function injectNavbar() {
+        // Evita duplicar a barra caso o script rode duas vezes
         if (document.querySelector(".erp-navbar")) return;
+
+        // Se estiver na página de login, não injeta a barra
+        if (window.location.pathname.includes("login.html")) return;
 
         const style = `
         <style>
@@ -18,9 +22,11 @@
             .erp-navbar button, .erp-navbar a { 
                 background: #334155; color: white; border: none; 
                 padding: 8px 15px; border-radius: 4px; cursor: pointer;
-                text-decoration: none; font-size: 13px;
+                text-decoration: none; font-size: 13px; transition: 0.2s;
             }
+            .erp-navbar button:hover, .erp-navbar a:hover { background: #475569; }
             .erp-navbar .btn-logout { background: #ef4444; }
+            .erp-navbar .btn-logout:hover { background: #dc2626; }
             body { padding-top: 70px !important; }
         </style>`;
 
@@ -29,6 +35,7 @@
             <div class="brand">ERP ABP Profissional</div>
             <div class="menu">
                 <a href="index.html">Início</a>
+                <a href="entidades.html">Entidades</a>
                 <button id="nav-btn-sair" class="btn-logout">Sair</button>
             </div>
         </nav>`;
@@ -38,13 +45,17 @@
 
         document.getElementById("nav-btn-sair")?.addEventListener("click", async () => {
             if (confirm("Deseja sair?")) {
-                await window._supabase.auth.signOut();
-                window.location.replace("login.html");
+                // Ajustado para window.db que é o padrão que você usou no outro arquivo
+                if (window.db) {
+                    await window.db.auth.signOut();
+                    window.location.replace("login.html");
+                } else {
+                    console.error("Erro: Instância do Supabase (window.db) não encontrada.");
+                }
             }
         });
     }
 
-    // Aguarda o DOM estar pronto para injetar
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", injectNavbar);
     } else {
