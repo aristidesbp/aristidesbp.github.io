@@ -550,6 +550,14 @@ async function cadastrar() {
 
 ```
 
+# 📌 Próximos passos naturais (quando você quiser)
+* 🔐 Proteger o index.html (só entra logado)
+* 📄 Criar CRUD por usuário (ex: apólices)
+* 🧱 Separar admin vs usuário comum
+* 🔁 Criar logout global
+* 📱 Transformar em PWA
+* 🎨 Melhorar layout (Tailwind / UI)
+
 
 
 
