@@ -55,6 +55,13 @@ end $$;
 * INSERT → Allow public
 * UPDATE → Allow public
 * DELETE → Allow public
+
+## ✅ Resumo final (bem seco)
+### 👉 Para o SELECT funcionar no seu CRUD:
+* Policy SELECT
+* Role: public anon
+* USING: true
+* Salvar
 ### Isso é necessário para funcionar no GitHub Pages (front-end puro).
 
 # 🔑 2. Pegar as chaves do Supabase
