@@ -144,7 +144,7 @@ li {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
+
     
 <script>
 // CONFIGURAÇÃO DO SUPABASE
@@ -222,7 +222,7 @@ async function deletar(id) {
 
   listar()
 }
-</script>
+
 </script>
 </body>
 </html>
