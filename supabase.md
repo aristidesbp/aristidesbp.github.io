@@ -72,13 +72,10 @@ end $$;
 * Salvar
 
 ## 🧠 Primeiro: o que é USING e WITH CHECK
-### 🔹 USING
-👉 Quem pode ATUALIZAR a linha
-### 🔹 WITH CHECK
-👉 Que dados podem ser salvos após o UPDATE
-
-## Se qualquer um pode editar qualquer linha, ambos ficam "true".
-## Isso é necessário para funcionar no GitHub Pages (front-end puro).
+#### 🔹 USING : 👉 Quem pode ATUALIZAR a linha
+#### 🔹 WITH CHECK: 👉 Que dados podem ser salvos após o UPDATE
+*  Se qualquer um pode editar qualquer linha, ambos ficam "true".
+*  Isso é necessário para funcionar no GitHub Pages (front-end puro).
 
 ## 🧠 Regras mentais importantes (grave isso)
 * ❌ RLS ativado + policy sem USING = bloqueia tudo
