@@ -39,6 +39,7 @@ end $$;
 * Vá em Table Editor
 * Clique em New Table
 * Nome da tabela: usuarios
+* 
 ## Crie as colunas:
 ```
 | Coluna     | Tipo      | Observação                  |
@@ -49,30 +50,62 @@ end $$;
 | email      | text      | obrigatório                 |
 ```
 # 1.3 Liberar acesso público (IMPORTANTE)
-* Vá em Authentication → Policies
-## Para a tabela usuarios, crie políticas:
+* Vá em Authentication → Policie
+  
+## Para a tabela usuarios, crie 4 políticas:
 * SELECT → Allow public
 * INSERT → Allow public
 * UPDATE → Allow public
 * DELETE → Allow public
-
-## ✅ Resumo final (bem seco)
-### 👉 Para o SELECT funcionar no seu CRUD:
+  
+### EXEMPLO_1 (SELECT) 
 * Policy SELECT
 * Role: public anon
 * USING: true
 * Salvar
-### Isso é necessário para funcionar no GitHub Pages (front-end puro).
+
+### EXEMPLO_2 (UPDATE)
+* Policy UPDATE
+* Role: public anon
+* USING: true
+* WITH CHECK: true
+* Salvar
+
+## 🧠 Primeiro: o que é USING e WITH CHECK
+### 🔹 USING
+👉 Quem pode ATUALIZAR a linha
+### 🔹 WITH CHECK
+👉 Que dados podem ser salvos após o UPDATE
+
+## Se qualquer um pode editar qualquer linha, ambos ficam "true".
+## Isso é necessário para funcionar no GitHub Pages (front-end puro).
+
+## 🧠 Regras mentais importantes (grave isso)
+* ❌ RLS ativado + policy sem USING = bloqueia tudo
+* ✅ USING (true) = acesso liberado
+* anon key ≠ bypass de segurança
+* Policy manda mais que a chave
+  
+## 🔒 Quando NÃO usar true
+* Só para contexto futuro:
+ ```
+| Situação                 | USING correto                   |
+| ------------------------ | ------------------------------- |
+| Apenas usuários logados  | `auth.role() = 'authenticated'` |
+| Apenas dono do registro  | `user_id = auth.uid()`          |
+| Público total (seu caso) | `true`                          |
+ ```
 
 # 🔑 2. Pegar as chaves do Supabase
 *  Vá em Settings → API
+  
 ### Você vai copiar:
 * Project URL
 * anon public key
+  
 ## Exemplo:
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
 # 🧩 3. HTML (index.html)
 ```
 <!DOCTYPE html>
