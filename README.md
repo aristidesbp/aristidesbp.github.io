@@ -63,7 +63,7 @@ end $$;
 * Vá em Table Editor
 * Clique em New Table
 * Nome da tabela: usuarios 
-## Crie as colunas:
+### TABELA USUARIO 
 ```
 | Coluna     | Tipo      | Observação                  |
 | ---------- | --------- | --------------------------- |
@@ -119,8 +119,7 @@ end $$;
 ## Vá em Settings
 *  DATA API/Project URL/copiar
 *  API Keis/anon public key/copiar
-
-## Exemplo:
+### Exemplo:
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 * NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
