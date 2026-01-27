@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP ABP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
+   <!--  <script src="conexao_supabase.js" defer></script> -->
+    <script src="js/entidades.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 id="form-title"><i class="fas fa-user-plus"></i> Novo Cadastro de Entidade</h2>
+            <form id="entity-form">
+                <input type="hidden" id="edit-id">
+                <div class="grid">
+                    <div>
+                        <label>Nome Completo / Razão Social</label>
+                        <input type="text" id="nome_completo" required>
+                    </div>
+                    <div>
+                        <label>Tipo de Entidade</label>
+                        <select id="tipo_entidade">
+                            <option value="Cliente">Cliente</option>
+                            <option value="Fornecedor">Fornecedor</option>
+                            <option value="Colaborador">Colaborador</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>CPF / CNPJ</label>
+                        <input type="text" id="documento">
+                    </div>
+                    <div>
+                        <label>Telefone / WhatsApp</label>
+                        <input type="text" id="telefone">
+                    </div>
+                    <div>
+                        <label>E-mail</label>
+                        <input type="email" id="email">
+                    </div>
+                    <div>
+                        <label>Avaliação (1-5)</label>
+                        <input type="number" id="avaliacao" min="1" max="5" value="5">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <label>Endereço Completo</label>
+                    <textarea id="endereco" rows="2"></textarea>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" id="btn-save">Salvar Entidade</button>
+                    <button type="button" class="btn btn-danger" id="btn-cancel" style="display:none;" onclick="resetForm()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <h3><i class="fas fa-list"></i> Entidades Cadastradas</h3>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="inputBusca" placeholder="Buscar por nome ou doc..." style="width: 250px; margin-top:0">
+                    <button class="btn btn-primary" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> Exportar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Documento</th>
+                            <th>Contato</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-entidades">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
