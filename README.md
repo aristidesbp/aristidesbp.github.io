@@ -235,42 +235,10 @@ async function cadastrar() {
     
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="produtos.css">
     
-    <script src="conexao_supabase.js"></script>
-
-    <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #1e293b; }
-        
-        /* O padding-top é aplicado automaticamente pelo conexao_supabase.js */
-        
-        .container { max-width: 1250px; margin: auto; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .section-title { color: var(--primary); font-size: 13px; text-transform: uppercase; margin: 25px 0 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; font-weight: 800; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: 600; }
-        input, select { width: 100%; padding: 11px; border: 1px solid #e2e8f0; border-radius: 8px; }
-        
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 20px; font-weight: bold; }
-        .btn-cancel { background: #94a3b8; color: white; padding: 12px; border: none; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: bold; }
-        .btn-scan { background: var(--dark); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
-        
-        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { background: #f8fafc; padding: 15px; font-size: 12px; text-align: left; color: #475569; }
-        td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
-        
-        .img-prod { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; background: #eee; }
-        #reader { width: 100%; border-radius: 12px; margin-bottom: 10px; }
-
-        .actions-flex { display: flex; gap: 8px; }
-        .btn-action { border: none; border-radius: 6px; padding: 8px; cursor: pointer; color: white; transition: 0.2s; }
-        .btn-edit { background-color: var(--dark); }
-        .btn-delete { background-color: var(--danger); }
-        .btn-action:hover { filter: brightness(1.2); }
-    </style>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script> </head>
 <body>
 
 <div class="container">
@@ -284,7 +252,7 @@ async function cadastrar() {
                 <label>Foto do Produto</label>
                 <input type="file" id="foto_produto" accept="image/*" onchange="previewImage(this)">
                 <div id="preview-container" style="margin-top:10px; display:none;">
-                    <img id="img-preview" src="" style="max-height: 120px; border: 2px solid #3ecf8e; border-radius: 8px;">
+                    <img id="img-preview" src="" style="max-height: 120px;">
                 </div>
             </div>
             <div style="grid-column: span 2;">
@@ -364,7 +332,174 @@ async function cadastrar() {
     </div>
 </div>
 
-<script>
+<script src="produtos.js"></script>
+</body>
+</html>
+```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# css/produtos.css
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+```
+:root { 
+    --primary: #3ecf8e; 
+    --dark: #0f172a; 
+    --bg: #f1f5f9; 
+    --danger: #ef4444; 
+}
+
+* { box-sizing: border-box; }
+
+body { 
+    margin: 0; 
+    font-family: 'Segoe UI', sans-serif; 
+    background: var(--bg); 
+    color: #1e293b; 
+}
+
+.container { 
+    max-width: 1250px; 
+    margin: auto; 
+    padding: 20px; 
+}
+
+.card { 
+    background: white; 
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    margin-bottom: 25px; 
+}
+
+.section-title { 
+    color: var(--primary); 
+    font-size: 13px; 
+    text-transform: uppercase; 
+    margin: 25px 0 12px; 
+    border-bottom: 2px solid #f1f5f9; 
+    padding-bottom: 6px; 
+    font-weight: 800; 
+}
+
+.form-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 15px; 
+}
+
+label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-size: 13px; 
+    color: #64748b; 
+    font-weight: 600; 
+}
+
+input, select { 
+    width: 100%; 
+    padding: 11px; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 8px; 
+}
+
+.btn-add { 
+    background: var(--primary); 
+    color: white; 
+    padding: 15px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    width: 100%; 
+    margin-top: 20px; 
+    font-weight: bold; 
+}
+
+.btn-cancel { 
+    background: #94a3b8; 
+    color: white; 
+    padding: 12px; 
+    border: none; 
+    border-radius: 8px; 
+    width: 100%; 
+    margin-top: 10px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.btn-scan { 
+    background: var(--dark); 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
+
+.table-container { 
+    background: white; 
+    border-radius: 12px; 
+    overflow-x: auto; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    min-width: 900px; 
+}
+
+th { 
+    background: #f8fafc; 
+    padding: 15px; 
+    font-size: 12px; 
+    text-align: left; 
+    color: #475569; 
+}
+
+td { 
+    padding: 12px 15px; 
+    border-top: 1px solid #f1f5f9; 
+    font-size: 14px; 
+}
+
+.img-prod { 
+    width: 50px; 
+    height: 50px; 
+    object-fit: cover; 
+    border-radius: 6px; 
+    background: #eee; 
+}
+
+#img-preview { 
+    border: 2px solid var(--primary); 
+    border-radius: 8px; 
+}
+
+#reader { 
+    width: 100%; 
+    border-radius: 12px; 
+    margin-bottom: 10px; 
+}
+
+.actions-flex { display: flex; gap: 8px; }
+
+.btn-action { 
+    border: none; 
+    border-radius: 6px; 
+    padding: 8px; 
+    cursor: pointer; 
+    color: white; 
+    transition: 0.2s; 
+}
+
+.btn-edit { background-color: var(--dark); }
+.btn-delete { background-color: var(--danger); }
+.btn-action:hover { filter: brightness(1.2); }
+```
+
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# css/produtos.js
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+```
 (function() {
     "use strict";
     let listaProdutos = [];
@@ -571,7 +706,9 @@ async function cadastrar() {
 
     document.addEventListener('DOMContentLoaded', inicializar);
 })();
-</script>
-</body>
-</html>
 ```
+
+
+
+
+
