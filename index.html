@@ -1,120 +1,113 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>CRUD Supabase</title>
-  <style>
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
 body {
-  font-family: Arial, sans-serif;
-  max-width: 600px;
-  margin: 40px auto;
+  font-family: Arial;
+  max-width: 400px;
+  margin: 60px auto;
 }
-
-form input, form button {
-  padding: 8px;
-  margin: 5px 0;
+input, button {
   width: 100%;
+  padding: 10px;
+  margin: 6px 0;
 }
-
-li {
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 0;
+.senha {
+  position: relative;
+}
+.senha span {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  cursor: pointer;
+}
+a {
+  cursor: pointer;
+  color: blue;
 }
 </style>
 </head>
 <body>
 
-  <h1>CRUD com Supabase</h1>
+<h2 id="titulo">Login</h2>
 
-  <form id="form">
-    <input type="hidden" id="id">
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <button type="submit">Salvar</button>
-  </form>
+<input id="email" type="email" placeholder="Email">
 
-  <ul id="lista"></ul>
+<div class="senha">
+  <input id="senha" type="password" placeholder="Senha">
+  <span onclick="toggleSenha()">👁️</span>
+</div>
+
+<button onclick="login()">Entrar</button>
+
+<p>
+  <a onclick="mostrarCadastro()">Criar conta</a> |
+  <a onclick="resetSenha()">Esqueci minha senha</a>
+</p>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-    
 <script>
-// CONFIGURAÇÃO DO SUPABASE
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcHZzcG53em9zdnBuaXljYXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjkwNDksImV4cCI6MjA4NTAwNTA0OX0.hYgXJXn3CuvNJkbDyVkJNq6xREV-1OSohB1hhoetibk'
-const supabaseUrl = 'https://ndpvspnwzosvpniycapc.supabase.co'
+const supabase = supabase.createClient(
+  'https://SEU-PROJETO.supabase.co',
+  'SUA-ANON-KEY'
+)
 
-const db = supabase.createClient(supabaseUrl, supabaseKey)
+function toggleSenha() {
+  const input = document.getElementById('senha')
+  input.type = input.type === 'password' ? 'text' : 'password'
+}
 
+async function login() {
+  const email = email.value
+  const password = senha.value
 
-// LISTAR
-async function listar() {
-  const { data, error } = await db
-    .from('usuarios')
-    .select('*')
-    .order('id', { ascending: false })
-
-  const lista = document.getElementById('lista')
-  lista.innerHTML = ''
-
-  data.forEach(user => {
-    const li = document.createElement('li')
-    li.innerHTML = `
-      ${user.nome} - ${user.email}
-      <div>
-        <button onclick="editar(${user.id}, '${user.nome}', '${user.email}')">Editar</button>
-        <button onclick="deletar(${user.id})">Excluir</button>
-      </div>
-    `
-    lista.appendChild(li)
+  const { error } = await supabase.auth.signInWithPassword({
+    email, password
   })
+
+  if (error) return alert(error.message)
+
+  window.location.href = 'dashboard.html'
 }
 
-listar()
+async function resetSenha() {
+  const emailValue = email.value
+  if (!emailValue) return alert('Digite seu email')
 
+  await supabase.auth.resetPasswordForEmail(emailValue, {
+    redirectTo: window.location.origin
+  })
 
-// CRIAR E ATUALIZAR
-document.getElementById('form').addEventListener('submit', async e => {
-  e.preventDefault()
-
-  const id = document.getElementById('id').value
-  const nome = document.getElementById('nome').value
-  const email = document.getElementById('email').value
-
-  if (id) {
-    await db
-      .from('usuarios')
-      .update({ nome, email })
-      .eq('id', id)
-  } else {
-    await db
-      .from('usuarios')
-      .insert([{ nome, email }])
-  }
-
-  e.target.reset()
-  document.getElementById('id').value = ''
-  listar()
-})
-
-
-// EDITAR
-function editar(id, nome, email) {
-  document.getElementById('id').value = id
-  document.getElementById('nome').value = nome
-  document.getElementById('email').value = email
+  alert('Email de recuperação enviado!')
 }
 
+function mostrarCadastro() {
+  document.getElementById('titulo').innerText = 'Cadastro'
+  document.querySelector('button').innerText = 'Cadastrar'
+  document.querySelector('button').onclick = cadastrar
+}
 
-// DELETAR
-async function deletar(id) {
-  await db
-    .from('usuarios')
-    .delete()
-    .eq('id', id)
+async function cadastrar() {
+  const emailValue = email.value
+  const password = senha.value
 
-  listar()
+  const { data, error } = await supabase.auth.signUp({
+    email: emailValue,
+    password
+  })
+
+  if (error) return alert(error.message)
+
+  // cria registro seguro na tabela usuarios
+  await supabase.from('usuarios').insert({
+    email: emailValue,
+    nome: emailValue.split('@')[0],
+    auth_id: data.user.id
+  })
+
+  alert('Cadastro realizado! Verifique seu email.')
 }
 </script>
 
