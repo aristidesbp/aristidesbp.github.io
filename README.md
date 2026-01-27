@@ -1,5 +1,5 @@
-# 🧱 1. Criar o projeto no Supabase
-## 1.1 Criar conta e projeto
+# 🧱 Criar o projeto no Supabase
+## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
 * Clique em New Project
@@ -34,35 +34,41 @@ end $$;
 | nome       | text      | obrigatório                 |
 | email      | text      | obrigatório                 |
 ```
-# 1.3 Liberar acesso público (IMPORTANTE)
-# TAREFA 1: Crie 4 polícies para tabela usuário 
-
+# SQL PARA CRIAR TABELA USUARIOS:
 ```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.usuarios (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  nome text,
+  email text,
+  CONSTRAINT usuarios_pkey PRIMARY KEY (id)
+);
+```
+
+# Liberar acesso público (IMPORTANTE)
 * Vá em Authentication → Policie
-### Crie:
-* SELECT → Allow public
-* INSERT → Allow public
-* UPDATE → Allow public
-* DELETE → Allow public
-  
-### EXEMPLO_1 (SELECT) 
-* Policy SELECT
-* Role: defalt...(public) 
-* USING: true
-* Salvar
-
-### EXEMPLO_2 (UPDATE)
-* Policy UPDATE
-* Role: defalt...(public) 
-* USING: true
-* WITH CHECK: true
-* Salvar
 ```
-## 🧠 Primeiro: o que é USING e WITH CHECK
-#### 🔹 USING : 👉 Quem pode ATUALIZAR a linha
-#### 🔹 WITH CHECK: 👉 Que dados podem ser salvos após o UPDATE
-*  Se qualquer um pode editar qualquer linha, ambos ficam "true".
-*  Isso é necessário para funcionar no GitHub Pages (front-end puro).
+## CRIAR 4 APOLICES:         ## EXEMPLO (UPDATE)
+* SELECT → Allow public      * Policy UPDATE
+* INSERT → Allow public.     * Role: defalt...(public)
+* UPDATE → Allow public.     * USING: true
+* DELETE → Allow public.     * WITH CHECK: true
+                              * Salvar
+```
+## 🧠 USING e WITH CHECK ?
+* USING => Quem pode ATUALIZAR a linha;
+* WITH CHECK => Que dados podem ser salvos após o UPDATE;
+*  Se qualquer um pode editar qualquer linha, ambos ficam "true";
+*  Isso é necessário para funcionar no GitHub Pages (front-end puro);
+# SQL PARA CRIAR APÓLICES DA TABELA USUARIOS:
+```
+AUSE OPTIONS ABOVE TO EDIT
+alter policy "crud_update"
+on "public"."usuarios" to public using (true) with check (true);
+```
 
 ## 🧠 Regras mentais importantes (grave isso)
 * ❌ RLS ativado + policy sem USING = bloqueia tudo
@@ -79,21 +85,33 @@ end $$;
 | Apenas dono do registro  | `user_id = auth.uid()`          |
 | Público total (seu caso) | `true`                          |
  ```
-Você pegou os três pilares fundamentais, mas no ecossistema do Supabase (e do PostgreSQL), existem variações estratégicas dessas regras que são o que separam um sistema amador de um ERP Profissional.
-Para o ERP ABP Profissional, além desses três, existem mais 2 conceitos cruciais que você precisa dominar para garantir a escalabilidade do projeto.
+Você pegou os três pilares fundamentais, mas no ecossistema do Supabase
+(e do PostgreSQL), existem variações estratégicas dessas regras que são
+o que separam um sistema amador de um ERP Profissional. Para Profissional, 
+além desses três, existem mais 2 conceitos cruciais que você precisa 
+dominar para garantir a escalabilidade do projeto.
+
 # O Conceito de "Admin" ou "Nível de Acesso"
-No seu ERP, não basta estar logado; alguns usuários poderão ver tudo, enquanto outros apenas o que lhes cabe.
-A Situação: "Apenas gerentes podem excluir produtos".
+No seu ERP, não basta estar logado; alguns usuários poderão ver tudo, 
+enquanto outros apenas o que lhes cabe.
+## Situação:
+" Apenas gerentes podem excluir produtos".
 * O USING: (auth.jwt() ->> 'user_metadata')::jsonb ->> 'role' = 'admin'.
-* Por que aprender: Isso permite que você use a própria autenticação do Supabase para guardar se o usuário é um "Vendedor" ou "Dono", sem precisar de tabelas extras complexas no início.
+* Isso permite que você use a própria autenticação do
+  Supabase para guardar se o usuário é um "Vendedor" ou "Dono", sem
+  precisar de tabelas extras complexas no início.
+  
 # Diferença entre SELECT e UPDATE (Controle de Fluxo)
 Muitas vezes, a regra para ver é diferente da regra para mudar.
+
 ## A Situação:
 * "Todos na empresa podem ver os clientes, mas apenas o criador pode editar".
 ## A Estratégia:
 * Para o SELECT: Você usaria auth.role() = 'authenticated'.
 * Para o UPDATE: Você usaria user_id = auth.uid().
-* Por que aprender: Isso evita que um funcionário altere acidentalmente os dados de outro, mantendo a integridade do banco.
+* Isso evita que um funcionário altere acidentalmente os dados de outro,
+  mantendo a integridade do banco.
+  
 # 🔑 2. Pegar as chaves do Supabase
 ## Vá em Settings
 *  DATA API/Project URL/copiar
