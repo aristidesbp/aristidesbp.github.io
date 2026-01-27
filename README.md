@@ -319,3 +319,47 @@ create table public.usuarios (
   )
 ) TABLESPACE pg_default;
 ```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# apolicies
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
+```
+* CREATE POLICY "Perfis: usuários podem atualizar apenas o seu" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id)) WITH CHECK ((auth.uid() = id));
+* CREATE POLICY "Perfis: usuários podem ver apenas o seu" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
+* CREATE POLICY "Usuários podem atualizar seu próprio perfil" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id));
+* CREATE POLICY "Usuários podem ver seu próprio perfil" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
+```
+## COMO FAZER BKP:
+```
+SELECT 
+    'CREATE POLICY ' || quote_ident(policyname) || 
+    ' ON ' || tablename || 
+    ' FOR ' || cmd || 
+    ' TO ' || array_to_string(roles, ',') || 
+    ' USING (' || qual || ')' || 
+    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'NOME_DA_SUA_TABELA';
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
