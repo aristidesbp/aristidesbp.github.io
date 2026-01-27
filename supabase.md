@@ -104,8 +104,7 @@ end $$;
 * NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
     
 # 🧩 3. HTML (index.html)
-```
-<!DOCTYPE html>
+```<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -146,16 +145,18 @@ li {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+    
+<script>
+// CONFIGURAÇÃO DO SUPABASE
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcHZzcG53em9zdnBuaXljYXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjkwNDksImV4cCI6MjA4NTAwNTA0OX0.hYgXJXn3CuvNJkbDyVkJNq6xREV-1OSohB1hhoetibk'
+const supabaseUrl = 'https://ndpvspnwzosvpniycapc.supabase.co'
 
-//CONFIGURAÇÃO DO SUPABASE
-const supabaseUrl = 'https://SEU-PROJETO.supabase.co'
-const supabaseKey = 'SUA-ANON-KEY'
-const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+const db = supabase.createClient(supabaseUrl, supabaseKey)
 
 
-//lISTAR
+// LISTAR
 async function listar() {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('usuarios')
     .select('*')
     .order('id', { ascending: false })
@@ -178,7 +179,8 @@ async function listar() {
 
 listar()
 
-//CRIAR E ATUALIZAR
+
+// CRIAR E ATUALIZAR
 document.getElementById('form').addEventListener('submit', async e => {
   e.preventDefault()
 
@@ -187,12 +189,12 @@ document.getElementById('form').addEventListener('submit', async e => {
   const email = document.getElementById('email').value
 
   if (id) {
-    await supabase
+    await db
       .from('usuarios')
       .update({ nome, email })
       .eq('id', id)
   } else {
-    await supabase
+    await db
       .from('usuarios')
       .insert([{ nome, email }])
   }
@@ -211,17 +213,16 @@ function editar(id, nome, email) {
 }
 
 
-//DELETAR
+// DELETAR
 async function deletar(id) {
-  await supabase
+  await db
     .from('usuarios')
     .delete()
     .eq('id', id)
 
   listar()
 }
-
-
+</script>
 </script>
 </body>
 </html>
