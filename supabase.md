@@ -144,7 +144,9 @@ li {
   <ul id="lista"></ul>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script">
+
+<script>
+
 //CONFIGURAÇÃO DO SUPABASE
 const supabaseUrl = 'https://SEU-PROJETO.supabase.co'
 const supabaseKey = 'SUA-ANON-KEY'
