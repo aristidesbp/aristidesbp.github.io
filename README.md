@@ -36,15 +36,11 @@ end $$;
 ```
 # SQL PARA CRIAR TABELA USUARIOS:
 ```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
-
-CREATE TABLE public.usuarios (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  nome text,
-  email text,
-  CONSTRAINT usuarios_pkey PRIMARY KEY (id)
+create table public.usuarios (
+  id bigint generated always as identity primary key,
+  nome text not null,
+  email text not null unique,
+  created_at timestamp with time zone default now()
 );
 ```
 
@@ -65,9 +61,24 @@ CREATE TABLE public.usuarios (
 *  Isso é necessário para funcionar no GitHub Pages (front-end puro);
 # SQL PARA CRIAR APÓLICES DA TABELA USUARIOS:
 ```
-AUSE OPTIONS ABOVE TO EDIT
-alter policy "crud_update"
-on "public"."usuarios" to public using (true) with check (true);
+create table public.apolices (
+  id bigint generated always as identity primary key,
+
+  usuario_id bigint not null,
+  numero_apolice text not null,
+  tipo text not null,
+  valor numeric(12,2) not null,
+  data_inicio date not null,
+  data_fim date not null,
+  status text not null default 'ativa',
+
+  created_at timestamp with time zone default now(),
+
+  constraint fk_usuario
+    foreign key (usuario_id)
+    references public.usuarios(id)
+    on delete cascade
+);
 ```
 
 ## 🧠 Regras mentais importantes (grave isso)
