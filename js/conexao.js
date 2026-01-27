@@ -1,8 +1,11 @@
 (function() {
     // 1. Configurações de Conexão (Chaves de 21/01/2026)
-    const supabaseUrl = 'https://tlhxtsanevvbpbyedmgv.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsaHh0c2FuZXZ2YnBieWVkbWd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MTg0ODQsImV4cCI6MjA4NTA5NDQ4NH0.E7ZplcLusSKK78ME-aO12mwOKEw1XV1FYmWx7GYP_sU';
-    
+    const supabaseUrl = 'https://vgrcqrplwgdyzzrhfzlb.supabase.co';
+    const Publishable key ='sb_publishable_gIADKs6ojnY0uXcTy6Um2Q_bTdUOCwP';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZncmNxcnBsd2dkeXp6cmhmemxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MzA0MTEsImV4cCI6MjA4NTEwNjQxMX0.ZCE9Lj8cQHNcxwXmBRz_qlY0xNkt9DfR6ezs4wDbol8';
+   
+
+        
     // Inicializa o cliente globalmente para uso nos outros scripts do ERP
     window.db = supabase.createClient(supabaseUrl, supabaseKey);
 
