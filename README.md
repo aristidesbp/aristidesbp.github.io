@@ -59,40 +59,6 @@ create table public.usuarios (
 * WITH CHECK => Que dados podem ser salvos após o UPDATE;
 *  Se qualquer um pode editar qualquer linha, ambos ficam "true";
 *  Isso é necessário para funcionar no GitHub Pages (front-end puro);
-# 📌 2️⃣ SQL – Criar tabela de apólices usuarios 
-```
-create table public.apolices (
-  id bigint generated always as identity primary key,
-
-  usuario_id bigint not null,
-  numero_apolice text not null,
-  tipo text not null,
-  valor numeric(12,2) not null,
-  data_inicio date not null,
-  data_fim date not null,
-  status text not null default 'ativa',
-
-  created_at timestamp with time zone default now(),
-
-  constraint fk_usuario
-    foreign key (usuario_id)
-    references public.usuarios(id)
-    on delete cascade
-);
-```
-# 🧠 Explicação didática (importante)
-🔗 Relacionamento
-usuario_id aponta para usuarios.id
-on delete cascade:
-Se o usuário for apagado → apólices dele também são
-📄 Campos da apólice
-numero_apolice → identificador da seguradora
-tipo → ex: Auto, Vida, Residencial
-valor → valor segurado
-data_inicio / data_fim → vigência
-status → ativa, cancelada, vencida
-🔐 (Opcional, mas recomendado) – RLS básico
-Ativar segurança por linha:
 
 ## 🧠 Regras mentais importantes (grave isso)
 * ❌ RLS ativado + policy sem USING = bloqueia tudo
@@ -271,28 +237,216 @@ async function deletar(id) {
 </html>
 ```
 # PARABÉNS VOCÊ JÁ TEM O SEU PRIMEIRO CRUD🥳🥳
-# FASE 2:
+# FASE 2:Vamos fazer isso do jeito certo, seguro e profissional, usando Supabase Auth (não login “caseiro”).
+## A partir de agora:
+* 🔐 Login seguro
+* 👁️ Olho para mostrar/ocultar senha
+* 🔁 Esqueci minha senha (real, por e-mail)
+* 🆕 Novo cadastro
+* 📄 CRUD protegido (somente usuário logado)
+* 🌐 Compatível com GitHub Pages
 
+## 🧠 ARQUITETURA FINAL
+```
+GitHub Pages (HTML + JS)
+        ↓
+Supabase Auth (login, cadastro, reset)
+        ↓
+Supabase Database (CRUD com RLS)
 
+```
+# 1️⃣ CONFIGURAÇÃO NO SUPABASE (OBRIGATÓRIO)
+## Ativar Auth por e-mail
+* Supabase → Authentication → Providers
+* Ative Email
+* Desative SMS (se quiser simplicidade)
+  
+# URL de redirecionamento (reset de senha)
+* Supabase → Authentication → URL Configuration
+```
+ Adicione: https://SEU-USUARIO.github.io/SEU-REPO/
+```
+## Isso permite:
+* Reset de senha
+* Login funcionando no GitHub Pages
 
+## SEGURANÇA DO BANCO (RLS REAL)
+* Vamos proteger os dados por usuário autenticado.
+* Ajustar tabela usuarios
+```
+alter table usuarios
+add column auth_id uuid;
+create unique index on usuarios(auth_id);
+```
+## Política segura (usuários só veem seus dados)
+```
+alter table usuarios enable row level security;
 
+create policy "Usuário vê só seus dados"
+on usuarios
+for all
+using (auth.uid() = auth_id)
+with check (auth.uid() = auth_id);
+```
+👉 Agora ninguém acessa dados sem login.
 
+# NOVA TELA: LOGIN + CADASTRO + RESET
+👉 Arquivo único: index.html
+Copie TUDO abaixo.
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+body {
+  font-family: Arial;
+  max-width: 400px;
+  margin: 60px auto;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+}
+.senha {
+  position: relative;
+}
+.senha span {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  cursor: pointer;
+}
+a {
+  cursor: pointer;
+  color: blue;
+}
+</style>
+</head>
+<body>
 
+<h2 id="titulo">Login</h2>
 
+<input id="email" type="email" placeholder="Email">
 
+<div class="senha">
+  <input id="senha" type="password" placeholder="Senha">
+  <span onclick="toggleSenha()">👁️</span>
+</div>
 
+<button onclick="login()">Entrar</button>
 
+<p>
+  <a onclick="mostrarCadastro()">Criar conta</a> |
+  <a onclick="resetSenha()">Esqueci minha senha</a>
+</p>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = supabase.createClient(
+  'https://SEU-PROJETO.supabase.co',
+  'SUA-ANON-KEY'
+)
 
+function toggleSenha() {
+  const input = document.getElementById('senha')
+  input.type = input.type === 'password' ? 'text' : 'password'
+}
 
+async function login() {
+  const email = email.value
+  const password = senha.value
 
+  const { error } = await supabase.auth.signInWithPassword({
+    email, password
+  })
 
+  if (error) return alert(error.message)
 
+  window.location.href = 'dashboard.html'
+}
 
+async function resetSenha() {
+  const emailValue = email.value
+  if (!emailValue) return alert('Digite seu email')
 
+  await supabase.auth.resetPasswordForEmail(emailValue, {
+    redirectTo: window.location.origin
+  })
 
+  alert('Email de recuperação enviado!')
+}
 
+function mostrarCadastro() {
+  document.getElementById('titulo').innerText = 'Cadastro'
+  document.querySelector('button').innerText = 'Cadastrar'
+  document.querySelector('button').onclick = cadastrar
+}
 
+async function cadastrar() {
+  const emailValue = email.value
+  const password = senha.value
+
+  const { data, error } = await supabase.auth.signUp({
+    email: emailValue,
+    password
+  })
+
+  if (error) return alert(error.message)
+
+  // cria registro seguro na tabela usuarios
+  await supabase.from('usuarios').insert({
+    email: emailValue,
+    nome: emailValue.split('@')[0],
+    auth_id: data.user.id
+  })
+
+  alert('Cadastro realizado! Verifique seu email.')
+}
+</script>
+
+</body>
+</html>
+```
+4️⃣ TELA PROTEGIDA (CRUD / DASHBOARD)
+🧩 dashboard.html
+```
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+</head>
+<body>
+
+<h1>Área protegida</h1>
+<button onclick="logout()">Sair</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = supabase.createClient(
+  'https://SEU-PROJETO.supabase.co',
+  'SUA-ANON-KEY'
+)
+
+async function check() {
+  const { data } = await supabase.auth.getUser()
+  if (!data.user) location.href = 'index.html'
+}
+check()
+
+async function logout() {
+  await supabase.auth.signOut()
+  location.href = 'index.html'
+}
+</script>
+
+</body>
+</html>
+
+```
 
 
 
