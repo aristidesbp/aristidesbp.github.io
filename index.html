@@ -1,166 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  max-width: 400px;
-  margin: 60px auto;
-}
-
-input, button {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
-}
-
-.senha {
-  position: relative;
-}
-
-.senha span {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  cursor: pointer;
-}
-
-a {
-  cursor: pointer;
-  color: blue;
-  text-decoration: underline;
-}
-</style>
-
-  <link rel="icon" href="data:image/svg+xml,
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-  <text y='.9em' font-size='90'>🔐</text>
-</svg>">
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ERP ABP Profissional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="conexao.js"></script>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Painel de Controle</h1>
+            <p id="welcome-msg">Carregando informações...</p>
+        </header>
 
-<h2 id="titulo">Login</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #3498db;">
+                <h3>Total Entidades</h3>
+                <p id="count-entidades" style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #2ecc71;">
+                <h3>Saldo Financeiro</h3>
+                <p id="total-financeiro" style="font-size: 2rem; font-weight: bold; margin: 0;">R$ 0,00</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #e67e22;">
+                <h3>Produtos em Estoque</h3>
+                <p id="count-produtos" style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+            </div>
+        </div>
 
-<input id="email" type="email" placeholder="Email" required>
+        <div style="margin-top: 40px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h3>Visão Geral Financeira (Entradas vs Saídas)</h3>
+            <canvas id="financeChart" height="100"></canvas>
+        </div>
+    </div>
 
-<div class="senha">
-  <input id="senha" type="password" placeholder="Senha" required>
-  <span onclick="toggleSenha()">👁️</span>
-</div>
+    <script>
+    (function() {
+        // Aguarda a conexão do Supabase estar pronta
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verifica sessão via conexao.js
+            const { data: { session } } = await db.auth.getSession();
+            if (!session) return;
 
-<button id="btnAcao" onclick="login()">Entrar</button>
+            document.getElementById('welcome-msg').innerText = `Bem-vindo, ${session.user.email}`;
 
-<p>
-  <a onclick="mostrarCadastro()">Criar conta</a> |
-  <a onclick="resetSenha()">Esqueci minha senha</a>
-</p>
-  
+            loadDashboardData();
+        });
 
+        async function loadDashboardData() {
+            try {
+                // 1. Contagem de Entidades
+                const { count: countEntidades } = await db
+                    .from('entidades')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('count-entidades').innerText = countEntidades || 0;
 
-<!-- Supabase CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                // 2. Contagem de Produtos
+                const { count: countProdutos } = await db
+                    .from('produtos')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('count-produtos').innerText = countProdutos || 0;
 
-<script>
-/* ================================
-   CONFIGURAÇÃO
-================================ */
-const dbsupabase = supabase.createClient(
-  'https://ndpvspnwzosvpniycapc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcHZzcG53em9zdnBuaXljYXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjkwNDksImV4cCI6MjA4NTAwNTA0OX0.hYgXJXn3CuvNJkbDyVkJNq6xREV-1OSohB1hhoetibk'
-)
+                // 3. Resumo Financeiro Simulado (Integrar com sua tabela financeiro depois)
+                renderChart();
+                
+            } catch (error) {
+                console.error("Erro ao carregar dashboard:", error);
+            }
+        }
 
-/* ================================
-   FUNÇÕES DE UI
-================================ */
-function toggleSenha() {
-  const input = document.getElementById('senha')
-  input.type = input.type === 'password' ? 'text' : 'password'
-}
-
-/* ================================
-   LOGIN
-================================ */
-async function login() {
-  const email = document.getElementById('email').value
-  const senha = document.getElementById('senha').value
-
-  const { error } = await dbsupabase.auth.signInWithPassword({
-    email: email,
-    password: senha
-  })
-
-  if (error) {
-    alert(error.message)
-    return
-  }
-
-  window.location.href = 'dashboard.html'
-}
-
-/* ================================
-   RESET DE SENHA
-================================ */
-async function resetSenha() {
-  const email = document.getElementById('email').value
-
-  if (!email) {
-    alert('Digite seu email')
-    return
-  }
-
-  const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin
-  })
-
-  if (error) {
-    alert(error.message)
-    return
-  }
-
-  alert('Email de recuperação enviado!')
-}
-
-/* ================================
-   TELA DE CADASTRO
-================================ */
-function mostrarCadastro() {
-  document.getElementById('titulo').innerText = 'Cadastro'
-  const btn = document.getElementById('btnAcao')
-  btn.innerText = 'Cadastrar'
-  btn.onclick = cadastrar
-}
-
-/* ================================
-   CADASTRO SEGURO
-================================ */
-async function cadastrar() {
-  const email = document.getElementById('email').value
-  const senha = document.getElementById('senha').value
-
-  const { data, error } = await dbsupabase.auth.signUp({
-    email: email,
-    password: senha
-  })
-
-  if (error) {
-    alert(error.message)
-    return
-  }
-
-  // cria vínculo seguro no banco
-  await dbsupabase.from('usuarios').insert({
-    email: email,
-    nome: email.split('@')[0],
-    auth_id: data.user.id
-  })
-
-  alert('Cadastro realizado! Verifique seu email.')
-}
-</script>
-
+        function renderChart() {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+                    datasets: [{
+                        label: 'Fluxo de Caixa',
+                        data: [1200, 1900, 3000, 2500, 4200],
+                        borderColor: '#2c3e50',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+        }
+    })();
+    </script>
 </body>
 </html>
