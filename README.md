@@ -382,9 +382,8 @@ CREATE POLICY "Produtos: Ver próprios (Apenas se Ativo)"
 ON public.produtos FOR SELECT 
 USING (auth.uid() = usuario_id AND public.usuario_esta_ativo());
 ```
-
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# login.html
+# config.js
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 ##  Pegar as chaves do Supabase
 ## Vá em Settings
@@ -395,24 +394,22 @@ USING (auth.uid() = usuario_id AND public.usuario_esta_ativo());
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 * NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
-  
-## LOGIN do jeito certo, seguro e profissional, usando Supabase Auth (login proficional).
-##  ARQUITETURA FINAL DO LOGIN
-* Autenticação → Supabase Auth
-* Senhas → hash + sal (automático)
-* Identidade → auth.users
-* Dados do app → public.usuarios
-* Segurança → RLS + policies
-* Automação → trigger
-
-  
+```
+const dbsupabase = supabase.createClient(
+  'SUA_URL_AQUI', 
+  'SUA_KEY_AQUI'
+)
+```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+# login.html
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
-
+<script src="js/config.js" defer></script> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -477,13 +474,7 @@ p {
 
 
 <script>
-/* ===============================
-   SUPABASE CONFIG
-================================ */
-const dbsupabase = supabase.createClient(
-  'SUA_URL_AQUI', 
-  'SUA_KEY_AQUI'
-)
+
 
 /* ===============================
    UI
@@ -600,7 +591,7 @@ async function cadastrar() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA ERP ABP - Inicio</title>
-    
+    <script src="js/config.js" defer></script> 
     <script src="js/conexao_supabase.js" defer></script> 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
