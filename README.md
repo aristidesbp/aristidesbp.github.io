@@ -1,3 +1,40 @@
+# 📘 Dominando o Supabase: Do Zero ao ERP Profissional
+# 📂 Índice Programático
+## Módulo 1: A Fundação (O Banco de Dados)
+1.1 Introdução ao PostgreSQL: Por que ele é o coração do Supabase.
+1.2 Modelagem de Dados: Criando tabelas para Entidades, Produtos e Financeiro.
+1.3 Relacionamentos: Como conectar tabelas (Chaves Estrangeiras).
+
+## Módulo 2: Segurança e Apólices (RLS)
+2.1 O conceito de RLS: O muro de Berlim dos seus dados.
+2.2 Apólices de Acesso:
+Público Total vs. Usuários Autenticados.
+Propriedade de Dados (auth.uid()).
+Níveis de Acesso (Admin vs. Usuário).
+2.3 Controle de Fluxo: Diferenciando permissões de Leitura (SELECT) e Escrita (INSERT/UPDATE).
+
+## Módulo 3: Inteligência com Triggers e Funções
+3.1 Introdução às Functions (PL/pgSQL): Criando lógica dentro do banco.
+3.2 Trigger (Gatilhos):
+Automatizando o updated_at.
+Sincronizando estoque ao realizar uma venda.
+Criando perfis de usuário automaticamente após o cadastro.
+
+## Módulo 4: Views e Consultas Avançadas
+4.1 Database Views: Como simplificar relatórios financeiros complexos.
+4.2 Consultas no Front-end: Filtros, ordenação e paginação eficiente.
+Módulo 5: Integração e Interface (O ERP na Prática)
+5.1 Conexão Segura: Protegendo chaves e gerenciando sessões.
+5.2 Módulo de Dashboard: Gráficos e indicadores em tempo real.
+5.3 Deploy Profissional: Hospedagem no GitHub Pages com integridade total.
+
+
+# REQUISITOS 
+* Criar conta no github
+* Cirar github page
+* Criar conta no Supabase
+* Criar ou limpar um projeto do supabase
+
 # 🧨 RESET TOTAL DO SUPABASE (DADOS + AUTH + STORAGE)
 * 👉 Isso é o mais próximo possível de um banco novo.
 ``` 
