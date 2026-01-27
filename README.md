@@ -90,7 +90,102 @@ create table public.usuarios (
 ```
 alter table public.usuarios enable row level security;
 ```
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+```
+-- ==========================================
+-- 1. TABELA DE PERFIS (ESTENDE O AUTH.USERS)
+-- ==========================================
+CREATE TABLE public.usuarios (
+  id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  email TEXT NOT NULL,
+  nome_completo TEXT,
+  avatar_url TEXT,
+  criado_em TIMESTAMPTZ DEFAULT NOW()
+);
 
+-- Habilitar RLS
+ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
+
+-- Política: Usuário só lê e edita seu próprio perfil
+CREATE POLICY "Usuários podem ver seu próprio perfil" 
+ON public.usuarios FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Usuários podem atualizar seu próprio perfil" 
+ON public.usuarios FOR UPDATE USING (auth.uid() = id);
+
+-- ==========================================
+-- 2. TABELA DE ENTIDADES (NOTAS/CLIENTES)
+-- ==========================================
+CREATE TABLE public.entidades (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  titulo TEXT NOT NULL,
+  conteudo TEXT,
+  categoria TEXT,
+  criado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- Política: Segurança total por usuario_id
+CREATE POLICY "Acesso total às próprias entidades" 
+ON public.entidades FOR ALL USING (auth.uid() = usuario_id);
+
+-- ==========================================
+-- 3. TABELA DE PRODUTOS
+-- ==========================================
+CREATE TABLE public.produtos (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  nome TEXT NOT NULL,
+  preco DECIMAL(10,2) DEFAULT 0,
+  estoque INTEGER DEFAULT 0,
+  criado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Acesso total aos próprios produtos" 
+ON public.produtos FOR ALL USING (auth.uid() = usuario_id);
+
+-- ==========================================
+-- 4. TABELA FINANCEIRO
+-- ==========================================
+CREATE TABLE public.financeiro (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  descricao TEXT NOT NULL,
+  valor DECIMAL(10,2) NOT NULL,
+  tipo TEXT CHECK (tipo IN ('receita', 'despesa')),
+  data_movimento DATE DEFAULT CURRENT_DATE,
+  criado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Acesso total ao próprio financeiro" 
+ON public.financeiro FOR ALL USING (auth.uid() = usuario_id);
+
+-- ==========================================
+-- 5. TRIGGER AUTOMÁTICA (O CORAÇÃO DO LOGIN)
+-- ==========================================
+-- Esta função cria o perfil na tabela 'public.usuarios' 
+-- assim que o usuário confirma o e-mail no Auth.
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.usuarios (id, email, nome_completo)
+  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Gatilho que dispara após o Insert no Auth
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+```
 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 # 2️⃣ POLICIES
 * Vá em Authentication → Policie
