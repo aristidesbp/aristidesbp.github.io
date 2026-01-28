@@ -60,7 +60,18 @@ PDF
 * Pedir para fazer funcionar;
 * exportar o projeto;
 
-## [GOOGLE ANTIGRAVIT ](https://antigravity.google/)
+## [IDE GOOGLE ANTIGRAVIT ](https://antigravity.google/)
+* baixar (.tar.gz) para linux mint
+## Passo a passo para instalar (após o download):
+Como você vai baixar um arquivo .tar.gz, ele não funciona como um instalador de Windows (clique duplo). Siga estes passos no Mint:
+* Extraia o arquivo: Clique com o botão direito no arquivo baixado e escolha "Extrair aqui".
+* Entre na pasta: Abra a pasta que foi criada.
+* Execute o programa: Procure por um arquivo chamado apenas antigravity (ou algo similar, com ícone de executável).
+  Clique com o botão direito nele, vá em Propriedades > Permissões e marque a caixa "Permitir executar o arquivo como programa".
+* Abrir: Agora é só dar um clique duplo nesse arquivo.
+#### Dica : Se o Google Antigravity oferecer uma versão em .deb (que é o formato padrão do Linux Mint/Ubuntu), prefira ela! É muito mais fácil de instalar, 
+basta dar dois cliques e o sistema faz tudo sozinho.
+
 
 
 
