@@ -2,7 +2,7 @@
 
 Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.
 
-**Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago**
+|Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago|
 
 ---
 
@@ -14,7 +14,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * Projetos para pequenos e médios negócios
 * Automação e soluções digitais
 
-**HTML5|CSS3|JavaScript|Docker|Supabase|IAs**
+|HTML5|CSS3|JavaScript|Docker|Supabase|IAs|
 
 ---
 
