@@ -53,7 +53,7 @@ PDF
 ``` 
 ## [GOOGLE STITCH](https://stitch.withgoogle.com/)
 * Colar o prompt
-* Exportar o projeto
+* Exportar o projeto (IMG E HTML)
 
 ## [GOOGLE IA STUDIO](https://aistudio.google.com/prompts/new_chat)
 * Colar todos os arquivo;
