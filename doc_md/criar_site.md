@@ -1,5 +1,5 @@
 # CRIAÇAÕ DE SIITES
-## ROMPT MODELO :
+## ROMPT MODELO PARA CRIAR SISTEMAS
 ```
 * Crie um ERP universal com o nome "UniversoCorp", focado em uma experiência de usuário limpa e moderna. Utilize o tom de cor "blue-600" (#2563EB) como primário, com um fundo geral #FFFFFF e a fonte principal será a Inter. O público-alvo são pequenas e médias empresas que buscam centralizar a gestão de seus negócios.
 * A tela de login, acessível pela rota raiz "/", terá um layout centrado. Um formulário com título em "text-2xl font-bold text-gray-900" com o texto "Bem-vindo à UniversoCorp". Os campos de input para email e senha usarão componentes Input do Shadcn/UI com placeholder como "Seu email" e "Sua senha", respectivamente, com classes w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500. Abaixo dos campos, haverá um botão Button do Shadcn/UI com texto "Entrar" em bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out. Abaixo deste botão, links para "Cadastro" usando text-blue-600 hover:underline e um botão estilizado para "Entrar com Google" (com um ícone do Google) utilizando flex items-center justify-center gap-2 w-full py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200. Adicione também um link discreto para "Recuperar senha" com text-sm text-blue-600 hover:underline. A página terá um Skeleton carregando para a interface de login enquanto os dados são processados.
@@ -51,7 +51,7 @@ MD
 PDF
 
 ``` 
-# supabase
+# CONECTAR COM O SUPABASE
 ```
 Crie um ERP universal chamado "UniversoCorp", focado em uma experiência de usuário limpa e moderna, utilizando o tom de cor blue-600 (#2563EB) como primário e um fundo geral #FFFFFF, com a fonte principal sendo a Inter. Este sistema é destinado a pequenas e médias empresas que buscam centralizar a gestão de seus negócios, e para isso, integraremos diretamente com o Supabase como backend, incluindo uma análise e configuração para otimizar essa integração.
 
@@ -89,7 +89,7 @@ A página de gerenciamento de entregas, em /gerenciar/entregas, listará as entr
     [X] A integração com Supabase foi detalhada?
 
 ```
-# 
+# COLOCAR APIS
 ```
 Vamos criar um sistema de automação e pagamentos inteligentes chamado "OrbitFlow" para a plataforma Lovable, com um tema escuro profissional utilizando um azul profundo #1E3A8A como cor primária, um fundo escuro #0F172A para o corpo do app e a fonte Inter para consistência. O público-alvo são empresas que buscam otimizar processos de pagamento e integrações.
 
