@@ -34,6 +34,9 @@ Projeto de site para um pequeno negócio local, com foco em simplicidade, usabil
 * HTML5
 * CSS3
 * JavaScript
+* Docker
+* Supabase
+* IAs
 
 🔗 [https://aristidesbp.github.io/projetos/tapioca/](https://aristidesbp.github.io/projetos/tapioca/)
 
