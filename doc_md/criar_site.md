@@ -55,12 +55,12 @@ PDF
 * Colar o prompt
 * Exportar o projeto
 
-[# GOOGLE IA STUDIO](https://aistudio.google.com/prompts/new_chat)
+## [GOOGLE IA STUDIO](https://aistudio.google.com/prompts/new_chat)
 * Colar todos os arquivo;
 * Pedir para fazer funcionar;
 * exportar o projeto;
 
-[# GOOGLE ANTIGRAVIT ](https://antigravity.google/)
+## [GOOGLE ANTIGRAVIT ](https://antigravity.google/)
 
 
 
