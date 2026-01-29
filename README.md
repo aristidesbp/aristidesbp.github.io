@@ -34,6 +34,12 @@ Atuar como desenvolvedor, contribuindo para projetos que gerem impacto real, cre
 
 ## 💼 Portfólio Online 
 #### Apresentação dos meus projetos, estudos e experiências práticas em desenvolvimento web:
+---
+
+**ERPABP**: Sistema de gestão financeira open-source focado em transparência e privacidade, permitindo o controle total de dados via IndexedDB ou Supabase.
+* [https://aristidesbp.github.io/projetos/erpabp/](https://aristidesbp.github.io/projetos/erpabp/)
+
+---
 
 ---
 
