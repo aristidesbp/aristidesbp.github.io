@@ -1,33 +1,75 @@
+// Nome do banco de dados que ficará salvo no navegador
+const NOME_BANCO = 'app_db';
+
+// Versão do banco.
+// Sempre que essa versão mudar, o evento onupgradeneeded será executado
+const VERSAO_BANCO = 1;
+
 /**
- * Lógica da tela de Termos de Uso (index.html)
+ * Função responsável por abrir o banco de dados IndexedDB.
+ * Se o banco não existir, ele será criado automaticamente.
+ * Se a versão for maior que a atual, ele executa a criação/atualização das tabelas.
  */
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Identifica os elementos da tela
-    const botoes = document.querySelectorAll('footer button');
-    const botaoAceitar = botoes[0];
-    const botaoRecusar = botoes[1];
+function abrirBanco() {
+    return new Promise((resolve, reject) => {
 
-    // 2. Ação ao clicar em ACEITAR
-    botaoAceitar.addEventListener('click', async () => {
-        try {
-            // Chama a função que criamos no indexdb.js
-            await abrirBanco(); 
-            
-            // Registra que o usuário aceitou os termos localmente
-            localStorage.setItem('termos_aceitos', 'true');
-            
-            // Leva o usuário para a próxima etapa
-            window.location.href = 'login.html';
-        } catch (error) {
-            alert('Não foi possível inicializar o banco de dados no seu navegador.');
-        }
+        // Solicita ao navegador a abertura (ou criação) do banco
+        const request = indexedDB.open(NOME_BANCO, VERSAO_BANCO);
+
+        /**
+         * Evento disparado APENAS quando:
+         * - O banco ainda não existe
+         * - Ou a versão do banco foi alterada
+         * 
+         * Aqui é o ÚNICO lugar correto para criar tabelas (objectStores)
+         */
+        request.onupgradeneeded = (event) => {
+
+            // Instância do banco de dados
+            const db = event.target.result;
+
+            /**
+             * Verifica se a tabela "usuario" já existe.
+             * Isso evita erro ao tentar criar novamente.
+             */
+            if (!db.objectStoreNames.contains('usuario')) {
+
+                /**
+                 * Criação da tabela "usuario"
+                 * keyPath: campo que será a chave primária
+                 * autoIncrement: gera o id automaticamente
+                 */
+                const store = db.createObjectStore('usuario', {
+                    keyPath: 'id',
+                    autoIncrement: true
+                });
+
+                /**
+                 * Índice para busca por e-mail
+                 * unique: true impede cadastro de e-mails duplicados
+                 */
+                store.createIndex('email', 'email', { unique: true });
+
+                /**
+                 * Índice para senha
+                 * Não é único pois várias senhas podem ser iguais
+                 */
+                store.createIndex('senha', 'senha', { unique: false });
+            }
+        };
+
+        /**
+         * Evento disparado quando o banco foi aberto com sucesso
+         */
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+
+        /**
+         * Evento disparado em caso de erro ao abrir/criar o banco
+         */
+        request.onerror = () => {
+            reject(request.error);
+        };
     });
-
-    // 3. Ação ao clicar em RECUSAR
-    botaoRecusar.addEventListener('click', () => {
-        if (confirm("Se você recusar, os dados não poderão ser salvos. Deseja sair?")) {
-            window.location.href = "about:blank";
-        }
-    });
-});
-
+}
