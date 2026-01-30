@@ -171,6 +171,13 @@ cd aristidesbp.github.io
 git init
 ```
 **OBS**: ABRA A PASTA E CRIE UM ARQUIVO PARA TESTE !!!
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BAIXAR E ENVIAR ARQUIVOS 
+``` 
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main 
+```
 ```
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
 git status
@@ -182,10 +189,6 @@ git add .
 ``` 
 # SALVAR PONTO DE ALTERAÇÃO:
 git commit -m "DESCRIÇÃO_DA_ALTERACAO" 
-```
-``` 
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main 
 ```
 ``` 
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
