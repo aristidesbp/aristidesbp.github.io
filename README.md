@@ -170,10 +170,6 @@ cd aristidesbp.github.io
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
 ```
-``` 
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main 
-```
 **OBS**: ABRA A PASTA E CRIE UM ARQUIVO PARA TESTE !!!
 ```
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
@@ -186,6 +182,10 @@ git add .
 ``` 
 # SALVAR PONTO DE ALTERAÇÃO:
 git commit -m "DESCRIÇÃO_DA_ALTERACAO" 
+```
+``` 
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main 
 ```
 ``` 
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
