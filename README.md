@@ -14,7 +14,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 - [GITHUB E TERMUX](#termux/github)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX/GITHUB
+# TERMUX
 
 Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
@@ -59,6 +59,62 @@ mv teste.txt ./repositorios_git
 # limpar atela
 clear
 ```
+Digite o seguinte endereço na barra de URL:
+
+```
+http://localhost:8080/admin.html
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BAIXAR VIDEOS
+# INSTALE O yt-dlp:
+-------------------------------------------------------
+Agora instale o yt-dlp com o comando:
+```
+pip install yt-dlp
+```
+-------------------------------------------------------
+4. (OPCIONAL) INSTALE O FFMPEG:
+-------------------------------------------------------
+O ffmpeg permite baixar vídeos com áudio ou converter formatos:
+```
+pkg install ffmpeg -y
+```
+-------------------------------------------------------
+5. COMANDOS PARA BAIXAR VÍDEOS:
+-------------------------------------------------------
+
+# Comando básico para baixar vídeo:
+```
+yt-dlp "URL_DO_VÍDEO"
+```
+# Exemplo:
+```
+yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+-------------------------------------------------------
+6. COMANDOS OPCIONAIS:
+-------------------------------------------------------
+
+# Baixar apenas o áudio em MP3:
+```
+yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
+```
+# Escolher qualidade de vídeo (exemplo: 720p):
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
+```
+# Salvar com nome personalizado:
+```
+yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
+```
+# Ver formatos disponíveis:
+```
+yt-dlp -F "URL_DO_VÍDEO
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# GITHUB NO TERMUX
+
 ```
 # Lista todas as configurações ativas: 
 git config --list
@@ -158,7 +214,25 @@ git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
 git push origin main 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO UM SERVIDOR COM PYTHON 
+# Passo 1: Instalar o Python3
+Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+```
+cd pasta_do_arquivo
+# Navegue até a pasta onde seus arquivos estão 
+```
+```
+python -m http.server 8080
+# Ele inicia um servidor web simples na porta 8080:
+# O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+```
+# Como Acessar o Site no Navegador
+Abra o navegador do seu celular (Chrome, Firefox, etc.).
 
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ##########################
 # ADICIONANDO COLABORADORES 
 # ##########################
@@ -194,75 +268,6 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (1) Clique no botão “Add people”.
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CRIANDO UM SERVIDOR COM PYTHON 
-# Passo 1: Instalar o Python3
-Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
-```
-cd pasta_do_arquivo
-# Navegue até a pasta onde seus arquivos estão 
-```
-```
-python -m http.server 8080
-# Ele inicia um servidor web simples na porta 8080:
-# O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
-```
-# Como Acessar o Site no Navegador
-Abra o navegador do seu celular (Chrome, Firefox, etc.).
-Digite o seguinte endereço na barra de URL:
-
-```
-http://localhost:8080/admin.html
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXAR VIDEOS
-# INSTALE O yt-dlp:
--------------------------------------------------------
-Agora instale o yt-dlp com o comando:
-```
-pip install yt-dlp
-```
--------------------------------------------------------
-4. (OPCIONAL) INSTALE O FFMPEG:
--------------------------------------------------------
-O ffmpeg permite baixar vídeos com áudio ou converter formatos:
-```
-pkg install ffmpeg -y
-```
--------------------------------------------------------
-5. COMANDOS PARA BAIXAR VÍDEOS:
--------------------------------------------------------
-
-# Comando básico para baixar vídeo:
-```
-yt-dlp "URL_DO_VÍDEO"
-```
-# Exemplo:
-```
-yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-```
--------------------------------------------------------
-6. COMANDOS OPCIONAIS:
--------------------------------------------------------
-
-# Baixar apenas o áudio em MP3:
-```
-yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
-```
-# Escolher qualidade de vídeo (exemplo: 720p):
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
-```
-# Salvar com nome personalizado:
-```
-yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
-```
-# Ver formatos disponíveis:
-```
-yt-dlp -F "URL_DO_VÍDEO
 
 
 
