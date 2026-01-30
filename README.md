@@ -10,8 +10,10 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 [ERPABP](https://aristidesbp.github.io/projetos/erpabp/)
 [Barraca de Tapioca](https://aristidesbp.github.io/projetos/tapioca/)
 
-## 📓🗃️ MATERIAL DE APOIO
-[GITHUB E TERMUX](#_GITHUB_E_TERMUX)
+## 📓🗃️ MATERIAL DE APOIO (ÍNDICE)
+- [GITHUB E TERMUX](#github-e-termux)
+  - [Como instalar o Termux](#como-instalar-o-termux)
+
 
 
 
