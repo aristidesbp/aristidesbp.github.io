@@ -174,6 +174,10 @@ git init
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # BAIXAR E ENVIAR ARQUIVOS 
+```
+# entre na pasta
+cd storage/downloads/Aristidesbp.github.io
+```
 ``` 
 # BAIXAR ATUALIZAÇÃO DO SITE:
 git pull origin main 
@@ -194,7 +198,7 @@ git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
 git push origin main 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CRIANDO UM SERVIDOR COM PYTHON 
 # Passo 1: Instalar o Python3
 Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
