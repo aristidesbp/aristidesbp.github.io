@@ -13,14 +13,95 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ## 📓🗃️ MATERIAL DE APOIO (ÍNDICE)
 - [GITHUB E TERMUX](#github-e-termux)
   - [Como instalar o Termux](#como-instalar-o-termux)
+- [INSTALL E CONFIG TERMUX/GITHUB](#INSTALL-E-CONFIG-TERMUX/GITHUB
+
+- 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# INSTALL E CONFIG TERMUX/GITHUB
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+Faça o download do aplicativo direto no github te instale:
+Acesse o link oficial (não use da Play Store)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
+```
+# ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
+```
+```
+## ATUALIZE SEU TERMUX:
+pkg update && pkg upgrade -y 
+```
+```
+## PERMITA ELE USAR AS PASTAS DO SEU ANDROID:
+termux-setup-storage
+```
+```
+## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
+pkg install git -y
+pkg install nano -y
+pkg install openssh -y
+pkg install curl -y
+pkg install tree -y
+```
+```
+# vá para pasta do projeto (abaixo terá um exemplo)
+
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+git config --global --add safe.directory "$(pwd)"
+# Configurar a pasta como segura (evita erros de segurança)                               
+```
+```git config --list
+# Lista todas as configurações ativas 
+```
+```
+git config --global user.name "Seu Nome"
+# Configurar nome de usuário
+```
+```
+git config --global user.email "seu@email.com"
+# Configurar email do GitHub
+```
+```
+eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
+# Iniciar o agente ssh
+```
+```
+ssh-keygen -t ed25519 -C "seu@email.com"
+#Gerar nova chave SSH (caso ainda não tenha)
+```
+```
+cat ~/.ssh/id_ed25519.pub
+# Mostrar a chave pública para adicionar no GitHub
+```
+```
+git remote set-url origin git@github.com:usuario/repositorio.git
+# Troque a URL remota para usar SSH
+```
+```
+ssh -T git@github.com
+## 🧪 Teste de conexão com GitHub via SSH 
+### Se tudo estiver certo, você verá:
+### Hi SEU_USUARIO! You've successfully authenticated..
+```
 
 
-
-
+## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
+----------------------------------------------------
+1. Acesse: https://github.com](https://github.com
+2. Faça login na sua conta
+3. No canto superior direito, clique na sua foto de perfil → **Settings**
+4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
+5. Clique em **New SSH key**
+6. Em **Title**, coloque um nome (ex: “Meu notebook”)
+7. Em **Key**, cole a chave pública copiada (noterminal digite)
+----------------------------------------------------
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🧱 Criar o projeto no Supabase
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
@@ -47,7 +128,7 @@ end $$;
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CRIANDO UM ARQUIVO CONFIG (js/config.js)
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ##  Pegar as chaves do Supabase
 ## Vá em Settings
 *  🧱 DATA API/Project URL/copiar🧱 
@@ -63,9 +144,10 @@ const dbsupabase = supabase.createClient(
   'SUA_KEY_AQUI'
 )
 ```
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # como ler o codigo de barras com a camera
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
+
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
