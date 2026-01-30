@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="pt-br" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Delivery - Aristidesbp</title>
+<title>Delivery - Tapioca da Maria</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root {
@@ -29,34 +29,26 @@ body { scroll-behavior:smooth; }
   padding:12px;
   border-radius:8px;
   border:2px solid var(--marrom-madeira);
+  background: #fff;
+  color: #000;
 }
-
-  .campo {
+.campo {
   width: 100%; 
   padding: 12px;
   border-radius: 8px; 
   border: none;
-  /* Adicione as linhas abaixo */
   color: #000; 
   background-color: #fff;
 }
-  
 .botao {
   background:var(--amarelo-mostarda);
   padding:12px 24px;
   font-weight:600;
   border-radius:8px;
-}
-
-.busca {
   width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 2px solid var(--marrom-madeira);
-  background: #fff;
-  color: #000;
+  transition: opacity 0.2s;
 }
+.botao:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 </head>
 
@@ -74,13 +66,7 @@ body { scroll-behavior:smooth; }
       <option value="bebidas">Bebidas</option>
       <option value="sobremesas">Sobremesas</option>
     </select>
-
-    <input
-      type="text"
-      id="buscaProduto"
-      class="busca"
-      placeholder="Buscar produto pelo nome..."
-    >
+    <input type="text" id="buscaProduto" class="busca" placeholder="Buscar produto pelo nome...">
   </div>
 </header>
 
@@ -90,43 +76,44 @@ body { scroll-behavior:smooth; }
 </section>
 
 <section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
-<div class="container mx-auto">
+  <div class="container mx-auto">
+    <p class="text-lg font-bold mb-4">Total do pedido: R$ <span id="total">0,00</span></p>
+    <div id="itens-pedido" class="space-y-2 mb-6"></div>
 
-<p class="text-lg font-bold mb-4">
-Total do pedido: R$ <span id="total">0,00</span>
-</p>
+    <form id="pedido-form" class="space-y-4">
+      <input id="nome" placeholder="Nome Completo" class="campo" required>
+      <input id="telefone" placeholder="Telefone" class="campo" required>
+      <input id="endereco" placeholder="Endereço" class="campo" required>
+      
+      <select id="formaPagamento" class="campo" required>
+        <option value="" disabled selected>Escolha o método de pagamento</option>
+        <option value="pix">Pix (Mercado Pago)</option>
+        <option value="cartao">Cartão de Crédito (Mercado Pago)</option>
+      </select>
 
-<div id="itens-pedido" class="space-y-2 mb-6"></div>
-
-<form id="pedido-form" class="space-y-4">
-<input id="nome" placeholder="Nome Completo" class="campo" required>
-<input id="telefone" placeholder="Telefone" class="campo" required>
-<input id="endereco" placeholder="Endereço" class="campo" required>
-
-<select id="formaPagamento" class="campo" required>
-<option disabled selected>Forma de Pagamento</option>
-<option>Dinheiro</option>
-<option>Pix</option>
-<option>Cartão</option>
-</select>
-
-<textarea id="obs" placeholder="Observações" class="campo"></textarea>
-<button class="botao">Enviar pedido via WhatsApp</button>
-</form>
-
-</div>
+      <textarea id="obs" placeholder="Observações" class="campo"></textarea>
+      <button type="submit" id="btnFinalizar" class="botao">Pagar e Finalizar Pedido</button>
+    </form>
+  </div>
 </section>
 
 <script>
+// CONFIGURAÇÃO SUPABASE (Substitua pelos seus dados do projeto)
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_KEY_ANON_AQUI';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const menuEl = document.getElementById("menu");
 const filtro = document.getElementById("filtroCategoria");
 const busca = document.getElementById("buscaProduto");
 const itensEl = document.getElementById("itens-pedido");
 const totalEl = document.getElementById("total");
+const btnFinalizar = document.getElementById("btnFinalizar");
 
 let produtos = [];
 let carrinho = [];
 
+// Carregar Produtos
 fetch("produtos.json")
 .then(r => r.json())
 .then(d => { produtos = d; renderMenu(); });
@@ -134,74 +121,65 @@ fetch("produtos.json")
 function renderMenu() {
   const cat = filtro.value;
   const termo = busca.value.toLowerCase();
-
   menuEl.innerHTML = "";
+  
   produtos
-  .filter(p =>
-    (cat==="todos" || p.categoria.toLowerCase()===cat) &&
-    p.nome.toLowerCase().includes(termo)
-  )
+  .filter(p => (cat==="todos" || p.categoria.toLowerCase()===cat) && p.nome.toLowerCase().includes(termo))
   .forEach(p => {
     const div = document.createElement("div");
     div.className="bg-white p-4 rounded shadow";
     div.innerHTML=`
       <img src="${p.imagem}" class="h-48 w-full object-cover rounded mb-2">
-      <strong>${p.nome}</strong>
-      <p>${p.desc||""}</p>
-      <span>R$ ${p.preco.toFixed(2)}</span>
-      <button class="mt-2 bg-yellow-400 w-full py-2 rounded">Adicionar</button>
+      <strong class="block text-lg">${p.nome}</strong>
+      <p class="text-sm text-gray-600">${p.desc||""}</p>
+      <span class="font-bold text-red-700">R$ ${p.preco.toFixed(2)}</span>
+      <button class="mt-2 bg-yellow-400 w-full py-2 rounded font-bold">Adicionar</button>
     `;
-    const btn = div.querySelector("button");
-    btn.onclick = () => adicionar(p,btn);
+    div.querySelector("button").onclick = (e) => adicionar(p, e.target);
     menuEl.appendChild(div);
   });
 }
 
-function adicionar(p,btn){
+function adicionar(p, btn){
   const item = carrinho.find(i=>i.id===p.id);
   if(item) item.qtd++;
-  else carrinho.push({...p,qtd:1});
-
+  else carrinho.push({...p, qtd:1});
   btn.textContent="Adicionado ✓";
-  setTimeout(()=>btn.textContent="Adicionar",800);
+  setTimeout(()=>btn.textContent="Adicionar", 800);
   atualizarCarrinho();
 }
 
 function atualizarCarrinho(){
   itensEl.innerHTML="";
   let total=0;
-
-  carrinho.forEach((i,idx)=>{
+  carrinho.forEach((i, idx)=>{
     total += i.preco * i.qtd;
     itensEl.innerHTML += `
     <div class="flex items-center justify-between bg-gray-800 p-2 rounded">
       <span>${i.nome} (x${i.qtd})</span>
       <div class="flex gap-2">
-        <button onclick="menos(${idx})">➖</button>
-        <button onclick="mais(${idx})">➕</button>
+        <button onclick="alterarQtd(${idx}, -1)">➖</button>
+        <button onclick="alterarQtd(${idx}, 1)">➕</button>
         <button onclick="remover(${idx})">❌</button>
       </div>
     </div>`;
   });
-
   totalEl.textContent = total.toFixed(2);
 }
 
-function mais(i){ carrinho[i].qtd++; atualizarCarrinho(); }
-function menos(i){
-  carrinho[i].qtd--;
-  if(carrinho[i].qtd<=0) carrinho.splice(i,1);
+window.alterarQtd = (i, delta) => {
+  carrinho[i].qtd += delta;
+  if(carrinho[i].qtd <= 0) carrinho.splice(i, 1);
   atualizarCarrinho();
-}
-function remover(i){
-  carrinho.splice(i,1);
+};
+
+window.remover = (i) => {
+  carrinho.splice(i, 1);
   atualizarCarrinho();
-}
+};
 
-filtro.onchange = renderMenu;
-busca.oninput = renderMenu;
-
-           document.getElementById("pedido-form").onsubmit = function(e) {
+// SUBMIT COM VALIDAÇÃO E PAGAMENTO
+document.getElementById("pedido-form").onsubmit = async function(e) {
   e.preventDefault();
 
   if (carrinho.length === 0) {
@@ -209,141 +187,54 @@ busca.oninput = renderMenu;
     return;
   }
 
-  const nome = document.getElementById("nome").value;
-  const endereco = document.getElementById("endereco").value;
-  const pagto = document.getElementById("formaPagamento").value;
-  
-  // Monta a mensagem
-  let msg = `*Novo Pedido - Tapioca da Maria*\n\n`;
-  msg += `*Cliente:* ${nome}\n`;
-  msg += `*Endereço:* ${endereco}\n`;
-  msg += `*Pagamento:* ${pagto}\n\n`;
-  msg += `*Itens:*\n`;
-  
-  carrinho.forEach(i => {
-    msg += `- ${i.nome} (x${i.qtd}): R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
-  });
-  
-  msg += `\n*Total: R$ ${totalEl.textContent}*`;
+  btnFinalizar.disabled = true;
+  btnFinalizar.textContent = "Processando Pagamento...";
 
-  // Codifica para URL e redireciona (substitua pelo seu número)
-  const fone = "5591992420981"; 
-  window.open(`https://wa.me/${fone}?text=${encodeURIComponent(msg)}`, "_blank");
+  const dadosPedido = {
+    cliente_nome: document.getElementById("nome").value,
+    telefone: document.getElementById("telefone").value,
+    endereco: document.getElementById("endereco").value,
+    total: parseFloat(totalEl.textContent),
+    itens: carrinho,
+    status: 'pendente'
+  };
+
+  try {
+    // 1. Salvar pedido no Supabase
+    const { data, error } = await supabase
+      .from('pedidos')
+      .insert([dadosPedido])
+      .select();
+
+    if (error) throw error;
+
+    // 2. Chamar sua Edge Function que integra com Mercado Pago
+    // Essa URL você obtém após criar a function no Supabase
+    const response = await fetch('SUA_URL_SUPABASE_FUNCTION/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId: data[0].id,
+        total: dadosPedido.total,
+        nome: dadosPedido.cliente_nome
+      })
+    });
+
+    const { init_point } = await response.json();
+
+    // 3. Redirecionar para o Mercado Pago
+    window.location.href = init_point;
+
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao processar pedido. Tente novamente.");
+    btnFinalizar.disabled = false;
+    btnFinalizar.textContent = "Pagar e Finalizar Pedido";
+  }
 };
 
-// Tornar as funções globais para o onclick funcionar
-window.mais = mais;
-window.menos = menos;
-window.remover = remover;
+filtro.onchange = renderMenu;
+busca.oninput = renderMenu;
 </script>
-
-=======
-<html class="light" lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Termos de Uso e Responsabilidade</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Inter"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-<style type="text/tailwindcss">
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            min-height: max(884px, 100dvh);
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative flex h-screen w-full flex-col overflow-hidden">
-<header class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10">
-<div class="text-[#111418] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer">
-<!-- <span class="material-symbols-outlined">arrow_back_ios</span> -->
-</div>
-<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Termos de Uso e Responsabilidade</h2>
-</header>
-<main class="flex-1 overflow-y-auto bg-white dark:bg-background-dark">
-<div class="max-w-xl mx-auto">
-<div class="px-4">
-<h3 class="text-[#111418] dark:text-white tracking-light text-2xl font-bold leading-tight pb-1 pt-6">Termos de Uso do Aplicativo</h3>
-<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal pb-6">Atualizado em: 15 de Outubro de 2024</p>
-</div>
-<div class="px-4">
-<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">1. Aceitação dos Termos</h3>
-<p class="text-[#111418] dark:text-gray-300 text-base font-normal leading-relaxed pb-3 pt-1">
-                        Ao acessar e utilizar este aplicativo, você concorda expressamente com os termos e condições aqui descritos. Se você não concordar com qualquer parte destes termos, não deverá utilizar nossos serviços.
-                    </p>
-</div>
-<div class="px-4">
-<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">2. Responsabilidade pelos Dados</h3>
-<p class="text-[#111418] dark:text-gray-300 text-base font-normal leading-relaxed pb-3 pt-1">
-                        Os proprietários e desenvolvedores da aplicação não são responsáveis pelos dados inseridos no sistema. Todas as informações são armazenadas exclusivamente de duas formas:
-                    </p>
-<ul class="list-disc ml-6 space-y-2 pb-4 text-[#111418] dark:text-gray-300 text-base">
-<li><strong>Localmente:</strong> Via IndexedDB no próprio navegador do usuário.</li>
-<li><strong>Conta Própria:</strong> Na conta pessoal do Supabase configurada pelo próprio usuário.</li>
-</ul>
-<p class="text-[#111418] dark:text-gray-300 text-base font-normal leading-relaxed pb-3 pt-1">
-                        Os desenvolvedores não possuem qualquer tipo de acesso a esses ambientes de armazenamento, o que remove totalmente sua capacidade técnica de gerenciar, administrar, recuperar ou excluir tais dados.
-                    </p>
-</div>
-<div class="px-4">
-<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">3. Projeto Open-Source</h3>
-<p class="text-[#111418] dark:text-gray-300 text-base font-normal leading-relaxed pb-3 pt-1">
-                        Este sistema é um software de código aberto (open-source), promovendo a transparência e a colaboração. O código-fonte está hospedado e disponível publicamente no GitHub através do repositório: <br/>
-<span class="font-mono text-primary break-all">aristidesbp/projetos/app_financeiro</span>
-</p>
-</div>
-<div class="px-4">
-<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">4. Privacidade</h3>
-<p class="text-[#111418] dark:text-gray-300 text-base font-normal leading-relaxed pb-3 pt-1">
-                        Garantimos que a arquitetura do software foi desenhada para priorizar sua privacidade, assegurando que o controle sobre as informações financeiras permaneça inteiramente sob posse do usuário final.
-                    </p>
-</div>
-<div class="h-40 bg-white dark:bg-background-dark"></div>
-</div>
-</main>
-<footer class="bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 p-4 pb-10 space-y-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-<div class="max-w-xl mx-auto w-full flex flex-col gap-3">
-<button class="w-full h-12 flex items-center justify-center rounded-xl bg-primary text-white font-bold text-base active:opacity-80 transition-opacity">
-                    Aceitar e Continuar
-                </button>
-<button class="w-full h-12 flex items-center justify-center rounded-xl border-2 border-gray-200 dark:border-gray-700 text-[#111418] dark:text-white font-semibold text-base active:bg-gray-50 dark:active:bg-gray-800 transition-colors">
-                    Recusar
-                </button>
-</div>
-</footer>
-</div>
-    <script src="js/index.js"></script>
->>>>>>> faa0952b95d18688ac6aa69a618ca328d2eb5550
 </body>
 </html>
-
-</body></html>
