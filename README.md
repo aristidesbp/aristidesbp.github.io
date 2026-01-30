@@ -44,7 +44,10 @@ pkg install tree -y
 ```
 ```
 # vá para pasta do projeto (abaixo terá um exemplo)
-
+cd storage/donwloads
+# veja o que tem na pasta
+ls
+```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
