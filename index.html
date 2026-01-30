@@ -1,196 +1,239 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARISTIDES DEBUG PRO</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery - Aristidesbp</title>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-    #console-log {
-        font-family: monospace;
-        font-size: 11px;
-        scroll-behavior: smooth;
-    }
-    .log-info {
-        color: #50fa7b;
-        border-left: 4px solid #50fa7b;
-        padding: 6px;
-        margin: 4px 0;
-        word-break: break-word;
-    }
-    .log-error {
-        color: #ff5555;
-        background: rgba(255,0,0,0.08);
-        border-left: 4px solid #ff5555;
-        padding: 6px;
-        margin: 4px 0;
-        word-break: break-word;
-    }
-    .log-system {
-        color: #aaa;
-        font-size: 10px;
-        font-style: italic;
-        margin-top: 8px;
-        border-bottom: 1px solid #333;
-    }
+:root {
+  --bege-claro:#fff8e1;
+  --vermelho-telha:#b22222;
+  --amarelo-mostarda:#f7d84f;
+  --marrom-madeira:#8b4513;
+  --preto-quadro:#1a1a1a;
+}
+body { scroll-behavior:smooth; }
+.filtro-categoria {
+  background:var(--amarelo-mostarda);
+  font-weight:bold;
+  padding:10px 20px;
+  border:2px solid var(--marrom-madeira);
+  border-radius:8px;
+}
+.busca {
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  border:2px solid var(--marrom-madeira);
+}
+
+  .campo {
+  width: 100%; 
+  padding: 12px;
+  border-radius: 8px; 
+  border: none;
+  /* Adicione as linhas abaixo */
+  color: #000; 
+  background-color: #fff;
+}
+  
+.botao {
+  background:var(--amarelo-mostarda);
+  padding:12px 24px;
+  font-weight:600;
+  border-radius:8px;
+}
+
+.busca {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--marrom-madeira);
+  background: #fff;
+  color: #000;
+}
 </style>
 </head>
 
-<body class="bg-gray-900 h-screen flex flex-col overflow-hidden">
+<body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)]">
 
-<header class="bg-gray-800 p-4 border-b border-gray-700 shadow-lg">
-    <div class="flex flex-col gap-3">
-        <div class="flex justify-between items-center">
-            <h1 class="text-blue-400 font-black italic tracking-tight">
-                ARISTIDES DEBUG PRO
-            </h1>
-            <button onclick="limparConsole()"
-                class="bg-red-900 text-white text-[10px] px-3 py-1 rounded">
-                Limpar
-            </button>
-        </div>
+<header class="bg-[var(--vermelho-telha)] text-white text-center py-6">
+  <img src="assets/img/barraquinha-lanche.jpg" class="w-full h-64 object-cover">
+  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
+  <p>Seu lanche artesanal favorito!</p>
 
-        <label class="flex items-center justify-center w-full h-14 bg-blue-600 rounded-xl cursor-pointer active:bg-blue-700 shadow">
-            <span class="text-white font-bold">📂 CARREGAR HTML</span>
-            <input type="file" accept=".html" hidden onchange="carregarArquivo(this)">
-        </label>
-    </div>
+  <div class="mt-4 px-4 max-w-md mx-auto">
+    <select id="filtroCategoria" class="filtro-categoria w-full">
+      <option value="todos">Todos</option>
+      <option value="lanches">Lanches</option>
+      <option value="bebidas">Bebidas</option>
+      <option value="sobremesas">Sobremesas</option>
+    </select>
+
+    <input
+      type="text"
+      id="buscaProduto"
+      class="busca"
+      placeholder="Buscar produto pelo nome..."
+    >
+  </div>
 </header>
 
-<div class="flex-1 bg-white relative">
-    <iframe id="viewer" class="w-full h-full border-none"></iframe>
-</div>
+<section class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 text-[var(--marrom-madeira)]">Nosso Cardápio</h2>
+  <div id="menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
 
-<div class="h-[45%] bg-[#0a0a0a] flex flex-col border-t-4 border-blue-600">
-    <div class="bg-gray-900 px-3 py-1 flex justify-between items-center">
-        <span class="text-blue-500 text-[10px] font-bold uppercase">
-            Console
-        </span>
-        <span id="file-name" class="text-gray-500 text-[10px] truncate max-w-[150px]">
-            Nenhum arquivo
-        </span>
-    </div>
+<section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
+<div class="container mx-auto">
 
-    <div id="console-log" class="flex-1 overflow-y-auto p-3">
-        <div class="log-info">Pronto para capturar logs e erros…</div>
-    </div>
+<p class="text-lg font-bold mb-4">
+Total do pedido: R$ <span id="total">0,00</span>
+</p>
+
+<div id="itens-pedido" class="space-y-2 mb-6"></div>
+
+<form id="pedido-form" class="space-y-4">
+<input id="nome" placeholder="Nome Completo" class="campo" required>
+<input id="telefone" placeholder="Telefone" class="campo" required>
+<input id="endereco" placeholder="Endereço" class="campo" required>
+
+<select id="formaPagamento" class="campo" required>
+<option disabled selected>Forma de Pagamento</option>
+<option>Dinheiro</option>
+<option>Pix</option>
+<option>Cartão</option>
+</select>
+
+<textarea id="obs" placeholder="Observações" class="campo"></textarea>
+<button class="botao">Enviar pedido via WhatsApp</button>
+</form>
+
 </div>
+</section>
 
 <script>
-const viewer = document.getElementById('viewer');
-const consoleLog = document.getElementById('console-log');
-const fileName = document.getElementById('file-name');
+const menuEl = document.getElementById("menu");
+const filtro = document.getElementById("filtroCategoria");
+const busca = document.getElementById("buscaProduto");
+const itensEl = document.getElementById("itens-pedido");
+const totalEl = document.getElementById("total");
 
-let currentURL = null;
+let produtos = [];
+let carrinho = [];
 
-/* ================================
-   UTILITÁRIOS
-================================ */
+fetch("produtos.json")
+.then(r => r.json())
+.then(d => { produtos = d; renderMenu(); });
 
-function hora() {
-    return new Date().toLocaleTimeString();
+function renderMenu() {
+  const cat = filtro.value;
+  const termo = busca.value.toLowerCase();
+
+  menuEl.innerHTML = "";
+  produtos
+  .filter(p =>
+    (cat==="todos" || p.categoria.toLowerCase()===cat) &&
+    p.nome.toLowerCase().includes(termo)
+  )
+  .forEach(p => {
+    const div = document.createElement("div");
+    div.className="bg-white p-4 rounded shadow";
+    div.innerHTML=`
+      <img src="${p.imagem}" class="h-48 w-full object-cover rounded mb-2">
+      <strong>${p.nome}</strong>
+      <p>${p.desc||""}</p>
+      <span>R$ ${p.preco.toFixed(2)}</span>
+      <button class="mt-2 bg-yellow-400 w-full py-2 rounded">Adicionar</button>
+    `;
+    const btn = div.querySelector("button");
+    btn.onclick = () => adicionar(p,btn);
+    menuEl.appendChild(div);
+  });
 }
 
-function safeStringify(obj) {
-    try {
-        if (typeof obj === 'object') {
-            return JSON.stringify(obj);
-        }
-        return String(obj);
-    } catch {
-        return '[Objeto não serializável]';
-    }
+function adicionar(p,btn){
+  const item = carrinho.find(i=>i.id===p.id);
+  if(item) item.qtd++;
+  else carrinho.push({...p,qtd:1});
+
+  btn.textContent="Adicionado ✓";
+  setTimeout(()=>btn.textContent="Adicionar",800);
+  atualizarCarrinho();
 }
 
-function imprimir(tipo, msg) {
-    const div = document.createElement('div');
-    div.className = 'log-' + tipo;
-    div.innerHTML = `<span>[${hora()}]</span> ${msg}`;
-    consoleLog.appendChild(div);
-    consoleLog.scrollTop = consoleLog.scrollHeight;
+function atualizarCarrinho(){
+  itensEl.innerHTML="";
+  let total=0;
+
+  carrinho.forEach((i,idx)=>{
+    total += i.preco * i.qtd;
+    itensEl.innerHTML += `
+    <div class="flex items-center justify-between bg-gray-800 p-2 rounded">
+      <span>${i.nome} (x${i.qtd})</span>
+      <div class="flex gap-2">
+        <button onclick="menos(${idx})">➖</button>
+        <button onclick="mais(${idx})">➕</button>
+        <button onclick="remover(${idx})">❌</button>
+      </div>
+    </div>`;
+  });
+
+  totalEl.textContent = total.toFixed(2);
 }
 
-function limparConsole() {
-    consoleLog.innerHTML = '<div class="log-info">Console reiniciado.</div>';
+function mais(i){ carrinho[i].qtd++; atualizarCarrinho(); }
+function menos(i){
+  carrinho[i].qtd--;
+  if(carrinho[i].qtd<=0) carrinho.splice(i,1);
+  atualizarCarrinho();
+}
+function remover(i){
+  carrinho.splice(i,1);
+  atualizarCarrinho();
 }
 
-/* ================================
-   CARREGAMENTO DO HTML
-================================ */
+filtro.onchange = renderMenu;
+busca.oninput = renderMenu;
 
-function carregarArquivo(input) {
-    const file = input.files[0];
-    if (!file) return;
+           document.getElementById("pedido-form").onsubmit = function(e) {
+  e.preventDefault();
 
-    if (currentURL) URL.revokeObjectURL(currentURL);
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
 
-    fileName.textContent = file.name;
-    imprimir('system', `Arquivo carregado: ${file.name}`);
+  const nome = document.getElementById("nome").value;
+  const endereco = document.getElementById("endereco").value;
+  const pagto = document.getElementById("formaPagamento").value;
+  
+  // Monta a mensagem
+  let msg = `*Novo Pedido - Tapioca da Maria*\n\n`;
+  msg += `*Cliente:* ${nome}\n`;
+  msg += `*Endereço:* ${endereco}\n`;
+  msg += `*Pagamento:* ${pagto}\n\n`;
+  msg += `*Itens:*\n`;
+  
+  carrinho.forEach(i => {
+    msg += `- ${i.nome} (x${i.qtd}): R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
+  });
+  
+  msg += `\n*Total: R$ ${totalEl.textContent}*`;
 
-    const reader = new FileReader();
-    reader.onload = e => {
-        let html = e.target.result;
+  // Codifica para URL e redireciona (substitua pelo seu número)
+  const fone = "5591992420981"; 
+  window.open(`https://wa.me/${fone}?text=${encodeURIComponent(msg)}`, "_blank");
+};
 
-        const spy = `
-<script>
-(function () {
-    const originalLog = console.log;
-    const originalError = console.error;
-
-    function send(type, msg) {
-        window.parent.postMessage({ type, msg }, '*');
-    }
-
-    console.log = function () {
-        originalLog.apply(console, arguments);
-        send('info', '📝 ' + Array.from(arguments).map(a => {
-            try { return typeof a === 'object' ? JSON.stringify(a) : a }
-            catch { return '[obj]' }
-        }).join(' '));
-    };
-
-    console.error = function () {
-        originalError.apply(console, arguments);
-        send('error', '❌ ' + Array.from(arguments).join(' '));
-    };
-
-    window.onerror = function (msg, url, line, col) {
-        send('error', '❌ ' + msg + ' | Linha: ' + line + (col ? ' Col: ' + col : ''));
-    };
-
-    window.onunhandledrejection = function (e) {
-        send('error', '⚠️ Promise: ' + e.reason);
-    };
-})();
-<\/script>
-`;
-
-        if (html.includes('<head')) {
-            html = html.replace(/<head[^>]*>/i, m => m + spy);
-        } else {
-            html = spy + html;
-        }
-
-        const blob = new Blob([html], { type: 'text/html' });
-        currentURL = URL.createObjectURL(blob);
-        viewer.src = currentURL;
-    };
-
-    reader.readAsText(file);
-}
-
-/* ================================
-   RECEBIMENTO SEGURO
-================================ */
-
-window.addEventListener('message', event => {
-    if (event.source !== viewer.contentWindow) return;
-    if (!event.data || !event.data.type) return;
-
-    imprimir(event.data.type, event.data.msg);
-});
+// Tornar as funções globais para o onclick funcionar
+window.mais = mais;
+window.menos = menos;
+window.remover = remover;
 </script>
 
 </body>
