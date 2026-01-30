@@ -41,7 +41,7 @@ pkg install tree -y
 ```
 ```
 # vá para pasta do projeto (abaixo terá um exemplo)
-cd storage/donwloads
+cd storage/downloads
 ```
 ```
 # veja o que tem na pasta
