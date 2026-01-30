@@ -11,14 +11,11 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 [Barraca de Tapioca](https://aristidesbp.github.io/projetos/tapioca/)
 
 ## 📓🗃️ MATERIAL DE APOIO (ÍNDICE)
-- [GITHUB E TERMUX](#github-e-termux)
-  - [Como instalar o Termux](#como-instalar-o-termux)
-- [INSTALL E CONFIG TERMUX/GITHUB](#INSTALL-E-CONFIG-TERMUX/GITHUB
+- [GITHUB E TERMUX](#termux/github)
 
-- 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX/GITHUB
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
