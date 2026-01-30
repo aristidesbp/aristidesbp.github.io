@@ -1,4 +1,4 @@
 const dbsupabase = supabase.createClient(
-  'SUA_URL_AQUI', 
-  'SUA_KEY_AQUI'
+  'https://jxvrnzodkahspmyruhdm.supabase.co', 
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4dnJuem9ka2Foc3BteXJ1aGRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3Njg2ODgsImV4cCI6MjA4NTM0NDY4OH0.H2NvKCv7A2vLYY9BZF5nl68XocHUZKLMxeh6b1v_4SE'
 )

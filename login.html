@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<script src="js/config.js" defer></script> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 80px auto;
+}
+
+h2 {
+  text-align: center;
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+}
+
+.senha {
+  position: relative;
+}
+
+.senha span {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  cursor: pointer;
+}
+
+a {
+  cursor: pointer;
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+p {
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<h2 id="titulo">Login</h2>
+
+<input id="email" type="email" placeholder="Email" required>
+
+<div class="senha">
+  <input id="senha" type="password" placeholder="Senha (mín. 6 caracteres)" required>
+  <span onclick="toggleSenha()">👁️</span>
+</div>
+
+<button id="btnAcao" onclick="login()">Entrar</button>
+
+<p>
+  <a onclick="mostrarCadastro()">Criar conta</a> |
+  <a onclick="resetSenha()">Esqueci minha senha</a>
+</p>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+/* ===============================
+   UI
+================================ */
+function toggleSenha() {
+  const input = document.getElementById('senha')
+  input.type = input.type === 'password' ? 'text' : 'password'
+}
+
+/* ===============================
+   LOGIN (COM AUDITORIA E CORREÇÕES)
+================================ */
+async function login() {
+  const email = document.getElementById('email').value
+  const senha = document.getElementById('senha').value
+
+  // 1. Tenta o login
+  const { data, error } = await dbsupabase.auth.signInWithPassword({
+    email,
+    password: senha
+  })
+
+  if (error) {
+    alert("Erro: " + error.message)
+    return
+  }
+
+  // 2. Se logou com sucesso, grava o Log de Auditoria
+  if (data.user) {
+    try {
+      await dbsupabase.from('logs_acesso').insert([
+        { 
+          usuario_id: data.user.id, 
+          user_agent: navigator.userAgent 
+        }
+      ]);
+    } catch (logError) {
+      console.error("Erro ao gravar log:", logError);
+      // Não bloqueamos o login se o log falhar, para não travar o usuário
+    }
+
+    // 3. Redireciona
+    window.location.href = 'index.html'
+  }
+}
+
+/* ===============================
+   RESET DE SENHA
+================================ */
+async function resetSenha() {
+  const email = document.getElementById('email').value
+
+  if (!email) {
+    alert('Digite seu email para recuperar a senha')
+    return
+  }
+
+  const { error } = await dbsupabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'http://aristidesbp.github.io' 
+  })
+
+  if (error) {
+    alert(error.message)
+    return
+  }
+
+  alert('Email de recuperação enviado!')
+}
+
+/* ===============================
+   CADASTRO
+================================ */
+function mostrarCadastro() {
+  document.getElementById('titulo').innerText = 'Cadastro'
+  const btn = document.getElementById('btnAcao')
+  btn.innerText = 'Cadastrar'
+  btn.onclick = cadastrar
+}
+
+async function cadastrar() {
+  const email = document.getElementById('email').value
+  const senha = document.getElementById('senha').value
+
+  if (senha.length < 6) {
+    alert('A senha deve ter no mínimo 6 caracteres')
+    return
+  }
+
+  const { error } = await dbsupabase.auth.signUp({
+    email,
+    password: senha
+  })
+
+  if (error) {
+    alert(error.message)
+    return
+  }
+
+  alert('Cadastro realizado! Verifique seu email para confirmar a conta.')
+}
+</script>
+
+</body>
+</html>
