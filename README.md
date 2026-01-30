@@ -15,11 +15,9 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
-
-Faça o download do aplicativo direto no github te instale:
+* Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
-
 ```
 # ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
 ```
@@ -66,51 +64,30 @@ http://localhost:8080/admin.html
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # BAIXAR VIDEOS
-# INSTALE O yt-dlp:
--------------------------------------------------------
-Agora instale o yt-dlp com o comando:
 ```
+# instale o yt-dlp com o comando:
 pip install yt-dlp
 ```
--------------------------------------------------------
-4. (OPCIONAL) INSTALE O FFMPEG:
--------------------------------------------------------
-O ffmpeg permite baixar vídeos com áudio ou converter formatos:
 ```
+# ffmpeg permite baixar vídeos com áudio ou converter formatos:
 pkg install ffmpeg -y
 ```
--------------------------------------------------------
-5. COMANDOS PARA BAIXAR VÍDEOS:
--------------------------------------------------------
-
-# Comando básico para baixar vídeo:
 ```
-yt-dlp "URL_DO_VÍDEO"
-```
-# Exemplo:
-```
-yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-```
--------------------------------------------------------
-6. COMANDOS OPCIONAIS:
--------------------------------------------------------
-
 # Baixar apenas o áudio em MP3:
-```
 yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
 ```
-# Escolher qualidade de vídeo (exemplo: 720p):
 ```
+# Escolher qualidade de vídeo (exemplo:720p)
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
 ```
-# Salvar com nome personalizado:
 ```
+# Salvar com nome personalizado:
 yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
 ```
-# Ver formatos disponíveis:
 ```
+# Ver formatos disponíveis:
 yt-dlp -F "URL_DO_VÍDEO
-
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # GITHUB NO TERMUX
@@ -620,101 +597,6 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 
-
-
-
-
-
-```
-```
-git remote -v
-## git add nome-do-arquivo.ext
-# Adiciona um arquivo específico para a área de staging
-# OBS: CASO VOCÊ JÁ TENHA CRIADO OU ALTERADO ALGUM ATIVO
-```
-```
-git add .
-# Adiciona TODOS os arquivos modificados para o commit
-```
-```
-git commit -m "Mensagem clara e objetiva"
-# Cria um commit com a mensagem entre aspas
-```
-```
-git commit -am "Mensagem"
-# Adiciona e comita arquivos rastreados (não funciona com novos arquivos)
-```
-```
-git diff
-# Mostra as diferenças entre o código atual e o último commit
-```
-```
-git show
-# Mostra detalhes do último commit
-```
-```
-git blame nome-do-arquivo
-# 
----
-
-
-O Painel Administrativo agora deve carregar, e o JavaScript (Bloco 6) deve funcionar, permitindo que você clique no botão para adicionar campos e que o localStorage funcione corretamente.
-
-Para parar o servidor, volte para o Termux e pressione 
-#### Ctrl + C.
-
-# FIREBASE
-
-```
-# Instalando o Firebase
-pkg update && pkg upgrade
-pkg install nodejs git -y
-npm install -g firebase-tools
-firebase login
-```
-```
-# Atualiza o Firebase CLI para a versão mais recente
-npm install -g firebase-tools
-# Verifica se a instalação foi concluída e mostra a versão atual
-firebase --version
-
-```
-```
-# Cria uma nova pasta para seu projeto (exemplo: delivery)
-mkdir delivery && cd delivery
-```
-```
-# Inicializa o projeto Firebase dentro dessa pasta
-firebase init
-```
-```
-# Durante o "firebase init":
-# - Escolha: "Hosting" (pressione espaço para marcar e Enter para confirmar)
-# - Escolha: "Use an existing project" (se já criou no site do Firebase)
-# - Ou: "Create a new project" (para criar agora)
-# - Defina a pasta pública (geralmente "public" ou "dist")
-# - Escolha "No" quando perguntar sobre SPA (single page app)
-# - Escolha "Yes" para sobrescrever index.html se quiser um novo
-```
-```
-# 4️⃣ Depois de configurar, você pode testar o deploy:
-firebase deploy
-```
-
-
----
-"
-
-
-
-
-```
--------------------------------------------------------
-DICA EXTRA:
--------------------------------------------------------
-Você pode criar um script `.sh` com esses comandos para facilitar o processo com menus interativos.
-
-Se quiser ajuda para isso, me avise!
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # CRIANDO BANCO DE DADOS NO SUPABASE
