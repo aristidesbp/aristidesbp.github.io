@@ -40,6 +40,10 @@ pkg install curl -y
 pkg install tree -y
 ```
 ```
+# limpar atela
+clear
+```
+```
 # Lista todas as configurações ativas: 
 git config --list
 ```
@@ -101,8 +105,8 @@ ls
 git clone git@github.com:aristidesbp/aristidesbp.github.io
 ```
 ```
-cd aristidesbp.github.io
 # entre na pasta do repositório clonado
+cd aristidesbp.github.io
 ```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
