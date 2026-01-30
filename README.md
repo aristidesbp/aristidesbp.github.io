@@ -17,7 +17,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 - 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# INSTALL E CONFIG TERMUX/GITHUB
+# TERMUX/GITHUB
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
@@ -47,6 +47,10 @@ pkg install tree -y
 cd storage/donwloads
 # veja o que tem na pasta
 ls
+```
+```
+## Clona o repositório com chave SSH
+git clone git@github.com:usuario/repositorio.git
 ```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
@@ -656,10 +660,7 @@ ssh -T git@github.com
 # Clonando um repositório do GitHub
 ---
  
-```
-git clone git@github.com:usuario/repositorio.git
-## Clona o repositório com chave SSH
-```
+
 ```
 cd nome_do_reposito_clonado
 ## entra na pasta do repositório 
