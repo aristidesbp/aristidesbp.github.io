@@ -1,28 +1,33 @@
+/**
+ * Lógica da tela de Termos de Uso (index.html)
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    // Seleciona os botões do rodapé
+    // 1. Identifica os elementos da tela
     const botoes = document.querySelectorAll('footer button');
-    
-    // O primeiro botão é o "Aceitar e Continuar" (bg-primary)
     const botaoAceitar = botoes[0];
-    
-    // O segundo botão é o "Recusar" (border-2)
     const botaoRecusar = botoes[1];
 
-    // Evento para o botão Aceitar
-    botaoAceitar.addEventListener('click', () => {
-        // Encaminha para a tela de login
-        window.location.href = 'login.html';
+    // 2. Ação ao clicar em ACEITAR
+    botaoAceitar.addEventListener('click', async () => {
+        try {
+            // Chama a função que criamos no indexdb.js
+            await abrirBanco(); 
+            
+            // Registra que o usuário aceitou os termos localmente
+            localStorage.setItem('termos_aceitos', 'true');
+            
+            // Leva o usuário para a próxima etapa
+            window.location.href = 'login.html';
+        } catch (error) {
+            alert('Não foi possível inicializar o banco de dados no seu navegador.');
+        }
     });
 
-    // Evento para o botão Recusar
+    // 3. Ação ao clicar em RECUSAR
     botaoRecusar.addEventListener('click', () => {
-        // Tenta fechar a aba/janela do aplicativo
-        // Nota: Browsers modernos só permitem fechar janelas abertas via script (window.open)
-        // Por segurança, redirecionamos para uma página vazia caso não consiga fechar
-        if (confirm("Deseja realmente sair do aplicativo?")) {
-            window.close();
-            // Fallback caso o window.close() seja bloqueado pelo navegador
+        if (confirm("Se você recusar, os dados não poderão ser salvos. Deseja sair?")) {
             window.location.href = "about:blank";
         }
     });
 });
+
