@@ -38,6 +38,22 @@ pkg install nano -y
 pkg install openssh -y
 pkg install curl -y
 pkg install tree -y
+pkf install tree -y
+```
+```  
+mkdir novo_projeto
+# para criar pasta com o nome repositorios_git
+```
+``` 
+nano teste.txt 
+# abre o arquivo teste.txt 
+# obs: ele cria caso não exista
+# Ctrl+S  para salvar
+# Crtl+X  para sair
+```
+```
+mv teste.txt ./repositorios_git 
+# mover pasta ou arquivo (./pasta_destino)
 ```
 ```
 # limpar atela
@@ -101,6 +117,15 @@ cd storage/downloads
 ls
 ```
 ```
+# para mostrar conteudo o culto da pasta
+ls -a
+```
+```
+# mostrar todas as pastas e subpastas
+tree
+```
+
+```
 ## Clona o repositório com chave SSH
 git clone git@github.com:aristidesbp/aristidesbp.github.io
 ```
@@ -133,6 +158,42 @@ git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
 git push origin main 
 ```
+
+# ADICIONANDO COLABORADORES 
+
+Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
+
+---
+🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
+💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
+
+---
+🧩 1️⃣ Pré-requisitos
+Antes de começar:
+(1) Você precisa ter uma conta no GitHub.
+(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
+NOME_DO_USUARIO: aristidesbp
+NOME_DO_REPOSITORIO: aristidesbp.github.io
+(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
+
+---
+🏗️ 2️⃣ Acesse o repositório do seu site
+(1) Entre em https://github.com/.
+(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
+(3) Você será levado para a tela principal com os arquivos do projeto.
+
+⚙️ 3️⃣ Vá até as configurações do repositório
+(1) Clique em ⚙️ Settings (no canto direito superior).
+(2) No menu lateral esquerdo, role até encontrar “Collaborators”
+(fica dentro da seção Access → Collaborators).
+
+---
+🪪 4️⃣ Adicionando o colaborador
+(1) Clique no botão “Add people”.
+(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
+(3) Clique no botão “Add” ao lado do nome que aparecer.
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🧱 Criar o projeto no Supabase
@@ -490,41 +551,6 @@ WHERE schemaname = 'public'
 # GITHUB E TERMUX
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ADICIONANDO COLABORADORES 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
-
----
-🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
-💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
-
----
-🧩 1️⃣ Pré-requisitos
-Antes de começar:
-(1) Você precisa ter uma conta no GitHub.
-(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
-NOME_DO_USUARIO: aristidesbp
-NOME_DO_REPOSITORIO: aristidesbp.github.io
-(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
-
----
-🏗️ 2️⃣ Acesse o repositório do seu site
-(1) Entre em https://github.com/.
-(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
-(3) Você será levado para a tela principal com os arquivos do projeto.
-
-⚙️ 3️⃣ Vá até as configurações do repositório
-(1) Clique em ⚙️ Settings (no canto direito superior).
-(2) No menu lateral esquerdo, role até encontrar “Collaborators”
-(fica dentro da seção Access → Collaborators).
-
----
-🪪 4️⃣ Adicionando o colaborador
-(1) Clique no botão “Add people”.
-(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
-(3) Clique no botão “Add” ao lado do nome que aparecer.
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO UTILIZAR O REPOSITORIO FORA DO SITE:
@@ -532,24 +558,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# USANDO GITHUB NO TERMUX (CELULAR ANDROID)
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-Faça o download do aplicativo direto no github te instale:
-Acesse o link oficial (não use da Play Store)
-[TERMUX](https://github.com/termux/termux-app/releases)
 
-```
-# ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
-```
-```
-## ATUALIZE SEU TERMUX:
-pkg update && pkg upgrade -y 
-```
-```
-## PERMITA ELE USAR AS PASTAS DO SEU ANDROID:
-termux-setup-storage
-```
 ```
 ## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
 pkg install git -y
@@ -562,25 +571,7 @@ pkg install tree -y
 ls 
 # O comando acima, mostrar conteudo da pasta
 ```
-``` 
-ls -a
-# para mostrar conteudo o culto da pasta
-```
-```  
-mkdir repositorios_git 
-# para criar pasta com o nome repositorios_git
-```
-``` 
-nano teste.txt 
-# abre o arquivo teste.txt 
-# obs: ele cria caso não exista
-# Ctrl+S  para salvar
-# Crtl+X  para sair
-```
-```
-mv teste.txt ./repositorios_git 
-# mover pasta ou arquivo (./pasta_destino)
-```
+
 ``` 
 cd repositorios_git 
 # vai para dentro da pasta repositorios_git
