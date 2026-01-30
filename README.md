@@ -24,12 +24,12 @@ Acesse o link oficial (não use da Play Store)
 # ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
 ```
 ```
-## ATUALIZE SEU TERMUX:
-pkg update && pkg upgrade -y 
+pkg update && pkg upgrade -y
+# atualizando o termux
 ```
 ```
-## PERMITA ELE USAR AS PASTAS DO SEU ANDROID:
 termux-setup-storage
+# autorizando o uso de pastas do celular
 ```
 ```
 ## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
@@ -62,8 +62,9 @@ git init
 git config --global --add safe.directory "$(pwd)"
 # Configurar a pasta como segura (evita erros de segurança)                               
 ```
-```git config --list
-# Lista todas as configurações ativas 
+```
+git config --list
+# Lista todas as configurações ativas: 
 ```
 ```
 git config --global user.name "Seu Nome"
