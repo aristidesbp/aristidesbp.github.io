@@ -53,18 +53,15 @@ git clone git@github.com:aristidesbp/aristidesbp.github.io
 ```
 ```
 cd aristidesbp.github.io
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-git config --global --add safe.directory "$(pwd)"
-# Configurar a pasta como segura (evita erros de segurança)                               
+# entre na pasta do repositório clonado
 ```
 ```
 git config --list
 # Lista todas as configurações ativas: 
+```
+```
+git config --global --add safe.directory "$(pwd)"
+# Configurar a pasta como segura (evita erros de segurança)                               
 ```
 ```
 git config --global user.name "Seu Nome"
@@ -108,6 +105,32 @@ ssh -T git@github.com
 6. Em **Title**, coloque um nome (ex: “Meu notebook”)
 7. Em **Key**, cole a chave pública copiada (noterminal digite)
 ----------------------------------------------------
+
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+``` 
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main 
+```
+**OBS**: ABRA A PASTA E CRIE UM ARQUIVO PARA TESTE !!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+```
+``` 
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .  
+```
+``` 
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_DA_ALTERACAO" 
+```
+``` 
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main 
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🧱 Criar o projeto no Supabase
@@ -504,26 +527,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO UTILIZAR O REPOSITORIO FORA DO SITE:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-``` 
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main 
-```
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-```
-``` 
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .  
-```
-``` 
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_DA_ALTERACAO" 
-```
-``` 
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main 
-```
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
