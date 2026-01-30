@@ -24,12 +24,12 @@ Acesse o link oficial (não use da Play Store)
 # ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
 ```
 ```
+# atualizando o termux:
 pkg update && pkg upgrade -y
-# atualizando o termux
 ```
 ```
-termux-setup-storage
 # autorizando o uso de pastas do celular
+termux-setup-storage
 ```
 ```
 ## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
@@ -40,44 +40,43 @@ pkg install curl -y
 pkg install tree -y
 ```
 ```
-git config --list
 # Lista todas as configurações ativas: 
+git config --list
 ```
 ```
-git config --global --add safe.directory "$(pwd)"
-# Configurar a pasta como segura (evita erros de segurança)                               
+# Configurar a pasta como segura (evita erros de segurança)
+git config --global --add safe.directory "$(pwd)"                     
 ```
 ```
-git config --global user.name "Seu Nome"
 # Configurar nome de usuário
+git config --global user.name "Seu Nome"
 ```
 ```
-git config --global user.email "seu@email.com"
 # Configurar email do GitHub
+git config --global user.email "seu@email.com"
 ```
 ```
-eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
 # Iniciar o agente ssh
+eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
 ```
 ```
+# Gerar nova chave SSH (caso ainda não tenha)
 ssh-keygen -t ed25519 -C "seu@email.com"
-#Gerar nova chave SSH (caso ainda não tenha)
 ```
 ```
-cat ~/.ssh/id_ed25519.pub
 # Mostrar a chave pública para adicionar no GitHub
+cat ~/.ssh/id_ed25519.pub
 ```
 ```
-git remote set-url origin git@github.com:usuario/repositorio.git
 # Troque a URL remota para usar SSH
+git remote set-url origin git@github.com:usuario/repositorio.git
 ```
 ```
+#🧪 Teste de conexão com GitHub via SSH 
+# Se tudo estiver certo, você verá:
+# Hi SEU_USUARIO! You've successfully authenticated..
 ssh -T git@github.com
-## 🧪 Teste de conexão com GitHub via SSH 
-### Se tudo estiver certo, você verá:
-### Hi SEU_USUARIO! You've successfully authenticated..
 ```
-
 
 ## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
 ----------------------------------------------------
