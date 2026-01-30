@@ -45,12 +45,17 @@ pkg install tree -y
 ```
 # vá para pasta do projeto (abaixo terá um exemplo)
 cd storage/donwloads
+```
+```
 # veja o que tem na pasta
 ls
 ```
 ```
 ## Clona o repositório com chave SSH
-git clone git@github.com:usuario/repositorio.git
+git clone git@github.com:aristidesbp/aristidesbp.github.io
+```
+```
+cd aristidesbp.github.io
 ```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
