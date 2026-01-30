@@ -40,22 +40,6 @@ pkg install curl -y
 pkg install tree -y
 ```
 ```
-# vá para pasta do projeto (abaixo terá um exemplo)
-cd storage/downloads
-```
-```
-# veja o que tem na pasta
-ls
-```
-```
-## Clona o repositório com chave SSH
-git clone git@github.com:aristidesbp/aristidesbp.github.io
-```
-```
-cd aristidesbp.github.io
-# entre na pasta do repositório clonado
-```
-```
 git config --list
 # Lista todas as configurações ativas: 
 ```
@@ -105,7 +89,22 @@ ssh -T git@github.com
 6. Em **Title**, coloque um nome (ex: “Meu notebook”)
 7. Em **Key**, cole a chave pública copiada (noterminal digite)
 ----------------------------------------------------
-
+```
+# vá para pasta do projeto (abaixo terá um exemplo)
+cd storage/downloads
+```
+```
+# veja o que tem na pasta
+ls
+```
+```
+## Clona o repositório com chave SSH
+git clone git@github.com:aristidesbp/aristidesbp.github.io
+```
+```
+cd aristidesbp.github.io
+# entre na pasta do repositório clonado
+```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
