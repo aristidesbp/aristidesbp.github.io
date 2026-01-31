@@ -126,7 +126,7 @@ const totalEl = document.getElementById("total");
 let produtos = [];
 let carrinho = [];
 
-fetch("assets/produtos.json")
+fetch("produtos.json")
 .then(r => r.json())
 .then(d => { produtos = d; renderMenu(); });
 
