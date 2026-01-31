@@ -1,142 +1,244 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html class="dark" lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprar PDF Misterioso - Barraca do Ari</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Design System da Barraca do Ari */
-        :root {
-            --primary: #1e40af; /* Azul Corporativo */
-            --bg-page: #f1f5f9;
-            --text-main: #1e293b;
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aristidesbp | Digital Solutions</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "success": "#10b981",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#020617",
+                        "slate-border": "#1e293b",
+                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
+                },
+            },
         }
-        body { background-color: var(--bg-page); color: var(--text-main); font-family: 'Inter', sans-serif; }
-        .card { background: white; border-radius: 12px; shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .input-form { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 4px; }
-        
-        /* Estado de Loading (Animação de carregamento) */
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .glass {
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                background: rgba(15, 23, 42, 0.6);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .dark .glass { background: rgba(15, 23, 42, 0.6); }
+            .light .glass { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.1); }
+        }
+        .light body { background-color: #f6f6f8; color: #1e293b; }
         .loading-spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-top: 3px solid white;
             border-radius: 50%; width: 18px; height: 18px;
             animation: spin 0.8s linear infinite;
-            display: inline-block;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="bg-background-light dark:bg-background-dark text-[#f8fafc] dark:text-[#f8fafc] font-display transition-colors duration-300">
 
-    <div class="max-w-md w-full">
-        <header class="text-center mb-6">
-            <h1 class="text-3xl font-black text-blue-800 uppercase tracking-tighter">Barraca do Ari</h1>
-            <p class="text-slate-500 font-medium">Sistemas & Tutorias Digitais</p>
-        </header>
+<header class="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-border px-6 md:px-16 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">code</span>
+            </div>
+            <h1 class="text-xl font-black tracking-tight uppercase">Aristidesbp</h1>
+        </div>
+        <nav class="hidden md:flex items-center gap-10">
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#home">Início</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#about">Sobre</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#services">Serviços</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#contact">Checkout</a>
+        </nav>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-800 border border-slate-border hover:bg-slate-700 transition-all">
+                <span id="themeIcon" class="material-symbols-outlined text-white text-sm">light_mode</span>
+            </button>
+            <select id="langSelect" onchange="changeLang()" class="bg-slate-800 border-slate-border text-white text-xs font-bold rounded-lg py-1.5">
+                <option value="pt">PT-BR</option>
+                <option value="es">ES-ES</option>
+            </select>
+        </div>
+    </div>
+</header>
 
-        <main class="card p-8 shadow-xl">
-            <div class="text-center mb-8 border-b pb-6">
-                <h2 class="text-xl font-bold italic">PDF Misterioso</h2>
-                <p class="text-gray-500 text-sm mb-4">Aprenda o segredo por apenas R$ 2,00</p>
-                
-                <div class="flex items-center justify-center gap-6 mt-4">
-                    <button onclick="mudarQtd(-1)" class="w-10 h-10 bg-slate-100 rounded-full font-bold hover:bg-slate-200">-</button>
-                    <span id="qtdDisplay" class="text-2xl font-black">1</span>
-                    <button onclick="mudarQtd(1)" class="w-10 h-10 bg-slate-100 rounded-full font-bold hover:bg-slate-200">+</button>
+<main class="pt-20">
+    <section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
+        <div class="relative z-10 max-w-4xl text-center flex flex-col items-center gap-8">
+            <h1 class="text-4xl md:text-7xl font-black leading-[1.1] tracking-tight" id="heroTitle">
+                Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl">
+                Escalando negócios e automatizando processos através de tecnologia de ponta.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                <a class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20" href="#services">Ver Serviços</a>
+                <a class="px-8 py-4 glass hover:bg-white/5 font-bold rounded-xl transition-all border border-slate-border" href="#about">Saiba Mais</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-16" id="about">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-slate-border">
+                <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop');"></div>
+            </div>
+            <div class="flex flex-col gap-6">
+                <h2 class="text-3xl md:text-5xl font-bold">Sobre o Especialista</h2>
+                <p class="text-slate-400 text-lg leading-relaxed">Analista de Sistemas e Programador com foco no desenvolvimento de soluções digitais práticas, eficientes e orientadas a resultados. Atuo desde a concepção até a entrega final.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-16" id="services">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center">Pacote Completo de Soluções</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">developer_mode_tv</span>
+                    <h3 class="text-xl font-bold mb-2">Desenvolvimento Web</h3>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow">Sistemas web personalizados e sites institucionais.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold">R$ 3.500,00</span>
+                        <button onclick="addServico(this, 'Dev Web', 3500)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
+                        </button>
+                    </div>
+                </div>
+                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">query_stats</span>
+                    <h3 class="text-xl font-bold mb-2">Tráfego Pago</h3>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow">Gestão de anúncios focada em conversão.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold">R$ 1.500,00</span>
+                        <button onclick="addServico(this, 'Tráfego', 1500)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
+                        </button>
+                    </div>
+                </div>
+                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">terminal</span>
+                    <h3 class="text-xl font-bold mb-2">Consultoria Técnica</h3>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow">Arquitetura de sistemas e suporte especializado.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold">R$ 1.000,00</span>
+                        <button onclick="addServico(this, 'Consultoria', 1000)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
+                        </button>
+                    </div>
+                </div>
+                <div class="glass p-6 border-primary bg-primary/5 rounded-xl flex flex-col">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">picture_as_pdf</span>
+                    <h3 class="text-xl font-bold mb-2">PDF Misterioso</h3>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow">Guia completo de automação e criação de PDF.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold text-primary">R$ 2,00</span>
+                        <button onclick="addServico(this, 'PDF Misterioso', 2)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">shopping_cart</span> Comprar
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
+    <section class="py-24 px-6 md:px-16" id="contact">
+        <div class="max-w-4xl mx-auto glass p-8 rounded-2xl border border-slate-border">
+            <h2 class="text-2xl font-bold mb-8">Checkout Seguro</h2>
             <form id="payForm" class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold uppercase text-slate-400">Nome Completo</label>
-                    <input type="text" id="cliente_nome" class="input-form" placeholder="Ex: Aristides Pontes" required>
+                <input id="cliente_nome" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" placeholder="Nome Completo" required/>
+                <input id="cliente_email" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" type="email" placeholder="E-mail" required/>
+                <div class="p-6 bg-primary/10 rounded-xl border border-primary/20 flex justify-between items-center">
+                    <div>
+                        <span class="block text-xs uppercase font-bold text-slate-500">Valor Total</span>
+                        <span class="text-3xl font-black text-primary">R$ <span id="resumoTotal">0.00</span></span>
+                    </div>
+                    <span class="material-symbols-outlined text-4xl text-primary opacity-50">account_balance_wallet</span>
                 </div>
-                <div>
-                    <label class="text-xs font-bold uppercase text-slate-400">E-mail para recebimento</label>
-                    <input type="email" id="cliente_email" class="input-form" placeholder="exemplo@email.com" required>
-                </div>
-
-                <div class="bg-blue-50 p-4 rounded-lg flex justify-between items-center my-6">
-                    <span class="font-bold text-blue-900">Total a Pagar:</span>
-                    <span class="text-2xl font-black text-blue-900">R$ <span id="totalDisplay">2.00</span></span>
-                </div>
-
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-black py-4 rounded-lg hover:bg-blue-700 transition-all shadow-lg active:scale-95">
-                    PAGAR COM MERCADO PAGO
+                <button type="button" onclick="processarPagamento()" id="btnPagar" class="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25">
+                    FINALIZAR NO MERCADO PAGO
                 </button>
             </form>
-        </main>
-        
-        <p class="text-center text-[10px] text-slate-400 mt-6 uppercase tracking-widest">Pagamento 100% Seguro via Mercado Pago</p>
-    </div>
+        </div>
+    </section>
+</main>
 
-    <script>
-        // 1. CONFIGURAÇÕES INICIAIS
-        let quantidade = 1;
-        const precoUnitario = 2.00;
-        // URL da sua Edge Function no Supabase (O Token do MP está escondido lá dentro)
-        const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
+<script>
+    let carrinho = [];
+    const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
 
-        // 2. FUNÇÃO PARA ATUALIZAR QUANTIDADE E PREÇO NA TELA
-        function mudarQtd(valor) {
-            quantidade = Math.max(1, quantidade + valor);
-            document.getElementById('qtdDisplay').innerText = quantidade;
-            document.getElementById('totalDisplay').innerText = (quantidade * precoUnitario).toFixed(2);
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('themeIcon');
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark'); html.classList.add('light');
+            icon.innerText = 'dark_mode';
+        } else {
+            html.classList.remove('light'); html.classList.add('dark');
+            icon.innerText = 'light_mode';
         }
+    }
 
-        // 3. LOGICA DE ENVIO DO PEDIDO
-        document.getElementById('payForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const btn = document.getElementById('btnSubmit');
-            const nome = document.getElementById('cliente_nome').value;
-            const email = document.getElementById('cliente_email').value;
-            const total = (quantidade * precoUnitario).toFixed(2);
+    function changeLang() {
+        const lang = document.getElementById('langSelect').value;
+        const title = document.getElementById('heroTitle');
+        title.innerHTML = lang === 'es' ? 
+            'Transformando Necesidades Reales en <span class="text-primary">Soluciones Digitales</span>' : 
+            'Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais';
+    }
 
-            // MUDANÇA DE ESTADO: Mostra ao cliente que o sistema está processando
-            btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> PROCESSANDO...`;
+    function addServico(btn, nome, preco) {
+        // Lógica de Carrinho
+        carrinho.push({ nome, preco });
+        const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+        document.getElementById('resumoTotal').innerText = total.toFixed(2);
 
-            try {
-                // CHAMADA AJAX (FETCH) PARA O SUPABASE
-                const response = await fetch(functionUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nome: nome,
-                        email: email,
-                        total: parseFloat(total),
-                        itens: [{
-                            id: 'pdf-001',
-                            nome: 'PDF misterioso',
-                            qtd: quantidade,
-                            preco: precoUnitario
-                        }]
-                    })
-                });
+        // Feedback Visual (Botão Verde)
+        btn.classList.remove('bg-primary');
+        btn.classList.add('bg-success');
+        btn.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> Adicionado`;
+    }
 
-                // O Supabase processa e retorna o link do Mercado Pago
-                const data = await response.json();
+    async function processarPagamento() {
+        const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+        if (total <= 0) return alert("Selecione um serviço primeiro.");
+        
+        const nome = document.getElementById('cliente_nome').value;
+        const email = document.getElementById('cliente_email').value;
+        if(!nome || !email) return alert("Preencha nome e e-mail.");
 
-                if (data.init_point) {
-                    // REDIRECIONAMENTO: Sai do seu site e vai para o checkout oficial do Mercado Pago
-                    window.location.href = data.init_point;
-                } else {
-                    // Caso a função responda mas sem o link (erro de Token ou MP)
-                    throw new Error('Link de pagamento não gerado pela API');
-                }
+        const btn = document.getElementById('btnPagar');
+        btn.disabled = true;
+        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loading-spinner"></div> PROCESSANDO...</div>`;
 
-            } catch (error) {
-                // TRATAMENTO DE ERROS: Se a função cair ou o 401/CORS persistir
-                console.error('Erro no checkout:', error);
-                alert('Erro ao iniciar pagamento. Verifique sua conexão ou tente novamente mais tarde.');
-                
-                // RESET DO BOTÃO: Permite o cliente tentar novamente
-                btn.disabled = false;
-                btn.innerHTML = `TENTAR NOVAMENTE`;
-            }
-        };
-    </script>
+        try {
+            const response = await fetch(functionUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome, email, total,
+                    itens: carrinho.map(i => ({ nome: i.nome, preco: i.preco, qtd: 1 }))
+                })
+            });
+            const data = await response.json();
+            if (data.init_point) window.location.href = data.init_point;
+        } catch (e) {
+            alert("Erro ao conectar. Tente novamente.");
+            btn.disabled = false;
+            btn.innerText = "FINALIZAR NO MERCADO PAGO";
+        }
+    }
+</script>
 </body>
 </html>
