@@ -1,0 +1,23 @@
+[
+  {
+    "id": "srv-sistemas",
+    "nome": "Desenvolvimento de sistemas e sites",
+    "preco": 0,
+    "obs": "Sob consulta",
+    "categoria": "SERVIÇOS"
+  },
+  {
+    "id": "srv-trafego",
+    "nome": "Criação de Tráfego Pago",
+    "preco": 0,
+    "obs": "Sob consulta",
+    "categoria": "SERVIÇOS"
+  },
+  {
+    "id": "srv-consultoria",
+    "nome": "Consultoria Especializada",
+    "preco": 0,
+    "obs": "Sob consulta",
+    "categoria": "SERVIÇOS"
+  }
+]
