@@ -114,7 +114,7 @@ async function carregarDados() {
   try {
     const [resProdutos, resServicos] = await Promise.all([
       fetch("produtos.json").then(r => r.json()),
-      fetch("serviços.json").then(r => r.json())
+      fetch("servicos.json").then(r => r.json())
     ]);
     produtos = [...resProdutos, ...resServicos];
     renderMenu();
