@@ -1,23 +1,26 @@
 [
   {
-    "id": "pdf-zero-reais",
-    "nome": "Como iniciar um negócio lucrativo com zero reais",
+    "id": 1,
+    "nome": "Como iniciar com zero reais",
+    "categoria": "tutorias",
     "preco": 2.00,
-    "categoria": "TUTORIAIS EM PDF",
-    "imagem": "assets/pdf-icon.png"
+    "desc": "O guia prático para começar seu negócio sem investimento.",
+    "imagem": "assets/img/zero-reais.jpg"
   },
   {
-    "id": "pdf-sistema-gratis",
-    "nome": "Como ter um sistema completo sem custos mensais",
+    "id": 2,
+    "nome": "Sistema completo sem custos",
+    "categoria": "tutorias",
     "preco": 2.00,
-    "categoria": "TUTORIAIS EM PDF",
-    "imagem": "assets/pdf-icon.png"
+    "desc": "Aprenda a usar ferramentas gratuitas para gerir seu negócio.",
+    "imagem": "assets/img/sistema-gratis.jpg"
   },
   {
-    "id": "pdf-trafego-pago",
-    "nome": "Como não perder dinheiro com tráfego pago",
+    "id": 3,
+    "nome": "Como não perder dinheiro com tráfego",
+    "categoria": "tutorias",
     "preco": 2.00,
-    "categoria": "TUTORIAIS EM PDF",
-    "imagem": "assets/pdf-icon.png"
+    "desc": "Estratégias para anúncios que realmente convertem.",
+    "imagem": "assets/img/trafego-pago.jpg"
   }
 ]
