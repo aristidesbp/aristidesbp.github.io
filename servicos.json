@@ -1,23 +1,26 @@
 [
   {
-    "id": "srv-sistemas",
-    "nome": "Desenvolvimento de sistemas e sites",
-    "preco": 0,
-    "obs": "Sob consulta",
-    "categoria": "SERVIÇOS"
+    "id": 101,
+    "nome": "Desenvolvimento de Sistemas",
+    "categoria": "serviços",
+    "preco": 1500.00,
+    "desc": "Sites e Apps profissionais sob medida.",
+    "imagem": "assets/img/dev.jpg"
   },
   {
-    "id": "srv-trafego",
+    "id": 102,
     "nome": "Criação de Tráfego Pago",
-    "preco": 0,
-    "obs": "Sob consulta",
-    "categoria": "SERVIÇOS"
+    "categoria": "serviços",
+    "preco": 800.00,
+    "desc": "Gestão de anúncios no Google e Meta.",
+    "imagem": "assets/img/ads.jpg"
   },
   {
-    "id": "srv-consultoria",
-    "nome": "Consultoria Especializada",
-    "preco": 0,
-    "obs": "Sob consulta",
-    "categoria": "SERVIÇOS"
+    "id": 103,
+    "nome": "Consultoria Estratégica",
+    "categoria": "serviços",
+    "preco": 250.00,
+    "desc": "1 hora de mentoria focada no seu negócio.",
+    "imagem": "assets/img/consultoria.jpg"
   }
 ]
