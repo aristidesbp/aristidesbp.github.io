@@ -1,26 +1,10 @@
 [
   {
     "id": 1,
-    "nome": "Tapioca de Carne Seca",
-    "descricao": "Carne seca com queijo",
+    "nome": "tráfego pago",
+    "descricao": "forma definitiva de não perder dinheiro com tráfego pago",
     "preco": 18,
-    "categoria": "lanches",
-    "imagem": "assets/img/produtos/carne-seca.jpg"
-  },
-  {
-    "id": 2,
-    "nome": "Suco Natural",
-    "descricao": "Suco gelado",
-    "preco": 6,
-    "categoria": "Bebidas",
-    "imagem": "assets/img/produtos/suco.jpg"
-  },
-  {
-    "id": 1767709985801,
-    "nome": "Tapioca de morango",
-    "descricao": "Tapioca de morango recheada com leite condensado",
-    "preco": 15,
-    "categoria": "lanches",
-    "imagem": "assets/img/produtos/morango.jpg"
+    "categoria": "mentoria",
+    "imagem": "assets/img/produtos/trafego.jpg"
   }
 ]
