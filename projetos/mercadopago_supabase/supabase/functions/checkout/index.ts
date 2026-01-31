@@ -18,8 +18,8 @@ const preferenceData = {
   // Redirecionamento automático após pagar
   back_urls: {
     success: "https://aristidesbp.github.io/sucesso.html",
-    failure: "https://aristidesbp.github.io/",
-    pending: "https://aristidesbp.github.io/"
-  },
-  auto_return: "approved",
+    failure: "https://aristidesbp.github.io/pagamento.html",
+    pending: "https://aristidesbp.github.io/sucesso.html", // Adicionado para Pix pendente
+},
+auto_return: "all", // Mude de "approved" para "all"
 };
