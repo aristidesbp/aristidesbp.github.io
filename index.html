@@ -6,111 +6,86 @@
     <title>Comprar PDF Misterioso - Barraca do Ari</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Design System da Barraca do Ari */
         :root {
-            --primary: #1e40af;
-            --bg-page: #f8fafc;
+            --primary: #1e40af; /* Azul Corporativo */
+            --bg-page: #f1f5f9;
+            --text-main: #1e293b;
         }
-        body { background-color: var(--bg-page); font-family: sans-serif; }
-        .card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .input-field { 
-            width: 100%; padding: 12px; border: 1px solid #e2e8f0; 
-            border-radius: 8px; outline: none; transition: border 0.3s;
-        }
-        .input-field:focus { border-color: var(--primary); ring: 2px solid #bfdbfe; }
-        .btn-pay {
-            background-color: var(--primary); color: white; width: 100%;
-            padding: 16px; border-radius: 8px; font-weight: bold;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-        .btn-pay:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-pay:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        body { background-color: var(--bg-page); color: var(--text-main); font-family: 'Inter', sans-serif; }
+        .card { background: white; border-radius: 12px; shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .input-form { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 4px; }
         
-        /* Skeleton de carregamento simples */
+        /* Estado de Loading (Animação de carregamento) */
         .loading-spinner {
-            border: 3px solid #f3f3f3; border-top: 3px solid var(--primary);
-            border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;
-            display: inline-block; vertical-align: middle; margin-right: 8px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%; width: 18px; height: 18px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <div class="max-w-xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-slate-800">Barraca do Ari</h1>
-            <p class="text-slate-500 uppercase tracking-widest text-sm font-semibold">Oferta Exclusiva</p>
+    <div class="max-w-md w-full">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-black text-blue-800 uppercase tracking-tighter">Barraca do Ari</h1>
+            <p class="text-slate-500 font-medium">Sistemas & Tutorias Digitais</p>
         </header>
 
-        <main class="card p-6 mb-6">
-            <div class="flex flex-col md:flex-row gap-6 items-center mb-6">
-                <img src="https://placehold.co/400x400?text=PDF+Expert" alt="Capa do PDF" class="w-32 h-32 rounded-lg object-cover shadow-sm">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800">PDF Misterioso</h2>
-                    <p class="text-slate-600 text-sm"> Pode ser qualquer coisa! </p>
-                    <p class="text-blue-600 font-bold text-lg mt-2">R$ 2,00 <span class="text-xs text-slate-400 font-normal">/ unidade</span></p>
-                </div>
-            </div>
-
-            <hr class="mb-6 border-slate-100">
-
-            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl mb-8">
-                <span class="font-medium text-slate-700">Quantidade de licenças:</span>
-                <div class="flex items-center gap-4">
-                    <button type="button" onclick="mudarQtd(-1)" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center font-bold text-xl">-</button>
-                    <span id="qtdDisplay" class="text-xl font-bold min-w-[20px] text-center">1</span>
-                    <button type="button" onclick="mudarQtd(1)" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center font-bold text-xl">+</button>
+        <main class="card p-8 shadow-xl">
+            <div class="text-center mb-8 border-b pb-6">
+                <h2 class="text-xl font-bold italic">PDF Misterioso</h2>
+                <p class="text-gray-500 text-sm mb-4">Aprenda o segredo por apenas R$ 2,00</p>
+                
+                <div class="flex items-center justify-center gap-6 mt-4">
+                    <button onclick="mudarQtd(-1)" class="w-10 h-10 bg-slate-100 rounded-full font-bold hover:bg-slate-200">-</button>
+                    <span id="qtdDisplay" class="text-2xl font-black">1</span>
+                    <button onclick="mudarQtd(1)" class="w-10 h-10 bg-slate-100 rounded-full font-bold hover:bg-slate-200">+</button>
                 </div>
             </div>
 
             <form id="payForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nome Completo</label>
-                    <input type="text" id="cliente_nome" class="input-field" placeholder="Como quer ser chamado?" required>
+                    <label class="text-xs font-bold uppercase text-slate-400">Nome Completo</label>
+                    <input type="text" id="cliente_nome" class="input-form" placeholder="Ex: Aristides Pontes" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Seu melhor E-mail</label>
-                    <input type="email" id="cliente_email" class="input-field" placeholder="Para onde enviamos o PDF?" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">WhatsApp</label>
-                    <input type="tel" id="cliente_tel" class="input-field" placeholder="(91) 99999-9999" required>
+                    <label class="text-xs font-bold uppercase text-slate-400">E-mail para recebimento</label>
+                    <input type="email" id="cliente_email" class="input-form" placeholder="exemplo@email.com" required>
                 </div>
 
-                <div class="pt-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-slate-500 font-medium">Total a pagar:</span>
-                        <span class="text-2xl font-black text-slate-900">R$ <span id="totalDisplay">2,00</span></span>
-                    </div>
-                    
-                    <button type="submit" id="btnSubmit" class="btn-pay">
-                        FINALIZAR E PAGAR AGORA
-                    </button>
-                    
-                    <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1">
-                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"></path></svg>
-                        Ambiente Seguro • Mercado Pago
-                    </p>
+                <div class="bg-blue-50 p-4 rounded-lg flex justify-between items-center my-6">
+                    <span class="font-bold text-blue-900">Total a Pagar:</span>
+                    <span class="text-2xl font-black text-blue-900">R$ <span id="totalDisplay">2.00</span></span>
                 </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-black py-4 rounded-lg hover:bg-blue-700 transition-all shadow-lg active:scale-95">
+                    PAGAR COM MERCADO PAGO
+                </button>
             </form>
         </main>
-
-        <footer class="text-center text-slate-400 text-xs">
-            © 2026 Barraca do Ari - Todos os direitos reservados.
-        </footer>
+        
+        <p class="text-center text-[10px] text-slate-400 mt-6 uppercase tracking-widest">Pagamento 100% Seguro via Mercado Pago</p>
     </div>
 
     <script>
+        // 1. CONFIGURAÇÕES INICIAIS
         let quantidade = 1;
         const precoUnitario = 2.00;
+        // URL da sua Edge Function no Supabase (O Token do MP está escondido lá dentro)
         const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
 
+        // 2. FUNÇÃO PARA ATUALIZAR QUANTIDADE E PREÇO NA TELA
         function mudarQtd(valor) {
             quantidade = Math.max(1, quantidade + valor);
             document.getElementById('qtdDisplay').innerText = quantidade;
             document.getElementById('totalDisplay').innerText = (quantidade * precoUnitario).toFixed(2);
         }
 
+        // 3. LOGICA DE ENVIO DO PEDIDO
         document.getElementById('payForm').onsubmit = async (e) => {
             e.preventDefault();
             
@@ -119,11 +94,12 @@
             const email = document.getElementById('cliente_email').value;
             const total = (quantidade * precoUnitario).toFixed(2);
 
-            // UI State: Loading
+            // MUDANÇA DE ESTADO: Mostra ao cliente que o sistema está processando
             btn.disabled = true;
             btn.innerHTML = `<span class="loading-spinner"></span> PROCESSANDO...`;
 
             try {
+                // CHAMADA AJAX (FETCH) PARA O SUPABASE
                 const response = await fetch(functionUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -140,20 +116,23 @@
                     })
                 });
 
+                // O Supabase processa e retorna o link do Mercado Pago
                 const data = await response.json();
 
                 if (data.init_point) {
-                    // Sucesso: Redireciona para o Mercado Pago
+                    // REDIRECIONAMENTO: Sai do seu site e vai para o checkout oficial do Mercado Pago
                     window.location.href = data.init_point;
                 } else {
-                    throw new Error('Link de pagamento não gerado');
+                    // Caso a função responda mas sem o link (erro de Token ou MP)
+                    throw new Error('Link de pagamento não gerado pela API');
                 }
 
             } catch (error) {
+                // TRATAMENTO DE ERROS: Se a função cair ou o 401/CORS persistir
                 console.error('Erro no checkout:', error);
                 alert('Erro ao iniciar pagamento. Verifique sua conexão ou tente novamente mais tarde.');
                 
-                // UI State: Erro/Reset
+                // RESET DO BOTÃO: Permite o cliente tentar novamente
                 btn.disabled = false;
                 btn.innerHTML = `TENTAR NOVAMENTE`;
             }
