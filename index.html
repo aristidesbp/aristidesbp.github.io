@@ -210,7 +210,8 @@ document.getElementById("pedido-form").onsubmit = async function(e) {
 
     // 2. Chamar sua Edge Function que integra com Mercado Pago
     // Essa URL você obtém após criar a function no Supabase
-    const response = await fetch('SUA_URL_SUPABASE_FUNCTION/checkout', {
+    const response = await fetch(' https://supabase.com/dashboard/project/eisruaetsqrratemqswv/functions
+', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
