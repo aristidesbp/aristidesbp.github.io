@@ -1,0 +1,23 @@
+[
+  {
+    "id": "pdf-zero-reais",
+    "nome": "Como iniciar um negócio lucrativo com zero reais",
+    "preco": 2.00,
+    "categoria": "TUTORIAIS EM PDF",
+    "imagem": "assets/pdf-icon.png"
+  },
+  {
+    "id": "pdf-sistema-gratis",
+    "nome": "Como ter um sistema completo sem custos mensais",
+    "preco": 2.00,
+    "categoria": "TUTORIAIS EM PDF",
+    "imagem": "assets/pdf-icon.png"
+  },
+  {
+    "id": "pdf-trafego-pago",
+    "nome": "Como não perder dinheiro com tráfego pago",
+    "preco": 2.00,
+    "categoria": "TUTORIAIS EM PDF",
+    "imagem": "assets/pdf-icon.png"
+  }
+]
