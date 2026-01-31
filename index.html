@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Delivery - Tapioca da Maria</title>
+<title>Aristidesbp - Soluções para seu negócio</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -56,15 +56,15 @@ body { scroll-behavior:smooth; }
 
 <header class="bg-[var(--vermelho-telha)] text-white text-center py-6">
   <img src="assets/img/barraquinha-lanche.jpg" class="w-full h-64 object-cover">
-  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
-  <p>Seu lanche artesanal favorito!</p>
+  <h1 class="text-4xl font-bold mt-4">Aristidesbp</h1>
+  <p>Soluções para seu negócio!</p>
 
   <div class="mt-4 px-4 max-w-md mx-auto">
     <select id="filtroCategoria" class="filtro-categoria w-full">
       <option value="todos">Todos</option>
-      <option value="lanches">Lanches</option>
-      <option value="bebidas">Bebidas</option>
-      <option value="sobremesas">Sobremesas</option>
+      <option value="sistemas">Sistemas</option>
+      <option value="sites">Sites</option>
+      <option value="mentoria">Mentoria</option>
     </select>
     <input type="text" id="buscaProduto" class="busca" placeholder="Buscar produto pelo nome...">
   </div>
@@ -99,8 +99,8 @@ body { scroll-behavior:smooth; }
 
 <script>
 // CONFIGURAÇÃO SUPABASE (Substitua pelos seus dados do projeto)
-const SUPABASE_URL = 'SUA_URL_AQUI';
-const SUPABASE_KEY = 'SUA_KEY_ANON_AQUI';
+const SUPABASE_URL = 'https://eisruaetsqrratemqswv.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const menuEl = document.getElementById("menu");
