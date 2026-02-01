@@ -1,6 +1,6 @@
 // Importa o cliente do arquivo de configuração que você já possui
 // Certifique-se de que o config_supabase.js exporta o objeto 'supabase'
-import { supabase } from './config_supabase.js';
+import { supabase } from 'supabase_config.js';
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
