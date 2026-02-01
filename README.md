@@ -169,10 +169,6 @@ git clone git@github.com:aristidesbp/aristidesbp.github.io
 cd aristidesbp.github.io
 ```
 ```
-# entre na pasta
-cd storage/downloads/Aristidesbp.github.io
-```
-```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
 ```
