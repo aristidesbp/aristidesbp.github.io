@@ -158,6 +158,8 @@ ls -a
 tree
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BAIXAR E ENVIAR ARQUIVOS 
 ```
 ## Clona o repositório com chave SSH
 git clone git@github.com:aristidesbp/aristidesbp.github.io
@@ -167,16 +169,12 @@ git clone git@github.com:aristidesbp/aristidesbp.github.io
 cd aristidesbp.github.io
 ```
 ```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-**OBS**: ABRA A PASTA E CRIE UM ARQUIVO PARA TESTE !!!
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXAR E ENVIAR ARQUIVOS 
-```
 # entre na pasta
 cd storage/downloads/Aristidesbp.github.io
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
 ```
 ``` 
 # BAIXAR ATUALIZAÇÃO DO SITE:
