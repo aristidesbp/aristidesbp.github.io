@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Recebimento de Carga - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body class="bg-[#f6f8f7]">
+    <div class="p-6">
+        <div class="bg-white p-8 rounded-3xl border border-dashed border-[#1e8044]/30 text-center mb-8">
+            <span class="material-symbols-outlined text-5xl text-[#1e8044] mb-4">barcode_scanner</span>
+            <h2 class="text-xl font-black uppercase">Conferência de Nota Fiscal</h2>
+            <div class="max-w-md mx-auto mt-4">
+                <input type="text" id="chave_nf" placeholder="Insira a Chave de Acesso (44 dígitos)" 
+                    class="w-full text-center py-4 rounded-2xl border-2 border-gray-100 focus:border-[#1e8044]">
+                <button id="btn_importar" class="mt-4 w-full bg-[#1e8044] text-white py-3 rounded-xl font-bold shadow-lg transition-transform hover:scale-[1.02]">
+                    IMPORTAR DADOS DA XML
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+            <div class="p-4 font-bold text-xs uppercase bg-gray-50 text-[#568f6c] flex justify-between">
+                <span>Itens Pendentes de Conferência</span>
+                <span id="toast_sucesso" class="hidden text-[#1e8044] flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">check_circle</span> Estoque atualizado!
+                </span>
+            </div>
+            </div>
+    </div>
+</body>
+</html>

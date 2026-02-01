@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Financeiro e Fluxo de Caixa - ERP Supermercado</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e8044",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f18",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0f1a13] dark:text-white min-h-screen">
+<div class="relative flex flex-col w-full min-h-screen overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-solid border-[#e9f2ec] dark:border-[#2a3a30] bg-white dark:bg-background-dark px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0f1a13] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">ERP Super</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-[#568f6c] hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary py-1" href="#">Financeiro</a>
+<a class="text-[#568f6c] hover:text-primary text-sm font-medium transition-colors" href="#">Vendas</a>
+<a class="text-[#568f6c] hover:text-primary text-sm font-medium transition-colors" href="#">Estoque</a>
+<a class="text-[#568f6c] hover:text-primary text-sm font-medium transition-colors" href="#">PDV</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#568f6c] flex border-none bg-[#e9f2ec] dark:bg-[#1d2d24] items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-[#e9f2ec] dark:bg-[#1d2d24] text-[#0f1a13] dark:text-white focus:ring-0 h-full placeholder:text-[#568f6c] px-4 rounded-r-lg pl-2 text-sm font-normal" placeholder="Buscar lançamentos..."/>
+</div>
+</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#568f6c] cursor-pointer">notifications</span>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border-2 border-primary" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3CzcUlIffxfO0MeVKbSAUAp71V_0TCcKGNnNXUxl_EKL7HajbBbYX7OMdC5H6MyNNl2X6xrtszh3up4sHjlj0YMso50KgNwiOwqtpwdv-VAF_9Ckj4y_-83J_-iaAp1AbZenxI2KJnIL4lVD0Ng90O4r4gu9nuQ6wkvEDigUD0QwhSz_3a9_dBSyFAtOLrSLhaGRf6hARDyU_J5oXQA_Z7TY3wBMcEYpIRfRruBF4Pv6bKZN129laV6KrSMkmSjczJomfrJC6K_V8");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1280px] mx-auto w-full px-10 py-8">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 mb-2">
+<a class="text-[#568f6c] text-sm font-medium hover:underline" href="#">Financeiro</a>
+<span class="text-[#568f6c] text-sm font-medium">/</span>
+<span class="text-[#0f1a13] dark:text-white text-sm font-medium">Fluxo de Caixa</span>
+</div>
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between items-center gap-3 mb-8">
+<h1 class="text-[#0f1a13] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Fluxo de Caixa</h1>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 cursor-pointer rounded-lg h-11 px-6 bg-[#e9f2ec] dark:bg-[#1d2d24] text-[#0f1a13] dark:text-white text-sm font-bold hover:bg-[#d2e4d9] transition-colors">
+<span class="material-symbols-outlined text-lg">file_download</span>
+<span>Exportar PDF</span>
+</button>
+<button class="flex items-center gap-2 cursor-pointer rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg">add</span>
+<span>Novo Lançamento</span>
+</button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1d2d24] border border-[#d2e4d9] dark:border-[#2a3a30] shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#568f6c] dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">Saldo em Caixa</p>
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+</div>
+<p class="text-[#0f1a13] dark:text-white tracking-tight text-3xl font-black leading-tight">R$ 45.250,00</p>
+<div class="flex items-center gap-1 text-primary text-sm font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+5.2% este mês</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1d2d24] border border-[#d2e4d9] dark:border-[#2a3a30] shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#568f6c] dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">Total a Receber</p>
+<span class="material-symbols-outlined text-blue-500">payments</span>
+</div>
+<p class="text-[#0f1a13] dark:text-white tracking-tight text-3xl font-black leading-tight">R$ 12.800,00</p>
+<div class="flex items-center gap-1 text-primary text-sm font-bold">
+<span class="material-symbols-outlined text-sm">event_repeat</span>
+<span>12 títulos pendentes</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1d2d24] border border-[#d2e4d9] dark:border-[#2a3a30] shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#568f6c] dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">Contas Vencendo Hoje</p>
+<span class="material-symbols-outlined text-red-500">warning</span>
+</div>
+<p class="text-[#0f1a13] dark:text-white tracking-tight text-3xl font-black leading-tight">R$ 3.420,00</p>
+<div class="flex items-center gap-1 text-red-500 text-sm font-bold">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+<span>Atenção: 4 pagamentos</span>
+</div>
+</div>
+</div>
+<!-- Filters Section -->
+<div class="bg-white dark:bg-[#1d2d24] rounded-xl border border-[#d2e4d9] dark:border-[#2a3a30] p-6 mb-8">
+<div class="flex flex-wrap items-end gap-4">
+<div class="flex-1 min-w-[200px]">
+<label class="block text-xs font-bold text-[#568f6c] uppercase mb-2">Período</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#568f6c] text-lg">calendar_today</span>
+<select class="form-select w-full pl-10 rounded-lg border-[#d2e4d9] dark:border-[#2a3a30] bg-[#f9fbfa] dark:bg-background-dark text-sm focus:ring-primary focus:border-primary">
+<option>Últimos 30 dias</option>
+<option>Este mês</option>
+<option>Mês passado</option>
+<option>Personalizado...</option>
+</select>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block text-xs font-bold text-[#568f6c] uppercase mb-2">Tipo de Lançamento</label>
+<select class="form-select w-full rounded-lg border-[#d2e4d9] dark:border-[#2a3a30] bg-[#f9fbfa] dark:bg-background-dark text-sm focus:ring-primary focus:border-primary">
+<option>Todos os tipos</option>
+<option>Entradas (Receitas)</option>
+<option>Saídas (Despesas)</option>
+</select>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block text-xs font-bold text-[#568f6c] uppercase mb-2">Status</label>
+<select class="form-select w-full rounded-lg border-[#d2e4d9] dark:border-[#2a3a30] bg-[#f9fbfa] dark:bg-background-dark text-sm focus:ring-primary focus:border-primary">
+<option>Qualquer status</option>
+<option>Liquidado</option>
+<option>Pendente</option>
+<option>Atrasado</option>
+</select>
+</div>
+<button class="bg-primary text-white h-10 px-6 rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">filter_alt</span>
+                        Filtrar
+                    </button>
+</div>
+</div>
+<!-- List Section -->
+<div class="bg-white dark:bg-[#1d2d24] rounded-xl border border-[#d2e4d9] dark:border-[#2a3a30] overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#f9fbfa] dark:bg-[#16251c] border-b border-[#d2e4d9] dark:border-[#2a3a30]">
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider">Data</th>
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider">Descrição / Favorecido</th>
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider">Categoria</th>
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider">Valor</th>
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-[#568f6c] uppercase tracking-wider text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#d2e4d9] dark:divide-[#2a3a30]">
+<!-- Row 1: Liquidado (Entrada) -->
+<tr class="hover:bg-[#f6f8f7] dark:hover:bg-[#1a2a20] transition-colors">
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">18/10/2023</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-[#0f1a13] dark:text-white">Vendas PDV - Dinheiro</p>
+<p class="text-xs text-[#568f6c]">Venda Consumidor Final</p>
+</td>
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">Operacional</td>
+<td class="px-6 py-4 text-sm font-bold text-primary">+ R$ 4.250,00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary">
+                                        Liquidado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#568f6c] hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2: Atrasado (Saída) -->
+<tr class="hover:bg-[#f6f8f7] dark:hover:bg-[#1a2a20] transition-colors">
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">17/10/2023</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-[#0f1a13] dark:text-white">Distribuidora Alimentos X</p>
+<p class="text-xs text-[#568f6c]">Reposicão de Estoque - NF 4421</p>
+</td>
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">Fornecedores</td>
+<td class="px-6 py-4 text-sm font-bold text-red-500">- R$ 1.500,00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                                        Atrasado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#568f6c] hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3: Pendente (Saída) -->
+<tr class="hover:bg-[#f6f8f7] dark:hover:bg-[#1a2a20] transition-colors">
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">18/10/2023</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-[#0f1a13] dark:text-white">Energia Elétrica - Equatorial</p>
+<p class="text-xs text-[#568f6c]">Fatura Ref. Setembro</p>
+</td>
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">Fixas</td>
+<td class="px-6 py-4 text-sm font-bold text-red-500">- R$ 2.420,00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                        Pendente
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#568f6c] hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4: Liquidado (Saída) -->
+<tr class="hover:bg-[#f6f8f7] dark:hover:bg-[#1a2a20] transition-colors">
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">16/10/2023</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-[#0f1a13] dark:text-white">Aluguel Imóvel</p>
+<p class="text-xs text-[#568f6c]">Pagamento Mensal</p>
+</td>
+<td class="px-6 py-4 text-sm text-[#0f1a13] dark:text-gray-300">Fixas</td>
+<td class="px-6 py-4 text-sm font-bold text-red-500">- R$ 5.000,00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary">
+                                        Liquidado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#568f6c] hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer Summary -->
+<div class="px-6 py-4 border-t border-[#d2e4d9] dark:border-[#2a3a30] bg-[#f9fbfa] dark:bg-[#16251c] flex justify-between items-center">
+<p class="text-sm text-[#568f6c]">Exibindo 4 de 128 lançamentos</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-[#d2e4d9] dark:border-[#2a3a30] rounded-lg text-sm disabled:opacity-50" disabled="">Anterior</button>
+<button class="px-3 py-1 bg-primary text-white rounded-lg text-sm">1</button>
+<button class="px-3 py-1 border border-[#d2e4d9] dark:border-[#2a3a30] rounded-lg text-sm">2</button>
+<button class="px-3 py-1 border border-[#d2e4d9] dark:border-[#2a3a30] rounded-lg text-sm">Próximo</button>
+</div>
+</div>
+</div>
+<!-- Footer Balance Row -->
+<div class="mt-4 flex justify-end">
+<div class="bg-primary/5 dark:bg-primary/10 p-4 rounded-xl border border-primary/20 flex gap-8">
+<div class="text-right">
+<p class="text-xs font-bold text-[#568f6c] uppercase">Total Entradas</p>
+<p class="text-lg font-black text-primary">R$ 15.400,00</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-[#568f6c] uppercase">Total Saídas</p>
+<p class="text-lg font-black text-red-500">R$ 8.920,00</p>
+</div>
+<div class="text-right border-l border-primary/20 pl-8">
+<p class="text-xs font-bold text-[#568f6c] uppercase">Resultado</p>
+<p class="text-lg font-black text-[#0f1a13] dark:text-white">R$ 6.480,00</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

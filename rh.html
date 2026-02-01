@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Recursos Humanos - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body class="bg-[#f6f8f7] dark:bg-[#131f18]">
+    <main class="p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1 bg-white dark:bg-[#1a2920] p-6 rounded-2xl shadow-xl">
+                <h2 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#1e8044]">person_add</span> Cadastro
+                </h2>
+                <form id="form_colaborador" class="space-y-4">
+                    <input type="text" id="rh_nome" placeholder="Nome Completo" class="w-full rounded-xl border-gray-200 dark:bg-white/5">
+                    <input type="text" id="rh_cpf" placeholder="CPF" class="w-full rounded-xl border-gray-200 dark:bg-white/5">
+                    <select id="rh_cargo" class="w-full rounded-xl border-gray-200 dark:bg-white/5">
+                        <option>Operador de Caixa</option>
+                        <option>Repositor</option>
+                        <option>Gerente</option>
+                    </select>
+                    <button type="submit" class="w-full bg-[#1e8044] text-white py-3 rounded-xl font-bold uppercase tracking-wider">Salvar Colaborador</button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 bg-white dark:bg-[#1a2920] rounded-2xl shadow-xl overflow-hidden">
+                <div class="p-4 bg-gray-50 border-b flex justify-between">
+                    <input type="text" id="search_rh" placeholder="Pesquisar funcionário..." class="rounded-lg border-none text-sm w-64">
+                    <div class="flex gap-2">
+                        <button class="p-2 bg-white rounded-lg shadow-sm text-[#1e8044]"><span class="material-symbols-outlined">print</span></button>
+                        <button class="p-2 bg-white rounded-lg shadow-sm text-blue-500"><span class="material-symbols-outlined">download</span></button>
+                    </div>
+                </div>
+                <div id="rh_empty_state" class="p-20 text-center">
+                    <span class="material-symbols-outlined text-6xl text-gray-200">group_off</span>
+                    <p class="text-gray-400 mt-4 uppercase font-bold text-xs">Nenhum colaborador encontrado</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

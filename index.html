@@ -50,12 +50,41 @@
             </div>
             <h1 class="text-xl font-black tracking-tight uppercase">Aristidesbp</h1>
         </div>
-        <nav class="hidden md:flex items-center gap-10 text-slate-300">
-            <a class="text-sm font-medium hover:text-primary transition-colors" href="#home">Início</a>
-            <a class="text-sm font-medium hover:text-primary transition-colors" href="#about">Sobre</a>
-            <a class="text-sm font-medium hover:text-primary transition-colors" href="#about">PDFs</a>
-            <a class="text-sm font-medium hover:text-primary transition-colors" href="#services">Serviços</a>
-        </nav>
+        
+
+<nav class="fixed w-full z-50 glass border-b border-gray-200 dark:border-slate-border">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+            <span class="font-black text-xl tracking-tighter dark:text-white">ABP<span class="text-primary text-xs uppercase ml-1">Digital</span></span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex gap-6 text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-400">
+                <a href="#home" class="hover:text-primary transition-colors">Home</a>
+                <a href="#projetos" class="hover:text-primary transition-colors">Projetos</a>
+            </div>
+
+            <select id="langSelect" onchange="changeLang()" class="bg-transparent border-none text-xs font-bold uppercase cursor-pointer focus:ring-0 dark:text-white">
+                <option value="pt">PT</option>
+                <option value="es">ES</option>
+            </select>
+
+            <a href="login.html" id="nav_login_btn" 
+               class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-sm">login</span>
+                ÁREA DO CLIENTE
+            </a>
+
+            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                <span id="themeIcon" class="material-symbols-outlined text-gray-600 dark:text-gray-400">dark_mode</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+
+
         <div class="flex items-center gap-3">
             <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-800 border border-slate-border hover:bg-slate-700 transition-all">
                 <span id="themeIcon" class="material-symbols-outlined text-white text-sm">light_mode</span>

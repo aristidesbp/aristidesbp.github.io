@@ -1,0 +1,3 @@
+const supabase_url = 'https://tefvegltvqwvggspxaiw.supabase.co';
+
+const supabase_anonkey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlZnZlZ2x0dnF3dmdnc3B4YWl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5NjY2NjksImV4cCI6MjA4NTU0MjY2OX0.9eNliDpzKt8Thq8NjHrHouEiAJ3KUAaKg4wi4j9TlNc';
