@@ -12,7 +12,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 #### Tutoriais escrito por Aristidesbp
 obs: projeto em andamento podendo conter erros!
 
----
+
 # 📘 ÍNDICE
 1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
 2. [ TERMUX E GITHUB](#termux-e-github)
