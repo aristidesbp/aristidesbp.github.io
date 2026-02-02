@@ -706,7 +706,7 @@ yt-dlp -F "URL_DO_VÍDEO
 </html>
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# mercadopago_supabase/servicos.json
+# mercadopago_supabase/services/servicos.json
 ```
 {
   "servicos": [
