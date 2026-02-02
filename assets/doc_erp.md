@@ -13,9 +13,68 @@ obs: projeto em andamento podendo conter erros!
 5. [ BANCO DE DADOS ](#05)
 
 
-
-
-
+# ESTRUTURA DO PROJETO ERP
+```
+aristidesbp.github.io
+    |
+    ├── assets
+    │   ├── mercadopago_supabase
+    │   ├── documentacao_erp.md
+    │   ├── navbar_erp.js
+    │   ├── conexao_supabase.js
+    |   |
+    │   ├── login.html
+    │   ├── login
+    │   │   ├── login.css
+    │   │   ├── login_supabase.js
+    │   │   └── login.js
+    |   |
+    │   ├── index.html
+    │   ├── index
+    │   │   ├── index.css
+    │   │   ├── index_supabase.js
+    │   │   └── index.js
+    |   |
+    │   ├── entidades.html
+    │   ├── entidades
+    │   │   ├── entidades.css
+    │   │   ├── entidades_supabase.js
+    │   │   └── entidades.js
+    |   |
+    │   ├── produtos.html
+    │   ├── produtos
+    │   │   ├── produtos.css
+    │   │   ├── produtos_supabase.js
+    │   │   └── produtos.js
+    |   |
+    │   ├── financeiro.html 
+    │   ├── financeiro
+    │   │   ├── financeiro.js
+    │   │   ├── financeiro_supabase.js
+    │   │   └── financerio.css
+    |   |
+    │   ├── pdv.html
+    │   ├── pdv
+    │   │   ├── pdv_supabase.js
+    │   │   ├── pdv.css
+    │   │   └── pdv.js
+    |   |
+    │   ├── pdv_adm.html
+    │   ├── pdv_adm
+    │   │   ├── pdv_adm.js
+    │   │   ├── pdv_adm_supabase.js
+    │   │   └── pdv_adm.css
+    |   |
+    │   ├── notas.html
+    │   └── notas
+    │       ├── notas.js
+    │       ├── notas_supabase.js
+    │       └── notas.css
+    |   
+    ├── navbar.js
+    ├── index.html
+    └── README.md
+    ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 # NAVBAR
