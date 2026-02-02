@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>VR - Andar + Sabre (corrigido)</title>
+  <meta name="description" content="Versão com locomoção via analógico e sabre alinhado ao controle direito." />
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+  <style>html,body{height:100%;margin:0;background:#000;color:#fff;font-family:sans-serif} .ui{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;text-align:center} .enter-btn{background:linear-gradient(180deg,#ffd700,#ffb400);border:none;padding:16px 32px;border-radius:12px;font-size:18px;font-weight:700;color:#000;box-shadow:0 6px 18px rgba(0,0,0,0.6)} .hint{margin-top:8px;font-size:14px;background:rgba(0,0,0,0.6);padding:6px 10px;border-radius:8px}</style>
+</head>
+<body>
+  <div class="ui" id="ui">
+    <button id="enterVrBtn" class="enter-btn">Entrar em VR</button>
+    <div class="hint">Use o analógico esquerdo para andar. Segure o gatilho para brandir o sabre (direito).</div>
+  </div>
+
+  <a-scene id="scene" embedded background="color:#081022">
+    <a-entity environment="preset: tron; groundColor: #111; grid: cross; lighting: distant; fog:0.5; dressingAmount:12"></a-entity>
+
+    <a-entity light="type: ambient; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; intensity: 0.8" position="-1 4 2"></a-entity>
+
+    <!-- Rig on ground (rig.y = 0). Camera child defines head height -->
+    <a-entity id="rig" position="0 0 0">
+      <a-entity id="camera" camera position="0 1.6 0" look-controls></a-entity>
+
+      <!-- Left hand (no sabre) -->
+      <a-entity id="handL" hand-controls="hand: left; handModelStyle: lowPoly; color: #777"></a-entity>
+
+      <!-- Right hand with sabre (blade is child so we control its quat) -->
+      <a-entity id="handR" hand-controls="hand: right; handModelStyle: lowPoly; color: #777">
+        <a-cylinder id="hilt" position="0 -0.08 0" radius="0.03" height="0.18" color="#333"></a-cylinder>
+        <a-cylinder id="blade" radius="0.02" height="0.9" position="0 0.45 0" color="#00f" material="emissive: #33f"></a-cylinder>
+      </a-entity>
+    </a-entity>
+
+    <!-- Close objects for easy testing -->
+    <a-box position="0 0.5 -1" depth="0.6" height="1" width="0.6" color="#FF6F61"></a-box>
+    <a-sphere position="1 0.6 -1.4" radius="0.5" color="#4CC3D9"></a-sphere>
+    <a-cylinder position="-1 0.8 -1.2" radius="0.4" height="1.6" color="#FFC65D"></a-cylinder>
+
+    <a-sky color="#081022"></a-sky>
+  </a-scene>
+
+  <script>
+    const btn = document.getElementById('enterVrBtn');
+    const scene = document.getElementById('scene');
+    const ui = document.getElementById('ui');
+
+    async function enterVR() {
+      ui.style.display = 'none';
+      try { if(scene && scene.enterVR) { scene.enterVR(); return; } } catch(e){}
+      try { if(navigator.xr && navigator.xr.isSessionSupported){ const ok = await navigator.xr.isSessionSupported('immersive-vr'); if(ok){ await navigator.xr.requestSession('immersive-vr'); return; } } } catch(e){ console.warn(e); }
+      ui.style.display='';
+      alert('Não foi possível entrar em VR automaticamente.');
+    }
+
+    btn.addEventListener('click', enterVR);
+    btn.addEventListener('touchstart', e=>{e.preventDefault(); enterVR();});
+
+    // Movement + sabre alignment
+    const rig = document.getElementById('rig');
+    const cameraEl = document.getElementById('camera');
+    const handR = document.getElementById('handR');
+    const blade = document.getElementById('blade');
+    const THREE = AFRAME.THREE;
+
+    let lastTime = performance.now();
+    const speed = 1.4; // m/s
+    const deadzone = 0.15;
+
+    function getPrimaryGamepad() {
+      const gps = navigator.getGamepads && navigator.getGamepads();
+      if (!gps) return null;
+      for (let i=0;i<gps.length;i++){
+        const g = gps[i];
+        if (g) return g;
+      }
+      return null;
+    }
+
+    function chooseLeftAxes(gp){
+      const a = gp.axes || [];
+      const ax0 = a[0]||0, ax1 = a[1]||0, ax2 = a[2]||0, ax3 = a[3]||0;
+      const mag01 = Math.hypot(ax0, ax1); const mag23 = Math.hypot(ax2, ax3);
+      if (mag23 > mag01) return {x: ax2, y: ax3};
+      return {x: ax0, y: ax1};
+    }
+
+    function tick(now){
+      const dt = (now - lastTime)/1000;
+      lastTime = now;
+
+      const gp = getPrimaryGamepad();
+      if (gp) {
+        const left = chooseLeftAxes(gp);
+        let lx = Math.abs(left.x) > deadzone ? left.x : 0;
+        let ly = Math.abs(left.y) > deadzone ? left.y : 0;
+        if (lx !== 0 || ly !== 0) {
+          // move relative to camera yaw
+          const camObj = cameraEl.object3D;
+          const forward = new THREE.Vector3();
+          camObj.getWorldDirection(forward);
+          forward.y = 0; forward.normalize();
+          const up = new THREE.Vector3(0,1,0);
+          const right = new THREE.Vector3();
+          right.crossVectors(forward, up).normalize();
+
+          const moveVec = new THREE.Vector3();
+          // forward is negative Z; pushing thumb forward usually gives -1 or -y; invert if needed
+          moveVec.addScaledVector(forward, -ly);
+          moveVec.addScaledVector(right, lx);
+          // scale by speed
+          moveVec.multiplyScalar(speed * dt);
+          rig.object3D.position.add(moveVec);
+          // keep rig on ground
+          rig.object3D.position.y = 0;
+        }
+
+        // Sabre alignment: apply controller quaternion + offset (90deg X) so blade points 'up'
+        if (handR.object3D && blade.object3D) {
+          const ctrlQuat = handR.object3D.quaternion.clone();
+          const offset = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI/2,0,0));
+          const final = ctrlQuat.multiply(offset);
+          blade.object3D.quaternion.copy(final);
+          // position blade a bit forward from hilt in local space
+          blade.object3D.position.set(0,0.45,0);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  </script>
+
+  <!-- Instruções: salve e abra no MetaQuest. Se sabre ficar inclinado ajuste o offset Euler (Math.PI/2). -->
+</body>
+</html>

@@ -1,0 +1,181 @@
+/* produtos.css - ERP ABP */
+
+:root { 
+    --primary: #3ecf8e; 
+    --dark: #0f172a; 
+    --bg: #f1f5f9; 
+    --danger: #ef4444; 
+    --warning: #f59e0b;
+}
+
+/* Reutilizando a base do seu ERP para consistência */
+* { box-sizing: border-box; }
+
+body { 
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: var(--bg); 
+    padding-top: 85px; 
+    color: #1e293b;
+}
+
+.container { max-width: 1250px; margin: auto; padding: 20px; }
+
+/* Estilização dos Cards */
+.card { 
+    background: white; 
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    margin-bottom: 25px; 
+}
+
+.section-title { 
+    color: var(--primary); 
+    font-size: 13px; 
+    text-transform: uppercase; 
+    margin: 25px 0 12px; 
+    border-bottom: 2px solid #f1f5f9; 
+    padding-bottom: 6px; 
+    font-weight: 800; 
+    letter-spacing: 0.5px;
+}
+
+/* Grid do Formulário */
+.form-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 18px; 
+}
+
+label { 
+    display: block; 
+    margin-bottom: 6px; 
+    font-size: 13px; 
+    color: #64748b; 
+    font-weight: 600; 
+}
+
+input, select { 
+    width: 100%; 
+    padding: 11px; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 8px; 
+    font-size: 14px; 
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.1);
+}
+
+/* Botões */
+.btn-add { 
+    background: var(--primary); 
+    color: white; 
+    padding: 14px 24px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    width: 100%; 
+    margin-top: 25px; 
+    font-size: 15px;
+    transition: opacity 0.2s;
+}
+
+.btn-add:hover { opacity: 0.9; }
+
+.btn-cancel { 
+    background: #94a3b8; 
+    color: white; 
+    margin-top: 10px; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    display: none; 
+    width: 100%; 
+}
+
+/* Tabela de Produtos */
+.table-container { 
+    background: white; 
+    border-radius: 12px; 
+    overflow-x: auto; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+
+th { 
+    background: #f8fafc; 
+    padding: 16px; 
+    color: #475569; 
+    font-size: 12px; 
+    text-transform: uppercase; 
+    text-align: left; 
+    border-bottom: 2px solid #f1f5f9;
+}
+
+td { 
+    padding: 14px 16px; 
+    border-top: 1px solid #f1f5f9; 
+    font-size: 14px; 
+    vertical-align: middle;
+}
+
+tr:hover { background-color: #fcfdfe; }
+
+/* Status e Badges */
+.status-badge { 
+    padding: 5px 10px; 
+    border-radius: 6px; 
+    font-size: 11px; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    display: inline-block;
+}
+
+/* Estilo para Estoque Crítico */
+.estoque-alerta {
+    color: var(--danger);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.estoque-alerta::before {
+    content: '\f071'; /* Ícone de triângulo de alerta FontAwesome */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Ações */
+.btn-action { 
+    background: #f1f5f9; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 14px; 
+    padding: 8px;
+    border-radius: 6px;
+    margin-right: 5px; 
+    transition: all 0.2s;
+}
+
+.btn-action:hover { background: #e2e8f0; transform: translateY(-1px); }
+
+/* Customização da Barra de Busca */
+#inputBusca {
+    border-left: 4px solid var(--primary);
+    background: #fff;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .container { padding: 10px; }
+}

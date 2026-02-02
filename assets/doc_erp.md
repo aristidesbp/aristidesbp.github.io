@@ -1,0 +1,4241 @@
+obs: projeto em andamento podendo conter erros!
+#### Tutoriais escrito por Aristides Barbosa Pontes. 09/10/2025
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
+
+---
+# 📘 ÍNDICE
+1. [ CRIANDO BANCO DE DADOS NO SUPABASE ](#01)
+1. [ BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA ](#01)
+2. [ GITHUB ](#02)
+3. [ TERMUX/LINUX ](#03)
+4. [ CODIGOS PRONTOS ](#04)
+5. [ BANCO DE DADOS ](#05)
+
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# NAVBAR
+
+```
+// Funções de Autenticação e Segurança
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) window.location.href = 'login.html';
+}
+
+async function sairDaConta() {
+    if(confirm("Sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+
+
+
+
+
+
+/** ##### NAVBAR COMPONENTE - ERP ABP ####### */
+(function() {
+const styles = `
+
+
+<style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .btn-home {
+            background: #3ecf8e !important; /* Verde padrão do seu ERP */
+        }
+
+        /* Ajuste para o conteúdo não ficar embaixo da navbar fixa */
+        body {
+            padding-top: 80px;
+        }
+    </style>
+
+
+
+`; const navbarHtml = `
+
+
+<div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="adm.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>`;
+
+
+
+//  Inserir no início do Body
+document.head.insertAdjacentHTML('beforeend', styles);
+document.body.insertAdjacentHTML('afterbegin', navbarHtml);
+})();
+
+
+
+/** Função global para Deslogar do supabase */
+async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            // Verifica se o cliente supabase existe antes de tentar deslogar
+            if (typeof _supabase !== 'undefined') {
+                await _supabase.auth.signOut();
+            }
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+}
+
+
+```
+ # segurança reforçada 
+ ```
+/**
+ * =======================================================
+ *  ERP ABP - GUARD GLOBAL
+ *  Segurança + Navbar + Controle de Sessão
+ *  Arquivo ÚNICO | Reutilizável | Defensivo
+ * =======================================================
+ */
+
+(() => {
+    "use strict";
+
+    // Evita execução duplicada
+    if (window.__ERP_GUARD_LOADED__) return;
+    window.__ERP_GUARD_LOADED__ = true;
+
+    // ---------------------------------------------------
+    // VERIFICA SUPABASE
+    // ---------------------------------------------------
+    if (typeof window._supabase === "undefined") {
+        console.error("Supabase não encontrado.");
+        window.location.replace("login.html");
+        return;
+    }
+
+    // ---------------------------------------------------
+    // CONFIGURAÇÃO CENTRAL
+    // ---------------------------------------------------
+    const CONFIG = Object.freeze({
+        LOGIN_PAGE: "login.html",
+        HOME_PAGE: "adm.html",
+        APP_NAME: "ERP ABP"
+    });
+
+    // ---------------------------------------------------
+    // VALIDA SESSÃO
+    // ---------------------------------------------------
+    async function validarSessao() {
+        try {
+            const { data, error } = await _supabase.auth.getSession();
+            if (error || !data || !data.session) {
+                throw new Error("Sessão inválida");
+            }
+            return data.session;
+        } catch (e) {
+            window.location.replace(CONFIG.LOGIN_PAGE);
+            return null;
+        }
+    }
+
+    // ---------------------------------------------------
+    // LOGOUT
+    // ---------------------------------------------------
+    async function logout() {
+        if (!confirm("Deseja sair do sistema?")) return;
+
+        try {
+            await _supabase.auth.signOut();
+        } catch (_) {
+            // Falha silenciosa proposital
+        } finally {
+            window.location.replace(CONFIG.LOGIN_PAGE);
+        }
+    }
+
+    // ---------------------------------------------------
+    // NAVBAR
+    // ---------------------------------------------------
+    function renderNavbar() {
+        if (document.querySelector(".erp-navbar")) return;
+
+        const style = `
+            <style>
+                .erp-navbar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    background: #fff;
+                    padding: 15px 25px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+                    z-index: 9999;
+                }
+                .erp-navbar .btn {
+                    background: #ef4444;
+                    color: #fff;
+                    border: none;
+                    padding: 8px 14px;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+                .erp-navbar .home {
+                    background: #3ecf8e;
+                }
+                body.erp-guard {
+                    padding-top: 80px;
+                }
+            </style>
+        `;
+
+        const html = `
+            <div class="erp-navbar">
+                <strong>${CONFIG.APP_NAME}</strong>
+                <div>
+                    <a href="${CONFIG.HOME_PAGE}" class="btn home">Início</a>
+                    <button class="btn" id="erpLogout">Sair</button>
+                </div>
+            </div>
+        `;
+
+        document.head.insertAdjacentHTML("beforeend", style);
+        document.body.insertAdjacentHTML("afterbegin", html);
+        document.body.classList.add("erp-guard");
+
+        document
+            .getElementById("erpLogout")
+            ?.addEventListener("click", logout);
+    }
+
+    // ---------------------------------------------------
+    // INICIALIZAÇÃO
+    // ---------------------------------------------------
+    document.addEventListener("DOMContentLoaded", async () => {
+        const session = await validarSessao();
+        if (!session) return;
+        renderNavbar();
+    });
+
+})();
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# 01
+# CRIANDO BANCO DE DADOS NO SUPABASE
+https://supabase.com
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+
+
+## CRIANDO TABELA USUARIOS VIA SQL
+```
+create table public.usuarios (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  user_id uuid null,
+  nome_completo text null,
+  bio text null,
+  avatar_url text null,
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_user_id_fkey foreign KEY (user_id) references auth.users (id)
+) TABLESPACE pg_default;
+```
+
+## FUNCTION TRIGGER
+``` 
+-- 1. Criar a função que insere os dados na tabela public.usuarios
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.usuarios (user_id, nome_completo, avatar_url)
+  values (
+    new.id, 
+    new.raw_user_meta_data->>'full_name', -- Tenta pegar o nome dos metadados (ex: Google Login)
+    new.raw_user_meta_data->>'avatar_url' -- Tenta pegar a foto dos metadados
+  );
+  return new;
+end;
+$$;
+
+-- 2. Criar o gatilho (trigger) que dispara após um novo registro em auth.users
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
+```
+
+# CRIAR APOLICE 
+```
+-- Cria a política que permite ao usuário gerenciar apenas os seus fornecedores
+CREATE POLICY "Acesso total aos próprios fornecedores" 
+ON public.fornecedores 
+FOR ALL 
+USING (auth.uid() = usuario_id);
+```
+
+# POPULAR TABELA USUARIOS
+
+```
+insert into public.usuarios (nome_completo, bio, avatar_url) values
+('João da Silva', 'Usuário padrão do sistema', null),
+('Maria Oliveira', 'Perfil de testes internos', null),
+('Carlos Pereira', 'Cliente cadastrado manualmente', null),
+('Ana Souza', 'Usuária ativa da plataforma', null),
+('Lucas Fernandes', 'Conta criada para homologação', null),
+('Juliana Costa', 'Usuária administrativa', null),
+('Rafael Martins', 'Perfil comercial', null),
+('Patrícia Almeida', 'Usuária visitante', null),
+('Bruno Rocha', 'Conta de demonstração', null),
+('Fernanda Lima', 'Usuária comum do sistema', null);
+```
+
+# CRIANDO UMA VISUALIZAÇÃO COM VIEWS
+
+## PROMPT PARA CRIAR VIEWS:
+```
+Crie uma view chamada "v_sevicos_destaque" que liste os serviços com o nome
+da categoria e detalhes do autor que esta na tabela de usuarios. Alem disso, 
+caucule a media das notas (use ) se nao houver) e o total de avaliçoes recebidas por cada serviço.
+Conforme o schema do banco de dados que vou te passar abaixo:
+
+Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para criar uma segurança.
+
+[cole aqui o schema fica em: menu lateral/ Database/ no canto superior direi opção Copy as SQL]
+```
+
+# CRIAR TABELAS PROJETO ERP
+```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.clientes (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  usuario_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  rg text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT clientes_pkey PRIMARY KEY (id),
+  CONSTRAINT clientes_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.fornecedores (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  usuario_id uuid,
+  razao_social text NOT NULL,
+  nome_fantasia text,
+  cnpj text,
+  inscricao_estadual text,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  CONSTRAINT fornecedores_pkey PRIMARY KEY (id),
+  CONSTRAINT fornecedores_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.notes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT notes_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.usuarios (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id uuid NOT NULL UNIQUE,
+  email text NOT NULL UNIQUE,
+  nivel_acesso text DEFAULT 'cliente'::text CHECK (nivel_acesso = ANY (ARRAY['master'::text, 'funcionario'::text, 'cliente'::text, 'fornecedor'::text])),
+  status text DEFAULT 'ativo'::text CHECK (status = ANY (ARRAY['ativo'::text, 'inativo'::text])),
+  CONSTRAINT usuarios_pkey PRIMARY KEY (id),
+  CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+```
+
+
+
+# INDEX
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SISTEMA ERP ABP - Inicio</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CONEXAO -->
+    <script>
+// Configurações do Supabase
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+   </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+   <style>
+   /* Remove inconsistências de box model */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilo base do corpo da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    padding-top: 80px;
+}
+
+/* Container central do conteúdo */
+.content {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Grade responsiva dos cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilo dos cards clicáveis */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #334155;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Efeito visual ao passar o mouse */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #3ecf8e;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Ícones dos cards */
+.card i {
+    font-size: 45px;
+    color: #3ecf8e;
+    margin-bottom: 15px;
+}
+
+/* Título dos cards */
+.card h3 {
+    margin: 10px 0;
+}
+
+/* Texto auxiliar dos cards */
+.card p {
+    font-size: 0.9em;
+    color: #64748b;
+}
+   </style>
+</head>
+<body>
+
+    <div class="content">
+        
+        <div class="grid">
+
+            <a href="bloco_de_notas.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Bloco de Notas</h3>
+                <p>Anote e organize suas ideias na nuvem.</p>
+            </a>
+
+            <a href="clientes.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>Gestão de Clientes</h3>
+                <p>Cadastro e gerenciamento completo de clientes.</p>
+            </a>
+
+            <a href="fornecedores.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>fornecedores</h3>
+                <p>Gerencie dados e contatos dos fornecedores</p>
+            </a>
+
+
+            <a href="financeiro.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Financeiro</h3>
+                <p>Contas a pagar/receber/relatorios</p>
+            </a>
+            
+
+        </div>
+        
+    </div>
+
+<script src="js/navbar.js"></script>
+
+<script>
+// URL do projeto Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+
+// Chave pública (publishable) para uso no frontend
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Cria o cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Função responsável por verificar se o usuário está autenticado
+async function checkUser() {
+    // Obtém a sessão atual
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    // Se não existir sessão, redireciona para o login
+    if (!session) {
+        window.location.href = 'login.html';
+    }
+}
+
+// Executa a verificação após o carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+    checkUser();
+});
+
+</script>
+
+</body>
+</html>
+```
+# LOGIN
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Codificação de caracteres -->
+    <meta charset="UTF-8">
+
+    <!-- Responsividade para dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título da aba -->
+    <title>Login - SISTEMA ERP ABP</title>
+
+    <!-- SDK do Supabase (frontend) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- CSS específico da tela de login -->
+    <style>
+    /* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #1e293b;
+    --bg: #0f172a;
+}
+
+/* Estilo base da página */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Card central de login */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título principal */
+h1 {
+    color: var(--dark);
+    margin-bottom: 5px;
+    font-size: 24px;
+}
+
+/* Subtítulo */
+h2 {
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Container dos inputs */
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* Campos de entrada */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Botão para mostrar/ocultar senha */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Botão principal */
+button.main-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover do botão */
+button.main-btn:hover {
+    background-color: #34b27b;
+}
+
+/* Links extras */
+.extra-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* Estilo dos links */
+.link {
+    color: #4a90e2;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Botão de voltar */
+.btn-back {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: none;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Card central de autenticação -->
+    <div class="login-card">
+
+        <!-- Botão de retorno (usado em recuperação/cadastro) -->
+        <button id="btn-back" class="btn-back" onclick="toggleMode()">
+            ← Voltar para o Login
+        </button>
+
+        <!-- Título principal -->
+        <h1>SISTEMA ERP ABP</h1>
+
+        <!-- Subtítulo dinâmico -->
+        <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
+
+        <!-- Campo de e-mail -->
+        <div class="input-container" id="email-group">
+            <input type="email" id="email" placeholder="Seu e-mail">
+        </div>
+
+        <!-- Campo de senha -->
+        <div class="input-container" id="pass-group">
+            <input type="password" id="password" placeholder="Sua senha">
+
+            <!-- Botão para alternar visibilidade da senha -->
+            <button type="button" class="toggle-password" onclick="toggleVisibility()">
+                👁️
+            </button>
+        </div>
+
+        <!-- Botão principal (login / cadastro / salvar senha) -->
+        <button class="main-btn" id="btn-auth" onclick="handleAuth()">
+            Entrar
+        </button>
+
+        <!-- Links auxiliares -->
+        <div class="extra-links">
+            <span id="link-forgot" class="link" onclick="forgotPassword()">
+                Esqueci minha senha
+            </span>
+
+    <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
+    <h3>CONTATO: +55 91 99242-0981</h3>
+            
+        </div>
+    </div>
+
+    
+    
+    <!-- Script principal do login -->
+    <script>
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+
+// Criação do cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Alterna a visibilidade da senha
+ */
+function toggleVisibility() {
+    const passInput = document.getElementById('password');
+    const toggleBtn = document.querySelector('.toggle-password');
+
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    toggleBtn.innerText = passInput.type === 'password' ? '👁️' : '🙈';
+}
+
+/**
+ * Apenas Login
+ */
+async function handleAuth() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) alert("Erro: " + error.message);
+    else window.location.href = 'index.html';
+}
+
+/**
+ * Envio de e-mail para recuperação de senha
+ */
+async function forgotPassword() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite seu e-mail.");
+
+    const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+    });
+
+    if (error) alert(error.message);
+    else alert("Link de recuperação enviado!");
+}
+
+/**
+ * Detecta se o usuário chegou por link de recuperação
+ */
+async function checkRecovery() {
+    const hash = window.location.hash;
+
+    if (hash && (hash.includes("type=recovery") || hash.includes("access_token="))) {
+        document.getElementById('form-subtitle').innerText = "🔑 Defina sua nova senha";
+        document.getElementById('email-group').style.display = 'none';
+        document.getElementById('btn-auth').innerText = "Salvar Nova Senha";
+        document.getElementById('btn-auth').onclick = updatePassword;
+        document.getElementById('link-forgot').style.display = 'none';
+    }
+}
+
+/**
+ * Atualiza a senha do usuário
+ */
+async function updatePassword() {
+    const newPassword = document.getElementById('password').value;
+
+    if (newPassword.length < 6) {
+        return alert("Mínimo 6 caracteres.");
+    }
+
+    const { error } = await _supabase.auth.updateUser({ password: newPassword });
+
+    if (error) alert(error.message);
+    else {
+        alert("Senha atualizada!");
+        window.location.hash = "";
+        window.location.reload();
+    }
+}
+
+// Executa verificação de recuperação ao carregar a página
+window.onload = checkRecovery;
+    </script>
+
+</body>
+</html>
+
+```
+# BLOCO_DE_NOTAS
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bloco de Notas - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- CONEXAO -->
+    <script>
+// Configurações do Supabase
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+   </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/bloco_de_notas.css">
+    <style>
+/* Variáveis globais */
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilo base da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    padding-top: 90px;
+}
+
+/* Container do bloco de notas */
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* Inputs e textarea */
+textarea,
+input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Botão de salvar/atualizar */
+.btn-save {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    filter: brightness(1.1);
+}
+
+/* Nota individual */
+.note {
+    border-bottom: 1px solid #f1f1f1;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Conteúdo da nota */
+.note-content strong {
+    color: #1e293b;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.note-content p {
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+/* Ações da nota */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+}
+
+/* Área de busca e exportação */
+.search-box {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+/* Botão de exportação */
+.export-btn {
+    width: 100%;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h2>Minhas Notas</h2>
+
+        <input type="hidden" id="note-id">
+
+        <input type="text" id="title" placeholder="Título da nota...">
+
+        <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
+
+        <button class="btn-save" id="btn-save" onclick="saveNote()">
+            Salvar Nota
+        </button>
+
+        <div class="search-box">
+            <label>PESQUISAR OU EXPORTAR</label>
+
+            <input
+                type="text"
+                id="search"
+                placeholder="🔍 Digite para buscar..."
+                onkeyup="filterNotes()"
+            >
+
+            <button class="export-btn" onclick="exportAllToPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
+            </button>
+        </div>
+
+        <div id="notes-list"></div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+
+    <script>
+/**
+ * js/bloco_de_notas.js
+ * Depende de: js/conexao.js (que fornece a variável _supabase)
+ */
+
+// Armazena todas as notas carregadas localmente para busca rápida
+let allNotes = [];
+
+/**
+ * Carrega as notas do banco (Iniciado automaticamente ao carregar a página)
+ */
+async function loadNotes() {
+    // Busca todas as notas ordenadas pela data de criação
+    const { data: notes, error } = await _supabase
+        .from('notes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar notas:", error.message);
+        return;
+    }
+
+    allNotes = notes || [];
+    renderNotes(allNotes);
+}
+
+/**
+ * Renderiza as notas na tela (HTML dinâmico)
+ */
+function renderNotes(notes) {
+    document.getElementById('notes-list').innerHTML =
+        notes.map(n => `
+            <div class="note">
+                <div class="note-content">
+                    <strong>${n.title}</strong>
+                    <p>${n.content}</p>
+                </div>
+                <div class="actions">
+                    <button style="background:#f1c40f"
+                        onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button style="background:#e74c3c"
+                        onclick="deleteNote('${n.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('') ||
+        '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Nenhuma nota encontrada.</p>';
+}
+
+/**
+ * Salva ou atualiza uma nota (CRUD - Create/Update)
+ */
+async function saveNote() {
+    const id = document.getElementById('note-id').value;
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    if (!title || !content) {
+        return alert("Preencha título e conteúdo!");
+    }
+
+    // Obtém o usuário logado através da conexão ativa
+    const { data: { user } } = await _supabase.auth.getUser();
+
+    if (id) {
+        // Modo Edição (Update)
+        await _supabase.from('notes')
+            .update({ title, content })
+            .eq('id', id);
+    } else {
+        // Modo Novo (Insert)
+        await _supabase.from('notes')
+            .insert([{ title, content, user_id: user.id }]);
+    }
+
+    resetForm();
+    loadNotes();
+}
+
+/**
+ * Prepara o formulário para edição (Preenche os campos)
+ */
+function prepareEdit(id, title, content) {
+    document.getElementById('note-id').value = id;
+    document.getElementById('title').value = title;
+    document.getElementById('content').value = content;
+    document.getElementById('btn-save').innerText = "Atualizar Nota";
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Reseta o formulário para o estado original
+ */
+function resetForm() {
+    document.getElementById('note-id').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('content').value = '';
+    document.getElementById('btn-save').innerText = "Salvar Nota";
+}
+
+/**
+ * Exclui uma nota do banco (CRUD - Delete)
+ */
+async function deleteNote(id) {
+    if (confirm("Deseja excluir esta nota?")) {
+        await _supabase.from('notes').delete().eq('id', id);
+        loadNotes();
+    }
+}
+
+/**
+ * Filtra as notas carregadas pelo texto digitado na pesquisa
+ */
+function filterNotes() {
+    const q = document.getElementById('search').value.toLowerCase();
+
+    const filtered = allNotes.filter(n =>
+        n.title.toLowerCase().includes(q) ||
+        n.content.toLowerCase().includes(q)
+    );
+
+    renderNotes(filtered);
+}
+
+/**
+ * Exporta todas as notas presentes na lista para um arquivo PDF
+ */
+async function exportAllToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("Meu Bloco de Notas - ERP ABP", 10, 10);
+
+    let y = 20;
+
+    allNotes.forEach((n, i) => {
+        doc.setFont(undefined, 'bold');
+        doc.text(`${i + 1}. ${n.title}`, 10, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(n.content, 10, y + 7);
+        y += 25;
+    });
+
+    doc.save("minhas-notas.pdf");
+}
+
+/**
+ * Inicializa os dados assim que o documento estiver pronto
+ * A trava de segurança já foi executada no conexao.js
+ */
+document.addEventListener('DOMContentLoaded', loadNotes);
+
+
+
+</script>
+
+</body>
+</html>
+
+```
+
+
+
+# CLIENTES/FORNECEDORES
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Configurações do Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) {
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+validarAcesso();
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+/* Variáveis globais de cores */
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; }
+
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; }
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+/* NAVBAR FIXA */
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; background: white;
+    padding: 15px 25px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
+}
+.btn-nav {
+    background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
+    font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP</div>
+    <div class="nav-buttons">
+        <a href="index.html" style="text-decoration: none; color: #64748b; margin-right: 20px; font-weight: bold;">Voltar</a>
+        <button class="btn-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="card">
+            <h3 id="form-title">Novo Cadastro de Usuário / Entidade</h3>
+            <input type="hidden" id="edit-id">
+
+            <div class="section-title">Informações Pessoais e Acesso</div>
+            <div class="form-grid">
+                <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
+                <div><label>CPF</label><input type="text" id="cpf"></div>
+                <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+                <div><label>E-mail</label><input type="email" id="email"></div>
+                <div><label>Telefone</label><input type="text" id="telefone"></div>
+                <div><label>Senha de Acesso</label><input type="password" id="senha_acesso" placeholder="Senha interna"></div>
+                
+                <div>
+                    <label>Nível de Acesso</label>
+                    <select id="acesso">
+                        <option value="cliente">Cliente</option>
+                        <option value="funcionario">Funcionário</option>
+                        <option value="comprador">Comprador</option>
+                        <option value="master">Master</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Relacionamento</label>
+                    <select id="relacionamento">
+                        <option value="cliente">Cliente</option>
+                        <option value="funcionario">Funcionário</option>
+                        <option value="fornecedor">Fornecedor</option>
+                        <option value="terceirizado">Terceirizado</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="ativo">Ativo</option>
+                        <option value="desativado">Desativado</option>
+                    </select>
+                </div>
+                <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+            </div>
+
+            <div class="section-title">Endereço</div>
+            <div class="form-grid">
+                <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+                <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+                <div><label>Número</label><input type="text" id="numero"></div>
+                <div><label>Bairro</label><input type="text" id="bairro"></div>
+                <div><label>Cidade</label><input type="text" id="cidade"></div>
+                <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+            </div>
+
+            <div class="section-title">Complementos</div>
+            <div class="form-grid">
+                <div style="grid-column: span 2;"><label>URL de Arquivos (Fotos/Documentos)</label><input type="text" id="arquivos_url" placeholder="Link da foto ou documento"></div>
+                <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+            </div>
+
+            <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Cadastro</button>
+            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome / Relacionamento</th>
+                        <th>CPF / Contato</th>
+                        <th>Acesso / Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="clients-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+async function sairDaConta() {
+    if(confirm("Deseja realmente sair?")) {
+        await _supabase.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+
+async function buscaCEP() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('estado').value = data.uf;
+            }
+        } catch { console.error("Erro CEP"); }
+    }
+}
+
+async function loadClients() {
+    const { data, error } = await _supabase.from('clientes').select('*').order('nome_completo');
+    if (error) return;
+
+    const list = document.getElementById('clients-list');
+    list.innerHTML = (data || []).map(c => `
+        <tr>
+            <td><b>${c.nome_completo}</b><br><small>${c.relacionamento.toUpperCase()}</small></td>
+            <td>${c.cpf || '-'}<br><small>${c.email || ''}</small></td>
+            <td>${c.acesso}<br><small style="color:${c.status === 'ativo' ? 'green' : 'red'}">${c.status}</small></td>
+            <td>
+                <button class="btn-edit" onclick="editFull('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" onclick="deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum registro.</td></tr>';
+}
+
+async function handleSave() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    const id = document.getElementById('edit-id').value;
+
+    const dados = {
+        usuario_id: user.id,
+        nome_completo: document.getElementById('nome_completo').value,
+        cpf: document.getElementById('cpf').value,
+        data_nascimento: document.getElementById('data_nascimento').value || null,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        senha_acesso: document.getElementById('senha_acesso').value,
+        acesso: document.getElementById('acesso').value,
+        relacionamento: document.getElementById('relacionamento').value,
+        status: document.getElementById('status').value,
+        avaliacao: parseInt(document.getElementById('avaliacao').value),
+        observacoes: document.getElementById('observacoes').value,
+        cep: document.getElementById('cep').value,
+        logradouro: document.getElementById('logradouro').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        estado: document.getElementById('estado').value,
+        // Converte string para array caso tenha algo escrito, ou envia array vazio
+        arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
+    };
+
+    if (!dados.nome_completo) return alert("Nome é obrigatório");
+
+    const { error } = id
+        ? await _supabase.from('clientes').update(dados).eq('id', id)
+        : await _supabase.from('clientes').insert([dados]);
+
+    if (error) alert("Erro: " + error.message);
+    else { resetForm(); loadClients(); }
+}
+
+async function editFull(id) {
+    const { data, error } = await _supabase.from('clientes').select('*').eq('id', id).single();
+    if (error || !data) return;
+
+    Object.keys(data).forEach(k => {
+        const el = document.getElementById(k);
+        if (el) {
+            if (k === 'arquivos_url') el.value = data[k] ? data[k][0] : '';
+            else el.value = data[k] || '';
+        }
+    });
+
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('form-title').innerText = "Editando Registro";
+    document.getElementById('btn-save').innerText = "Atualizar Cadastro";
+    document.getElementById('btn-cancel').style.display = "block";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetForm() {
+    document.querySelectorAll('input, select, textarea').forEach(i => {
+        if(i.id === 'avaliacao') i.value = '5';
+        else if(i.tagName === 'SELECT') i.selectedIndex = 0;
+        else i.value = '';
+    });
+    document.getElementById('edit-id').value = '';
+    document.getElementById('form-title').innerText = "Novo Cadastro de Usuário / Entidade";
+    document.getElementById('btn-save').innerText = "Salvar Cadastro";
+    document.getElementById('btn-cancel').style.display = "none";
+}
+
+async function deleteClient(id) {
+    if (confirm("Excluir definitivamente?")) {
+        await _supabase.from('clientes').delete().eq('id', id);
+        loadClients();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadClients);
+    </script>
+</body>
+</html>
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# 01.1
+# BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+
+Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
+
+# APRESENTAÇÃO DA LOJA/SERVIÇÕS
+```
+Ola, [Sou AristidesBP], [Moro em Belém do Pará , Brasil] , tenho uma empresa de  [ de criação de sites e gestor de trafego pago] para um público
+super exigente. Pretendo fazer uma campanha no Google Ads, logo eu preciso saber as informações que vou te passar abaixo, porfavor não utilize caixas de testo.
+```
+# PESQUISAR PUBLICO ALVO (PERSONA)
+```
+Quero saber as  Dores, Desejos, as principais Objeções e as principais Motivações para Compra. 
+Traga isso listado por topico de cada pergunta.
+```
+# PALAVRAS CHAVES
+```
+Agora quero criar uma campahna no google ADS paera vender este serviço. Me ajude trazendo as 10 palavras chaves mais usadas para pesquisa no
+google, de quem deseja comprar este servoço.
+```
+
+# [FAZER UMA PLANILHA PARA ANALIZAR AS PALAVRAS CHAVES]:
+```
+(1) Quero construir uma lista de cards para verificar cada uma das palavras chaves.
+(2) Faça uma lista em forma de cardes com as seguintes informações para cada uma das palavras:
+palavra-chave, busca por mês, CPC medio ,Custo do Tráfego, Concorrência, Relação com a solução (intenção de compra,maioria quer comprar,buscando solução,pesquisando o problema),Relação de Intencionalidade (Exclusiva,70%,50%,baixa intencionalidade),Relação site/ palavra chaves.
+(3) organize a lisata ou tabela começando da melhor para pior.
+```
+
+#  PALAVRAS NEGATIVAS
+```
+Quero construir outra lista ou tabela para verificar cada uma das palavras negativas.
+1- Faça uma planilha ou Tabela com as seguintes colunas: palavra-negativas, motivo.
+
+## EXEMPLO:
+| Palavra-negativa    | Motivo                                                         |
+|---------------------|----------------------------------------------------------------|
+| grátis              | Usuários buscando soluções sem pagar, sem intenção de compra   |
+| tutorial            | Pessoas querendo aprender, não contratar                       |
+| curso               | Interesse em aprender tráfego pago, não em contratar gestor    |
+| pdf                 | Busca por material gratuito ou informativo                     |
+| exemplo             | Usuários querendo modelos ou ideias, não serviços              |
+| amostra             | Busca por algo sem custo ou demonstração gratuita              |
+| como fazer          | Interesse em executar por conta própria                        |
+| ferramenta gratuita | Procurando ferramentas e não serviços profissionais            |
+| sem custo           | Busca por alternativas gratuitas                               |
+| dicas               | Usuários querendo informações e não serviço pago               |
+
+```
+
+# FAZER UMA PLANILHA PARA SERAPARA AS PALAVRAS-CHAVES POR TIPO DE SOLUÇÃO E INTERESSE
+```
+Quero construir uma tabela em um arquivo .md para verificar cada uma das palavras-chaves.
+1- Faça uma planilha ou Tabela com as seguintes colunas:
+palavra-chaves, tipo de solução, interesse.
+
+## EXEMPLO:
+| Palavra-chave                        | Tipo de Solução                     | Interesse                              |
+|--------------------------------------|--------------------------------------|---------------------------------------|
+| gestor de tráfego pago               | Serviço profissional                 | Alta intenção de contratação          |
+| especialista em tráfego pago         | Serviço profissional                 | Alta intenção de contratação          |
+| consultoria de tráfego pago          | Consultoria e estratégia             | Média-alta intenção                   |
+| tráfego pago para e-commerce         | Solução para e-commerce              | Média intenção                        |
+| gerenciamento de anúncios Google Ads| Gestão de campanhas Google Ads       | Alta intenção de contratação           |
+| agência de tráfego pago              | Agência especializada                | Alta intenção de contratação          |
+| profissional de tráfego pago         | Serviço individual                   | Média intenção                        |
+| tráfego pago para vendas online      | Solução para aumento de vendas       | Média intenção                        |
+| otimização de campanhas Google Ads   | Serviço de otimização                | Média intenção                        |
+| tráfego pago para empresas           | Solução B2B                          | Média-alta intenção                   |
+```
+# ESCOLHENDO  INFORMAÇÕES:
+```
+Quais são as principais informações, dentro do que você pesquisou sobre esta persona, que se esta persona souber ela compra de mim?
+Liste da mais importante para a menus importante.
+
+```
+
+# CRIANDO ANUNCIOS
+```
+ Com base nas pesquisas realizadas , faça um anuncio com 4 tituloas (no maximo 30 caracteres cada um) e 2 descrições (com no maximo 90 caracteres cada uma):
+(1) GOOGLE ADS É DIFERENTE DO META ADS, ELE TEM UMA HIERARQUIA NA ESTRUTURA DE CAMPANHAS QUE DEVE SER RESPEITADA,UM ANUNCIO BEM FEITO E QUASE GRARANTIA DE VENDAS !!
+(2) NO CONJUNTO DAS PALAVRAS NO MINIMO 10K DE BUSCA MES!
+# PARA CADA SOLUÇÃO UMA CAMPANHA.
+# PARA CADA INTERESSE , DA MESMA SOLUÇÃO UM GRUPO DE ANUNCIOS.
+
+```
+# BÔNUS:GERAR IMAGEM Perchance 
+https://perchance.org/ai-text-to-image-generator
+escolha o modelo “Flux” ou “SDXL” se aparecer opção – eles dão mais nitidez
+
+
+# BÔNUS: Site comercial venda de serviços 
+Obs: ao baixar verifique o endereço das pastas para salvar a imagem no código.
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criação de Sites & Tráfego Pago – AristidesBP</title>
+<meta name="description" content="Aumente suas vendas com um site profissional e campanhas de tráfego pago otimizadas.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f97316;
+      --dark: #1a1a1a;
+      --light: #f5f5f5;
+      --gray: #777;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans', sans-serif; }
+    body { background:var(--light); color:var(--dark); line-height:1.6; overflow-x:hidden; }
+    nav { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.1); z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:10px 30px; }
+    nav h2 { color:var(--primary); font-size:1.2rem; }
+    nav ul { list-style:none; display:flex; gap:20px; }
+    nav ul li a { text-decoration:none; color:var(--dark); font-weight:600; }
+  
+  
+
+header { background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/header.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:120px 20px; }
+   
+header h1 { font-size:3rem; margin-bottom:10px; }
+    header p { font-size:1.2rem; margin-bottom:20px; }
+    header a { background:var(--primary); color:#fff; padding:12px 30px; text-decoration:none; border-radius:30px; font-weight:600; }
+    
+
+
+section { padding:80px 20px; text-align:center; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:40px; }
+    .card { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    .card h3 { color:var(--primary); margin-bottom:15px; }
+    .card img { width:100%; border-radius:10px; margin-bottom:15px; }
+    .contact form { max-width:600px; margin:auto; display:flex; flex-direction:column; gap:15px; }
+    .contact input,.contact textarea,.contact select { padding:15px; border:1px solid #ddd; border-radius:5px; font-size:1rem; }
+    .contact button { background:var(--primary); color:#fff; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+    footer { background:var(--dark); color:#fff; text-align:center; padding:20px; margin-top:40px; }
+    footer a { color:#fff; text-decoration:none; margin:0 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h2>AristidesBP</h2>
+    <ul>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#services">Serviços</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Transforme seu Negócio Online!</h1>
+    <p>Sites profissionais + campanhas de tráfego pago que geram vendas reais.</p>
+    <a href="#contact">Quero Meu Site Agora</a>
+  </header>
+
+  <!-- SOBRE -->
+  <section id="about">
+    <h2>Por Que Escolher AristidesBP?</h2>
+    <p>Profissional especializado em criação de sites que convertem e gestão de tráfego pago para empresas exigentes. Resultados reais, transparência e suporte próximo.</p>
+ 
+<!-- CARDS --> 
+<div class="cards">
+     
+<!-- CARD01 --> 
+<div class="card">
+<img src="img/card01.jpg" alt="Resultados">
+<h3>Resultados Garantidos</h3>
+<p>Sites que vendem e campanhas de ads otimizadas para gerar ROI real.</p>
+</div>
+ 
+<!-- CARD02 -->
+<div class="card">
+<img src="img/card02.jpg" alt="Profissionalismo">
+<h3>Profissionalismo</h3>
+<p>Mais de 10 anos de experiência, portfólio de clientes satisfeitos.</p>
+      </div>
+      
+<!-- CARD03 -->
+<div class="card">
+        <img src="img/card03" alt="Suporte">
+        <h3>Suporte Personalizado</h3>
+        <p>Acompanhamento próximo, ajustes estratégicos e relatórios claros.</p>
+      </div>
+      
+<!-- CARD04 -->
+<div class="card">
+        <img src="img/CARD04.jpg" alt="Exclusividade">
+        <h3>Exclusividade</h3>
+        <p>Projetos sob medida, alinhados com o posicionamento da sua empresa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="services">
+    <h2>Serviços</h2>
+    <div class="cards">
+     
+<!-- CARD05 -->
+ <div class="card">
+        <img src="img/card05.jpg" alt="Sites Profissionais">
+        <h3>Criação de Sites Profissionais</h3>
+        <p>Design moderno, responsivo e otimizado para conversão de clientes.</p>
+      </div>
+
+<!-- CARD06 -->
+      <div class="card">
+        <img src="img/CARD06.jpg" alt="Tráfego Pago">
+        <h3>Gestão de Tráfego Pago</h3>
+        <p>Campanhas no Google Ads e redes sociais, maximizando resultados.</p>
+      </div>
+
+<!-- CARD07 -->
+      <div class="card">
+        <img src="img/card07.jpg" alt="Consultoria">
+        <h3>Consultoria Estratégica</h3>
+        <p>Planejamento e análise de resultados para escalar seu negócio online.</p>
+
+</div>
+    </div>
+  </section>
+
+<!-- VÍDEO -->
+<section id="video">
+  <h2>Assista Nosso Vídeo</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+      title="Vídeo Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</section>
+
+<style>
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 20px auto;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
+  <!-- FORMULÁRIO / CONTRATO -->
+  <section id="contact" class="contact">
+    <h2>Contrato de Prestação de Serviços</h2>
+    <p>Ao enviar o formulário você aceita a prestação do serviço de criação de site + gestão de tráfego pago. Será gerado o custo de <strong>R$50,00</strong> para visita técnica e relatório do projeto.</p>
+    <form id="contact-form">
+      <input type="text" id="nome" placeholder="Nome Completo" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="telefone" placeholder="Telefone" required>
+      <textarea id="mensagem" rows="5" placeholder="Descrição do Projeto / Informações adicionais" required></textarea>
+      <label><input type="checkbox" id="aceite" required> Aceito os termos e condições do contrato e autorizo o pagamento de R$50,00 para visita técnica.</label>
+      <button type="submit">Enviar para WhatsApp e Confirmar Contrato</button>
+    </form>
+  </section>
+
+<!-- FOOTER -->
+  <footer>
+    <p>Contatos e Redes Sociais</p>
+    <p>WhatsApp: <a href="https://wa.me/5591992420981" target="_blank">+55 91 99242-0981</a> | Email: contato@aristidesbp.com</p>
+    <p>
+      <a href="#" target="_blank">Facebook</a> | 
+      <a href="#" target="_blank">Instagram</a> | 
+      <a href="#" target="_blank">LinkedIn</a>
+    </p>
+    <p>&copy; 2025 AristidesBP. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Função para enviar formulário para WhatsApp
+    const form = document.getElementById("contact-form");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+      const mensagem = document.getElementById("mensagem").value;
+      const aceite = document.getElementById("aceite").checked;
+
+      if(!aceite){
+        alert("Você precisa aceitar os termos do contrato para continuar.");
+        return;
+      }
+
+      const texto = `*Contrato de Prestação de Serviços*%0A
+Nome: ${nome}%0A
+Email: ${email}%0A
+Telefone: ${telefone}%0A
+Mensagem: ${mensagem}%0A
+Aceite dos Termos: Sim%0A
+Custo Visita Técnica: R$50,00`;
+
+      // Abre WhatsApp no número fornecido
+      window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
+
+      alert("Formulário enviado! Aguarde nosso contato via WhatsApp.");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+```
+
+
+# BONUS: cardápio online para lanchonetes e restaurantes
+### ESTRUTURA DE PASTAS DO PROJETO: 
+http://aristidesbp.github.io/projeto/tapioca/index.html
+```
+|── index.html
+├── admin2.html
+├── assets
+    ├── img
+    │   └── logo.jpg                        
+    │   └── produtos
+    │       ├── banana.jpg
+    │       ├── carne-seca.jpg
+    │       ├── coca.jpg                     
+    │       ├── morango.jpg               
+    │       ├── presunto.jpg
+    │       ├── salada.jpg
+    │       └── suco.jpg
+    └── produtos.json
+
+```
+
+### cardapio.html
+```
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery - Aristidesbp</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+  --bege-claro:#fff8e1;
+  --vermelho-telha:#b22222;
+  --amarelo-mostarda:#f7d84f;
+  --marrom-madeira:#8b4513;
+  --preto-quadro:#1a1a1a;
+}
+body { scroll-behavior:smooth; }
+.filtro-categoria {
+  background:var(--amarelo-mostarda);
+  font-weight:bold;
+  padding:10px 20px;
+  border:2px solid var(--marrom-madeira);
+  border-radius:8px;
+}
+.busca {
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  border:2px solid var(--marrom-madeira);
+}
+.campo {
+  width:100%; padding:12px;
+  border-radius:8px; border:none;
+}
+.botao {
+  background:var(--amarelo-mostarda);
+  padding:12px 24px;
+  font-weight:600;
+  border-radius:8px;
+}
+
+.busca {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--marrom-madeira);
+  background: #fff;
+  color: #000;
+}
+</style>
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)]">
+
+<header class="bg-[var(--vermelho-telha)] text-white text-center py-6">
+  <img src="assets/img/logo.jpg" class="w-full h-64 object-cover">
+  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
+  <p>Seu lanche artesanal favorito!</p>
+
+  <div class="mt-4 px-4 max-w-md mx-auto">
+    <select id="filtroCategoria" class="filtro-categoria w-full">
+      <option value="todos">Todos</option>
+      <option value="lanches">Lanches</option>
+      <option value="bebidas">Bebidas</option>
+      <option value="sobremesas">Sobremesas</option>
+    </select>
+
+    <input
+      type="text"
+      id="buscaProduto"
+      class="busca"
+      placeholder="Buscar produto pelo nome..."
+    >
+  </div>
+</header>
+
+<section class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 text-[var(--marrom-madeira)]">Nosso Cardápio</h2>
+  <div id="menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
+<div class="container mx-auto">
+
+<p class="text-lg font-bold mb-4">
+Total do pedido: R$ <span id="total">0,00</span>
+</p>
+
+<div id="itens-pedido" class="space-y-2 mb-6"></div>
+
+<form id="pedido-form" class="space-y-4">
+<input id="nome" placeholder="Nome Completo" class="campo" required>
+<input id="telefone" placeholder="Telefone" class="campo" required>
+<input id="endereco" placeholder="Endereço" class="campo" required>
+
+<select id="formaPagamento" class="campo" required>
+<option disabled selected>Forma de Pagamento</option>
+<option>Dinheiro</option>
+<option>Pix</option>
+<option>Cartão</option>
+</select>
+
+<textarea id="obs" placeholder="Observações" class="campo"></textarea>
+<button class="botao">Enviar pedido via WhatsApp</button>
+</form>
+
+</div>
+</section>
+
+<script>
+const menuEl = document.getElementById("menu");
+const filtro = document.getElementById("filtroCategoria");
+const busca = document.getElementById("buscaProduto");
+const itensEl = document.getElementById("itens-pedido");
+const totalEl = document.getElementById("total");
+
+let produtos = [];
+let carrinho = [];
+
+fetch("assets/produtos.json")
+.then(r => r.json())
+.then(d => { produtos = d; renderMenu(); });
+
+function renderMenu() {
+  const cat = filtro.value;
+  const termo = busca.value.toLowerCase();
+
+  menuEl.innerHTML = "";
+  produtos
+  .filter(p =>
+    (cat==="todos" || p.categoria.toLowerCase()===cat) &&
+    p.nome.toLowerCase().includes(termo)
+  )
+  .forEach(p => {
+    const div = document.createElement("div");
+    div.className="bg-white p-4 rounded shadow";
+    div.innerHTML=`
+      <img src="${p.imagem}" class="h-48 w-full object-cover rounded mb-2">
+      <strong>${p.nome}</strong>
+      <p>${p.desc||""}</p>
+      <span>R$ ${p.preco.toFixed(2)}</span>
+      <button class="mt-2 bg-yellow-400 w-full py-2 rounded">Adicionar</button>
+    `;
+    const btn = div.querySelector("button");
+    btn.onclick = () => adicionar(p,btn);
+    menuEl.appendChild(div);
+  });
+}
+
+function adicionar(p,btn){
+  const item = carrinho.find(i=>i.id===p.id);
+  if(item) item.qtd++;
+  else carrinho.push({...p,qtd:1});
+
+  btn.textContent="Adicionado ✓";
+  setTimeout(()=>btn.textContent="Adicionar",800);
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho(){
+  itensEl.innerHTML="";
+  let total=0;
+
+  carrinho.forEach((i,idx)=>{
+    total += i.preco * i.qtd;
+    itensEl.innerHTML += `
+    <div class="flex items-center justify-between bg-gray-800 p-2 rounded">
+      <span>${i.nome} (x${i.qtd})</span>
+      <div class="flex gap-2">
+        <button onclick="menos(${idx})">➖</button>
+        <button onclick="mais(${idx})">➕</button>
+        <button onclick="remover(${idx})">❌</button>
+      </div>
+    </div>`;
+  });
+
+  totalEl.textContent = total.toFixed(2);
+}
+
+function mais(i){ carrinho[i].qtd++; atualizarCarrinho(); }
+function menos(i){
+  carrinho[i].qtd--;
+  if(carrinho[i].qtd<=0) carrinho.splice(i,1);
+  atualizarCarrinho();
+}
+function remover(i){
+  carrinho.splice(i,1);
+  atualizarCarrinho();
+}
+
+filtro.onchange = renderMenu;
+busca.oninput = renderMenu;
+</script>
+
+</body>
+</html>
+```
+### produtos.json
+```
+[
+  {
+    "id": 1,
+    "nome": "Tapioca de Carne Seca",
+    "descricao": "Carne seca com queijo",
+    "preco": 18,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/carne-seca.jpg"
+  },
+  {
+    "id": 2,
+    "nome": "Suco Natural",
+    "descricao": "Suco gelado",
+    "preco": 6,
+    "categoria": "Bebidas",
+    "imagem": "assets/img/produtos/suco.jpg"
+  },
+  {
+    "id": 1767709985801,
+    "nome": "Tapioca de morango",
+    "descricao": "Tapioca de morango recheada com leite condensado",
+    "preco": 15,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/morango.jpg"
+  }
+]
+```
+### cadastrar_produtos.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Produtos</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+  --bege-claro:#fff8e1;
+  --vermelho:#b22222;
+  --amarelo:#f7d84f;
+  --marrom:#8b4513;
+  --preto:#1a1a1a;
+}
+</style>
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto)]">
+
+<header class="bg-[var(--vermelho)] text-white text-center py-6 shadow">
+  <h1 class="text-3xl font-bold">Painel Administrativo</h1>
+  <p>Cadastro de Produtos</p>
+</header>
+
+<main class="container mx-auto p-4 space-y-8">
+
+<!-- IMPORTAR -->
+<section class="bg-white p-4 rounded-xl shadow">
+  <h2 class="font-bold mb-2">Importar produtos.json</h2>
+  <input type="file" id="importar" accept=".json"
+    class="w-full p-2 border rounded">
+</section>
+
+<!-- FORM -->
+<section class="bg-white p-4 rounded-xl shadow space-y-3">
+  <h2 class="font-bold">Novo / Editar Produto</h2>
+
+  <input id="nome" placeholder="Nome" class="w-full p-2 border rounded">
+  <input id="descricao" placeholder="Descrição" class="w-full p-2 border rounded">
+  <input id="preco" type="number" placeholder="Preço" class="w-full p-2 border rounded">
+
+  <!-- CATEGORIA -->
+  <select id="categoria" class="w-full p-2 border rounded">
+    <option value="">Selecione a categoria</option>
+    <option value="lanches">Lanches</option>
+    <option value="bebidas">Bebidas</option>
+    <option value="sobremesas">Sobremesas</option>
+  </select>
+
+  <input id="imagem" type="file" accept="image/*" class="w-full">
+
+  <img id="preview" class="hidden w-32 h-32 object-cover rounded shadow">
+
+  <button onclick="salvar()"
+    class="bg-[var(--amarelo)] px-4 py-2 rounded font-bold hover:opacity-90">
+    Salvar Produto
+  </button>
+</section>
+
+<!-- BUSCA -->
+<section class="bg-white p-4 rounded-xl shadow">
+  <input id="busca" placeholder="Buscar produto..."
+    class="w-full p-2 border rounded">
+</section>
+
+<!-- LISTA -->
+<section>
+  <h2 class="font-bold mb-4">Produtos</h2>
+  <div id="lista" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</section>
+
+<!-- EXPORTAR -->
+<section class="text-center">
+  <button onclick="exportar()"
+    class="bg-[var(--vermelho)] text-white px-6 py-3 rounded font-bold">
+    Exportar produtos.json
+  </button>
+</section>
+
+</main>
+
+<script>
+let produtos = [];
+let editandoId = null;
+
+importar.onchange = e => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    produtos = JSON.parse(reader.result);
+    ordenar();
+    render();
+  };
+  reader.readAsText(e.target.files[0]);
+};
+
+imagem.onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove("hidden");
+};
+
+busca.oninput = render;
+
+function ordenar() {
+  produtos.sort((a,b) =>
+    a.nome.localeCompare(b.nome, 'pt-BR'));
+}
+
+function render() {
+  const termo = busca.value.toLowerCase();
+  lista.innerHTML = "";
+
+  produtos
+    .filter(p => p.nome.toLowerCase().includes(termo))
+    .forEach(p => {
+      lista.innerHTML += `
+      <div class="bg-white p-4 rounded-xl shadow flex flex-col gap-2">
+        <img src="${p.imagem}" class="h-40 object-cover rounded">
+        <strong>${p.nome}</strong>
+        <span>R$ ${p.preco}</span>
+        <span class="text-sm text-gray-600">${p.categoria}</span>
+        <div class="flex gap-2">
+          <button onclick="editar(${p.id})"
+            class="bg-blue-500 text-white px-3 py-1 rounded">Editar</button>
+          <button onclick="excluir(${p.id})"
+            class="bg-red-500 text-white px-3 py-1 rounded">Excluir</button>
+        </div>
+      </div>`;
+    });
+}
+
+function salvar() {
+  if (!nome.value || !preco.value || !categoria.value)
+    return alert("Preencha nome, preço e categoria");
+
+  const img = imagem.files[0];
+  let imgPath = editandoId
+    ? produtos.find(p => p.id === editandoId).imagem
+    : "";
+
+  if (img) imgPath = "assets/img/produtos/" + img.name;
+
+  if (editandoId) {
+    Object.assign(produtos.find(p => p.id === editandoId), {
+      nome:nome.value,
+      descricao:descricao.value,
+      preco:+preco.value,
+      categoria:categoria.value,
+      imagem:imgPath
+    });
+    editandoId = null;
+  } else {
+    produtos.push({
+      id:Date.now(),
+      nome:nome.value,
+      descricao:descricao.value,
+      preco:+preco.value,
+      categoria:categoria.value,
+      imagem:imgPath
+    });
+  }
+
+  ordenar();
+  limpar();
+  render();
+}
+
+function editar(id) {
+  const p = produtos.find(p => p.id === id);
+  nome.value = p.nome;
+  descricao.value = p.descricao;
+  preco.value = p.preco;
+  categoria.value = p.categoria;
+  preview.src = p.imagem;
+  preview.classList.remove("hidden");
+  editandoId = id;
+}
+
+function excluir(id) {
+  produtos = produtos.filter(p => p.id !== id);
+  render();
+}
+
+function exportar() {
+  const blob = new Blob(
+    [JSON.stringify(produtos, null, 2)],
+    {type:"application/json"}
+  );
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "produtos.json";
+  a.click();
+}
+
+function limpar() {
+  nome.value = descricao.value =
+  preco.value = categoria.value = "";
+  imagem.value = "";
+  preview.classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
+```
+
+      
+  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# 02
+# GITHUB VERSIONAMENTO DE PROJETO / ADICIONANDO COLABORADORES 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
+
+---
+🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
+💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
+
+---
+🧩 1️⃣ Pré-requisitos
+Antes de começar:
+(1) Você precisa ter uma conta no GitHub.
+(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
+NOME_DO_USUARIO: aristidesbp
+NOME_DO_REPOSITORIO: aristidesbp.github.io
+(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
+
+---
+🏗️ 2️⃣ Acesse o repositório do seu site
+(1) Entre em https://github.com/.
+(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
+(3) Você será levado para a tela principal com os arquivos do projeto.
+
+⚙️ 3️⃣ Vá até as configurações do repositório
+(1) Clique em ⚙️ Settings (no canto direito superior).
+(2) No menu lateral esquerdo, role até encontrar “Collaborators”
+(fica dentro da seção Access → Collaborators).
+
+---
+🪪 4️⃣ Adicionando o colaborador
+(1) Clique no botão “Add people”.
+(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
+(3) Clique no botão “Add” ao lado do nome que aparecer.
+
+### EXEMPLOS DE CÓDIGO 
+baixar atualizações do repositório do github
+
+``` git pull origin main ```
+
+após fazer as alterações utilize os seguintes comandos para subir. 
+
+``` git status ```
+
+``` git add .  ```
+
+``` git commit -m "mensagem" ```
+
+``` git push origin main ```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥
+# 03
+# LINUX/TERMUX
+🟥🟥🟥🟥🟥🟥🟥🟥
+
+Acesse o link oficial (não use da Play Store):
+faça o download do aplicativo direto no github
+https://github.com/termux/termux-app/releases
+
+```
+pkg update && pkg upgrade -y 
+# comando utilizado para atualizar o Termux
+```
+```
+termux-setup-storage
+# comando usado para permitir acesso às pastas internas do Android
+```
+```
+pkg install git -y
+pkg install nano -y
+pkg install openssh -y
+pkg install curl -y
+pkg install tree -y
+# instala ferramentas básicas para programar e conectar ao GitHub
+```
+---
+# COMANDOS BASICOS DO TERMUX 
+---
+```
+# isto é um comentário utilizado para explicações
+```
+```
+ls 
+# O comando acima, mostrar conteudo da pasta
+```
+``` 
+ls -a
+# para mostrar conteudo o culto da pasta
+```
+```  
+mkdir repositorios_git 
+# para criar pasta com o nome repositorios_git
+```
+``` 
+nano teste.txt 
+# abre o arquivo teste.txt 
+# obs: ele cria caso não exista
+# Ctrl+S  para salvar
+# Crtl+X  para sair
+```
+```
+mv teste.txt ./repositorios_git 
+# mover pasta ou arquivo (./pasta_destino)
+```
+``` 
+cd repositorios_git 
+# vai para dentro da pasta repositorios_git
+```
+``` 
+cd .. 
+# volta para pasta anterior
+```
+``` 
+rm -rf teste.txt 
+# apagar pasta/arquivo
+```
+``` 
+clear 
+# usado para limpar a tela
+```
+
+---
+# GIT-GITHUB 
+---
+  
+```
+git --help
+# usado para procurar comandos git
+```
+```
+git <comando> --help
+# pesquise por comando especifico :
+```             
+```git init
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+```
+```
+git config --global --add safe.directory "$(pwd)"
+# Configurar a pasta como segura (evita erros de segurança)                               
+```
+```git config --list
+# Lista todas as configurações ativas 
+```
+```
+git config --global user.name "Seu Nome"
+# Configurar nome de usuário
+```
+```
+git config --global user.email "seu@email.com"
+# Configurar email do GitHub
+```
+```
+eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
+# Iniciar o agente ssh
+```
+```
+ssh-keygen -t ed25519 -C "seu@email.com"
+#Gerar nova chave SSH (caso ainda não tenha)
+```
+```
+cat ~/.ssh/id_ed25519.pub
+# Mostrar a chave pública para adicionar no GitHub
+```
+```
+git remote set-url origin git@github.com:usuario/repositorio.git
+# Troque a URL remota para usar SSH
+```
+```
+ssh -T git@github.com
+## 🧪 Teste de conexão com GitHub via SSH 
+### Se tudo estiver certo, você verá:
+### Hi SEU_USUARIO! You've successfully authenticated..
+```
+
+
+## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
+----------------------------------------------------
+1. Acesse: https://github.com](https://github.com
+2. Faça login na sua conta
+3. No canto superior direito, clique na sua foto de perfil → **Settings**
+4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
+5. Clique em **New SSH key**
+6. Em **Title**, coloque um nome (ex: “Meu notebook”)
+7. Em **Key**, cole a chave pública copiada (noterminal digite)
+----------------------------------------------------
+
+
+
+---
+# Clonando um repositório do GitHub
+---
+ 
+```
+git clone git@github.com:usuario/repositorio.git
+## Clona o repositório com chave SSH
+```
+```
+cd nome_do_reposito_clonado
+## entra na pasta do repositório 
+```
+```
+git config --global --add safe.directory "$(pwd)"```
+## Configurar a pasta como segura (evita erros de segurança)   
+```
+```
+git remote -v
+## Mostra os repositórios remotos configurados
+## git@github.com:usuario/repositorio.git (fetch).Mostra a URL SSH usada para buscar (fetch) atualizações do repositório remoto. Ou seja, de onde você pode baixar mudanças do GitHub para o seu computador.
+## git@github.com:usuario/repositorio.git (push).Mostra a URL SSH usada para enviar (push) suas mudanças locais para o repositório no GitHub.
+```
+```
+git fetch
+## Busca atualizações sem aplicar
+```
+```
+git pull origin main
+## Sincroniza com o repositório remoto (branch main)
+``` 
+
+
+
+---
+# BRANCHES AS RAMIFICAÇÕES
+---
+
+```
+git branch
+# Lista todas as branches (ramificações) existentes no repositório
+```
+```
+git log
+# Exibe histórico de commits com hash, autor e data (PARA SAIR DIGITE: q)
+```
+``` 
+git checkout -b novaBranch numero-do-commit
+# Cria uma nova branch a partir de um commit específico e já muda para ela
+# Exemplo: git checkout -b novaBranch 2ad9347bba64542687c6
+```
+```
+git branch nome-da-branch
+# Cria uma nova branch com o nome informado (sem trocar para ela)
+```
+```
+git checkout -b nova-branch
+# Cria uma nova branch e já muda para ela
+```
+```
+git stash
+# Salva temporariamente alterações não commitadas (útil antes de trocar de branch)
+```
+```
+git checkout main
+# Troca para a branch principal (main)
+```
+```
+git checkout nome-da-branch
+# Troca para a branch especificada
+```
+```
+git stash apply
+# Recupera alterações salvas com `git stash`
+``` 
+```
+git merge especificar-nome-da-branch
+# Une a branch especificada com a branch atual
+```
+```
+git branch -d nome-da-branch
+# Deleta a branch local (apenas se já foi mesclada)
+```
+```
+git merge nova-branch
+# Junta as alterações da branch "nova-branch" com a atual (ex: main)
+```
+```
+git pull origin main
+# Atualiza a branch atual com as últimas alterações do repositório remoto (main)
+```
+
+
+---
+# TRABALHANDO COM COMMIT 
+---
+```
+git status
+# Mostra o status atual dos arquivos (modificados, novos, deletados)
+# digite Q para sair
+```
+```
+git add nome-do-arquivo.ext
+# Adiciona um arquivo específico para a área de staging
+# OBS: CASO VOCÊ JÁ TENHA CRIADO OU ALTERADO ALGUM ATIVO
+```
+```
+git add .
+# Adiciona TODOS os arquivos modificados para o commit
+```
+```
+git commit -m "Mensagem clara e objetiva"
+# Cria um commit com a mensagem entre aspas
+```
+```
+git commit -am "Mensagem"
+# Adiciona e comita arquivos rastreados (não funciona com novos arquivos)
+```
+```
+git diff
+# Mostra as diferenças entre o código atual e o último commit
+```
+```
+git show
+# Mostra detalhes do último commit
+```
+```
+git blame nome-do-arquivo
+# Mostra linha por linha quem modificou o quê (ótimo para rastrear bugs)
+```
+```
+git tag -a v1.0 -m "Versão 1.0"
+# Cria uma tag de versão
+```
+```
+git log --oneline
+# Mostra o histórico de forma resumida (1 linha por commit)
+```
+```
+git log
+# Exibe histórico de todos os commits com hash, autor e data (PARA SAIR DIGITE: q) 
+```
+---
+# 🧹 CORREÇÕES E AJUSTES 
+---
+```
+git reset nome-do-arquivo
+# Remove o arquivo da área de staging (antes do commit)
+```
+```
+git reset --hard HEAD
+# Remove todas as alterações e volta ao último commit
+```
+```
+git clean -f
+# Remove arquivos não rastreados (novos arquivos que não foram adicionados)
+```
+```
+git revert <id-do-commit>
+# Reverte um commit específico sem apagar o histórico
+```
+
+---
+## 📤   RECEBENDO E ENVIANDO PARA O GITHUB 
+---
+```
+git remote add origin git@github.com:usuario/repositorio.git
+# Conecta seu repositório local ao repositório remoto via SSH
+```
+```
+git fetch
+# Busca atualizações do repositório remoto (mas não aplica)
+```
+```
+git merge
+# Aplica as atualizações buscadas com `git fetch`
+```
+```
+git pull
+# Baixa alterações do GitHub para seu projeto local
+```
+```
+git pull origin main --rebase
+##  Atualizar seu repositório local com o que está no GitHub:
+```
+```
+git push -u origin main
+# Envia o repositório local para o GitHub (main = branch principal)
+```
+---
+# TUTORIAL: COMO RECUPERAR ARQUIVOS EXCLUÍDOS NO GIT:
+### OBS: Este tutorial assume que você está dentro do repositório local.
+---
+```
+git log --diff-filter=D --summary
+# ETAPA 1 — LOCALIZAR ARQUIVOS DELETADOS
+# Exibe o histórico de commits com resumo das alterações,e filtra SOMENTE commits que deletaram arquivos.
+# DICA: Use a tecla Q para sair da visualização do log quando quiser.
+```
+```
+git log --summary --name-status | grep -B 10 "editor-de-txt.html
+# para buscar especificamente um arquivo que você quer recuperar:
+# Neste exemplo, buscamos o arquivo "editor-de-txt.html"
+# O parâmetro -B 10 mostra as 10 linhas antes da ocorrência,
+# para encontrar o commit completo que removeu o arquivo.
+# A saída  mostra algo assim:
+# commit 7477572b4f232ee774236f1b58f510d57d0f7de9
+# Author: aristidesbp <aristidesbp@gmail.com>
+# Date:   Thu May 22 10:01:41 2025 -0300
+# Mensagem: atualizarS
+# D	editor-de-txt.html
+# OBS: Anote o HASH DO COMMIT (exemplo acima: 7477572b4f232ee774236f1b58f510d57d0f7de9)
+```
+```
+git show --name-status --diff-filter=D 7477572b4f232ee774236f1b58f510d57d0f7de9
+# Agora você pode usar o comando abaixo para ver todos os arquivos DELETADOS no mesmo commit:
+# Exemplo de saída esperada:
+# D	editor-de-txt.html
+# D	script-antigo.js
+# D	css/velho-style.css
+```
+```
+git checkout <HASH_DO_COMMIT>^ -- caminho/do/arquivo
+# Para restaurar um arquivo deletado, use o comando:
+# O ^ (circunflexo) indica que queremos o arquivo da versão ANTERIOR ao commit que deletou.
+# Exemplo real:
+# git checkout 7477572b4f232ee774236f1b58f510d57d0f7de9^ -- editor-de-txt.html
+# Esse comando recupera o arquivo "editor-de-txt.html" e o adiciona de volta ao diretório atual.
+```
+```
+git add editor-de-txt.html
+# Após restaurar o arquivo, você deve adicioná-lo novamente ao controle de versão:
+```
+```
+git commit -m "Recuperar arquivo editor-de-txt.html que havia sido deletado"
+# Agora salve com um novo commit:
+```
+### PRONTO! O arquivo está de volta no seu projeto.
+### CONCLUSÃO:
+Usando Git, você pode recuperar QUALQUER arquivo que foi deletado
+. Em qualquer ponto do histórico, mesmo que não saiba o commit exato.
+. Sempre use git log e git show para investigar o histórico.
+. Lembre-se: o Git guarda tudo. 😉
+
+---
+# ✅ 1. Voltar temporariamente a um commit (modo detached HEAD) Pressione q para sair da visualização.
+---
+```
+git log
+# Use o comando abaixo para listar o histórico de commits no (pc): assim você encontra o ID
+```
+```
+git checkout <id_do_commit>
+# Esse modo é útil apenas para explorar um commit antigo sem alterar o histórico da branch atual.
+# Exemplo: git checkout a1b2c3d ⚠️ Neste modo, você não está em nenhuma branch. Se fizer alterações aqui, precisará criar uma nova branch para não perder seu trabalho.
+```
+
+---
+# ✅ 2. Voltar permanentemente a um commit (desfazendo commits posteriores)
+---
+```
+git reset --soft <id_do_commit>
+# Opção A: Reset "soft" – mantém as alterações no stage
+```
+```
+git reset <id_do_commit>
+# Opção B: Reset "mixed" (padrão) – mantém alterações nos arquivos, mas remove do stage
+```
+```
+git reset --hard <id_do_commit>
+# Opção C: Reset "hard" – apaga tudo (perigoso!)
+#⚠️ Atenção: Se você fizer --hard, todo o trabalho feito depois do commit escolhido será perdido, a menos que esteja salvo em algum lugar (como no GitHub ou em um branch separado).
+#💡 Dica de segurança: Antes de usar reset --hard, é recomendado criar uma branch backup:(git branch backup-antes-do-reset) Assim, você pode recuperar os commits caso precise
+```
+
+---
+# ✅ 3. Criar uma nova branch a partir de um commit antigo
+---
+```
+git checkout -b nova-branch <id_do_commit>
+# Se quiser preservar o histórico e começar uma nova linha de desenvolvimento a partir de um commit antigo:
+# Exemplo: git checkout -b teste-antigo a1b2c3d
+```
+
+---
+# CRIANDO UM SERVIDOR COM PYTHON 
+---
+
+
+# Passo 1: Instalar o Python
+
+Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+```
+cd pasta_do_arquivo
+# Navegue até a pasta onde seus arquivos estão 
+```
+```
+python -m http.server 8080
+# Ele inicia um servidor web simples na porta 8080:
+# O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+```
+# Como Acessar o Site no Navegador
+Abra o navegador do seu celular (Chrome, Firefox, etc.).
+Digite o seguinte endereço na barra de URL:
+
+```
+http://localhost:8080/admin.html
+```
+
+O Painel Administrativo agora deve carregar, e o JavaScript (Bloco 6) deve funcionar, permitindo que você clique no botão para adicionar campos e que o localStorage funcione corretamente.
+
+Para parar o servidor, volte para o Termux e pressione 
+#### Ctrl + C.
+
+# FIREBASE
+
+```
+# Instalando o Firebase
+pkg update && pkg upgrade
+pkg install nodejs git -y
+npm install -g firebase-tools
+firebase login
+```
+```
+# Atualiza o Firebase CLI para a versão mais recente
+npm install -g firebase-tools
+# Verifica se a instalação foi concluída e mostra a versão atual
+firebase --version
+
+```
+```
+# Cria uma nova pasta para seu projeto (exemplo: delivery)
+mkdir delivery && cd delivery
+```
+```
+# Inicializa o projeto Firebase dentro dessa pasta
+firebase init
+```
+```
+# Durante o "firebase init":
+# - Escolha: "Hosting" (pressione espaço para marcar e Enter para confirmar)
+# - Escolha: "Use an existing project" (se já criou no site do Firebase)
+# - Ou: "Create a new project" (para criar agora)
+# - Defina a pasta pública (geralmente "public" ou "dist")
+# - Escolha "No" quando perguntar sobre SPA (single page app)
+# - Escolha "Yes" para sobrescrever index.html se quiser um novo
+```
+```
+# 4️⃣ Depois de configurar, você pode testar o deploy:
+firebase deploy
+```
+
+
+---
+# BAIXAR VIDEOS
+# INSTALE O yt-dlp:
+-------------------------------------------------------
+Agora instale o yt-dlp com o comando:
+```
+pip install yt-dlp
+```
+-------------------------------------------------------
+4. (OPCIONAL) INSTALE O FFMPEG:
+-------------------------------------------------------
+O ffmpeg permite baixar vídeos com áudio ou converter formatos:
+```
+pkg install ffmpeg -y
+```
+-------------------------------------------------------
+5. COMANDOS PARA BAIXAR VÍDEOS:
+-------------------------------------------------------
+
+# Comando básico para baixar vídeo:
+```
+yt-dlp "URL_DO_VÍDEO"
+```
+# Exemplo:
+```
+yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+-------------------------------------------------------
+6. COMANDOS OPCIONAIS:
+-------------------------------------------------------
+
+# Baixar apenas o áudio em MP3:
+```
+yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
+```
+# Escolher qualidade de vídeo (exemplo: 720p):
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
+```
+# Salvar com nome personalizado:
+```
+yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
+```
+# Ver formatos disponíveis:
+```
+yt-dlp -F "URL_DO_VÍDEO"
+```
+-------------------------------------------------------
+DICA EXTRA:
+-------------------------------------------------------
+Você pode criar um script `.sh` com esses comandos para facilitar o processo com menus interativos.
+
+Se quiser ajuda para isso, me avise!
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 04
+# CODIGOS PRONTOS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
+Abaixo vou te passar 3 códigos depois vou te pedir uma tarefa.
+1. Com base nas pesquisas que realizamos, faça as outras seções que faltam
+```
+
+---
+# INDEX.HTML (MODULAR)
+```
+<!DOCTYPE html>
+<html lang="pt-BR"> 
+<head>
+
+<!-- ✅ Estrutura básica  -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title> TÍTULO DA PÁGINA </title>
+
+<link rel="stylesheet" href="css/index.css">
+<!-- ✅ Estrutura SEO  -->
+</head>
+<body> 
+
+<!-- ✅ Navbar  -->
+<nav id="componente-Navbar" role="navigation" aria-label="Menu de navegação principal">
+</nav>
+<script src="assets/js/navbar.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarNavbar);</script>
+
+
+<!-- ✅ Header (promoções e propaganda) -->
+<header id="componente-Header" role="banner" aria-label="Cabeçalho principal"></header>
+<script src="assets/js/header.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHeader);</script>
+
+<main>
+
+<!-- ✅ Cardapio -->
+<section id="componente-produtos" aria-label="Produtos oferecidos"></section>
+<script src="assets/js/produtos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarProdutos);</script>
+
+<!-- ✅ formulário de pedido no whatsapp  -->
+<!-- O formulário recebe os produtos e quantidades selecionadas acima, fazendo o serviço de check-out e pagamento, depois enviando o pedido para o WhatsApp  -->
+<section id="componente-Fpedidos" aria-label="Produtos oferecidos"></section>
+<script src="assets/js/fpedidos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarCardapioFpedidos);</script>
+ 
+  
+<!-- ✅ Serviços e Eventos  -->
+<section id="componente-servicos" aria-label="Serviços oferecidos"></section>
+<script src="assets/js/servicos.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarServicos);</script>
+
+<!-- ✅ Hero  -->
+<section id="componente-hero" aria-label="Chamada de ação principal"></section>
+<script src="assets/js/hero.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarHero);</script>
+
+</main>
+
+<!-- ✅ Footer -->
+<footer id="footer-container" role="contentinfo" aria-label="Rodapé do site"></footer>
+<script src="assets/js/footer.js"></script>
+<script>document.addEventListener('DOMContentLoaded', criarFooter);</script>
+
+  <!-- 🔧 Bibliotecas js externas e principais -->
+  <!-- 🧠 Prompt: Importe bibliotecas modernas que melhorem animações e interação. Scripts devem ser carregados no final para performance. Use defer e async quando necessário. -->
+  <script src="https://unpkg.com/scrollreveal" defer></script> <!-- Efeitos de scroll reveal -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
+  <!-- 🧠 Prompt: Carregue o script principal do site com type="module" para suportar import/export. Use defer para não bloquear renderização. -->
+  <script src="assets/js/site-mvc-main.js" type="module" defer></script>
+  <script src="assets/js/index.js" defer></script>
+</body>
+</html>
+
+```
+
+---
+## Exemplo navbar.js
+```
+// assets/js/navbar.js
+function criarNavbar() {
+const nav = document.getElementById("componente-Navbar");
+if (!nav) return;
+nav.innerHTML = `
+<!-- 🟥🟥 início do html 🟥🟥 -->
+<style>
+/* assets/css/Navbar.css */
+#componente-Navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #000;
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+}
+
+#componente-Navbar .navbar-container {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: #FFD700;
+  font-family: 'DM Sans', sans-serif;
+}
+
+#componente-Navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#componente-Navbar .nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+#componente-Navbar .nav-links a {
+  color: #FFD700;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+#componente-Navbar .nav-links a:hover {
+  color: white;
+}
+
+#componente-Navbar .hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#componente-Navbar .hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #FFD700;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+  #componente-Navbar .hamburger {
+    display: flex;
+  }
+
+  #componente-Navbar .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #111;
+    flex-direction: column;
+    width: 200px;
+    display: none;
+  }
+
+  #componente-Navbar .nav-links.ativo {
+    display: flex;
+  }
+}
+
+</style>
+    <div class="navbar-container">
+      <div class="logo">Aristidesbp</div>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#componente-Header">Início</a></li>
+        <li><a href="#componente-servicos">Serviços</a></li>
+      <li><a href="#main-formularioContato">Contato</a></li>
+      <li><a href="admin.html">Admin</a></li>
+
+      </ul>
+    </div>
+
+
+<!-- 🟥🟥 início do html 🟥🟥 --> `;
+const hamburger = nav.querySelector(".hamburger");
+const navLinks = nav.querySelector(".nav-links");
+hamburger.addEventListener("click", () => {
+navLinks.classList.toggle("ativo");
+hamburger.classList.toggle("ativo");
+});
+}
+
+```
+
+## Seo 
+```
+ 
+  <!-- ✅ Estrutura básica com foco em SEO, performance e compartilhamento social -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Aristides Barbosa Pontes // Portfólio</title>
+
+  <!-- ✅ SEO para posicionamento no Google (palavras chaves/keywords)-->
+  <meta name="description" content="Sou Aristides Barbosa Pontes, desenvolvedor front-end e gestor de tráfego pago. Estratégias de marketing digital que funcionam.">
+  <meta name="author" content=" Aristides Barbosa Pontes - Portfólio ">
+  <meta name="keywords" content=" Portfólio profissional, Aristides Barbosa Pontes, Analista de Sistemas, desenvolvedor, front-end, Gestor de Tráfego, Tráfego pago, Marketing digital, programador web, Desenvolvimento web, sites profissionais, programador ">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://aristidesbp.github.io/" /> 
+  
+
+  <!-- ✅ Compartilhamento em redes sociais (Open Graph & Twitter Card) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aristidesbp.github.io/">
+  <meta property="og:title" content="Portfólio de Aristides Barbosa Pontes – Dev Front-End e Gestor de Tráfego">
+  <meta property="og:description" content="Conheça os projetos e estratégias digitais de Aristides Barbosa Pontes, especialista em desenvolvimento web e tráfego pago.">
+  <meta property="og:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portfólio de Aristides Barbosa Pontes – Dev & Tráfego Pago">
+  <meta name="twitter:description" content="Confira meus projetos e estratégias como desenvolvedor front-end e gestor de tráfego.">
+  <meta name="twitter:image" content="https://aristidesbp.github.io/img/Aristidesbp.png">
+  <meta name="twitter:site" content="@aristidesbp">
+
+  <!--  ✅ PWA e Favicon -->
+  <link rel="manifest" href="json/site-mvc-manifest.json">
+  <link rel="icon" href="icons/favicon.png" type="image/x-icon"/>
+
+  <!--  ✅ Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  
+<!--  ✅ Google Tag Manager (noscript) -->
+<!-- End Google Tag Manager (noscript) -->
+
+
+```
+
+
+
+## VENDA DE SERVIÇOS 
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criação de Sites & Tráfego Pago – AristidesBP</title>
+<meta name="description" content="Aumente suas vendas com um site profissional e campanhas de tráfego pago otimizadas.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Gemunu+Libre:wght@200&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f97316;
+      --dark: #1a1a1a;
+      --light: #f5f5f5;
+      --gray: #777;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans', sans-serif; }
+    body { background:var(--light); color:var(--dark); line-height:1.6; overflow-x:hidden; }
+    nav { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.1); z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:10px 30px; }
+    nav h2 { color:var(--primary); font-size:1.2rem; }
+    nav ul { list-style:none; display:flex; gap:20px; }
+    nav ul li a { text-decoration:none; color:var(--dark); font-weight:600; }
+  
+  
+
+header { background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/header.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:120px 20px; }
+   
+header h1 { font-size:3rem; margin-bottom:10px; }
+    header p { font-size:1.2rem; margin-bottom:20px; }
+    header a { background:var(--primary); color:#fff; padding:12px 30px; text-decoration:none; border-radius:30px; font-weight:600; }
+    
+
+
+section { padding:80px 20px; text-align:center; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:40px; }
+    .card { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    .card h3 { color:var(--primary); margin-bottom:15px; }
+    .card img { width:100%; border-radius:10px; margin-bottom:15px; }
+    .contact form { max-width:600px; margin:auto; display:flex; flex-direction:column; gap:15px; }
+    .contact input,.contact textarea,.contact select { padding:15px; border:1px solid #ddd; border-radius:5px; font-size:1rem; }
+    .contact button { background:var(--primary); color:#fff; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+    footer { background:var(--dark); color:#fff; text-align:center; padding:20px; margin-top:40px; }
+    footer a { color:#fff; text-decoration:none; margin:0 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h2>AristidesBP</h2>
+    <ul>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#services">Serviços</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Transforme seu Negócio Online!</h1>
+    <p>Sites profissionais + campanhas de tráfego pago que geram vendas reais.</p>
+    <a href="#contact">Quero Meu Site Agora</a>
+  </header>
+
+  <!-- SOBRE -->
+  <section id="about">
+    <h2>Por Que Escolher AristidesBP?</h2>
+    <p>Profissional especializado em criação de sites que convertem e gestão de tráfego pago para empresas exigentes. Resultados reais, transparência e suporte próximo.</p>
+ 
+<!-- CARDS --> 
+<div class="cards">
+     
+<!-- CARD01 --> 
+<div class="card">
+<img src="img/card01.jpg" alt="Resultados">
+<h3>Resultados Garantidos</h3>
+<p>Sites que vendem e campanhas de ads otimizadas para gerar ROI real.</p>
+</div>
+ 
+<!-- CARD02 -->
+<div class="card">
+<img src="img/card02.jpg" alt="Profissionalismo">
+<h3>Profissionalismo</h3>
+<p>Mais de 10 anos de experiência, portfólio de clientes satisfeitos.</p>
+      </div>
+      
+<!-- CARD03 -->
+<div class="card">
+        <img src="img/card03" alt="Suporte">
+        <h3>Suporte Personalizado</h3>
+        <p>Acompanhamento próximo, ajustes estratégicos e relatórios claros.</p>
+      </div>
+      
+<!-- CARD04 -->
+<div class="card">
+        <img src="img/CARD04.jpg" alt="Exclusividade">
+        <h3>Exclusividade</h3>
+        <p>Projetos sob medida, alinhados com o posicionamento da sua empresa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="services">
+    <h2>Serviços</h2>
+    <div class="cards">
+     
+<!-- CARD05 -->
+ <div class="card">
+        <img src="img/card05.jpg" alt="Sites Profissionais">
+        <h3>Criação de Sites Profissionais</h3>
+        <p>Design moderno, responsivo e otimizado para conversão de clientes.</p>
+      </div>
+
+<!-- CARD06 -->
+      <div class="card">
+        <img src="img/CARD06.jpg" alt="Tráfego Pago">
+        <h3>Gestão de Tráfego Pago</h3>
+        <p>Campanhas no Google Ads e redes sociais, maximizando resultados.</p>
+      </div>
+
+<!-- CARD07 -->
+      <div class="card">
+        <img src="img/card07.jpg" alt="Consultoria">
+        <h3>Consultoria Estratégica</h3>
+        <p>Planejamento e análise de resultados para escalar seu negócio online.</p>
+      </div>
+    </div>
+  </section>
+
+<!-- VÍDEO -->
+<section id="video">
+  <h2>Assista Nosso Vídeo</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+      title="Vídeo Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</section>
+
+<style>
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 20px auto;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
+  <!-- FORMULÁRIO / CONTRATO -->
+  <section id="contact" class="contact">
+    <h2>Contrato de Prestação de Serviços</h2>
+    <p>Ao enviar o formulário você aceita a prestação do serviço de criação de site + gestão de tráfego pago. Será gerado o custo de <strong>R$50,00</strong> para visita técnica e relatório do projeto.</p>
+    <form id="contact-form">
+      <input type="text" id="nome" placeholder="Nome Completo" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="telefone" placeholder="Telefone" required>
+      <textarea id="mensagem" rows="5" placeholder="Descrição do Projeto / Informações adicionais" required></textarea>
+      <label><input type="checkbox" id="aceite" required> Aceito os termos e condições do contrato e autorizo o pagamento de R$50,00 para visita técnica.</label>
+      <button type="submit">Enviar para WhatsApp e Confirmar Contrato</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Contatos e Redes Sociais</p>
+    <p>WhatsApp: <a href="https://wa.me/5591992420981" target="_blank">+55 91 99242-0981</a> | Email: contato@aristidesbp.com</p>
+    <p>
+      <a href="#" target="_blank">Facebook</a> | 
+      <a href="#" target="_blank">Instagram</a> | 
+      <a href="#" target="_blank">LinkedIn</a>
+    </p>
+    <p>&copy; 2025 AristidesBP. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Função para enviar formulário para WhatsApp
+    const form = document.getElementById("contact-form");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+      const mensagem = document.getElementById("mensagem").value;
+      const aceite = document.getElementById("aceite").checked;
+
+      if(!aceite){
+        alert("Você precisa aceitar os termos do contrato para continuar.");
+        return;
+      }
+
+      const texto = `*Contrato de Prestação de Serviços*%0A
+Nome: ${nome}%0A
+Email: ${email}%0A
+Telefone: ${telefone}%0A
+Mensagem: ${mensagem}%0A
+Aceite dos Termos: Sim%0A
+Custo Visita Técnica: R$50,00`;
+
+      // Abre WhatsApp no número fornecido
+      window.open(`https://wa.me/5591992420981?text=${texto}`, "_blank");
+
+      alert("Formulário enviado! Aguarde nosso contato via WhatsApp.");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+
+```
+
+## CARDÁPIO LANCHONETE 
+```
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delivery - Aristidesbp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+:root {
+  --bege-claro: #fff8e1;
+  --vermelho-telha: #b22222;
+  --amarelo-mostarda: #f7d84f;
+  --marrom-madeira: #8b4513;
+  --preto-quadro: #1a1a1a;
+}
+
+body {
+  scroll-behavior: smooth;
+}
+
+.filtro-categoria {
+  background-color: var(--amarelo-mostarda);
+  color: #000;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: 2px solid var(--marrom-madeira);
+  border-radius: 8px;
+  outline: none;
+}
+
+.campo {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #fff;
+  color: #000;
+}
+
+.botao {
+  background: var(--amarelo-mostarda);
+  color: #000;
+  padding: 12px 24px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.botao:hover {
+  background: #ffe066;
+}
+</style>
+</head>
+
+<body class="bg-[var(--bege-claro)] text-[var(--preto-quadro)] font-sans">
+
+  <!-- Cabeçalho -->
+  <header class="bg-[var(--vermelho-telha)] text-white py-6 shadow-lg text-center">
+  <img src="assets/img/barraquinha-lanche.jpg" alt="Barraquinha" class="w-full h-64 object-cover rounded-b-xl shadow-lg" />
+  <h1 class="text-4xl font-bold mt-4">Tapioca da Maria</h1>
+  <p class="text-lg">Seu lanche artesanal favorito!</p>
+
+  <!-- Filtro -->
+  <div class="mt-4">
+    <select id="filtroCategoria" class="filtro-categoria">
+      <option value="todos">Todos</option>
+      <option value="lanches">Lanches</option>
+      <option value="bebidas">Bebidas</option>
+      <option value="sobremesas">Sobremesas</option>
+    </select>
+  </div>
+</header>
+
+  <!-- Cardápio -->
+  <section class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6 text-[var(--marrom-madeira)]">Nosso Cardápio</h2>
+    <div id="menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Pedido -->
+  <section class="bg-[var(--preto-quadro)] text-white py-8 px-4">
+    <div class="container mx-auto">
+      <p class="text-lg font-bold mb-4">
+        Total do pedido: R$ <span id="total">0,00</span>
+      </p>
+
+      <div id="itens-pedido" class="mb-6 max-h-48 overflow-y-auto bg-gray-800 p-4 rounded text-white space-y-2"></div>
+
+      <h2 class="text-2xl font-bold mb-4">Finalizar Pedido</h2>
+
+      <form id="pedido-form" class="space-y-4">
+        <input type="text" id="nome" placeholder="Nome Completo" class="campo" required />
+        <input type="text" id="cpf" placeholder="CPF" class="campo" required />
+        <input type="tel" id="telefone" placeholder="Telefone" class="campo" required />
+        <input type="text" id="endereco" placeholder="Endereço Completo" class="campo" required />
+
+        <select id="formaPagamento" class="campo" required>
+          <option value="" disabled selected>Forma de Pagamento</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Pix">Pix</option>
+          <option value="Transferência">Transferência</option>
+        </select>
+
+        <textarea id="obs" placeholder="Observações" class="campo" rows="3"></textarea>
+
+        <button type="submit" class="botao">Enviar pedido via WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+let menu = [];
+let pedido = [];
+let total = 0;
+
+const menuContainer = document.getElementById("menu");
+const filtro = document.getElementById("filtroCategoria");
+const itensPedido = document.getElementById("itens-pedido");
+const totalSpan = document.getElementById("total");
+const form = document.getElementById("pedido-form");
+
+/* ===============================
+   CARREGAR PRODUTOS DO JSON
+================================ */
+async function carregarProdutos() {
+  try {
+    const resposta = await fetch("produtos.json");
+    const dados = await resposta.json();
+    menu = dados.produtos.filter(p => p.ativo);
+    renderMenu();
+  } catch (erro) {
+    console.error("Erro ao carregar produtos:", erro);
+    menuContainer.innerHTML = "<p>Erro ao carregar cardápio.</p>";
+  }
+}
+
+/* ===============================
+   RENDERIZAR CARDÁPIO
+================================ */
+function renderMenu(categoria = "todos") {
+  menuContainer.innerHTML = "";
+
+  menu
+    .filter(item => categoria === "todos" || item.categoria === categoria)
+    .forEach(item => {
+      const div = document.createElement("div");
+      div.className = "bg-white p-4 rounded-xl shadow-md flex flex-col justify-between";
+
+      div.innerHTML = `
+        <img src="${item.imagem}" alt="${item.nome}" class="w-full h-64 object-cover rounded-b-xl shadow-lg" />
+        <h3 class="text-xl font-semibold">${item.nome}</h3>
+        <p class="text-sm text-gray-600">${item.descricao}</p>
+        <span class="text-lg font-bold text-[var(--vermelho-telha)]">
+          R$ ${item.preco.toFixed(2)}
+        </span>
+        <button class="mt-3 bg-[var(--amarelo-mostarda)] text-black py-2 px-4 rounded hover:bg-yellow-400 font-semibold">
+          Adicionar
+        </button>
+      `;
+
+      div.querySelector("button").addEventListener("click", () => addToOrder(item));
+      menuContainer.appendChild(div);
+    });
+}
+
+/* ===============================
+   PEDIDO
+================================ */
+function addToOrder(item) {
+  pedido.push(item);
+  total += item.preco;
+  atualizarPedido();
+}
+
+function atualizarPedido() {
+  itensPedido.innerHTML = "";
+
+  pedido.forEach(item => {
+    const p = document.createElement("p");
+    p.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+    itensPedido.appendChild(p);
+  });
+
+  totalSpan.textContent = total.toFixed(2);
+}
+
+/* ===============================
+   EVENTOS
+================================ */
+filtro.addEventListener("change", () => renderMenu(filtro.value));
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (pedido.length === 0) {
+    alert("Adicione itens ao pedido!");
+    return;
+  }
+
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const endereco = document.getElementById("endereco").value;
+  const forma = document.getElementById("formaPagamento").value;
+  const obs = document.getElementById("obs").value;
+
+  const msg = `*Novo Pedido*
+Cliente: ${nome}
+Telefone: ${telefone}
+Endereço: ${endereco}
+Forma de Pagamento: ${forma}
+
+Itens:
+${pedido.map(p => `• ${p.nome} - R$ ${p.preco.toFixed(2)}`).join("\n")}
+
+Total: R$ ${total.toFixed(2)}
+
+Obs: ${obs}`;
+
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+});
+
+/* ===============================
+   INICIALIZAÇÃO
+================================ */
+carregarProdutos();
+</script>
+</body>
+</html>      
+
+
+
+
+## CADASTRO DE PRODUTOS (ADMIM)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Produtos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+<h1 class="text-3xl font-bold mb-6">Administração de Produtos</h1>
+
+<!-- IMPORTAR / EXPORTAR -->
+<div class="mb-6 bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+  <div>
+    <h2 class="text-xl font-semibold mb-1">Banco de Produtos</h2>
+    <input type="file" id="importarJson" accept=".json">
+  </div>
+
+  <button id="exportarJson"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    📦 Exportar produtos.json
+  </button>
+</div>
+
+<!-- FORMULÁRIO -->
+<div class="mb-6 bg-white p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">Produto</h2>
+
+  <form id="formProduto" class="grid gap-3">
+    <input type="hidden" id="indexProduto">
+
+    <input id="campoId" placeholder="ID (ex: lanche-001)" class="border p-2 rounded" required>
+    <input id="campoNome" placeholder="Nome" class="border p-2 rounded" required>
+    <input id="campoPreco" type="number" step="0.01" placeholder="Preço" class="border p-2 rounded" required>
+    <input id="campoCategoria" placeholder="Categoria" class="border p-2 rounded" required>
+    <textarea id="campoDescricao" placeholder="Descrição" class="border p-2 rounded"></textarea>
+
+    <input id="campoImagem" type="file" accept="image/*" class="border p-2 rounded">
+
+    <label class="flex items-center gap-2">
+      <input type="checkbox" id="campoAtivo" checked>
+      Produto ativo
+    </label>
+
+    <button class="bg-green-600 text-white py-2 rounded">
+      Salvar Produto
+    </button>
+  </form>
+</div>
+
+<!-- LISTAGEM -->
+<div class="bg-white p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">Produtos</h2>
+  <div id="listaProdutos" class="space-y-3"></div>
+</div>
+
+<script>
+/* ===============================
+   ESTADO
+================================ */
+let banco = {
+  meta: {
+    versao: "1.0",
+    atualizadoEm: ""
+  },
+  categorias: [],
+  produtos: []
+};
+
+let imagemBase64 = "";
+
+/* ===============================
+   ELEMENTOS
+================================ */
+const importarJson = document.getElementById("importarJson");
+const exportarJson = document.getElementById("exportarJson");
+const listaProdutos = document.getElementById("listaProdutos");
+const form = document.getElementById("formProduto");
+
+const campoId = document.getElementById("campoId");
+const campoNome = document.getElementById("campoNome");
+const campoPreco = document.getElementById("campoPreco");
+const campoCategoria = document.getElementById("campoCategoria");
+const campoDescricao = document.getElementById("campoDescricao");
+const campoImagem = document.getElementById("campoImagem");
+const campoAtivo = document.getElementById("campoAtivo");
+const indexProduto = document.getElementById("indexProduto");
+
+/* ===============================
+   IMPORTAR JSON
+================================ */
+importarJson.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      banco = JSON.parse(reader.result);
+      renderizarLista();
+    } catch {
+      alert("Arquivo JSON inválido");
+    }
+  };
+  reader.readAsText(file);
+});
+
+/* ===============================
+   EXPORTAR JSON
+================================ */
+exportarJson.addEventListener("click", () => {
+  banco.meta.atualizadoEm = new Date().toISOString().split("T")[0];
+
+  const json = JSON.stringify(banco, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "produtos.json";
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+});
+
+/* ===============================
+   IMAGEM → BASE64
+================================ */
+campoImagem.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => imagemBase64 = reader.result;
+  reader.readAsDataURL(file);
+});
+
+/* ===============================
+   SALVAR PRODUTO
+================================ */
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const produto = {
+    id: campoId.value,
+    nome: campoNome.value,
+    preco: Number(campoPreco.value),
+    categoria: campoCategoria.value,
+    descricao: campoDescricao.value,
+    imagem: imagemBase64,
+    ativo: campoAtivo.checked
+  };
+
+  if (indexProduto.value === "") {
+    banco.produtos.push(produto);
+  } else {
+    banco.produtos[indexProduto.value] = produto;
+  }
+
+  form.reset();
+  imagemBase64 = "";
+  indexProduto.value = "";
+
+  renderizarLista();
+});
+
+/* ===============================
+   LISTAR
+================================ */
+function renderizarLista() {
+  listaProdutos.innerHTML = "";
+
+  banco.produtos.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "flex items-center gap-4 border p-3 rounded bg-gray-50";
+
+    div.innerHTML = `
+      <img src="${p.imagem}" class="w-20 h-20 object-cover rounded border">
+
+      <div class="flex-1">
+        <strong>${p.nome}</strong><br>
+        <span class="text-sm text-gray-600">
+          ${p.categoria} — R$ ${p.preco.toFixed(2)}
+        </span>
+      </div>
+
+      <div class="space-x-2">
+        <button class="editar bg-yellow-400 px-3 py-1 rounded text-sm">Editar</button>
+        <button class="excluir bg-red-500 text-white px-3 py-1 rounded text-sm">Excluir</button>
+      </div>
+    `;
+
+    div.querySelector(".editar").onclick = () => editarProduto(i);
+    div.querySelector(".excluir").onclick = () => excluirProduto(i);
+
+    listaProdutos.appendChild(div);
+  });
+}
+
+/* ===============================
+   EDITAR
+================================ */
+function editarProduto(i) {
+  const p = banco.produtos[i];
+
+  indexProduto.value = i;
+  campoId.value = p.id;
+  campoNome.value = p.nome;
+  campoPreco.value = p.preco;
+  campoCategoria.value = p.categoria;
+  campoDescricao.value = p.descricao;
+  campoAtivo.checked = p.ativo;
+
+  imagemBase64 = p.imagem;
+}
+
+/* ===============================
+   EXCLUIR
+================================ */
+function excluirProduto(i) {
+  if (!confirm("Excluir produto?")) return;
+  banco.produtos.splice(i, 1);
+  renderizarLista();
+}
+</script>
+
+</body>
+</html>
+
+```
+## CONTROLE DE ENTREGAS 
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entregas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-xl mx-auto bg-white shadow rounded-xl p-6">
+    <h2 class="text-2xl font-bold mb-4 text-center">Cadastro de Entrega</h2>
+    <form id="formulario" class="space-y-4">
+      <input type="hidden" id="indexEdicao" value="-1" />
+      <div><label>Código da Venda</label><input id="codigo" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Nome do Cliente</label><input id="nome" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Endereço</label><input id="endereco" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Bairro</label><input id="bairro" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Valor (R$)</label><input id="valor" type="number" step="0.01" required class="w-full border rounded px-3 py-2" /></div>
+      <div><label>Observação</label><textarea id="observacao" class="w-full border rounded px-3 py-2"></textarea></div>
+      <div><label>Foto da Nota</label><input id="foto" type="file" accept="image/*" capture="environment" class="w-full" /></div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Salvar</button>
+    </form>
+  </div>
+
+  <div class="max-w-xl mx-auto mt-6 bg-white shadow rounded-xl p-4">
+    <h3 class="text-xl font-bold mb-3">Entregas</h3>
+    <ul id="lista" class="space-y-3"></ul>
+  </div>
+
+  <script>
+    const form = document.getElementById("formulario");
+    const lista = document.getElementById("lista");
+    const campos = ["codigo", "nome", "endereco", "bairro", "valor", "observacao"];
+
+    function getEntregas() {
+      return JSON.parse(localStorage.getItem("entregas") || "[]");
+    }
+
+    function salvarEntregas(dados) {
+      localStorage.setItem("entregas", JSON.stringify(dados));
+    }
+
+    function renderizarLista() {
+      let entregas = getEntregas();
+
+      // Ordenação
+      entregas.sort((a, b) => {
+        const ba = a.bairro.toLowerCase(), bb = b.bairro.toLowerCase();
+        if (ba < bb) return -1;
+        if (ba > bb) return 1;
+        const ea = a.endereco.toLowerCase(), eb = b.endereco.toLowerCase();
+        return ea.localeCompare(eb);
+      });
+
+      lista.innerHTML = "";
+      entregas.forEach((e, i) => {
+        const enderecoCompleto = encodeURIComponent(`${e.endereco}, ${e.bairro}`);
+        const status = e.status || "Pendente";
+        const corStatus = {
+          "Pendente": "bg-yellow-400",
+          "Entregue": "bg-green-500",
+          "Problema": "bg-red-500"
+        }[status];
+
+        const imgTag = e.foto ? `<img src="${e.foto}" class="mt-2 w-32 rounded border" />` : "";
+
+        const obs = e.status === "Problema" && e.observacao ? `<p class="text-sm text-red-700">Obs: ${e.observacao}</p>` : "";
+
+        const li = document.createElement("li");
+        li.className = "p-3 border rounded bg-gray-50";
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <strong>${e.codigo}</strong> - ${e.nome}<br>
+              ${e.endereco}, ${e.bairro} - R$ ${parseFloat(e.valor).toFixed(2)}
+              ${obs}
+              ${imgTag}
+            </div>
+            <div class="flex flex-col gap-1 text-right">
+              <a href="https://www.google.com/maps/search/?api=1&query=${enderecoCompleto}" target="_blank"
+                 class="text-green-600 hover:underline">Ver no mapa</a>
+              <button onclick="trocarStatus(${i})" class="text-white text-xs px-2 py-1 rounded ${corStatus}">${status}</button>
+              <button onclick="editar(${i})" class="text-blue-600 hover:underline text-sm">Editar</button>
+              <button onclick="excluir(${i})" class="text-red-600 hover:underline text-sm">Excluir</button>
+            </div>
+          </div>
+        `;
+        lista.appendChild(li);
+      });
+    }
+
+    function trocarStatus(index) {
+      const entregas = getEntregas();
+      const atual = entregas[index].status || "Pendente";
+      const proximo = atual === "Pendente" ? "Entregue" : atual === "Entregue" ? "Problema" : "Pendente";
+      entregas[index].status = proximo;
+      salvarEntregas(entregas);
+      renderizarLista();
+    }
+
+    function editar(index) {
+      const e = getEntregas()[index];
+      campos.forEach(c => document.getElementById(c).value = e[c] || "");
+      document.getElementById("indexEdicao").value = index;
+    }
+
+    function excluir(index) {
+      const entregas = getEntregas();
+      entregas.splice(index, 1);
+      salvarEntregas(entregas);
+      renderizarLista();
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const entregas = getEntregas();
+      const novo = {};
+      campos.forEach(c => novo[c] = document.getElementById(c).value);
+      novo.status = novo.status || "Pendente";
+
+      const fotoInput = document.getElementById("foto");
+      if (fotoInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          novo.foto = event.target.result;
+          salvarDados(novo);
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+      } else {
+        salvarDados(novo);
+      }
+
+      function salvarDados(novo) {
+        const idx = parseInt(document.getElementById("indexEdicao").value);
+        if (idx >= 0) {
+          entregas[idx] = novo;
+          document.getElementById("indexEdicao").value = -1;
+        } else {
+          entregas.push(novo);
+        }
+        salvarEntregas(entregas);
+        form.reset();
+        renderizarLista();
+      }
+    });
+
+    renderizarLista();
+  </script>
+</body>
+</html>
+```
+
+
+## PRODUTOS EM BASE64 
+```
+{
+  "meta": {
+    "versao": "1.0",
+    "atualizadoEm": "2026-01-06",
+    "descricao": "Banco de dados de produtos do delivery"
+  },
+  "categorias": [
+    "lanches",
+    "bebidas",
+    "sobremesas"
+  ],
+  "produtos": [
+    {
+      "id": "lanche-001",
+      "nome": "Carne Seca",
+      "preco": 18,
+      "categoria": "lanches",
+      "descricao": "Tapioca com carne seca e queijo coalho",
+      "imagem": "data:image/jpeg;base64,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",
+      "ativo": true
+    },
+
+
+    {
+      "id": "bebida-002",
+      "nome": "Suco Natural",
+      "preco": 10,
+      "categoria": "bebidas",
+      "descricao": "Suco natural da fruta",
+      "imagem": "data:image/jpeg;base64,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",
+      "ativo": true
+    }
+  ]
+}
+
+```
+# 05
+# BANCO DE DADOS SUBASE.COM
+
+Aqui vai uma introdução básica e clara sobre o banco de dados Supabase, pensada para quem está começando do zero 👇
+Introdução ao Supabase
+O Supabase é uma plataforma de backend como serviço (BaaS – Backend as a Service) criada para facilitar o desenvolvimento de aplicações modernas. Ele fornece, de forma integrada, tudo o que normalmente seria necessário montar manualmente em um servidor backend.
+A principal proposta do Supabase é permitir que o desenvolvedor foque na aplicação (site ou app) enquanto a plataforma cuida da infraestrutura.
+Supabase como Banco de Dados
+O banco de dados do Supabase é baseado no PostgreSQL, um dos sistemas de banco de dados relacionais mais robustos e utilizados no mundo.
+Isso significa que:
+Os dados são organizados em tabelas
+É possível criar relacionamentos entre tabelas
+Suporta SQL padrão
+Permite consultas complexas, filtros e ordenações
+Diferente de outros serviços, no Supabase você tem acesso direto ao banco PostgreSQL, podendo usar tanto a interface web quanto comandos SQL.
+Principais Recursos do Supabase
+Banco de Dados PostgreSQL
+Totalmente gerenciado
+Suporte a funções, triggers e views
+Controle de permissões por usuário
+Autenticação
+Login com e-mail e senha
+Login social (Google, GitHub, etc.)
+Controle de sessões e tokens
+API Automática
+Cada tabela vira automaticamente uma API REST
+Acesso seguro com regras de permissão
+Não é necessário criar endpoints manualmente
+Segurança (Row Level Security – RLS)
+Define quem pode ler, inserir, atualizar ou excluir dados
+Regras diretamente no banco de dados
+Segurança aplicada mesmo acessando via SQL
+Armazenamento (Storage)
+Upload de imagens, vídeos e arquivos
+Integração com autenticação
+Controle de acesso por regras
+Como o Supabase é Usado
+O Supabase pode ser usado em:
+Sites HTML, CSS e JavaScript
+Aplicações React, Vue, Angular
+Aplicativos móveis (Android, iOS)
+Projetos pessoais ou sistemas corporativos
+A comunicação com o banco ocorre por meio de bibliotecas cliente (JavaScript, Dart, Python, etc.), que facilitam consultas, inserções e autenticação.
+Vantagens do Supabase
+Não precisa configurar servidor
+Banco de dados poderoso (PostgreSQL)
+Código mais simples e rápido
+Ideal para projetos pequenos e médios
+Código aberto (open source)
+Conclusão
+O Supabase é uma solução moderna que une banco de dados, autenticação, API e armazenamento em um único lugar.
+Ele é ideal para quem quer aprender banco de dados na prática ou desenvolver aplicações completas sem a complexidade de montar toda a infraestrutura do zero.
+
+# PROJETO SUPABASE - APP CURSOS EAD
+## SENHA: Aristidesbp8761
+
+# O QUE VAMOS APRENDER:
+## O QUE É SUPABASE?
+## CONCEITOS DE TABELAS COLUNAS E RELACIONAMENTOS
+## TIPOS DE DADOS
+## AUTENTICAÇÃO DE USUARIOS
+## VIEWS E SQL EDITOR
+## SEGURANÇA DE DADOS COM RLS (ROW LEVEL SECURITY)
+## CONECTANDO OS DADOS AO FRONTEND COM LOVABLE
+
+# OQUE É O SUPABASE?
+## É um BAAS (backend as a service)
+## Utiliza banco de daos postegreSQL Relacional
+
+# CONCEITOS DE TABELAS COLUNAS E RELACIONAMENTOS
+## TABELAS: 
+Onde os dados são Gravados.
+
+## COLUNAS:
+Definen: atributos/tipo de dado
+(Ex: nome=text, altura=doble)
+
+## RELACIONAMENTOS:
+Ligações entre tabelas que compartilham dados em comun.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
