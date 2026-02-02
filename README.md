@@ -14,7 +14,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 - [GITHUB E TERMUX](#termux/github)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX
+# TERMUX (INSTALL/CONFIG)
 * Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
@@ -90,7 +90,7 @@ yt-dlp -F "URL_DO_VÍDEO
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GITHUB NO TERMUX
+# GITHUB (INSTALL/CONFIG)
 
 ```
 # Lista todas as configurações ativas: 
@@ -159,7 +159,7 @@ tree
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXAR E ENVIAR ARQUIVOS 
+# GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 ```
 ## Clona o repositório com chave SSH
 git clone git@github.com:aristidesbp/aristidesbp.github.io
