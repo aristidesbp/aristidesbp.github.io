@@ -1,74 +1,137 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Codificação de caracteres -->
     <meta charset="UTF-8">
-
-    <!-- Responsividade para dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP-ABP</title>
 
-    <!-- Título da aba -->
-    <title>Login - SISTEMA ERP ABP</title>
-
-    <!-- SDK do Supabase (frontend) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- CSS específico da tela de login -->
     <link rel="stylesheet" href="login/login.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="assets/config.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <!-- Card central de autenticação -->
-    <div class="login-card">
-
-        <!-- Botão de retorno (usado em recuperação/cadastro) -->
-        <button id="btn-back" class="btn-back" onclick="toggleMode()">
+    <div class="login-card" id="login-container">
+        <button id="btn-back" class="btn-back" onclick="toggleMode('login')" style="display: none;">
             ← Voltar para o Login
         </button>
 
-        <!-- Título principal -->
-        <h1>SISTEMA ERP ABP</h1>
+        <header>
+            <h1 class="brand-title">SISTEMA ERP ABP</h1>
+            <p id="form-subtitle" class="text-muted">Faça login para acessar o ERP</p>
+        </header>
 
-        <!-- Subtítulo dinâmico -->
-        <h2 id="form-subtitle">Faça login para acessar o ERP</h2>
+        <form id="auth-form" onsubmit="event.preventDefault(); handleAuth();">
+            <div class="input-container" id="email-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="exemplo@email.com" required>
+            </div>
 
-        <!-- Campo de e-mail -->
-        <div class="input-container" id="email-group">
-            <input type="email" id="email" placeholder="Seu e-mail">
-        </div>
+            <div class="input-container" id="pass-group">
+                <label for="password">Senha</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="Sua senha secreta" required>
+                    <button type="button" class="toggle-password" onclick="toggleVisibility()" tabindex="-1">
+                        <span id="eye-icon">👁️</span>
+                    </button>
+                </div>
+            </div>
 
-        <!-- Campo de senha -->
-        <div class="input-container" id="pass-group">
-            <input type="password" id="password" placeholder="Sua senha">
-
-            <!-- Botão para alternar visibilidade da senha -->
-            <button type="button" class="toggle-password" onclick="toggleVisibility()">
-                👁️
+            <button type="submit" class="main-btn" id="btn-auth">
+                <span id="btn-text">Entrar</span>
+                <div id="loader" class="loader-spinner" style="display: none;"></div>
             </button>
-        </div>
+        </form>
 
-        <!-- Botão principal (login / cadastro / salvar senha) -->
-        <button class="main-btn" id="btn-auth" onclick="handleAuth()">
-            Entrar
-        </button>
-
-        <!-- Links auxiliares -->
         <div class="extra-links">
-            <span id="link-forgot" class="link" onclick="forgotPassword()">
+            <span id="link-forgot" class="link-action" onclick="toggleMode('recovery')">
                 Esqueci minha senha
             </span>
-
-    <h3>DESENVOLVEDOR: ARISTIDES BP</h3>
-    <h3>CONTATO: +55 91 99242-0981</h3>
-            
         </div>
+
+        <footer class="dev-info">
+            <p>DESENVOLVEDOR: <strong>ARISTIDES BP</strong></p>
+            <p>CONTATO: +55 91 99242-0981</p>
+            
+            <div class="language-selector">
+                <select id="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+        </footer>
     </div>
 
-    
-    
-    <!-- Script principal do login -->
-   <script src="login/login.js"></script>
-   <script src="login/login_supabase.js"></script>
+    <script src="login/login.js"></script>
+    <script>
+        // Lógica de integração imediata com o dbsupabase do config.js
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btnText = document.getElementById('btn-text');
+            const loader = document.getElementById('loader');
+            const btnAuth = document.getElementById('btn-auth');
 
+            // Estado de Loading (UI)
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+            btnAuth.disabled = true;
+
+            try {
+                // USA O dbsupabase DEFINIDO NO config.js
+                const { data, error } = await dbsupabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) throw error;
+
+                // Sucesso: Toast e Redirecionamento
+                console.log("Login realizado!", data);
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                alert("Erro na autenticação: " + error.message);
+                // Reset UI em caso de erro
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+                btnAuth.disabled = false;
+            }
+        }
+
+        function toggleVisibility() {
+            const passInput = document.getElementById('password');
+            const icon = document.getElementById('eye-icon');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                icon.innerText = "🙈";
+            } else {
+                passInput.type = "password";
+                icon.innerText = "👁️";
+            }
+        }
+
+        function toggleMode(mode) {
+            const subtitle = document.getElementById('form-subtitle');
+            const btnBack = document.getElementById('btn-back');
+            const btnAuth = document.getElementById('btn-auth');
+            const passGroup = document.getElementById('pass-group');
+
+            if (mode === 'recovery') {
+                subtitle.innerText = "Recuperar acesso ao sistema";
+                btnBack.style.display = "block";
+                btnAuth.innerText = "Enviar link de recuperação";
+                passGroup.style.display = "none";
+            } else {
+                subtitle.innerText = "Faça login para acessar o ERP";
+                btnBack.style.display = "none";
+                btnAuth.innerText = "Entrar";
+                passGroup.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
