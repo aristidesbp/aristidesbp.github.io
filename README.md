@@ -68,11 +68,11 @@ pkg install nano -y
 pkg install openssh -y
 pkg install curl -y
 pkg install tree -y
-pkf install tree -y
+pkg install tree -y
 ```
 ```  
 mkdir novo_projeto
-# para criar pasta com o nome repositorios_git
+# para criar pasta/diretorios
 ```
 ``` 
 nano teste.txt 
@@ -116,7 +116,8 @@ git config --global user.email "seu@email.com"
 ```
 ```
 # Iniciar o agente ssh
-eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_ed25519
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
 ```
 ```
 # Gerar nova chave SSH (caso ainda não tenha)
@@ -139,7 +140,7 @@ ssh -T git@github.com
 
 ## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
 ----------------------------------------------------
-1. Acesse: https://github.com](https://github.com
+1. Acesse: https://github.com
 2. Faça login na sua conta
 3. No canto superior direito, clique na sua foto de perfil → **Settings**
 4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
@@ -308,19 +309,19 @@ yt-dlp -F "URL_DO_VÍDEO
 /aristidesbp.github.io  (Sua pasta local e no GitHub)
 │
 ├── index.html          <-- (A página principal que te enviei agora)
-├── pagamento.html      <-- (A página universal de checkout)
-├── sucesso.html        <-- (Página de agradecimento após o Pix)
-│
-├── services/           <-- (Opcional: Para organizar seus JSONs)
-│   └── serviços.json   <-- (Onde você pode listar os preços e descrições)
-│
-├── assets/             <-- (Para suas imagens e logos)
-│   └── foto-perfil.jpg
-│
-└── supabase/           <-- (Pasta que contém sua inteligência de backend)
-    └── functions/
-        └── checkout/
-            └── index.ts <-- (O código TypeScript que gera o Mercado Pago)
+└── assets
+      ├── pagamento.html      <-- (A página universal de checkout)
+      ├── sucesso.html        <-- (Página de agradecimento após o Pix)
+      ├── services/           <-- (Opcional: Para organizar seus JSONs)
+      │    └── serviços.json   <-- (Onde você pode listar os preços e descrições)
+      │
+      ├── assets/             <-- (Para suas imagens e logos)
+      │   └── foto-perfil.jpg
+      |
+      └── supabase/           <-- (Pasta que contém sua inteligência de backend)
+            └── functions/
+                     └── checkout/
+                           └── index.ts <-- (O código TypeScript que gera o Mercado Pago)
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥         
@@ -413,8 +414,8 @@ yt-dlp -F "URL_DO_VÍDEO
                 <option value="es">ES-ES</option>
             </select>
         </div>
-    </div>
-</header>
+
+
 
 <main class="pt-20">
     <section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
