@@ -1,0 +1,4 @@
+const dbsupabase = supabase.createClient(
+  'https://lzbkvwwsexlmchlrdmbt.supabase.co', 
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6Ymt2d3dzZXhsbWNobHJkbWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDUxNzEsImV4cCI6MjA4NTYyMTE3MX0.x2zHo61OZULTyB85ksRMwN24CF4HHnR3c7TzCpq1hoE'
+)
