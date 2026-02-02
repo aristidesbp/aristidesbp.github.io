@@ -10,8 +10,17 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 [ERPABP](https://aristidesbp.github.io/projetos/erpabp/)
 [Barraca de Tapioca](https://aristidesbp.github.io/projetos/tapioca/)
 
-## 📓🗃️ MATERIAL DE APOIO (ÍNDICE)
-- [GITHUB E TERMUX](#termux/github)
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#### Tutoriais escrito por Aristidesbp
+obs: projeto em andamento podendo conter erros!
+
+---
+# 📘 ÍNDICE
+1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
+2. [ CONFIGURAÇAO INICIAL NO SUPABASE ](#configuracao-inicial-no-supabase)
+3. [usuarios.sql](#usuarios-.-sql)
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX (INSTALL/CONFIG)
@@ -232,9 +241,8 @@ Aí o endereço vira:
 * http://localhost:3000
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ##########################
 # ADICIONANDO COLABORADORES 
-# ##########################
+
 
 Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
 
@@ -271,20 +279,18 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 
 
-🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
-# 🧱 Criar o projeto no Supabase
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🧱 Criar o projeto no Supabase (RECOMENDADO)
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
 * Clique em New Project
 ## Escolha:
-* Nome do projeto
-* Senha do banco
-* Região
+* Nome do projeto: erp
+* Senha do banco: ***********
+* Região: brasil
   
-# 🧨 RESET TOTAL DO SUPABASE (DADOS + AUTH + STORAGE)
+# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
 @ 👉 Isso é o mais próximo possível de um banco novo.
 ``` 
 -- Apagar tabelas públicas
@@ -297,10 +303,8 @@ begin
   end loop;
 end $$;
 ```
-
-
-
-# CRIANDO UM ARQUIVO CONFIG (js/config.js)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO UM ARQUIVO CONFIG (config.js)
 
 ##  Pegar as chaves do Supabase
 ## Vá em Settings
@@ -317,85 +321,52 @@ const dbsupabase = supabase.createClient(
   'SUA_KEY_AQUI'
 )
 ```
-
-
-# como ler o codigo de barras com a camera
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# usuarios.sql
 ```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>codigo de barras</title>
- </head>
-<body>
- <label>Código de Barras (EAN)</label>
-   <div style="display: flex; gap: 5px;">
-      <input type="text" id="codigo_de_barras" placeholder="0000000000000">
-         <button type="button" class="btn-scan" onclick="abrirScanner()">
-           <i class="fas fa-camera"></i>
-           </button>
-                </div>
-            </div>
-        </div>
-        <div id="reader-container" style="display:none;">
-            <div id="reader"></div>
-            <button class="btn-cancel" onclick="fecharScanner()" style="margin-bottom: 20px;">Fechar Câmera</button>
-        </div>
-<script>
-let html5QrCode; // Variável global para controlar a instância da câmera
-/** Inicia a câmera e o processamento de imagem para ler códigos */
-window.abrirScanner = function() {
-    // Exibe o container onde o vídeo da câmera aparecerá
-    const container = document.getElementById('reader-container');
-    if (container) container.style.display = 'block';
-    // Cria a instância do leitor apontando para o ID 'reader' no HTML
-    html5QrCode = new Html5Qrcode("reader");
-    // Configurações do Scanner
-    const config = { 
-        fps: 10,    // Quadros por segundo
-        qrbox: 250  // Área de foco da leitura
-    };
-    // Inicia a câmera traseira ("environment")
-    html5QrCode.start(
-        { facingMode: "environment" }, 
-        config,
-        (decodedText) => {
-            // AÇÃO AO LER COM SUCESSO:
-            // Preenche o campo de código de barras e fecha a câmera
-            const inputCodigo = document.getElementById('codigo_de_barras');
-            if (inputCodigo) {
-                inputCodigo.value = decodedText;
-                // Opcional: emitir um sinal sonoro aqui
-                console.log("Código lido: " + decodedText);
-            }
-            fecharScanner();
-        }
-    ).catch(err => {
-        console.error("Erro ao iniciar câmera: ", err);
-        alert("Não foi possível acessar a câmera. Verifique as permissões.");
-    });
-};
-
-/**  * Para a câmera e limpa a memória  */
-window.fecharScanner = function() {
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            const container = document.getElementById('reader-container');
-            if (container) container.style.display = 'none';
-            console.log("Câmera desligada.");
-        }).catch(err => {
-            console.warn("Erro ao parar a câmera: ", err);
-        });
-    }};
-</script>
-</body>
-</html>
+create table public.usuarios (
+  id uuid not null,
+  email text not null,
+  nome_completo text null,
+  avatar_url text null,
+  criado_em timestamp with time zone null default now(),
+  status text null default 'ativo'::text,
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_id_fkey foreign KEY (id) references auth.users (id) on delete CASCADE,
+  constraint usuarios_status_check check (
+    (
+      status = any (
+        array['ativo'::text, 'suspenso'::text, 'pendente'::text]
+      )
+    )
+  )
+) TABLESPACE pg_default;
 ```
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# apolicies
+```
+* CREATE POLICY "Perfis: usuários podem atualizar apenas o seu" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id)) WITH CHECK ((auth.uid() = id));
+* CREATE POLICY "Perfis: usuários podem ver apenas o seu" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
+* CREATE POLICY "Usuários podem atualizar seu próprio perfil" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id));
+* CREATE POLICY "Usuários podem ver seu próprio perfil" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
+```
+## COMO FAZER BKP:
+```
+SELECT 
+    'CREATE POLICY ' || quote_ident(policyname) || 
+    ' ON ' || tablename || 
+    ' FOR ' || cmd || 
+    ' TO ' || array_to_string(roles, ',') || 
+    ' USING (' || qual || ')' || 
+    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'NOME_DA_SUA_TABELA';
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # login.html
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -573,50 +544,6 @@ async function cadastrar() {
 </body>
 </html>
 
-```
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# usuarios.sql
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
-```
-create table public.usuarios (
-  id uuid not null,
-  email text not null,
-  nome_completo text null,
-  avatar_url text null,
-  criado_em timestamp with time zone null default now(),
-  status text null default 'ativo'::text,
-  constraint usuarios_pkey primary key (id),
-  constraint usuarios_id_fkey foreign KEY (id) references auth.users (id) on delete CASCADE,
-  constraint usuarios_status_check check (
-    (
-      status = any (
-        array['ativo'::text, 'suspenso'::text, 'pendente'::text]
-      )
-    )
-  )
-) TABLESPACE pg_default;
-```
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
-# apolicies
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 
-```
-* CREATE POLICY "Perfis: usuários podem atualizar apenas o seu" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id)) WITH CHECK ((auth.uid() = id));
-* CREATE POLICY "Perfis: usuários podem ver apenas o seu" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
-* CREATE POLICY "Usuários podem atualizar seu próprio perfil" ON usuarios FOR UPDATE TO public USING ((auth.uid() = id));
-* CREATE POLICY "Usuários podem ver seu próprio perfil" ON usuarios FOR SELECT TO public USING ((auth.uid() = id));
-```
-## COMO FAZER BKP:
-```
-SELECT 
-    'CREATE POLICY ' || quote_ident(policyname) || 
-    ' ON ' || tablename || 
-    ' FOR ' || cmd || 
-    ' TO ' || array_to_string(roles, ',') || 
-    ' USING (' || qual || ')' || 
-    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
-FROM pg_policies
-WHERE schemaname = 'public' 
-  AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 
 
@@ -1161,18 +1088,78 @@ Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para cri
 </html>
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
-# entidades.html
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# como ler o codigo de barras com a camera
+
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Entidades - ERP ABP</title>
-    <script src="conexao.js"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plug
+    <title>codigo de barras</title>
+ </head>
+<body>
+ <label>Código de Barras (EAN)</label>
+   <div style="display: flex; gap: 5px;">
+      <input type="text" id="codigo_de_barras" placeholder="0000000000000">
+         <button type="button" class="btn-scan" onclick="abrirScanner()">
+           <i class="fas fa-camera"></i>
+           </button>
+                </div>
+            </div>
+        </div>
+        <div id="reader-container" style="display:none;">
+            <div id="reader"></div>
+            <button class="btn-cancel" onclick="fecharScanner()" style="margin-bottom: 20px;">Fechar Câmera</button>
+        </div>
+<script>
+let html5QrCode; // Variável global para controlar a instância da câmera
+/** Inicia a câmera e o processamento de imagem para ler códigos */
+window.abrirScanner = function() {
+    // Exibe o container onde o vídeo da câmera aparecerá
+    const container = document.getElementById('reader-container');
+    if (container) container.style.display = 'block';
+    // Cria a instância do leitor apontando para o ID 'reader' no HTML
+    html5QrCode = new Html5Qrcode("reader");
+    // Configurações do Scanner
+    const config = { 
+        fps: 10,    // Quadros por segundo
+        qrbox: 250  // Área de foco da leitura
+    };
+    // Inicia a câmera traseira ("environment")
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        config,
+        (decodedText) => {
+            // AÇÃO AO LER COM SUCESSO:
+            // Preenche o campo de código de barras e fecha a câmera
+            const inputCodigo = document.getElementById('codigo_de_barras');
+            if (inputCodigo) {
+                inputCodigo.value = decodedText;
+                // Opcional: emitir um sinal sonoro aqui
+                console.log("Código lido: " + decodedText);
+            }
+            fecharScanner();
+        }
+    ).catch(err => {
+        console.error("Erro ao iniciar câmera: ", err);
+        alert("Não foi possível acessar a câmera. Verifique as permissões.");
+    });
+};
+
+/**  * Para a câmera e limpa a memória  */
+window.fecharScanner = function() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            const container = document.getElementById('reader-container');
+            if (container) container.style.display = 'none';
+            console.log("Câmera desligada.");
+        }).catch(err => {
+            console.warn("Erro ao parar a câmera: ", err);
+        });
+    }};
+</script>
+</body>
+</html>
+```
