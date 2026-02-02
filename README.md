@@ -310,18 +310,19 @@ yt-dlp -F "URL_DO_VÍDEO
 │
 ├── index.html          <-- (A página principal que te enviei agora)
 └── assets
-      ├── pagamento.html      <-- (A página universal de checkout)
-      ├── sucesso.html        <-- (Página de agradecimento após o Pix)
-      ├── services/           <-- (Opcional: Para organizar seus JSONs)
-      │    └── serviços.json   <-- (Onde você pode listar os preços e descrições)
-      │
-      ├── assets/             <-- (Para suas imagens e logos)
-      │   └── foto-perfil.jpg
-      |
-      └── supabase/           <-- (Pasta que contém sua inteligência de backend)
-            └── functions/
-                     └── checkout/
-                           └── index.ts <-- (O código TypeScript que gera o Mercado Pago)
+     └── mercadopago_supabase
+           ├── pagamento.html      <-- (A página universal de checkout)
+           ├── sucesso.html        <-- (Página de agradecimento após o Pix)
+           ├── services/           <-- (Opcional: Para organizar seus JSONs)
+           │    └── serviços.json   <-- (Onde você pode listar os preços e descrições)
+           │
+           ├── assets/             <-- (Para suas imagens e logos)
+           │   └── foto-perfil.jpg
+           |
+           └── supabase/           <-- (Pasta que contém sua inteligência de backend)
+                └── functions/
+                       └── checkout/
+                             └── index.ts <-- (O código TypeScript que gera o Mercado Pago)
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥         
