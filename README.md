@@ -275,6 +275,8 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
 
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # BONUS:COMO BAIXAR VIDEOS COM TERMUX
 ```
@@ -588,6 +590,96 @@ yt-dlp -F "URL_DO_VÍDEO
 </body>
 </html>
 ```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# INTALANDO O DOCKER
+É importante mencionar: o Supabase CLI funciona "dentro" do Docker para simular o ambiente de nuvem no seu computador. Sem ele, você não conseguirá rodar supabase init ou fazer o deploy das funções.
+No Linux Mint, você instala o Docker assim:
+```
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+# Permite rodar o docker sem usar 'sudo' toda hora
+sudo usermod -aG docker $USER
+```
+##  Nota: Após rodar o comando usermod, você precisará reiniciar o computador ou fazer logoff para as alterações surtirem efeito.
+Verificação Final ,Assim que conseguir instalar, rode: 
+```
+supabase --version
+```
+## O que acontece depois?
+*  O instalador vai concluir a configuração dos arquivos.
+*  Assim que ele terminar e você voltar para a linha de comando comum (onde aparece seu nome de usuário), lembre-se de rodar aquele comando importante para não precisar usar sudo toda hora:
+```  
+ sudo usermod -aG docker $USER
+```  
+* Dica: Depois de rodar o comando acima, você precisará reiniciar o seu computador para que o Linux entenda que agora você tem permissão total para usar o Docker e o Supabase CLI.
+* Assim que reiniciar, tente rodar docker --version no terminal. Se funcionar, já podemos partir para o deploy da sua função !
+
+## Docker está rodando perfeitamente no seu Linux Mint. Agora o seu computador tem a "ferramenta" necessária para empacotar e enviar o código para os servidores do Supabase.
+* Como você já reiniciou (ou aplicou as permissões), vamos colocar  para processar pagamentos reais.
+  **Siga estes passos no terminal, dentro da pasta onde está o seu projeto (seu repositório do GitHub)**:
+* Inicialize o Supabase no seu Projeto
+```
+# Este comando vai criar uma pasta chamada supabase no seu diretório.
+supabase init
+```
+* Crie a Estrutura da Função
+```
+# Vamos criar o espaço para a função de checkout:
+supabase functions new checkout
+```
+
+* Cole o Código da Função index.ts
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# mercadopago_supabase/supabase/functions/checkout/index.ts
+```
+// Adicione os dados do comprador (Payer) para habilitar os botões
+const preferenceData = {
+  items: body.itens.map((i: any) => ({
+    title: i.nome,
+    unit_price: i.preco,
+    quantity: i.qtd,
+    currency_id: 'BRL'
+  })),
+  payer: {
+    name: body.nome,
+    email: body.email, // O Mercado Pago exige e-mail válido para liberar o botão
+  },
+  // Garante que o cliente possa pagar com qualquer método
+  payment_methods: {
+    excluded_payment_types: [],
+    installments: 12
+  },
+  // Redirecionamento automático após pagar
+  back_urls: {
+    success: "https://aristidesbp.github.io/sucesso.html",
+    failure: "https://aristidesbp.github.io/pagamento.html",
+    pending: "https://aristidesbp.github.io/sucesso.html", // Adicionado para Pix pendente
+},
+auto_return: "all", // Mude de "approved" para "all"
+};
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Configure as Variáveis de Ambiente
+* Para não deixar sua chave do Mercado Pago exposta no código, vamos salvá-la de forma segura no Supabase:
+```
+supabase secrets set MP_ACCESS_TOKEN=seu_token_aqui
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Faça o Deploy (Envio)
+* Agora, com o Docker rodando, execute o comando para subir a função para a nuvem:
+```
+supabase functions deploy checkout
+```
+**Verificação no Painel do Supabase**
+* Após o comando terminar, você poderá ver a função listada no seu painel do Supabase em Edge Functions.
+* Informação Importante: Lembre-se de que no seu arquivo index.html (o que vai para o GitHub), a URL para chamar essa função será: https://[SEU-ID-DO-PROJETO].supabase.co/functions/v1/checkout
+  
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # mercadopago_supabase/index.html
 ```
@@ -1222,35 +1314,7 @@ entrypoint = "./functions/checkout/index.ts"
   }
 }
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# mercadopago_supabase/supabase/functions/checkout/index.ts
-```
-// Adicione os dados do comprador (Payer) para habilitar os botões
-const preferenceData = {
-  items: body.itens.map((i: any) => ({
-    title: i.nome,
-    unit_price: i.preco,
-    quantity: i.qtd,
-    currency_id: 'BRL'
-  })),
-  payer: {
-    name: body.nome,
-    email: body.email, // O Mercado Pago exige e-mail válido para liberar o botão
-  },
-  // Garante que o cliente possa pagar com qualquer método
-  payment_methods: {
-    excluded_payment_types: [],
-    installments: 12
-  },
-  // Redirecionamento automático após pagar
-  back_urls: {
-    success: "https://aristidesbp.github.io/sucesso.html",
-    failure: "https://aristidesbp.github.io/pagamento.html",
-    pending: "https://aristidesbp.github.io/sucesso.html", // Adicionado para Pix pendente
-},
-auto_return: "all", // Mude de "approved" para "all"
-};
-```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
 ## Criar conta e projeto
