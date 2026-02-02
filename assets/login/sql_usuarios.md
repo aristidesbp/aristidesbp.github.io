@@ -3,7 +3,7 @@
 Configure o URL de redirecionamento padrão usado quando um URL de redirecionamento não é especificado ou não corresponde a um da lista de permitidas. Esse valor também é exposto como uma variável de modelo na seção de modelos de email. Wildcards não podem ser usados aqui.
 **EXEMPLO**:
 ```
-https://aristidesbp.github.io
+http://aristidesbp.github.io/assets/login.html
 ```
 
 # CRIAR TABELA USUARIOS
