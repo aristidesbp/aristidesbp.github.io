@@ -6,12 +6,9 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 📱 **WhatsApp:** +55 (91) 99242-0981
 * 🌐 **GitHub:** [https://github.com/aristidesbp](https://github.com/aristidesbp)
 
-## 💼 PROJETOS 
-[ERPABP](https://aristidesbp.github.io/projetos/erpabp/)
-[Barraca de Tapioca](https://aristidesbp.github.io/projetos/tapioca/)
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 💼 PROJETO ERP-ABP (sas)
 #### Tutoriais escrito por Aristidesbp
 obs: projeto em andamento podendo conter erros!
 
