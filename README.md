@@ -1316,7 +1316,7 @@ entrypoint = "./functions/checkout/index.ts"
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
+# SUPABASE (PROJETO ERP)
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
