@@ -1,6 +1,0 @@
-{
-  "servicos": [
-    {"id": "s001", "nome": "Entrega em Domicílio", "preco": 15.00, "categoria": "Logística"},
-    {"id": "s002", "nome": "Corte de Carne Especial", "preco": 0.00, "categoria": "Açougue"}
-  ]
-}

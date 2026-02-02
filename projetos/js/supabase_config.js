@@ -1,3 +1,0 @@
-const supabase_url = 'https://jiaautjsmiosovunjcjc.supabase.co';
-
-const supabase_anonkey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppYWF1dGpzbWlvc292dW5qY2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDEwOTMsImV4cCI6MjA4NTU3NzA5M30.LFGOwXTu2vQQzUtStXZPKuH7dnk2g5yVqab1GTIVnfY';
