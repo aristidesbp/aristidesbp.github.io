@@ -71,32 +71,6 @@ Digite o seguinte endereço na barra de URL:
 ```
 http://localhost:8080/admin.html
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXAR VIDEOS
-```
-# instale o yt-dlp com o comando:
-pip install yt-dlp
-```
-```
-# ffmpeg permite baixar vídeos com áudio ou converter formatos:
-pkg install ffmpeg -y
-```
-```
-# Baixar apenas o áudio em MP3:
-yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
-```
-```
-# Escolher qualidade de vídeo (exemplo:720p)
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
-```
-```
-# Salvar com nome personalizado:
-yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
-```
-```
-# Ver formatos disponíveis:
-yt-dlp -F "URL_DO_VÍDEO
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # GITHUB (INSTALL/CONFIG)
@@ -277,7 +251,32 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BONUS:COMO BAIXAR VIDEOS COM TERMUX
+```
+# instale o yt-dlp com o comando:
+pip install yt-dlp
+```
+```
+# ffmpeg permite baixar vídeos com áudio ou converter formatos:
+pkg install ffmpeg -y
+```
+```
+# Baixar apenas o áudio em MP3:
+yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
+```
+```
+# Escolher qualidade de vídeo (exemplo:720p)
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
+```
+```
+# Salvar com nome personalizado:
+yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
+```
+```
+# Ver formatos disponíveis:
+yt-dlp -F "URL_DO_VÍDEO
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🧱 Criar o projeto no Supabase (RECOMENDADO)
