@@ -18,12 +18,37 @@ obs: projeto em andamento podendo conter erros!
 ---
 # 📘 ÍNDICE
 1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
-2. [ CONFIGURAÇAO INICIAL NO SUPABASE ](#configuracao-inicial-no-supabase)
-3. [usuarios.sql](#usuarios-.-sql)
+2. [ TERMUX E GITHUB](#termux-e-github)
+3. [SUPABASE](#supabase)
 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
+# ESTRUTURA DO PROJETO ERP
+```
+aristidesbp.github.io
+    |
+    ├── assets
+    │   ├── mercadopago_supabase
+    │   ├── documentacao_erp.md
+    │   ├── navbar_erp.js
+    │   ├── conexao_supabase.js
+    │   ├── login.html
+    │   ├── index.html
+    │   ├── index
+    │   ├── entidades.html
+    │   ├── produtos.html
+    │   ├── financeiro.html 
+    │   ├── pdv.html
+    │   ├── pdv_adm.html
+    │   └── notas.html
+    ├── navbar.js
+    ├── index.html
+    └── README.md
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX (INSTALL/CONFIG)
+# TERMUX E GITHUB
 * Faça o download do aplicativo direto no github te instale:
 Acesse o link oficial (não use da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
@@ -279,7 +304,7 @@ yt-dlp -F "URL_DO_VÍDEO
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🧱 Criar o projeto no Supabase (RECOMENDADO)
+# SUPABASE
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
