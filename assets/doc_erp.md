@@ -22,55 +22,15 @@ aristidesbp.github.io
     │   ├── documentacao_erp.md
     │   ├── navbar_erp.js
     │   ├── conexao_supabase.js
-    |   |
     │   ├── login.html
-    │   ├── login
-    │   │   ├── login.css
-    │   │   ├── login_supabase.js
-    │   │   └── login.js
-    |   |
     │   ├── index.html
     │   ├── index
-    │   │   ├── index.css
-    │   │   ├── index_supabase.js
-    │   │   └── index.js
-    |   |
     │   ├── entidades.html
-    │   ├── entidades
-    │   │   ├── entidades.css
-    │   │   ├── entidades_supabase.js
-    │   │   └── entidades.js
-    |   |
     │   ├── produtos.html
-    │   ├── produtos
-    │   │   ├── produtos.css
-    │   │   ├── produtos_supabase.js
-    │   │   └── produtos.js
-    |   |
     │   ├── financeiro.html 
-    │   ├── financeiro
-    │   │   ├── financeiro.js
-    │   │   ├── financeiro_supabase.js
-    │   │   └── financerio.css
-    |   |
     │   ├── pdv.html
-    │   ├── pdv
-    │   │   ├── pdv_supabase.js
-    │   │   ├── pdv.css
-    │   │   └── pdv.js
-    |   |
     │   ├── pdv_adm.html
-    │   ├── pdv_adm
-    │   │   ├── pdv_adm.js
-    │   │   ├── pdv_adm_supabase.js
-    │   │   └── pdv_adm.css
-    |   |
-    │   ├── notas.html
-    │   └── notas
-    │       ├── notas.js
-    │       ├── notas_supabase.js
-    │       └── notas.css
-    |   
+    │   └── notas.html
     ├── navbar.js
     ├── index.html
     └── README.md
@@ -83,7 +43,7 @@ aristidesbp.github.io
 Configure o URL de redirecionamento padrão usado quando um URL de redirecionamento não é especificado ou não corresponde a um da lista de permitidas. Esse valor também é exposto como uma variável de modelo na seção de modelos de email. Wildcards não podem ser usados aqui.
 **EXEMPLO**:
 ```
-http://aristidesbp.github.io/assets/login.html
+http://aristidesbp.github.io
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
