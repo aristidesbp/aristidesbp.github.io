@@ -1341,16 +1341,16 @@ end $$;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CRIANDO UM ARQUIVO CONFIG (config.js)
-
+##  Configure a URL DO SEU SITE em:
+*  🧠 Altentication/url config/ coloque o endereço de onde está hospedado
+  
 ##  Pegar as chaves do Supabase
 ## Vá em Settings
 *  🧱 DATA API/Project URL/copiar🧱 
 *  🔑 API Keis/anon public key/copiar🔑
-*  🧠 Altentication/url config/ coloque o endereço de onde está hospedado
 ### Exemplo:
 * URL: https://xxxxx.supabase.co
 * EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-* NO HTML/JS COLE EM [CONFIGURAÇÃO DO SUPABASE]
 ```
 const dbsupabase = supabase.createClient(
   'SUA_URL_AQUI', 
