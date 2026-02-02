@@ -7,10 +7,8 @@ obs: projeto em andamento podendo conter erros!
 # 📘 ÍNDICE
 1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
 2. [ CONFIGURAÇAO INICIAL NO SUPABASE ](#configuracao-inicial-no-supabase)
-2. [usuarios.sql](#usuarios-.-sql)
-3. [ TERMUX/LINUX ](#03)
-4. [ CODIGOS PRONTOS ](#04)
-5. [ BANCO DE DADOS ](#05)
+3. [usuarios.sql](#usuarios-.-sql)
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
 # ESTRUTURA DO PROJETO ERP
