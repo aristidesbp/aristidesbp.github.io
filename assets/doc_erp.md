@@ -88,7 +88,7 @@ create trigger on_auth_user_created
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 
-# LOGIN
+# login.html
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -372,7 +372,7 @@ window.onload = checkRecovery;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# NAVBAR
+# navbar.js
 * segurança reforçada 
  ```
 /**
@@ -511,32 +511,27 @@ window.onload = checkRecovery;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# INDEX
+# index.html
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>SISTEMA ERP ABP - Inicio</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <!-- CONEXAO -->
     <script>
-// Configurações do Supabase
 
+// Configurações do Supabase
 const SUPABASE_URL = 'SUA_URL_AQUI';
 const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
 
 // Inicializa o cliente globalmente
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/**
- * Bloqueia o acesso se não estiver logado
- */
+/** Bloqueia o acesso se não estiver logado  */
 async function validarAcesso() {
     const { data: { session } } = await _supabase.auth.getSession();
 
@@ -698,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# BLOCO_DE_NOTAS
+# notas.html
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -1437,36 +1432,19 @@ document.addEventListener('DOMContentLoaded', loadClients);
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-
-# CRIAR APOLICE 
+# CRIANDO APOLICES 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 ```
--- Cria a política que permite ao usuário gerenciar apenas os seus fornecedores
-CREATE POLICY "Acesso total aos próprios fornecedores" 
-ON public.fornecedores 
-FOR ALL 
-USING (auth.uid() = usuario_id);
+
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-
 # CRIANDO UMA VISUALIZAÇÃO COM VIEWS
-
-## PROMPT PARA CRIAR VIEWS:
-```
-Crie uma view chamada "v_sevicos_destaque" que liste os serviços com o nome
-da categoria e detalhes do autor que esta na tabela de usuarios. Alem disso, 
-caucule a media das notas (use ) se nao houver) e o total de avaliçoes recebidas por cada serviço.
-Conforme o schema do banco de dados que vou te passar abaixo:
-
-Obs: Ja acrescente with (security_invoker) logo depois do nome da view, para criar uma segurança.
-
-[cole aqui o schema fica em: menu lateral/ Database/ no canto superior direi opção Copy as SQL]
-```
-
-
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
-# 01.1
-# BUSCANDO UM NICHO E ELABORANDO UM NEGÓCIO COM IA
+```
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
+# TRAFEGO PAGO
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥  
 
 Neste  tutorial, vamos atacar um nicho de criação de sites e gestão de tráfego pago, utilizaremos o chat GPT com os seguintes prompts abaixo:
