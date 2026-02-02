@@ -17,7 +17,7 @@ obs: projeto em andamento podendo conter erros!
 1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
 2. [ TERMUX E GITHUB](#termux-e-github)
 3. [SITE DE VENDAS E PAGAMENTOS](#site-de-vendas-e-pagamentos)
-4. [SITE DE VENDAS E PAGAMENTOS](#site-de-vendas-e-pagamentos)
+4. [FASE 2](#fase-2)
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
@@ -1314,7 +1314,8 @@ entrypoint = "./functions/checkout/index.ts"
   }
 }
 ```
-
+# PARABENS METODO DE PAGAMENTO FUNCIONANDO, VAMOS PARA FASE 2 !!!!!!!!!!!!!
+# FASE 2
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE (PROJETO ERP)
 ## Criar conta e projeto
