@@ -176,6 +176,7 @@ git init
 # BAIXAR ATUALIZAÇÃO DO SITE:
 git pull origin main 
 ```
+### FAÇA SUAS ALTERAÇOES !!!!!
 ```
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
 git status
