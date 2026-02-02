@@ -16,7 +16,8 @@ obs: projeto em andamento podendo conter erros!
 # 📘 ÍNDICE
 1. [ ESTRUTURA DO PROJETO ERP ](#estrutura-do-projeto-erp)
 2. [ TERMUX E GITHUB](#termux-e-github)
-3. [SUPABASE](#supabase)
+3. [SITE DE VENDAS E PAGAMENTOS](#site-de-vendas-e-pagamentos)
+4. [SITE DE VENDAS E PAGAMENTOS](#site-de-vendas-e-pagamentos)
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
@@ -301,7 +302,8 @@ yt-dlp -F "URL_DO_VÍDEO
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ESTRUTURA SITE DE VENDAS E PAGAMENTOS
+# SITE DE VENDAS E PAGAMENTOS
+* ESTRUTURA SITE DE VENDAS E PAGAMENTOS:
 ```
 /aristidesbp.github.io  (Sua pasta local e no GitHub)
 │
