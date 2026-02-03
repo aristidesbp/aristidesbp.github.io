@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Entidades - ERP ABP</title>
+    <title>Gestão de Usuarios - ERP ABP</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -187,7 +187,7 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 <body>
 
 <div class="navbar">
-    <div style="font-weight: bold; color: #0f172a;">ERP ABP - ENTIDADES</div>
+    <div style="font-weight: bold; color: #0f172a;">ERP ABP - USUARIOS</div>
     <div class="nav-buttons">
         <a href="index.html" class="btn-nav-back"><i class="fas fa-home"></i> Voltar</a>
         <button class="btn-logout-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
@@ -332,7 +332,7 @@ async function buscaCEP() {
 }
 
 async function loadEntities() {
-    const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
+    const { data, error } = await _supabase.from('usuarios').select('*').order('nome_completo');
     if (error) return;
     currentData = data || [];
     renderTable(currentData);
@@ -374,7 +374,7 @@ function filtrarTabela() {
 function exportarPDFListagem() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("Listagem de Entidades - ERP ABP", 14, 15);
+    doc.text("Listagem de Ususarios - ERP ABP", 14, 15);
     const rows = [];
     document.querySelectorAll("#entities-list tr").forEach(tr => {
         if (tr.style.display !== "none") {
@@ -383,7 +383,7 @@ function exportarPDFListagem() {
         }
     });
     doc.autoTable({ head: [['Entidade / Tipo', 'Contato', 'Acesso / Status']], body: rows, startY: 20 });
-    doc.save("listagem_entidades.pdf");
+    doc.save("listagem_usuarios.pdf");
 }
 
 function exportarPDFFichaCompleta() {
@@ -393,7 +393,7 @@ function exportarPDFFichaCompleta() {
     const filtro = document.getElementById("inputBusca").value.toLowerCase();
     const dadosFiltrados = currentData.filter(c => c.nome_completo.toLowerCase().includes(filtro));
     doc.setFontSize(16);
-    doc.text("FICHAS DETALHADAS DE ENTIDADES", 14, y);
+    doc.text("FICHAS DETALHADAS DE USUARIOS", 14, y);
     y += 10;
     dadosFiltrados.forEach((c, index) => {
         if (y > 250) { doc.addPage(); y = 20; }
@@ -416,7 +416,7 @@ function exportarPDFFichaCompleta() {
         doc.line(14, y, 196, y);
         y += 8;
     });
-    doc.save("fichas_entidades.pdf");
+    doc.save("fichas_usuarios.pdf");
 }
 
 async function handleSave() {
@@ -444,12 +444,12 @@ async function handleSave() {
         arquivos_url: document.getElementById('arquivos_url').value ? [document.getElementById('arquivos_url').value] : []
     };
     if (!dados.nome_completo) return alert("Nome é obrigatório");
-    const { error } = id ? await _supabase.from('entidades').update(dados).eq('id', id) : await _supabase.from('entidades').insert([dados]);
+    const { error } = id ? await _supabase.from('usuarios').update(dados).eq('id', id) : await _supabase.from('usuarios').insert([dados]);
     if (error) alert("Erro: " + error.message); else { resetForm(); loadEntities(); }
 }
 
 async function editFull(id) {
-    const { data, error } = await _supabase.from('entidades').select('*').eq('id', id).single();
+    const { data, error } = await _supabase.from('usuarios').select('*').eq('id', id).single();
     if (error || !data) return;
     Object.keys(data).forEach(k => {
         const el = document.getElementById(k);
@@ -476,7 +476,7 @@ function resetForm() {
 
 async function deleteEntity(id) {
     if (confirm("Excluir definitivamente?")) {
-        await _supabase.from('entidades').delete().eq('id', id);
+        await _supabase.from('usuarios').delete().eq('id', id);
         loadEntities();
     }
 }
