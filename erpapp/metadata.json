@@ -1,6 +1,7 @@
+
 {
-  "name": "ErpAbp",
-  "description": "Sistema completo para gerenciamento financeiro",
+  "name": "Nexus Finance Manager",
+  "description": "Gerenciamento financeiro local-first",
   "requestFramePermissions": [
     "camera",
     "microphone",

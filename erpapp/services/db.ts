@@ -69,9 +69,7 @@ export class LocalDB {
         request.onsuccess = () => resolve(request.result?.value || {});
         request.onerror = () => resolve({});
       });
-    } catch {
-      return {};
-    }
+    } catch { return {}; }
   }
 
   async setConfig(config: Partial<UserConfig>): Promise<void> {
