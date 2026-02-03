@@ -18,7 +18,7 @@ obs: projeto em andamento podendo conter erros!
 2. [ GITHUB](#github)
 3. [SERVIDOR PYTHON ](#servidor-python)
 4. [BAIXAR VIDEOS](#baixar-videos)
-
+4. [SUPABASE](#supabase)
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -282,10 +282,11 @@ yt-dlp -F "URL_DO_VÍDEO
 
 
 
-# FASE 2 
-# BANCO DE DADOS SUPABASE
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE (PROJETO ERP)
+# SUPABASE
+
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
