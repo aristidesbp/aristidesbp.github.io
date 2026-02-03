@@ -158,7 +158,8 @@
     </div>
 
     <script>
-        /** * 2. VALIDAR LOGIN (SEGURANÇA) 
+        
+        /** * 2. VALIDAR LOGIN (SEGURANÇA) */
       
         const AuthService = {
             verificar() {
@@ -170,7 +171,22 @@
                 }
                 return true;
             }
-        };   */
+        };   
+
+        async function loadEntities() {
+    const { data, error } = await _supabase.from('usuarios').select('*').order('nome_completo');
+    
+    if (error) {
+        console.error("Erro Supabase:", error.message);
+        alert("Erro ao buscar dados: " + error.message);
+        return;
+    }
+
+    console.log("Dados recebidos do banco:", data); // Adicione isso para testar
+    currentData = data || [];
+    renderTable(currentData);
+}
+        
 
         /** * 3. DATABASE (INDEXEDDB) 
          */
@@ -340,8 +356,7 @@
             }
         };
 
-        // INICIALIZAÇÃO GLOBAL
-        document.addEventListener('DOMContentLoaded', () => AppController.init());
+
     </script>
 </body>
 </html>
