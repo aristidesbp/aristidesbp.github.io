@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
@@ -42,8 +41,6 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark text-[#f8fafc] dark:text-[#f8fafc] font-display transition-colors duration-300">  
     
-
-    <!-- navbar ##################################################################################################################### -->
 <nav class="fixed w-full z-50 glass border-b border-gray-200 dark:border-slate-border">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -63,7 +60,7 @@
                 <option value="en">EN</option>
             </select>
 
-            <a href="assets/login.html" id="nav_login_btn" 
+            <a href="login.html" id="nav_login_btn" 
                class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20">
                 <span class="material-symbols-outlined text-sm">login</span>
                 ÁREA DO CLIENTE
@@ -75,20 +72,6 @@
         </div>
     </div>
 </nav>
-
-
-
-        <div class="flex items-center gap-3">
-            <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-800 border border-slate-border hover:bg-slate-700 transition-all">
-                <span id="themeIcon" class="material-symbols-outlined text-white text-sm">light_mode</span>
-            </button>
-            <select id="langSelect" onchange="changeLang()" class="bg-slate-800 border-slate-border text-white text-xs font-bold rounded-lg py-1.5">
-                <option value="pt">PT-BR</option>
-                <option value="es">ES-ES</option>
-            </select>
-        </div>
-    </div>
-</header>
 
 <main class="pt-20">
     <section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
@@ -155,15 +138,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="glass p-6 border-primary bg-primary/5 rounded-xl flex flex-col">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-4">picture_as_pdf</span>
-                    <h3 class="text-xl font-bold mb-2">PDF Misterioso</h3>
-                    <p class="text-slate-400 text-sm mb-6 flex-grow">Guia completo de automação e criação de PDF.</p>
-                    <div class="flex items-center justify-between mt-auto">
-                        <span class="font-bold text-primary">R$ 2,00</span>
-                        <button onclick="addServico(this, 'PDF Misterioso', 2)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">shopping_cart</span> Comprar
-                        </button>
+                <div class="glass p-6 border-primary border-2 bg-primary/10 rounded-xl flex flex-col transform scale-105 shadow-2xl shadow-primary/20">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">auto_stories</span>
+                    <h3 class="text-xl font-bold mb-2">Loja de PDFs</h3>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow">Conheça nossa biblioteca digital exclusiva de guias e automações.</p>
+                    <div class="mt-auto">
+                        <a href="loja.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-blue-700 text-white rounded-xl text-sm font-black uppercase tracking-widest transition-all">
+                            <span class="material-symbols-outlined text-sm">shopping_bag</span> ACESSAR LOJA
+                        </a>
                     </div>
                 </div>
             </div>
@@ -216,14 +198,12 @@
     }
 
     function addServico(btn, nome, preco) {
-        // Lógica de Carrinho
         carrinho.push({ nome, preco });
         const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
         document.getElementById('resumoTotal').innerText = total.toFixed(2);
 
-        // Feedback Visual (Botão Verde)
         btn.classList.remove('bg-primary');
-        btn.classList.add('bg-success');
+        btn.classList.add('bg-green-600');
         btn.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> Adicionado`;
     }
 
@@ -237,7 +217,7 @@
 
         const btn = document.getElementById('btnPagar');
         btn.disabled = true;
-        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loading-spinner"></div> PROCESSANDO...</div>`;
+        btn.innerHTML = `PROCESSANDO...`;
 
         try {
             const response = await fetch(functionUrl, {
