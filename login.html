@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+    <meta charset="utf-8">
+    <title>Login - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen">
+    <div class="glass p-8 rounded-2xl border border-slate-800 w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Acesse sua Conta</h2>
+        
+        <button id="btnGoogle" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4"> Entrar com Google
+        </button>
+
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-12px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500">OU</span>
+        </div>
+
+        <form id="loginForm" class="space-y-4">
+            <input type="email" id="email" placeholder="E-mail" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3" required>
+            <input type="password" id="password" placeholder="Senha" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3" required>
+            <button type="submit" class="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-blue-600">ENTRAR</button>
+        </form>
+
+        <p class="mt-4 text-center text-sm text-slate-400">
+            Não tem conta? <a href="#" id="toggleSignUp" class="text-primary hover:underline">Cadastre-se</a>
+        </p>
+    </div>
+
+    <script src="supabase_config.js"></script>
+    <script src="login/auth_functions.js"></script>
+</body>
+</html>
+
