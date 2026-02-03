@@ -1,0 +1,9 @@
+{
+  "name": "ErpAbp",
+  "description": "Sistema completo para gerenciamento financeiro",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
