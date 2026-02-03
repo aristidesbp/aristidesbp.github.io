@@ -286,8 +286,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentData = [];
 
-/**
- * 1. INICIALIZAÇÃO E ACESSO
+/** 1. INICIALIZAÇÃO E ACESSO */
 
 async function validarAcesso() {
     const { data: { session } } = await _supabase.auth.getSession();
@@ -296,7 +295,7 @@ async function validarAcesso() {
         window.location.href = pathPrefix + 'login.html';
     }
     return session;
-} */
+} 
 
 // Injeção da Navbar via JS (Regra de Arquitetura)
 function renderNavbar() {
