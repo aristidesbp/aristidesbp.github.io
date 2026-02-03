@@ -13,282 +13,31 @@
 </head>
 <body>
 
+
     <div id="navbar-container"></div>
 
     <div class="container">
-        <div class="card">
-            <h3 id="form-title" style="margin-top:0">Gestão de Entidade</h3>
-            <input type="hidden" id="edit-id">
-
-            <form id="main-form">
-                <div class="section-title">Dados Principais</div>
-                <div class="form-grid">
-                    <div><label for="nome_completo">Nome / Razão *</label><input type="text" id="nome_completo" required></div>
-                    <div><label for="cpf">CPF / CNPJ</label><input type="text" id="cpf"></div>
-                    <div><label for="telefone">WhatsApp / Tel *</label><input type="text" id="telefone" required></div>
-                    <div><label for="email">E-mail</label><input type="email" id="email"></div>
-                </div>
-
-                <div class="section-title">Configurações</div>
-                <div class="form-grid">
-                    <div>
-                        <label for="acesso">Nível de Acesso</label>
-                        <select id="acesso">
-                            <option value="cliente">Cliente</option>
-                            <option value="funcionario">Funcionário</option>
-                            <option value="master">Master</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="status">Status</label>
-                        <select id="status">
-                            <option value="ativo">Ativo</option>
-                            <option value="desativado">Desativado</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="margin-top: 25px; display: flex; gap: 10px;">
-                    <button type="button" id="btn-save" class="btn-add" onclick="AppController.handleSave()">Salvar Registro</button>
-                    <button type="button" id="btn-cancel" class="btn-cancel" style="display:none;" onclick="AppController.resetarForm()">Cancelar</button>
-                </div>
-            </form>
         </div>
 
-        <div class="card">
-            <div class="form-grid" style="align-items: end; margin-bottom: 20px;">
-                <div style="grid-column: span 2;">
-                    <label for="inputBusca">Filtrar Entidades</label>
-                    <input type="text" id="inputBusca" placeholder="Pesquise por nome ou documento..." onkeyup="AppController.filtrar()">
-                </div>
-                <button class="btn-add" style="background: var(--dark);" onclick="AppController.exportarPDF()">
-                    <i class="fas fa-file-pdf"></i> PDF
-                </button>
-            </div>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Entidade / Acesso</th>
-                            <th>Contato</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="entities-list">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase_config.js"></script>
+    <script src="verificar_login.js"></script>
     <script src="navbar.js"></script>
-<script src="usuarios/load_usuarios.js"></script>
-<script src="usuarios/render_table.js"></script>
-<script src="usuarios/handle_save.js"></script>
 
-    <script>
-        
-        /** * 2. VALIDAR LOGIN (SEGURANÇA) */
-      
-        const AuthService = {
-            verificar() {
-                const session = localStorage.getItem('erp_abp_session');
-                if (!session) {
-                    // Simulação: Se não houver, criamos uma para o Aristides não ser bloqueado no teste local
-                    console.warn("Sessão não encontrada. Criando sessão de teste...");
-                    localStorage.setItem('erp_abp_session', 'true');
-                }
-                return true;
-            }
-        };   
-
-        async function loadEntities() {
-    const { data, error } = await _supabase.from('usuarios').select('*').order('nome_completo');
-    
-    if (error) {
-        console.error("Erro Supabase:", error.message);
-        alert("Erro ao buscar dados: " + error.message);
-        return;
-    }
-
-    console.log("Dados recebidos do banco:", data); // Adicione isso para testar
-    currentData = data || [];
-    renderTable(currentData);
-}
-        
-
-        /** * 3. DATABASE (INDEXEDDB) 
-         */
-        const DB_CONFIG = { name: 'ERP_ABP', version: 1, store: 'entidades' };
-        
-        const dbOps = {
-            init() {
-                return new Promise((resolve) => {
-                    const req = indexedDB.open(DB_CONFIG.name, DB_CONFIG.version);
-                    req.onupgradeneeded = (e) => e.target.result.createObjectStore(DB_CONFIG.store, { keyPath: 'id', autoIncrement: true });
-                    req.onsuccess = (e) => resolve(e.target.result);
-                });
-            },
-            async getAll() {
-                const db = await this.init();
-                return new Promise(res => {
-                    const req = db.transaction(DB_CONFIG.store).objectStore(DB_CONFIG.store).getAll();
-                    req.onsuccess = () => res(req.result);
-                });
-            },
-            async save(data) {
-                const db = await this.init();
-                const tx = db.transaction(DB_CONFIG.store, 'readwrite');
-                data.id ? tx.objectStore(DB_CONFIG.store).put(data) : tx.objectStore(DB_CONFIG.store).add(data);
-                return new Promise(res => tx.oncomplete = () => res(true));
-            },
-            async delete(id) {
-                const db = await this.init();
-                const tx = db.transaction(DB_CONFIG.store, 'readwrite');
-                tx.objectStore(DB_CONFIG.store).delete(Number(id));
-                return new Promise(res => tx.oncomplete = () => res(true));
+    <script src="usuarios/load_usuarios.js"></script>
+    <script src="usuarios/render_table.js"></script>
+    <script src="usuarios/handle_save.js"></script>
+    <script src="usuarios/delete_usuario.js"></script>
+    <script src="usuarios/utils_usuarios.js"></script> <script>
+        // Inicialização única
+        window.onload = async () => {
+            const sessao = await verificarSessao(); // Função do verificar_login.js
+            if(sessao) {
+                loadUsuarios(); // Função do load_usuarios.js
             }
         };
-
-        /** * 4. NAVBAR INDEPENDENTE (COMPONENT) 
-         */
-        function renderNavbar() {
-            const container = document.getElementById('navbar-container');
-            container.innerHTML = `
-                <div class="navbar">
-                    <div style="font-weight: 900; color: var(--dark); font-size: 1.2rem;">
-                        <i class="fas fa-layer-group" style="color: var(--primary)"></i> ERP ABP
-                    </div>
-                    <div style="display:flex; gap: 20px; align-items:center;">
-                        <select id="lang-selector" style="padding: 5px; width: auto;">
-                            <option>🇧🇷 PT</option>
-                            <option>🇺🇸 EN</option>
-                        </select>
-                        <button onclick="location.reload()" style="background:none; border:none; cursor:pointer; color: var(--text-muted)">
-                            <i class="fas fa-sync"></i>
-                        </button>
-                        <button onclick="alert('Saindo...')" style="background: var(--danger); color:white; border:none; padding: 8px 15px; border-radius:6px; cursor:pointer;">
-                            Sair
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        /** * 5. APP CONTROLLER (LÓGICA PRINCIPAL) 
-         */
-        const AppController = {
-            cache: [],
-
-            async init() {
-                AuthService.verificar();
-                renderNavbar();
-                this.carregarDados();
-                // Simulação de carregamento de JSON externo
-                console.log("Serviços invocados de serviços.json (Simulado)");
-            },
-
-            async carregarDados() {
-                this.renderSkeleton();
-                this.cache = await dbOps.getAll();
-                this.renderizarTabela(this.cache);
-            },
-
-            renderizarTabela(dados) {
-                const lista = document.getElementById('entities-list');
-                if (dados.length === 0) {
-                    lista.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 40px; color: #94a3b8;">Nenhum registro.</td></tr>';
-                    return;
-                }
-                lista.innerHTML = dados.map(item => `
-                    <tr>
-                        <td><b>${item.nome_completo}</b><br><small style="color:var(--text-muted)">${item.acesso.toUpperCase()}</small></td>
-                        <td>${item.telefone}<br><small>${item.email || ''}</small></td>
-                        <td><span class="badge-${item.status}">${item.status}</span></td>
-                        <td>
-                            <button class="btn-edit" onclick="AppController.prepararEdicao(${item.id})" style="color: var(--primary); border:none; background:none; cursor:pointer; font-size:18px;"><i class="fas fa-edit"></i></button>
-                            <button class="btn-del" onclick="AppController.excluir(${item.id})" style="color: var(--danger); border:none; background:none; cursor:pointer; font-size:18px;"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-            },
-
-            async handleSave() {
-                const id = document.getElementById('edit-id').value;
-                const data = {
-                    nome_completo: document.getElementById('nome_completo').value,
-                    cpf: document.getElementById('cpf').value,
-                    telefone: document.getElementById('telefone').value,
-                    email: document.getElementById('email').value,
-                    acesso: document.getElementById('acesso').value,
-                    status: document.getElementById('status').value
-                };
-
-                if (!data.nome_completo || !data.telefone) return alert("Campos obrigatórios faltando!");
-                
-                if (id) data.id = Number(id);
-                
-                await dbOps.save(data);
-                this.resetarForm();
-                this.carregarDados();
-            },
-
-            prepararEdicao(id) {
-                const item = this.cache.find(x => x.id === id);
-                if (!item) return;
-                document.getElementById('edit-id').value = item.id;
-                document.getElementById('nome_completo').value = item.nome_completo;
-                document.getElementById('cpf').value = item.cpf;
-                document.getElementById('telefone').value = item.telefone;
-                document.getElementById('email').value = item.email;
-                document.getElementById('acesso').value = item.acesso;
-                document.getElementById('status').value = item.status;
-                
-                document.getElementById('form-title').innerText = "Editando Registro";
-                document.getElementById('btn-cancel').style.display = "block";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            },
-
-            async excluir(id) {
-                if (confirm("Excluir esta entidade permanentemente?")) {
-                    await dbOps.delete(id);
-                    this.carregarDados();
-                }
-            },
-
-            filtrar() {
-                const termo = document.getElementById('inputBusca').value.toLowerCase();
-                const filtrados = this.cache.filter(i => i.nome_completo.toLowerCase().includes(termo));
-                this.renderizarTabela(filtrados);
-            },
-
-            renderSkeleton() {
-                document.getElementById('entities-list').innerHTML = `
-                    <tr><td colspan="4"><div class="skeleton"></div><div class="skeleton"></div></td></tr>
-                `;
-            },
-
-            resetarForm() {
-                document.getElementById('main-form').reset();
-                document.getElementById('edit-id').value = '';
-                document.getElementById('form-title').innerText = "Gestão de Entidade";
-                document.getElementById('btn-cancel').style.display = "none";
-            },
-
-            exportarPDF() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text("Relatório de Entidades - ERP ABP", 14, 15);
-                const rows = this.cache.map(i => [i.nome_completo, i.telefone, i.acesso, i.status]);
-                doc.autoTable({ head: [['Nome', 'Telefone', 'Nível', 'Status']], body: rows, startY: 20 });
-                doc.save("entidades.pdf");
-            }
-        };
-
     </script>
+
     
 </body>
 </html>
