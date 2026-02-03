@@ -54,3 +54,31 @@ async function salvarNovaSenha() {
         window.location.href = 'login.html';
     }
 }
+// Função para o botão de Login com Google
+async function loginComGoogle() {
+    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: window.location.origin + '/index.html'
+        }
+    });
+
+    if (error) {
+        console.error("Erro no login Google:", error.message);
+        alert("Erro ao conectar com Google: " + error.message);
+    }
+}
+
+// Função de confirmação que chama o cadastro real
+function confirmarCadastro() {
+    const email = document.getElementById('email').value;
+    if (!email) {
+        alert("Digite um e-mail primeiro!");
+        return;
+    }
+    
+    const confirmou = confirm(`Deseja criar uma conta para: ${email}?`);
+    if (confirmou) {
+        realizarCadastro(); 
+    }
+}
