@@ -1,5 +1,5 @@
 async function handleSave() {
-    const id = document.getElementById('edit-id').value;
+    const idExistente = document.getElementById('edit-id').value;
     
     const dados = {
         nome_completo: document.getElementById('nome_completo').value,
@@ -8,38 +8,38 @@ async function handleSave() {
         email: document.getElementById('email').value,
         acesso: document.getElementById('acesso').value,
         status: document.getElementById('status').value,
-        relacionamento: document.getElementById('acesso').value // Espelhando o acesso como relacionamento inicial
+        relacionamento: document.getElementById('acesso').value
     };
 
-    if (!dados.nome_completo || !dados.telefone) {
-        return alert("Por favor, preencha os campos obrigatórios (*)");
+    if (!dados.nome_completo || !dados.telefone || !dados.email) {
+        return alert("Nome, Telefone e E-mail são obrigatórios.");
     }
 
     try {
-        let result;
-        
-        if (id) {
-            // Atualização (O ID já será o UUID do registro existente)
-            result = await _supabase
-                .from('usuarios')
-                .update(dados)
-                .eq('id', id);
-        } else {
-            // Inserção Manual (Para entidades sem login Auth ainda)
-            // Nota: Como o ID é obrigatório no seu SQL (referenciando auth.users),
-            // a inserção manual direta na tabela pública pode falhar se não houver um usuário no Auth.
-            alert("Atenção: Novos usuários devem ser criados via tela de Cadastro/Login para gerar o UUID de autenticação.");
-            return;
+        let userId = idExistente;
+
+        // Se for um NOVO registro, primeiro criamos no Auth
+        if (!idExistente) {
+            alert("Criando credenciais de acesso para: " + dados.email);
+            userId = await criarContaAuth(dados.email, null, dados.nome_completo);
         }
 
-        if (result.error) throw result.error;
+        // Agora salvamos ou atualizamos na tabela public.usuarios
+        const { error } = await _supabase
+            .from('usuarios')
+            .upsert({
+                id: userId, // Garante o vínculo com o Auth (UUID)
+                ...dados,
+                updated_at: new Date()
+            });
 
-        alert("Sucesso!");
+        if (error) throw error;
+
+        alert(idExistente ? "Perfil atualizado!" : "Usuário e Login criados com sucesso!");
         resetarForm();
         loadUsuarios();
 
     } catch (error) {
-        console.error("Erro ao salvar:", error.message);
-        alert("Erro ao salvar: " + error.message);
+        alert("Erro no processo: " + error.message);
     }
 }
