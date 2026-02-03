@@ -1,36 +1,61 @@
 <!DOCTYPE html>
-<html class="dark">
+<html class="dark" lang="pt-BR">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen">
-    <div class="glass p-8 rounded-2xl border border-slate-800 w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Acesse sua Conta</h2>
-        
-        <button id="btnGoogle" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4"> Entrar com Google
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
         </button>
 
         <div class="relative mb-6 text-center border-b border-slate-800">
-            <span class="absolute top-[-12px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500">OU</span>
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
         </div>
 
-        <form id="loginForm" class="space-y-4">
-            <input type="email" id="email" placeholder="E-mail" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3" required>
-            <input type="password" id="password" placeholder="Senha" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3" required>
-            <button type="submit" class="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-blue-600">ENTRAR</button>
-        </form>
-
-        <p class="mt-4 text-center text-sm text-slate-400">
-            Não tem conta? <a href="#" id="toggleSignUp" class="text-primary hover:underline">Cadastre-se</a>
-        </p>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+                <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+            
+            <div class="flex gap-3 pt-2">
+                <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+                    ENTRAR
+                </button>
+                <button onclick="realizarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+                    CADASTRAR
+                </button>
+            </div>
+        </div>
     </div>
 
     <script src="supabase_config.js"></script>
     <script src="login/auth_functions.js"></script>
+
 </body>
 </html>
-
