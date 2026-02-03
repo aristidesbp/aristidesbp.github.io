@@ -3,6 +3,7 @@
 Este arquivo gerencia a abertura do banco de dados e as operações de CRUD.
 
 ```
+<script>
 :root {
     --primary: #3ecf8e;
     --primary-hover: #34b27b;
@@ -42,7 +43,7 @@ label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-m
 input, select, textarea {
     width: 100%; padding: 10px; border: 1px solid #ddd;
     border-radius: 6px; font-size: 14px; transition: border 0.3s;
-
+</script>
 ```
 # 3. Interface (HTML)
 Arquivo: entidades.html
@@ -151,9 +152,10 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
 ```
 
-4. Lógica e Controle (JS)
+# 4. Lógica e Controle (JS)
 Arquivo: app.js
 ```
+<script>
 // Arquivo de dados simulado (conforme instrução de produtos.json)
 const loadConfig = async () => {
     // Exemplo de como chamaria: const res = await fetch('servicos.json');
@@ -259,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     controller.init();
     loadConfig();
 });
+</script>
 ```
 
 ✅ Checklist de Validação
