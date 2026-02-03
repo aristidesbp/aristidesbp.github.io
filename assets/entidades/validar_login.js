@@ -1,17 +1,18 @@
 /**
- * Lógica de Proteção de Rota
+ * verificar_login.js
+ * Função externa para verificar a autenticação do usuário.
  */
-function verificarAutenticacao() {
-    const usuarioLogado = localStorage.getItem('erp_abp_session');
-    
-    // Se não houver sessão, redireciona para o login
-    if (!usuarioLogado) {
+async function verificarSessao() {
+    const { data: { session }, error } = await _supabase.auth.getSession();
+
+    if (error || !session) {
+        console.warn("Acesso negado: Sessão inválida ou expirada.");
+        // Define o prefixo do caminho caso o arquivo esteja em subpastas
         const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
         window.location.href = pathPrefix + 'login.html';
-        return false;
+        return null;
     }
-    return JSON.parse(usuarioLogado);
-}
 
-// Execução imediata ao carregar o script
-const sessaoAtiva = verificarAutenticacao();
+    console.log("Sessão ativa para:", session.user.email);
+    return session;
+}
