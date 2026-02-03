@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+    <div class="bg-slate-900 p-8 rounded-2xl w-full max-w-md border border-slate-800 shadow-2xl">
+        <h2 class="text-2xl font-bold mb-6 text-blue-500">Nova Senha</h2>
+        <div class="space-y-4">
+            <input type="password" id="novaSenha" placeholder="Digite a nova senha" class="w-full bg-slate-800 rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="salvarNovaSenha()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-xl transition-all">
+                ATUALIZAR SENHA
+            </button>
+        </div>
+    </div>
+    <script src="supabase_config.js"></script>
+    <script src="login/auth_functions.js"></script>
+</body>
+</html>
