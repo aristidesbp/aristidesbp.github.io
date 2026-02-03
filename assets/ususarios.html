@@ -3,21 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de susuarios - ERP ABP</title>
+    <title>Gestão de Usuários - ERP ABP</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
- <link rel="stylesheet" href="usuarios/style.css">
-  
+    
+    <link rel="stylesheet" href="usuarios/style.css">
 </head>
 <body>
-
 
     <div id="navbar-container"></div>
 
     <div class="container">
+        <div class="card">
+            <h3 id="form-title" style="margin-top:0">Gestão de Usuário</h3>
+            <input type="hidden" id="edit-id">
+
+            <form id="main-form">
+                <div class="section-title">Dados Principais</div>
+                <div class="form-grid">
+                    <div><label for="nome_completo">Nome / Razão *</label><input type="text" id="nome_completo" required></div>
+                    <div><label for="cpf">CPF / CNPJ</label><input type="text" id="cpf"></div>
+                    <div><label for="telefone">WhatsApp / Tel *</label><input type="text" id="telefone" required></div>
+                    <div><label for="email">E-mail</label><input type="email" id="email"></div>
+                </div>
+
+                <div class="section-title">Configurações</div>
+                <div class="form-grid">
+                    <div>
+                        <label for="acesso">Nível de Acesso</label>
+                        <select id="acesso">
+                            <option value="cliente">Cliente</option>
+                            <option value="funcionario">Funcionário</option>
+                            <option value="master">Master</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="status">Status</label>
+                        <select id="status">
+                            <option value="ativo">Ativo</option>
+                            <option value="desativado">Desativado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; gap: 10px;">
+                    <button type="button" id="btn-save" class="btn-add" onclick="handleSave()">Salvar Registro</button>
+                    <button type="button" id="btn-cancel" class="btn-cancel" style="display:none;" onclick="resetarForm()">Cancelar</button>
+                </div>
+            </form>
         </div>
+
+        <div class="card">
+            <div class="form-grid" style="align-items: end; margin-bottom: 20px;">
+                <div style="grid-column: span 2;">
+                    <label for="inputBusca">Filtrar Usuários</label>
+                    <input type="text" id="inputBusca" placeholder="Pesquise por nome ou documento..." onkeyup="filtrarUsuarios()">
+                </div>
+                <button class="btn-add" style="background: var(--dark);" onclick="exportarUsuariosPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entidade / Acesso</th>
+                            <th>Contato</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entities-list">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase_config.js"></script>
@@ -28,16 +92,19 @@
     <script src="usuarios/render_table.js"></script>
     <script src="usuarios/handle_save.js"></script>
     <script src="usuarios/delete_usuario.js"></script>
-    <script src="usuarios/utils_usuarios.js"></script> <script>
-        // Inicialização única
+    <script src="usuarios/utils_usuarios.js"></script>
+
+    <script>
+        // Inicialização do Ciclo de Vida da Página
         window.onload = async () => {
-            const sessao = await verificarSessao(); // Função do verificar_login.js
-            if(sessao) {
-                loadUsuarios(); // Função do load_usuarios.js
+            // Chamada obrigatória conforme suas configurações
+            const autenticado = await verificar_login();
+            
+            if (autenticado) {
+                renderNavbar(); 
+                loadUsuarios();
             }
         };
     </script>
-
-    
 </body>
 </html>
