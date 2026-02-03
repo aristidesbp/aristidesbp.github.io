@@ -1,17 +1,23 @@
-// Função para garantir que apenas usuários logados acessem a página
+/** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
 async function checarAutenticacao() {
-    // Busca a sessão atual do cliente que configuramos no supabase_config.js
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
     const { data: { session }, error } = await window.supabaseClient.auth.getSession();
 
-    // Se houver erro ou se a sessão estiver vazia (null)
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
     if (error || !session) {
         console.log("Acesso negado: Usuário não autenticado.");
-        // Redireciona para a raiz onde está o login.html, conforme sua estrutura
-        window.location.href = "../login.html";
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
     } else {
+        // Se a sessão existir, permitimos que ele continue na página
         console.log("Acesso autorizado para:", session.user.email);
     }
 }
 
-// Executa a verificação assim que o script é carregado
+// Executamos a verificação imediatamente ao carregar o script
 checarAutenticacao();
