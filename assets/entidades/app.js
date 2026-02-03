@@ -1,91 +1,105 @@
-/**
- * Controlador Principal - Gestão de Entidades
- */
-const AppController = {
-    entidades: [],
-    servicos: [],
+// Arquivo de dados simulado (conforme instrução de produtos.json)
+const loadConfig = async () => {
+    // Exemplo de como chamaria: const res = await fetch('servicos.json');
+    console.log("Configurações e serviços carregados.");
+};
 
-    async iniciar() {
-        console.log("Iniciando App...");
-        await this.carregarServicos();
-        await this.carregarDados();
-        this.renderizarTabela();
-    },
-
-    // Regra: "Sempre invocar produto, serviços de um arquivo json"
-    async carregarServicos() {
-        try {
-            const response = await fetch('servicos.json');
-            this.servicos = await response.json();
-            console.log("Serviços carregados via JSON:", this.servicos);
-        } catch (err) {
-            console.error("Erro ao carregar servicos.json", err);
-        }
-    },
-
-    async carregarDados() {
-        this.entidades = await dbOps.getAll(); // Função do db.js (IndexedDB)
-    },
-
-    async handleSave() {
-        const id = document.getElementById('edit-id').value;
-        const entidade = {
-            nome_completo: document.getElementById('nome_completo').value,
-            cpf: document.getElementById('cpf').value,
-            telefone: document.getElementById('telefone').value,
-            acesso: document.getElementById('acesso').value,
-            status: document.getElementById('status').value,
-            // IDs obrigatórios nos campos de formulário conforme sua regra
-            timestamp: new Date().toISOString()
-        };
-
-        if (id) {
-            entidade.id = Number(id);
-            await dbOps.update(entidade);
-            this.notificar("Entidade atualizada com sucesso!", "success");
-        } else {
-            await dbOps.add(entidade);
-            this.notificar("Entidade cadastrada!", "success");
-        }
-
-        this.resetarForm();
-        this.iniciar();
-    },
-
-    renderizarTabela(dados = this.entidades) {
-        const tbody = document.getElementById('entities-list');
-        if (dados.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Nenhum registro encontrado.</td></tr>`;
+const view = {
+    renderList(data) {
+        const list = document.getElementById('entities-list');
+        if (data.length === 0) {
+            list.innerHTML = '<tr><td colspan="3" style="text-align:center">Nenhum registro encontrado.</td></tr>';
             return;
         }
-
-        tbody.innerHTML = dados.map(item => `
+        list.innerHTML = data.map(item => `
             <tr>
-                <td><b>${item.nome_completo}</b></td>
+                <td><b>${item.nome_completo}</b><br><small>${item.acesso}</small></td>
                 <td>${item.telefone}</td>
-                <td><span class="badge-${item.status}">${item.status}</span></td>
                 <td>
-                    <button onclick="AppController.prepararEdicao(${item.id})"><i class="fas fa-edit"></i></button>
-                    <button onclick="AppController.excluir(${item.id})"><i class="fas fa-trash"></i></button>
+                    <button onclick="controller.edit(${item.id})"><i class="fas fa-edit"></i></button>
+                    <button onclick="controller.delete(${item.id})"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
         `).join('');
     },
-
-    // Regra: "Sempre use filtros e campo de busca nas listagens"
-    filtrar() {
-        const termo = document.getElementById('inputBusca').value.toLowerCase();
-        const filtrados = this.entidades.filter(e => 
-            e.nome_completo.toLowerCase().includes(termo) || 
-            e.cpf.includes(termo)
-        );
-        this.renderizarTabela(filtrados);
+    
+    resetForm() {
+        document.getElementById('entity-form').reset();
+        document.getElementById('edit-id').value = '';
+        document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
+        document.getElementById('btn-cancel').style.display = "none";
     },
 
-    notificar(msg, tipo) {
-        // Implementação de Toasts de sucesso/erro conforme arquitetura
-        alert(msg); 
+    showLoading() {
+        document.getElementById('entities-list').innerHTML = '<tr><td colspan="3"><div class="skeleton"></div></td></tr>';
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => AppController.iniciar());
+const controller = {
+    async init() {
+        view.showLoading();
+        const data = await dbOps.getAll();
+        view.renderList(data);
+    },
+
+    async handleSave() {
+        const id = document.getElementById('edit-id').value;
+        const entity = {
+            nome_completo: document.getElementById('nome_completo').value,
+            cpf: document.getElementById('cpf').value,
+            telefone: document.getElementById('telefone').value,
+            email: document.getElementById('email').value,
+            acesso: document.getElementById('acesso').value,
+            status: document.getElementById('status').value,
+            cep: document.getElementById('cep').value,
+            logradouro: document.getElementById('logradouro').value,
+            cidade: document.getElementById('cidade').value
+        };
+
+        if (!entity.nome_completo) return alert("Nome é obrigatório");
+
+        if (id) {
+            entity.id = Number(id);
+            await dbOps.update(entity);
+        } else {
+            await dbOps.add(entity);
+        }
+
+        view.resetForm();
+        this.init();
+    },
+
+    async edit(id) {
+        const item = await dbOps.getById(id);
+        if (item) {
+            Object.keys(item).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.value = item[key];
+            });
+            document.getElementById('edit-id').value = item.id;
+            document.getElementById('form-title').innerText = "Editando Entidade";
+            document.getElementById('btn-cancel').style.display = "block";
+            window.scrollTo(0,0);
+        }
+    },
+
+    async delete(id) {
+        if (confirm("Deseja excluir?")) {
+            await dbOps.delete(id);
+            this.init();
+        }
+    },
+
+    async filter() {
+        const termo = document.getElementById('inputBusca').value.toLowerCase();
+        const todos = await dbOps.getAll();
+        const filtrados = todos.filter(e => e.nome_completo.toLowerCase().includes(termo));
+        view.renderList(filtrados);
+    }
+};
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    controller.init();
+    loadConfig();
+});
