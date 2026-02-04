@@ -185,11 +185,12 @@ git push origin main
 python3 -m http.server 8080
 ```
 * Ele inicia um servidor web simples na porta 8080:
-
+* caso queira encerrar o processo basta apertar Ctr+C;
 
 **Como Acessar o Site no Navegador**
 Abra o navegador do seu celular (Chrome, Firefox, etc.).
--[localhost](http://localhost:8080)
+
+## [localhost CLIQUE AQUI](http://localhost:8080)
 ```
 http://localhost:8080
 ```
