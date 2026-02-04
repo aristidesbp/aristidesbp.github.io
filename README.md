@@ -179,21 +179,20 @@ git push origin main
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
-Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+ * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+ * Navegue até a pasta onde seus arquivos estão 
 ```
-cd pasta_do_arquivo
-# Navegue até a pasta onde seus arquivos estão 
+python3 -m http.server 8080
 ```
-```
-python -m http.server 8080
-# Ele inicia um servidor web simples na porta 8080:
-# O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
-```
-## Como Acessar o Site no Navegador
+* Ele inicia um servidor web simples na porta 8080:
+* O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+
+**Como Acessar o Site no Navegador**
 Abra o navegador do seu celular (Chrome, Firefox, etc.).
 ```
 http://localhost:8080
 ```
+
 ## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
 ```
 # Descubra o IP do celular no Termux:
