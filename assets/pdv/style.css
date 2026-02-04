@@ -1,0 +1,28 @@
+
+        /* Overlay para bloquear o PDV se o caixa estiver fechado */
+        .caixa-fechado-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); z-index: 9999; 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; text-align: center; 
+        }
+        .busca-grande { font-size: 1.5rem !important; padding: 20px !important; border: 2px solid #3ecf8e !important; width: 100%; border-radius: 8px; }
+        .total-destaque { font-size: 2.5rem; color: #166534; font-weight: 800; }
+        
+        /* Dropdowns de resultados */
+        #resultados-busca, #resultados-cliente { 
+            position: absolute; width: 100%; z-index: 100; 
+            background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            border-radius: 0 0 8px 8px; max-height: 300px; overflow-y: auto;
+        }
+
+        /* Estilo para o Checkbox de Impressão */
+        .print-option {
+            background: #f0fdf4; border: 2px solid #bbf7d0;
+            padding: 15px; border-radius: 12px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            transition: 0.2s;
+        }
+        .print-option:hover { background: #dcfce7; }
+        .print-option input { transform: scale(1.5); cursor: pointer; }
+
