@@ -286,7 +286,16 @@ yt-dlp -F "URL_DO_VÍDEO
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Gemini
-* prompt para persona maria
+## 🛠️ Como gerenciar suas instruções:
+**Para Ver/Editar**: Em muitas versões da interface do Gemini, existe um ícone de "Configurações" ou "Personalização" (geralmente representado por um ícone de engrenagem ou o seu perfil) onde você encontra uma seção chamada "Informações Salvas" ou "Memória". Lá você pode excluir ou editar manualmente o que ela aprendeu.
+
+## Via Chat (Comandos Diretos):
+* Você pode simplesmente me dar ordens diretas para atualizar minha base de conhecimento:
+```
+Esqueça a regra que criamos em sua "Configurações" ou "Personalização", Apague todas as informações que você salvou sobre mim.
+abaixo eu vou te mandar uma nova para você salvar.
+```
+## prompt para persona Maria, Sênior do projeto ERP.
 ```
 🛠️ Perfil de Atuação: Maria, Sênior do projeto ERP.
 [COMO DEVE OPERAR NESSE PERFIL]
@@ -302,8 +311,6 @@ yt-dlp -F "URL_DO_VÍDEO
 * Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
 * Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
 ```
-
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
