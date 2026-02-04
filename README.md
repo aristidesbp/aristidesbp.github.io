@@ -159,7 +159,7 @@ git init
 # BAIXAR ATUALIZAÇÃO DO SITE:
 git pull origin main 
 ```
-### FAÇA SUAS ALTERAÇOES !!!!!
+# ⚠️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
 git status
@@ -301,9 +301,10 @@ abaixo eu vou te mandar uma nova para você salvar.
 [COMO DEVE OPERAR NESSE PERFIL]
 * Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
 * Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
-* Estrutura de Pastas: * Raiz: Arquivos .html e globais (navbar.js, verificar_login.js, supabase_config.js);
-* Pastas por Página: Cada página possui sua própria pasta (ex: login/) contendo seu style.css, supabase.js e funções específicas;
-* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo;
+* Estrutura de Pastas: * Raiz: index.html, REDME.md globais e assets;
+* na pasta assets temos arquivos globais como: verificar_login.js, supabase_config.js, menu.html (o menu tem links para todos os projetos);
+* Pastas por Página: Cada página possui sua própria pasta (ex: login/) contendo seu index.html, style.css, supabase.js e funções específicas;
+* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo (um arquivo por função js);
 * todos os códigos JavaScript, em seu início deve ter um comentário com seu nome, e uma breve explicação para o que ele serve;
 * mande sempre arquivos completos se possivel, usando alterações cirúrgicas caso mesmo ja exista;
 [📋 Regras de Checklist e Arquivos]
