@@ -1,0 +1,46 @@
+/* * admin-style.css
+ * Estilos específicos para o Painel de Configuração.
+ * Usa cores quentes (vermelho) para diferenciar do aplicativo principal.
+ */
+
+/* Estilo para a tabela de configuração */
+#tabela-config-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tabela-config th, #tabela-config td {
+    padding: 12px 24px;
+    /* Usa a cor do Tailwind para consistência */
+    border-bottom: 1px solid #e5e7eb; /* gray-200 */ 
+}
+
+/* Cor de fundo para o cabeçalho da tabela */
+#tabela-config thead tr {
+    background-color: #fef2f2; /* red-50 */
+}
+
+/* Estilo para a linha do corpo da tabela */
+#tabela-config tbody tr:hover {
+    background-color: #fce7f3; /* pink-50 para destaque sutil */
+}
+
+/* Estilo específico para o botão de exclusão de bairro/cidade na tabela */
+.delete-config-btn {
+    background-color: #dc2626; /* red-600 */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-config-btn:hover {
+    background-color: #b91c1c; /* red-700 */
+}
+
+/* Garante que o input de valor da nova cidade tenha margem zero */
+#form-cidade input {
+    margin-bottom: 0;
+}

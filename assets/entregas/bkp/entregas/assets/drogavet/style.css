@@ -1,0 +1,32 @@
+* {margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body {background:#f0f2f5;color:#333;padding:16px;max-width:1200px;margin:0 auto;}
+h1 {text-align:center;color:#1f2937;margin-bottom:16px;font-size:2rem;}
+
+form, .controls, #relatorio {background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-bottom:20px;transition: all 0.3s ease;}
+form:hover, .controls:hover, #relatorio:hover {box-shadow:0 6px 20px rgba(0,0,0,0.12);}
+
+input, select, textarea, button {width:100%;padding:10px;margin:6px 0;border:1px solid #d1d5db;border-radius:8px;font-size:14px;}
+input:focus, select:focus, textarea:focus {border-color:#6366f1;outline:none;box-shadow:0 0 4px rgba(99,102,241,0.3);}
+
+button {cursor:pointer;background:#6366f1;color:#fff;border:none;transition:0.3s;}
+button:hover {background:#4f46e5;}
+
+.small {width:auto;padding:8px 12px;font-size:13px;}
+.btn-row {display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+
+.row {display:flex;gap:12px;margin-bottom:8px;}
+.row>* {flex:1;}
+
+table {width:100%;border-collapse:collapse;background:#fff;margin-top:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+th, td {border:1px solid #e5e7eb;padding:10px;text-align:left;font-size:13px;}
+th {background:#f9fafb;color:#111827;font-weight:600;}
+td img {width:120px;height:120px;object-fit:contain;border-radius:6px;}
+
+#msgSuccess {display:none;padding:12px;margin-bottom:12px;border-radius:8px;color:#fff;text-align:center;background:#22c55e;font-weight:600;}
+
+#relatorio {display:none;}
+
+@media(max-width:900px){
+  .row {flex-direction:column;}
+  td img {width:72px;height:72px;}
+}

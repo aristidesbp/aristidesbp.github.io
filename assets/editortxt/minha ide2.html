@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Editor ABP</title>
+<style>
+  * {margin:0; padding:0; box-sizing:border-box;}
+  body, html {height:100%; font-family:Arial, sans-serif;}
+  header {
+    position: fixed; top:0; left:0; width:100%;
+    background:#222; color:white; padding:8px;
+    z-index:1000; display:flex; flex-wrap:wrap;
+    gap:5px; align-items:center;
+  }
+  header input, header select, header button {
+    padding:6px; font-size:14px;
+  }
+  header button {
+    background:#333; color:white; border:none; border-radius:4px; cursor:pointer;
+  }
+  header button:hover {background:#555;}
+  #editor {
+    position:absolute;
+    top:100px; /* ajustado para ficar abaixo do menu */
+    left:0;
+    width:100%;
+    height:calc(100vh - 100px); /* ajusta altura considerando menu */
+    border:none;
+    padding:12px;
+    font-family:monospace;
+    font-size:14px;
+    resize:none;
+    overflow:auto;
+  }
+  #mensagem {color:yellow; font-size:14px; margin-left:5px;}
+</style>
+</head>
+<body>
+
+<header>
+  <input type="file" id="input-arquivo" onchange="abrirArquivo(event)">
+  <input type="text" id="busca" placeholder="Buscar...">
+  <input type="text" id="substituir" placeholder="Substituir por...">
+  <button onclick="buscarPalavra()">Buscar</button>
+  <button onclick="substituirTudo()">S</button>
+  <button onclick="navegar(1)">→</button>
+  <input type="text" id="nomeArquivo" placeholder="Nome do arquivo">
+  <select id="extensaoArquivo">
+    <option value=".txt">.txt</option>
+    <option value=".html">.html</option>
+    <option value=".js">.js</option>
+  </select>
+  <button onclick="salvarArquivo()">💾 Salvar/Exportar</button>
+  <span id="mensagem"></span>
+</header>
+
+<textarea id="editor" placeholder="Digite ou abra um arquivo..."></textarea>
+
+<script>
+let ocorrencias = [];
+let indiceAtual = -1;
+let conteudoOriginal = "";
+let conteudoOriginalAlterado = false;
+
+const editor = document.getElementById('editor');
+
+// Detecta alterações
+editor.addEventListener('input', () => {
+  conteudoOriginalAlterado = editor.value !== conteudoOriginal;
+});
+
+// Alerta antes de sair ou atualizar se houver alterações
+window.addEventListener('beforeunload', function(e) {
+  if (conteudoOriginalAlterado) {
+    const mensagem = "Você tem alterações não salvas. Deseja realmente sair ou atualizar?";
+    e.preventDefault();
+    e.returnValue = mensagem;
+    return mensagem;
+  }
+});
+
+// Abrir arquivo
+function abrirArquivo(event) {
+  const arquivo = event.target.files[0];
+  if (!arquivo) return;
+  const leitor = new FileReader();
+  leitor.onload = e => {
+    editor.value = e.target.result;
+    conteudoOriginal = editor.value;
+    conteudoOriginalAlterado = false;
+  };
+  leitor.readAsText(arquivo);
+}
+
+// Salvar/exportar arquivo com nome e extensão
+function salvarArquivo() {
+  const texto = editor.value;
+  const nome = document.getElementById('nomeArquivo').value.trim();
+  const ext = document.getElementById('extensaoArquivo').value;
+  if (!nome) { alert("Digite um nome para o arquivo!"); return; }
+
+  const blob = new Blob([texto], { type:"text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = nome + ext;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  conteudoOriginal = editor.value;
+  conteudoOriginalAlterado = false;
+  document.getElementById('mensagem').textContent = `Arquivo "${nome+ext}" salvo!`;
+}
+
+// Buscar palavra
+function buscarPalavra() {
+  const texto = editor.value;
+  const termo = document.getElementById('busca').value;
+  ocorrencias = [];
+  indiceAtual = -1;
+
+  if (!termo) { document.getElementById('mensagem').textContent = "Digite algo para buscar"; return; }
+
+  const regex = new RegExp(termo, "gi");
+  let match;
+  while ((match = regex.exec(texto)) !== null) { ocorrencias.push(match.index); }
+
+  if (ocorrencias.length > 0) { indiceAtual = 0; destacar(); 
+    document.getElementById('mensagem').textContent = `${ocorrencias.length} encontrada(s)`; }
+  else { document.getElementById('mensagem').textContent = "Nenhuma encontrada"; }
+}
+
+// Substituir tudo
+function substituirTudo() {
+  const termo = document.getElementById('busca').value;
+  const substituto = document.getElementById('substituir').value;
+  if (!termo) return;
+
+  const regex = new RegExp(termo, "gi");
+  const qtdAntes = (editor.value.match(regex) || []).length;
+  editor.value = editor.value.replace(regex, substituto);
+  conteudoOriginalAlterado = true;
+  document.getElementById('mensagem').textContent = `${qtdAntes} substituição(ões) realizada(s)`;
+
+  buscarPalavra(); // atualiza ocorrências
+}
+
+// Navegar entre ocorrências
+function navegar(direcao) {
+  if (ocorrencias.length === 0) return;
+  indiceAtual += direcao;
+  if (indiceAtual >= ocorrencias.length) indiceAtual = 0;
+  if (indiceAtual < 0) indiceAtual = ocorrencias.length - 1;
+  destacar();
+}
+
+// Destacar palavra com foco
+function destacar() {
+  if (indiceAtual < 0 || ocorrencias.length === 0) return;
+  const pos = ocorrencias[indiceAtual];
+  const termo = document.getElementById('busca').value;
+
+  editor.focus();
+  editor.setSelectionRange(pos, pos + termo.length);
+
+  const linha = editor.value.substr(0,pos).split("\n").length;
+  const alturaLinha = editor.scrollHeight / editor.value.split("\n").length;
+  editor.scrollTop = (linha-1) * alturaLinha;
+}
+</script>
+
+</body>
+</html>

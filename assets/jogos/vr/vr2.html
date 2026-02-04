@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Experiência VR - Andar + Sabre de Luz</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+  <style>
+    html,body{height:100%;margin:0;background:#000;color:#fff;font-family:sans-serif}
+    .ui{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;text-align:center}
+    .enter-btn{background:linear-gradient(180deg,#ffd700,#ffb400);border:none;padding:20px 40px;border-radius:14px;font-size:20px;font-weight:700;color:#000;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .hint{margin-top:10px;font-size:14px;background:rgba(0,0,0,0.6);padding:6px 10px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="ui" id="ui">
+    <button id="enterVrBtn" class="enter-btn">Entrar em VR</button>
+    <div class="hint">Use o analógico para andar pelo cenário. Segure o controle direito para ver o sabre de luz.</div>
+  </div>
+
+  <a-scene id="scene" embedded background="color:#081022">
+    <!-- Cenário grande -->
+    <a-entity environment="preset: tron; groundColor: #222; grid: cross; lighting: distant; fog:0.5; dressingAmount:10"></a-entity>
+
+    <!-- Luzes -->
+    <a-entity light="type: ambient; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; intensity: 0.8" position="-1 4 2"></a-entity>
+
+    <!-- Rig com movimento -->
+    <a-entity id="rig" movement-controls position="0 1.6 0">
+      <a-entity camera look-controls wasd-controls-enabled="false"></a-entity>
+      <a-entity id="handL" hand-controls="hand: left; handModelStyle: lowPoly; color: #777"></a-entity>
+      <a-entity id="handR" hand-controls="hand: right; handModelStyle: lowPoly; color: #777">
+        <!-- Sabre de luz -->
+        <a-cylinder id="hilt" position="0 -0.1 0" radius="0.04" height="0.2" color="#555"></a-cylinder>
+        <a-cylinder id="blade" position="0 0.5 0" radius="0.02" height="1" color="#00f" emissive="#33f" visible="true"></a-cylinder>
+      </a-entity>
+    </a-entity>
+
+    <!-- Objetos para brincar -->
+    <a-box position="0 1 -3" depth="1" height="1" width="1" color="#FF6F61"></a-box>
+    <a-sphere position="3 1 -5" radius="1" color="#4CC3D9"></a-sphere>
+    <a-cylinder position="-3 1 -4" radius="0.7" height="2" color="#FFC65D"></a-cylinder>
+
+    <!-- Texto -->
+    <a-entity position="0 3 -6">
+      <a-text value="Ande com o analógico esquerdo.\nMova o controle direito para brandir o sabre de luz." align="center" color="#fff" width="6"></a-text>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    const btn = document.getElementById('enterVrBtn');
+    const scene = document.getElementById('scene');
+    const ui = document.getElementById('ui');
+
+    async function enterVR() {
+      ui.style.display = 'none';
+      try { if(scene && scene.enterVR) { scene.enterVR(); return; } } catch(e){}
+      try {
+        if(navigator.xr && navigator.xr.isSessionSupported){
+          const ok = await navigator.xr.isSessionSupported('immersive-vr');
+          if(ok){ await navigator.xr.requestSession('immersive-vr'); return; }
+        }
+      } catch(e){ console.warn(e); }
+      ui.style.display='';
+      alert('Não foi possível entrar em VR automaticamente.');
+    }
+
+    btn.addEventListener('click', enterVR);
+    btn.addEventListener('touchstart', e=>{e.preventDefault(); enterVR();});
+  </script>
+</body>
+</html>
