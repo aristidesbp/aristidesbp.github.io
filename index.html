@@ -1,241 +1,180 @@
 <!DOCTYPE html>
-<html class="dark" lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Aristidesbp | Digital Solutions</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#2563eb",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#020617",
-                        "slate-border": "#1e293b",
-                    },
-                    fontFamily: { "display": ["Inter", "sans-serif"] },
-                },
-            },
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer components {
-            .glass {
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                background: rgba(15, 23, 42, 0.6);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            .dark .glass { background: rgba(15, 23, 42, 0.6); }
-            .light .glass { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.1); }
-        }
-        .light body { background-color: #f6f6f8; color: #1e293b; }
-        .light .service-card { background: white; border-color: #e2e8f0; }
-        .service-card:hover { border-color: #2563eb; transform: translateY(-4px); }
-    </style>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SISTEMA ERP ABP - Inicio</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CONEXAO -->
+    <script>
+// Configurações do Supabase
+
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
+
+// Inicializa o cliente globalmente
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/**
+ * Bloqueia o acesso se não estiver logado
+ */
+async function validarAcesso() {
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session) {
+        // Verifica se a página está na raiz ou em subpasta para ajustar o caminho do login
+        const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : '';
+        window.location.href = pathPrefix + 'login.html';
+    }
+    return session;
+}
+
+// Executa automaticamente ao carregar o script
+validarAcesso();
+
+   </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+   <style>
+   /* Remove inconsistências de box model */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilo base do corpo da página */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    padding-top: 80px;
+}
+
+/* Container central do conteúdo */
+.content {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Grade responsiva dos cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilo dos cards clicáveis */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #334155;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Efeito visual ao passar o mouse */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #3ecf8e;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Ícones dos cards */
+.card i {
+    font-size: 45px;
+    color: #3ecf8e;
+    margin-bottom: 15px;
+}
+
+/* Título dos cards */
+.card h3 {
+    margin: 10px 0;
+}
+
+/* Texto auxiliar dos cards */
+.card p {
+    font-size: 0.9em;
+    color: #64748b;
+}
+   </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-[#f8fafc] dark:text-[#f8fafc] font-display transition-colors duration-300">  
-    
-<nav class="fixed w-full z-50 glass border-b border-gray-200 dark:border-slate-border">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-3xl">terminal</span>
-            <span class="font-black text-xl tracking-tighter dark:text-white">ABP<span class="text-primary text-xs uppercase ml-1">Digital</span></span>
-        </div>
+<body>
 
-        <div class="flex items-center gap-6">
-            <div class="hidden md:flex gap-6 text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-400">
-                <a href="#home" class="hover:text-primary transition-colors">Home</a>
-                <a href="#projetos" class="hover:text-primary transition-colors">Projetos</a>
-            </div>
+    <div class="content">
+        
+        <div class="grid">
 
-            <select id="langSelect" onchange="changeLang()" class="bg-transparent border-none text-xs font-bold uppercase cursor-pointer focus:ring-0 dark:text-white">
-                <option value="pt">PT</option>
-                <option value="es">ES</option>
-                <option value="en">EN</option>
-            </select>
-
-            <a href="login.html" id="nav_login_btn" 
-               class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20">
-                <span class="material-symbols-outlined text-sm">login</span>
-                ÁREA DO CLIENTE
+            <a href="bloco_de_notas.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Bloco de Notas</h3>
+                <p>Anote e organize suas ideias na nuvem.</p>
             </a>
 
-            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                <span id="themeIcon" class="material-symbols-outlined text-gray-600 dark:text-gray-400">dark_mode</span>
-            </button>
+            <a href="clientes.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>Gestão de Clientes</h3>
+                <p>Cadastro e gerenciamento completo de clientes.</p>
+            </a>
+
+            <a href="fornecedores.html" class="card">
+                <i class="fas fa-users"></i>
+                <h3>fornecedores</h3>
+                <p>Gerencie dados e contatos dos fornecedores</p>
+            </a>
+
+
+            <a href="financeiro.html" class="card">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Financeiro</h3>
+                <p>Contas a pagar/receber/relatorios</p>
+            </a>
+            
+
         </div>
+        
     </div>
-</nav>
 
-<main class="pt-20">
-    <section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
-        <div class="relative z-10 max-w-4xl text-center flex flex-col items-center gap-8">
-            <h1 class="text-4xl md:text-7xl font-black leading-[1.1] tracking-tight" id="heroTitle">
-                Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais
-            </h1>
-            <p class="text-lg md:text-xl text-slate-400 max-w-2xl">
-                Escalando negócios e automatizando processos através de tecnologia de ponta.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 mt-4">
-                <a class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20" href="#services">Ver Serviços</a>
-                <a class="px-8 py-4 glass hover:bg-white/5 font-bold rounded-xl transition-all border border-slate-border" href="#about">Saiba Mais</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 px-6 md:px-16" id="about">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-            <div class="aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-slate-border">
-                <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop');"></div>
-            </div>
-            <div class="flex flex-col gap-6">
-                <h2 class="text-3xl md:text-5xl font-bold">Sobre o Especialista</h2>
-                <p class="text-slate-400 text-lg leading-relaxed">Analista de Sistemas e Programador com foco no desenvolvimento de soluções digitais práticas, eficientes e orientadas a resultados. Atuo desde a concepção até a entrega final.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 px-6 md:px-16" id="services">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center">Pacote Completo de Soluções</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-4">developer_mode_tv</span>
-                    <h3 class="text-xl font-bold mb-2">Desenvolvimento Web</h3>
-                    <p class="text-slate-400 text-sm mb-6 flex-grow">Sistemas web personalizados e sites institucionais.</p>
-                    <div class="flex items-center justify-between mt-auto">
-                        <span class="font-bold">R$ 3.500,00</span>
-                        <button onclick="addServico(this, 'Dev Web', 3500)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
-                    </div>
-                </div>
-                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-4">query_stats</span>
-                    <h3 class="text-xl font-bold mb-2">Tráfego Pago</h3>
-                    <p class="text-slate-400 text-sm mb-6 flex-grow">Gestão de anúncios focada em conversão.</p>
-                    <div class="flex items-center justify-between mt-auto">
-                        <span class="font-bold">R$ 1.500,00</span>
-                        <button onclick="addServico(this, 'Tráfego', 1500)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
-                    </div>
-                </div>
-                <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-4">terminal</span>
-                    <h3 class="text-xl font-bold mb-2">Consultoria Técnica</h3>
-                    <p class="text-slate-400 text-sm mb-6 flex-grow">Arquitetura de sistemas e suporte especializado.</p>
-                    <div class="flex items-center justify-between mt-auto">
-                        <span class="font-bold">R$ 1.000,00</span>
-                        <button onclick="addServico(this, 'Consultoria', 1000)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
-                    </div>
-                </div>
-                <div class="glass p-6 border-primary border-2 bg-primary/10 rounded-xl flex flex-col transform scale-105 shadow-2xl shadow-primary/20">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-4">auto_stories</span>
-                    <h3 class="text-xl font-bold mb-2">Loja de PDFs</h3>
-                    <p class="text-slate-400 text-sm mb-6 flex-grow">Conheça nossa biblioteca digital exclusiva de guias e automações.</p>
-                    <div class="mt-auto">
-                        <a href="loja.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-blue-700 text-white rounded-xl text-sm font-black uppercase tracking-widest transition-all">
-                            <span class="material-symbols-outlined text-sm">shopping_bag</span> ACESSAR LOJA
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 px-6 md:px-16" id="contact">
-        <div class="max-w-4xl mx-auto glass p-8 rounded-2xl border border-slate-border">
-            <h2 class="text-2xl font-bold mb-8">Checkout Seguro</h2>
-            <form id="payForm" class="space-y-4">
-                <input id="cliente_nome" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" placeholder="Nome Completo" required/>
-                <input id="cliente_email" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" type="email" placeholder="E-mail" required/>
-                <div class="p-6 bg-primary/10 rounded-xl border border-primary/20 flex justify-between items-center">
-                    <div>
-                        <span class="block text-xs uppercase font-bold text-slate-500">Valor Total</span>
-                        <span class="text-3xl font-black text-primary">R$ <span id="resumoTotal">0.00</span></span>
-                    </div>
-                    <span class="material-symbols-outlined text-4xl text-primary opacity-50">account_balance_wallet</span>
-                </div>
-                <button type="button" onclick="processarPagamento()" id="btnPagar" class="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25">
-                    FINALIZAR NO MERCADO PAGO
-                </button>
-            </form>
-        </div>
-    </section>
-</main>
+<script src="js/navbar.js"></script>
 
 <script>
-    let carrinho = [];
-    const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
+// URL do projeto Supabase
+const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
 
-    function toggleTheme() {
-        const html = document.documentElement;
-        const icon = document.getElementById('themeIcon');
-        if (html.classList.contains('dark')) {
-            html.classList.remove('dark'); html.classList.add('light');
-            icon.innerText = 'dark_mode';
-        } else {
-            html.classList.remove('light'); html.classList.add('dark');
-            icon.innerText = 'light_mode';
-        }
+// Chave pública (publishable) para uso no frontend
+const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
+
+// Cria o cliente Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Função responsável por verificar se o usuário está autenticado
+async function checkUser() {
+    // Obtém a sessão atual
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    // Se não existir sessão, redireciona para o login
+    if (!session) {
+        window.location.href = 'login.html';
     }
+}
 
-    function changeLang() {
-        const lang = document.getElementById('langSelect').value;
-        const title = document.getElementById('heroTitle');
-        title.innerHTML = lang === 'es' ? 
-            'Transformando Necesidades Reales en <span class="text-primary">Soluciones Digitales</span>' : 
-            'Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais';
-    }
+// Executa a verificação após o carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+    checkUser();
+});
 
-    function addServico(btn, nome, preco) {
-        carrinho.push({ nome, preco });
-        const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-        document.getElementById('resumoTotal').innerText = total.toFixed(2);
-
-        btn.classList.remove('bg-primary');
-        btn.classList.add('bg-green-600');
-        btn.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> Adicionado`;
-    }
-
-    async function processarPagamento() {
-        const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-        if (total <= 0) return alert("Selecione um serviço primeiro.");
-        
-        const nome = document.getElementById('cliente_nome').value;
-        const email = document.getElementById('cliente_email').value;
-        if(!nome || !email) return alert("Preencha nome e e-mail.");
-
-        const btn = document.getElementById('btnPagar');
-        btn.disabled = true;
-        btn.innerHTML = `PROCESSANDO...`;
-
-        try {
-            const response = await fetch(functionUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nome, email, total,
-                    itens: carrinho.map(i => ({ nome: i.nome, preco: i.preco, qtd: 1 }))
-                })
-            });
-            const data = await response.json();
-            if (data.init_point) window.location.href = data.init_point;
-        } catch (e) {
-            alert("Erro ao conectar. Tente novamente.");
-            btn.disabled = false;
-            btn.innerText = "FINALIZAR NO MERCADO PAGO";
-        }
-    }
 </script>
+
 </body>
 </html>
