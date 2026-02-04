@@ -185,13 +185,24 @@ git push origin main
 python3 -m http.server 8080
 ```
 * Ele inicia um servidor web simples na porta 8080:
-* O Termux agora mostrará a mensagem: Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+
 
 **Como Acessar o Site no Navegador**
 Abra o navegador do seu celular (Chrome, Firefox, etc.).
+-[localhost](http://localhost:8080)
 ```
 http://localhost:8080
 ```
+
+## ⚠️ Observações importantes
+O servidor só funciona enquanto o Termux estiver aberto
+A porta 8080 pode ser trocada por outra, ex:
+Copiar código
+```
+python -m http.server 3000
+```
+Aí o endereço vira:
+* http://localhost:3000
 
 ## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
 ```
@@ -203,15 +214,7 @@ Vai aparecer algo como:
 No navegador do outro dispositivo, acesse:
 * http://192.168.1.105:8080
 
-## ⚠️ Observações importantes
-O servidor só funciona enquanto o Termux estiver aberto
-A porta 8080 pode ser trocada por outra, ex:
-Copiar código
-```
-python -m http.server 3000
-```
-Aí o endereço vira:
-* http://localhost:3000
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ADICIONANDO COLABORADORES 
