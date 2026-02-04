@@ -144,37 +144,37 @@ tree
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 ```
-## Clona o repositório com chave SSH
 git clone git@github.com:aristidesbp/aristidesbp.github.io
+## Clona o repositório com chave SSH
 ```
 ```
-# entre na pasta do repositório clonado
 cd aristidesbp.github.io
+# entre na pasta do repositório clonado
 ```
 ```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
 ```
 ``` 
+git pull origin main
 # BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main 
 ```
 # ⚠️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
 git status
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
 ```
 ``` 
+git add .
 # ADICIONAR REPOSITÓRIOS À LISTA:
-git add .  
 ```
 ``` 
+git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 # SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_DA_ALTERACAO" 
 ```
 ``` 
+git push origin main
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SERVIDOR PYTHON 
