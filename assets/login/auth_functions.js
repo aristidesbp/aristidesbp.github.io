@@ -1,6 +1,5 @@
-/** * Estrutura do auth_functions.js
- * Para começar, vamos focar na função de Gestão de Conta. 
- * O comando básico do Supabase é: supabase.auth.updateUser({ password: new_password })
+/** * ERP ABP - auth_functions.js
+ * Local: assets/login/auth_functions.js
  */
 
 // 1. Alternar visualização da senha
@@ -9,7 +8,7 @@ function alternarSenha() {
     campo.type = campo.type === 'password' ? 'text' : 'password';
 }
 
-// 2. Cadastro com confirmação (Sua solicitação)
+// 2. Cadastro real (chamado pela confirmação)
 async function realizarCadastro() {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('password').value;
@@ -19,29 +18,51 @@ async function realizarCadastro() {
         return;
     }
 
-    const confirmou = confirm(`Deseja criar uma conta para ${email}? Certifique-se de que anotou sua senha.`);
-    if (!confirmou) return;
+    try {
+        const { data, error } = await window.supabaseClient.auth.signUp({ 
+            email, 
+            password: senha 
+        });
 
-    const { data, error } = await window.supabaseClient.auth.signUp({ email, password: senha });
-
-    if (error) alert("Erro: " + error.message);
-    else alert("Cadastro realizado! Verifique seu e-mail.");
+        if (error) {
+            alert("Erro: " + error.message);
+        } else {
+            alert("Cadastro realizado! Se você desativou o 'Confirm Email' no Supabase, já pode tentar o login.");
+        }
+    } catch (err) {
+        console.error("Erro inesperado no cadastro:", err);
+    }
 }
 
-// 3. Solicitar Recuperação
+// 3. Função de confirmação (UX para o usuário)
+function confirmarCadastro() {
+    const email = document.getElementById('email').value;
+    if (!email) {
+        alert("Digite um e-mail primeiro!");
+        return;
+    }
+    
+    const confirmou = confirm(`Deseja criar uma conta para: ${email}?`);
+    if (confirmou) {
+        realizarCadastro(); 
+    }
+}
+
+// 4. Solicitar Recuperação de Senha
 async function solicitarRecuperacao() {
     const email = document.getElementById('email').value;
     if (!email) return alert("Digite seu e-mail.");
 
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/redefinir_senha.html',
+        // Redireciona para o arquivo na pasta assets
+        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
     });
 
     if (error) alert(error.message);
-    else alert("Link enviado ao e-mail!");
+    else alert("Link de recuperação enviado ao seu e-mail!");
 }
 
-// 4. Salvar Nova Senha (usado na redefinir_senha.html)
+// 5. Salvar Nova Senha (usado na redefinir_senha.html)
 async function salvarNovaSenha() {
     const novaSenha = document.getElementById('novaSenha').value;
     if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
@@ -54,31 +75,19 @@ async function salvarNovaSenha() {
         window.location.href = 'menu.html';
     }
 }
-// Função para o botão de Login com Google
+
+// 6. Login com Google (Ajustado para o seu novo redirecionamento)
 async function loginComGoogle() {
     const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: window.location.origin + '/index.html'
+            // ✅ Redirecionamento absoluto para evitar erro de autorização
+            redirectTo: 'https://aristidesbp.github.io/assets/menu.html'
         }
     });
 
     if (error) {
         console.error("Erro no login Google:", error.message);
         alert("Erro ao conectar com Google: " + error.message);
-    }
-}
-
-// Função de confirmação que chama o cadastro real
-function confirmarCadastro() {
-    const email = document.getElementById('email').value;
-    if (!email) {
-        alert("Digite um e-mail primeiro!");
-        return;
-    }
-    
-    const confirmou = confirm(`Deseja criar uma conta para: ${email}?`);
-    if (confirmou) {
-        realizarCadastro(); 
     }
 }
