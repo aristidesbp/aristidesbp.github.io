@@ -1,0 +1,58 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.player-container {
+    background: #1e1e1e;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.now-playing {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+#track-name {
+    font-weight: bold;
+    color: #1db954; /* Verde estilo Spotify */
+    margin-bottom: 10px;
+}
+
+audio {
+    width: 100%;
+}
+
+.playlist {
+    list-style: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.playlist li {
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s;
+    border-bottom: 1px solid #282828;
+}
+
+.playlist li:hover {
+    background: #282828;
+}
+
+.playlist li.active {
+    color: #1db954;
+    background: #282828;
+}
