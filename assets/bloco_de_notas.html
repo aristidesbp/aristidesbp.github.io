@@ -2,18 +2,11 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Bloco de Notas - ERP ABP</title>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link rel="stylesheet" href="bloco_de_notas/style.css">
    
 </head>
@@ -28,40 +21,25 @@
     </div>
 
     <div class="container">
-
         <h2>Minhas Notas</h2>
-
         <input type="hidden" id="note-id">
-
         <input type="text" id="title" placeholder="Título da nota...">
-
         <textarea id="content" rows="4" placeholder="Escreva algo importante..."></textarea>
-
         <button class="btn-save" id="btn-save" onclick="saveNote()">
             Salvar Nota
         </button>
-
         <div class="search-box">
             <label>PESQUISAR OU EXPORTAR</label>
-
-            <input
-                type="text"
-                id="search"
-                placeholder="🔍 Digite para buscar..."
-                onkeyup="filterNotes()"
-            >
-
+            <input type="text" id="search" placeholder="🔍 Digite para buscar..."  onkeyup="filterNotes()">
             <button class="export-btn" onclick="exportAllToPDF()">
                 <i class="fas fa-file-pdf"></i> Exportar Notas para PDF
             </button>
         </div>
-
         <div id="notes-list"></div>
     </div>
 
     <script src="navbar.js"></script>
-
-    
-
+    <script src="supabase_config.js"></script>
+    <script src="verificar_login.js"></script>
 </body>
 </html>
