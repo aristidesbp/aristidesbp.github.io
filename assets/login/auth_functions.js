@@ -51,7 +51,7 @@ async function salvarNovaSenha() {
     if (error) alert(error.message);
     else {
         alert("Senha atualizada com sucesso!");
-        window.location.href = 'login.html';
+        window.location.href = 'menu.html';
     }
 }
 // Função para o botão de Login com Google
