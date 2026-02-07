@@ -1,14 +1,13 @@
 /** * ERP ABP - cadastrar_financeiro.js 
- * Local: assets/financeiro/cadastrar_financeiro.js
- * Responsável por: Criar (com parcelas), Editar e Carregar Entidades no Select.
+ * Sincronizado com o novo financeiro.html (Parcelas e Entidades)
  */
 
-// 1. Função Principal de Salvar (Acionada pelo botão no HTML)
+// 1. Função para Salvar ou Editar (Chamada pelo botão do HTML)
 async function handleSave() {
     const id = document.getElementById('edit-id').value;
     const qtdeParcelas = parseInt(document.getElementById('parcelas').value) || 1;
     
-    // Coleta dos dados do formulário
+    // Coleta de dados (Garante que os IDs batem com seu HTML)
     const dadosBase = {
         tipo: document.getElementById('tipo').value,
         descricao: document.getElementById('descricao').value,
@@ -20,9 +19,9 @@ async function handleSave() {
         forma_pagamento: document.getElementById('forma_pagamento').value
     };
 
-    // Validação Simples
+    // Validação de segurança
     if (!dadosBase.descricao || isNaN(dadosBase.valor)) {
-        return alert("Por favor, preencha a Descrição e o Valor corretamente.");
+        return alert("Preencha a Descrição e o Valor corretamente!");
     }
 
     let resultado;
@@ -35,26 +34,26 @@ async function handleSave() {
             .update(dadosBase)
             .eq('id', id);
     } else {
-        // --- MODO NOVO (Com suporte a Parcelamento) ---
+        // --- MODO NOVO (Com Parcelamento Automático) ---
         const lancamentos = [];
-        // Converte string de data para Objeto Date (garantindo meia-noite local)
-        let dataReferencia = new Date(document.getElementById('data_vencimento').value + 'T00:00:00');
+        // Pega a data de vencimento inicial
+        let dataRef = new Date(document.getElementById('data_vencimento').value + 'T00:00:00');
 
         for (let i = 1; i <= qtdeParcelas; i++) {
-            const novoLancamento = { ...dadosBase };
+            const novoItem = { ...dadosBase };
             
-            // Ajusta a descrição para parcelas (Ex: "Internet (1/3)")
+            // Se tiver mais de 1 parcela, renomeia a descrição
             if (qtdeParcelas > 1) {
-                novoLancamento.descricao = `${dadosBase.descricao} (${i}/${qtdeParcelas})`;
+                novoItem.descricao = `${dadosBase.descricao} (${i}/${qtdeParcelas})`;
             }
 
-            // Formata a data para YYYY-MM-DD
-            novoLancamento.data_vencimento = dataReferencia.toISOString().split('T')[0];
+            // Define a data desta parcela no formato YYYY-MM-DD
+            novoItem.data_vencimento = dataRef.toISOString().split('T')[0];
             
-            lancamentos.push(novoLancamento);
+            lancamentos.push(novoItem);
 
-            // Incrementa um mês para a próxima parcela
-            dataReferencia.setMonth(dataReferencia.getMonth() + 1);
+            // Pula 1 mês para a próxima parcela
+            dataRef.setMonth(dataRef.getMonth() + 1);
         }
 
         resultado = await window.supabaseClient
@@ -62,20 +61,18 @@ async function handleSave() {
             .insert(lancamentos);
     }
 
-    // Tratamento de Resposta
     if (resultado.error) {
-        console.error("Erro Supabase:", resultado.error);
-        alert("Erro ao salvar: " + resultado.error.message);
+        alert("Erro no Supabase: " + resultado.error.message);
     } else {
-        alert(id ? "Lançamento atualizado!" : `${qtdeParcelas} lançamento(s) criado(s) com sucesso!`);
+        alert(id ? "Registro atualizado!" : `${qtdeParcelas} Lançamento(s) salvo(s)!`);
         
-        // Chamada das funções de outros arquivos para limpar e atualizar a tela
+        // Limpeza e Atualização Automática
         if (typeof resetForm === "function") resetForm(); 
         if (typeof loadFinanceiro === "function") loadFinanceiro();
     }
 }
 
-// 2. Carregar a lista de Entidades no campo <select> do formulário
+// 2. Carrega as entidades para o Select de Classificação
 async function loadEntidadesSelect() {
     const select = document.getElementById('entidade_id');
     if (!select) return;
@@ -86,16 +83,16 @@ async function loadEntidadesSelect() {
         .order('nome_completo', { ascending: true });
 
     if (error) {
-        console.error("Erro ao carregar entidades para o select:", error.message);
+        console.error("Erro ao carregar entidades:", error.message);
         return;
     }
 
     if (data) {
-        // Preserva a opção padrão e adiciona as entidades do banco
+        // Limpa e repovoa o select
         select.innerHTML = '<option value="">Selecione...</option>' + 
-            data.map(ent => `<option value="${ent.id}">${ent.nome_completo}</option>`).join('');
+            data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
     }
 }
 
-// 3. Inicialização automática do Select ao carregar a página
+// Inicializa o select quando a página carregar
 document.addEventListener('DOMContentLoaded', loadEntidadesSelect);
