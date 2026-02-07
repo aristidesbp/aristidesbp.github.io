@@ -2,7 +2,25 @@
  * Para começar, vamos focar na função de Login (Sign In). 
  * O comando básico do Supabase é: supabase.auth.signInWithPassword({ email, password })
  */
+/** * Trecho atualizado do auth_functions.js */
 
+// Função para o botão de Login com Google
+async function loginComGoogle() {
+    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            // ✅ REDIRECIONAMENTO CORRIGIDO PARA O MENU:
+            redirectTo: window.location.origin + '/menu.html'
+        }
+    });
+
+    if (error) {
+        console.error("Erro no login Google:", error.message);
+        alert("Erro ao conectar com Google: " + error.message);
+    }
+}
+
+// ... restante das funções (confirmarCadastro, etc) permanecem iguais
 /** * Estrutura do login_function.js atualizada */
 
 async function realizarLogin() {
