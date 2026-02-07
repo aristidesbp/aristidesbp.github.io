@@ -1,6 +1,6 @@
 // Configuração central do Supabase para o ERP ABP
-const supabaseUrl = 'https://bhppnlcgcbkicsqtrdiw.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJocHBubGNnY2JraWNzcXRyZGl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDA3NzIsImV4cCI6MjA4NTcxNjc3Mn0.7byyWtVi_-WoxAzV33AycWQpd_gHkBei5rTXRMj6Ib8';
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
 
 // Inicializa o cliente Supabase
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
