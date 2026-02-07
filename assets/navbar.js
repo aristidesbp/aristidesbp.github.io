@@ -63,7 +63,7 @@
             <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
         </div>
         <div class="nav-buttons">
-            <a href="adm.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <a href="menu.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Menu</a>
             <button class="btn-nav" onclick="sairDaConta()">
                 <i class="fas fa-sign-out-alt"></i> Sair
             </button>
