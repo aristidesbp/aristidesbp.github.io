@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cadastro de Produtos e Estoque</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+select {
+    appearance: none;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBj0n4hqFQi8BH6nWGKw6tnq2GV5pWiF2go7Gkauq2CGPWmx59O-pxXgSFlawUS70n9eOOISZc1oFm6cQM_BInh9EI072oPHTWw4H-YZrRfRZwATtlPeI8O-fyaqgdXAah_90cK5PafcqvSE45RDuUdwzhQz3lgLyjC_Qp2zYAEZQwRxE1DNDBV3GszjfAlrlCFOLR4otYCX5pmQ1WTpqBZEp-VnYoBFM6blIYQt-XA5g7L0Q9ty9scyZfBl4-loQSjBZxnnC1HwDM);
+    background-repeat: no-repeat;
+    background-position: right 1rem center
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-[#111418] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex items-center bg-white dark:bg-[#111418] p-4 sticky top-0 z-10 border-b border-gray-100 dark:border-gray-800">
+<div class="text-[#111418] dark:text-white flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Cadastrar Produto</h2>
+</header>
+<main class="flex-1 overflow-y-auto">
+<!-- Image Upload Placeholder (EmptyState adapted) -->
+<div class="p-4">
+<div class="flex flex-col items-center gap-4 rounded-xl border-2 border-dashed border-[#dbe0e6] dark:border-gray-700 px-6 py-10 bg-gray-50 dark:bg-gray-800/20">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">add_a_photo</span>
+<p class="text-[#111418] dark:text-white text-lg font-bold leading-tight text-center">Adicionar Foto</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal text-center">Toque para carregar a imagem do produto</p>
+</div>
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-wide shadow-sm">
+<span class="truncate">Upload</span>
+</button>
+</div>
+</div>
+<!-- Form Section -->
+<div class="flex flex-col gap-1 pb-10">
+<!-- Product Name (TextField) -->
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Nome do Produto</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 placeholder:text-[#617589] p-4 text-base font-normal" placeholder="Ex: Camiseta Algodão Premium" type="text"/>
+</label>
+</div>
+<!-- SKU & Category (Two per Row logic) -->
+<div class="px-4 py-3 flex gap-4">
+<label class="flex flex-col flex-1">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">SKU / Código</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 placeholder:text-[#617589] p-4 text-base font-normal" placeholder="PROD-12345" type="text"/>
+</label>
+</div>
+<!-- Category Select (TextField Dropdown style) -->
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Categoria</p>
+<select class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 p-4 text-base font-normal">
+<option value="">Selecione uma categoria</option>
+<option value="vestuario">Vestuário</option>
+<option value="eletronicos">Eletrônicos</option>
+<option value="casa">Casa e Decoração</option>
+<option value="alimentos">Alimentos</option>
+</select>
+</label>
+</div>
+<!-- Financial Data (Purchase & Sale Price) -->
+<div class="px-4 py-3 grid grid-cols-2 gap-4">
+<label class="flex flex-col">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Preço de Compra</p>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-base">R$</span>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 pl-12 pr-4 text-base font-normal" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</label>
+<label class="flex flex-col">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Preço de Venda</p>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-base">R$</span>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 pl-12 pr-4 text-base font-normal" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</label>
+</div>
+<!-- Inventory (Current Stock) -->
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-[#111418] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Estoque Atual</p>
+<div class="flex items-center gap-3">
+<input class="form-input flex-1 rounded-lg text-[#111418] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 h-14 p-4 text-base font-normal" placeholder="Ex: 50" type="number"/>
+<div class="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+<button class="size-12 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-700 rounded-md transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="size-12 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-700 rounded-md transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</label>
+</div>
+<!-- Footer Action Button -->
+<div class="px-4 py-6 mt-4">
+<button class="w-full h-14 bg-primary text-white font-bold text-lg rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined">save</span>
+                        Salvar Produto
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu de Navegação com Scroll Lateral</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-col max-w-[480px] mx-auto overflow-hidden">
+<main class="flex-1 flex items-center justify-center p-8 text-center">
+<p class="text-gray-400 text-sm italic">O conteúdo da aplicação será exibido aqui. Deslize a barra de navegação abaixo para ver todos os módulos.</p>
+</main>
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50">
+<div class="flex overflow-x-auto hide-scrollbar items-end px-4 pt-3 pb-8 gap-4 snap-x snap-mandatory">
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-red-500 transition-colors">logout</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-red-500">Sair</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">groups</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">Entidades</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">calendar_month</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">Parcelas</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer min-w-[72px] active snap-start">
+<div class="bg-primary/10 px-3 py-1.5 rounded-lg -mt-1">
+<span class="material-symbols-outlined text-primary">grid_view</span>
+</div>
+<span class="text-[10px] font-bold text-primary">Painel</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">inventory_2</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">Produtos</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">point_of_sale</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">PDV</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">receipt_long</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">Vendas</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">shopping_bag</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">E-commerce</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer min-w-[72px] snap-start pr-4">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors">settings</span>
+<span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 group-hover:text-primary">Ajustes</span>
+</div>
+</div>
+<div class="h-5 w-full bg-white dark:bg-gray-900"></div>
+</nav>
+</div>
+
+</body></html>

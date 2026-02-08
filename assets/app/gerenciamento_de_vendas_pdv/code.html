@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gerenciamento de Vendas PDV</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111418] dark:text-white min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- TopAppBar -->
+<div class="flex items-center bg-white dark:bg-[#1c2632] p-4 pb-2 justify-between border-b border-[#e5e7eb] dark:border-[#2d3947] sticky top-0 z-50">
+<div class="text-[#111418] dark:text-white flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined cursor-pointer">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Gerenciar Vendas</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-[#111418] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">ios_share</span>
+</button>
+</div>
+</div>
+<!-- SearchBar -->
+<div class="px-4 py-3 bg-white dark:bg-[#1c2632]">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#617589] flex border-none bg-[#f0f2f4] dark:bg-[#2d3947] items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] dark:bg-[#2d3947] focus:border-none h-full placeholder:text-[#617589] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Buscar por cliente ou pedido..." value=""/>
+</div>
+</label>
+</div>
+<!-- Chips / Filters -->
+<div class="flex gap-3 p-3 overflow-x-auto whitespace-nowrap bg-white dark:bg-[#1c2632] scrollbar-hide no-scrollbar">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary text-white pl-4 pr-3">
+<p class="text-sm font-medium leading-normal">Hoje</p>
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-[#2d3947] pl-4 pr-3">
+<p class="text-[#111418] dark:text-white text-sm font-medium leading-normal">Últimos 7 dias</p>
+<span class="material-symbols-outlined text-[#111418] dark:text-white text-[20px]">keyboard_arrow_down</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f2f4] dark:bg-[#2d3947] pl-4 pr-3">
+<p class="text-[#111418] dark:text-white text-sm font-medium leading-normal">Status</p>
+<span class="material-symbols-outlined text-[#111418] dark:text-white text-[20px]">filter_list</span>
+</button>
+</div>
+<!-- SectionHeader -->
+<div class="flex items-center justify-between px-4 pt-6 pb-2">
+<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Transações Recentes</h3>
+<span class="text-primary text-sm font-semibold cursor-pointer">Ver Tudo</span>
+</div>
+<!-- Sales List -->
+<div class="flex flex-col gap-3 p-4">
+<!-- Sale Item 1 (Concluída) -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#e5e7eb] dark:border-[#2d3947] bg-white dark:bg-[#1c2632] p-4 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-sm font-bold text-[#111418] dark:text-white">Pedido #89420</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">Hoje, 14:32</p>
+</div>
+<div class="flex items-center justify-center rounded-lg bg-[#e8f5e9] px-2.5 py-1">
+<p class="text-[12px] font-bold text-[#2e7d32]">Concluída</p>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">JS</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-[#111418] dark:text-white">João Silva</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">3 itens</p>
+</div>
+</div>
+<p class="text-lg font-bold text-[#111418] dark:text-white">R$ 245,90</p>
+</div>
+</div>
+<!-- Sale Item 2 (Pendente) -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#e5e7eb] dark:border-[#2d3947] bg-white dark:bg-[#1c2632] p-4 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-sm font-bold text-[#111418] dark:text-white">Pedido #89419</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">Hoje, 13:15</p>
+</div>
+<div class="flex items-center justify-center rounded-lg bg-[#fff8e1] px-2.5 py-1">
+<p class="text-[12px] font-bold text-[#f57f17]">Pendente</p>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">MC</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-[#111418] dark:text-white">Maria Cavalcanti</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">1 item</p>
+</div>
+</div>
+<p class="text-lg font-bold text-[#111418] dark:text-white">R$ 89,00</p>
+</div>
+</div>
+<!-- Sale Item 3 (Cancelada) -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#e5e7eb] dark:border-[#2d3947] bg-white dark:bg-[#1c2632] p-4 shadow-sm opacity-80">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-sm font-bold text-[#111418] dark:text-white">Pedido #89418</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">Hoje, 12:40</p>
+</div>
+<div class="flex items-center justify-center rounded-lg bg-[#ffebee] px-2.5 py-1">
+<p class="text-[12px] font-bold text-[#c62828]">Cancelada</p>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">RP</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-[#111418] dark:text-white">Ricardo Pereira</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">5 itens</p>
+</div>
+</div>
+<p class="text-lg font-bold text-[#111418] dark:text-white">R$ 1.250,00</p>
+</div>
+</div>
+<!-- Sale Item 4 (Concluída) -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#e5e7eb] dark:border-[#2d3947] bg-white dark:bg-[#1c2632] p-4 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-sm font-bold text-[#111418] dark:text-white">Pedido #89417</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">Ontem, 18:05</p>
+</div>
+<div class="flex items-center justify-center rounded-lg bg-[#e8f5e9] px-2.5 py-1">
+<p class="text-[12px] font-bold text-[#2e7d32]">Concluída</p>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">AL</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-[#111418] dark:text-white">Ana Lúcia</p>
+<p class="text-xs text-[#617589] dark:text-[#a1b0bd]">2 itens</p>
+</div>
+</div>
+<p class="text-lg font-bold text-[#111418] dark:text-white">R$ 112,50</p>
+</div>
+</div>
+</div>
+<!-- Optional Calendar / Date Range Drawer Indicator -->
+<div class="mx-auto w-12 h-1.5 bg-[#e5e7eb] dark:bg-[#2d3947] rounded-full my-4"></div>
+<!-- Float Action Button (New Sale) -->
+<button class="fixed bottom-6 right-6 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+<!-- Calendar Picker Section (Hidden/Lower part as requested by components list reference) -->
+<div class="mt-10 border-t border-[#e5e7eb] dark:border-[#2d3947] pt-6 bg-white dark:bg-[#1c2632] rounded-t-3xl shadow-2xl overflow-hidden pb-10">
+<div class="px-4 pb-4 flex items-center justify-between">
+<h3 class="text-lg font-bold dark:text-white">Selecionar Período</h3>
+<span class="material-symbols-outlined dark:text-white">close</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-6 p-4">
+<div class="flex min-w-72 max-w-[336px] flex-1 flex-col gap-0.5">
+<div class="flex items-center p-1 justify-between">
+<button class="dark:text-white">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<p class="text-[#111418] dark:text-white text-base font-bold leading-tight flex-1 text-center">Outubro 2023</p>
+<button class="dark:text-white">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 text-[#111418] dark:text-[#a1b0bd]">
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">D</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">S</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">T</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">Q</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">Q</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">S</p>
+<p class="text-[13px] font-bold flex h-12 w-full items-center justify-center pb-0.5">S</p>
+<!-- Calendar Days -->
+<button class="h-12 w-full text-[#111418] dark:text-white col-start-1 text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">1</div></button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">2</div></button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">3</div></button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">4</div></button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">5</div></button>
+<button class="h-12 w-full text-white bg-primary/20 dark:bg-primary/30 text-sm font-medium">
+<div class="flex size-full items-center justify-center rounded-full bg-primary shadow-sm">6</div>
+</button>
+<button class="h-12 w-full bg-primary/20 dark:bg-primary/30 text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">7</div></button>
+<button class="h-12 w-full bg-primary/20 dark:bg-primary/30 text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">8</div></button>
+<button class="h-12 w-full bg-primary/20 dark:bg-primary/30 text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">9</div></button>
+<button class="h-12 w-full bg-primary/20 dark:bg-primary/30 text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">10</div></button>
+<button class="h-12 w-full bg-primary/20 dark:bg-primary/30 text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">11</div></button>
+<button class="h-12 w-full text-white bg-primary/20 dark:bg-primary/30 text-sm font-medium">
+<div class="flex size-full items-center justify-center rounded-full bg-primary shadow-sm">12</div>
+</button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">13</div></button>
+<button class="h-12 w-full text-[#111418] dark:text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full">14</div></button>
+<!-- ... truncated for space but implies full calendar functionality -->
+</div>
+</div>
+</div>
+<div class="px-6 py-4">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30">Aplicar Filtro</button>
+</div>
+</div>
+</body></html>

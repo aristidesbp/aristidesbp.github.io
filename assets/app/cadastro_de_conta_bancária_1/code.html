@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cadastro de Conta Bancária</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ios-tab-shadow {
+            box-shadow: 0 -1px 0 0 rgba(0,0,0,0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col items-center">
+<!-- Phone Container -->
+<div class="w-full max-w-[480px] bg-white dark:bg-background-dark min-h-screen flex flex-col relative shadow-xl">
+<!-- Top App Bar (iOS Style) -->
+<header class="sticky top-0 z-10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-3 flex items-center border-b border-gray-100 dark:border-gray-800">
+<button class="p-2 -ml-2 text-primary">
+<span class="material-symbols-outlined align-middle">chevron_left</span>
+<span class="text-base font-medium">Voltar</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-[#111418] dark:text-white pr-10">Nova Conta</h1>
+</header>
+<!-- Form Content -->
+<main class="flex-1 overflow-y-auto px-4 py-6 pb-32">
+<h2 class="text-2xl font-bold text-[#111418] dark:text-white mb-6">Cadastrar Conta Bancária</h2>
+<div class="space-y-4">
+<!-- Nome do Banco -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Nome do Banco *</label>
+<input class="flex w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all placeholder:text-[#617589]" placeholder="Ex: Nubank, Itaú, Bradesco" type="text"/>
+</div>
+<!-- Tipo de Conta -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Tipo de Conta *</label>
+<div class="relative">
+<select class="appearance-none w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+<option disabled="" selected="" value="">Selecione o tipo</option>
+<option value="corrente">Conta Corrente</option>
+<option value="poupanca">Poupança</option>
+<option value="investimento">Investimento</option>
+<option value="carteira">Carteira</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+<span class="material-symbols-outlined">unfold_more</span>
+</div>
+</div>
+</div>
+<!-- Saldo Inicial -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Saldo Inicial *</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">R$</span>
+<input class="flex w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="0,00" type="number"/>
+</div>
+</div>
+<!-- Agency and Account Row -->
+<div class="flex gap-4">
+<div class="flex-1 flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Agência</label>
+<input class="flex w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="0001" type="text"/>
+</div>
+<div class="flex-1 flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Conta</label>
+<input class="flex w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="000000-0" type="text"/>
+</div>
+</div>
+<!-- Apelido da Conta -->
+<div class="flex flex-col gap-1.5">
+<label class="text-[#111418] dark:text-gray-200 text-sm font-semibold">Apelido da Conta</label>
+<input class="flex w-full rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white h-14 px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Ex: Conta Principal, Reserva" type="text"/>
+</div>
+<!-- Brand Personalization -->
+<div class="py-4 space-y-4">
+<h3 class="text-[#111418] dark:text-white text-base font-bold">Identificação Visual</h3>
+<div class="flex flex-col gap-4">
+<p class="text-sm text-gray-500 dark:text-gray-400">Escolha uma cor de destaque para o banco:</p>
+<div class="flex flex-wrap gap-3">
+<button class="w-10 h-10 rounded-full bg-purple-600 ring-2 ring-offset-2 ring-primary"></button>
+<button class="w-10 h-10 rounded-full bg-orange-600"></button>
+<button class="w-10 h-10 rounded-full bg-red-600"></button>
+<button class="w-10 h-10 rounded-full bg-blue-800"></button>
+<button class="w-10 h-10 rounded-full bg-green-600"></button>
+<button class="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">palette</span>
+</button>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-medium mt-2">
+<span class="material-symbols-outlined">account_balance</span>
+                        Escolher Ícone Personalizado
+                    </button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-8 flex flex-col gap-3">
+<button class="w-full h-14 bg-primary text-white rounded-xl font-bold text-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                    Salvar Conta
+                </button>
+<button class="w-full h-14 bg-transparent text-gray-500 dark:text-gray-400 rounded-xl font-medium text-base hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    Cancelar
+                </button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full max-w-[480px] bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 pb-6 pt-2 ios-tab-shadow">
+<div class="flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Painel</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="text-[10px] font-medium">Entidades</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-medium">Parcelas</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Ajustes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-[10px] font-medium">Sair</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>
