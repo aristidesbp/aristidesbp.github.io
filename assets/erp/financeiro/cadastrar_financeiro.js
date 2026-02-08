@@ -3,12 +3,25 @@
 async function handleSave() {
     const id = document.getElementById('edit-id').value;
     const qtdeParcelas = parseInt(document.getElementById('parcelas').value) || 1;
-    
+    const dataVencInput = document.getElementById('data_vencimento').value;
+
+    // --- VALIDAÇÃO CRUCIAL PARA EVITAR O RANGEERROR ---
+    if (!dataVencInput) {
+        return alert("Por favor, selecione a data do 1º Vencimento!");
+    }
+
+    const tipoRaw = document.getElementById('tipo').value;
+    const statusRaw = document.getElementById('status').value;
+
+    // Normalização para o banco
+    const tipoFormatado = tipoRaw.charAt(0).toUpperCase() + tipoRaw.slice(1);
+    const statusFormatado = statusRaw.charAt(0).toUpperCase() + statusRaw.slice(1);
+
     const dadosBase = {
-        tipo: document.getElementById('tipo').value,
+        tipo: tipoFormatado,
         descricao: document.getElementById('descricao').value,
         valor: parseFloat(document.getElementById('valor').value),
-        status: document.getElementById('status').value,
+        status: statusFormatado,
         data_pagamento: document.getElementById('data_pagamento').value || null,
         entidade_id: document.getElementById('entidade_id').value || null,
         categoria: document.getElementById('categoria').value,
@@ -21,37 +34,36 @@ async function handleSave() {
 
     let res;
     if (id) {
-        dadosBase.data_vencimento = document.getElementById('data_vencimento').value;
+        // Modo Edição
+        dadosBase.data_vencimento = dataVencInput;
         res = await window.supabaseClient.from('financeiro').update(dadosBase).eq('id', id);
     } else {
+        // Modo Novo com Parcelas
         const lancamentos = [];
-        let dataRef = new Date(document.getElementById('data_vencimento').value + 'T00:00:00');
+        // Tratamento seguro da data
+        let dataRef = new Date(dataVencInput + 'T00:00:00');
 
         for (let i = 1; i <= qtdeParcelas; i++) {
             const novo = { ...dadosBase };
-            if (qtdeParcelas > 1) novo.descricao = `${dadosBase.descricao} (${i}/${qtdeParcelas})`;
+            if (qtdeParcelas > 1) {
+                novo.descricao = `${dadosBase.descricao} (${i}/${qtdeParcelas})`;
+            }
+            
             novo.data_vencimento = dataRef.toISOString().split('T')[0];
             lancamentos.push(novo);
-            dataRef.setMonth(dataRef.setMonth() + 1);
+
+            // Soma um mês para a próxima parcela
+            dataRef.setMonth(dataRef.getMonth() + 1);
         }
         res = await window.supabaseClient.from('financeiro').insert(lancamentos);
     }
 
-    if (res.error) alert("Erro: " + res.error.message);
-    else {
-        alert("Sucesso!");
-        resetForm(); // Função no autolimpeza_fin.js
-        loadFinanceiro(); // Função no listar_financeiro.js
+    if (res.error) {
+        console.error("Erro Supabase:", res.error);
+        alert("Erro ao salvar: " + res.error.message);
+    } else {
+        alert("Salvo com sucesso!");
+        if (typeof resetForm === "function") resetForm(); 
+        if (typeof loadFinanceiro === "function") loadFinanceiro();
     }
 }
-
-async function loadEntidadesSelect() {
-    const { data } = await window.supabaseClient.from('entidades').select('id, nome_completo').order('nome_completo');
-    const select = document.getElementById('entidade_id');
-    if (data && select) {
-        select.innerHTML = '<option value="">Selecione...</option>' + 
-            data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadEntidadesSelect);
