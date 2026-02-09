@@ -73,7 +73,7 @@ async function loginComGoogle() {
         provider: 'google',
         options: {
             // ✅ URL ABSOLUTA para evitar erros de Redirect no Supabase
-            redirectTo: 'https://aristidesbp.github.io/assets/index.html'
+            redirectTo: 'https://aristidesbp.github.io/assets/app/index.html'
         }
     });
 
