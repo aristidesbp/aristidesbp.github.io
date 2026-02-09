@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tutorial Supabase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        pre {
+            font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", monospace;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-[430px] mx-auto bg-white dark:bg-background-dark shadow-xl overflow-x-hidden pb-20">
+<!-- TopAppBar -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Tutorial Supabase</h2>
+</div>
+<!-- Progress Timeline (Short Version for Header) -->
+<div class="px-4 py-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex flex-col items-center gap-1">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">1</div>
+<span class="text-[10px] text-primary font-medium">Conta</span>
+</div>
+<div class="h-[2px] flex-1 bg-primary/30 mx-2 mb-4"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="size-8 rounded-full bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-primary text-sm font-bold">2</div>
+<span class="text-[10px] text-[#617589] font-medium">Projeto</span>
+</div>
+<div class="h-[2px] flex-1 bg-gray-200 dark:bg-gray-700 mx-2 mb-4"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="size-8 rounded-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-400 text-sm font-bold">3</div>
+<span class="text-[10px] text-[#617589] font-medium">SQL</span>
+</div>
+</div>
+</div>
+<!-- Section 1: Abrir Conta -->
+<div class="px-4">
+<div class="flex items-center gap-2 pt-4">
+<span class="material-symbols-outlined text-primary">person_add</span>
+<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">1. Abrir Conta</h3>
+</div>
+<p class="text-[#617589] dark:text-gray-400 text-base font-normal leading-normal pb-3 pt-2">
+                Acesse o site oficial do Supabase e crie sua conta gratuita utilizando seu e-mail ou conta do GitHub.
+            </p>
+<div class="flex py-2 justify-start">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">open_in_new</span>
+<span class="truncate">Ir para Supabase.com</span>
+</button>
+</div>
+</div>
+<div class="h-4 bg-gray-50 dark:bg-gray-900/50 my-4"></div>
+<!-- Section 2: Criar Projeto -->
+<div class="px-4">
+<div class="flex items-center gap-2 pt-2">
+<span class="material-symbols-outlined text-primary">add_box</span>
+<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">2. Criar Projeto</h3>
+</div>
+<p class="text-[#617589] dark:text-gray-400 text-base font-normal leading-normal pb-3 pt-2">
+                No seu dashboard, clique em "New Project". Siga os parâmetros abaixo para melhor performance no app financeiro:
+            </p>
+<ul class="space-y-3 pb-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<div>
+<p class="text-[#111418] dark:text-white text-sm font-semibold">Nome do Projeto</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm">Use algo como "FinanceApp-Prod"</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-lg">public</span>
+<div>
+<p class="text-[#111418] dark:text-white text-sm font-semibold">Região</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm">Selecione "Sao Paulo (sa-east-1)"</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="h-4 bg-gray-50 dark:bg-gray-900/50 my-4"></div>
+<!-- Section 3: Configuração SQL -->
+<div class="px-4 pb-8">
+<div class="flex items-center gap-2 pt-2 mb-4">
+<span class="material-symbols-outlined text-primary">terminal</span>
+<h3 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">3. Configuração SQL</h3>
+</div>
+<p class="text-[#617589] dark:text-gray-400 text-sm mb-6">
+                Copie e cole cada bloco abaixo no "SQL Editor" do Supabase e execute-os na ordem.
+            </p>
+<!-- Code Block 1 -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-bold text-[#111418] dark:text-white">Criar Banco de Dados</span>
+<button class="flex items-center gap-1 text-primary text-xs font-bold px-2 py-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copiar
+                    </button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 overflow-x-auto border border-gray-800">
+<pre class="text-green-400 text-xs leading-relaxed">CREATE TABLE users (
+  id uuid REFERENCES auth.users NOT NULL PRIMARY KEY,
+  full_name text,
+  avatar_url text
+);
+
+CREATE TABLE transactions (
+  id bigserial PRIMARY KEY,
+  user_id uuid REFERENCES auth.users NOT NULL,
+  amount numeric NOT NULL,
+  category text,
+  created_at timestamptz DEFAULT now()
+);</pre>
+</div>
+</div>
+<!-- Code Block 2 -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-bold text-[#111418] dark:text-white">Políticas de Segurança (RLS)</span>
+<button class="flex items-center gap-1 text-primary text-xs font-bold px-2 py-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copiar
+                    </button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 overflow-x-auto border border-gray-800">
+<pre class="text-blue-400 text-xs leading-relaxed">-- Enable RLS
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can only see their own data
+CREATE POLICY "Select personal transactions" 
+ON transactions FOR SELECT 
+USING (auth.uid() = user_id);</pre>
+</div>
+</div>
+<!-- Code Block 3 -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-bold text-[#111418] dark:text-white">Funções e Triggers</span>
+<button class="flex items-center gap-1 text-primary text-xs font-bold px-2 py-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copiar
+                    </button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 overflow-x-auto border border-gray-800">
+<pre class="text-yellow-400 text-xs leading-relaxed">CREATE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.users (id, full_name)
+  VALUES (new.id, new.raw_user_meta_data-&gt;&gt;'full_name');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;</pre>
+</div>
+</div>
+<!-- Code Block 4 -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-bold text-[#111418] dark:text-white">Ajustes Adicionais</span>
+<button class="flex items-center gap-1 text-primary text-xs font-bold px-2 py-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copiar
+                    </button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 overflow-x-auto border border-gray-800">
+<pre class="text-purple-400 text-xs leading-relaxed">-- Optimize category index
+CREATE INDEX idx_transactions_category 
+ON transactions(category);</pre>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 flex justify-around items-center py-2 px-4 z-20">
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+<span class="text-[10px] font-medium">Sair</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+<span class="text-[10px] font-medium">Entidades</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined text-[24px]">event_repeat</span>
+<span class="text-[10px] font-medium">Parcelas</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-[10px] font-medium">Painel</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[10px] font-bold">Ajustes</span>
+</div>
+</div>
+</div>
+    <script src="js/navbar.js"></script>
+</body></html>
