@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<!-- Mobile Screen Wrapper -->
+<div class="max-w-md mx-auto min-h-screen relative flex flex-col bg-background-light dark:bg-background-dark shadow-xl">
+<!-- Header -->
+<header class="pt-12 pb-4 px-4 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<div class="flex items-center justify-between mb-4">
+<h1 class="text-2xl font-bold tracking-tight">Lista de Tarefas</h1>
+<button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-icons-round text-primary">notifications</span>
+</button>
+</div>
+<!-- Search Bar -->
+<div class="relative mb-6">
+<span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border-none rounded-xl shadow-sm focus:ring-2 focus:ring-primary text-sm transition-all" placeholder="Buscar tarefas..." type="text"/>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
+<button class="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium shadow-md shadow-primary/20 whitespace-nowrap">Todas</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap border border-slate-100 dark:border-slate-700">Pendentes</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap border border-slate-100 dark:border-slate-700">Realizadas</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap border border-slate-100 dark:border-slate-700">Arquivadas</button>
+</div>
+</header>
+<!-- Task List Content -->
+<main class="flex-1 px-4 pb-24">
+<div class="space-y-4">
+<!-- Task Card 1 (Pendente) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-start gap-3 group active:scale-[0.98] transition-all">
+<div class="mt-1">
+<input class="w-6 h-6 rounded-md border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-transparent" type="checkbox"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2 mb-1">
+<h3 class="font-semibold text-slate-900 dark:text-white truncate">Reunião de Alinhamento</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Pendente</span>
+</div>
+<p class="text-xs font-medium text-primary mb-1">Cliente Alpha</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Discutir novos requisitos técnicos para o módulo de relatórios...</p>
+</div>
+<div class="self-center pl-2">
+<span class="material-icons-round text-slate-300 dark:text-slate-600">chevron_right</span>
+</div>
+</div>
+<!-- Task Card 2 (Realizada) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-start gap-3 opacity-80">
+<div class="mt-1">
+<input checked="" class="w-6 h-6 rounded-md border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-transparent" type="checkbox"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2 mb-1">
+<h3 class="font-semibold text-slate-900 dark:text-white truncate line-through">Envio de NF Mensal</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Realizada</span>
+</div>
+<p class="text-xs font-medium text-primary mb-1">Fornecedor Beta</p>
+<p class="text-sm text-slate-400 dark:text-slate-500 line-clamp-1 italic">Nota fiscal referente ao mês de Outubro já processada.</p>
+</div>
+<div class="self-center pl-2">
+<span class="material-icons-round text-slate-300 dark:text-slate-600">chevron_right</span>
+</div>
+</div>
+<!-- Task Card 3 (Pendente) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-start gap-3">
+<div class="mt-1">
+<input class="w-6 h-6 rounded-md border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-transparent" type="checkbox"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2 mb-1">
+<h3 class="font-semibold text-slate-900 dark:text-white truncate">Revisão de Contrato</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Pendente</span>
+</div>
+<p class="text-xs font-medium text-primary mb-1">Logistics Corp</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Validar cláusula 4.2 sobre prazos de entrega e multas.</p>
+</div>
+<div class="self-center pl-2">
+<span class="material-icons-round text-slate-300 dark:text-slate-600">chevron_right</span>
+</div>
+</div>
+<!-- Task Card 4 (Pendente) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-start gap-3">
+<div class="mt-1">
+<input class="w-6 h-6 rounded-md border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-transparent" type="checkbox"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2 mb-1">
+<h3 class="font-semibold text-slate-900 dark:text-white truncate">Atualização de Cadastro</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Pendente</span>
+</div>
+<p class="text-xs font-medium text-primary mb-1">Sistemas S.A.</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Atualizar endereços de cobrança e contatos principais.</p>
+</div>
+<div class="self-center pl-2">
+<span class="material-icons-round text-slate-300 dark:text-slate-600">chevron_right</span>
+</div>
+</div>
+<!-- Task Card 5 (Realizada) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-start gap-3 opacity-80">
+<div class="mt-1">
+<input checked="" class="w-6 h-6 rounded-md border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-transparent" type="checkbox"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2 mb-1">
+<h3 class="font-semibold text-slate-900 dark:text-white truncate line-through">Check-in de Projeto</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Realizada</span>
+</div>
+<p class="text-xs font-medium text-primary mb-1">Tech Solutions</p>
+<p class="text-sm text-slate-400 dark:text-slate-500 line-clamp-1 italic">Status report semanal enviado por e-mail.</p>
+</div>
+<div class="self-center pl-2">
+<span class="material-icons-round text-slate-300 dark:text-slate-600">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center active:scale-95 transition-transform z-20">
+<span class="material-icons-round text-3xl">add</span>
+</button>
+<!-- Bottom Navigation Bar -->
+ <script src="js/navbar.js"></script>
+<!-- Decoration for iOS Home Indicator space -->
+<div class="h-6 w-full bg-white dark:bg-slate-900 fixed bottom-0 max-w-md mx-auto"></div>
+</div>
+</body></html>

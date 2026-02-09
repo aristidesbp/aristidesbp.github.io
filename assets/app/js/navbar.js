@@ -27,32 +27,33 @@
     <nav class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50">
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 pt-3 pb-6">
             
+
             <div onclick="window.location.href='index.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 text-primary">
                 <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">grid_view</span>
                 <span class="text-[10px] font-bold">Painel</span>
             </div>
 
-            <div onclick="window.location.href='tarefas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_tarefas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">assignment</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Tarefas</span>
             </div>
 
-            <div onclick="window.location.href='entidades.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_entidades.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">group</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Entidades</span>
             </div>
 
-            <div onclick="window.location.href='financeiro.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_financeiro.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">account_balance_wallet</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Financeiro</span>
             </div>
 
-            <div onclick="window.location.href='bancos.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_banco.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">account_balance</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Bancos</span>
             </div>
 
-            <div onclick="window.location.href='produtos.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_produto.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">inventory_2</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Produtos</span>
             </div>
@@ -62,12 +63,12 @@
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">PDV</span>
             </div>
 
-            <div onclick="window.location.href='vendas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='listar_vendas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">query_stats</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Vendas</span>
             </div>
 
-            <div onclick="window.location.href='ecommerce.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+            <div onclick="window.location.href='loja.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">storefront</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Loja</span>
             </div>

@@ -19,25 +19,25 @@
             card.addEventListener('click', () => {
                 switch (titulo) {
                     case 'tarefas':
-                        window.location.href = 'tarefas.html';
+                        window.location.href = 'tarefas_lista.html';
                         break;
                     case 'entidades':
-                        window.location.href = 'entidades.html';
+                        window.location.href = 'entidades_lista.html';
                         break;
                     case 'financeiro':
-                        window.location.href = 'financeiro.html';
+                        window.location.href = 'financeiro_lista.html';
                         break;
                     case 'bancos':
-                        window.location.href = 'bancos.html';
+                        window.location.href = 'bancos_lista.html';
                         break;
                     case 'produtos':
-                        window.location.href = 'produtos.html';
+                        window.location.href = 'produtos_lista.html';
                         break;
                     case 'pdv':
                         window.location.href = 'pdv.html';
                         break;
                     case 'vendas':
-                        window.location.href = 'vendas.html';
+                        window.location.href = 'vendas_lista.html';
                         break;
                     case 'e-commerce':
                         window.location.href = 'ecommerce.html';
