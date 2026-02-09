@@ -4,10 +4,20 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Menu de Navegação Principal</title>
+
+<!-- SCRIPTS DE VALIDAÇÃO/CONEXAO E NAVBAR
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/conexao_supabase.js"></script>
+<script src="js/validar_login.js"></script>
+
+-->
+
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<!-- CSS -->
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -30,17 +40,12 @@
                 },
             },
         }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+</script>
+<link rel="stylesheet" href="css/index.css">
+
+
+
+
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-[#111418] dark:text-white">
 <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
@@ -63,26 +68,54 @@
 </div>
 <!-- TextGrid / Navigation Hub -->
 <div class="grid grid-cols-2 gap-4">
-<!-- Home -->
+
+
+
+<!-- TAREFAS -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
 <span class="material-symbols-outlined text-3xl">home</span>
 </div>
 <div class="flex flex-col gap-1">
-<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Home</h2>
-<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Painel Geral</p>
+<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Tarefas</h2>
+<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Pedidos e Tarefas</p>
 </div>
 </div>
-<!-- Contas -->
+
+
+<!-- Entidades -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
+<div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
+<span class="material-symbols-outlined text-3xl">inventory_2</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Entidades</h2>
+<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Clientes/ Funcionários/ Fornecedores</p>
+</div>
+</div>
+
+<!-- Financeiro -->
+<div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
+<div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
+<span class="material-symbols-outlined text-3xl">inventory_2</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Financerio</h2>
+<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Contas a Pagar/Receber</p>
+</div>
+</div>
+
+<!-- BANCOS -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
 <span class="material-symbols-outlined text-3xl">payments</span>
 </div>
 <div class="flex flex-col gap-1">
-<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Contas</h2>
-<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Gestão Financeira</p>
+<h2 class="text-[#111418] dark:text-white text-base font-bold leading-tight">Bancos</h2>
+<p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Contas bancárias</p>
 </div>
 </div>
+
 <!-- Produtos -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
@@ -93,6 +126,7 @@
 <p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Estoque</p>
 </div>
 </div>
+
 <!-- PDV -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
@@ -103,6 +137,8 @@
 <p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Ponto de Venda</p>
 </div>
 </div>
+
+
 <!-- Gerenciar Vendas -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
@@ -113,6 +149,8 @@
 <p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Gerenciamento</p>
 </div>
 </div>
+
+
 <!-- E-commerce -->
 <div class="flex flex-col gap-3 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-95 transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 w-fit p-3 rounded-lg">
@@ -123,6 +161,8 @@
 <p class="text-[#617589] dark:text-gray-400 text-xs font-normal leading-normal">Loja Online</p>
 </div>
 </div>
+
+
 <!-- Ajustes (Full width at bottom for visual balance if desired, or keep in grid) -->
 <div class="col-span-2 flex items-center gap-4 rounded-xl border border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm active:scale-[0.98] transition-transform cursor-pointer">
 <div class="text-primary bg-primary/10 p-3 rounded-lg">
@@ -138,6 +178,8 @@
 </div>
 </div>
 </main>
+
+
 <!-- Footer Actions -->
 <footer class="mt-auto pb-8">
 <!-- SingleButton for Logout -->
@@ -147,6 +189,8 @@
 <span class="truncate">Sair da Conta</span>
 </button>
 </div>
+
+
 <!-- MetaText -->
 <div class="px-4">
 <p class="text-[#617589] dark:text-gray-500 text-xs font-normal leading-normal text-center">Versão 2.4.0 • Enterprise Edition</p>
@@ -155,4 +199,11 @@
 <!-- Safe Area Spacer for iOS -->
 <div class="h-6 bg-transparent"></div>
 </div>
-</body></html>
+
+
+<script src="js/navbar.js"></script>
+<script src="js/index.js"></script>
+
+
+</body>
+</html>

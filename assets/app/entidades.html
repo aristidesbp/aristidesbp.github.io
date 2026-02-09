@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "danger": "#ef4444",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100dvh;
+        }
+        .ios-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .nav-active {
+            @apply text-primary;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-[480px] mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden pb-40">
+<div class="sticky top-0 z-50 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="text-[#111418] dark:text-white flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">Cadastro de Entidades Atualizado</h2>
+<div class="size-10 shrink-0"></div>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-white dark:border-gray-800 shadow-md" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsIGbP1eKJ57PoAyAb8hHKW93yOKR_I59ift-E3u1Es2efiIrmUu8TxAvvJbJ2LRCm210u48iOHHHspQPFvJbhu1mG3CEIgy5DKLqUdn_cvcxHyrawNYSuEw8BkxnIMsSE5m97kQ31pGqAGnD5ng2oa-qPpVpDLHI_R3nAPPHfC7beYDH3Z7X3nCLAkxmP6P3Pwmbmc_eoUmBCo-V_JeLubHDbgiq7rn7dKBQB83_eP9LZnTY0M7wZGHkZegSy78y3WX7UB9js1Qc");'>
+</div>
+<div class="absolute bottom-6 right-0 bg-primary text-white p-2 rounded-full shadow-lg cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-medium leading-normal text-center mt-2">Toque para editar foto</p>
+</div>
+</div>
+</div>
+<div class="px-4 space-y-4">
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">
+                        E-mail <span class="text-danger">*</span>
+</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="exemplo@email.com" required="" type="email"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">
+                        Telefone <span class="text-danger">*</span>
+</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="(00) 00000-0000" required="" type="tel"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">
+                        Senha <span class="text-danger">*</span>
+</p>
+<div class="flex w-full items-stretch rounded-lg shadow-sm">
+<input class="form-input flex w-full rounded-l-lg text-[#111418] dark:text-white focus:outline-0 border border-gray-200 dark:border-gray-700 border-r-0 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="Digite sua senha" required="" type="password"/>
+<div class="text-[#617589] flex border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 items-center justify-center pr-[15px] rounded-r-lg border-l-0 cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Nome / Razão Social</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="Digite o nome completo"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">CPF / CNPJ</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="000.000.000-00"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Data de Nascimento / Início</p>
+<div class="flex w-full items-stretch rounded-lg shadow-sm">
+<input class="form-input flex w-full rounded-l-lg text-[#111418] dark:text-white focus:outline-0 border border-gray-200 dark:border-gray-700 border-r-0 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="DD/MM/AAAA"/>
+<div class="text-[#617589] flex border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Categoria</p>
+<div class="relative">
+<select class="form-select w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 p-[15px] pr-10 text-base font-normal appearance-none transition-all">
+<option value="">Selecione uma categoria</option>
+<option value="1">Cliente</option>
+<option value="2">Fornecedor</option>
+<option value="3">Colaborador</option>
+</select>
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#617589]">
+<span class="material-symbols-outlined">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Tipo de Relação</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="Ex: Sócio, Funcionário, Representante"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Empresa</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="Nome da Empresa"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Nível de Acesso</p>
+<div class="relative">
+<select class="form-select w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 p-[15px] pr-10 text-base font-normal appearance-none transition-all">
+<option value="1">Administrador</option>
+<option value="2">Usuário Padrão</option>
+<option value="3">Visualizador</option>
+</select>
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#617589]">
+<span class="material-symbols-outlined">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+<div class="pt-6 flex flex-col gap-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white h-14 rounded-xl text-lg font-bold shadow-lg transition-all active:scale-[0.98]">
+                        Salvar Entidade
+                    </button>
+<button class="w-full bg-transparent border-2 border-danger text-danger hover:bg-danger/5 h-14 rounded-xl text-lg font-bold transition-all active:scale-[0.98]">
+                        Excluir Entidade
+                    </button>
+</div>
+<div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-800">
+<h3 class="text-[#111418] dark:text-white text-base font-bold leading-tight mb-4">Upload de Documentos</h3>
+<div class="bg-primary/5 border-2 border-dashed border-primary/30 rounded-xl p-6 flex flex-col items-center justify-center gap-2 mb-4 cursor-pointer hover:bg-primary/10 transition-colors">
+<div class="bg-primary text-white p-3 rounded-full mb-2">
+<span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+</div>
+<p class="text-primary font-semibold text-center">Selecionar arquivo</p>
+<p class="text-xs text-gray-500 text-center">PDF, PNG ou JPG (máx. 5MB)</p>
+</div>
+<div class="flex flex-col mb-4">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">URL do Documento</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-[#617589] p-[15px] text-base font-normal" placeholder="https://exemplo.com/documento.pdf"/>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111418] dark:text-white text-sm font-semibold leading-normal pb-2 px-1">Observação</p>
+<textarea class="form-textarea flex w-full rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 min-h-[120px] placeholder:text-[#617589] p-[15px] text-base font-normal transition-all" placeholder="Adicione informações adicionais aqui..."></textarea>
+</div>
+
+
+<div class="pt-2">
+    <button onclick="window.location.href='entidades_lista.html'" class="w-full bg-white dark:bg-gray-800 border border-primary text-primary hover:bg-primary/5 h-14 rounded-xl text-lg font-bold shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">format_list_bulleted</span>
+        Ver Lista de Entidades
+    </button>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+    <script src="js/navbar.js"></script>
+
+
+</body></html>
