@@ -148,7 +148,7 @@ git clone git@github.com:aristidesbp/aristidesbp.github.io
 ## Clona o repositório com chave SSH
 ```
 ```
-cd aristidesbp.github.io
+cd storage/downloads/aristidesbp.github.io
 # entre na pasta do repositório clonado
 ```
 ```
@@ -159,7 +159,7 @@ git init
 git pull origin main
 # BAIXAR ATUALIZAÇÃO DO SITE:
 ```
-# ⚠️ FAÇA SUAS ALTERAÇOES !!!!!
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
 git status
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
