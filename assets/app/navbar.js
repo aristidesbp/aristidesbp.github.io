@@ -33,50 +33,7 @@
                 <span class="text-[10px] font-bold">Painel</span>
             </div>
 
-            <div onclick="window.location.href='listar_tarefas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">assignment</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Tarefas</span>
-            </div>
-
-            <div onclick="window.location.href='listar_entidades.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">group</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Entidades</span>
-            </div>
-
-            <div onclick="window.location.href='listar_financeiro.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">account_balance_wallet</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Financeiro</span>
-            </div>
-
-            <div onclick="window.location.href='listar_banco.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">account_balance</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Bancos</span>
-            </div>
-
-            <div onclick="window.location.href='listar_produto.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">inventory_2</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Produtos</span>
-            </div>
-
-            <div onclick="window.location.href='pdv.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">shopping_cart_checkout</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">PDV</span>
-            </div>
-
-            <div onclick="window.location.href='listar_vendas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">query_stats</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Vendas</span>
-            </div>
-
-            <div onclick="window.location.href='loja.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">storefront</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Loja</span>
-            </div>
-
-            <div onclick="window.location.href='ajustes.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
-                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">settings</span>
-                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Ajustes</span>
-            </div>
+            
 
             <div onclick="sairDaConta()" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-red-500 transition-colors text-2xl">logout</span>
