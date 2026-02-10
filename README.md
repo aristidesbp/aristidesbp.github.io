@@ -391,17 +391,728 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# login.html
+
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+       <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+<!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+        </div>
+
+        <div class="space-y-4">
+    <div>
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    
+    <div class="relative">
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+            👁️
+        </button>
+    </div>
+
+    <div class="text-right">
+        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+    </div>
+    
+    <div class="flex gap-3 pt-2">
+        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            ENTRAR
+        </button>
+        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+            CADASTRAR
+        </button>
+    </div>
+</div>
+
+    </div>
+
+   
+    <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    <script src="login/alternar_senha.js"></script>
+    <script src="login/realizar_login.js"></script>
+    <script src="login/realizar_cadastro.js"></script>
+    <script src="login/recuperar_senha.js"></script>
+    <script src="login/login_google.js"></script>
+    <!-- ############################################################################# --> 
+    
+
+</body>
+</html>
+
+```
+# login/alternar_senha.js
+```
+/**
+ * Nome do arquivo: alternar_senha.js
+ * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+ */
+
+function alternarSenha() {
+    // Busca o elemento de entrada pelo ID
+    const campo = document.getElementById('password');
+    
+    if (campo) {
+        // Se for password, vira text (visível). Se for text, vira password (oculto).
+        campo.type = campo.type === 'password' ? 'text' : 'password';
+    }
+}
+
+```
+# login_google.js
+```
+/**
+ * Nome do arquivo: login_google.js
+ * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
+ */
+
+async function loginComGoogle() {
+    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            // Define para onde o Google deve mandar o usuário após o login.
+            // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
+            redirectTo: window.location.origin + '/assets/app/index.html'
+        }
+    });
+
+    if (error) {
+        console.error("Erro no login Google:", error.message);
+        alert("Erro ao conectar com Google: " + error.message);
+    }
+}
+
+```
+# realizar_cadastro.js
+```
+/**
+ * Nome do arquivo: realizar_cadastro.js
+ * Objetivo: Criar uma nova conta de usuário no sistema.
+ */
+
+async function realizarCadastro() {
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+
+    if (!email || !senha) {
+        alert("Preencha e-mail e senha primeiro!");
+        return;
+    }
+
+    // Cria o usuário no Supabase. 
+    // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
+    const { data, error } = await window.supabaseClient.auth.signUp({ 
+        email, 
+        password: senha 
+    });
+
+    if (error) {
+        alert("Erro no cadastro: " + error.message);
+    } else {
+        alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
+    }
+}
+
+/**
+ * Função de apoio para evitar cadastros acidentais (UX)
+ */
+function confirmarCadastro() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite um e-mail!");
+    
+    if (confirm(`Deseja criar uma conta para: ${email}?`)) {
+        realizarCadastro(); 
+    }
+}
+
+```
+# realizar_login.js
+```
+/**
+ * Nome do arquivo: realizar_login.js
+ * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
+ */
+
+async function realizarLogin() {
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+
+    // Validação básica de campos vazios
+    if (!email || !senha) {
+        alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
+        return;
+    }
+
+    try {
+        // Chamada oficial ao método de Sign In do Supabase
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: senha,
+        });
+
+        if (error) {
+            console.error("Erro na autenticação:", error.message);
+            alert("Erro ao entrar: " + error.message);
+        } else {
+            console.log("Bem-vindo de volta!", data.user.email);
+            // Redireciona para o painel principal após o sucesso
+            window.location.href = 'index.html';
+        }
+    } catch (err) {
+        console.error("Ocorreu um erro inesperado no sistema:", err);
+    }
+}
+
+```
+# recuperar_senha.js
+```
+/**
+ * Nome do arquivo: recuperar_senha.js
+ * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
+ */
+
+async function solicitarRecuperacao() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite seu e-mail.");
+
+    // O Supabase envia um link que redireciona o usuário para a página de redefinição
+    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
+    });
+
+    if (error) alert(error.message);
+    else alert("Link enviado! Verifique sua caixa de entrada.");
+}
+
+async function salvarNovaSenha() {
+    const novaSenha = document.getElementById('novaSenha').value;
+    if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+
+    // Atualiza os dados do usuário que clicou no link de recuperação
+    const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
+
+    if (error) {
+        alert("Erro ao atualizar: " + error.message);
+    } else {
+        alert("Senha atualizada com sucesso!");
+        window.location.href = 'index.html';
+    }
+}
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# cadastrar_notas.html
+```
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cadastro de Notas ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>    
+    <script src="verificar_login.js"></script>
+        
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { 
+                        "primary": "#137fec", 
+                        "background-light": "#f6f7f8", 
+                        "background-dark": "#101922" 
+                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+
+<header class="p-4 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-10">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+        <button onclick="window.location.href='listar_notas.html'" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+            <span class="material-symbols-outlined dark:text-white">arrow_back</span>
+        </button>
+        <h1 class="font-bold text-lg dark:text-white text-center">Nota</h1>
+        <div class="w-10"></div>
+    </div>
+</header>
+
+<main class="flex-1 p-4 pb-32"> 
+    <div class="max-w-2xl mx-auto space-y-6">
+        <input type="hidden" id="note-id">
+
+        <div class="space-y-2">
+            <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Título</label>
+            <input id="title" type="text" placeholder="Ex: Ideias para o projeto" 
+                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all">
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Conteúdo</label>
+            <textarea id="content" rows="12" placeholder="Digite sua nota aqui..." 
+                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all"></textarea>
+        </div>
+
+        <div class="flex gap-3">
+            <button onclick="resetForm()" class="px-6 h-14 bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-400 font-bold rounded-2xl hover:bg-gray-300 transition-all">
+                Limpar
+            </button>
+            
+            <button id="btn-save" onclick="saveNote()" class="flex-1 h-14 bg-primary text-white font-bold rounded-2xl shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">save</span>
+                <span>Salvar Nota</span>
+            </button>
+        </div>
+    </div>
+</main>
+
+<script src="notas/limpar_notas.js"></script>
+
+<script src="notas/salvar_notas.js"></script>
+
+<script src="notas/editar_notas.js"></script>
+
+<script src="navbar.js"></script> 
+
+</body>
+</html>
+
+```
+# listar_notas.html
+```
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Minhas Notas - ERP ABP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>    
+    <script src="verificar_login.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#137fec", "background-dark": "#101922" }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+
+<header class="p-4 bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
+    <div class="max-w-2xl mx-auto space-y-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Bloco de Notas</h1>
+            <button onclick="exportAllToPDF()" class="p-2 text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg">
+                <span class="material-symbols-outlined">picture_as_pdf</span>
+            </button>
+        </div>
+        <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+            <input id="search" oninput="filterNotes()" type="text" placeholder="Pesquisar em minhas notas..." 
+                class="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary dark:text-white">
+        </div>
+    </div>
+</header>
+
+<main class="p-4 max-w-2xl mx-auto pb-32">
+    <div id="notes-list" class="space-y-4">
+        <div class="flex justify-center py-20">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+    </div>
+</main>
+
+<button onclick="window.location.href='cadastrar_notas.html'" 
+    class="fixed bottom-28 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-20">
+    <span class="material-symbols-outlined text-3xl">add</span>
+</button>
+
+<script src="notas/listar_notas.js"></script>
+<script src="notas/deletar_notas.js"></script>
+<script src="notas/pesquisar_notas.js"></script>
+<script src="notas/exportar_notas.js"></script>
+<script src="notas/editar_notas.js"></script> 
+<script src="navbar.js"></script>
+     
+</body>
+</html>
+
+```
+# notas/deletar_notas.js
+```
+/**
+ * Nome do arquivo: deletar_notas.js
+ */
+async function deleteNote(id) {
+    if (!confirm("Tem certeza que deseja excluir permanentemente esta nota?")) return;
+
+    try {
+        const { error } = await window.supabaseClient
+            .from('notes')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        alert("Nota excluída com sucesso.");
+        if (typeof loadNotes === "function") loadNotes();
+    } catch (err) {
+        console.error("Erro ao excluir:", err.message);
+        alert("Erro ao excluir nota.");
+    }
+}
+```
+# notas/editar_notas.js
+```
+/**
+ * Nome do arquivo: editar_notas.js
+ * Objetivo: Redirecionar para a página de cadastro enviando os dados da nota via URL.
+ */
+
+function prepareEdit(id, title, content) {
+    // Definimos a URL base para o cadastro (ajuste se o nome do arquivo for diferente)
+    const urlCadastro = "https://aristidesbp.github.io/assets/app/cadastrar_notas.html";
+    
+    // Criamos os parâmetros para passar via URL (codificando para evitar erros com espaços/quebras de linha)
+    const params = new URLSearchParams({
+        id: id,
+        edit: "true"
+    });
+
+    // Redireciona o usuário
+    window.location.href = `${urlCadastro}?${params.toString()}`;
+}
+
+/**
+ * Função para carregar os dados quando a página de CADASTRAR abrir
+ * Adicione esta chamada no seu cadastrar_notas.html ou salvar_notas.js
+ */
+async function checkEditMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const noteId = urlParams.get('id');
+
+    if (noteId && window.location.pathname.includes('cadastrar_notas.html')) {
+        try {
+            const { data: note, error } = await window.supabaseClient
+                .from('notes')
+                .select('*')
+                .eq('id', noteId)
+                .single();
+
+            if (error) throw error;
+
+            if (note) {
+                document.getElementById('note-id').value = note.id;
+                document.getElementById('title').value = note.title;
+                document.getElementById('content').value = note.content;
+                document.getElementById('btn-save').innerHTML = `<span class="material-symbols-outlined">edit</span> Atualizar Nota`;
+            }
+        } catch (err) {
+            console.error("Erro ao carregar nota para edição:", err.message);
+        }
+    }
+}
+
+// Executa a verificação se estiver na página de cadastro
+if (window.location.pathname.includes('cadastrar_notas.html')) {
+    document.addEventListener('DOMContentLoaded', checkEditMode);
+}
+
+```
+# exportar_notas.js
+
+```
+/**
+ * Nome do arquivo: exportar_notas.js
+ */
+async function exportAllToPDF() {
+    if (allNotes.length === 0) return alert("Não há notas para exportar.");
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(20);
+    doc.setTextColor(19, 127, 236); // Cor Primary
+    doc.text("Relatório de Notas - ERP ABP", 10, 20);
+
+    let y = 35;
+
+    allNotes.forEach((n, i) => {
+        if (y > 270) { 
+            doc.addPage(); 
+            y = 20; 
+        }
+        
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`${i + 1}. ${n.title}`, 10, y);
+        
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(60, 60, 60);
+        
+        // Quebra automática de texto para o conteúdo não sair da página
+        const splitContent = doc.splitTextToSize(n.content, 180);
+        doc.text(splitContent, 10, y + 7);
+        
+        y += (splitContent.length * 5) + 15;
+    });
+
+    doc.save("minhas-notas-abp.pdf");
+}
+```
+# limpar_notas.js
+```
+/**
+ * Nome do arquivo: limpar_notas.js
+ * Objetivo: Resetar o formulário de notas para o estado inicial (vazio).
+ */
+
+function resetForm() {
+    // Captura os elementos
+    const idField = document.getElementById('note-id');
+    const titleField = document.getElementById('title');
+    const contentField = document.getElementById('content');
+    const btnSave = document.getElementById('btn-save');
+
+    // Limpa os valores
+    if (idField) idField.value = '';
+    if (titleField) titleField.value = '';
+    if (contentField) contentField.value = '';
+
+    // Volta o botão para o modo de "Salvar" (caso estivesse em "Atualizar")
+    if (btnSave) {
+        btnSave.innerHTML = `
+            <span class="material-symbols-outlined">save</span>
+            Salvar Nota
+        `;
+        // Remove classes de edição se você tiver adicionado alguma (ex: mudar cor do botão)
+        btnSave.classList.remove('bg-amber-500');
+        btnSave.classList.add('bg-primary');
+    }
+
+    console.log("Formulário de notas limpo com sucesso.");
+}
+
+```
+# listar_notas.js
+```
+/**
+ * Nome do arquivo: listar_notas.js
+ * Objetivo: Buscar notas do banco e renderizar o HTML da listagem.
+ */
+let allNotes = []; // Variável global para busca e exportação
+
+async function loadNotes() {
+    const container = document.getElementById('notes-list');
+    if (!container) return;
+
+    try {
+        const { data: notes, error } = await window.supabaseClient
+            .from('notes')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allNotes = notes || [];
+        renderNotes(allNotes);
+    } catch (err) {
+        console.error("Erro ao carregar notas:", err.message);
+        container.innerHTML = `<p class="text-center text-red-500">Erro ao carregar notas.</p>`;
+    }
+}
+
+function renderNotes(notes) {
+    const container = document.getElementById('notes-list');
+    if (!container) return;
+
+    if (notes.length === 0) {
+        container.innerHTML = '<p class="text-center text-slate-400 py-10">Nenhuma nota encontrada.</p>';
+        return;
+    }
+
+    container.innerHTML = notes.map(n => `
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-start mb-4">
+            <div class="flex-1 pr-4">
+                <h3 class="font-bold text-lg dark:text-white">${n.title}</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1 whitespace-pre-wrap">${n.content}</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)" class="p-2 bg-amber-500/10 text-amber-600 rounded-lg hover:bg-amber-500 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">edit</span>
+                </button>
+                <button onclick="deleteNote('${n.id}')" class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Inicia a carga quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', loadNotes);
+```
+# pesquisar_notas.js
+```
+/**
+ * Nome do arquivo: pesquisar_notas.js
+ */
+function filterNotes() {
+    const searchInput = document.getElementById('search');
+    if (!searchInput) return;
+    
+    const query = searchInput.value.toLowerCase();
+
+    // Filtra sobre a variável global allNotes carregada no listar_notas.js
+    const filtered = allNotes.filter(n =>
+        n.title.toLowerCase().includes(query) ||
+        n.content.toLowerCase().includes(query)
+    );
+
+    renderNotes(filtered);
+}
+```
+# salvar_notas.js
+```
+/**
+ * Nome do arquivo: salvar_notas.js
+ * Objetivo: Criar novas notas ou atualizar notas existentes no Supabase.
+ */
+async function saveNote() {
+    const btn = document.getElementById('btn-save');
+    const id = document.getElementById('note-id').value;
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    if (!title || !content) return alert("Por favor, preencha o título e o conteúdo.");
+
+    btn.disabled = true;
+    btn.innerText = "Processando...";
+    
+    try {
+        // Busca o usuário logado para garantir o vínculo da nota
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) throw new Error("Usuário não autenticado.");
+
+        if (id) {
+            // Modo Edição (Update)
+            const { error } = await window.supabaseClient
+                .from('notes')
+                .update({ title, content })
+                .eq('id', id);
+            if (error) throw error;
+        } else {
+            // Modo Criação (Insert)
+            const { error } = await window.supabaseClient
+                .from('notes')
+                .insert([{ title, content, user_id: user.id }]);
+            if (error) throw error;
+        }
+
+        alert("Nota salva com sucesso!");
+        
+        // Limpa o formulário e recarrega a lista se as funções existirem
+        if (typeof resetForm === "function") resetForm();
+        if (typeof loadNotes === "function") loadNotes();
+
+    } catch (err) {
+        console.error("Erro ao salvar:", err.message);
+        alert("Erro ao salvar: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = id ? "Atualizar Nota" : "Salvar Nota";
+    }
+}
+```
+# sql notas
+```
+-- 1. Criar a tabela de notas
+CREATE TABLE notes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) DEFAULT auth.uid(), -- Vincula a nota ao usuário logado
+  title TEXT NOT NULL,
+  content TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+
+-- 2. Habilitar o Row Level Security (Segurança de Linha)
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+
+-- 3. Criar política: Usuários podem ver apenas suas próprias notas
+CREATE POLICY "Usuários podem ver suas próprias notas" 
+ON notes FOR SELECT 
+USING (auth.uid() = user_id);
+
+-- 4. Criar política: Usuários podem inserir apenas suas próprias notas
+CREATE POLICY "Usuários podem inserir suas próprias notas" 
+ON notes FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+-- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
+CREATE POLICY "Usuários podem atualizar suas próprias notas" 
+ON notes FOR UPDATE 
+USING (auth.uid() = user_id);
+
+-- 6. Criar política: Usuários podem deletar apenas suas próprias notas
+CREATE POLICY "Usuários podem deletar suas próprias notas" 
+ON notes FOR DELETE 
+USING (auth.uid() = user_id);
 
 ```
 
-```
-
-
-
-
-
-
-```
 
 
 
