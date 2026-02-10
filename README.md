@@ -96,7 +96,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 ```
 ```
-# Gerar nova chave SSH (caso ainda não tenha)
+# Gerar nova chave SSH (caso ainda não tenha,apertar enter ate finalizar)
 ssh-keygen -t ed25519 -C "seu@email.com"
 ```
 ```
