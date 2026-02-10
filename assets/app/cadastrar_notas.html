@@ -18,7 +18,11 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    colors: { "primary": "#137fec", "background-light": "#f6f7f8", "background-dark": "#101922" },
+                    colors: { 
+                        "primary": "#137fec", 
+                        "background-light": "#f6f7f8", 
+                        "background-dark": "#101922" 
+                    },
                     fontFamily: { "display": ["Inter", "sans-serif"] }
                 }
             }
@@ -33,37 +37,47 @@
         <button onclick="window.location.href='listar_notas.html'" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors">
             <span class="material-symbols-outlined dark:text-white">arrow_back</span>
         </button>
-        <h1 class="font-bold text-lg dark:text-white text-center">Nova Nota</h1>
+        <h1 class="font-bold text-lg dark:text-white text-center">Nota</h1>
         <div class="w-10"></div>
     </div>
 </header>
 
-<main class="flex-1 p-4 pb-32"> <div class="max-w-2xl mx-auto space-y-6">
+<main class="flex-1 p-4 pb-32"> 
+    <div class="max-w-2xl mx-auto space-y-6">
         <input type="hidden" id="note-id">
+
         <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Título</label>
             <input id="title" type="text" placeholder="Ex: Ideias para o projeto" 
-                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary">
+                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all">
         </div>
+
         <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Conteúdo</label>
             <textarea id="content" rows="12" placeholder="Digite sua nota aqui..." 
-                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"></textarea>
+                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all"></textarea>
         </div>
-        <button id="btn-save" onclick="saveNote()" class="w-full h-14 bg-primary text-white font-bold rounded-2xl shadow-lg hover:brightness-110 active:scale-[0.98] transition-all">
-            Salvar Nota
-        </button>
+
+        <div class="flex gap-3">
+            <button onclick="resetForm()" class="px-6 h-14 bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-400 font-bold rounded-2xl hover:bg-gray-300 transition-all">
+                Limpar
+            </button>
+            
+            <button id="btn-save" onclick="saveNote()" class="flex-1 h-14 bg-primary text-white font-bold rounded-2xl shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">save</span>
+                <span>Salvar Nota</span>
+            </button>
+        </div>
     </div>
 </main>
 
-<script src="notas/formulario_notas.js"></script>
+<script src="notas/limpar_notas.js"></script>
+
 <script src="notas/salvar_notas.js"></script>
-<script src="notas/listar_notas.js"></script>
+
+<script src="notas/editar_notas.js"></script>
+
 <script src="navbar.js"></script> 
-    <script src="listar_notas.js"></script>
-    
-<script src="salvar_notas.js"></script>
-<script src="editar_notas.js"></script> 
-    
+
 </body>
 </html>
