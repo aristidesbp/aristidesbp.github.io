@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/><title>Lista de Tarefas - ERP ABP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>    
+    <script src="verificar_login.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <script>
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "background-dark": "#101922" } } } }
+    </script>
+</head>
+<body class="bg-[#f6f7f8] dark:bg-background-dark min-h-screen">
+    <header class="p-4 bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
+        <div class="max-w-2xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-black text-slate-800 dark:text-white">Minhas Tarefas</h1>
+            <button onclick="window.location.href='https://aristidesbp.github.io/assets/app/cadastrar_tarefas.html'" class="p-2 bg-primary text-white rounded-xl">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="p-4 max-w-2xl mx-auto pb-32">
+        <div id="tasks-list" class="space-y-4">
+            <div class="flex justify-center py-20"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
+        </div>
+    </main>
+
+    <script src="tarefas/listar_tarefas.js"></script>
+    <script src="tarefas/deletar_tarefas.js"></script>
+    <script src="tarefas/editar_tarefas.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>
+
