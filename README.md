@@ -115,7 +115,7 @@ cat ~/.ssh/id_ed25519.pub
 ssh -T git@github.com
 ```
 
-## ⚠️ OBS: VERIFIQUE CONFIG GITHUB CASO NÃO FUNCIONE!
+## ⚠️ OBS: VERIFIQUE CONFIG GITHUB !
 ----------------------------------------------------
 1. Acesse: https://github.com
 2. Faça login na sua conta
@@ -124,6 +124,7 @@ ssh -T git@github.com
 5. Clique em **New SSH key**
 6. Em **Title**, coloque um nome (ex: “Meu notebook”)
 7. Em **Key**, cole a chave pública copiada (noterminal digite)
+8. 🧪 Teste de conexão com GitHub via SSH novamente
 ----------------------------------------------------
 ```
 # vá para pasta do projeto (abaixo terá um exemplo)
