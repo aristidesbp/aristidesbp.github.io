@@ -57,7 +57,7 @@ async function sairDaConta() {
             window.location.href = '../login/login.html'; // Ajustado para sua nova estrutura de pastas
         } catch (error) {
             console.error("Erro ao sair:", error);
-            window.location.href = '../login/login.html';
+            window.location.href = 'login.html';
         }
     }
 }
