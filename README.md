@@ -159,6 +159,14 @@ git init
 git pull origin main
 # BAIXAR ATUALIZAÇÃO DO SITE:
 ```
+```
+# 1. Sincroniza as informações com o GitHub
+git fetch origin
+
+# 2. Reseta seus arquivos locais para ficarem idênticos ao servidor
+git reset --hard origin/main
+
+```
 # 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
 git status
