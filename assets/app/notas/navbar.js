@@ -58,6 +58,6 @@ async function sairDaConta() {
             console.error(e);
         }
         // Tenta voltar um nível para achar o login.html
-        navegarPara('login.html');
+        navegarPara('../login.html');
     }
 }
