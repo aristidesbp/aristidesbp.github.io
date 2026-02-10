@@ -1,25 +1,39 @@
+/**
+ * Nome do arquivo: exportar_notas.js
+ */
 async function exportAllToPDF() {
+    if (allNotes.length === 0) return alert("Não há notas para exportar.");
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("Meu Bloco de Notas - ERP ABP", 10, 20);
+    doc.setFontSize(20);
+    doc.setTextColor(19, 127, 236); // Cor Primary
+    doc.text("Relatório de Notas - ERP ABP", 10, 20);
 
     let y = 35;
 
     allNotes.forEach((n, i) => {
-        if (y > 270) { doc.addPage(); y = 20; } // Nova página se estiver cheio
+        if (y > 270) { 
+            doc.addPage(); 
+            y = 20; 
+        }
         
         doc.setFont(undefined, 'bold');
         doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
         doc.text(`${i + 1}. ${n.title}`, 10, y);
         
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
-        doc.text(n.content, 10, y + 7);
+        doc.setTextColor(60, 60, 60);
         
-        y += 25;
+        // Quebra automática de texto para o conteúdo não sair da página
+        const splitContent = doc.splitTextToSize(n.content, 180);
+        doc.text(splitContent, 10, y + 7);
+        
+        y += (splitContent.length * 5) + 15;
     });
 
-    doc.save("minhas-notas.pdf");
+    doc.save("minhas-notas-abp.pdf");
 }
