@@ -1,22 +1,20 @@
 <!DOCTYPE html>
-<html class="light" lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cadastro de Notas ERP ABP</title>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cadastro de Notas ERP ABP</title>
 
-
-    <!-- SUPABASE #################################################################################### -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase_config.js"></script>    
     <script src="verificar_login.js"></script>
     <script src="navbar.js"></script>
-    <!-- FIM SUPABASE #################################################################################### -->
-
         
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -26,78 +24,64 @@
                         "background-light": "#f6f7f8",
                         "background-dark": "#101922",
                     },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
+                    borderRadius: { "xl": "0.75rem" },
                 },
             },
         }
     </script>
-<style type="text/tailwindcss">
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            min-height: 100dvh;
-        }
-        .ios-input-shadow {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        textarea {
-            resize: none;
+    <style type="text/tailwindcss">
+        @layer base {
+            body { @apply font-display bg-background-light dark:bg-background-dark min-h-screen flex flex-col; }
+            textarea { resize: none; }
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark font-display flex flex-col">
+</head>
+<body class="dark:text-white">
+
 <header class="sticky top-0 z-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
-<div class="flex items-center px-4 py-4">
-<button class="flex items-center justify-center p-1 -ml-2 text-primary">
-<span class="material-symbols-outlined text-2xl">arrow_back_ios</span>
-</button>
-<div class="flex-1 flex justify-center mr-6">
-<h1 class="text-[#111418] dark:text-white text-lg font-bold tracking-tight">Cadastrar Nota</h1>
-</div>
-</div>
-</header>
-<main class="flex-1 px-4 py-6">
-<form class="space-y-6">
-<div class="space-y-2">
-<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 px-1" for="titulo">
-                    Título da nota
-                </label>
-<input class="w-full h-12 px-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-base focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all dark:text-white ios-input-shadow placeholder:text-gray-400 dark:placeholder:text-gray-600" id="titulo" name="titulo" placeholder="Ex: Reunião de Planejamento" type="text"/>
-</div>
-<div class="space-y-2">
-<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 px-1" for="conteudo">
-                    Conteúdo
-                </label>
-<textarea class="w-full p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-base focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all dark:text-white ios-input-shadow placeholder:text-gray-400 dark:placeholder:text-gray-600" id="conteudo" name="conteudo" placeholder="Descreva os detalhes da sua nota aqui..." rows="12"></textarea>
-</div>
-</form>
-</main>
-<footer class="p-4 bg-white/50 dark:bg-background-dark/50 backdrop-blur-sm border-t border-transparent">
-<button class="w-full h-14 bg-primary text-white font-bold text-lg rounded-2xl shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
-<span class="material-symbols-outlined">save</span>
-            Salvar Nota
+    <div class="flex items-center px-4 py-4">
+        <button onclick="window.location.href='listar_notas.html'" class="flex items-center justify-center p-1 -ml-2 text-primary">
+            <span class="material-symbols-outlined text-2xl">arrow_back_ios</span>
         </button>
+        <div class="flex-1 flex justify-center mr-6">
+            <h1 class="text-[#111418] dark:text-white text-lg font-bold tracking-tight">Cadastrar Nota</h1>
+        </div>
+    </div>
+</header>
+
+<main class="flex-1 px-4 py-6">
+    <input type="hidden" id="note-id">
+
+    <div class="space-y-6">
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 px-1" for="title">
+                Título da nota
+            </label>
+            <input class="w-full h-12 px-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-base focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600" 
+                id="title" placeholder="Ex: Reunião de Planejamento" type="text"/>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 px-1" for="content">
+                Conteúdo
+            </label>
+            <textarea class="w-full p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-base focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600" 
+                id="content" placeholder="Descreva os detalhes da sua nota aqui..." rows="12"></textarea>
+        </div>
+    </div>
+</main>
+
+<footer class="p-4 bg-white/50 dark:bg-background-dark/50 backdrop-blur-sm border-t border-gray-100 dark:border-gray-800">
+    <button id="btn-save" onclick="saveNote()" class="w-full h-14 bg-primary text-white font-bold text-lg rounded-2xl shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">save</span>
+        Salvar Nota
+    </button>
 </footer>
 
 <script src="notas/listar_notas.js"></script>
 <script src="notas/salvar_nota.js"></script>
-<script src="notas/deletar_nota.js"></script>
 <script src="notas/formulario_notas.js"></script>
-<script src="notas/pesquisar_nota.js"></script>
-<script src="notas/exportar_nota.js"></script>
 <script src="notas/logout.js"></script>
-        
-</body></html>
+</body>
+</html>
