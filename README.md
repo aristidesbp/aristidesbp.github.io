@@ -150,7 +150,7 @@ git clone git@github.com:aristidesbp/aristidesbp.github.io
 ## Clona o repositório com chave SSH
 ```
 ```
-cd storage/downloads/aristidesbp.github.io
+cd aristidesbp.github.io
 # entre na pasta do repositório clonado
 ```
 ```
