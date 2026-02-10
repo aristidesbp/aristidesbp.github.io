@@ -46,7 +46,7 @@ async function realizarLogin() {
             alert("Login realizado com sucesso! Acessando o Menu...");
             
             // ✅ REDIRECIONAMENTO CORRIGIDO:
-            window.location.href = 'menu.html';
+            window.location.href = 'index.html';
         }
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
