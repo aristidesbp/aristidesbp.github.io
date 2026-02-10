@@ -5,7 +5,7 @@
 
 function prepareEdit(id, title, content) {
     // Definimos a URL base para o cadastro (ajuste se o nome do arquivo for diferente)
-    const urlCadastro = "https://aristidesbp.github.io/assets/app/notas/cadastrar_notas.html";
+    const urlCadastro = "https://aristidesbp.github.io/assets/app/cadastrar_notas.html";
     
     // Criamos os parâmetros para passar via URL (codificando para evitar erros com espaços/quebras de linha)
     const params = new URLSearchParams({
