@@ -9,7 +9,7 @@ async function validarAcesso() {
 
     if (error || !session) {
         console.warn("Acesso negado: Redirecionando para login...");
-        window.location.href = 'login/index.html';
+        window.location.href = 'login.html';
     } else {
         console.log("Acesso autorizado: " + session.user.email);
     }
