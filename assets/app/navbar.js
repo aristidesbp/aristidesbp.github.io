@@ -26,7 +26,7 @@
     <nav class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50">
         <div class="flex items-center justify-center gap-6 overflow-x-auto no-scrollbar px-4 pt-3 pb-6 w-full">
             
-            <div onclick="window.location.href='index.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 text-primary">
+            <div onclick="window.location.href='aristidesbp.github.io/app/index.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 text-primary">
                 <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">grid_view</span>
                 <span class="text-[10px] font-bold">Voutar</span>
             </div>
