@@ -9,11 +9,11 @@
     <script src="../supabase_config.js"></script>    
     <script src="../verificar_login.js"></script>
     
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <script>
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -25,7 +25,7 @@
     </script>
 </head>
 
-<body class="bg-[#f6f7f8] dark:bg-background-dark min-h-screen">
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
 
 <header class="p-4 bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
     <div class="max-w-2xl mx-auto space-y-4">
@@ -35,7 +35,6 @@
                 <span class="material-symbols-outlined">picture_as_pdf</span>
             </button>
         </div>
-
         <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
             <input id="search" oninput="filterNotes()" type="text" placeholder="Pesquisar em minhas notas..." 
@@ -44,7 +43,7 @@
     </div>
 </header>
 
-<main class="p-4 max-w-2xl mx-auto">
+<main class="p-4 max-w-2xl mx-auto pb-32">
     <div id="notes-list" class="space-y-4">
         <div class="flex justify-center py-20">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -53,25 +52,15 @@
 </main>
 
 <button onclick="window.location.href='cadastrar_notas.html'" 
-    class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-20">
+    class="fixed bottom-28 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-20">
     <span class="material-symbols-outlined text-3xl">add</span>
 </button>
-
-<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t dark:border-slate-800 p-2 flex justify-around">
-    <button class="flex flex-col items-center p-2 text-primary">
-        <span class="material-symbols-outlined">description</span>
-        <span class="text-[10px]">Notas</span>
-    </button>
-    <button onclick="window.location.href='../dashboard.html'" class="flex flex-col items-center p-2 text-slate-400">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-[10px]">Painel</span>
-    </button>
-</nav>
 
 <script src="listar_notas.js"></script>
 <script src="deletar_notas.js"></script>
 <script src="pesquisar_notas.js"></script>
 <script src="exportar_notas.js"></script>
 <script src="formulario_notas.js"></script>
+<script src="../navbar.js"></script>
 </body>
 </html>
