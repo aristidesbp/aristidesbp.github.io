@@ -19,31 +19,31 @@
             card.addEventListener('click', () => {
                 switch (titulo) {
                     case 'tarefas':
-                        window.location.href = 'listar_tarefas.html';
+                        window.location.href = 'tarefas';
                         break;
                     case 'entidades':
-                        window.location.href = 'listar_entidades.html';
+                        window.location.href = 'entidades/';
                         break;
                     case 'financeiro':
-                        window.location.href = 'listar_financeiro.html';
+                        window.location.href = 'finaceiro/index.html';
                         break;
                     case 'bancos':
-                        window.location.href = 'listar_bancos.html';
+                        window.location.href = 'bancos/index.html';
                         break;
                     case 'produtos':
-                        window.location.href = 'listar_produtos.html';
+                        window.location.href = 'peodutos/index.html';
                         break;
                     case 'pdv':
-                        window.location.href = 'pdv.html';
+                        window.location.href = 'pdv/index.html';
                         break;
                     case 'vendas':
-                        window.location.href = 'listar_vendas.html';
+                        window.location.href = 'vendas/index.html';
                         break;
                     case 'e-commerce':
-                        window.location.href = 'loja.html';
+                        window.location.href = 'loja/index.html';
                         break;
                     case 'ajustes':
-                        window.location.href = 'ajustes.html';
+                        window.location.href = 'ajustes/index.html';
                         break;
                     default:
                         console.warn('Rota não definida para:', titulo);
