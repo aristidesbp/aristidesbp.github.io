@@ -91,6 +91,11 @@ git config --global user.name "Seu Nome"
 git config --global user.email "seu@email.com"
 ```
 ```
+# Troque a URL remota para usar SSH
+git remote set-url origin git@github.com:usuario/repositorio.git
+```
+
+```
 # Iniciar o agente ssh
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
@@ -102,10 +107,6 @@ ssh-keygen -t ed25519 -C "seu@email.com"
 ```
 # Mostrar a chave pública para adicionar no GitHub
 cat ~/.ssh/id_ed25519.pub
-```
-```
-# Troque a URL remota para usar SSH
-git remote set-url origin git@github.com:usuario/repositorio.git
 ```
 ```
 #🧪 Teste de conexão com GitHub via SSH 
