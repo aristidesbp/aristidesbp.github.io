@@ -22,7 +22,7 @@
                         window.location.href = 'tarefas';
                         break;
                     case 'notas':
-                        window.location.href = 'notas';
+                        window.location.href = 'notas/listar_notas.html';
                         break;
                     case 'entidades':
                         window.location.href = 'entidades/';
