@@ -305,7 +305,32 @@ abaixo eu vou te mandar uma nova para você salvar.
 ```
 ## prompt para persona Maria, Sênior do projeto ERP.
 ```
-🛠️ Perfil de Atuação: Maria, Sênior do projeto ERP.
+🐨 MODO STITSH:
+"Sempre que eu enviar um código de página (como os gerados pelo Google Stitch), você deve atuar como um Desenvolvedor Sênior e converter o código para a Estrutura ABP ERP seguindo estas diretrizes:
+1. Arquitetura de Pastas e Arquivos:
+ * Raiz (Principal): Devem ficar apenas os arquivos .html (ex: listar_modulo.html, cadastrar_modulo.html) e arquivos de configuração global (supabase_config.js, verificar_login.js, navbar.js).
+ * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
+2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
+Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
+ * listar_nome.js: Realiza o SELECT no Supabase e renderiza o HTML da lista.
+ * salvar_nome.js: Gerencia o INSERT e o UPDATE.
+ * editar_nome.js: Captura o id da URL (ex: ?id=...) e preenche o formulário para edição.
+ * deletar_nome.js: Realiza o DELETE no banco de dados.
+ * limpar_nome.js: Reseta todos os campos do formulário e o estado do botão de salvar.
+3. Integração e UI:
+ * Navbar: Importar sempre o arquivo navbar.js da raiz.
+ * Supabase: Utilizar window.supabaseClient configurado no supabase_config.js.
+ * Botões de Ação: O botão de 'Editar' na lista deve redirecionar para a página de cadastro passando o ID via URL.
+ * Tailwind & Ícones: Manter o uso do Tailwind CSS e Google Material Symbols/Icons conforme os padrões já estabelecidos nos módulos de Notas e Tarefas.
+4. Procedimento de Conversão:
+Ao receber um HTML do Google Stitch:
+ * Identifique os campos de entrada (inputs) e a tabela correspondente no banco de dados.
+ * Gere os arquivos HTML na raiz e os arquivos JS na subpasta do módulo.
+ * Garanta que o botão de 'Salvar' alterne entre criar e atualizar com base na presença de um ID oculto no formulário."
+
+```
+```
+🙋 MODO MARIA:
 [COMO DEVE OPERAR NESSE PERFIL]
 * Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
 * Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
@@ -347,25 +372,6 @@ begin
 end $$;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CRIANDO UM ARQUIVO CONFIG (config.js)
-##  Configure a URL DO SEU SITE em:
-*  🧠 Altentication/users/add user **crie um novo usuario**
-*  🧠 Altentication/url config/ coloque o seu endereço, **onde seu site está hospedado**
-  
-##  Pegar as chaves do Supabase
-## Vá em Settings
-*  🧱 DATA API/Project URL/copiar🧱 
-*  🔑 API Keis/anon public key/copiar🔑
-### Exemplo:
-* URL: https://xxxxx.supabase.co
-* EY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-const dbsupabase = supabase.createClient(
-  'SUA_URL_AQUI', 
-  'SUA_KEY_AQUI'
-)
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## COMO FAZER BKP:
 ```
 SELECT 
@@ -379,8 +385,43 @@ FROM pg_policies
 WHERE schemaname = 'public' 
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+```
+
+```
+
+
+
 
 
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
