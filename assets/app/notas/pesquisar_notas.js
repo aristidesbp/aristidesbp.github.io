@@ -1,10 +1,16 @@
+/**
+ * Nome do arquivo: pesquisar_notas.js
+ */
 function filterNotes() {
-    const q = document.getElementById('search').value.toLowerCase();
+    const searchInput = document.getElementById('search');
+    if (!searchInput) return;
+    
+    const query = searchInput.value.toLowerCase();
 
-    // Utiliza a variável allNotes que é global por estar no listar_notas.js
+    // Filtra sobre a variável global allNotes carregada no listar_notas.js
     const filtered = allNotes.filter(n =>
-        n.title.toLowerCase().includes(q) ||
-        n.content.toLowerCase().includes(q)
+        n.title.toLowerCase().includes(query) ||
+        n.content.toLowerCase().includes(query)
     );
 
     renderNotes(filtered);
