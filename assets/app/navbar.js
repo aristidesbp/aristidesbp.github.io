@@ -33,6 +33,11 @@
                 <span class="text-[10px] font-bold">Painel</span>
             </div>
 
+            <div onclick="window.location.href='listar_notas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
+                <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">assignment</span>
+                <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Notas</span>
+            </div>
+            
             <div onclick="window.location.href='listar_tarefas.html'" class="flex flex-col items-center gap-1 cursor-pointer min-w-[75px] shrink-0 group">
                 <span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors text-2xl">assignment</span>
                 <span class="text-[10px] font-medium text-gray-500 group-hover:text-primary">Tarefas</span>
