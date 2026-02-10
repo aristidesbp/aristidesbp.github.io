@@ -54,7 +54,7 @@ async function sairDaConta() {
             if (typeof window.supabaseClient !== 'undefined') {
                 await window.supabaseClient.auth.signOut();
             }
-            window.location.href = '../login/login.html'; // Ajustado para sua nova estrutura de pastas
+            window.location.href = 'login.html'; // Ajustado para sua nova estrutura de pastas
         } catch (error) {
             console.error("Erro ao sair:", error);
             window.location.href = 'login.html';
