@@ -21,6 +21,9 @@
                     case 'tarefas':
                         window.location.href = 'tarefas';
                         break;
+                    case 'notas':
+                        window.location.href = 'notas';
+                        break;
                     case 'entidades':
                         window.location.href = 'entidades/';
                         break;
