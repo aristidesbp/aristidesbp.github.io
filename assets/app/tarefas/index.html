@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <script src="../supabase_config.js"></script>
+        <script src="../validar_login.js"></script>
+    
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -39,12 +43,9 @@
         <button onclick="window.location.href='cadastrar_tarefas.html'" class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center active:scale-95 transition-transform z-20">
             <span class="material-icons-round text-3xl">add</span>
         </button>
-
-        <script src="../supabase_config.js"></script>
-        <script src="../validar_login.js"></script>
-        <script src="../navbar.js"></script>
-        <script src="listar_tarefas.js"></script>
-      
     </div>
+    
+    <script src="listar_tarefas.js"></script>
+    <script src="../navbar.js"></script>
 </body>
 </html>
