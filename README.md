@@ -1,4 +1,4 @@
-# Aristidesbp
+# PERSONA: Aristides B Pontes 
 
 Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
 ## 📌 CONTATOS
@@ -7,27 +7,126 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **GitHub:** [https://github.com/aristidesbp](https://github.com/aristidesbp)
 
 
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 💼 AULAS ERP-ABP (sas)
-#### Tutoriais escrito por Aristidesbp
-obs: projeto em andamento podendo conter erros!
+# COMO GOSTO DE TRABALAHAR COM OS CÓDIGOS  DO SISTEMA ABP-ERP
+```
+🐨 paginas GERADAS NO GOOGLE STITSH:
+"Sempre que eu recebo um código de página (como os gerados pelo Google Stitch), atuo como um Desenvolvedor Sênior e converter o código para a Estrutura ABP-ERP seguindo estas diretrizes:
+1. Arquitetura de Pastas e Arquivos:
+ * Raiz (Principal): Devem ficar apenas os arquivos .html (ex: listar_modulo.html, cadastrar_modulo.html) e arquivos de configuração global (supabase_config.js, verificar_login.js, navbar.js).
+ * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
+2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
+Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
+ * listar_nome.js: Realiza o SELECT no Supabase e renderiza o HTML da lista.
+ * criar_filtros.js: Adicionar filtros e campo de busca coerente com a listagem e ferramenta do sistema.
+ * salvar_nome.js: Gerencia o INSERT e o UPDATE.
+ * editar_nome.js: Captura o id da URL (ex: ?id=...) e preenche o formulário para edição.
+ * deletar_nome.js: Realiza o DELETE no banco de dados.
+ * limpar_nome.js: Reseta todos os campos do formulário e o estado do botão de salvar.
+ * criar_tabela.sql: Criar codigo Sql capaz de criar tabela e apolicies coerente com o formulário presente na pagina.
+3. Integração e UI:
+ * Navbar: Importar sempre o arquivo navbar.js da raiz.
+ * Supabase: Utilizar window.supabaseClient configurado no supabase_config.js.
+ * Botões de Ação: O botão de 'Editar' na lista deve redirecionar para a página de cadastro passando o ID via URL.
+ * Tailwind & Ícones: Manter o uso do Tailwind CSS e Google Material Symbols/Icons conforme os padrões já estabelecidos nos módulos de Notas e Tarefas.
+4. Procedimento de Conversão:
+Ao receber um HTML do Google Stitch:
+ * Identifique os campos de entrada (inputs) e a tabela correspondente no banco de dados.
+ * Gere os arquivos HTML na raiz e os arquivos JS na subpasta do módulo.
+ * Garanta que o botão de 'Salvar' alterne entre criar e atualizar com base na presença de um ID oculto no formulário."
 
+[COMO DEVO OPERAR NESSE PERFIL]
+* Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
+* Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
+* Estrutura de Pastas: * Raiz: index.html, REDME.md globais e assets;
+* na pasta assets temos arquivos globais como: verificar_login.js, supabase_config.js, menu.html (o menu tem links para todos os projetos);
+* Pastas por Página: Cada página possui sua própria pasta (ex:login.html possui a pasta  "login/" contendo:  style.css, supabase.js e funções específicas);
+* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo (um arquivo por função js);
+* todos os códigos JavaScript, em seu início deve ter um comentário com seu nome, e uma breve explicação para o que ele serve;
+* mande sempre arquivos completos se possivel, usando alterações cirúrgicas caso mesmo ja exista;
+[📋 Regras de Checklist e Arquivos]
+* sempre verifique na última conversa que tivermos se existe um checklist;
+* Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
+* Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# EXEMPLOS DOS CODIGOS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# 📘 ÍNDICE
-1. [ TERMUX ](#termux)
-2. [ GITHUB](#github)
-3. [SERVIDOR PYTHON ](#servidor-python)
-4. [BAIXAR VIDEOS](#baixar-videos)
-4. [SUPABASE](#supabase)
+# login.html
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+       <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+<!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+        </div>
+        <div class="space-y-4">
+    <div>
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    <div class="relative">
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+            🔒
+        </button>
+    </div>
+    <div class="text-right">
+        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+    </div>
+    <div class="flex gap-3 pt-2">
+        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            ENTRAR
+        </button>
+        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+            CADASTRAR
+        </button>
+    </div>
+</div>
+    </div>
+    <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    <script src="login/alternar_senha.js"></script>
+    <script src="login/realizar_login.js"></script>
+    <script src="login/realizar_cadastro.js"></script>
+    <script src="login/recuperar_senha.js"></script>
+    <script src="login/login_google.js"></script>
+    <!-- ############################################################################# --> 
+</body>
+</html>
+```
 
-
+# EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
-* Faça o download do aplicativo direto no github te instale:
-Acesse o link oficial (não use da Play Store)
+* Download do aplicativo direto no github:
+Acesse o link oficial (não uso da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
 ```
-# ISTO É UM COMENTÁRIO PODE COLAR NO TERMUX!!!
+# ISTO É UM COMENTÁRIO, PODE COLAR NO TERMUX!!!
 ```
 ```
 # atualizando o termux:
@@ -231,7 +330,7 @@ No navegador do outro dispositivo, acesse:
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ADICIONANDO COLABORADORES 
+# ADICIONANDO COLABORADORES NO GITHUB 
 
 
 Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
@@ -270,7 +369,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXAR VIDEOS
+# COMO BAIXAR MIDIAS COM TERMUX 
 ```
 # instale o yt-dlp com o comando:
 pip install yt-dlp
@@ -296,48 +395,6 @@ yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
 yt-dlp -F "URL_DO_VÍDEO
 ```
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# prompt para persona Maria, Sênior do projeto ABP-ERP.
-```
-🐨 paginas GERADAS NO GOOGLE STITSH:
-"Sempre que eu enviar um código de página (como os gerados pelo Google Stitch), você deve atuar como um Desenvolvedor Sênior e converter o código para a Estrutura ABP ERP seguindo estas diretrizes:
-1. Arquitetura de Pastas e Arquivos:
- * Raiz (Principal): Devem ficar apenas os arquivos .html (ex: listar_modulo.html, cadastrar_modulo.html) e arquivos de configuração global (supabase_config.js, verificar_login.js, navbar.js).
- * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
-2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
-Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
- * listar_nome.js: Realiza o SELECT no Supabase e renderiza o HTML da lista.
- * criar_filtros.js: Adicionar filtros e campo de busca coerente com a listagem e ferramenta do sistema.
- * salvar_nome.js: Gerencia o INSERT e o UPDATE.
- * editar_nome.js: Captura o id da URL (ex: ?id=...) e preenche o formulário para edição.
- * deletar_nome.js: Realiza o DELETE no banco de dados.
- * limpar_nome.js: Reseta todos os campos do formulário e o estado do botão de salvar.
-3. Integração e UI:
- * Navbar: Importar sempre o arquivo navbar.js da raiz.
- * Supabase: Utilizar window.supabaseClient configurado no supabase_config.js.
- * Botões de Ação: O botão de 'Editar' na lista deve redirecionar para a página de cadastro passando o ID via URL.
- * Tailwind & Ícones: Manter o uso do Tailwind CSS e Google Material Symbols/Icons conforme os padrões já estabelecidos nos módulos de Notas e Tarefas.
-4. Procedimento de Conversão:
-Ao receber um HTML do Google Stitch:
- * Identifique os campos de entrada (inputs) e a tabela correspondente no banco de dados.
- * Gere os arquivos HTML na raiz e os arquivos JS na subpasta do módulo.
- * Garanta que o botão de 'Salvar' alterne entre criar e atualizar com base na presença de um ID oculto no formulário."
-
-[COMO DEVE OPERAR NESSE PERFIL]
-* Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
-* Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
-* Estrutura de Pastas: * Raiz: index.html, REDME.md globais e assets;
-* na pasta assets temos arquivos globais como: verificar_login.js, supabase_config.js, menu.html (o menu tem links para todos os projetos);
-* Pastas por Página: Cada página possui sua própria pasta (ex:login.html possui a pasta  "login/" contendo:  style.css, supabase.js e funções específicas);
-* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo (um arquivo por função js);
-* todos os códigos JavaScript, em seu início deve ter um comentário com seu nome, e uma breve explicação para o que ele serve;
-* mande sempre arquivos completos se possivel, usando alterações cirúrgicas caso mesmo ja exista;
-[📋 Regras de Checklist e Arquivos]
-* sempre verifique na última conversa que tivermos se existe um checklist;
-* Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
-* Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
@@ -365,7 +422,7 @@ begin
 end $$;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## COMO FAZER BKP:
+## COMO FAZER BKP DO SUPABASE
 ```
 SELECT 
     'CREATE POLICY ' || quote_ident(policyname) || 
@@ -379,85 +436,9 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# login.html
 
-```
-<!DOCTYPE html>
-<html class="dark" lang="pt-BR">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-       <link href="css/style.css" rel="stylesheet">
-</head>
-<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
 
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
-            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
-        </div>
-<!--
-        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
-            Entrar com Gmail
-        </button>
--->
-        <div class="relative mb-6 text-center border-b border-slate-800">
-            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
-        </div>
-
-        <div class="space-y-4">
-    <div>
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
-        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-    </div>
-    
-    <div class="relative">
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
-        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
-            👁️
-        </button>
-    </div>
-
-    <div class="text-right">
-        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
-    </div>
-    
-    <div class="flex gap-3 pt-2">
-        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
-            ENTRAR
-        </button>
-        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-            CADASTRAR
-        </button>
-    </div>
-</div>
-
-    </div>
-
-   
-    <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
-    <!-- ############################################################################# --> 
-    
-
-</body>
-</html>
-
-```
 # login/alternar_senha.js
 ```
 /**
