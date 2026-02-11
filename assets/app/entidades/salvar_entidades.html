@@ -1,0 +1,44 @@
+async function saveEntidade() {
+    const btn = document.getElementById('btn-save');
+    const id = document.getElementById('entidade-id').value;
+    
+    const data = {
+        nome_completo: document.getElementById('nome_completo').value,
+        tipo_entidade: document.getElementById('tipo_entidade').value,
+        telefone: document.getElementById('telefone').value,
+        email: document.getElementById('email').value,
+        observacoes: document.getElementById('observacoes').value
+    };
+
+    if (!data.nome_completo) return alert("O nome é obrigatório!");
+
+    btn.disabled = true;
+    btn.innerHTML = "Processando...";
+
+    try {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        
+        if (id) {
+            // Atualização
+            const { error } = await window.supabaseClient
+                .from('entidades')
+                .update(data)
+                .eq('id', id);
+            if (error) throw error;
+        } else {
+            // Inserção
+            const { error } = await window.supabaseClient
+                .from('entidades')
+                .insert([{ ...data, user_id: user.id }]);
+            if (error) throw error;
+        }
+
+        alert("Entidade salva com sucesso!");
+        window.location.href = 'listar_entidades.html';
+    } catch (err) {
+        alert("Erro ao salvar: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salvar Entidade`;
+    }
+}
