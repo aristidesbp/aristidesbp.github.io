@@ -50,74 +50,7 @@ Ao receber um HTML do Google Stitch:
 * Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
 * Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# EXEMPLOS DOS CODIGOS
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# login.html
-```
-<!DOCTYPE html>
-<html class="dark" lang="pt-BR">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-       <link href="css/style.css" rel="stylesheet">
-</head>
-<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
-            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
-        </div>
-<!--
-        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
-            Entrar com Gmail
-        </button>
--->
-        <div class="relative mb-6 text-center border-b border-slate-800">
-            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
-        </div>
-        <div class="space-y-4">
-    <div>
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
-        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-    </div>
-    <div class="relative">
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
-        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
-            🔒
-        </button>
-    </div>
-    <div class="text-right">
-        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
-    </div>
-    <div class="flex gap-3 pt-2">
-        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
-            ENTRAR
-        </button>
-        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-            CADASTRAR
-        </button>
-    </div>
-</div>
-    </div>
-    <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
-    <!-- ############################################################################# --> 
-</body>
-</html>
-```
 
 # EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -435,9 +368,76 @@ FROM pg_policies
 WHERE schemaname = 'public' 
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
+
+
+
+# EXEMPLOS DOS CODIGOS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-
+# login.html
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+       <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+<!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+        </div>
+        <div class="space-y-4">
+    <div>
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    <div class="relative">
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+            🔒
+        </button>
+    </div>
+    <div class="text-right">
+        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+    </div>
+    <div class="flex gap-3 pt-2">
+        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            ENTRAR
+        </button>
+        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+            CADASTRAR
+        </button>
+    </div>
+</div>
+    </div>
+    <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    <script src="login/alternar_senha.js"></script>
+    <script src="login/realizar_login.js"></script>
+    <script src="login/realizar_cadastro.js"></script>
+    <script src="login/recuperar_senha.js"></script>
+    <script src="login/login_google.js"></script>
+    <!-- ############################################################################# --> 
+</body>
+</html>
+```
 
 # login/alternar_senha.js
 ```
