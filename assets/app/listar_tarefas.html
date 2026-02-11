@@ -29,28 +29,34 @@
     </script>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark min-h-screen font-display">
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-display flex flex-col">
 
     <header class="p-4 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-10">
         <div class="max-w-2xl mx-auto flex items-center justify-between">
             <h1 class="text-2xl font-black text-slate-800 dark:text-white">Tarefas</h1>
-            <button onclick="window.location.href='cadastrar_tarefas.html'" class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all">
-                <span class="material-symbols-outlined">add</span>
-            </button>
+            <div class="flex gap-2">
+                <button onclick="exportarPDF()" class="p-2 text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="p-4 pb-32">
+    <main class="flex-1 p-4 pb-32">
         <div class="max-w-2xl mx-auto">
             <div id="tasks-list" class="space-y-3">
-                <div class="animate-pulse space-y-3">
-                    <div class="h-24 bg-gray-200 dark:bg-slate-800 rounded-2xl"></div>
-                    <div class="h-24 bg-gray-200 dark:bg-slate-800 rounded-2xl"></div>
-                    <div class="h-24 bg-gray-200 dark:bg-slate-800 rounded-2xl"></div>
+                <div class="flex justify-center py-20">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
             </div>
         </div>
     </main>
+
+    <div class="fixed bottom-28 right-6 z-20">
+        <button onclick="window.location.href='cadastrar_tarefas.html'" class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-3xl font-bold">add</span>
+        </button>
+    </div>
 
     <script src="tarefas/listar_tarefas.js"></script>
     <script src="tarefas/deletar_tarefas.js"></script>
