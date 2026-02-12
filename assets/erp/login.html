@@ -4,17 +4,113 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
 
+   <!-- STYLE -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+   <!-- FIM DO STYLE -->
 
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-       <link href="css/style.css" rel="stylesheet">
 </head>
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
 
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+    
+<!-- NAVBAR -->
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .btn-home {
+            background: #3ecf8e !important; /* Verde padrão do seu ERP */
+        }
+
+        /* Ajuste para o conteúdo não ficar embaixo da navbar fixa */
+        body {
+            padding-top: 80px;
+        }
+    </style>
+    
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>`;
+
+    <script>
+        async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            // Verifica se o cliente supabase existe antes de tentar deslogar
+            if (typeof _supabase !== 'undefined') {
+                await _supabase.auth.signOut();
+            }
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+        }
+    </script>
+<!-- FIM DA NAVBAR -->
+
+<!-- FORMULÁRIO -->
+ <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
             <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
@@ -29,13 +125,7 @@
             <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
         </div>
 
-
-
-
-
-
-
-        <div class="space-y-4">
+ <div class="space-y-4">
     <div>
         <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
         <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
@@ -62,20 +152,159 @@
         </button>
     </div>
 </div>
-
     </div>
+<!-- FIM DO FORMULÁRIO -->
 
-   
-    <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
-    <!-- ############################################################################# --> 
+<script>
+    /**
+ * Nome do arquivo: alternar_senha.js
+ * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+ */
+
+function alternarSenha() {
+    // Busca o elemento de entrada pelo ID
+    const campo = document.getElementById('password');
     
+    if (campo) {
+        // Se for password, vira text (visível). Se for text, vira password (oculto).
+        campo.type = campo.type === 'password' ? 'text' : 'password';
+    }
+}
+    
+</script>   
+<script>
+/**
+ * Nome do arquivo: login_google.js
+ * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
+ */
 
+async function loginComGoogle() {
+    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            // Define para onde o Google deve mandar o usuário após o login.
+            // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
+            redirectTo: window.location.origin + '/assets/app/index.html'
+        }
+    });
+
+    if (error) {
+        console.error("Erro no login Google:", error.message);
+        alert("Erro ao conectar com Google: " + error.message);
+    }
+}
+</script>   
+<script>
+    /**
+ * Nome do arquivo: realizar_cadastro.js
+ * Objetivo: Criar uma nova conta de usuário no sistema.
+ */
+
+async function realizarCadastro() {
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+
+    if (!email || !senha) {
+        alert("Preencha e-mail e senha primeiro!");
+        return;
+    }
+
+    // Cria o usuário no Supabase. 
+    // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
+    const { data, error } = await window.supabaseClient.auth.signUp({ 
+        email, 
+        password: senha 
+    });
+
+    if (error) {
+        alert("Erro no cadastro: " + error.message);
+    } else {
+        alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
+    }
+}
+</script>   
+<script>
+/**
+ * Função de apoio para evitar cadastros acidentais (UX)
+ */
+function confirmarCadastro() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite um e-mail!");
+    
+    if (confirm(`Deseja criar uma conta para: ${email}?`)) {
+        realizarCadastro(); 
+    }
+}
+</script>   
+<script>
+  /**
+ * Nome do arquivo: realizar_login.js
+ * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
+ */
+
+async function realizarLogin() {
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+
+    // Validação básica de campos vazios
+    if (!email || !senha) {
+        alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
+        return;
+    }
+
+    try {
+        // Chamada oficial ao método de Sign In do Supabase
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: senha,
+        });
+
+        if (error) {
+            console.error("Erro na autenticação:", error.message);
+            alert("Erro ao entrar: " + error.message);
+        } else {
+            console.log("Bem-vindo de volta!", data.user.email);
+            // Redireciona para o painel principal após o sucesso
+            window.location.href = 'index.html';
+        }
+    } catch (err) {
+        console.error("Ocorreu um erro inesperado no sistema:", err);
+    }
+}  
+ </script>   
+<script>   
+    /**
+ * Nome do arquivo: recuperar_senha.js
+ * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
+ */
+
+async function solicitarRecuperacao() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite seu e-mail.");
+
+    // O Supabase envia um link que redireciona o usuário para a página de redefinição
+    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
+    });
+
+    if (error) alert(error.message);
+    else alert("Link enviado! Verifique sua caixa de entrada.");
+}
+
+async function salvarNovaSenha() {
+    const novaSenha = document.getElementById('novaSenha').value;
+    if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+
+    // Atualiza os dados do usuário que clicou no link de recuperação
+    const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
+
+    if (error) {
+        alert("Erro ao atualizar: " + error.message);
+    } else {
+        alert("Senha atualizada com sucesso!");
+        window.location.href = 'index.html';
+    }
+}
+</script>   
 </body>
 </html>
