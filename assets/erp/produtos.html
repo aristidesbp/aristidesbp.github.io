@@ -4,16 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Produtos - ERP ABP</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="css/produtos.css"> 
-    <script src="js/produtos.js" defer></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+<style>
+    :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 85px; }
+    .container { max-width: 1100px; margin: auto; padding: 20px; }
+    .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+    label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; }
+    .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
+    .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+    .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+    td { padding: 15px; border-top: 1px solid #f1f5f9; }
+    .btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+    .btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; }
+    .tag { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+    .status-stock { font-weight: bold; }
+    .low-stock { color: #ef4444; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+    .nav-buttons { display: flex; gap: 15px; }
+    .btn-nav { background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-home { background: #3ecf8e !important; }
+</style>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+    const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    window.supabaseClient = _supabase;
+
+    async function checarAutenticacao() {
+        const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+        if (error || !session) window.location.href = "login.html";
+    }
+    checarAutenticacao();
+</script>
 </head>
+
 <body>
 
-
+<div class="navbar">
+    <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+        <i class="fas fa-boxes" style="color: #3ecf8e;"></i> ERP ABP - Produtos
+    </div>
+    <div class="nav-buttons">
+        <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+        <button class="btn-nav" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+</div>
 
 <div class="container">
     <div class="card">
@@ -28,24 +78,24 @@
             </div>
             <div>
                 <label>Código de Barras (EAN)</label>
-                <input type="text" id="codigo_de_barras" placeholder="Gere ou escaneie...">
+                <input type="text" id="codigo_de_barras">
             </div>
             <div>
                 <label>Marca</label>
-                <input type="text" id="marca" placeholder="Marca do fabricante">
+                <input type="text" id="marca">
             </div>
             <div>
                 <label>SKU / Código Interno</label>
-                <input type="text" id="sku" placeholder="Ex: PROD-001">
+                <input type="text" id="sku">
             </div>
             <div>
                 <label>Categoria</label>
-                <input type="text" id="categoria_prod" placeholder="Ex: Materiais">
+                <input type="text" id="categoria_prod">
             </div>
             <div>
-                <label>Entidade (Fornecedor)</label>
+                <label>Fornecedor (Entidade)</label>
                 <select id="entidade_id">
-                    <option value="">Selecione...</option>
+                    <option value="">Carregando fornecedores...</option>
                 </select>
             </div>
             <div>
@@ -56,7 +106,7 @@
 
         <div class="section-title">Descrição e Detalhes</div>
         <div style="margin-bottom: 20px;">
-            <textarea id="descricao" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit;" placeholder="Informações adicionais do produto..."></textarea>
+            <textarea id="descricao" rows="3" placeholder="Informações adicionais do produto..."></textarea>
         </div>
 
         <div class="section-title">Preços e Estoque</div>
@@ -68,16 +118,12 @@
         </div>
 
         <button class="btn-add" id="btn-save" onclick="handleSaveProduto()">Salvar Produto</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()" style="display:none; background:#94a3b8; color:white; border:none; padding:10px; width:100%; border-radius:8px; margin-top:10px; cursor:pointer;">Cancelar Edição</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
     </div>
 
     <div class="card">
-        <div class="form-grid">
-            <div style="grid-column: span 3;">
-                <label>Busca Inteligente</label>
-                <input type="text" id="inputBusca" onkeyup="filtrarProdutos()" placeholder="Buscar por Nome, SKU, Código de Barras ou Marca...">
-            </div>
-        </div>
+        <label><i class="fas fa-search"></i> BUSCA INTELIGENTE</label>
+        <input type="text" id="inputBusca" onkeyup="filtrarProdutos()" placeholder="Buscar por Nome, SKU, Código ou Marca...">
     </div>
 
     <div class="table-container">
@@ -94,13 +140,127 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="produtos-list">
-                </tbody>
+            <tbody id="produtos-list"></tbody>
         </table>
     </div>
 </div>
-    
-<script src="js/navbar.js"></script>
-    
+
+<script>
+    // LÓGICA DE NEGÓCIO
+    async function handleSaveProduto() {
+        const id = document.getElementById('edit-id').value;
+        const campos = [
+            'nome', 'codigo_de_barras', 'marca', 'sku', 'categoria_prod',
+            'entidade_id', 'data_vencimento', 'descricao', 'preco_custo',
+            'preco_venda', 'estoque_atual', 'estoque_minimo'
+        ];
+
+        const payload = {};
+        campos.forEach(c => {
+            const el = document.getElementById(c);
+            if (el) payload[c] = el.value;
+        });
+
+        let result;
+        if (id) {
+            result = await window.supabaseClient.from('produtos').update(payload).eq('id', id);
+        } else {
+            result = await window.supabaseClient.from('produtos').insert([payload]);
+        }
+
+        if (result.error) {
+            alert("Erro ao salvar: " + result.error.message);
+        } else {
+            alert(id ? "Produto atualizado!" : "Produto cadastrado!");
+            resetForm();
+            loadProdutos();
+        }
+    }
+
+    async function loadProdutos() {
+        const { data, error } = await window.supabaseClient.from('produtos').select('*').order('nome', { ascending: true });
+        if (error) return console.error(error);
+        renderTable(data);
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('produtos-list');
+        tbody.innerHTML = data.map(p => `
+            <tr>
+                <td><small>${p.sku || '-'}</small><br><small class="tag">${p.codigo_de_barras || 'S/ EAN'}</small></td>
+                <td><strong>${p.nome}</strong><br><small>${p.marca || '-'}</small></td>
+                <td>${p.categoria_prod || '-'}</td>
+                <td>R$ ${parseFloat(p.preco_custo).toFixed(2)}</td>
+                <td><strong>R$ ${parseFloat(p.preco_venda).toFixed(2)}</strong></td>
+                <td class="status-stock ${p.estoque_atual <= p.estoque_minimo ? 'low-stock' : ''}">
+                    ${p.estoque_atual} <i class="fas ${p.estoque_atual <= p.estoque_minimo ? 'fa-exclamation-triangle' : ''}"></i>
+                </td>
+                <td>${p.data_vencimento || '-'}</td>
+                <td>
+                    <button class="btn-edit" onclick="editProduto('${p.id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn-del" onclick="deleteProduto('${p.id}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function editProduto(id) {
+        const { data, error } = await window.supabaseClient.from('produtos').select('*').eq('id', id).single();
+        if (error) return alert("Erro ao carregar dados.");
+
+        Object.keys(data).forEach(key => {
+            const el = document.getElementById(key);
+            if (el) el.value = data[key] || (el.type === 'number' ? '0' : '');
+        });
+
+        document.getElementById('edit-id').value = data.id;
+        document.getElementById('form-title').innerText = "Editando: " + data.nome;
+        document.getElementById('btn-save').innerText = "Atualizar Produto";
+        document.getElementById('btn-cancel').style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteProduto(id) {
+        if (!confirm("Excluir este produto?")) return;
+        const { error } = await window.supabaseClient.from('produtos').delete().eq('id', id);
+        if (!error) loadProdutos();
+    }
+
+    async function carregarFornecedores() {
+        const { data } = await window.supabaseClient.from('entidades').select('id, nome_completo');
+        const select = document.getElementById('entidade_id');
+        select.innerHTML = '<option value="">Selecione...</option>' + 
+            data.map(e => `<option value="${e.id}">${e.nome_completo}</option>`).join('');
+    }
+
+    function filtrarProdutos() {
+        const termo = document.getElementById('inputBusca').value.toLowerCase();
+        const linhas = document.querySelectorAll('#produtos-list tr');
+        linhas.forEach(linha => {
+            linha.style.display = linha.innerText.toLowerCase().includes(termo) ? '' : 'none';
+        });
+    }
+
+    function resetForm() {
+        document.querySelectorAll('input, select, textarea').forEach(c => c.id === 'estoque_minimo' ? c.value='5' : c.value='');
+        document.getElementById('edit-id').value = '';
+        document.getElementById('form-title').innerText = "Novo Produto";
+        document.getElementById('btn-save').innerText = "Salvar Produto";
+        document.getElementById('btn-cancel').style.display = "none";
+    }
+
+    async function sairDaConta() {
+        if(confirm("Sair do sistema?")) {
+            await window.supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProdutos();
+        carregarFornecedores();
+    });
+</script>
+
 </body>
 </html>
