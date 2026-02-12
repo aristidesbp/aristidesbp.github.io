@@ -9,33 +9,29 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 ## 📑 Índice
 
-- [👤 Persona Profissional](#-persona-profissional)
-- [📌 Contatos](#-contatos)
+- [PERSONA: Aristides B Pontes](#persona-aristides-b-pontes)
+- [📌 CONTATOS](#-contatos)
 
-- [📚 Tutoriais](#-tutoriais)
-  - [📱 Termux](#-termux)
-    - [Instalação e Configuração](#instalação-e-configuração)
-    - [Comandos Básicos](#comandos-básicos)
-    - [Servidor Python Local](#servidor-python-local)
-  - [🐙 GitHub](#-github)
-    - [Configurações Iniciais](#configurações-iniciais)
-    - [SSH e Segurança](#ssh-e-segurança)
-    - [Clonar, Atualizar e Enviar Arquivos](#clonar-atualizar-e-enviar-arquivos)
-    - [Adicionar Colaboradores](#adicionando-colaboradores-no-github)
+- [TUTORIAIS](#tutoriais)
+  - [TERMUX](#termux)
+  - [GITHUB](#github)
+  - [GITHUB : BAIXAR E ENVIAR ARQUIVOS](#github--baixar-e-enviar-arquivos)
+  - [SERVIDOR PYTHON](#servidor-python)
 
-- [🎥 Download de Mídias com Termux](#-como-baixar-midias-com-termux)
+- [ADICIONANDO COLABORADORES NO GITHUB](#adicionando-colaboradores-no-github)
 
-- [🗄️ Supabase](#-supabase)
-  - [Criar Conta e Projeto](#criar-conta-e-projeto)
-  - [Reset Total do Supabase](#-reset-total-do-supabase-caso-nao-queira-excluir-o-projeto)
-  - [Backup de Policies (RLS)](#-como-fazer-bkp-do-supabase)
+- [COMO BAIXAR MIDIAS COM TERMUX](#como-baixar-midias-com-termux)
 
-- [🧩 Exemplos de Código](#-exemplos-dos-meus-codigos-completos)
-  - [🔐 login.html](#loginhtml)
-  - [🏢 entidades.html](#entidadeshtml)
-  - [🗃️ SQL - Tabela de Entidades](#sql-de-entidades)
+- [SUPABASE](#supabase)
+  - [RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)](#-reset-total-do-supabase-caso-nao-queira-excluir-o-projeto-dados--auth--storage)
+  - [COMO FAZER BKP DO SUPABASE](#como-fazer-bkp-do-supabase)
 
-  
+- [EXEMPLOS DOS MEUS CODIGOS COMPLETOS](#exemplos-dos-meus-codigos-completos)
+  - [login.html](#loginhtml)
+  - [entidades.html](#entidadeshtml)
+  - [SQL de ENTIDADES](#sql-de-entidades)
+ 
+      
 
 # TUTORIAIS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
