@@ -261,6 +261,35 @@
         carregarFornecedores();
     });
 </script>
+    
+    
+    <!--
+    CREATE TABLE produtos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) DEFAULT auth.uid(),
+  nome TEXT NOT NULL,
+  codigo_de_barras TEXT,
+  marca TEXT,
+  sku TEXT,
+  categoria_prod TEXT,
+  entidade_id UUID REFERENCES entidades(id),
+  descricao TEXT,
+  data_vencimento DATE,
+  preco_custo NUMERIC DEFAULT 0,
+  preco_venda NUMERIC DEFAULT 0,
+  estoque_atual INTEGER DEFAULT 0,
+  estoque_minimo INTEGER DEFAULT 5,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+
+-- Ativar RLS (Idêntico ao entidades.sql)
+ALTER TABLE produtos ENABLE ROW LEVEL SECURITY;
+
+-- Política para cada usuário ver apenas seus próprios produtos
+CREATE POLICY "Gerenciar seus próprios produtos" 
+ON produtos FOR ALL 
+USING (auth.uid() = user_id);
+    -->
 
 </body>
 </html>
