@@ -168,14 +168,43 @@
 </div>
 
 <script>
-    // LÓGICA DE NEGÓCIO
-    async function handleSaveProduto() {
-        const id = document.getElementById('edit-id').value;
-        const campos = [
-            'nome', 'codigo_de_barras', 'marca', 'sku', 'categoria_prod',
-            'entidade_id', 'data_vencimento', 'descricao', 'preco_custo',
-            'preco_venda', 'estoque_atual', 'estoque_minimo'
-        ];
+
+    // 1. Função para o Scanner
+let html5QrCode;
+
+function startScanner() {
+    const readerDiv = document.getElementById('reader');
+    readerDiv.style.display = 'block';
+    
+    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode.start(
+        { facingMode: "environment" }, // Câmera traseira
+        { fps: 10, qrbox: { width: 250, height: 150 } },
+        (decodedText) => {
+            document.getElementById('codigo_de_barras').value = decodedText;
+            stopScanner();
+        },
+        (errorMessage) => { /* Erros de foco ou ausência de código são ignorados */ }
+    ).catch(err => alert("Erro ao acessar câmera: " + err));
+}
+
+function stopScanner() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            document.getElementById('reader').style.display = 'none';
+        });
+    }
+}
+
+// 2. Atualize a lista de campos na função handleSaveProduto
+async function handleSaveProduto() {
+    const id = document.getElementById('edit-id').value;
+    const campos = [
+        'nome', 'codigo_de_barras', 'marca', 'sku', 'categoria_prod',
+        'entidade_id', 'data_vencimento', 'data_compra', 'descricao', // 'data_compra' incluído aqui
+        'preco_custo', 'preco_venda', 'estoque_atual', 'estoque_minimo'
+    ];
+
 
         const payload = {};
         campos.forEach(c => {
