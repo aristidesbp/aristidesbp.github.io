@@ -8,51 +8,8 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO GOSTO DE TRABALAHAR COM OS CÓDIGOS  DO SISTEMA ABP-ERP
-```
-🐨 paginas GERADAS NO GOOGLE STITSH:
-"Sempre que eu recebo um código de página (como os gerados pelo Google Stitch), atuo como um Desenvolvedor Sênior e converter o código para a Estrutura ABP-ERP seguindo estas diretrizes:
-1. Arquitetura de Pastas e Arquivos:
- * Raiz (Principal): Devem ficar apenas os arquivos .html (ex: listar_modulo.html, cadastrar_modulo.html) e arquivos de configuração global (supabase_config.js, verificar_login.js, navbar.js).
- * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
-2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
-Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
- * listar_nome.js: Realiza o SELECT no Supabase e renderiza o HTML da lista.
- * criar_filtros.js: Adicionar filtros e campo de busca coerente com a listagem e ferramenta do sistema.
- * salvar_nome.js: Gerencia o INSERT e o UPDATE.
- * editar_nome.js: Captura o id da URL (ex: ?id=...) e preenche o formulário para edição.
- * deletar_nome.js: Realiza o DELETE no banco de dados.
- * limpar_nome.js: Reseta todos os campos do formulário e o estado do botão de salvar.
- * criar_tabela.sql: Criar codigo Sql capaz de criar tabela e apolicies coerente com o formulário presente na pagina.
-3. Integração e UI:
- * Navbar: Importar sempre o arquivo navbar.js da raiz.
- * Supabase: Utilizar window.supabaseClient configurado no supabase_config.js.
- * Botões de Ação: O botão de 'Editar' na lista deve redirecionar para a página de cadastro passando o ID via URL.
- * Tailwind & Ícones: Manter o uso do Tailwind CSS e Google Material Symbols/Icons conforme os padrões já estabelecidos nos módulos de Notas e Tarefas.
-4. Procedimento de Conversão:
-Ao receber um HTML do Google Stitch:
- * Identifique os campos de entrada (inputs) e a tabela correspondente no banco de dados.
- * Gere os arquivos HTML na raiz e os arquivos JS na subpasta do módulo.
- * Garanta que o botão de 'Salvar' alterne entre criar e atualizar com base na presença de um ID oculto no formulário."
 
-[COMO DEVO OPERAR NESSE PERFIL]
-* Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
-* Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
-* Estrutura de Pastas: * Raiz: index.html, REDME.md globais e assets;
-* na pasta assets temos arquivos globais como: verificar_login.js, supabase_config.js, menu.html (o menu tem links para todos os projetos);
-* Pastas por Página: Cada página possui sua própria pasta (ex:login.html possui a pasta  "login/" contendo:  style.css, supabase.js e funções específicas);
-* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo (um arquivo por função js);
-* todos os códigos JavaScript, em seu início deve ter um comentário com seu nome, e uma breve explicação para o que ele serve;
-* mande sempre arquivos completos se possivel, usando alterações cirúrgicas caso mesmo ja exista;
-[📋 Regras de Checklist e Arquivos]
-* sempre verifique na última conversa que tivermos se existe um checklist;
-* Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
-* Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
-```
-
-
-# EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
+# TUTORIAIS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
 * Download do aplicativo direto no github:
@@ -195,7 +152,7 @@ git pull origin main
 ```
 ---
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# ⚠️ APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO ⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
 ```
 # 1. Sincroniza as informações com o GitHub 
 git fetch origin
@@ -371,10 +328,10 @@ WHERE schemaname = 'public'
 
 
 
-# EXEMPLOS DOS CODIGOS
+# EXEMPLOS DOS MEUS CODIGOS COMPLETOS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
 # login.html
+* OBS: A página de login não precisa criar uma tabela no banco de dados.
 ```
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
@@ -382,12 +339,31 @@ WHERE schemaname = 'public'
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-       <link href="css/style.css" rel="stylesheet">
+
+   <!-- STYLE -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+   <!-- FIM DO STYLE -->
+
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
 </head>
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+
+
+<!-- FORMULÁRIO -->
+ <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
             <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
@@ -401,11 +377,13 @@ WHERE schemaname = 'public'
         <div class="relative mb-6 text-center border-b border-slate-800">
             <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
         </div>
-        <div class="space-y-4">
+
+ <div class="space-y-4">
     <div>
         <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
         <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
     </div>
+    
     <div class="relative">
         <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
         <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
@@ -413,9 +391,11 @@ WHERE schemaname = 'public'
             🔒
         </button>
     </div>
+
     <div class="text-right">
         <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
     </div>
+    
     <div class="flex gap-3 pt-2">
         <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
             ENTRAR
@@ -426,22 +406,10 @@ WHERE schemaname = 'public'
     </div>
 </div>
     </div>
-    <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
-    <!-- ############################################################################# --> 
-</body>
-</html>
-```
+<!-- FIM DO FORMULÁRIO -->
 
-# login/alternar_senha.js
-```
-/**
+<script>
+    /**
  * Nome do arquivo: alternar_senha.js
  * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
  */
@@ -455,10 +423,9 @@ function alternarSenha() {
         campo.type = campo.type === 'password' ? 'text' : 'password';
     }
 }
-
-```
-# login_google.js
-```
+    
+</script>   
+<script>
 /**
  * Nome do arquivo: login_google.js
  * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
@@ -479,11 +446,9 @@ async function loginComGoogle() {
         alert("Erro ao conectar com Google: " + error.message);
     }
 }
-
-```
-# realizar_cadastro.js
-```
-/**
+</script>   
+<script>
+    /**
  * Nome do arquivo: realizar_cadastro.js
  * Objetivo: Criar uma nova conta de usuário no sistema.
  */
@@ -510,7 +475,8 @@ async function realizarCadastro() {
         alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
     }
 }
-
+</script>   
+<script>
 /**
  * Função de apoio para evitar cadastros acidentais (UX)
  */
@@ -522,11 +488,9 @@ function confirmarCadastro() {
         realizarCadastro(); 
     }
 }
-
-```
-# realizar_login.js
-```
-/**
+</script>   
+<script>
+  /**
  * Nome do arquivo: realizar_login.js
  * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
  */
@@ -559,12 +523,10 @@ async function realizarLogin() {
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
     }
-}
-
-```
-# recuperar_senha.js
-```
-/**
+}  
+ </script>   
+<script>   
+    /**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
  */
@@ -596,517 +558,594 @@ async function salvarNovaSenha() {
         window.location.href = 'index.html';
     }
 }
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# cadastrar_notas.html
-```
-<!DOCTYPE html>
-<html class="light" lang="pt-BR">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Cadastro de Notas ERP ABP</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>    
-    <script src="verificar_login.js"></script>
-        
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: { 
-                        "primary": "#137fec", 
-                        "background-light": "#f6f7f8", 
-                        "background-dark": "#101922" 
-                    },
-                    fontFamily: { "display": ["Inter", "sans-serif"] }
-                }
-            }
-        }
-    </script>
-</head>
-
-<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
-
-<header class="p-4 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-10">
-    <div class="max-w-2xl mx-auto flex items-center justify-between">
-        <button onclick="window.location.href='listar_notas.html'" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors">
-            <span class="material-symbols-outlined dark:text-white">arrow_back</span>
-        </button>
-        <h1 class="font-bold text-lg dark:text-white text-center">Nota</h1>
-        <div class="w-10"></div>
-    </div>
-</header>
-
-<main class="flex-1 p-4 pb-32"> 
-    <div class="max-w-2xl mx-auto space-y-6">
-        <input type="hidden" id="note-id">
-
-        <div class="space-y-2">
-            <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Título</label>
-            <input id="title" type="text" placeholder="Ex: Ideias para o projeto" 
-                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all">
-        </div>
-
-        <div class="space-y-2">
-            <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Conteúdo</label>
-            <textarea id="content" rows="12" placeholder="Digite sua nota aqui..." 
-                class="w-full p-4 rounded-xl border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary transition-all"></textarea>
-        </div>
-
-        <div class="flex gap-3">
-            <button onclick="resetForm()" class="px-6 h-14 bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-400 font-bold rounded-2xl hover:bg-gray-300 transition-all">
-                Limpar
-            </button>
-            
-            <button id="btn-save" onclick="saveNote()" class="flex-1 h-14 bg-primary text-white font-bold rounded-2xl shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">save</span>
-                <span>Salvar Nota</span>
-            </button>
-        </div>
-    </div>
-</main>
-
-<script src="notas/limpar_notas.js"></script>
-
-<script src="notas/salvar_notas.js"></script>
-
-<script src="notas/editar_notas.js"></script>
-
-<script src="navbar.js"></script> 
-
+</script>   
 </body>
 </html>
-
 ```
-# listar_notas.html
+# entidades.html
 ```
 <!DOCTYPE html>
-<html class="light" lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Minhas Notas - ERP ABP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP ABP</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>    
-    <script src="verificar_login.js"></script>
+<!-- STYLE -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+<style>
     
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
 
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: { "primary": "#137fec", "background-dark": "#101922" }
-                }
-            }
-        }
-    </script>
-</head>
+* { box-sizing: border-box; }
 
-<body class="bg-background-light dark:bg-background-dark min-h-screen">
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
 
-<header class="p-4 bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-    <div class="max-w-2xl mx-auto space-y-4">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Bloco de Notas</h1>
-            <button onclick="exportAllToPDF()" class="p-2 text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg">
-                <span class="material-symbols-outlined">picture_as_pdf</span>
-            </button>
-        </div>
-        <div class="relative">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-            <input id="search" oninput="filterNotes()" type="text" placeholder="Pesquisar em minhas notas..." 
-                class="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary dark:text-white">
-        </div>
-    </div>
-</header>
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
 
-<main class="p-4 max-w-2xl mx-auto pb-32">
-    <div id="notes-list" class="space-y-4">
-        <div class="flex justify-center py-20">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-    </div>
-</main>
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
 
-<button onclick="window.location.href='cadastrar_notas.html'" 
-    class="fixed bottom-28 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-20">
-    <span class="material-symbols-outlined text-3xl">add</span>
-</button>
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
 
-<script src="notas/listar_notas.js"></script>
-<script src="notas/deletar_notas.js"></script>
-<script src="notas/pesquisar_notas.js"></script>
-<script src="notas/exportar_notas.js"></script>
-<script src="notas/editar_notas.js"></script> 
-<script src="navbar.js"></script>
-     
-</body>
-</html>
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
 
-```
-# notas/deletar_notas.js
-```
-/**
- * Nome do arquivo: deletar_notas.js
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Estilo para o campo de senha com Olho */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper i {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #64748b;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; }
+
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-mail { color: #ea4335; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; background: white;
+    padding: 15px 25px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
+}
+.nav-buttons { display: flex; gap: 15px; align-items: center; }
+.btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+.btn-logout-nav {
+    background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
+    font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+}
+
+.export-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.btn-export {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export-full {
+    background: #1e293b;
+}
+   
+</style>   
+<!-- FIM DO STYLE -->
+
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<script>
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
  */
-async function deleteNote(id) {
-    if (!confirm("Tem certeza que deseja excluir permanentemente esta nota?")) return;
 
-    try {
-        const { error } = await window.supabaseClient
-            .from('notes')
-            .delete()
-            .eq('id', id);
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
 
-        if (error) throw error;
-
-        alert("Nota excluída com sucesso.");
-        if (typeof loadNotes === "function") loadNotes();
-    } catch (err) {
-        console.error("Erro ao excluir:", err.message);
-        alert("Erro ao excluir nota.");
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
     }
 }
-```
-# notas/editar_notas.js
-```
-/**
- * Nome do arquivo: editar_notas.js
- * Objetivo: Redirecionar para a página de cadastro enviando os dados da nota via URL.
- */
 
-function prepareEdit(id, title, content) {
-    // Definimos a URL base para o cadastro (ajuste se o nome do arquivo for diferente)
-    const urlCadastro = "https://aristidesbp.github.io/assets/app/cadastrar_notas.html";
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+   
+</head>
+<body>
+
+<!-- NAVBAR -->
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .btn-home {
+            background: #3ecf8e !important; /* Verde padrão do seu ERP */
+        }
+
+        /* Ajuste para o conteúdo não ficar embaixo da navbar fixa */
+        body {
+            padding-top: 80px;
+        }
+    </style>
     
-    // Criamos os parâmetros para passar via URL (codificando para evitar erros com espaços/quebras de linha)
-    const params = new URLSearchParams({
-        id: id,
-        edit: "true"
-    });
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>`;
 
-    // Redireciona o usuário
-    window.location.href = `${urlCadastro}?${params.toString()}`;
-}
-
-/**
- * Função para carregar os dados quando a página de CADASTRAR abrir
- * Adicione esta chamada no seu cadastrar_notas.html ou salvar_notas.js
- */
-async function checkEditMode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const noteId = urlParams.get('id');
-
-    if (noteId && window.location.pathname.includes('cadastrar_notas.html')) {
+    <script>
+        async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
         try {
-            const { data: note, error } = await window.supabaseClient
-                .from('notes')
-                .select('*')
-                .eq('id', noteId)
-                .single();
-
-            if (error) throw error;
-
-            if (note) {
-                document.getElementById('note-id').value = note.id;
-                document.getElementById('title').value = note.title;
-                document.getElementById('content').value = note.content;
-                document.getElementById('btn-save').innerHTML = `<span class="material-symbols-outlined">edit</span> Atualizar Nota`;
+            // Verifica se o cliente supabase existe antes de tentar deslogar
+            if (typeof _supabase !== 'undefined') {
+                await _supabase.auth.signOut();
             }
-        } catch (err) {
-            console.error("Erro ao carregar nota para edição:", err.message);
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
         }
     }
-}
-
-// Executa a verificação se estiver na página de cadastro
-if (window.location.pathname.includes('cadastrar_notas.html')) {
-    document.addEventListener('DOMContentLoaded', checkEditMode);
-}
-
-```
-# exportar_notas.js
-
-```
-/**
- * Nome do arquivo: exportar_notas.js
- */
-async function exportAllToPDF() {
-    if (allNotes.length === 0) return alert("Não há notas para exportar.");
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(20);
-    doc.setTextColor(19, 127, 236); // Cor Primary
-    doc.text("Relatório de Notas - ERP ABP", 10, 20);
-
-    let y = 35;
-
-    allNotes.forEach((n, i) => {
-        if (y > 270) { 
-            doc.addPage(); 
-            y = 20; 
         }
+    </script>
+<!-- FIM DA NAVBAR -->
+    
+<!-- FORMULARIO -->
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Cadastro de Entidade</h3>
+        <input type="hidden" id="edit-id">
+
+        <div class="section-title">Informações e Acesso</div>
+        <div class="form-grid">
+            <div><label>Nome Completo / Razão *</label><input type="text" id="nome_completo"></div>
+            <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
+            <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+            <div><label>E-mail</label><input type="email" id="email"></div>
+            <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
+            <div>
+                <label>Senha Interna</label>
+                <div class="password-wrapper">
+                    <input type="password" id="senha_acesso">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
+            
+            <div>
+                <label>Nível de Acesso</label>
+                <select id="acesso">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="comprador">Comprador</option>
+                    <option value="master">Master</option>
+                </select>
+            </div>
+            <div>
+                <label>Relacionamento</label>
+                <select id="relacionamento">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="terceirizado">Terceirizado</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="ativo">Ativo</option>
+                    <option value="desativado">Desativado</option>
+                </select>
+            </div>
+            <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+        </div>
+
+        <div class="section-title">Endereço</div>
+        <div class="form-grid">
+            <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+            <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+            <div><label>Número</label><input type="text" id="numero"></div>
+            <div><label>Bairro</label><input type="text" id="bairro"></div>
+            <div><label>Cidade</label><input type="text" id="cidade"></div>
+            <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+        </div>
+
+        <div class="section-title">Complementos</div>
+        <div class="form-grid">
+            <div style="grid-column: span 2;"><label>URL de Arquivos</label><input type="text" id="arquivos_url"></div>
+            <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+        </div>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+    </div>
+
+    <div class="card" style="margin-bottom: 10px; padding: 15px;">
+        <label><i class="fas fa-search"></i> BUSCAR ENTIDADE</label>
+        <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
         
-        doc.setFont(undefined, 'bold');
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${i + 1}. ${n.title}`, 10, y);
-        
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(10);
-        doc.setTextColor(60, 60, 60);
-        
-        // Quebra automática de texto para o conteúdo não sair da página
-        const splitContent = doc.splitTextToSize(n.content, 180);
-        doc.text(splitContent, 10, y + 7);
-        
-        y += (splitContent.length * 5) + 15;
+        <div class="export-area">
+            <button class="btn-export" onclick="exportarPDFListagem()">
+                <i class="fas fa-list"></i> Exportar Listagem (PDF)
+            </button>
+            <button class="btn-export btn-export-full" onclick="exportarPDFFichaCompleta()">
+                <i class="fas fa-file-invoice"></i> Exportar Fichas Detalhadas (PDF)
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome / Tipo</th>
+                    <th>Telefone / E-mail</th>
+                    <th>Acesso / Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="entities-list"></tbody>
+        </table>
+    </div>
+</div>
+<!-- FORMULARIO -->
+<script>
+    /** * ERP ABP - cadastrar.js */
+async function handleSave() {
+    const id = document.getElementById('edit-id').value;
+    
+    const campos = [
+        'nome_completo', 'cpf', 'data_nascimento', 'genero', 'estado_civil',
+        'tipo_entidade', 'status_entidade', 'tipo_acesso', 'email', 'telefone',
+        'senha_acesso', 'cep', 'logradouro', 'numero', 'bairro', 'cidade',
+        'estado', 'avaliacao', 'observacoes'
+    ];
+
+    const payload = {};
+    campos.forEach(c => {
+        const el = document.getElementById(c);
+        if (el) payload[c] = el.value;
     });
 
-    doc.save("minhas-notas-abp.pdf");
-}
-```
-# limpar_notas.js
-```
-/**
- * Nome do arquivo: limpar_notas.js
- * Objetivo: Resetar o formulário de notas para o estado inicial (vazio).
- */
-
-function resetForm() {
-    // Captura os elementos
-    const idField = document.getElementById('note-id');
-    const titleField = document.getElementById('title');
-    const contentField = document.getElementById('content');
-    const btnSave = document.getElementById('btn-save');
-
-    // Limpa os valores
-    if (idField) idField.value = '';
-    if (titleField) titleField.value = '';
-    if (contentField) contentField.value = '';
-
-    // Volta o botão para o modo de "Salvar" (caso estivesse em "Atualizar")
-    if (btnSave) {
-        btnSave.innerHTML = `
-            <span class="material-symbols-outlined">save</span>
-            Salvar Nota
-        `;
-        // Remove classes de edição se você tiver adicionado alguma (ex: mudar cor do botão)
-        btnSave.classList.remove('bg-amber-500');
-        btnSave.classList.add('bg-primary');
+    let result;
+    if (id) {
+        result = await window.supabaseClient.from('entidades').update(payload).eq('id', id);
+    } else {
+        result = await window.supabaseClient.from('entidades').insert([payload]);
     }
 
-    console.log("Formulário de notas limpo com sucesso.");
-}
-
-```
-# listar_notas.js
-```
-/**
- * Nome do arquivo: listar_notas.js
- * Objetivo: Buscar notas do banco e renderizar o HTML da listagem.
- */
-let allNotes = []; // Variável global para busca e exportação
-
-async function loadNotes() {
-    const container = document.getElementById('notes-list');
-    if (!container) return;
-
-    try {
-        const { data: notes, error } = await window.supabaseClient
-            .from('notes')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        allNotes = notes || [];
-        renderNotes(allNotes);
-    } catch (err) {
-        console.error("Erro ao carregar notas:", err.message);
-        container.innerHTML = `<p class="text-center text-red-500">Erro ao carregar notas.</p>`;
+    if (result.error) {
+        alert("Erro ao salvar: " + result.error.message);
+    } else {
+        alert(id ? "Atualizado com sucesso!" : "Cadastrado com sucesso!");
+        resetForm();
+        if (typeof loadEntities === "function") loadEntities();
     }
 }
+</script>
+<script>
+/** * ERP ABP - deletar.js */
+async function deleteEntity(id) {
+    if (!confirm("Tem certeza que deseja excluir esta entidade permanentemente?")) return;
 
-function renderNotes(notes) {
-    const container = document.getElementById('notes-list');
-    if (!container) return;
+    const { error } = await window.supabaseClient
+        .from('entidades')
+        .delete()
+        .eq('id', id);
 
-    if (notes.length === 0) {
-        container.innerHTML = '<p class="text-center text-slate-400 py-10">Nenhuma nota encontrada.</p>';
+    if (error) {
+        alert("Erro ao excluir: " + error.message);
+    } else {
+        if (typeof loadEntities === "function") loadEntities();
+    }
+}
+</script>
+ <script> 
+/** * ERP ABP - editar.js */
+async function editFull(id) {
+    const { data, error } = await window.supabaseClient
+        .from('entidades')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) return alert("Erro ao carregar dados para edição.");
+
+    Object.keys(data).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) el.value = data[key] || '';
+    });
+
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
+    document.getElementById('btn-save').innerText = "Atualizar Entidade";
+    document.getElementById('btn-cancel').style.display = "block";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+     }
+ </script>
+ <script>
+     /** * ERP ABP - listar.js */
+async function loadEntities() {
+    const { data, error } = await window.supabaseClient
+        .from('entidades')
+        .select('*')
+        .order('nome_completo', { ascending: true });
+
+    if (error) {
+        console.error("Erro ao carregar:", error.message);
         return;
     }
+    renderTable(data || []);
+}
 
-    container.innerHTML = notes.map(n => `
-        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-start mb-4">
-            <div class="flex-1 pr-4">
-                <h3 class="font-bold text-lg dark:text-white">${n.title}</h3>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1 whitespace-pre-wrap">${n.content}</p>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="prepareEdit('${n.id}', \`${n.title}\`, \`${n.content}\`)" class="p-2 bg-amber-500/10 text-amber-600 rounded-lg hover:bg-amber-500 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-sm">edit</span>
-                </button>
-                <button onclick="deleteNote('${n.id}')" class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-sm">delete</span>
-                </button>
-            </div>
-        </div>
+function renderTable(data) {
+    const tbody = document.getElementById('entities-list');
+    if (!tbody) return;
+
+    tbody.innerHTML = data.map(e => `
+        <tr>
+            <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
+            <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
+            <td><span class="status-tag">${e.status_entidade || 'Ativo'}</span></td>
+            <td>
+                <button class="btn-edit" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
+                ${e.telefone ? `<button class="btn-wpp" onclick="window.open('https://wa.me/55${e.telefone.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>` : ''}
+            </td>
+        </tr>
     `).join('');
 }
 
-// Inicia a carga quando o documento estiver pronto
-document.addEventListener('DOMContentLoaded', loadNotes);
-```
-# pesquisar_notas.js
-```
-/**
- * Nome do arquivo: pesquisar_notas.js
+// Inicia ao carregar a página
+document.addEventListener('DOMContentLoaded', loadEntities);
+</script>
+ <script>
+/** * ERP ABP - utilidades.js
+ * Funções auxiliares e automação de interface
  */
-function filterNotes() {
-    const searchInput = document.getElementById('search');
-    if (!searchInput) return;
-    
-    const query = searchInput.value.toLowerCase();
 
-    // Filtra sobre a variável global allNotes carregada no listar_notas.js
-    const filtered = allNotes.filter(n =>
-        n.title.toLowerCase().includes(query) ||
-        n.content.toLowerCase().includes(query)
-    );
-
-    renderNotes(filtered);
-}
-```
-# salvar_notas.js
-```
-/**
- * Nome do arquivo: salvar_notas.js
- * Objetivo: Criar novas notas ou atualizar notas existentes no Supabase.
- */
-async function saveNote() {
-    const btn = document.getElementById('btn-save');
-    const id = document.getElementById('note-id').value;
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-
-    if (!title || !content) return alert("Por favor, preencha o título e o conteúdo.");
-
-    btn.disabled = true;
-    btn.innerText = "Processando...";
-    
-    try {
-        // Busca o usuário logado para garantir o vínculo da nota
-        const { data: { user } } = await window.supabaseClient.auth.getUser();
-        if (!user) throw new Error("Usuário não autenticado.");
-
-        if (id) {
-            // Modo Edição (Update)
-            const { error } = await window.supabaseClient
-                .from('notes')
-                .update({ title, content })
-                .eq('id', id);
-            if (error) throw error;
+// 1. Limpa todos os campos e volta o formulário ao estado inicial
+function resetForm() {
+    // Limpa Inputs, Selects e Textareas
+    document.querySelectorAll('input, select, textarea').forEach(campo => {
+        if (campo.id === 'avaliacao') {
+            campo.value = '5';
+        } else if (campo.tagName === 'SELECT') {
+            campo.selectedIndex = 0;
         } else {
-            // Modo Criação (Insert)
-            const { error } = await window.supabaseClient
-                .from('notes')
-                .insert([{ title, content, user_id: user.id }]);
-            if (error) throw error;
+            campo.value = '';
         }
+    });
 
-        alert("Nota salva com sucesso!");
-        
-        // Limpa o formulário e recarrega a lista se as funções existirem
-        if (typeof resetForm === "function") resetForm();
-        if (typeof loadNotes === "function") loadNotes();
+    // Reset de elementos visuais de edição
+    const editId = document.getElementById('edit-id');
+    if (editId) editId.value = '';
 
-    } catch (err) {
-        console.error("Erro ao salvar:", err.message);
-        alert("Erro ao salvar: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerText = id ? "Atualizar Nota" : "Salvar Nota";
+    const formTitle = document.getElementById('form-title');
+    if (formTitle) formTitle.innerText = "Novo Cadastro de Entidade";
+
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.innerText = "Salvar Entidade";
+
+    const btnCancel = document.getElementById('btn-cancel');
+    if (btnCancel) btnCancel.style.display = "none";
+
+    console.log("🧹 Campos limpos com sucesso!");
+}
+
+// 2. Filtro de busca em tempo real (sem precisar de botão)
+function filtrarTabela() {
+    const termo = document.getElementById('inputBusca').value.toLowerCase();
+    const linhas = document.querySelectorAll('#entities-list tr');
+
+    linhas.forEach(linha => {
+        const texto = linha.innerText.toLowerCase();
+        linha.style.display = texto.includes(termo) ? '' : 'none';
+    });
+}
+
+// 3. Função para alternar visibilidade da senha
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('senha_acesso');
+    const toggleIcon = document.getElementById('togglePassword');
+    if (passwordInput && passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else if (passwordInput) {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
     }
 }
+
+// 4. Busca de CEP automática (ViaCEP)
+async function buscaCEP() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro || '';
+                document.getElementById('bairro').value = data.bairro || '';
+                document.getElementById('cidade').value = data.localidade || '';
+                document.getElementById('estado').value = data.uf || '';
+                console.log("📍 Endereço preenchido via CEP");
+            }
+        } catch (e) { console.error("Erro ao buscar CEP", e); }
+    }
+     }
+ </script>
+     
+</body>
+</html>
 ```
-# sql notas
-```
--- 1. Criar a tabela de notas
-CREATE TABLE notes (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) DEFAULT auth.uid(), -- Vincula a nota ao usuário logado
-  title TEXT NOT NULL,
-  content TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
-);
-
--- 2. Habilitar o Row Level Security (Segurança de Linha)
-ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
-
--- 3. Criar política: Usuários podem ver apenas suas próprias notas
-CREATE POLICY "Usuários podem ver suas próprias notas" 
-ON notes FOR SELECT 
-USING (auth.uid() = user_id);
-
--- 4. Criar política: Usuários podem inserir apenas suas próprias notas
-CREATE POLICY "Usuários podem inserir suas próprias notas" 
-ON notes FOR INSERT 
-WITH CHECK (auth.uid() = user_id);
-
--- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
-CREATE POLICY "Usuários podem atualizar suas próprias notas" 
-ON notes FOR UPDATE 
-USING (auth.uid() = user_id);
-
--- 6. Criar política: Usuários podem deletar apenas suas próprias notas
-CREATE POLICY "Usuários podem deletar suas próprias notas" 
-ON notes FOR DELETE 
-USING (auth.uid() = user_id);
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    
