@@ -1,107 +1,207 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html class="light" lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV Profissional - ERP ABP</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/produtos.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PDV Móvel - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
     
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#3ecf8e", "background-light": "#f6f7f8", "background-dark": "#101922" },
+                    fontFamily: { "display": ["Inter"] }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        window.supabaseClient = _supabase;
+
+        async function checarAutenticacao() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session) window.location.href = "login.html";
+        }
+        checarAutenticacao();
+    </script>
 </head>
-<body>
 
-<div id="caixa-status-modal" class="caixa-fechado-overlay" style="display:none;">
-    <div class="card" style="width: 400px; color: #333; position: relative; padding: 30px; background: white; border-radius: 15px;">
-        <button onclick="desistirAbertura()" style="position: absolute; top: 10px; right: 15px; border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;">&times;</button>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <i class="fas fa-cash-register" style="font-size: 3rem; color: #3ecf8e;"></i>
-            <h3 style="margin-top: 10px;">Abertura de Caixa</h3>
-        </div>
-        <p style="font-size: 14px; color: #64748b;">Informe o valor inicial em dinheiro (Troco):</p>
-        <input type="number" id="valor_inicial" class="form-control" value="0.00" step="0.01" style="width: 100%; margin: 15px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1.2rem; text-align: center;">
-        <button onclick="abrirCaixa()" class="btn-add" style="width: 100%; background: #3ecf8e; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">ABRIR CAIXA AGORA</button>
-    </div>
-</div>
-
-<div class="container" style="display: grid; grid-template-columns: 1fr 450px; gap: 20px; margin-top: 20px; padding: 0 20px;">
-    
-    <div>
-        <div class="card" style="position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="margin:0;"><i class="fas fa-shopping-cart"></i> Carrinho de Vendas</h3>
-                <span id="caixa-info" class="status-badge" style="background: #dcfce7; color: #166534; padding: 5px 15px; border-radius: 20px; font-weight: bold;">Verificando caixa...</span>
-            </div>
-            <input type="text" id="busca-pdv" class="busca-grande" placeholder="PASSE O LEITOR OU DIGITE O NOME DO PRODUTO..." onkeyup="buscarProdutoPDV(event)" autofocus>
-            <div id="resultados-busca"></div>
-        </div>
-
-        <div class="table-container" style="max-height: 550px; overflow-y: auto; margin-top: 10px; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead style="position: sticky; top: 0; background: #f8fafc; border-bottom: 2px solid #eee;">
-                    <tr>
-                        <th style="padding: 15px; text-align: left;">Produto</th>
-                        <th style="padding: 15px;">Qtd</th>
-                        <th style="padding: 15px;">Unitário</th>
-                        <th style="padding: 15px;">Subtotal</th>
-                        <th style="padding: 15px;">Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="carrinho-corpo"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; height: fit-content;">
-        <div>
-            <h3 style="margin-top:0;">Finalização da Venda</h3>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-            
-            <label style="font-weight: bold; color: #64748b;">Cliente (Nome ou CPF)</label>
-            <div style="position: relative; margin: 8px 0 15px 0;">
-                <input type="text" id="cliente-busca" class="form-control" placeholder="Digite para buscar cliente..." onkeyup="buscarClientePDV(event)" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd;">
-                <div id="resultados-cliente"></div>
-                <input type="hidden" id="cliente_id"> <div id="cliente-selecionado" style="font-size: 13px; color: #166534; font-weight: bold; margin-top: 5px;">👤 Consumidor Final</div>
-            </div>
-            
-            <label style="font-weight: bold; color: #64748b;">Forma de Pagamento</label>
-            <select id="forma_pagto" style="width: 100%; margin: 8px 0 20px 0; font-weight: bold; font-size: 1.1rem; padding: 12px; border-radius: 8px; border: 1px solid #3ecf8e; background: #f0fff4;">
-                <option value="Dinheiro">💵 Dinheiro</option>
-                <option value="Pix">⚡ Pix</option>
-                <option value="Cartão Débito">💳 Cartão Débito</option>
-                <option value="Cartão Crédito">💳 Cartão Crédito</option>
-            </select>
-
-            <label class="print-option">
-                <input type="checkbox" id="imprimir-ticket" checked>
-                <span style="font-weight: bold; color: #166534;">Deseja imprimir o cupom?</span>
-            </label>
-
-            <div style="background: #f8fafc; padding: 20px; border-radius: 15px; text-align: right; border: 1px solid #e2e8f0;">
-                <p style="margin:0; color: #64748b;">Subtotal: <span id="total-bruto">R$ 0,00</span></p>
-                <div style="margin: 10px 0; color: #ef4444;">
-                    Desconto: R$ <input type="number" id="desconto" value="0.00" step="0.01" oninput="calcularTotalVenda()" style="width: 90px; text-align: right; font-weight: bold; border: 1px solid #fecaca; border-radius: 5px; padding: 5px;">
+<body class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white antialiased">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-[480px] mx-auto shadow-2xl bg-white dark:bg-background-dark">
+        
+        <header class="sticky top-0 z-30 bg-white dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+            <div class="flex items-center p-4 pb-2 justify-between">
+                <div class="text-primary flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <span class="material-symbols-outlined">storefront</span>
                 </div>
-                <div style="border-top: 2px solid #e2e8f0; padding-top: 10px;">
-                    <span style="font-size: 0.9rem; color: #166534; font-weight: bold;">TOTAL A RECEBER</span>
-                    <div class="total-destaque" id="total-venda">R$ 0,00</div>
-                </div>
+                <h2 class="text-lg font-bold flex-1 ml-3">PDV Móvel</h2>
+                <a href="index.html" class="p-2 text-gray-500"><span class="material-symbols-outlined">home</span></a>
             </div>
-        </div>
 
-        <div style="margin-top: 20px;">
-            <button class="btn-add" onclick="finalizarVenda()" style="background: #22c55e; height: 85px; font-size: 1.6rem; width: 100%; border-radius: 15px; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);">
-                <i class="fas fa-check-double"></i> FINALIZAR (F2)
-            </button>
+            <div class="px-4 py-3 flex gap-2 relative">
+                <div class="flex flex-1 items-stretch rounded-xl overflow-hidden bg-[#f0f2f4] dark:bg-gray-800">
+                    <div class="text-[#617589] flex items-center justify-center pl-4">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input id="inputBusca" onkeyup="buscarProdutos(this.value)" class="form-input flex-1 border-none bg-transparent focus:ring-0 text-base py-3" placeholder="Buscar produto..."/>
+                </div>
+                <div id="resultadosBusca" class="absolute top-16 left-4 right-4 bg-white dark:bg-gray-800 shadow-xl rounded-xl z-50 hidden max-h-60 overflow-y-auto border dark:border-gray-700"></div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto pb-44">
+            <div class="p-4 border-b border-gray-50 dark:border-gray-800">
+                <h3 class="text-sm font-semibold text-[#617589] uppercase tracking-wider">Carrinho</h3>
+            </div>
             
-            <button onclick="fecharCaixa()" style="background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; padding: 12px; width: 100%; margin-top: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-                <i class="fas fa-lock"></i> FECHAR CAIXA DO DIA
-            </button>
-        </div>
+            <div id="carrinho-lista">
+                <div class="p-8 text-center text-gray-400">Carrinho vazio</div>
+            </div>
+        </main>
+
+        <footer class="fixed bottom-0 w-full max-w-[480px] bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 px-4 pt-4 pb-8 z-40">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between text-sm text-[#617589]">
+                    <span>Subtotal</span>
+                    <span id="resumo-subtotal">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between mt-1">
+                    <span class="text-lg font-bold">Total</span>
+                    <span id="resumo-total" class="text-2xl font-extrabold tracking-tight text-primary">R$ 0,00</span>
+                </div>
+                <button onclick="finalizarVenda()" class="w-full flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white text-base font-bold shadow-lg active:scale-95 transition-all">
+                    <span class="material-symbols-outlined">shopping_cart_checkout</span>
+                    Finalizar Venda
+                </button>
+            </div>
+        </footer>
     </div>
-</div>
 
+<script>
+    let carrinho = [];
 
-<script src="navbar.js"></script>
+    async function buscarProdutos(termo) {
+        const listaResultados = document.getElementById('resultadosBusca');
+        if (termo.length < 2) {
+            listaResultados.classList.add('hidden');
+            return;
+        }
+
+        const { data, error } = await window.supabaseClient
+            .from('produtos')
+            .select('*')
+            .ilike('nome', `%${termo}%`)
+            .limit(5);
+
+        if (data && data.length > 0) {
+            listaResultados.innerHTML = data.map(p => `
+                <div onclick="adicionarAoCarrinho('${p.id}', '${p.nome}', ${p.preco_venda})" class="p-4 border-b dark:border-gray-700 flex justify-between items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <div>
+                        <p class="font-bold text-sm">${p.nome}</p>
+                        <p class="text-xs text-primary">R$ ${p.preco_venda.toFixed(2)}</p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary">add_circle</span>
+                </div>
+            `).join('');
+            listaResultados.classList.remove('hidden');
+        }
+    }
+
+    function adicionarAoCarrinho(id, nome, preco) {
+        const itemExistente = carrinho.find(i => i.id === id);
+        if (itemExistente) {
+            itemExistente.qtd++;
+        } else {
+            carrinho.push({ id, nome, preco, qtd: 1 });
+        }
+        document.getElementById('resultadosBusca').classList.add('hidden');
+        document.getElementById('inputBusca').value = '';
+        renderizarCarrinho();
+    }
+
+    function alterarQtd(id, delta) {
+        const item = carrinho.find(i => i.id === id);
+        if (item) {
+            item.qtd += delta;
+            if (item.qtd <= 0) {
+                carrinho = carrinho.filter(i => i.id !== id);
+            }
+        }
+        renderizarCarrinho();
+    }
+
+    function renderizarCarrinho() {
+        const lista = document.getElementById('carrinho-lista');
+        let total = 0;
+
+        if (carrinho.length === 0) {
+            lista.innerHTML = '<div class="p-8 text-center text-gray-400">Carrinho vazio</div>';
+        } else {
+            lista.innerHTML = carrinho.map(item => {
+                total += item.preco * item.qtd;
+                return `
+                <div class="flex items-center gap-4 px-4 py-4 border-b dark:border-gray-800/50 justify-between">
+                    <div class="flex-1">
+                        <p class="text-base font-semibold leading-tight">${item.nome}</p>
+                        <p class="text-primary font-bold mt-1">R$ ${item.preco.toFixed(2)}</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-[#f0f2f4] dark:bg-gray-800 p-1 rounded-full">
+                        <button onclick="alterarQtd('${item.id}', -1)" class="h-8 w-8 rounded-full bg-white dark:bg-gray-700 shadow-sm font-bold text-lg">-</button>
+                        <span class="font-bold w-4 text-center">${item.qtd}</span>
+                        <button onclick="alterarQtd('${item.id}', 1)" class="h-8 w-8 rounded-full bg-white dark:bg-gray-700 shadow-sm font-bold text-lg">+</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        document.getElementById('resumo-subtotal').innerText = `R$ ${total.toFixed(2)}`;
+        document.getElementById('resumo-total').innerText = `R$ ${total.toFixed(2)}`;
+    }
+
+    async function finalizarVenda() {
+        if (carrinho.length === 0) return alert("Adicione itens ao carrinho!");
+
+        const total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+
+        try {
+            // 1. Criar Venda
+            const { data: venda, error: vError } = await window.supabaseClient
+                .from('vendas')
+                .insert([{ valor_total: total, metodo_pagamento: 'Dinheiro' }])
+                .select()
+                .single();
+
+            if (vError) throw vError;
+
+            // 2. Criar Itens da Venda
+            const itensPayload = carrinho.map(i => ({
+                venda_id: venda.id,
+                produto_id: i.id,
+                quantidade: i.qtd,
+                preco_unitario: i.preco,
+                subtotal_item: i.preco * i.qtd
+            }));
+
+            const { error: iError } = await window.supabaseClient.from('venda_itens').insert(itensPayload);
+            if (iError) throw iError;
+
+            alert("Venda realizada com sucesso!");
+            carrinho = [];
+            renderizarCarrinho();
+
+        } catch (err) {
+            alert("Erro ao finalizar: " + err.message);
+        }
+    }
+</script>
 </body>
 </html>
