@@ -51,6 +51,13 @@
     }
     checarAutenticacao();
 </script>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+    #reader { width: 100%; border-radius: 8px; margin-bottom: 10px; display: none; }
+    .btn-scan { background: #6366f1; color: white; padding: 10px; border-radius: 6px; cursor: pointer; border: none; margin-bottom: 5px; width: 100%; }
+</style>
+    
 </head>
 
 <body>
@@ -70,16 +77,31 @@
         <h3 id="form-title">Novo Produto</h3>
         <input type="hidden" id="edit-id">
         
-        <div class="section-title">Informações Básicas</div>
-        <div class="form-grid">
-            <div style="grid-column: span 2;">
-                <label>Nome do Produto *</label>
-                <input type="text" id="nome" placeholder="Ex: Cimento CP-II">
-            </div>
-            <div>
-                <label>Código de Barras (EAN)</label>
-                <input type="text" id="codigo_de_barras">
-            </div>
+        
+<div class="section-title">Informações Básicas</div>
+<div class="form-grid">
+    <div style="grid-column: span 2;">
+        <label>Nome do Produto *</label>
+        <input type="text" id="nome" placeholder="Ex: Cimento CP-II">
+    </div>
+    <div>
+        <label>Código de Barras (EAN)</label>
+        <button type="button" class="btn-scan" onclick="startScanner()"><i class="fas fa-camera"></i> Ler Código</button>
+        <div id="reader"></div>
+        <input type="text" id="codigo_de_barras">
+    </div>
+    <div>
+        <label>Data de Compra</label>
+        <input type="date" id="data_compra">
+    </div>
+    <div>
+        <label>Marca</label>
+        <input type="text" id="marca">
+    </div>
+</div>
+            
+
+            
             <div>
                 <label>Marca</label>
                 <input type="text" id="marca">
