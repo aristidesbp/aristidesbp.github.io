@@ -154,7 +154,7 @@ git pull origin main
 ```
 ---
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# ⚠️ APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO ⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
 ```
 # 1. Sincroniza as informações com o GitHub 
 git fetch origin
