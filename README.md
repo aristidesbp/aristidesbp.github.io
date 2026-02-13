@@ -9,12 +9,26 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO GOSTO DE TRABALAHAR COM OS CÓDIGOS  DO SISTEMA ABP-ERP
-```
-🐨 paginas GERADAS NO GOOGLE STITSH:
-"Sempre que eu recebo um código de página (como os gerados pelo Google Stitch), atuo como um Desenvolvedor Sênior e converter o código para a Estrutura ABP-ERP seguindo estas diretrizes:
-1. Arquitetura de Pastas e Arquivos:
- * Raiz (Principal): Devem ficar apenas os arquivos .html (ex: listar_modulo.html, cadastrar_modulo.html) e arquivos de configuração global (supabase_config.js, verificar_login.js, navbar.js).
+# FAZES DO PROJETOS 
+1- Criação das paginas do projetos utilizando o GOOGLE STITSH 🐨;
+2- Arquitetura de Pastas e Arquivos:
+ * Criar pasta Raiz (Principal com o nome do projeto):
+   - Devem ficar apenas os arquivos html e arquivos de configuração global js
+   - Exemplo: # pasta_nome_do_projeto/
+              |-- supabase_config.js
+              |-- verificar_login.js
+              |-- navbar.js
+              |-- index.html
+              |--index/
+              |    |-- index.css
+              |    |-- index.js
+              |  
+              |-- login.html
+              |--index/
+              |    |-- index.css
+              |    |-- index.js
+
+ 
  * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
 2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
 Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
