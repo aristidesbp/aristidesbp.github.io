@@ -9,7 +9,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 
-# EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
 * Download do aplicativo direto no github:
