@@ -59,6 +59,45 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; paddi
 .detalhes-ocultos { display: none; max-height: 300px; overflow-y: auto; padding: 0 20px; }
         
         </style>
+ 
+<!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<script>
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
+    }
+}
+
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
 </head>
 <body>
 
@@ -85,9 +124,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; paddi
 </footer>
 
 <script>
-  const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  
 
 let produtosFull = [];
 let carrinho = [];
