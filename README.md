@@ -9,7 +9,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FAZES DO PROJETOS 
+# FASES DO PROJETOS 
 ```
 1- Exportar paginas do projetos criadas no GOOGLE STITSH 🐨;
 2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos);
