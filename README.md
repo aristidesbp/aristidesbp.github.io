@@ -15,15 +15,17 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * Download do aplicativo direto no github:
 Acesse o link oficial (não uso da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
 ```
-# ISTO É UM COMENTÁRIO, PODE COLAR NO TERMUX!!!
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
 ```
 ```
-# atualizando o termux:
+# comando para atualizar o termux:
 pkg update && pkg upgrade -y
 ```
 ```
-# autorizando o uso de pastas do celular
+# comando para autorizar o uso de pastas do celular
 termux-setup-storage
 ```
 ```
@@ -35,9 +37,9 @@ pkg install curl -y
 pkg install tree -y
 pkg install tree -y
 ```
-```  
+```
+# comando para criar pasta
 mkdir novo_projeto
-# para criar pasta/diretorios
 ```
 ``` 
 nano teste.txt 
