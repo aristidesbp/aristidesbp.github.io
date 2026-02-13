@@ -330,6 +330,10 @@ WHERE schemaname = 'public'
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FASES DO PROJETOS 
+## REQUISITOS PARA O PROJETO: 
+* TER UMA CONTA GUIHUB
+* TER UMA CONTA NO SUPABASE
+* TER UMA CONTA NO MERCADO PAGO
 ```
 ## Como executar o projeto: (persona: Aristidesbp)
 1- Exportar paginas do projetos criadas no GOOGLE STITSH 🐨;
