@@ -46,7 +46,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
               L__ REDME.md
      
 ```
-## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DO ARQUIVO login.html
+## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DOS ARQUIVOS HTML.
 ```
 <!-- LOGIN.HTML ############################################################### --> 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
