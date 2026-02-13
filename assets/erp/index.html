@@ -85,119 +85,154 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; paddi
 </footer>
 
 <script>
-const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
-const supabaseKey = 'SUA_CHAVE_AQUI'; // Use a chave do seu produtos.html
+  const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-let produtos = [];
+let produtosFull = [];
 let carrinho = [];
-let scanner;
+let html5QrCode;
 
-async function inicializar() {
-    const { data, error } = await _supabase.from('produtos').select('*');
-    if (error) return console.error("Erro ao carregar:", error);
-    
-    produtos = data;
-    renderizar(produtos);
-    popularCategorias(data);
+// --- INICIALIZAÇÃO ---
+async function carregarTudo() {
+    try {
+        // Busca produtos do banco
+        const { data, error } = await _supabase.from('produtos').select('*').order('nome');
+        
+        if (error) throw error;
+
+        produtosFull = data || [];
+        
+        if (produtosFull.length === 0) {
+            document.getElementById('lista-produtos').innerHTML = '<p class="text-center p-10">Nenhum produto cadastrado.</p>';
+        } else {
+            renderizarProdutos(produtosFull);
+            popularCategorias(produtosFull);
+        }
+    } catch (err) {
+        console.error("Erro ao carregar vitrine:", err);
+        alert("Erro ao conectar com o banco de dados.");
+    }
 }
 
-function popularCategorias(data) {
-    const categorias = [...new Set(data.map(p => p.categoria_prod).filter(c => c))];
+// --- CATEGORIAS (SELECT DINÂMICO) ---
+function popularCategorias(dados) {
     const select = document.getElementById('filtro-categoria');
-    categorias.forEach(cat => {
+    // Extrai categorias únicas e remove nulos/vazios
+    const categorias = [...new Set(dados.map(p => p.categoria_prod).filter(c => c && c.trim() !== ""))];
+    
+    select.innerHTML = '<option value="">Todas as Categorias</option>';
+    categorias.sort().forEach(cat => {
         select.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
 }
 
-function renderizar(lista) {
+// --- RENDERIZAÇÃO ---
+function renderizarProdutos(lista) {
     const container = document.getElementById('lista-produtos');
     container.innerHTML = lista.map(p => `
         <div class="card-prod">
-            <img src="${p.imagem_url || ''}" class="prod-img">
+            <img src="${p.imagem_url || 'https://via.placeholder.com/150'}" class="prod-img">
             <div class="p-3">
                 <h4 class="font-bold text-sm truncate">${p.nome}</h4>
                 <p class="text-green-600 font-bold">R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
                 <p class="text-xs text-gray-400">Estoque: ${p.estoque_atual}</p>
             </div>
-            <button class="btn-add" onclick="adicionar('${p.id}')">ADICIONAR</button>
+            <button class="btn-add" onclick="adicionarAoCarrinho('${p.id}')">ADICIONAR</button>
         </div>
     `).join('');
 }
 
-function adicionar(id) {
-    const p = produtos.find(item => item.id === id);
-    carrinho.push(p);
-    atualizarCarrinho();
+// --- CARRINHO ---
+function adicionarAoCarrinho(id) {
+    const produto = produtosFull.find(p => p.id === id);
+    if (produto.estoque_atual <= 0) {
+        alert("Produto sem estoque disponível!");
+        return;
+    }
+    carrinho.push(produto);
+    atualizarCheckout();
 }
 
-function atualizarCarrinho() {
+function atualizarCheckout() {
     const total = carrinho.reduce((acc, p) => acc + parseFloat(p.preco_venda), 0);
     document.getElementById('total-itens').innerText = `${carrinho.length} itens`;
     document.getElementById('valor-total').innerText = `R$ ${total.toFixed(2)}`;
 }
 
+// --- FINALIZAR (ESTOQUE + FINANCEIRO) ---
 async function finalizarVenda() {
-    if (carrinho.length === 0) return alert("Carrinho vazio!");
+    if (carrinho.length === 0) return alert("Adicione produtos primeiro!");
 
     const totalVenda = carrinho.reduce((acc, p) => acc + parseFloat(p.preco_venda), 0);
 
-    // 1. Registrar no Financeiro
+    // 1. LANÇAMENTO FINANCEIRO
     const { error: errFin } = await _supabase.from('financeiro').insert([{
+        descricao: `Venda Vitrine: ${carrinho.length} itens`,
         tipo: 'receber',
-        descricao: `Venda PDV - ${carrinho.length} itens`,
         valor: totalVenda,
         status: 'pago',
-        data_pagamento: new Date().toISOString().split('T')[0]
+        data_pagamento: new Date().toISOString().split('T')[0],
+        data_vencimento: new Date().toISOString().split('T')[0],
+        categoria: 'Venda PDV'
     }]);
 
-    // 2. Baixar Estoque
+    if (errFin) return alert("Erro no financeiro: " + errFin.message);
+
+    // 2. BAIXA DE ESTOQUE
     for (const item of carrinho) {
         await _supabase.from('produtos')
             .update({ estoque_atual: item.estoque_atual - 1 })
             .eq('id', item.id);
     }
 
-    if (!errFin) {
-        alert("Venda Finalizada com Sucesso!");
-        carrinho = [];
-        atualizarCarrinho();
-        inicializar(); // Recarrega para atualizar números de estoque na tela
-    }
+    alert("Venda realizada e estoque atualizado!");
+    carrinho = [];
+    atualizarCheckout();
+    carregarTudo(); // Recarrega vitrine para atualizar estoque visualmente
 }
 
-// Lógica de Busca e Scanner
+// --- BUSCA E FILTROS ---
 function filtrar() {
     const termo = document.getElementById('busca').value.toLowerCase();
     const cat = document.getElementById('filtro-categoria').value;
-    const filtrados = produtos.filter(p => 
-        (p.nome.toLowerCase().includes(termo) || (p.codigo_de_barras && p.codigo_de_barras.includes(termo))) &&
-        (cat === "" || p.categoria_prod === cat)
-    );
-    renderizar(filtrados);
+    
+    const filtrados = produtosFull.filter(p => {
+        const matchesBusca = p.nome.toLowerCase().includes(termo) || 
+                             (p.codigo_de_barras && p.codigo_de_barras.includes(termo)) ||
+                             (p.sku && p.sku.toLowerCase().includes(termo));
+        const matchesCat = cat === "" || p.categoria_prod === cat;
+        return matchesBusca && matchesCat;
+    });
+    renderizarProdutos(filtrados);
 }
 
+// --- SCANNER PDV ---
 function toggleScanner() {
     const div = document.getElementById('reader');
     if (div.style.display === 'block') {
-        scanner.stop();
-        div.style.display = 'none';
+        html5QrCode.stop().then(() => { div.style.display = 'none'; });
     } else {
         div.style.display = 'block';
-        scanner = new Html5Qrcode("reader");
-        scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
-            const p = produtos.find(prod => prod.codigo_de_barras === text);
-            if (p) {
-                adicionar(p.id);
-                alert("Adicionado: " + p.nome);
+        html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            (decodedText) => {
+                const p = produtosFull.find(prod => prod.codigo_de_barras === decodedText);
+                if (p) {
+                    adicionarAoCarrinho(p.id);
+                    alert("Adicionado: " + p.nome);
+                } else {
+                    alert("Produto não encontrado no sistema.");
+                }
             }
-        });
+        ).catch(err => alert("Erro na câmera: " + err));
     }
 }
 
-document.addEventListener('DOMContentLoaded', inicializar);
+document.addEventListener('DOMContentLoaded', carregarTudo);
     
-
     
 </script>
 </body>
