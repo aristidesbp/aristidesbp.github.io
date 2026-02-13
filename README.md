@@ -1848,8 +1848,10 @@ CREATE POLICY "Gerenciar seus próprios produtos"
 ON produtos FOR ALL 
 USING (auth.uid() = user_id);
     
--- Adicionar coluna
+-- Adicionar colunas
 ALTER TABLE produtos ADD COLUMN data_compra DATE;
+
+ALTER TABLE produtos ADD COLUMN imagem_url TEXT;
 -->
 
 </body>
