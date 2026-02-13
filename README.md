@@ -11,8 +11,9 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FAZES DO PROJETOS 
 ```
-1- Criação das paginas do projetos utilizando o GOOGLE STITSH 🐨;
-2- Arquitetura de Pastas e Arquivos:
+1- Exportar paginas do projetos criadas no GOOGLE STITSH 🐨;
+2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos);
+3- Arquitetura de Pastas e Arquivos:
  * Criar pasta Raiz (Principal com o nome do projeto):
    - Devem ficar apenas os arquivos html e arquivos de configuração global js
    - Exemplo: # pasta_nome_do_projeto/
