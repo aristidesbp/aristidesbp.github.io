@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine Digital - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link rel="stylesheet" href="vitrine.css">
+<style>
+  :root { --primary: #3ecf8e; --accent: #6366f1; --dark: #0f172a; --bg: #f8fafc; }
+
+body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-top: 130px; padding-bottom: 100px; }
+
+.header-fixo { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; }
+
+.search-bar-container { display: flex; gap: 10px; margin-bottom: 12px; }
+
+#busca-vitrine { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
+
+.btn-scan-pdv { background: var(--accent); color: white; border: none; width: 50px; border-radius: 12px; cursor: pointer; }
+
+#reader-pdv { width: 100%; border-radius: 12px; margin-top: 10px; display: none; overflow: hidden; }
+
+.categorias-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.cat-chip { padding: 8px 18px; border-radius: 20px; background: #edf2f7; border: none; white-space: nowrap; font-weight: 600; color: #4a5568; }
+.cat-chip.active { background: var(--primary); color: white; }
+
+/* Grid de Produtos */
+.grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+
+.card-produto { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.2s; position: relative; }
+
+.img-vitrine { width: 100%; height: 140px; object-fit: cover; background: #f1f5f9; }
+
+.info-prod { padding: 12px; }
+.info-prod h4 { margin: 0; font-size: 14px; color: var(--dark); }
+.info-prod .preco { color: var(--primary); font-weight: 800; font-size: 16px; margin: 5px 0; }
+
+.btn-add-vitrine { width: 100%; padding: 10px; border: none; background: #f1f5f9; color: var(--dark); font-weight: bold; border-radius: 10px; cursor: pointer; }
+.btn-add-vitrine:active { transform: scale(0.95); }
+
+/* Rodapé Checkout */
+.checkout-footer { position: fixed; bottom: 0; width: 100%; background: white; border-top: 2px solid #edf2f7; z-index: 1001; }
+.resumo-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 20px; cursor: pointer; }
+.btn-finalizar { width: calc(100% - 40px); margin: 0 20px 20px; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; }
+.detalhes-ocultos { display: none; max-height: 300px; overflow-y: auto; padding: 0 20px; }
+
+  </style>
+
+</head>
+<body>
+
+<header class="header-fixo">
+    <div class="search-bar-container">
+        <input type="text" id="busca-vitrine" placeholder="Buscar produto ou SKU..." onkeyup="filtrarVitrine()">
+        <button class="btn-scan-pdv" onclick="abrirScannerPDV()">
+            <i class="fas fa-barcode"></i>
+        </button>
+    </div>
+    <div id="reader-pdv"></div>
+    
+    <div class="categorias-scroll" id="lista-categorias">
+        <button class="cat-chip active" onclick="filtrarCategoria('todas')">Todas</button>
+    </div>
+</header>
+
+<main class="container-vitrine">
+    <div id="grid-produtos" class="grid-produtos">
+        </div>
+</main>
+
+<footer class="checkout-footer">
+    <div class="resumo-carrinho" onclick="toggleDetalhesCarrinho()">
+        <div class="info-itens">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="carrinho-qtd">0 itens</span>
+        </div>
+        <div class="total-carrinho">
+            <small>Total:</small>
+            <span id="carrinho-total">R$ 0,00</span>
+        </div>
+    </div>
+    
+    <div id="carrinho-detalhes" class="detalhes-ocultos">
+        <div id="itens-checkout"></div>
+        <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar Pedido / Venda</button>
+    </div>
+</footer>
+
+<script>
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'SUA_CHAVE_ANON_AQUI'; // Use a chave do seu arquivo anterior
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let produtosFull = [];
+let carrinho = [];
+let html5QrCode;
+
+// Carregar Produtos da Tabela
+async function carregarVitrine() {
+    const { data, error } = await _supabase.from('produtos').select('*').order('nome');
+    if (error) return console.error(error);
+    
+    produtosFull = data;
+    renderizarProdutos(data);
+    gerarCategorias(data);
+}
+
+function renderizarProdutos(lista) {
+    const grid = document.getElementById('grid-produtos');
+    grid.innerHTML = lista.map(p => `
+        <div class="card-produto" data-categoria="${p.categoria_prod}">
+            <img src="${p.imagem_url || 'https://via.placeholder.com/150'}" class="img-vitrine">
+            <div class="info-prod">
+                <h4>${p.nome}</h4>
+                <p class="preco">R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
+                <button class="btn-add-vitrine" onclick="addAoCarrinho('${p.id}')">Adicionar +</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Lógica do Carrinho / PDV
+function addAoCarrinho(id) {
+    const produto = produtosFull.find(p => p.id === id);
+    const itemExistente = carrinho.find(i => i.id === id);
+
+    if (itemExistente) {
+        itemExistente.qtd++;
+    } else {
+        carrinho.push({ ...produto, qtd: 1 });
+    }
+    atualizarInterfaceCarrinho();
+}
+
+function atualizarInterfaceCarrinho() {
+    const qtdTotal = carrinho.reduce((acc, cur) => acc + cur.qtd, 0);
+    const valorTotal = carrinho.reduce((acc, cur) => acc + (cur.qtd * cur.preco_venda), 0);
+
+    document.getElementById('carrinho-qtd').innerText = `${qtdTotal} itens`;
+    document.getElementById('carrinho-total').innerText = `R$ ${valorTotal.toFixed(2)}`;
+    
+    // Lista itens no detalhe
+    document.getElementById('itens-checkout').innerHTML = carrinho.map(i => `
+        <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+            <span>${i.qtd}x ${i.nome}</span>
+            <span>R$ ${(i.qtd * i.preco_venda).toFixed(2)}</span>
+        </div>
+    `).join('');
+}
+
+// Scanner para PDV (Busca por Código de Barras)
+function abrirScannerPDV() {
+    const reader = document.getElementById('reader-pdv');
+    reader.style.display = 'block';
+    html5QrCode = new Html5Qrcode("reader-pdv");
+    
+    html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
+        const prodEncontrado = produtosFull.find(p => p.codigo_de_barras === text || p.sku === text);
+        if (prodEncontrado) {
+            addAoCarrinho(prodEncontrado.id);
+            alert(`Adicionado: ${prodEncontrado.nome}`);
+        } else {
+            alert("Produto não encontrado!");
+        }
+        fecharScanner();
+    });
+}
+
+function fecharScanner() {
+    if(html5QrCode) html5QrCode.stop().then(() => { document.getElementById('reader-pdv').style.display='none'; });
+}
+
+// Filtros
+function filtrarVitrine() {
+    const termo = document.getElementById('busca-vitrine').value.toLowerCase();
+    const filtrados = produtosFull.filter(p => 
+        p.nome.toLowerCase().includes(termo) || 
+        (p.sku && p.sku.toLowerCase().includes(termo)) ||
+        (p.codigo_de_barras && p.codigo_de_barras.includes(termo))
+    );
+    renderizarProdutos(filtrados);
+}
+
+function toggleDetalhesCarrinho() {
+    const div = document.getElementById('carrinho-detalhes');
+    div.style.display = div.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('DOMContentLoaded', carregarVitrine);
+  
+  
+</script>
+</body>
+</html>
