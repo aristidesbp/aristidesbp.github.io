@@ -6,7 +6,58 @@
 <title>SISTEMA ERP ABP - Inicio</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="index/style.css">
+<style>
+ /* Custom Glassmorphism e Classes auxiliares */
+@layer components {
+    .glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
 
+/* Light Theme overrides */
+.light body { 
+    background-color: #f6f6f8; 
+    color: #1e293b; 
+}
+
+.light .glass { 
+    background: rgba(255, 255, 255, 0.7); 
+    border: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+.light .service-card { 
+    background: white; 
+    border-color: #e2e8f0; 
+}
+
+/* Utilitários de Hover */
+.service-card:hover { 
+    border-color: #2563eb; 
+    transform: translateY(-4px); 
+}
+
+/* Estilização para o feedback de sucesso no botão */
+.bg-success {
+    background-color: #10b981 !important; /* emerald-500 */
+}
+
+/* Spinner de carregamento */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+ </style>
 
 
  <!-- CONEXÃO SUPABASE -->   
