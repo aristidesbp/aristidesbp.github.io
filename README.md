@@ -1607,12 +1607,6 @@ USING (auth.uid() = user_id);
         <label>Data de Compra</label>
         <input type="date" id="data_compra">
     </div>
-    <div>
-        <label>Marca</label>
-        <input type="text" id="marca">
-    </div>
-</div>
-            
 
             
             <div>
