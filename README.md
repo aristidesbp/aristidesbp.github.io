@@ -586,6 +586,7 @@ async function salvarNovaSenha() {
 </body>
 </html>
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # entidades.html
 ```
 <!DOCTYPE html>
@@ -1209,8 +1210,8 @@ USING (auth.uid() = user_id);
 </html>
 ```
 
-
-# produtos.html
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# produtos.html (com leito codigo de barra)
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
