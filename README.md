@@ -10,6 +10,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FAZES DO PROJETOS 
+```
 1- Criação das paginas do projetos utilizando o GOOGLE STITSH 🐨;
 2- Arquitetura de Pastas e Arquivos:
  * Criar pasta Raiz (Principal com o nome do projeto):
@@ -43,7 +44,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
               |
               L__ REDME.md
      
-
+```
 ## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DO ARQUIVO login.html
 ```
 <!-- LOGIN.HTML ############################################################### --> 
