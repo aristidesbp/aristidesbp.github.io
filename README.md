@@ -7,33 +7,6 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **GitHub:** [https://github.com/aristidesbp](https://github.com/aristidesbp)
 
 
-## 📑 Índice
-
-- [PERSONA: Aristides B Pontes](#persona-aristides-b-pontes)
-- [📌 CONTATOS](#-contatos)
-
-- [TUTORIAIS](#tutoriais)
-  - [TERMUX](#termux)
-  - [GITHUB](#github)
-  - [GITHUB : BAIXAR E ENVIAR ARQUIVOS](#github--baixar-e-enviar-arquivos)
-  - [SERVIDOR PYTHON](#servidor-python)
-
-- [ADICIONANDO COLABORADORES NO GITHUB](#adicionando-colaboradores-no-github)
-
-- [COMO BAIXAR MIDIAS COM TERMUX](#como-baixar-midias-com-termux)
-
-- [SUPABASE](#supabase)
-  - [RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)](#-reset-total-do-supabase-caso-nao-queira-excluir-o-projeto-dados--auth--storage)
-  - [COMO FAZER BKP DO SUPABASE](#como-fazer-bkp-do-supabase)
-
-- [EXEMPLOS DOS MEUS CODIGOS COMPLETOS](#exemplos-dos-meus-codigos-completos)
-  - [login.html](#loginhtml)
-  - [entidades.html](#entidadeshtml)
-  - [SQL de ENTIDADES](#sql-de-entidades)
- 
-      
-
-# TUTORIAIS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
 * Download do aplicativo direto no github:
