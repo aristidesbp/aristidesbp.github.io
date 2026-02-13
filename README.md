@@ -8,68 +8,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASES DO PROJETOS 
-```
-1- Exportar paginas do projetos criadas no GOOGLE STITSH 🐨;
-2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos);
-3- Arquitetura de Pastas e Arquivos:
- * Criar pasta Raiz (Principal com o nome do projeto):
-   - Devem ficar apenas os arquivos html e arquivos de configuração global js
-   - Exemplo: # pasta_nome_do_projeto/
-              |__ supabase_config.js
-              |__ verificar_login.js
-              |__ navbar.js
-              |__ index.html
-              |__ index/
-              |    |__ index.css
-              |    |__ index.js
-              |  
-              |__ login.html
-              |__ login/
-              |    |__ login.css
-              |    |__ login.js (cada função JS terá um arquivo, aqui fica referente a página realizando)
-              |    |__ alternar_senha.js
-              |    |__ realiza_login.js
-              |    |__ alternar_cadastro.js
-              |    |__ recuperar_senha.js
-              |    L__ login_loogle.js
-              |
-              |__ notas.html
-              |__ notas/
-              |    |__ notas.css
-              |    |__ listar_notas.js
-              |    |__ deletar_notas.js
-              |    |__ exportar_notas.js
-              |    |__ pesquisar_notas.js
-              |
-              L__ REDME.md
-     
-```
-## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DOS ARQUIVOS HTML.
-```
-<!-- LOGIN.HTML ############################################################### --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
-    <!-- ###################################################################### --> 
-```
-```
-<!-- NOTAS.HTML ############################################################### --> 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase_config.js"></script>
-<script src="notas/listar_notas.js"></script>
-<script src="notas/deletar_notas.js"></script>
-<script src="notas/pesquisar_notas.js"></script>
-<script src="notas/exportar_notas.js"></script>
-<script src="notas/editar_notas.js"></script> 
-<script src="navbar.js"></script>
-<!-- ########################################################################## --> 
-```
+
 # EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
@@ -387,6 +326,69 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASES DO PROJETOS 
+```
+## Como executar o projeto: (persona: Aristidesbp)
+1- Exportar paginas do projetos criadas no GOOGLE STITSH 🐨;
+2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos);
+3- Arquitetura de Pastas e Arquivos:
+ * Criar pasta Raiz (Principal com o nome do projeto):
+   - Devem ficar apenas os arquivos html e arquivos de configuração global js
+   - Exemplo: # pasta_nome_do_projeto/
+              |__ supabase_config.js
+              |__ verificar_login.js
+              |__ navbar.js
+              |__ index.html
+              |__ index/
+              |    |__ index.css
+              |    |__ index.js
+              |  
+              |__ login.html
+              |__ login/
+              |    |__ login.css
+              |    |__ login.js (cada função JS terá um arquivo, aqui fica referente a página realizando)
+              |    |__ alternar_senha.js
+              |    |__ realiza_login.js
+              |    |__ alternar_cadastro.js
+              |    |__ recuperar_senha.js
+              |    L__ login_loogle.js
+              |
+              |__ cadastrar_notas.html
+              |__ listar_notas.html
+              |__ notas/
+              |    |__ notas.css
+              |    |__ listar_notas.js
+              |    |__ deletar_notas.js
+              |    |__ exportar_notas.js
+              |    |__ pesquisar_notas.js
+              |
+              L__ REDME.md
+     
+
+## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DOS ARQUIVOS HTML.
+
+<!-- LOGIN.HTML ############################################################### --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    <script src="login/alternar_senha.js"></script>
+    <script src="login/realizar_login.js"></script>
+    <script src="login/realizar_cadastro.js"></script>
+    <script src="login/recuperar_senha.js"></script>
+    <script src="login/login_google.js"></script>
+<!-- ###################################################################### --> 
+
+<!-- NOTAS.HTML ############################################################### --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="supabase_config.js"></script>
+<script src="notas/listar_notas.js"></script>
+<script src="notas/deletar_notas.js"></script>
+<script src="notas/pesquisar_notas.js"></script>
+<script src="notas/exportar_notas.js"></script>
+<script src="notas/editar_notas.js"></script> 
+<script src="navbar.js"></script>
+<!-- ########################################################################## --> 
+```
 
 
 # EXEMPLOS DOS CODIGOS
