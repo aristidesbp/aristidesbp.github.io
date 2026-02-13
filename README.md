@@ -358,6 +358,7 @@ WHERE schemaname = 'public'
               |__ listar_notas.html
               |__ notas/
               |    |__ notas.css
+              |    |__ notas.js
               |    |__ listar_notas.js
               |    |__ deletar_notas.js
               |    |__ exportar_notas.js
