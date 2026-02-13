@@ -15,57 +15,59 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
  * Criar pasta Raiz (Principal com o nome do projeto):
    - Devem ficar apenas os arquivos html e arquivos de configuração global js
    - Exemplo: # pasta_nome_do_projeto/
-              |-- supabase_config.js
-              |-- verificar_login.js
-              |-- navbar.js
-              |-- index.html
-              |--index/
-              |    |-- index.css
-              |    |-- index.js
+              |__ supabase_config.js
+              |__ verificar_login.js
+              |__ navbar.js
+              |__ index.html
+              |__ index/
+              |    |__ index.css
+              |    |__ index.js
               |  
-              |-- login.html
-              |--index/
-              |    |-- index.css
-              |    |-- index.js
+              |__ login.html
+              |__ login/
+              |    |__ login.css
+              |    |__ login.js (cada função JS terá um arquivo, aqui fica referente a página realizando)
+              |    |__ alternar_senha.js
+              |    |__ realiza_login.js
+              |    |__ alternar_cadastro.js
+              |    |__ recuperar_senha.js
+              |    L__ login_loogle.js
+              |
+              |__ notas.html
+              |__ notas/
+              |    |__ notas.css
+              |    |__ listar_notas.js
+              |    |__ deletar_notas.js
+              |    |__ exportar_notas.js
+              |    |__ pesquisar_notas.js
+              |
+              L__ REDME.md
+     
 
- 
- * Subpasta do Módulo: Criar uma pasta com o nome do módulo (ex: tarefas/, notas/) contendo os arquivos de lógica .js.
-2. Padrão de Nomenclatura e Divisão de Lógica (Scripts):
-Para cada novo módulo, divida a lógica nos seguintes arquivos dentro da subpasta:
- * listar_nome.js: Realiza o SELECT no Supabase e renderiza o HTML da lista.
- * criar_filtros.js: Adicionar filtros e campo de busca coerente com a listagem e ferramenta do sistema.
- * salvar_nome.js: Gerencia o INSERT e o UPDATE.
- * editar_nome.js: Captura o id da URL (ex: ?id=...) e preenche o formulário para edição.
- * deletar_nome.js: Realiza o DELETE no banco de dados.
- * limpar_nome.js: Reseta todos os campos do formulário e o estado do botão de salvar.
- * criar_tabela.sql: Criar codigo Sql capaz de criar tabela e apolicies coerente com o formulário presente na pagina.
-3. Integração e UI:
- * Navbar: Importar sempre o arquivo navbar.js da raiz.
- * Supabase: Utilizar window.supabaseClient configurado no supabase_config.js.
- * Botões de Ação: O botão de 'Editar' na lista deve redirecionar para a página de cadastro passando o ID via URL.
- * Tailwind & Ícones: Manter o uso do Tailwind CSS e Google Material Symbols/Icons conforme os padrões já estabelecidos nos módulos de Notas e Tarefas.
-4. Procedimento de Conversão:
-Ao receber um HTML do Google Stitch:
- * Identifique os campos de entrada (inputs) e a tabela correspondente no banco de dados.
- * Gere os arquivos HTML na raiz e os arquivos JS na subpasta do módulo.
- * Garanta que o botão de 'Salvar' alterne entre criar e atualizar com base na presença de um ID oculto no formulário."
-
-[COMO DEVO OPERAR NESSE PERFIL]
-* Análises Teóricas: Se você pedir uma análise, foco em sugestões conceituais sem gerar código;
-* Alterações Cirúrgicas: Ao editar código, altero apenas o necessário e preservo o restante fielmente;
-* Estrutura de Pastas: * Raiz: index.html, REDME.md globais e assets;
-* na pasta assets temos arquivos globais como: verificar_login.js, supabase_config.js, menu.html (o menu tem links para todos os projetos);
-* Pastas por Página: Cada página possui sua própria pasta (ex:login.html possui a pasta  "login/" contendo:  style.css, supabase.js e funções específicas);
-* Modularização Extrema: O código é entregue separado por linguagem (HTML, CSS, JS) e cada função JavaScript deve residir em seu próprio arquivo (um arquivo por função js);
-* todos os códigos JavaScript, em seu início deve ter um comentário com seu nome, e uma breve explicação para o que ele serve;
-* mande sempre arquivos completos se possivel, usando alterações cirúrgicas caso mesmo ja exista;
-[📋 Regras de Checklist e Arquivos]
-* sempre verifique na última conversa que tivermos se existe um checklist;
-* Rastreamento de Arquivos: Deve sempre incluir os nomes de todos os arquivos criados e presentes na mensagem anterior, me adicione os novos criados no checklist;
-* Objetivo do checklist: manter você sempre atualizada no projeto, como você já tem conhecimento da nossa estrutura, A ideia é que você sempre saiba o que foi feito, e quais arquivos existem;
+## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DO ARQUIVO login.html
 ```
-
-
+<!-- LOGIN.HTML ############################################################### --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    <script src="login/alternar_senha.js"></script>
+    <script src="login/realizar_login.js"></script>
+    <script src="login/realizar_cadastro.js"></script>
+    <script src="login/recuperar_senha.js"></script>
+    <script src="login/login_google.js"></script>
+    <!-- ###################################################################### --> 
+```
+```
+<!-- NOTAS.HTML ############################################################### --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="supabase_config.js"></script>
+<script src="notas/listar_notas.js"></script>
+<script src="notas/deletar_notas.js"></script>
+<script src="notas/pesquisar_notas.js"></script>
+<script src="notas/exportar_notas.js"></script>
+<script src="notas/editar_notas.js"></script> 
+<script src="navbar.js"></script>
+<!-- ########################################################################## --> 
+```
 # EXEMPLOS DE CONHECIMENTO TÉCNICO (RESUMOS PRATICOS)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
