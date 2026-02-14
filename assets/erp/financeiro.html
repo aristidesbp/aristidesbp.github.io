@@ -11,25 +11,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS Consolidado de financerio.css */
+        /* CONTEÚDO DE financerio.css */
         :root { 
             --primary: #3ecf8e; 
             --dark: #0f172a; 
             --bg: #f1f5f9; 
             --danger: #ef4444; 
         }
-
         * { box-sizing: border-box; }
-
         body { 
             margin: 0; 
             font-family: 'Segoe UI', sans-serif; 
             background: var(--bg); 
             padding-top: 85px; 
         }
-
         .container { max-width: 1200px; margin: auto; padding: 20px; }
-
         .card { 
             background: white; 
             padding: 25px; 
@@ -37,41 +33,33 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
             margin-bottom: 20px; 
         }
-
         .section-title { 
             color: var(--primary); font-size: 14px; text-transform: uppercase; 
             margin: 20px 0 10px; border-bottom: 1px solid #eee; 
             padding-bottom: 5px; font-weight: bold; 
         }
-
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-
         .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; }
         .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-
         .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
         td { padding: 12px 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
-
         .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .status-pago { background: #dcfce7; color: #166534; }
         .status-pendente { background: #fef9c3; color: #854d0e; }
-
         .label-tipo { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 5px; }
         .tipo-pagar { color: var(--danger); }
         .tipo-receber { color: var(--primary); }
-
         .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .resumo-card { padding: 15px; border-radius: 10px; color: white; text-align: center; }
         .resumo-entradas { background: #10b981; }
         .resumo-saidas { background: #ef4444; }
         .resumo-saldo { background: #3b82f6; }
-
-        .bulk-actions { margin-bottom: 10px; display: none; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; }
-        .btn-delete-bulk { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-left: 15px; }
+        .bulk-actions { margin-bottom: 10px; display: none; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; align-items: center; justify-content: space-between; }
+        .btn-delete-bulk { background: var(--danger); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
         .btn-action { background: none; border: none; cursor: pointer; font-size: 16px; margin-right: 8px; }
         .btn-pdf { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
     </style>
@@ -79,7 +67,7 @@
 <body>
 
 <div class="container">
-    <div class="card">
+    <div class="card" id="form-financeiro">
         <h3 id="form-title">Novo Lançamento</h3>
         <input type="hidden" id="edit-id">
         
@@ -106,12 +94,12 @@
         </div>
         
         <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Lançamento(s)</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetFormFinanceiro()">Cancelar Edição</button>
     </div>
 
     <div class="card">
         <div class="form-grid">
-            <div style="grid-column: span 2;"><label>Busca Inteligente (Tudo)</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Busque por descrição, categoria, valor..."></div>
+            <div style="grid-column: span 2;"><label>Busca Inteligente</label><input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Busque por descrição, categoria..."></div>
             <div><label>Início</label><input type="date" id="dataInicio" onchange="filtrarTabela()"></div>
             <div><label>Fim</label><input type="date" id="dataFim" onchange="filtrarTabela()"></div>
             <div style="display: flex; align-items: flex-end;">
@@ -153,17 +141,23 @@
 </div>
 
 <script>
-    // JS Consolidado de financeiro.js e outros
+    /* CONFIGURAÇÃO SUPABASE */
     const SUPABASE_URL = 'https://kjhjeaiwjilkgocwvbwi.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_WP3TF2GTMMWCS1tCYzQSjA_syIKLyIX';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    window.supabaseClient = _supabase; // Compatibilidade com outros scripts internos
 
-    let currentFinanceData = [];
-    let filteredData = [];
+    let baseFinanceira = [];
 
-    async function validarAcesso() {
-        const { data: { session } } = await _supabase.auth.getSession();
-        if (!session) window.location.href = 'login.html';
+    /* LÓGICA DE LISTAGEM (listar_financeiro.js / financeiro.js) */
+    async function loadFinanceiro() {
+        const { data, error } = await _supabase.from('financeiro')
+            .select('*, entidades(nome_completo)')
+            .order('data_vencimento', { ascending: true });
+        
+        if (error) return console.error(error);
+        baseFinanceira = data || [];
+        filtrarTabela();
     }
 
     function formatarDataBR(dataISO) {
@@ -172,205 +166,204 @@
         return `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
 
-    async function loadFinanceiro() {
-        const { data, error } = await _supabase.from('financeiro')
-            .select('*, entidades(nome_completo)')
-            .order('data_vencimento', { ascending: true });
-        
-        if (error) return;
-        currentFinanceData = data || [];
-        filtrarTabela();
+    function filtrarTabela() {
+        const busca = document.getElementById('inputBusca').value.toLowerCase();
+        const dInicio = document.getElementById('dataInicio').value;
+        const dFim = document.getElementById('dataFim').value;
+
+        const filtrados = baseFinanceira.filter(f => {
+            const txt = (f.descricao + (f.categoria || "")).toLowerCase().includes(busca);
+            const data = f.data_vencimento;
+            const fits = (!dInicio || data >= dInicio) && (!dFim || data <= dFim);
+            return txt && fits;
+        });
+
+        renderTable(filtrados);
     }
 
     function renderTable(data) {
         const list = document.getElementById('financeiro-list');
-        let e = 0, s = 0;
+        let ent = 0, sai = 0;
         
         list.innerHTML = data.map(f => {
-            const val = parseFloat(f.valor) || 0;
-            const tipoLabel = f.tipo === 'receber' ? 'Entrada' : 'Saída';
-            if(f.tipo === 'receber') e += val; else s += val;
-            
+            const v = parseFloat(f.valor) || 0;
+            const tipoLower = f.tipo.toLowerCase();
+            tipoLower === 'receber' ? ent += v : sai += v;
+
             return `
-            <tr>
-                <td><input type="checkbox" class="row-checkbox" value="${f.id}" onclick="updateBulkUI()"></td>
-                <td><span class="label-tipo tipo-${f.tipo}">${tipoLabel}</span></td>
-                <td>${f.descricao}</td>
-                <td>${f.categoria || '-'}</td>
-                <td>${f.forma_pagamento || '-'}</td>
-                <td>${formatarDataBR(f.data_vencimento)}</td>
-                <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '<small style="color:#ccc">---</small>'}</td>
-                <td><b>R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
-                <td><span class="status-badge status-${f.status}">${f.status}</span></td>
-                <td>
-                    <button class="btn-action" style="color:#3b82f6" onclick="editFinance('${f.id}')"><i class="fas fa-edit"></i></button>
-                    <button class="btn-action" style="color:#ef4444" onclick="deleteSingle('${f.id}')"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>`;
-        }).join('') || '<tr><td colspan="10" style="text-align:center">Nenhum resultado encontrado.</td></tr>';
-        
-        document.getElementById('total-receber').innerText = `R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-        document.getElementById('total-pagar').innerText = `R$ ${s.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-        document.getElementById('total-saldo').innerText = `R$ ${(e-s).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox" value="${f.id}" onclick="updateBulkUI()"></td>
+                    <td><span class="label-tipo tipo-${tipoLower}">${f.tipo}</span></td>
+                    <td>${f.descricao}</td>
+                    <td>${f.categoria || '-'}</td>
+                    <td>${f.forma_pagamento || '-'}</td>
+                    <td>${formatarDataBR(f.data_vencimento)}</td>
+                    <td>${f.data_pagamento ? formatarDataBR(f.data_pagamento) : '---'}</td>
+                    <td><b>R$ ${v.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></td>
+                    <td><span class="status-badge status-${f.status.toLowerCase()}">${f.status}</span></td>
+                    <td>
+                        <button onclick="prepararEdicao('${f.id}')" class="btn-action" style="color:#3b82f6"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteSingle('${f.id}')" class="btn-action" style="color:#ef4444"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+        }).join('');
+
+        document.getElementById('total-receber').innerText = `R$ ${ent.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+        document.getElementById('total-pagar').innerText = `R$ ${sai.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+        document.getElementById('total-saldo').innerText = `R$ ${(ent - sai).toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     }
 
-    function filtrarTabela() {
-        const busca = document.getElementById('inputBusca').value.toLowerCase();
-        const dIni = document.getElementById('dataInicio').value;
-        const dFim = document.getElementById('dataFim').value;
-        
-        filteredData = currentFinanceData.filter(f => {
-            const valorFormatado = parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2});
-            const tipoExtenso = f.tipo === 'receber' ? 'entrada' : 'saida saída';
-
-            const matchBusca = f.descricao.toLowerCase().includes(busca) || 
-                               (f.categoria && f.categoria.toLowerCase().includes(busca)) ||
-                               f.status.toLowerCase().includes(busca) ||
-                               valorFormatado.includes(busca) ||
-                               tipoExtenso.includes(busca);
-
-            let matchData = true;
-            if(dIni) matchData = matchData && (f.data_vencimento >= dIni);
-            if(dFim) matchData = matchData && (f.data_vencimento <= dFim);
-
-            return matchBusca && matchData;
-        });
-        renderTable(filteredData);
-    }
-
+    /* LÓGICA DE CADASTRO/EDIÇÃO (cadastrar_financeiro.js) */
     async function handleSave() {
-        const { data: { user } } = await _supabase.auth.getUser();
         const id = document.getElementById('edit-id').value;
-        const numParcelas = parseInt(document.getElementById('parcelas').value) || 1;
-        const valorParcela = parseFloat(document.getElementById('valor').value) || 0;
-        const dataString = document.getElementById('data_vencimento').value;
+        const qtdeParcelas = parseInt(document.getElementById('parcelas').value) || 1;
+        const dataVencInput = document.getElementById('data_vencimento').value;
 
-        if(!document.getElementById('descricao').value || !valorParcela || !dataString) return alert("Preencha os campos obrigatórios.");
+        if (!dataVencInput) return alert("Por favor, selecione a data do 1º Vencimento!");
 
-        const dadosBase = { 
-            user_id: user.id, 
-            tipo: document.getElementById('tipo').value, 
-            descricao: document.getElementById('descricao').value, 
-            valor: valorParcela, 
-            data_vencimento: dataString, 
-            data_pagamento: document.getElementById('data_pagamento').value || null, 
-            status: document.getElementById('status').value, 
-            entidade_id: document.getElementById('entidade_id').value || null, 
-            categoria: document.getElementById('categoria').value, 
-            forma_pagamento: document.getElementById('forma_pagamento').value 
+        const tipoRaw = document.getElementById('tipo').value;
+        const statusRaw = document.getElementById('status').value;
+
+        // Normalização conforme Ajustes.sql
+        const tipoFormatado = tipoRaw.charAt(0).toUpperCase() + tipoRaw.slice(1);
+        const statusFormatado = statusRaw.charAt(0).toUpperCase() + statusRaw.slice(1);
+
+        const dadosBase = {
+            tipo: tipoFormatado,
+            descricao: document.getElementById('descricao').value,
+            valor: parseFloat(document.getElementById('valor').value),
+            status: statusFormatado,
+            data_pagamento: document.getElementById('data_pagamento').value || null,
+            entidade_id: document.getElementById('entidade_id').value || null,
+            categoria: document.getElementById('categoria').value,
+            forma_pagamento: document.getElementById('forma_pagamento').value
         };
 
-        if(id) {
-            await _supabase.from('financeiro').update(dadosBase).eq('id', id);
+        if (!dadosBase.descricao || isNaN(dadosBase.valor)) return alert("Preencha a Descrição e o Valor!");
+
+        let res;
+        if (id) {
+            dadosBase.data_vencimento = dataVencInput;
+            res = await _supabase.from('financeiro').update(dadosBase).eq('id', id);
         } else {
             const lancamentos = [];
-            for(let i = 0; i < numParcelas; i++) {
-                let dt = new Date(dataString + "T12:00:00"); 
-                dt.setMonth(dt.getMonth() + i);
-                lancamentos.push({
-                    ...dadosBase, 
-                    descricao: numParcelas > 1 ? `${dadosBase.descricao} (${i+1}/${numParcelas})` : dadosBase.descricao,
-                    data_vencimento: dt.toISOString().split('T')[0]
-                });
+            let dataRef = new Date(dataVencInput + 'T00:00:00');
+            for (let i = 1; i <= qtdeParcelas; i++) {
+                const novo = { ...dadosBase };
+                if (qtdeParcelas > 1) novo.descricao = `${dadosBase.descricao} (${i}/${qtdeParcelas})`;
+                novo.data_vencimento = dataRef.toISOString().split('T')[0];
+                lancamentos.push(novo);
+                dataRef.setMonth(dataRef.getMonth() + 1);
             }
-            await _supabase.from('financeiro').insert(lancamentos);
+            res = await _supabase.from('financeiro').insert(lancamentos);
         }
-        resetForm(); loadFinanceiro();
+
+        if (res.error) alert("Erro ao salvar: " + res.error.message);
+        else {
+            alert("Salvo com sucesso!");
+            resetFormFinanceiro();
+            loadFinanceiro();
+        }
     }
 
-    function editFinance(id) {
-        const item = currentFinanceData.find(f => f.id === id);
-        document.getElementById('edit-id').value = item.id;
-        document.getElementById('tipo').value = item.tipo;
-        document.getElementById('descricao').value = item.descricao;
-        document.getElementById('valor').value = item.valor;
-        document.getElementById('data_vencimento').value = item.data_vencimento;
-        document.getElementById('data_pagamento').value = item.data_pagamento || '';
-        document.getElementById('status').value = item.status;
-        document.getElementById('entidade_id').value = item.entidade_id || '';
-        document.getElementById('categoria').value = item.categoria || '';
-        document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
-        document.getElementById('parcelas').disabled = true;
+    function prepararEdicao(id) {
+        const f = baseFinanceira.find(item => item.id === id);
+        if (!f) return;
+        document.getElementById('edit-id').value = f.id;
+        document.getElementById('tipo').value = f.tipo.toLowerCase();
+        document.getElementById('descricao').value = f.descricao;
+        document.getElementById('valor').value = f.valor;
+        document.getElementById('data_vencimento').value = f.data_vencimento;
+        document.getElementById('data_pagamento').value = f.data_pagamento || '';
+        document.getElementById('status').value = f.status.toLowerCase();
+        document.getElementById('entidade_id').value = f.entidade_id || '';
+        document.getElementById('categoria').value = f.categoria || '';
+        document.getElementById('forma_pagamento').value = f.forma_pagamento || '';
         document.getElementById('form-title').innerText = "Editando Lançamento";
-        document.getElementById('btn-save').innerText = "Atualizar Lançamento";
-        document.getElementById('btn-cancel').style.display = 'block';
-        window.scrollTo({top:0, behavior:'smooth'});
+        document.getElementById('btn-cancel').style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function resetForm() { 
-        document.querySelectorAll('input, select').forEach(i => i.value = (i.id==='parcelas'?1:'')); 
-        document.getElementById('edit-id').value = ''; 
-        document.getElementById('tipo').value = 'pagar'; 
-        document.getElementById('status').value = 'pendente'; 
-        document.getElementById('parcelas').disabled = false; 
-        document.getElementById('form-title').innerText = "Novo Lançamento"; 
-        document.getElementById('btn-save').innerText = "Salvar Lançamento(s)"; 
-        document.getElementById('btn-cancel').style.display = 'none'; 
+    /* LÓGICA DE EXCLUSÃO (deletar_financeiro.js) */
+    async function deleteSingle(id) {
+        if (!confirm("Tem certeza que deseja excluir este lançamento?")) return;
+        const { error } = await _supabase.from('financeiro').delete().eq('id', id);
+        if (error) alert("Erro ao excluir: " + error.message);
+        else loadFinanceiro();
     }
 
-    async function deleteSingle(id) { 
-        if(confirm("Excluir este lançamento?")) { 
-            await _supabase.from('financeiro').delete().eq('id', id); 
-            loadFinanceiro(); 
-        } 
+    function toggleSelectAll() {
+        const isChecked = document.getElementById('select-all').checked;
+        document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked);
+        updateBulkUI();
     }
 
-    function toggleSelectAll() { 
-        const isChecked = document.getElementById('select-all').checked; 
-        document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked); 
-        updateBulkUI(); 
+    async function deleteSelected() {
+        const ids = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+        if (ids.length === 0) return;
+        if (!confirm(`Excluir os ${ids.length} lançamentos selecionados?`)) return;
+        const { error } = await _supabase.from('financeiro').delete().in('id', ids);
+        if (error) alert("Erro: " + error.message);
+        else {
+            loadFinanceiro();
+            updateBulkUI();
+            document.getElementById('select-all').checked = false;
+        }
     }
 
-    function updateBulkUI() { 
-        const selected = document.querySelectorAll('.row-checkbox:checked').length; 
-        document.getElementById('bulk-area').style.display = selected > 0 ? 'block' : 'none'; 
-        document.getElementById('selected-count').innerText = `${selected} selecionados`; 
+    /* UTILITÁRIOS E LIMPEZA (autolimpeza_fin.js) */
+    function resetFormFinanceiro() {
+        document.querySelectorAll('#form-financeiro input, #form-financeiro select').forEach(i => {
+            if(i.id !== 'parcelas') i.value = '';
+            else i.value = '1';
+        });
+        document.getElementById('edit-id').value = '';
+        document.getElementById('form-title').innerText = "Novo Lançamento";
+        document.getElementById('status').value = 'pendente';
+        document.getElementById('tipo').value = 'pagar';
+        document.getElementById('btn-cancel').style.display = "none";
     }
 
-    async function deleteSelected() { 
-        if(!confirm("Excluir selecionados?")) return; 
-        const ids = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value); 
-        await _supabase.from('financeiro').delete().in('id', ids); 
-        loadFinanceiro(); 
-        updateBulkUI(); 
+    function updateBulkUI() {
+        const selected = document.querySelectorAll('.row-checkbox:checked').length;
+        const bulkArea = document.getElementById('bulk-area');
+        if (bulkArea) bulkArea.style.display = selected > 0 ? 'flex' : 'none';
+        document.getElementById('selected-count').innerText = `${selected} selecionados`;
     }
 
     function exportarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('l', 'mm', 'a4');
         doc.text("Extrato Financeiro - ERP ABP", 14, 15);
-        
-        const body = filteredData.map(f => [
-            f.tipo === 'receber' ? 'ENTRADA' : 'SAÍDA',
-            f.descricao,
-            f.categoria || '-',
-            f.forma_pagamento || '-',
-            formatarDataBR(f.data_vencimento),
-            f.data_pagamento ? formatarDataBR(f.data_pagamento) : '-',
-            `R$ ${parseFloat(f.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
-            f.status.toUpperCase()
+        const corpoPDF = baseFinanceira.map(f => [
+            f.tipo.toUpperCase(), f.descricao, f.categoria || '-', f.forma_pagamento || '-',
+            formatarDataBR(f.data_vencimento), f.data_pagamento ? formatarDataBR(f.data_pagamento) : '-',
+            `R$ ${parseFloat(f.valor).toFixed(2)}`, f.status.toUpperCase()
         ]);
-
         doc.autoTable({
             head: [['TIPO', 'DESCRIÇÃO', 'CATEGORIA', 'FORMA', 'VENC.', 'PAGTO.', 'VALOR', 'STATUS']],
-            body: body,
+            body: corpoPDF,
             startY: 25,
-            theme: 'striped',
+            theme: 'grid',
             styles: { fontSize: 8 }
         });
-        doc.save('extrato.pdf');
+        doc.save('financeiro.pdf');
     }
 
-    async function loadEntidadesSelect() { 
-        const { data } = await _supabase.from('entidades').select('id, nome_completo'); 
-        const select = document.getElementById('entidade_id'); 
-        if(data) data.forEach(e => { select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`; }); 
+    async function loadEntidades() {
+        const { data } = await _supabase.from('entidades').select('id, nome_completo');
+        const select = document.getElementById('entidade_id');
+        if(data) data.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.id; opt.textContent = e.nome_completo;
+            select.appendChild(opt);
+        });
     }
 
-    document.addEventListener('DOMContentLoaded', () => { 
-        validarAcesso();
-        loadEntidadesSelect(); 
-        loadFinanceiro(); 
+    /* INICIALIZAÇÃO */
+    document.addEventListener('DOMContentLoaded', () => {
+        loadEntidades();
+        loadFinanceiro();
     });
 </script>
 </body>
