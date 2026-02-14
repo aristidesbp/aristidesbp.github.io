@@ -19,10 +19,7 @@
             card.addEventListener('click', () => {
                 switch (titulo) {
                     case 'tarefas':
-                        window.location.href = 'listar_tarefas';
-                        break;
-                    case 'notas':
-                        window.location.href = 'listar_notas.html';
+                        window.location.href = 'listar_tarefas.html';
                         break;
                     case 'entidades':
                         window.location.href = 'listar_entidades.html';
