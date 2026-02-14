@@ -149,6 +149,18 @@
 
     let baseFinanceira = [];
 
+
+// --- 1. AUTENTICAÇÃO ---
+async function checarAutenticacao() {
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+    if (error || !session) window.location.href = "login.html";
+}
+
+
+
+
+
+    
     /* LÓGICA DE LISTAGEM (listar_financeiro.js / financeiro.js) */
     async function loadFinanceiro() {
         const { data, error } = await _supabase.from('financeiro')
