@@ -31,7 +31,7 @@
                         window.location.href = 'listar_financeiro.html';
                         break;
                     case 'bancos':
-                        window.location.href = 'listar_bancos.html;
+                        window.location.href = 'listar_bancos.html';
                         break;
                     case 'produtos':
                         window.location.href = 'listar_produtos.html';
