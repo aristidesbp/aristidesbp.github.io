@@ -3,9 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>PDV Móvel - ERP ABP</title>
+    <title>PDV Móvel Pro - ERP ABP</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
     
@@ -19,104 +21,126 @@
             }
         }
     </script>
+    <style>
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; display: none; }
+    </style>
 </head>
 
-<body class="bg-[#f6f7f8] dark:bg-background-dark min-h-screen pb-40">
+<body class="bg-[#f6f7f8] dark:bg-background-dark min-h-screen pb-48">
     <header class="bg-white dark:bg-background-dark border-b border-gray-100 dark:border-gray-800 p-4 sticky top-0 z-50">
         <div class="max-w-[480px] mx-auto space-y-4">
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold dark:text-white">PDV Móvel</h1>
-                <button onclick="window.location.href='index.html'" class="text-gray-500"><span class="material-symbols-outlined">home</span></button>
+                <h1 class="text-xl font-bold dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">point_of_sale</span> PDV Pro
+                </h1>
+                <div class="flex gap-2">
+                    <button onclick="toggleScanner()" class="p-2 bg-gray-100 dark:bg-gray-800 rounded-full">
+                        <span class="material-symbols-outlined">qr_code_scanner</span>
+                    </button>
+                    <button onclick="window.location.href='index.html'" class="p-2 text-gray-500">
+                        <span class="material-symbols-outlined">home</span>
+                    </button>
+                </div>
             </div>
             
+            <div id="reader" class="mb-4"></div>
+
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400">search</span>
-                <input type="text" id="inputBusca" oninput="buscarProdutos()" placeholder="Buscar produto por nome ou código..." 
-                    class="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-primary">
-                
-                <div id="resultadosBusca" class="absolute w-full bg-white dark:bg-gray-800 shadow-lg rounded-xl mt-1 hidden max-h-60 overflow-y-auto z-50"></div>
+                <input type="text" id="inputBusca" oninput="buscarProdutos()" placeholder="Nome ou código de barras..." 
+                    class="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-primary">
+                <div id="resultadosBusca" class="absolute w-full bg-white dark:bg-gray-800 shadow-2xl rounded-xl mt-1 hidden max-h-60 overflow-y-auto z-50 border dark:border-gray-700"></div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[480px] mx-auto p-4 space-y-4" id="lista-carrinho">
-        <div id="carrinho-vazio" class="text-center py-20 text-gray-500">
+    <main class="max-w-[480px] mx-auto p-4 space-y-3" id="lista-carrinho">
+        <div id="carrinho-vazio" class="text-center py-20 text-gray-400">
             <span class="material-symbols-outlined text-6xl">shopping_cart</span>
-            <p class="mt-2">O carrinho está vazio</p>
+            <p class="mt-2 font-medium">Carrinho pronto para vender</p>
         </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 px-4 pt-4 pb-8 z-40">
-        <div class="max-w-[480px] mx-auto flex flex-col gap-4">
-            <div class="flex flex-col gap-1">
-                <div class="flex justify-between items-center text-sm text-gray-500">
-                    <span>Subtotal</span>
-                    <span id="subtotal">R$ 0,00</span>
+    <footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 px-4 pt-4 pb-6 z-40">
+        <div class="max-w-[480px] mx-auto space-y-4">
+            <div class="flex justify-between items-end">
+                <div>
+                    <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Total da Venda</p>
+                    <p id="total-geral" class="text-3xl font-black text-primary tracking-tighter">R$ 0,00</p>
                 </div>
-                <div class="flex justify-between items-center mt-1">
-                    <span class="text-lg font-bold dark:text-white">Total</span>
-                    <span id="total-geral" class="text-2xl font-extrabold text-primary tracking-tight">R$ 0,00</span>
-                </div>
+                <button onclick="imprimirCupom()" id="btn-imprimir" class="hidden flex items-center gap-1 text-sm font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg">
+                    <span class="material-symbols-outlined text-sm">print</span> Recibo
+                </button>
             </div>
-            <button onclick="finalizarVenda()" class="w-full bg-primary hover:opacity-90 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">check_circle</span>
-                FINALIZAR VENDA
+            <button onclick="finalizarVenda()" class="w-full bg-primary hover:brightness-110 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-lg">
+                CONFIRMAR E FINALIZAR
             </button>
         </div>
     </footer>
 
     <script>
-        // Configuração Supabase
         const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let produtosDB = [];
         let carrinho = [];
+        let html5QrCode;
 
-        // Carregar produtos ao iniciar
         async function inicializar() {
-            const { data, error } = await _supabase.from('produtos').select('*');
+            const { data } = await _supabase.from('produtos').select('*');
             if (data) produtosDB = data;
+        }
+
+        // --- SCANNER DE CÂMERA ---
+        function toggleScanner() {
+            const readerDiv = document.getElementById('reader');
+            if (readerDiv.style.display === 'block') {
+                html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+            } else {
+                readerDiv.style.display = 'block';
+                html5QrCode = new Html5Qrcode("reader");
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 150 } },
+                    (decodedText) => {
+                        const p = produtosDB.find(prod => prod.codigo_barras === decodedText);
+                        if (p) {
+                            adicionarAoCarrinho(p.id);
+                            navigator.vibrate(100);
+                        }
+                    }
+                ).catch(err => alert("Câmera não disponível"));
+            }
         }
 
         function buscarProdutos() {
             const termo = document.getElementById('inputBusca').value.toLowerCase();
             const container = document.getElementById('resultadosBusca');
-            
-            if (termo.length < 2) {
-                container.classList.add('hidden');
-                return;
-            }
+            if (termo.length < 1) return container.classList.add('hidden');
 
             const filtrados = produtosDB.filter(p => 
-                p.nome.toLowerCase().includes(termo) || 
-                (p.codigo_barras && p.codigo_barras.includes(termo))
+                p.nome.toLowerCase().includes(termo) || (p.codigo_barras && p.codigo_barras.includes(termo))
             );
 
-            if (filtrados.length > 0) {
-                container.innerHTML = filtrados.map(p => `
-                    <div onclick="adicionarAoCarrinho('${p.id}')" class="p-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer flex justify-between">
-                        <span>${p.nome}</span>
-                        <span class="font-bold text-primary">R$ ${parseFloat(p.preco_venda).toFixed(2)}</span>
+            container.innerHTML = filtrados.map(p => `
+                <div onclick="adicionarAoCarrinho('${p.id}')" class="p-4 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-3">
+                    <img src="${p.imagem_url || 'https://via.placeholder.com/50'}" class="w-10 h-10 rounded-lg object-cover">
+                    <div class="flex-1">
+                        <div class="font-bold dark:text-white">${p.nome}</div>
+                        <div class="text-xs text-gray-500">Estoque: ${p.estoque_atual || 0}</div>
                     </div>
-                `).join('');
-                container.classList.remove('hidden');
-            } else {
-                container.innerHTML = `<div class="p-3 text-gray-500">Nenhum produto encontrado</div>`;
-            }
+                    <span class="font-bold text-primary text-sm">R$ ${parseFloat(p.preco_venda).toFixed(2)}</span>
+                </div>
+            `).join('');
+            container.classList.remove('hidden');
         }
 
         function adicionarAoCarrinho(id) {
             const produto = produtosDB.find(p => p.id === id);
-            const itemNoCarrinho = carrinho.find(item => item.id === id);
-
-            if (itemNoCarrinho) {
-                itemNoCarrinho.quantidade++;
-            } else {
-                carrinho.push({ ...produto, quantidade: 1 });
-            }
-
+            const item = carrinho.find(i => i.id === id);
+            if (item) item.quantidade++; else carrinho.push({ ...produto, quantidade: 1 });
+            
             document.getElementById('inputBusca').value = '';
             document.getElementById('resultadosBusca').classList.add('hidden');
             renderizarCarrinho();
@@ -126,88 +150,85 @@
             const item = carrinho.find(i => i.id === id);
             if (item) {
                 item.quantidade += delta;
-                if (item.quantidade <= 0) {
-                    carrinho = carrinho.filter(i => i.id !== id);
-                }
+                if (item.quantidade <= 0) carrinho = carrinho.filter(i => i.id !== id);
                 renderizarCarrinho();
             }
         }
 
         function renderizarCarrinho() {
             const lista = document.getElementById('lista-carrinho');
-            const subtotalEl = document.getElementById('subtotal');
             const totalEl = document.getElementById('total-geral');
+            const btnImp = document.getElementById('btn-imprimir');
             
             if (carrinho.length === 0) {
-                lista.innerHTML = `<div class="text-center py-20 text-gray-500"><span class="material-symbols-outlined text-6xl">shopping_cart</span><p>Carrinho vazio</p></div>`;
-                subtotalEl.innerText = "R$ 0,00";
+                lista.innerHTML = `<div class="text-center py-20 text-gray-400"><span class="material-symbols-outlined text-6xl">shopping_cart</span><p>Carrinho vazio</p></div>`;
                 totalEl.innerText = "R$ 0,00";
+                btnImp.classList.add('hidden');
                 return;
             }
 
+            btnImp.classList.remove('hidden');
             let total = 0;
             lista.innerHTML = carrinho.map(item => {
-                const totalItem = item.preco_venda * item.quantidade;
-                total += totalItem;
+                total += item.preco_venda * item.quantidade;
                 return `
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm flex items-center gap-4">
-                        <div class="h-16 w-16 bg-gray-100 rounded-xl flex items-center justify-center">
-                            <span class="material-symbols-outlined text-gray-400">package_2</span>
-                        </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm flex items-center gap-4 border border-gray-100 dark:border-gray-700">
+                        <img src="${item.imagem_url || 'https://via.placeholder.com/80'}" class="h-16 w-16 rounded-xl object-cover bg-gray-50">
                         <div class="flex-1">
-                            <h3 class="font-semibold dark:text-white">${item.nome}</h3>
-                            <p class="text-primary font-bold">R$ ${parseFloat(item.preco_venda).toFixed(2)}</p>
+                            <h3 class="font-bold text-sm dark:text-white line-clamp-1">${item.nome}</h3>
+                            <p class="text-primary font-black">R$ ${parseFloat(item.preco_venda).toFixed(2)}</p>
                         </div>
-                        <div class="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1">
-                            <button onclick="alterarQtd('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center text-xl">-</button>
-                            <span class="font-bold">${item.quantidade}</span>
-                            <button onclick="alterarQtd('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center text-xl">+</button>
+                        <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 rounded-xl p-1">
+                            <button onclick="alterarQtd('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-500">-</button>
+                            <span class="w-6 text-center font-bold dark:text-white">${item.quantidade}</span>
+                            <button onclick="alterarQtd('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-500">+</button>
                         </div>
                     </div>
                 `;
             }).join('');
-
-            subtotalEl.innerText = `R$ ${total.toFixed(2)}`;
             totalEl.innerText = `R$ ${total.toFixed(2)}`;
         }
 
+        // --- GERAÇÃO DE PDF ---
+        function imprimirCupom() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: 'mm', format: [80, 150] }); // Formato cupom térmico
+            
+            doc.setFontSize(12);
+            doc.text("ERP ABP - COMPROVANTE", 10, 10);
+            doc.setFontSize(8);
+            doc.text(`Data: ${new Date().toLocaleString()}`, 10, 16);
+            doc.text("------------------------------------------", 10, 20);
+            
+            let y = 25;
+            carrinho.forEach(item => {
+                doc.text(`${item.quantidade}x ${item.nome.substring(0, 20)}`, 10, y);
+                doc.text(`R$ ${(item.preco_venda * item.quantidade).toFixed(2)}`, 60, y);
+                y += 5;
+            });
+            
+            doc.text("------------------------------------------", 10, y + 2);
+            doc.setFontSize(10);
+            const total = carrinho.reduce((acc, i) => acc + (i.preco_venda * i.quantidade), 0);
+            doc.text(`TOTAL: R$ ${total.toFixed(2)}`, 10, y + 8);
+            
+            doc.save(`venda_${Date.now()}.pdf`);
+        }
+
         async function finalizarVenda() {
-            if (carrinho.length === 0) return alert("Adicione produtos ao carrinho!");
+            if (carrinho.length === 0) return alert("Carrinho vazio!");
+            const total = carrinho.reduce((acc, i) => acc + (i.preco_venda * i.quantidade), 0);
 
-            const totalVenda = carrinho.reduce((acc, item) => acc + (item.preco_venda * item.quantidade), 0);
+            const { data: v, error } = await _supabase.from('vendas').insert([{ total_venda: total, metodo_pagamento: 'Dinheiro' }]).select();
+            if (error) return alert("Erro ao salvar");
 
-            try {
-                // 1. Inserir a Venda
-                const { data: venda, error: erroVenda } = await _supabase
-                    .from('vendas')
-                    .insert([{ 
-                        total_venda: totalVenda, 
-                        metodo_pagamento: 'Dinheiro',
-                        data_venda: new Date().toISOString()
-                    }])
-                    .select();
+            const itens = carrinho.map(i => ({ venda_id: v[0].id, produto_id: i.id, quantidade: i.quantidade, preco_unitario: i.preco_venda }));
+            await _supabase.from('venda_itens').insert(itens);
 
-                if (erroVenda) throw erroVenda;
-
-                // 2. Inserir Itens da Venda
-                const itensParaInserir = carrinho.map(item => ({
-                    venda_id: venda[0].id,
-                    produto_id: item.id,
-                    quantidade: item.quantidade,
-                    preco_unitario: item.preco_venda
-                }));
-
-                const { error: erroItens } = await _supabase.from('venda_itens').insert(itensParaInserir);
-                if (erroItens) throw erroItens;
-
-                alert("Venda realizada com sucesso!");
-                carrinho = [];
-                renderizarCarrinho();
-
-            } catch (err) {
-                console.error(err);
-                alert("Erro ao processar venda.");
-            }
+            alert("Venda Concluída!");
+            imprimirCupom();
+            carrinho = [];
+            renderizarCarrinho();
         }
 
         document.addEventListener('DOMContentLoaded', inicializar);
