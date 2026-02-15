@@ -3,230 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV Profissional - ERP ABP</title>
+    <title>Vitrine & PDV - ERP ABP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         :root { --primary: #3ecf8e; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding-bottom: 140px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding-bottom: 120px; }
         .header-pdv { position: fixed; top: 0; width: 100%; background: white; z-index: 100; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 180px 15px 20px; }
-        .card-prod { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; }
-        .prod-img { width: 100%; height: 110px; object-fit: cover; background: #eee; }
-        .btn-add { width: 100%; background: var(--primary); color: white; padding: 10px; border: none; font-weight: bold; cursor: pointer; margin-top: auto; }
-        .footer-checkout { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; border-top: 2px solid var(--primary); z-index: 101; }
-        
-        /* Estilo para Impressão */
-        @media print {
-            body * { visibility: hidden; }
-            #cupom-fiscal, #cupom-fiscal * { visibility: visible; }
-            #cupom-fiscal { position: absolute; left: 0; top: 0; width: 80mm; font-family: monospace; font-size: 12px; }
-            .no-print { display: none; }
-        }
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 140px 15px 20px; }
+        .card-prod { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .prod-img { width: 100%; height: 120px; object-fit: cover; background: #eee; }
+        .btn-add { width: 100%; background: var(--primary); color: white; padding: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .footer-checkout { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; border-top: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; z-index: 101; }
+        #reader { width: 100%; display: none; margin-top: 10px; }
     </style>
+    <style>
+   :root { --primary: #3ecf8e; --accent: #6366f1; --dark: #0f172a; --bg: #f8fafc; }
+
+body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-top: 130px; padding-bottom: 100px; }
+
+.header-fixo { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; }
+
+.search-bar-container { display: flex; gap: 10px; margin-bottom: 12px; }
+
+#busca-vitrine { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
+
+.btn-scan-pdv { background: var(--accent); color: white; border: none; width: 50px; border-radius: 12px; cursor: pointer; }
+
+#reader-pdv { width: 100%; border-radius: 12px; margin-top: 10px; display: none; overflow: hidden; }
+
+.categorias-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.cat-chip { padding: 8px 18px; border-radius: 20px; background: #edf2f7; border: none; white-space: nowrap; font-weight: 600; color: #4a5568; }
+.cat-chip.active { background: var(--primary); color: white; }
+
+/* Grid de Produtos */
+.grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+
+.card-produto { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.2s; position: relative; }
+
+.img-vitrine { width: 100%; height: 140px; object-fit: cover; background: #f1f5f9; }
+
+.info-prod { padding: 12px; }
+.info-prod h4 { margin: 0; font-size: 14px; color: var(--dark); }
+.info-prod .preco { color: var(--primary); font-weight: 800; font-size: 16px; margin: 5px 0; }
+
+.btn-add-vitrine { width: 100%; padding: 10px; border: none; background: #f1f5f9; color: var(--dark); font-weight: bold; border-radius: 10px; cursor: pointer; }
+.btn-add-vitrine:active { transform: scale(0.95); }
+
+/* Rodapé Checkout */
+.checkout-footer { position: fixed; bottom: 0; width: 100%; background: white; border-top: 2px solid #edf2f7; z-index: 1001; }
+.resumo-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 20px; cursor: pointer; }
+.btn-finalizar { width: calc(100% - 40px); margin: 0 20px 20px; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; }
+.detalhes-ocultos { display: none; max-height: 300px; overflow-y: auto; padding: 0 20px; }
+        
+        </style>
+ 
+<!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<script>
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
+    }
+}
+
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
 </head>
 <body>
 
 <header class="header-pdv">
-    <div class="flex gap-2 mb-2">
-        <input type="text" id="busca" class="w-full p-3 border rounded-lg" placeholder="Produto ou Código..." onkeyup="filtrar()">
+    <div class="flex gap-2">
+        <input type="text" id="busca" class="w-full p-3 border rounded-lg" placeholder="Buscar produto ou ler código..." onkeyup="filtrar()">
         <button onclick="toggleScanner()" class="bg-indigo-500 text-white p-3 rounded-lg"><i class="fas fa-barcode"></i></button>
     </div>
-    
-    <div class="flex gap-2">
-        <select id="cliente-id" class="flex-1 p-2 border rounded-lg text-sm">
-            <option value="">Consumidor Final</option>
-        </select>
-        <select id="forma-pagamento" class="flex-1 p-2 border rounded-lg text-sm">
-            <option value="Dinheiro">Dinheiro</option>
-            <option value="Pix">Pix</option>
-            <option value="Cartão">Cartão</option>
-        </select>
-    </div>
-    <div id="reader" class="mt-2 hidden"></div>
+    <div id="reader"></div>
+    <select id="filtro-categoria" class="w-full mt-2 p-2 border rounded-lg" onchange="filtrar()">
+        <option value="">Todas as Categorias</option>
+    </select>
 </header>
 
-<div id="lista-produtos" class="grid-produtos"></div>
+<div id="lista-produtos" class="grid-produtos">
+    </div>
 
 <footer class="footer-checkout">
-    <div class="flex justify-between items-center mb-3">
-        <div>
-            <span class="block text-xs text-gray-500 uppercase font-bold" id="total-itens">0 itens</span>
-            <b class="text-2xl text-green-600" id="valor-total">R$ 0,00</b>
+    <div>
+        <span class="block text-sm text-gray-500" id="total-itens">0 itens</span>
+        <b class="text-xl" id="valor-total">R$ 0,00</b>
+    </div>
+    <button onclick="finalizarVenda()" class="bg-green-500 text-white px-6 py-3 rounded-xl font-bold">Finalizar Venda</button>
+
+
+<button onclick="abrirHistoricoVendas()" class="fixed bottom-32 right-5 bg-indigo-600 text-white p-4 rounded-full shadow-xl z-50">
+    <i class="fas fa-history"></i>
+</button>
+
+<div id="modal-historico" class="fixed inset-0 bg-black bg-opacity-50 z-[200] hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-width-2xl max-h-[80vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+        <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+            <h3 class="font-bold text-lg text-gray-800"><i class="fas fa-list-ul mr-2"></i>Vendas Recentes</h3>
+            <button onclick="fecharHistorico()" class="text-gray-500 text-2xl">&times;</button>
         </div>
-        <div class="flex flex-col gap-1">
-            <button onclick="limparCarrinho()" class="text-xs text-red-500 font-bold uppercase">Limpar</button>
-            <button onclick="finalizarVenda()" class="bg-green-500 text-white px-8 py-4 rounded-xl font-black shadow-lg">FINALIZAR (F2)</button>
+        <div class="overflow-y-auto p-4" id="lista-vendas-corpo">
+            <p class="text-center text-gray-500 py-10">Carregando histórico...</p>
         </div>
     </div>
+</div>
+
+
 </footer>
 
-<div id="cupom-fiscal" class="hidden"></div>
-
 <script>
-const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
-const supabaseKey = 'SUA_CHAVE_AQUI'; // Use a chave que você já tem
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  
 
 let produtosFull = [];
 let carrinho = [];
 let html5QrCode;
 
-async function carregarDados() {
-    // Carregar Produtos
-    const { data: prods } = await _supabase.from('produtos').select('*').order('nome');
-    produtosFull = prods || [];
-    renderizarProdutos(produtosFull);
+// --- INICIALIZAÇÃO ---
+async function carregarTudo() {
+    try {
+        // Busca produtos do banco
+        const { data, error } = await _supabase.from('produtos').select('*').order('nome');
+        
+        if (error) throw error;
 
-    // Carregar Clientes (Entidades)
-    const { data: ents } = await _supabase.from('entidades').select('id, nome_completo');
-    const select = document.getElementById('cliente-id');
-    ents?.forEach(e => {
-        select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`;
+        produtosFull = data || [];
+        
+        if (produtosFull.length === 0) {
+            document.getElementById('lista-produtos').innerHTML = '<p class="text-center p-10">Nenhum produto cadastrado.</p>';
+        } else {
+            renderizarProdutos(produtosFull);
+            popularCategorias(produtosFull);
+        }
+    } catch (err) {
+        console.error("Erro ao carregar vitrine:", err);
+        alert("Erro ao conectar com o banco de dados.");
+    }
+}
+
+// --- CATEGORIAS (SELECT DINÂMICO) ---
+function popularCategorias(dados) {
+    const select = document.getElementById('filtro-categoria');
+    // Extrai categorias únicas e remove nulos/vazios
+    const categorias = [...new Set(dados.map(p => p.categoria_prod).filter(c => c && c.trim() !== ""))];
+    
+    select.innerHTML = '<option value="">Todas as Categorias</option>';
+    categorias.sort().forEach(cat => {
+        select.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
 }
 
+// --- RENDERIZAÇÃO ---
 function renderizarProdutos(lista) {
     const container = document.getElementById('lista-produtos');
     container.innerHTML = lista.map(p => `
         <div class="card-prod">
             <img src="${p.imagem_url || 'https://via.placeholder.com/150'}" class="prod-img">
-            <div class="p-2">
-                <h4 class="font-bold text-xs h-8 overflow-hidden">${p.nome}</h4>
-                <p class="text-green-600 font-bold text-lg">R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
-                <p class="text-[10px] text-gray-400">Qtd: ${p.estoque_atual}</p>
+            <div class="p-3">
+                <h4 class="font-bold text-sm truncate">${p.nome}</h4>
+                <p class="text-green-600 font-bold">R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
+                <p class="text-xs text-gray-400">Estoque: ${p.estoque_atual}</p>
             </div>
-            <button class="btn-add" onclick="adicionarAoCarrinho('${p.id}')"><i class="fas fa-plus"></i></button>
+            <button class="btn-add" onclick="adicionarAoCarrinho('${p.id}')">ADICIONAR</button>
         </div>
     `).join('');
 }
 
+// --- CARRINHO ---
 function adicionarAoCarrinho(id) {
     const produto = produtosFull.find(p => p.id === id);
-    if (!produto || produto.estoque_atual <= 0) return alert("Sem estoque!");
-    
-    const itemNoCarrinho = carrinho.find(c => c.id === id);
-    if (itemNoCarrinho) {
-        itemNoCarrinho.quantidade++;
-    } else {
-        carrinho.push({ ...produto, quantidade: 1 });
+    if (produto.estoque_atual <= 0) {
+        alert("Produto sem estoque disponível!");
+        return;
     }
+    carrinho.push(produto);
     atualizarCheckout();
 }
 
 function atualizarCheckout() {
-    const total = carrinho.reduce((acc, p) => acc + (p.preco_venda * p.quantidade), 0);
-    const itens = carrinho.reduce((acc, p) => acc + p.quantidade, 0);
-    document.getElementById('total-itens').innerText = `${itens} itens`;
+    const total = carrinho.reduce((acc, p) => acc + parseFloat(p.preco_venda), 0);
+    document.getElementById('total-itens').innerText = `${carrinho.length} itens`;
     document.getElementById('valor-total').innerText = `R$ ${total.toFixed(2)}`;
 }
 
+// --- FINALIZAR (ESTOQUE + FINANCEIRO) ---
 async function finalizarVenda() {
-    if (carrinho.length === 0) return;
+    if (carrinho.length === 0) return alert("Adicione produtos primeiro!");
 
-    const clienteId = document.getElementById('cliente-id').value;
-    const pagamento = document.getElementById('forma-pagamento').value;
-    const totalVenda = carrinho.reduce((acc, p) => acc + (p.preco_venda * p.quantidade), 0);
+    const totalVenda = carrinho.reduce((acc, p) => acc + parseFloat(p.preco_venda), 0);
 
-    try {
-        // 1. Gravar na tabela Vendas
-        const { data: venda, error: ev } = await _supabase.from('vendas').insert([{
-            entidade_id: clienteId || null,
-            total_venda: totalVenda,
-            metodo_pagamento: pagamento
-        }]).select().single();
+    // 1. LANÇAMENTO FINANCEIRO
+    const { error: errFin } = await _supabase.from('financeiro').insert([{
+        descricao: `Venda Vitrine: ${carrinho.length} itens`,
+        tipo: 'receber',
+        valor: totalVenda,
+        status: 'pago',
+        data_pagamento: new Date().toISOString().split('T')[0],
+        data_vencimento: new Date().toISOString().split('T')[0],
+        categoria: 'Venda PDV'
+    }]);
 
-        if (ev) throw ev;
+    if (errFin) return alert("Erro no financeiro: " + errFin.message);
 
-        // 2. Gravar Itens e Baixar Estoque
-        for (const item of carrinho) {
-            await _supabase.from('venda_itens').insert([{
-                venda_id: venda.id,
-                produto_id: item.id,
-                quantidade: item.quantidade,
-                preco_unitario: item.preco_venda
-            }]);
-
-            await _supabase.from('produtos')
-                .update({ estoque_atual: item.estoque_atual - item.quantidade })
-                .eq('id', item.id);
-        }
-
-        // 3. Lançar no Financeiro automático
-        await _supabase.from('financeiro').insert([{
-            descricao: `Venda PDV #${venda.id.slice(0,5)}`,
-            tipo: 'receber',
-            valor: totalVenda,
-            status: 'pago',
-            data_pagamento: new Date().toISOString().split('T')[0],
-            categoria: 'Venda'
-        }]);
-
-        gerarCupom(venda, totalVenda, pagamento);
-        alert("Venda Finalizada!");
-        limparCarrinho();
-        carregarDados();
-
-    } catch (err) {
-        alert("Erro: " + err.message);
+    // 2. BAIXA DE ESTOQUE
+    for (const item of carrinho) {
+        await _supabase.from('produtos')
+            .update({ estoque_atual: item.estoque_atual - 1 })
+            .eq('id', item.id);
     }
-}
 
-function gerarCupom(venda, total, pagamento) {
-    const area = document.getElementById('cupom-fiscal');
-    const data = new Date().toLocaleString();
-    
-    let itensHtml = carrinho.map(i => 
-        `${i.nome.slice(0,20)}...<br>${i.quantidade}x R$${i.preco_venda.toFixed(2)} = R$${(i.quantidade*i.preco_venda).toFixed(2)}`
-    ).join('<br>--------------------------------<br>');
-
-    area.innerHTML = `
-        <center>
-            <b>ERP ABP - SISTEMA DE VENDAS</b><br>
-            Rua do Comércio, 123 - Centro<br>
-            --------------------------------<br>
-            <b>CUPOM NÃO FISCAL</b><br>
-            --------------------------------<br>
-        </center>
-        DATA: ${data}<br>
-        VENDA ID: ${venda.id.slice(0,8)}<br>
-        --------------------------------<br>
-        ${itensHtml}<br>
-        --------------------------------<br>
-        <b>TOTAL: R$ ${total.toFixed(2)}</b><br>
-        PAGTO: ${pagamento}<br>
-        --------------------------------<br>
-        <center>Obrigado pela preferência!</center>
-    `;
-    
-    window.print();
-}
-
-function limparCarrinho() {
+    alert("Venda realizada e estoque atualizado!");
     carrinho = [];
     atualizarCheckout();
+    carregarTudo(); // Recarrega vitrine para atualizar estoque visualmente
 }
 
+// --- BUSCA E FILTROS ---
 function filtrar() {
-    const t = document.getElementById('busca').value.toLowerCase();
-    renderizarProdutos(produtosFull.filter(p => p.nome.toLowerCase().includes(t) || p.codigo_de_barras?.includes(t)));
+    const termo = document.getElementById('busca').value.toLowerCase();
+    const cat = document.getElementById('filtro-categoria').value;
+    
+    const filtrados = produtosFull.filter(p => {
+        const matchesBusca = p.nome.toLowerCase().includes(termo) || 
+                             (p.codigo_de_barras && p.codigo_de_barras.includes(termo)) ||
+                             (p.sku && p.sku.toLowerCase().includes(termo));
+        const matchesCat = cat === "" || p.categoria_prod === cat;
+        return matchesBusca && matchesCat;
+    });
+    renderizarProdutos(filtrados);
 }
 
+// --- SCANNER PDV ---
 function toggleScanner() {
-    const r = document.getElementById('reader');
-    r.classList.toggle('hidden');
-    if (!r.classList.contains('hidden')) {
+    const div = document.getElementById('reader');
+    if (div.style.display === 'block') {
+        html5QrCode.stop().then(() => { div.style.display = 'none'; });
+    } else {
+        div.style.display = 'block';
         html5QrCode = new Html5Qrcode("reader");
-        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (txt) => {
-            const p = produtosFull.find(x => x.codigo_de_barras === txt);
-            if(p) { adicionarAoCarrinho(p.id); r.classList.add('hidden'); html5QrCode.stop(); }
-        });
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            (decodedText) => {
+                const p = produtosFull.find(prod => prod.codigo_de_barras === decodedText);
+                if (p) {
+                    adicionarAoCarrinho(p.id);
+                    alert("Adicionado: " + p.nome);
+                } else {
+                    alert("Produto não encontrado no sistema.");
+                }
+            }
+        ).catch(err => alert("Erro na câmera: " + err));
     }
 }
 
-document.addEventListener('DOMContentLoaded', carregarDados);
+document.addEventListener('DOMContentLoaded', carregarTudo);
+    
+
+
+
+    // --- FUNÇÕES DE HISTÓRICO DE VENDAS ---
+
+async function abrirHistoricoVendas() {
+    document.getElementById('modal-historico').classList.remove('hidden');
+    const corpo = document.getElementById('lista-vendas-corpo');
+    corpo.innerHTML = '<p class="text-center py-10">Buscando vendas no banco...</p>';
+
+    try {
+        // Busca os registros do financeiro que foram gerados pelo PDV
+        const { data, error } = await _supabase
+            .from('financeiro')
+            .select('*')
+            .eq('categoria', 'Venda PDV')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            corpo.innerHTML = '<p class="text-center py-10 text-gray-500">Nenhuma venda encontrada.</p>';
+            return;
+        }
+
+        corpo.innerHTML = data.map(venda => `
+            <div class="bg-gray-50 p-4 rounded-xl mb-3 border border-gray-100 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                        ${new Date(venda.created_at).toLocaleString('pt-BR')}
+                    </span>
+                    <span class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full font-bold uppercase">
+                        ${venda.status}
+                    </span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800">${venda.descricao}</p>
+                        <p class="text-xs text-gray-500">ID: ${venda.id.split('-')[0]}...</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-black text-gray-900">R$ ${parseFloat(venda.valor).toFixed(2)}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        console.error("Erro ao carregar histórico:", err);
+        corpo.innerHTML = '<p class="text-center py-10 text-red-500">Erro ao carregar dados.</p>';
+    }
+}
+
+function fecharHistorico() {
+    document.getElementById('modal-historico').classList.add('hidden');
+}
 </script>
 </body>
 </html>
