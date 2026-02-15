@@ -110,24 +110,11 @@ checarAutenticacao();
     <select id="filtro-categoria" class="w-full mt-2 p-2 border rounded-lg" onchange="filtrar()">
         <option value="">Todas as Categorias</option>
     </select>
-</header>
-
-<div id="lista-produtos" class="grid-produtos">
-    </div>
-
-<footer class="footer-checkout">
-    <div>
-        <span class="block text-sm text-gray-500" id="total-itens">0 itens</span>
-        <b class="text-xl" id="valor-total">R$ 0,00</b>
-    </div>
-    <button onclick="finalizarVenda()" class="bg-green-500 text-white px-6 py-3 rounded-xl font-bold">Finalizar Venda</button>
 
 
-<button onclick="abrirHistoricoVendas()" class="fixed bottom-32 right-5 bg-indigo-600 text-white p-4 rounded-full shadow-xl z-50">
-    <i class="fas fa-history"></i>
-</button>
 
-<div id="modal-historico" class="fixed inset-0 bg-black bg-opacity-50 z-[200] hidden flex items-center justify-center p-4">
+
+    <div id="modal-historico" class="fixed inset-0 bg-black bg-opacity-50 z-[200] hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-width-2xl max-h-[80vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
         <div class="p-4 border-b flex justify-between items-center bg-gray-50">
             <h3 class="font-bold text-lg text-gray-800"><i class="fas fa-list-ul mr-2"></i>Vendas Recentes</h3>
@@ -145,6 +132,24 @@ checarAutenticacao();
         Voltar ao Início
     </a>
 </div>
+
+</header>
+
+<div id="lista-produtos" class="grid-produtos">
+    </div>
+
+<footer class="footer-checkout">
+    <div>
+        <span class="block text-sm text-gray-500" id="total-itens">0 itens</span>
+        <b class="text-xl" id="valor-total">R$ 0,00</b>
+    </div>
+    <button onclick="finalizarVenda()" class="bg-green-500 text-white px-6 py-3 rounded-xl font-bold">Finalizar Venda</button>
+
+
+<button onclick="abrirHistoricoVendas()" class="fixed bottom-32 right-5 bg-indigo-600 text-white p-4 rounded-full shadow-xl z-50">
+    <i class="fas fa-history"></i>
+</button>
+
 
     
 </footer>
