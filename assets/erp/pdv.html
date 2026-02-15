@@ -4,26 +4,16 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>PDV Móvel Pro - ERP ABP</title>
+    
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
     
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: { "primary": "#3ecf8e", "background-dark": "#101922" }
-                }
-            }
-        }
-    </script>
-    <style>
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; display: none; }
-    </style>
+    <link rel="stylesheet" href="pdv_style.css">
 </head>
 
 <body class="bg-[#f6f7f8] dark:bg-background-dark min-h-screen pb-48">
@@ -43,7 +33,7 @@
                 </div>
             </div>
             
-            <div id="reader" class="mb-4"></div>
+            <div id="reader"></div>
 
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400">search</span>
@@ -78,160 +68,6 @@
         </div>
     </footer>
 
-    <script>
-        const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        let produtosDB = [];
-        let carrinho = [];
-        let html5QrCode;
-
-        async function inicializar() {
-            const { data } = await _supabase.from('produtos').select('*');
-            if (data) produtosDB = data;
-        }
-
-        // --- SCANNER DE CÂMERA ---
-        function toggleScanner() {
-            const readerDiv = document.getElementById('reader');
-            if (readerDiv.style.display === 'block') {
-                html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
-            } else {
-                readerDiv.style.display = 'block';
-                html5QrCode = new Html5Qrcode("reader");
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: { width: 250, height: 150 } },
-                    (decodedText) => {
-                        const p = produtosDB.find(prod => prod.codigo_barras === decodedText);
-                        if (p) {
-                            adicionarAoCarrinho(p.id);
-                            navigator.vibrate(100);
-                        }
-                    }
-                ).catch(err => alert("Câmera não disponível"));
-            }
-        }
-
-        function buscarProdutos() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            const container = document.getElementById('resultadosBusca');
-            if (termo.length < 1) return container.classList.add('hidden');
-
-            const filtrados = produtosDB.filter(p => 
-                p.nome.toLowerCase().includes(termo) || (p.codigo_barras && p.codigo_barras.includes(termo))
-            );
-
-            container.innerHTML = filtrados.map(p => `
-                <div onclick="adicionarAoCarrinho('${p.id}')" class="p-4 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-3">
-                    <img src="${p.imagem_url || 'https://via.placeholder.com/50'}" class="w-10 h-10 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <div class="font-bold dark:text-white">${p.nome}</div>
-                        <div class="text-xs text-gray-500">Estoque: ${p.estoque_atual || 0}</div>
-                    </div>
-                    <span class="font-bold text-primary text-sm">R$ ${parseFloat(p.preco_venda).toFixed(2)}</span>
-                </div>
-            `).join('');
-            container.classList.remove('hidden');
-        }
-
-        function adicionarAoCarrinho(id) {
-            const produto = produtosDB.find(p => p.id === id);
-            const item = carrinho.find(i => i.id === id);
-            if (item) item.quantidade++; else carrinho.push({ ...produto, quantidade: 1 });
-            
-            document.getElementById('inputBusca').value = '';
-            document.getElementById('resultadosBusca').classList.add('hidden');
-            renderizarCarrinho();
-        }
-
-        function alterarQtd(id, delta) {
-            const item = carrinho.find(i => i.id === id);
-            if (item) {
-                item.quantidade += delta;
-                if (item.quantidade <= 0) carrinho = carrinho.filter(i => i.id !== id);
-                renderizarCarrinho();
-            }
-        }
-
-        function renderizarCarrinho() {
-            const lista = document.getElementById('lista-carrinho');
-            const totalEl = document.getElementById('total-geral');
-            const btnImp = document.getElementById('btn-imprimir');
-            
-            if (carrinho.length === 0) {
-                lista.innerHTML = `<div class="text-center py-20 text-gray-400"><span class="material-symbols-outlined text-6xl">shopping_cart</span><p>Carrinho vazio</p></div>`;
-                totalEl.innerText = "R$ 0,00";
-                btnImp.classList.add('hidden');
-                return;
-            }
-
-            btnImp.classList.remove('hidden');
-            let total = 0;
-            lista.innerHTML = carrinho.map(item => {
-                total += item.preco_venda * item.quantidade;
-                return `
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm flex items-center gap-4 border border-gray-100 dark:border-gray-700">
-                        <img src="${item.imagem_url || 'https://via.placeholder.com/80'}" class="h-16 w-16 rounded-xl object-cover bg-gray-50">
-                        <div class="flex-1">
-                            <h3 class="font-bold text-sm dark:text-white line-clamp-1">${item.nome}</h3>
-                            <p class="text-primary font-black">R$ ${parseFloat(item.preco_venda).toFixed(2)}</p>
-                        </div>
-                        <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 rounded-xl p-1">
-                            <button onclick="alterarQtd('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-500">-</button>
-                            <span class="w-6 text-center font-bold dark:text-white">${item.quantidade}</span>
-                            <button onclick="alterarQtd('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-500">+</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            totalEl.innerText = `R$ ${total.toFixed(2)}`;
-        }
-
-        // --- GERAÇÃO DE PDF ---
-        function imprimirCupom() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ unit: 'mm', format: [80, 150] }); // Formato cupom térmico
-            
-            doc.setFontSize(12);
-            doc.text("ERP ABP - COMPROVANTE", 10, 10);
-            doc.setFontSize(8);
-            doc.text(`Data: ${new Date().toLocaleString()}`, 10, 16);
-            doc.text("------------------------------------------", 10, 20);
-            
-            let y = 25;
-            carrinho.forEach(item => {
-                doc.text(`${item.quantidade}x ${item.nome.substring(0, 20)}`, 10, y);
-                doc.text(`R$ ${(item.preco_venda * item.quantidade).toFixed(2)}`, 60, y);
-                y += 5;
-            });
-            
-            doc.text("------------------------------------------", 10, y + 2);
-            doc.setFontSize(10);
-            const total = carrinho.reduce((acc, i) => acc + (i.preco_venda * i.quantidade), 0);
-            doc.text(`TOTAL: R$ ${total.toFixed(2)}`, 10, y + 8);
-            
-            doc.save(`venda_${Date.now()}.pdf`);
-        }
-
-        async function finalizarVenda() {
-            if (carrinho.length === 0) return alert("Carrinho vazio!");
-            const total = carrinho.reduce((acc, i) => acc + (i.preco_venda * i.quantidade), 0);
-
-            const { data: v, error } = await _supabase.from('vendas').insert([{ total_venda: total, metodo_pagamento: 'Dinheiro' }]).select();
-            if (error) return alert("Erro ao salvar");
-
-            const itens = carrinho.map(i => ({ venda_id: v[0].id, produto_id: i.id, quantidade: i.quantidade, preco_unitario: i.preco_venda }));
-            await _supabase.from('venda_itens').insert(itens);
-
-            alert("Venda Concluída!");
-            imprimirCupom();
-            carrinho = [];
-            renderizarCarrinho();
-        }
-
-        document.addEventListener('DOMContentLoaded', inicializar);
-    </script>
+    <script src="pdv_script.js"></script>
 </body>
 </html>
