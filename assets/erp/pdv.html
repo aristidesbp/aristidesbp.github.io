@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Profissional - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        :root { --primary: #3ecf8e; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding-bottom: 140px; }
+        .header-pdv { position: fixed; top: 0; width: 100%; background: white; z-index: 100; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 180px 15px 20px; }
+        .card-prod { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; }
+        .prod-img { width: 100%; height: 110px; object-fit: cover; background: #eee; }
+        .btn-add { width: 100%; background: var(--primary); color: white; padding: 10px; border: none; font-weight: bold; cursor: pointer; margin-top: auto; }
+        .footer-checkout { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; border-top: 2px solid var(--primary); z-index: 101; }
+        
+        /* Estilo para Impressão */
+        @media print {
+            body * { visibility: hidden; }
+            #cupom-fiscal, #cupom-fiscal * { visibility: visible; }
+            #cupom-fiscal { position: absolute; left: 0; top: 0; width: 80mm; font-family: monospace; font-size: 12px; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header-pdv">
+    <div class="flex gap-2 mb-2">
+        <input type="text" id="busca" class="w-full p-3 border rounded-lg" placeholder="Produto ou Código..." onkeyup="filtrar()">
+        <button onclick="toggleScanner()" class="bg-indigo-500 text-white p-3 rounded-lg"><i class="fas fa-barcode"></i></button>
+    </div>
+    
+    <div class="flex gap-2">
+        <select id="cliente-id" class="flex-1 p-2 border rounded-lg text-sm">
+            <option value="">Consumidor Final</option>
+        </select>
+        <select id="forma-pagamento" class="flex-1 p-2 border rounded-lg text-sm">
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão">Cartão</option>
+        </select>
+    </div>
+    <div id="reader" class="mt-2 hidden"></div>
+</header>
+
+<div id="lista-produtos" class="grid-produtos"></div>
+
+<footer class="footer-checkout">
+    <div class="flex justify-between items-center mb-3">
+        <div>
+            <span class="block text-xs text-gray-500 uppercase font-bold" id="total-itens">0 itens</span>
+            <b class="text-2xl text-green-600" id="valor-total">R$ 0,00</b>
+        </div>
+        <div class="flex flex-col gap-1">
+            <button onclick="limparCarrinho()" class="text-xs text-red-500 font-bold uppercase">Limpar</button>
+            <button onclick="finalizarVenda()" class="bg-green-500 text-white px-8 py-4 rounded-xl font-black shadow-lg">FINALIZAR (F2)</button>
+        </div>
+    </div>
+</footer>
+
+<div id="cupom-fiscal" class="hidden"></div>
+
+<script>
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'SUA_CHAVE_AQUI'; // Use a chave que você já tem
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let produtosFull = [];
+let carrinho = [];
+let html5QrCode;
+
+async function carregarDados() {
+    // Carregar Produtos
+    const { data: prods } = await _supabase.from('produtos').select('*').order('nome');
+    produtosFull = prods || [];
+    renderizarProdutos(produtosFull);
+
+    // Carregar Clientes (Entidades)
+    const { data: ents } = await _supabase.from('entidades').select('id, nome_completo');
+    const select = document.getElementById('cliente-id');
+    ents?.forEach(e => {
+        select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`;
+    });
+}
+
+function renderizarProdutos(lista) {
+    const container = document.getElementById('lista-produtos');
+    container.innerHTML = lista.map(p => `
+        <div class="card-prod">
+            <img src="${p.imagem_url || 'https://via.placeholder.com/150'}" class="prod-img">
+            <div class="p-2">
+                <h4 class="font-bold text-xs h-8 overflow-hidden">${p.nome}</h4>
+                <p class="text-green-600 font-bold text-lg">R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
+                <p class="text-[10px] text-gray-400">Qtd: ${p.estoque_atual}</p>
+            </div>
+            <button class="btn-add" onclick="adicionarAoCarrinho('${p.id}')"><i class="fas fa-plus"></i></button>
+        </div>
+    `).join('');
+}
+
+function adicionarAoCarrinho(id) {
+    const produto = produtosFull.find(p => p.id === id);
+    if (!produto || produto.estoque_atual <= 0) return alert("Sem estoque!");
+    
+    const itemNoCarrinho = carrinho.find(c => c.id === id);
+    if (itemNoCarrinho) {
+        itemNoCarrinho.quantidade++;
+    } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+    }
+    atualizarCheckout();
+}
+
+function atualizarCheckout() {
+    const total = carrinho.reduce((acc, p) => acc + (p.preco_venda * p.quantidade), 0);
+    const itens = carrinho.reduce((acc, p) => acc + p.quantidade, 0);
+    document.getElementById('total-itens').innerText = `${itens} itens`;
+    document.getElementById('valor-total').innerText = `R$ ${total.toFixed(2)}`;
+}
+
+async function finalizarVenda() {
+    if (carrinho.length === 0) return;
+
+    const clienteId = document.getElementById('cliente-id').value;
+    const pagamento = document.getElementById('forma-pagamento').value;
+    const totalVenda = carrinho.reduce((acc, p) => acc + (p.preco_venda * p.quantidade), 0);
+
+    try {
+        // 1. Gravar na tabela Vendas
+        const { data: venda, error: ev } = await _supabase.from('vendas').insert([{
+            entidade_id: clienteId || null,
+            total_venda: totalVenda,
+            metodo_pagamento: pagamento
+        }]).select().single();
+
+        if (ev) throw ev;
+
+        // 2. Gravar Itens e Baixar Estoque
+        for (const item of carrinho) {
+            await _supabase.from('venda_itens').insert([{
+                venda_id: venda.id,
+                produto_id: item.id,
+                quantidade: item.quantidade,
+                preco_unitario: item.preco_venda
+            }]);
+
+            await _supabase.from('produtos')
+                .update({ estoque_atual: item.estoque_atual - item.quantidade })
+                .eq('id', item.id);
+        }
+
+        // 3. Lançar no Financeiro automático
+        await _supabase.from('financeiro').insert([{
+            descricao: `Venda PDV #${venda.id.slice(0,5)}`,
+            tipo: 'receber',
+            valor: totalVenda,
+            status: 'pago',
+            data_pagamento: new Date().toISOString().split('T')[0],
+            categoria: 'Venda'
+        }]);
+
+        gerarCupom(venda, totalVenda, pagamento);
+        alert("Venda Finalizada!");
+        limparCarrinho();
+        carregarDados();
+
+    } catch (err) {
+        alert("Erro: " + err.message);
+    }
+}
+
+function gerarCupom(venda, total, pagamento) {
+    const area = document.getElementById('cupom-fiscal');
+    const data = new Date().toLocaleString();
+    
+    let itensHtml = carrinho.map(i => 
+        `${i.nome.slice(0,20)}...<br>${i.quantidade}x R$${i.preco_venda.toFixed(2)} = R$${(i.quantidade*i.preco_venda).toFixed(2)}`
+    ).join('<br>--------------------------------<br>');
+
+    area.innerHTML = `
+        <center>
+            <b>ERP ABP - SISTEMA DE VENDAS</b><br>
+            Rua do Comércio, 123 - Centro<br>
+            --------------------------------<br>
+            <b>CUPOM NÃO FISCAL</b><br>
+            --------------------------------<br>
+        </center>
+        DATA: ${data}<br>
+        VENDA ID: ${venda.id.slice(0,8)}<br>
+        --------------------------------<br>
+        ${itensHtml}<br>
+        --------------------------------<br>
+        <b>TOTAL: R$ ${total.toFixed(2)}</b><br>
+        PAGTO: ${pagamento}<br>
+        --------------------------------<br>
+        <center>Obrigado pela preferência!</center>
+    `;
+    
+    window.print();
+}
+
+function limparCarrinho() {
+    carrinho = [];
+    atualizarCheckout();
+}
+
+function filtrar() {
+    const t = document.getElementById('busca').value.toLowerCase();
+    renderizarProdutos(produtosFull.filter(p => p.nome.toLowerCase().includes(t) || p.codigo_de_barras?.includes(t)));
+}
+
+function toggleScanner() {
+    const r = document.getElementById('reader');
+    r.classList.toggle('hidden');
+    if (!r.classList.contains('hidden')) {
+        html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (txt) => {
+            const p = produtosFull.find(x => x.codigo_de_barras === txt);
+            if(p) { adicionarAoCarrinho(p.id); r.classList.add('hidden'); html5QrCode.stop(); }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', carregarDados);
+</script>
+</body>
+</html>
