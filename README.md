@@ -335,10 +335,13 @@ WHERE schemaname = 'public'
 * TER UMA CONTA NO SUPABASE
 * TER UMA CONTA NO MERCADO PAGO
 ```
-## Como executar o projeto: (persona: Aristidesbp)
-1- em todos os códigos colocar comentários explicativos .
-2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos);
-3- Arquitetura de Pastas e Arquivos:(faça arquivos independentes reutilizáveis)
+## Como executar o o projeto que vou te pedir:
+1- em todos os códigos SEMPRE ADICIONE comentários explicativos .
+2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos).
+3- caso eu não te mande o SQL do banco de dados me pergunte se ele existe, espere minha resposta.
+4- todos os códigos que não forem html, deve vir com um comentário no topo falando o nome do arquivo e para que ele serve.
+5- faça códigos modulares e reutilizáveis orientado a objeto
+6- Arquitetura de Pastas e Arquivos:
  * Criar pasta Raiz (Principal com o nome do projeto):
    - Devem ficar apenas os arquivos html e arquivos de configuração global js
    - Exemplo: # pasta_nome_do_projeto/
