@@ -1520,11 +1520,593 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
 ```
+# entidades.html
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP ABP</title>
 
+<!-- STYLE -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+<style>
+    
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
 
+* { box-sizing: border-box; }
 
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
 
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
 
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Estilo para o campo de senha com Olho */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper i {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #64748b;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; }
+
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-mail { color: #ea4335; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; background: white;
+    padding: 15px 25px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
+}
+.nav-buttons { display: flex; gap: 15px; align-items: center; }
+.btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+.btn-logout-nav {
+    background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
+    font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+}
+
+.export-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.btn-export {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export-full {
+    background: #1e293b;
+}
+   
+</style>   
+<!-- FIM DO STYLE -->
+
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<script>
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
+    }
+}
+
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+   
+</head>
+<body>
+
+<!-- NAVBAR -->
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .btn-home {
+            background: #3ecf8e !important; /* Verde padrão do seu ERP */
+        }
+
+        /* Ajuste para o conteúdo não ficar embaixo da navbar fixa */
+        body {
+            padding-top: 80px;
+        }
+    </style>
+    
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>`;
+
+    <script>
+        async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            // Verifica se o cliente supabase existe antes de tentar deslogar
+            if (typeof _supabase !== 'undefined') {
+                await _supabase.auth.signOut();
+            }
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+        }
+    </script>
+<!-- FIM DA NAVBAR -->
+    
+<!-- FORMULARIO -->
+<div class="container">
+    <div class="card">
+        <h3 id="form-title">Novo Cadastro de Entidade</h3>
+        <input type="hidden" id="edit-id">
+
+        <div class="section-title">Informações e Acesso</div>
+        <div class="form-grid">
+            <div><label>Nome Completo / Razão *</label><input type="text" id="nome_completo"></div>
+            <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
+            <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+            <div><label>E-mail</label><input type="email" id="email"></div>
+            <div><label>Telefone / WhatsApp *</label><input type="text" id="telefone"></div>
+            <div>
+                <label>Senha Interna</label>
+                <div class="password-wrapper">
+                    <input type="password" id="senha_acesso">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
+            
+            <div>
+                <label>Nível de Acesso</label>
+                <select id="acesso">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="comprador">Comprador</option>
+                    <option value="master">Master</option>
+                </select>
+            </div>
+            <div>
+                <label>Relacionamento</label>
+                <select id="relacionamento">
+                    <option value="cliente">Cliente</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="terceirizado">Terceirizado</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select id="status">
+                    <option value="ativo">Ativo</option>
+                    <option value="desativado">Desativado</option>
+                </select>
+            </div>
+            <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+        </div>
+
+        <div class="section-title">Endereço</div>
+        <div class="form-grid">
+            <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+            <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+            <div><label>Número</label><input type="text" id="numero"></div>
+            <div><label>Bairro</label><input type="text" id="bairro"></div>
+            <div><label>Cidade</label><input type="text" id="cidade"></div>
+            <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+        </div>
+
+        <div class="section-title">Complementos</div>
+        <div class="form-grid">
+            <div style="grid-column: span 2;"><label>URL de Arquivos</label><input type="text" id="arquivos_url"></div>
+            <div style="grid-column: span 2;"><label>Observações</label><textarea id="observacoes" rows="2"></textarea></div>
+        </div>
+
+        <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
+        <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+    </div>
+
+    <div class="card" style="margin-bottom: 10px; padding: 15px;">
+        <label><i class="fas fa-search"></i> BUSCAR ENTIDADE</label>
+        <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
+        
+        <div class="export-area">
+            <button class="btn-export" onclick="exportarPDFListagem()">
+                <i class="fas fa-list"></i> Exportar Listagem (PDF)
+            </button>
+            <button class="btn-export btn-export-full" onclick="exportarPDFFichaCompleta()">
+                <i class="fas fa-file-invoice"></i> Exportar Fichas Detalhadas (PDF)
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome / Tipo</th>
+                    <th>Telefone / E-mail</th>
+                    <th>Acesso / Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="entities-list"></tbody>
+        </table>
+    </div>
+</div>
+<!-- FORMULARIO -->
+<script>
+    /** * ERP ABP - cadastrar.js */
+async function handleSave() {
+    const id = document.getElementById('edit-id').value;
+    
+    const campos = [
+        'nome_completo', 'cpf', 'data_nascimento', 'genero', 'estado_civil',
+        'tipo_entidade', 'status_entidade', 'tipo_acesso', 'email', 'telefone',
+        'senha_acesso', 'cep', 'logradouro', 'numero', 'bairro', 'cidade',
+        'estado', 'avaliacao', 'observacoes'
+    ];
+
+    const payload = {};
+    campos.forEach(c => {
+        const el = document.getElementById(c);
+        if (el) payload[c] = el.value;
+    });
+
+    let result;
+    if (id) {
+        result = await window.supabaseClient.from('entidades').update(payload).eq('id', id);
+    } else {
+        result = await window.supabaseClient.from('entidades').insert([payload]);
+    }
+
+    if (result.error) {
+        alert("Erro ao salvar: " + result.error.message);
+    } else {
+        alert(id ? "Atualizado com sucesso!" : "Cadastrado com sucesso!");
+        resetForm();
+        if (typeof loadEntities === "function") loadEntities();
+    }
+}
+</script>
+<script>
+/** * ERP ABP - deletar.js */
+async function deleteEntity(id) {
+    if (!confirm("Tem certeza que deseja excluir esta entidade permanentemente?")) return;
+
+    const { error } = await window.supabaseClient
+        .from('entidades')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        alert("Erro ao excluir: " + error.message);
+    } else {
+        if (typeof loadEntities === "function") loadEntities();
+    }
+}
+</script>
+ <script> 
+/** * ERP ABP - editar.js */
+async function editFull(id) {
+    const { data, error } = await window.supabaseClient
+        .from('entidades')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) return alert("Erro ao carregar dados para edição.");
+
+    Object.keys(data).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) el.value = data[key] || '';
+    });
+
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
+    document.getElementById('btn-save').innerText = "Atualizar Entidade";
+    document.getElementById('btn-cancel').style.display = "block";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+     }
+ </script>
+ <script>
+     /** * ERP ABP - listar.js */
+async function loadEntities() {
+    const { data, error } = await window.supabaseClient
+        .from('entidades')
+        .select('*')
+        .order('nome_completo', { ascending: true });
+
+    if (error) {
+        console.error("Erro ao carregar:", error.message);
+        return;
+    }
+    renderTable(data || []);
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('entities-list');
+    if (!tbody) return;
+
+    tbody.innerHTML = data.map(e => `
+        <tr>
+            <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
+            <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
+            <td><span class="status-tag">${e.status_entidade || 'Ativo'}</span></td>
+            <td>
+                <button class="btn-edit" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-del" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
+                ${e.telefone ? `<button class="btn-wpp" onclick="window.open('https://wa.me/55${e.telefone.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>` : ''}
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Inicia ao carregar a página
+document.addEventListener('DOMContentLoaded', loadEntities);
+</script>
+ <script>
+/** * ERP ABP - utilidades.js
+ * Funções auxiliares e automação de interface
+ */
+
+// 1. Limpa todos os campos e volta o formulário ao estado inicial
+function resetForm() {
+    // Limpa Inputs, Selects e Textareas
+    document.querySelectorAll('input, select, textarea').forEach(campo => {
+        if (campo.id === 'avaliacao') {
+            campo.value = '5';
+        } else if (campo.tagName === 'SELECT') {
+            campo.selectedIndex = 0;
+        } else {
+            campo.value = '';
+        }
+    });
+
+    // Reset de elementos visuais de edição
+    const editId = document.getElementById('edit-id');
+    if (editId) editId.value = '';
+
+    const formTitle = document.getElementById('form-title');
+    if (formTitle) formTitle.innerText = "Novo Cadastro de Entidade";
+
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.innerText = "Salvar Entidade";
+
+    const btnCancel = document.getElementById('btn-cancel');
+    if (btnCancel) btnCancel.style.display = "none";
+
+    console.log("🧹 Campos limpos com sucesso!");
+}
+
+// 2. Filtro de busca em tempo real (sem precisar de botão)
+function filtrarTabela() {
+    const termo = document.getElementById('inputBusca').value.toLowerCase();
+    const linhas = document.querySelectorAll('#entities-list tr');
+
+    linhas.forEach(linha => {
+        const texto = linha.innerText.toLowerCase();
+        linha.style.display = texto.includes(termo) ? '' : 'none';
+    });
+}
+
+// 3. Função para alternar visibilidade da senha
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('senha_acesso');
+    const toggleIcon = document.getElementById('togglePassword');
+    if (passwordInput && passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else if (passwordInput) {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+// 4. Busca de CEP automática (ViaCEP)
+async function buscaCEP() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                document.getElementById('logradouro').value = data.logradouro || '';
+                document.getElementById('bairro').value = data.bairro || '';
+                document.getElementById('cidade').value = data.localidade || '';
+                document.getElementById('estado').value = data.uf || '';
+                console.log("📍 Endereço preenchido via CEP");
+            }
+        } catch (e) { console.error("Erro ao buscar CEP", e); }
+    }
+     }
+ </script>
+     
+</body>
+</html>
+
+```
 
 
 
