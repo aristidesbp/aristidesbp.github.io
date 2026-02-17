@@ -52,15 +52,25 @@
         <div class="section-title">Classificação</div>
         <div class="form-grid">
             
-  <!-- CARREGAR ENTIDADES -->
-  <div class="mb-3">
-  <label for="entidade_id" class="block text-sm font-medium text-gray-700">Entidade (Cliente/Fornecedor)</label>
-  <select id="entidade_id" name="entidade_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-  <option value="">Carregando entidades...</option>
-  </select>
-  </div>
-  <script src="js/carregar_entidades.js"></script> 
-  <!-- FIM CARREGAR ENTIDADES -->
+  <!-- BUSCAR ENSTIDADES -->
+<div class="relative w-full mb-4">
+    <label class="block text-sm font-medium text-gray-700">Buscar Entidade (Nome, CPF/CNPJ, Tipo...)</label>
+    
+    <div class="flex gap-2 mt-1">
+        <input type="text" id="busca_entidade" 
+               placeholder="Digite para pesquisar..." 
+               class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
+        
+        <input type="hidden" id="entidade_id_selecionada" name="entidade_id">
+    </div>
+
+    <ul id="lista_resultados_entidade" 
+        class="absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
+        </ul>
+</div>
+<script src="js/buscar_entidades.js"></script> 
+<!-- FIM DE BUSCAR ENSTIDADES -->
+            
             
             <div><label>Categoria</label><input type="text" id="categoria"></div>
             <div><label>Forma Pagto</label><input type="text" id="forma_pagamento"></div>
