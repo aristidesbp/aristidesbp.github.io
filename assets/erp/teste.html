@@ -1,33 +1,42 @@
 <!DOCTYPE html>
-<html class="dark" lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTE DE BUSCA - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="js/supabase_config.js"></script>
-    <script src="js/validar_acesso.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestão de Entidades - ERP ABP</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+<!-- ############################################################################# -->     
+<link rel="stylesheet" href="css/entidades.css"> 
+<link rel="stylesheet" href="css/navbar.css">    
+<!-- ############################################################################# --> 
 </head>
 <body>
 
-<p> jaghsdgh </p>
-<!-- BUSCA UNIVERSAL -->
-<div class="componente-busca" data-tabela="entidades">
-    <label>Cliente:</label>
-    <div class="flex gap-2">
-        <input type="text" class="input-busca-texto border p-2 w-full">
-        <button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
-        <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+<!-- NAVBAR -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
     </div>
-    <ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
-</div>
+<!-- FIM DA NAVBAR -->
+ 
 
-<script src="js/buscar_universal.js"></script>
-<!-- FIM DA BUSCA UNIVERSAL -->
-
+    
+  <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/validar_acesso.js"></script>
+     <script src="js/navbar.js"></script>
+    <script src="js/listar_entidades.js"></script> 
+  <!-- ############################################################################# -->    
+    
 </body>
 </html>
