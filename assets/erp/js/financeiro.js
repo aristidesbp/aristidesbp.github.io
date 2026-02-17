@@ -1,35 +1,3 @@
-// finaceiro.js
-// --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO ---
-const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-let dadosFinanceiros = []; // Cache local para busca e filtros
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await _supabase.auth.getSession();
-    if (!session) {
-        window.location.href = "login.html";
-        return;
-    }
-    carregarEntidades();
-    loadFinanceiro();
-});
-
-// --- 2. CARREGAMENTO DE DADOS ---
-
-async function carregarEntidades() {
-    const { data, error } = await _supabase.from('entidades').select('id, nome_completo');
-    if (!error) {
-        const select = document.getElementById('entidade_id');
-        data.forEach(ent => {
-            const opt = document.createElement('option');
-            opt.value = ent.id;
-            opt.textContent = ent.nome_completo;
-            select.appendChild(opt);
-        });
-    }
-}
 
 async function loadFinanceiro() {
     const { data, error } = await _supabase
