@@ -4,31 +4,35 @@
 
 <!-- BUSCAR ENSTIDADES -->
 <div class="relative w-full mb-4">
-    <label class="block text-sm font-medium text-gray-700">Buscar Entidade (Nome, CPF/CNPJ, Tipo...)</label>
-    
-    <div class="flex gap-2 mt-1">
-        <input type="text" id="busca_entidade" 
-               placeholder="Digite para pesquisar..." 
-               class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
-        
-        <input type="hidden" id="entidade_id_selecionada" name="entidade_id">
-    </div>
-
-    <ul id="lista_resultados_entidade" 
-        class="absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
-        </ul>
+<label class="block text-sm font-medium text-gray-700">Buscar Entidade (Nome, CPF/CNPJ, Tipo...)</label>  
+<div class="flex gap-2 mt-1">
+<input type="text" id="busca_entidade" 
+placeholder="Digite nome, documento ou relação..." 
+class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">       
+<button type="button" id="btn_buscar_entidade" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+<i class="fa fa-search"></i> Buscar
+</button>
+<input type="hidden" id="entidade_id_selecionada" name="entidade_id">
 </div>
-<script src="js/buscar_entidades.js"></script> 
+<ul id="lista_resultados_entidade" 
+class="absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
+</ul>
+</div>
+<script src="js/buscar_entidades.js"></script>
 <!-- FIM DE BUSCAR ENSTIDADES -->
  
  */
 
-let todasEntidades = []; // Cache local para busca rápida
+/**
+ * Nome do arquivo: buscar_entidades.js
+ * Objetivo: Busca avançada de entidades manual por clique no botão.
+ */
+
+let todasEntidades = []; 
 
 async function inicializarBuscaEntidades() {
     try {
-        // 1. Busca todos os dados necessários da tabela 'entidades'
-        // Adicione aqui as colunas que deseja usar na busca (ex: documento, tipo)
+        // 1. Busca inicial para popular o cache local
         const { data, error } = await window.supabaseClient
             .from('entidades')
             .select('id, nome_completo, documento, relacao') 
@@ -38,33 +42,36 @@ async function inicializarBuscaEntidades() {
         todasEntidades = data;
 
         const inputBusca = document.getElementById('busca_entidade');
-        const lista = document.getElementById('lista_resultados_entidade');
+        const btnBusca = document.getElementById('btn_buscar_entidade');
+        const listaUI = document.getElementById('lista_resultados_entidade');
 
-        // 2. Evento de digitação (Filtro)
-        inputBusca.addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase();
+        // 2. Evento de clique no Botão
+        btnBusca.addEventListener('click', () => {
+            const termo = inputBusca.value.trim().toLowerCase();
             
-            if (termo.length > 0) {
+            if (termo === "") {
+                // Se estiver vazio, mostra todos
+                exibirResultados(todasEntidades);
+            } else {
+                // Filtra pelo termo
                 const filtrados = todasEntidades.filter(ent => 
-                    ent.nome_completo?.toLowerCase().includes(termo) ||
-                    ent.documento?.includes(termo) ||
-                    ent.relacao?.toLowerCase().includes(termo)
+                    (ent.nome_completo && ent.nome_completo.toLowerCase().includes(termo)) ||
+                    (ent.documento && ent.documento.includes(termo)) ||
+                    (ent.relacao && ent.relacao.toLowerCase().includes(termo))
                 );
                 exibirResultados(filtrados);
-            } else {
-                lista.classList.add('hidden');
             }
         });
 
         // Fechar lista ao clicar fora
         document.addEventListener('click', (e) => {
-            if (!inputBusca.contains(e.target) && !lista.contains(e.target)) {
-                lista.classList.add('hidden');
+            if (!inputBusca.contains(e.target) && !btnBusca.contains(e.target) && !listaUI.contains(e.target)) {
+                listaUI.classList.add('hidden');
             }
         });
 
     } catch (err) {
-        console.error("Erro na busca de entidades:", err.message);
+        console.error("Erro ao inicializar busca de entidades:", err.message);
     }
 }
 
@@ -73,29 +80,40 @@ function exibirResultados(listaFiltrada) {
     listaUI.innerHTML = '';
 
     if (listaFiltrada.length === 0) {
-        listaUI.innerHTML = '<li class="p-2 text-gray-500">Nenhum resultado encontrado</li>';
+        listaUI.innerHTML = '<li class="p-2 text-gray-500">Nenhum registro encontrado</li>';
     } else {
         listaFiltrada.forEach(ent => {
             const li = document.createElement('li');
-            li.className = "p-2 hover:bg-blue-100 cursor-pointer border-b border-gray-100 flex justify-between";
+            li.className = "p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 flex flex-col";
+            
+            // Layout melhorado para exibir múltiplos campos
             li.innerHTML = `
-                <span><strong>${ent.nome_completo}</strong></span>
-                <span class="text-xs text-gray-500 uppercase">${ent.relacao || ''}</span>
+                <span class="font-bold text-gray-800">${ent.nome_completo}</span>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Doc: ${ent.documento || '---'}</span>
+                    <span class="uppercase font-semibold text-blue-600">${ent.relacao || 'Geral'}</span>
+                </div>
             `;
             
             li.onclick = () => selecionarEntidade(ent);
             listaUI.appendChild(li);
         });
     }
+    
+    // Remove o hidden para mostrar a lista
     listaUI.classList.remove('hidden');
 }
 
 function selecionarEntidade(ent) {
-    document.getElementById('busca_entidade').value = ent.nome_completo;
-    document.getElementById('entidade_id_selecionada').value = ent.id; // Valor para o formulário
-    document.getElementById('lista_resultados_entidade').classList.add('hidden');
+    const inputBusca = document.getElementById('busca_entidade');
+    const inputId = document.getElementById('entidade_id_selecionada');
+    const listaUI = document.getElementById('lista_resultados_entidade');
+
+    inputBusca.value = ent.nome_completo;
+    inputId.value = ent.id;
+    listaUI.classList.add('hidden');
     
-    console.log("Entidade Selecionada ID:", ent.id);
+    console.log("✅ Entidade Selecionada:", ent.nome_completo, "ID:", ent.id);
 }
 
 // Inicia ao carregar a página
