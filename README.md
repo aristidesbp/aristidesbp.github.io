@@ -329,75 +329,87 @@ WHERE schemaname = 'public'
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASES DO PROJETOS 
-## REQUISITOS PARA O PROJETO: 
-* TER UMA CONTA GUIHUB
-* TER UMA CONTA NO SUPABASE
-* TER UMA CONTA NO MERCADO PAGO
+# MEU MODO DE PROGRAMAR
 ```
-## Como executar o o projeto que vou te pedir:
-1- em todos os códigos SEMPRE ADICIONE comentários explicativos .
-2- Colocar id nos elementos (principalmente nos formulários, para utilização dos Campos).
-3- caso eu não te mande o SQL do banco de dados me pergunte se ele existe, espere minha resposta.
-4- todos os códigos que não forem html, deve vir com um comentário no topo falando o nome do arquivo e para que ele serve.
-5- faça códigos modulares e reutilizáveis orientado a objeto
-6- Arquitetura de Pastas e Arquivos:
- * Criar pasta Raiz (Principal com o nome do projeto):
-   - Devem ficar apenas os arquivos html e arquivos de configuração global js
-   - Exemplo: # pasta_nome_do_projeto/
-              |__ supabase_config.js
-              |__ verificar_login.js
-              |__ navbar.js
-              |__ index.html
-              |__ index/
-              |    |__ index.css
-              |    |__ index.js
-              |  
-              |__ login.html
-              |__ login/
-              |    |__ login.css
-              |    |__ login.js (cada função JS terá um arquivo, aqui fica referente a página realizando)
-              |    |__ alternar_senha.js
-              |    |__ realiza_login.js
-              |    |__ alternar_cadastro.js
-              |    |__ recuperar_senha.js
-              |    L__ login_loogle.js
-              |
-              |__ cadastrar_notas.html
-              |__ listar_notas.html
-              |__ notas/
-              |    |__ notas.css
-              |    |__ notas.js
-              |    |__ listar_notas.js
-              |    |__ deletar_notas.js
-              |    |__ exportar_notas.js
-              |    |__ pesquisar_notas.js
-              |
-              L__ REDME.md
-     
+1- sempre pergunto ao cliente se ja existe um banco de dados , e espero a resposta do mesmo, caso ele não mande.
+2- em todos os meus códigos SEMPRE ADICIONO comentários explicativos .
+3- Coloco id en todos os elementos (principalmente nos formulários, para facilitar utilização dos Campos).
+4- todos os códigos que não forem html, coloco um comentário no topo falando o nome do arquivo e para que ele serve.
+Exemplo:
+/**
+ * Nome do arquivo: alternar_senha.js
+ * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+ */
+
+5- faço códigos modulares e reutilizáveis orientado a objeto
+6- Exemplo da Arquitetura de Pastas e Arquivos:
+aristidesbp:erp$ tree
+.
+├── css
+│   ├── Arquivo sem título
+│   ├── entidades.css
+│   ├── financeiro.css
+│   ├── index.css
+│   ├── navbar.css
+│   ├── pdv.css
+│   ├── produto.css
+│   ├── produtos.css
+│   └── vitrine.css
+├── entidades.html
+├── financeiro2.html
+├── financeiro.html
+├── index.html
+├── js
+│   ├── alternar_senha.js
+│   ├── carrinho.js
+│   ├── entidades.js
+│   ├── finalizar_venda.js
+│   ├── financeiro.js
+│   ├── login_google.js
+│   ├── login.js
+│   ├── navbar.js
+│   ├── pdv2.js
+│   ├── pdv.js
+│   ├── processar_imagem.js
+│   ├── produto.js
+│   ├── realizar_cadastro.js
+│   ├── realizar_login.js
+│   ├── recuperar_senha.js
+│   ├── salvar_produto.js
+│   ├── supabase_config.js
+│   ├── validar_acesso.js
+│   └── vitrine.js
+├── login.html
+├── mercadopago_supabase
+│   ├── doc.md
+│   ├── index.html
+│   ├── servicos.json
+│   ├── site.html
+│   ├── sucesso.html
+│   └── supabase
+│       ├── config.toml
+│       └── functions
+│           └── checkout
+│               ├── deno.json
+│               └── index.ts
+├── pdv-completo.html
+├── pdv.html
+├── produtos.html
+├── redefinir_senha.html
+├── sql
+│   └── banco de dados.txt
+└── vitrine.html
 
 ## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DOS ARQUIVOS HTML.
-
 <!-- LOGIN.HTML ############################################################### --> 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/alternar_senha.js"></script>
+    <script src="js/realizar_login.js"></script>
+    <script src="js/realizar_cadastro.js"></script>
+    <script src="js/recuperar_senha.js"></script>
+    <script src="js/login_google.js"></script>
 <!-- ###################################################################### --> 
-
-<!-- NOTAS.HTML ############################################################### --> 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase_config.js"></script>
-<script src="notas/listar_notas.js"></script>
-<script src="notas/deletar_notas.js"></script>
-<script src="notas/pesquisar_notas.js"></script>
-<script src="notas/exportar_notas.js"></script>
-<script src="notas/editar_notas.js"></script> 
-<script src="navbar.js"></script>
-<!-- ########################################################################## --> 
 ```
 
 
@@ -458,12 +470,12 @@ WHERE schemaname = 'public'
     </div>
     <!-- ############################################################################# --> 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-    <script src="login/alternar_senha.js"></script>
-    <script src="login/realizar_login.js"></script>
-    <script src="login/realizar_cadastro.js"></script>
-    <script src="login/recuperar_senha.js"></script>
-    <script src="login/login_google.js"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/alternar_senha.js"></script>
+    <script src="js/realizar_login.js"></script>
+    <script src="js/realizar_cadastro.js"></script>
+    <script src="js/recuperar_senha.js"></script>
+    <script src="js/login_google.js"></script>
     <!-- ############################################################################# --> 
 </body>
 </html>
@@ -633,7 +645,7 @@ async function salvarNovaSenha() {
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# sql notas
+# sql notas (exemplo de como criar uma tabela)
 ```
 -- 1. Criar a tabela de notas
 CREATE TABLE notes (
@@ -669,7 +681,7 @@ USING (auth.uid() = user_id);
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# produtos.html
+# produtos.html (exemplo de codigo completo)
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -1078,7 +1090,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </html>
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# entidades.html
+# entidades.html (exemplo de codigo completo)
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
