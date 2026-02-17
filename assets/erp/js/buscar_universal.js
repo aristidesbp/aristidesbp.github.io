@@ -3,19 +3,19 @@
  * Objetivo: Sistema de busca dinâmica que lê a tabela alvo direto do atributo data-tabela no HTML.
  * Funcionalidade: Suporte a busca universal em todos os campos, múltiplos componentes na mesma página e tecla ENTER.
 
-<!-- BUSCA UNIVERSAL -->
+<!-- BUSCA UNIVERSAL ############################################## -->
 <div class="componente-busca" data-tabela="entidades">
-    <label>Cliente:</label>
-    <div class="flex gap-2">
-        <input type="text" class="input-busca-texto border p-2 w-full">
-        <button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
-        <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
-    </div>
-    <ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
+<label>Cliente:</label>
+<div class="flex gap-2">
+<input type="text" class="input-busca-texto border p-2 w-full">
+<button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
+<input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+</div>
+<ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
 </div>
 <!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
 <script src="js/buscar_universal.js"></script>
-<!-- FIM DA BUSCA UNIVERSAL -->
+<!-- FIM DA BUSCA UNIVERSAL ####################################### -->
  
  */
 
