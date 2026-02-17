@@ -1,61 +1,124 @@
-/* ===== BUSCA UNIVERSAL – ESTILOS ISOLADOS ===== */
-.bu-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+/* =========================================================
+   BUSCA UNIVERSAL – LISTA SUSPENSA INDEPENDENTE
+   Arquivo: busca_universal.css
+   Objetivo: Aparência de dropdown profissional
+========================================================= */
+
+/* Container principal */
+.componente-busca {
+    position: relative; /* ESSENCIAL para ancorar a lista */
+    width: 100%;
 }
 
-.bu-modal {
-  background: #fff;
-  width: 90%;
-  max-width: 520px;
-  border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.25);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Campo de texto */
+.componente-busca .input-busca-texto {
+    width: 100%;
+    outline: none;
 }
 
-.bu-header {
-  font-weight: bold;
-  font-size: 16px;
+/* Botão de busca (opcional ajuste fino) */
+.componente-busca .btn-disparar-busca {
+    cursor: pointer;
 }
 
-.bu-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+/* ==============================
+   LISTA SUSPENSA (DROPDOWN)
+============================== */
+.componente-busca .lista-resultados-suspensa {
+    position: absolute;
+    top: calc(100% + 4px); /* aparece logo abaixo do input */
+    left: 0;
+    width: 100%;
+
+    max-height: 260px;
+    overflow-y: auto;
+
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+
+    padding: 4px 0;
+    margin: 0;
+    list-style: none;
+
+    animation: fadeDrop 0.15s ease-out;
 }
 
-.bu-lista {
-  max-height: 280px;
-  overflow-y: auto;
-  border: 1px solid #eee;
-  border-radius: 6px;
+/* Scroll elegante */
+.componente-busca .lista-resultados-suspensa::-webkit-scrollbar {
+    width: 6px;
 }
 
-.bu-item {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #f1f1f1;
+.componente-busca .lista-resultados-suspensa::-webkit-scrollbar-thumb {
+    background-color: #c7c7c7;
+    border-radius: 10px;
 }
 
-.bu-item:hover {
-  background: #f0fdf4;
+.componente-busca .lista-resultados-suspensa::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.bu-item strong {
-  display: block;
-  font-size: 14px;
+/* ==============================
+   ITENS DA LISTA
+============================== */
+.componente-busca .lista-resultados-suspensa li {
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    font-size: 14px;
+    line-height: 1.2;
+
+    transition: background-color 0.15s ease, padding-left 0.15s ease;
 }
 
-.bu-item span {
-  font-size: 11px;
-  color: #666;
+/* Hover do item */
+.componente-busca .lista-resultados-suspensa li:hover {
+    background-color: #ecfdf5; /* verde suave */
+    padding-left: 18px;
+}
+
+/* Texto principal */
+.componente-busca .lista-resultados-suspensa li span:first-child {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Texto secundário */
+.componente-busca .lista-resultados-suspensa li span:last-child {
+    font-size: 10px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Item "nenhum resultado" */
+.componente-busca .lista-resultados-suspensa li.text-center {
+    cursor: default;
+}
+
+/* ==============================
+   ESTADO HIDDEN (controle via JS)
+============================== */
+.componente-busca .hidden {
+    display: none !important;
+}
+
+/* ==============================
+   ANIMAÇÃO SUAVE
+============================== */
+@keyframes fadeDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
