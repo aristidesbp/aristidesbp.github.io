@@ -1,25 +1,21 @@
 /**
  * Nome do arquivo: buscar_universal.js
  * Objetivo: Campo de busca universal que identifica automaticamente as colunas da tabela.
-
+<!-- BUSCA UNIVERSAL -->
 <div class="relative w-full mb-4">
-    <label class="block text-sm font-medium text-gray-700 font-bold mb-1">Busca Rápida</label>
-    <div class="flex gap-2">
-        <input type="text" id="input_busca_universal" placeholder="Pesquisar em qualquer campo..." 
-               class="block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-2 focus:ring-blue-500 outline-none text-gray-800">
-        
-        <button type="button" id="btn_buscar_universal" class="bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700 transition">
-            <i class="fas fa-search"></i>
-        </button>
-        
-        <input type="hidden" id="id_selecionado_universal" name="id_selecionado">
-    </div>
-    <ul id="lista_resultados_universal" class="absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-2xl max-h-60 overflow-y-auto hidden"></ul>
+<label class="block text-sm font-medium text-gray-700 font-bold mb-1">Busca Rápida</label>
+<div class="flex gap-2">
+<input type="text" id="input_busca_universal" placeholder="Pesquisar em qualquer campo..." 
+class="block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-2 focus:ring-blue-500 outline-none text-gray-800">
+<button type="button" id="btn_buscar_universal" class="bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700 transition">
+<i class="fas fa-search"></i>
+</button>
+<input type="hidden" id="id_selecionado_universal" name="id_selecionado">
+</div>
+<ul id="lista_resultados_universal" class="absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-2xl max-h-60 overflow-y-auto hidden"></ul>
 </div>
 <script src="js/buscar_universal.js"></script>
-
-
- 
+<!-- FIM DA BUSCA UNIVERSAL -->
  */
 
 // CONFIGURAÇÃO: Basta trocar o nome da tabela aqui para reutilizar o arquivo
