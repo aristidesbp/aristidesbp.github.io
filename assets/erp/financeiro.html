@@ -54,17 +54,16 @@
             
 
 <!-- BUSCA UNIVERSAL ############################################## -->
-<div class="componente-busca" data-tabela="entidades">
-<label>Cliente:</label>
-<div class="flex gap-2">
-<input type="text" class="input-busca-texto border p-2 w-full">
-<button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
-<input type="hidden" class="id-selecionado-hidden" name="cliente_id">
-</div>
-<ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
-</div>
-<!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
-<script src="js/buscar_universal.js"></script>
+<div class="componente-busca" data-tabela="entidades" style="position: relative;">
+        <label>Cliente:</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" class="input-busca-texto" placeholder="Digite para buscar...">
+            <button type="button" class="btn-disparar-busca"><i class="fas fa-search"></i></button>
+            <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+        </div>
+        <ul class="lista-resultados-suspensa hidden"></ul>
+    </div>
+<script src="js/componente_buscar_universal.js"></script>
 <!-- FIM DA BUSCA UNIVERSAL ####################################### -->      
 
  
