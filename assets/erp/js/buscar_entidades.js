@@ -2,6 +2,36 @@
  * Nome do arquivo: buscar_entidades.js
  * Objetivo: Realizar busca manual de entidades (clientes/fornecedores) 
  * filtrando por nome, cpf ou tipo, e exibir lista para seleção.
+
+
+<!-- BUSCAR ENTIDADE -->    
+<div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div class="relative w-full mb-4">
+    <label class="block text-sm font-medium text-gray-700 font-bold mb-1"> Entidade (Nome, CPF ou Tipo)</label>       
+    <div class="flex gap-2">
+        
+        <input type="text" id="busca_entidade" 
+        placeholder="Digite e clique na lupa..." 
+        class="block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-2 focus:ring-emerald-500 outline-none text-gray-800">
+                
+        <button type="button" id="btn_buscar_entidade" 
+        class="bg-emerald-500 text-white px-4 py-2 rounded-md font-bold hover:bg-emerald-600 transition flex items-center gap-2">
+        <i class="fas fa-search"></i>
+        </button>
+                
+        <input type="hidden" id="entidade_id_selecionada" name="entidade_id">
+    </div>
+
+    <ul id="lista_resultados_entidade" 
+    class="absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-2xl max-h-60 overflow-y-auto hidden">
+    </ul>
+   </div>
+     <p class="text-xs text-gray-400 mt-4 italic">* O ID da entidade selecionada ficará guardado no campo hidden.</p>
+</div>
+
+    <script src="js/buscar_entidades.js"></script>
+<!-- FIM DO BUSCAR ENTIDADE -->  
+ 
  */
 
 let cacheEntidades = []; // Armazena os dados para busca rápida
