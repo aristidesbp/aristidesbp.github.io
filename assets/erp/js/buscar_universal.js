@@ -2,7 +2,7 @@
  * Nome do arquivo: buscar_universal.js
  * Objetivo: Sistema de busca dinâmica que lê a tabela alvo direto do atributo data-tabela no HTML.
  * Funcionalidade: Suporte a busca universal em todos os campos, múltiplos componentes na mesma página e tecla ENTER.
-
+## COMO USAR:
 <!-- BUSCA UNIVERSAL ############################################## -->
 <div class="componente-busca" data-tabela="entidades">
 <label>Cliente:</label>
@@ -15,6 +15,7 @@
 </div>
 <!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
 <script src="js/buscar_universal.js"></script>
+<link rel="stylesheet" href="css/busca_universal.css">  
 <!-- FIM DA BUSCA UNIVERSAL ####################################### -->
  
  */
