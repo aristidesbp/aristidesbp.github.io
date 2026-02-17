@@ -1,5 +1,5 @@
 /**
- * Nome do arquivo: carregar_entidades.js
+ * Nome do arquivo: buscar_entidades.js
  * Objetivo: Busca avançada de entidades com filtro multi-campo.
 
 <!-- BUSCAR ENSTIDADES -->
