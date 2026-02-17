@@ -8,9 +8,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
 <!-- ############################################################################# -->     
-<link rel="stylesheet" href="css/entidades.css"> 
 <link rel="stylesheet" href="css/navbar.css">    
 <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/validar_acesso.js"></script>
+    <script src="js/navbar.js"></script>
+<!-- ############################################################################# -->    
 </head>
 <body>
 
@@ -28,42 +32,21 @@
     </div>
 <!-- FIM DA NAVBAR -->
 
-    
- <div class="card" style="margin-bottom: 10px; padding: 15px;">
-        <label><i class="fas fa-search"></i> BUSCAR ENTIDADE</label>
-        <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
-        
-        <div class="export-area">
-            <button class="btn-export" onclick="exportarPDFListagem()">
-                <i class="fas fa-list"></i> Exportar Listagem (PDF)
-            </button>
-            <button class="btn-export btn-export-full" onclick="exportarPDFFichaCompleta()">
-                <i class="fas fa-file-invoice"></i> Exportar Fichas Detalhadas (PDF)
-            </button>
-        </div>
-    </div>
-    
- <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome / Tipo</th>
-                    <th>Telefone / E-mail</th>
-                    <th>Acesso / Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="entities-list"></tbody>
-        </table>
-    </div>
-    
-  <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="js/supabase_config.js"></script>
-    <script src="js/validar_acesso.js"></script>
-     <script src="js/navbar.js"></script>
-    <script src="js/entidades.js"></script> 
-  <!-- ############################################################################# -->    
+<!-- BUSCA UNIVERSAL ############################################## -->
+<div class="componente-busca" data-tabela="entidades">
+<label>Cliente:</label>
+<div class="flex gap-2">
+<input type="text" class="input-busca-texto border p-2 w-full">
+<button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
+<input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+</div>
+<ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
+</div>
+<!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
+<script src="js/buscar_universal.js"></script>
+<link rel="stylesheet" href="css/busca_universal.css">  
+<!-- FIM DA BUSCA UNIVERSAL ####################################### -->
+ 
     
 </body>
 </html>
