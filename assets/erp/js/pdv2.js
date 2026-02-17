@@ -1,9 +1,6 @@
 /*pdv_js*/
 
-        // CONFIGURAÇÕES SUPABASE (Substituir pelas suas credenciais)
-        const supabaseUrl = 'SUA_URL_AQUI';
-        const supabaseKey = 'SUA_KEY_AQUI';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+     
 
         let produtosAtuais = [];
         let carrinho = [];
