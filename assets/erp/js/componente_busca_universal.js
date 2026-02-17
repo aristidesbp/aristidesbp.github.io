@@ -1,161 +1,233 @@
 /**
  * Nome do arquivo: buscar_universal.js
- * Objetivo: Sistema de busca dinâmica universal com interface em MODAL.
- * Funcionalidade: Evita bagunçar o layout da página abrindo uma janela flutuante para seleção.
+ * Objetivo: Sistema de busca dinâmica que lê a tabela alvo direto do atributo data-tabela no HTML.
+ * Funcionalidade: Suporte a busca universal em todos os campos, múltiplos componentes na mesma página e tecla ENTER.
+
+<!-- BUSCA UNIVERSAL ############################################## -->
+<div class="componente-busca" data-tabela="entidades">
+<label>Cliente:</label>
+<div class="flex gap-2">
+<input type="text" class="input-busca-texto border p-2 w-full">
+<button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
+<input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+</div>
+<ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
+</div>
+<!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
+<script src="js/buscar_universal.js"></script>
+<!-- FIM DA BUSCA UNIVERSAL ####################################### -->
+ 
  */
 
-let cacheGlobalBusca = [];
-let componenteAtivo = null;
-
 async function inicializarComponentesBusca() {
-    // 1. Localiza todos os containers que possuem a classe 'componente-busca'
+    // 1. Localiza todos os containers de busca na página (pela classe)
     const componentes = document.querySelectorAll('.componente-busca');
 
-    // Garante que o HTML do Modal exista na página
-    criarEstruturaModalSeNaoExistir();
-
-    componentes.forEach((container) => {
-        const btnBusca = container.querySelector('.btn-disparar-busca');
+    componentes.forEach(async (container) => {
+        // Seleciona os elementos específicos DESTE container usando as classes padrões
+        const nomeTabela = container.getAttribute('data-tabela');
         const inputTexto = container.querySelector('.input-busca-texto');
+        const btnBusca = container.querySelector('.btn-disparar-busca');
+        const listaUI = container.querySelector('.lista-resultados-suspensa');
+        const inputHidden = container.querySelector('.id-selecionado-hidden');
 
-        // GATILHO: Clique no botão (Lupa) ou Enter no campo de texto abre o modal
-        if (btnBusca) {
-            btnBusca.addEventListener('click', () => abrirModalBusca(container));
+        // Verifica se o HTML básico do componente está presente
+        if (!nomeTabela || !inputTexto || !btnBusca || !listaUI) {
+            console.warn("⚠️ Componente de busca incompleto detectado.");
+            return;
         }
 
-        if (inputTexto) {
+        let cacheDados = [];
+
+        try {
+            // 2. Carrega todos os dados da tabela definida no atributo 'data-tabela'
+            const { data, error } = await window.supabaseClient
+                .from(nomeTabela)
+                .select('*');
+
+            if (error) throw error;
+            cacheDados = data || [];
+
+            // 3. FUNÇÃO DE BUSCA: Filtra o cache e renderiza a lista
+            const executarBusca = () => {
+                const termo = inputTexto.value.trim().toLowerCase();
+                
+                // Se o campo estiver vazio, mostra tudo. Caso contrário, busca em todas as colunas.
+                const filtrados = (termo === "") 
+                    ? cacheDados 
+                    : cacheDados.filter(reg => 
+                        Object.values(reg).some(v => String(v).toLowerCase().includes(termo))
+                    );
+                
+                renderizarListaDinamica(filtrados, listaUI, inputTexto, inputHidden);
+            };
+
+            // GATILHO 1: Clique no botão (Lupa)
+            btnBusca.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que o evento de 'clicar fora' feche a lista na hora
+                executarBusca();
+            });
+
+            // GATILHO 2: Tecla ENTER no campo de texto
+            inputTexto.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Impede o envio do formulário padrão
+                    executarBusca();
+                }
+            });
+
+            // GATILHO 3: Fechar a lista ao clicar fora do container
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) {
+                    listaUI.classList.add('hidden');
+                }
+            });
+
+            console.log(`✅ Busca configurada para: [${nomeTabela}] com suporte a ENTER.`);
+
+        } catch (err) {
+            console.error(`❌ Erro ao configurar busca da tabela [${nomeTabela}]:`, err.message);
+        }
+    });
+}
+
+/**
+ * Função para gerar os itens da lista suspensa
+ */
+/**
+ * Nome do arquivo: buscar_universal.js
+ * Objetivo: Sistema de busca dinâmica universal para múltiplas tabelas.
+ * Funcionalidade: Injeta CSS automaticamente, suporta tecla ENTER e posicionamento absoluto.
+ */
+
+// 1. INJEÇÃO DE CSS (Garante que a lista flutue sobre o layout)
+const cssBusca = `
+    .componente-busca { position: relative; }
+    .lista-resultados-suspensa {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        background: white !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        max-height: 250px !important;
+        overflow-y: auto !important;
+        padding: 0 !important;
+        margin: 4px 0 0 0 !important;
+        list-style: none !important;
+    }
+    .lista-resultados-suspensa li {
+        padding: 10px 15px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        cursor: pointer !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .lista-resultados-suspensa li:hover { background: #f0fdf4 !important; }
+    .lista-resultados-suspensa .titulo-item { font-weight: bold; color: #333; font-size: 14px; }
+    .lista-resultados-suspensa .subtitulo-item { font-size: 11px; color: #666; text-transform: uppercase; }
+    .hidden { display: none !important; }
+`;
+
+const styleSheet = document.createElement("style");
+styleSheet.innerText = cssBusca;
+document.head.appendChild(styleSheet);
+
+// 2. LÓGICA DE BUSCA
+async function inicializarComponentesBusca() {
+    const componentes = document.querySelectorAll('.componente-busca');
+
+    componentes.forEach(async (container) => {
+        const nomeTabela = container.getAttribute('data-tabela');
+        const inputTexto = container.querySelector('.input-busca-texto');
+        const btnBusca = container.querySelector('.btn-disparar-busca');
+        const listaUI = container.querySelector('.lista-resultados-suspensa');
+        const inputHidden = container.querySelector('.id-selecionado-hidden');
+
+        if (!nomeTabela || !inputTexto || !btnBusca || !listaUI) return;
+
+        let cacheDados = [];
+
+        try {
+            // Carrega os dados da tabela via Supabase
+            const { data, error } = await window.supabaseClient
+                .from(nomeTabela)
+                .select('*');
+
+            if (error) throw error;
+            cacheDados = data || [];
+
+            const executarBusca = () => {
+                const termo = inputTexto.value.trim().toLowerCase();
+                const filtrados = (termo === "") 
+                    ? cacheDados 
+                    : cacheDados.filter(reg => 
+                        Object.values(reg).some(v => String(v).toLowerCase().includes(termo))
+                    );
+                renderizarListaDinamica(filtrados, listaUI, inputTexto, inputHidden);
+            };
+
+            // Evento: Clique no Botão
+            btnBusca.addEventListener('click', (e) => {
+                e.stopPropagation();
+                executarBusca();
+            });
+
+            // Evento: Tecla ENTER
             inputTexto.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    abrirModalBusca(container);
+                    executarBusca();
                 }
             });
+
+            // Evento: Clicar fora (fecha a lista)
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) {
+                    listaUI.classList.add('hidden');
+                }
+            });
+
+            console.log(`✅ Busca configurada: [${nomeTabela}]`);
+
+        } catch (err) {
+            console.error(`❌ Erro [${nomeTabela}]:`, err.message);
         }
     });
 }
 
-/**
- * Abre o modal e carrega os dados da tabela específica
- */
-async function abrirModalBusca(container) {
-    componenteAtivo = container;
-    const nomeTabela = container.getAttribute('data-tabela');
-    const modal = document.getElementById('modal_busca_universal');
-    const listaUI = document.getElementById('lista_modal_resultados');
-    const campoFiltro = document.getElementById('campo_filtro_modal');
-
-    // Reset e Exibição
-    modal.classList.remove('hidden');
-    listaUI.innerHTML = '<li class="p-3 text-center text-gray-500 italic">Carregando dados...</li>';
-    campoFiltro.value = "";
-    campoFiltro.focus();
-
-    try {
-        // Busca os dados da tabela definida no componente
-        const { data, error } = await window.supabaseClient
-            .from(nomeTabela)
-            .select('*');
-
-        if (error) throw error;
-        cacheGlobalBusca = data || [];
-        
-        renderizarItensModal(cacheGlobalBusca);
-
-        // Filtro em tempo real dentro do modal
-        campoFiltro.oninput = () => {
-            const termo = campoFiltro.value.toLowerCase();
-            const filtrados = cacheGlobalBusca.filter(item => 
-                Object.values(item).some(v => String(v).toLowerCase().includes(termo))
-            );
-            renderizarItensModal(filtrados);
-        };
-
-    } catch (err) {
-        console.error(`❌ Erro ao carregar tabela [${nomeTabela}]:`, err.message);
-        listaUI.innerHTML = `<li class="p-3 text-red-500 text-center">Erro ao carregar dados.</li>`;
-    }
-}
-
-/**
- * Renderiza os itens dentro da lista do modal
- */
-function renderizarItensModal(dados) {
-    const listaUI = document.getElementById('lista_modal_resultados');
+function renderizarListaDinamica(dados, listaUI, inputTexto, inputHidden) {
     listaUI.innerHTML = '';
 
     if (dados.length === 0) {
-        listaUI.innerHTML = '<li class="p-3 text-gray-500 text-center">Nenhum registro encontrado.</li>';
-        return;
-    }
-
-    dados.forEach(item => {
-        // Tenta identificar campos de título e subtítulo automaticamente
-        const principal = item.nome_completo || item.nome || item.descricao || item.title || Object.values(item)[1];
-        const secundario = item.cpf || item.tipo_entidade || item.codigo_barras || (item.created_at ? new Date(item.created_at).toLocaleDateString() : "");
-
-        const li = document.createElement('li');
-        li.className = "p-3 hover:bg-emerald-50 cursor-pointer flex flex-col border-b border-gray-100 transition-colors";
-        li.innerHTML = `
-            <span class="font-bold text-gray-800 text-sm">${principal}</span>
-            <span class="text-[10px] text-gray-500 uppercase tracking-tighter">${secundario}</span>
-        `;
-
-        li.onclick = () => {
-            // Preenche o input visível e o hidden do componente que disparou a busca
-            const inputVisivel = componenteAtivo.querySelector('.input-busca-texto');
-            const inputHidden = componenteAtivo.querySelector('.id-selecionado-hidden');
-
-            if (inputVisivel) inputVisivel.value = principal;
-            if (inputHidden) {
-                inputHidden.value = item.id;
-                console.log(`📌 Selecionado ID: ${item.id} para o campo: ${inputHidden.name}`);
-            }
+        listaUI.innerHTML = '<li style="text-align:center; color:#999; font-style:italic;">Nenhum resultado.</li>';
+    } else {
+        dados.forEach(item => {
+            const li = document.createElement('li');
             
-            fecharModalBusca();
-        };
+            // Define o que aparece como título e subtítulo
+            const principal = item.nome_completo || item.nome || item.descricao || item.title || Object.values(item)[1];
+            const secundario = item.cpf || item.tipo_entidade || item.codigo_barras || "";
 
-        listaUI.appendChild(li);
-    });
+            li.innerHTML = `
+                <span class="titulo-item">${principal}</span>
+                <span class="subtitulo-item">${secundario}</span>
+            `;
+            
+            li.onclick = () => {
+                inputTexto.value = principal;
+                if (inputHidden) inputHidden.value = item.id;
+                listaUI.classList.add('hidden');
+            };
+            
+            listaUI.appendChild(li);
+        });
+    }
+    listaUI.classList.remove('hidden');
 }
 
-function fecharModalBusca() {
-    document.getElementById('modal_busca_universal').classList.add('hidden');
-}
-
-/**
- * Cria dinamicamente a estrutura do Modal caso não esteja no HTML
- */
-function criarEstruturaModalSeNaoExistir() {
-    if (document.getElementById('modal_busca_universal')) return;
-
-    const modalHTML = `
-    <div id="modal_busca_universal" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
-                <h3 class="font-bold text-gray-700 uppercase text-sm tracking-widest">Selecionar Registro</h3>
-                <button type="button" onclick="fecharModalBusca()" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
-            </div>
-            <div class="p-4">
-                <input type="text" id="campo_filtro_modal" 
-                       placeholder="Digite para filtrar resultados..." 
-                       class="w-full p-3 border rounded-md mb-4 outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm">
-                
-                <ul id="lista_modal_resultados" class="max-h-72 overflow-y-auto border rounded-md divide-y divide-gray-100 shadow-inner bg-gray-50">
-                    </ul>
-            </div>
-            <div class="p-3 bg-gray-50 text-right">
-                <button type="button" onclick="fecharModalBusca()" class="text-xs font-bold text-gray-500 uppercase hover:text-gray-700">Cancelar</button>
-            </div>
-        </div>
-    </div>`;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-    // Fecha ao clicar na área escura
-    document.getElementById('modal_busca_universal').addEventListener('click', (e) => {
-        if (e.target.id === 'modal_busca_universal') fecharModalBusca();
-    });
-}
-
-// Inicializa o sistema
+// Inicialização
 document.addEventListener('DOMContentLoaded', inicializarComponentesBusca);
