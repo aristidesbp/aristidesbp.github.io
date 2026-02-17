@@ -4,15 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gestão de Entidades - ERP ABP</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-<link rel="stylesheet" href="css/entidades.css">   
+<!-- ############################################################################# -->     
+<link rel="stylesheet" href="css/entidades.css"> 
+<link rel="stylesheet" href="css/navbar.css">    
+<!-- ############################################################################# --> 
 </head>
 <body>
 
-
+<!-- NAVBAR -->
     <div class="navbar">
         <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
             <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
@@ -24,7 +26,7 @@
             </button>
         </div>
     </div>
-
+<!-- FIM DA NAVBAR -->
     
     
 <!-- FORMULARIO -->
@@ -125,6 +127,16 @@
         </table>
     </div>
 </div>
+<!-- FORMULARIO -->
+
+    
+  <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/validar_acesso.js"></script>
+     <script src="js/navbar.js"></script>
+    <script src="js/entidades.js"></script> 
+  <!-- ############################################################################# -->    
     
 </body>
 </html>
