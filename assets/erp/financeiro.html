@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/financeiro.css">
-
+     <link rel="stylesheet" href="css/busca_universal.css">
 </head>
 <body>
     
@@ -54,16 +54,17 @@
             
 
 <!-- BUSCA UNIVERSAL ############################################## -->
-<div class="componente-busca" data-tabela="entidades" style="position: relative;">
-        <label>Cliente:</label>
-        <div style="display: flex; gap: 5px;">
-            <input type="text" class="input-busca-texto" placeholder="Digite para buscar...">
-            <button type="button" class="btn-disparar-busca"><i class="fas fa-search"></i></button>
-            <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
-        </div>
-        <ul class="lista-resultados-suspensa hidden"></ul>
-    </div>
+<div class="componente-busca" data-tabela="entidades">
+  <label>Cliente:</label>
+  <div class="flex gap-2">
+    <input type="text" class="input-busca-texto" readonly>
+    <button type="button" class="btn-disparar-busca">Buscar</button>
+    <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+  </div>
+</div>
+
 <script src="js/componente_buscar_universal.js"></script>
+
 <!-- FIM DA BUSCA UNIVERSAL ####################################### -->      
 
  
