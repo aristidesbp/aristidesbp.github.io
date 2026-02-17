@@ -1,71 +1,61 @@
-/* Container principal da busca */
-.componente-busca {
-    position: relative; /* Essencial para a lista flutuar corretamente */
-    width: 100%;
+/* ===== BUSCA UNIVERSAL – ESTILOS ISOLADOS ===== */
+.bu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-/* Estilo do Input de Busca */
-.input-busca-texto {
-    background-color: #f9fafb;
-    transition: all 0.2s;
+.bu-modal {
+  background: #fff;
+  width: 90%;
+  max-width: 520px;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.input-busca-texto:focus {
-    background-color: #ffffff;
-    border-color: #10b981; /* Cor esmeralda */
-    ring: 2px #10b981;
+.bu-header {
+  font-weight: bold;
+  font-size: 16px;
 }
 
-/* A MÁGICA: Lista de resultados flutuante */
-.lista-resultados-suspensa {
-    position: absolute;
-    top: 100%; /* Aparece logo abaixo do input */
-    left: 0;
-    right: 0;
-    z-index: 9999; /* Garante que fique na frente de botões, outros inputs e tabelas */
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    max-height: 250px;
-    overflow-y: auto;
-    margin-top: 2px;
+.bu-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-/* Itens da lista */
-.lista-resultados-suspensa li {
-    padding: 12px;
-    border-bottom: 1px solid #f3f4f6;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
+.bu-lista {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 6px;
 }
 
-.lista-resultados-suspensa li:last-child {
-    border-bottom: none;
+.bu-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
 }
 
-.lista-resultados-suspensa li:hover {
-    background-color: #ecfdf5; /* Verde bem clarinho */
+.bu-item:hover {
+  background: #f0fdf4;
 }
 
-/* Estilo dos textos dentro da lista */
-.lista-resultados-suspensa .titulo-item {
-    font-weight: 700;
-    color: #1f2937;
-    font-size: 0.875rem;
+.bu-item strong {
+  display: block;
+  font-size: 14px;
 }
 
-.lista-resultados-suspensa .subtitulo-item {
-    font-size: 10px;
-    text-transform: uppercase;
-    color: #6b7280;
-    letter-spacing: 0.025em;
-    margin-top: 2px;
-}
-
-/* Esconder a lista quando não houver resultados ou estiver fechada */
-.hidden {
-    display: none !important;
+.bu-item span {
+  font-size: 11px;
+  color: #666;
 }
