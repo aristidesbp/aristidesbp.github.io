@@ -328,6 +328,51 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## COMO APAGAR USUARIO E SUAS DEPENDENCIAS
+```
+-- 1. Tabela de PRODUTOS
+ALTER TABLE public.produtos
+DROP CONSTRAINT IF EXISTS produtos_entidade_id_fkey,
+ADD CONSTRAINT produtos_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 2. Tabela de FINANCEIRO
+ALTER TABLE public.financeiro
+DROP CONSTRAINT IF EXISTS financeiro_entidade_id_fkey,
+ADD CONSTRAINT financeiro_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 3. Tabela de VENDAS
+ALTER TABLE public.vendas
+DROP CONSTRAINT IF EXISTS vendas_entidade_id_fkey,
+ADD CONSTRAINT vendas_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+```
+```
+-- 1. Ajusta o vínculo entre Itens da Venda e Produtos
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_produto_id_fkey,
+ADD CONSTRAINT venda_itens_produto_id_fkey 
+   FOREIGN KEY (produto_id) 
+   REFERENCES public.produtos(id) 
+   ON DELETE CASCADE;
+
+-- 2. Por segurança, garante que o vínculo entre Item e Venda também seja cascata
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_venda_id_fkey,
+ADD CONSTRAINT venda_itens_venda_id_fkey 
+   FOREIGN KEY (venda_id) 
+   REFERENCES public.vendas(id) 
+   ON DELETE CASCADE;
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # MEU MODO DE PROGRAMAR
 ```
