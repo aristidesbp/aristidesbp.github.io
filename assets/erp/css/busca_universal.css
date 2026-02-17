@@ -1,0 +1,71 @@
+/* Container principal da busca */
+.componente-busca {
+    position: relative; /* Essencial para a lista flutuar corretamente */
+    width: 100%;
+}
+
+/* Estilo do Input de Busca */
+.input-busca-texto {
+    background-color: #f9fafb;
+    transition: all 0.2s;
+}
+
+.input-busca-texto:focus {
+    background-color: #ffffff;
+    border-color: #10b981; /* Cor esmeralda */
+    ring: 2px #10b981;
+}
+
+/* A MÁGICA: Lista de resultados flutuante */
+.lista-resultados-suspensa {
+    position: absolute;
+    top: 100%; /* Aparece logo abaixo do input */
+    left: 0;
+    right: 0;
+    z-index: 9999; /* Garante que fique na frente de botões, outros inputs e tabelas */
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 2px;
+}
+
+/* Itens da lista */
+.lista-resultados-suspensa li {
+    padding: 12px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.lista-resultados-suspensa li:last-child {
+    border-bottom: none;
+}
+
+.lista-resultados-suspensa li:hover {
+    background-color: #ecfdf5; /* Verde bem clarinho */
+}
+
+/* Estilo dos textos dentro da lista */
+.lista-resultados-suspensa .titulo-item {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 0.875rem;
+}
+
+.lista-resultados-suspensa .subtitulo-item {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.025em;
+    margin-top: 2px;
+}
+
+/* Esconder a lista quando não houver resultados ou estiver fechada */
+.hidden {
+    display: none !important;
+}
