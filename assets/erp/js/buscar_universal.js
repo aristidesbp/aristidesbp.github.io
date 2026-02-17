@@ -1,110 +1,100 @@
 /**
  * Nome do arquivo: buscar_universal.js
  * Objetivo: Campo de busca universal que identifica automaticamente as colunas da tabela.
+ * Objetivo: Sistema de busca dinâmica que lê a tabela alvo direto do atributo data-tabela no HTML.
+
 <!-- BUSCA UNIVERSAL -->
-<div class="relative w-full mb-4">
+<div class="relative w-full mb-4 componente-busca" data-tabela="entidades">
 <label class="block text-sm font-medium text-gray-700 font-bold mb-1">Busca Rápida</label>
 <div class="flex gap-2">
-<input type="text" id="input_busca_universal" placeholder="Pesquisar em qualquer campo..." 
-class="block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-2 focus:ring-blue-500 outline-none text-gray-800">
-<button type="button" id="btn_buscar_universal" class="bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700 transition">
+<input type="text" class="input-busca-texto block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-2 focus:ring-blue-500 outline-none">
+<button type="button" class="btn-disparar-busca bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700">
 <i class="fas fa-search"></i>
 </button>
-<input type="hidden" id="id_selecionado_universal" name="id_selecionado">
+<input type="hidden" class="id-selecionado-hidden" name="id_selecionado">
 </div>
-<ul id="lista_resultados_universal" class="absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-2xl max-h-60 overflow-y-auto hidden"></ul>
+<ul class="lista-resultados-suspensa absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-2xl max-h-60 overflow-y-auto hidden"></ul>
 </div>
 <script src="js/buscar_universal.js"></script>
 <!-- FIM DA BUSCA UNIVERSAL -->
+
  */
 
-// CONFIGURAÇÃO: Basta trocar o nome da tabela aqui para reutilizar o arquivo
-const TABELA_ALVO = 'entidades'; 
 
-let cacheDadosUniversal = []; 
 
-async function inicializarBuscaUniversal() {
-    try {
-        // 1. Busca todos os dados da tabela definida
-        // O '*' busca todas as colunas automaticamente
-        const { data, error } = await window.supabaseClient
-            .from(TABELA_ALVO)
-            .select('*') 
-            .order('created_at', { ascending: false });
+async function inicializarComponentesBusca() {
+    // Busca todos os elementos que têm a classe 'componente-busca'
+    const componentes = document.querySelectorAll('.componente-busca');
 
-        if (error) throw error;
-        cacheDadosUniversal = data || [];
+    componentes.forEach(async (container) => {
+        const nomeTabela = container.getAttribute('data-tabela');
+        const inputTexto = container.querySelector('.input-busca-texto');
+        const btnBusca = container.querySelector('.btn-disparar-busca');
+        const listaUI = container.querySelector('.lista-resultados-suspensa');
+        const inputHidden = container.querySelector('.id-selecionado-hidden');
 
-        const btnBusca = document.getElementById('btn_buscar_universal');
-        const inputBusca = document.getElementById('input_busca_universal');
-        const listaUI = document.getElementById('lista_resultados_universal');
+        let cacheDados = [];
 
-        if (!btnBusca || !inputBusca || !listaUI) return;
+        try {
+            // 1. Carrega dados da tabela específica deste componente
+            const { data, error } = await window.supabaseClient
+                .from(nomeTabela)
+                .select('*');
 
-        // 2. Evento de Busca
-        btnBusca.addEventListener('click', () => {
-            const termo = inputBusca.value.trim().toLowerCase();
-            
-            if (termo === "") {
-                renderizarListaUniversal(cacheDadosUniversal);
-            } else {
-                // BUSCA DINÂMICA EM TODOS OS CAMPOS
-                const filtrados = cacheDadosUniversal.filter(registro => {
-                    // Object.values pega todos os valores das colunas do registro atual
-                    return Object.values(registro).some(valor => 
-                        String(valor).toLowerCase().includes(termo)
+            if (error) throw error;
+            cacheDados = data || [];
+
+            // 2. Evento de Clique
+            btnBusca.addEventListener('click', () => {
+                const termo = inputTexto.value.trim().toLowerCase();
+                const filtrados = (termo === "") 
+                    ? cacheDados 
+                    : cacheDados.filter(reg => 
+                        Object.values(reg).some(v => String(v).toLowerCase().includes(termo))
                     );
-                });
-                renderizarListaUniversal(filtrados);
-            }
-        });
+                
+                renderizarListaDinamica(filtrados, listaUI, inputTexto, inputHidden);
+            });
 
-        // Fechar lista ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (!inputBusca.contains(e.target) && !btnBusca.contains(e.target) && !listaUI.contains(e.target)) {
-                listaUI.classList.add('hidden');
-            }
-        });
+            // Fechar ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) listaUI.classList.add('hidden');
+            });
 
-        console.log(`🚀 Busca Universal pronta para a tabela: [${TABELA_ALVO}]`);
+            console.log(`✅ Busca configurada para: ${nomeTabela}`);
 
-    } catch (err) {
-        console.error("❌ Erro na busca universal:", err.message);
-    }
+        } catch (err) {
+            console.error(`Erro ao carregar tabela ${nomeTabela}:`, err.message);
+        }
+    });
 }
 
-function renderizarListaUniversal(dados) {
-    const listaUI = document.getElementById('lista_resultados_universal');
+function renderizarListaDinamica(dados, listaUI, inputTexto, inputHidden) {
     listaUI.innerHTML = '';
 
-    if (dados.length === 0) {
-        listaUI.innerHTML = '<li class="p-3 text-gray-500 italic text-sm text-center">Nenhum resultado encontrado.</li>';
-    } else {
-        dados.forEach(item => {
-            const li = document.createElement('li');
-            li.className = "p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 flex flex-col bg-white";
-            
-            // Lógica para exibição dinâmica:
-            // Tentamos pegar 'nome_completo' ou 'nome' ou 'descricao', senão pegamos o primeiro campo disponível
-            const titulo = item.nome_completo || item.nome || item.descricao || item.title || Object.values(item)[1];
-            const subInfo = item.cpf || item.documento || item.codigo_barras || item.tipo_entidade || "";
+    dados.forEach(item => {
+        const li = document.createElement('li');
+        li.className = "p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-50 bg-white flex flex-col";
+        
+        // Identifica campos para mostrar (tenta nomes comuns)
+        const principal = item.nome_completo || item.nome || item.descricao || item.title || Object.values(item)[1];
+        const secundario = item.cpf || item.tipo_entidade || item.codigo_barras || "";
 
-            li.innerHTML = `
-                <span class="font-bold text-gray-800 text-sm">${titulo}</span>
-                <span class="text-[10px] text-gray-500 uppercase">${subInfo}</span>
-            `;
-            
-            li.onclick = () => {
-                document.getElementById('input_busca_universal').value = titulo;
-                document.getElementById('id_selecionado_universal').value = item.id;
-                listaUI.classList.add('hidden');
-                console.log("📌 Selecionado ID:", item.id);
-            };
-            
-            listaUI.appendChild(li);
-        });
-    }
+        li.innerHTML = `
+            <span class="font-bold text-sm text-gray-800">${principal}</span>
+            <span class="text-[10px] text-gray-500 uppercase">${secundario}</span>
+        `;
+        
+        li.onclick = () => {
+            inputTexto.value = principal;
+            inputHidden.value = item.id;
+            listaUI.classList.add('hidden');
+        };
+        
+        listaUI.appendChild(li);
+    });
+
     listaUI.classList.remove('hidden');
 }
 
-document.addEventListener('DOMContentLoaded', inicializarBuscaUniversal);
+document.addEventListener('DOMContentLoaded', inicializarComponentesBusca);
