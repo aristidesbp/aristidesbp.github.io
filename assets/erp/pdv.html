@@ -12,16 +12,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
-
-
 <body class="bg-gray-100 font-sans">
-
-    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white p-5 rounded-lg flex flex-col items-center">
-            <i class="fas fa-spinner fa-spin text-3xl text-blue-600 mb-2"></i>
-            <span>Processando Venda...</span>
+<!-- NAVBAR -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
         </div>
     </div>
+<!-- FIM DA NAVBAR -->
+ 
 
     <header class="bg-slate-800 text-white p-4 shadow-md flex justify-between items-center">
         <div class="flex items-center gap-3">
@@ -102,6 +107,12 @@
         </div>
     </main>
 
-    
+ <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/validar_acesso.js"></script>
+     <script src="js/navbar.js"></script>
+    <script src="js/pdv.js"></script> 
+  <!-- ############################################################################# -->   
 </body>
 </html>
