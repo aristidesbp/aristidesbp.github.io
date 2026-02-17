@@ -1,51 +1,213 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestão de Entidades - ERP ABP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Busca Universal - Estilo Select</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+        /* CSS ESPECÍFICO DO COMPONENTE (busca_universal.css) */
+        
+        .componente-busca {
+            position: relative;
+        }
 
-<!-- ############################################################################# -->     
-<link rel="stylesheet" href="css/navbar.css">    
+        .lista-resultados-suspensa {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background-color: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            margin-top: 4px;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            padding: 0;
+        }
+
+        /* Esconder a lista */
+        .lista-resultados-suspensa.hidden {
+            display: none;
+        }
+
+        /* Estilo dos itens da lista */
+        .lista-resultados-suspensa li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lista-resultados-suspensa li:last-child {
+            border-bottom: none;
+        }
+
+        /* Efeito de Hover igual a um select */
+        .lista-resultados-suspensa li:hover {
+            background-color: #ecfdf5; /* Emerald 50 */
+        }
+
+        /* Scrollbar elegante */
+        .lista-resultados-suspensa::-webkit-scrollbar {
+            width: 6px;
+        }
+        .lista-resultados-suspensa::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-10">
+
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Formulário de Teste</h2>
+
+        <div class="componente-busca" data-tabela="entidades">
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Selecionar Cliente:</label>
+            
+            <div class="relative group">
+                <input type="text" 
+                       class="input-busca-texto w-full border border-gray-300 rounded-lg p-3 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm" 
+                       placeholder="Digite ou clique para listar...">
+                
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                    </svg>
+                </div>
+
+                <input type="hidden" class="id-selecionado-hidden" name="cliente_id">
+            </div>
+
+            <ul class="lista-resultados-suspensa hidden"></ul>
+        </div>
+        <button class="mt-8 w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 transition-colors">
+            Salvar Registro
+        </button>
+    </div>
+
+    <script>
+        /**
+         * JAVASCRIPT INTEGRADO (buscar_universal.js)
+         */
+
+        async function inicializarComponentesBusca() {
+            const componentes = document.querySelectorAll('.componente-busca');
+
+            componentes.forEach(async (container) => {
+                const nomeTabela = container.getAttribute('data-tabela');
+                const inputTexto = container.querySelector('.input-busca-texto');
+                const listaUI = container.querySelector('.lista-resultados-suspensa');
+                const inputHidden = container.querySelector('.id-selecionado-hidden');
+
+                if (!nomeTabela || !inputTexto || !listaUI) return;
+
+                let cacheDados = [];
+
+                // 1. Busca os dados (Simulação ou Supabase Real)
+                try {
+                    // Verificação para não quebrar se o supabase não estiver iniciado no teste puro
+                    if (window.supabaseClient) {
+                        const { data, error } = await window.supabaseClient.from(nomeTabela).select('*');
+                        if (error) throw error;
+                        cacheDados = data || [];
+                    } else {
+                        // MOCK PARA TESTE LOCAL (Se você abrir o arquivo sem banco de dados)
+                        cacheDados = [
+                            { id: 1, nome: "João Silva", cpf: "123.456.789-00" },
+                            { id: 2, nome: "Maria Oliveira", cpf: "987.654.321-11" },
+                            { id: 3, nome: "Empresa ABC Ltda", cnpj: "10.222.333/0001-44" },
+                            { id: 4, nome: "Carlos Souza", cpf: "555.666.777-88" }
+                        ];
+                        console.warn("Usando dados de teste (Supabase não detectado)");
+                    }
+                } catch (err) {
+                    console.error("Erro ao carregar dados:", err);
+                }
+
+                const executarBusca = () => {
+                    const termo = inputTexto.value.trim().toLowerCase();
+                    const filtrados = (termo === "") 
+                        ? cacheDados 
+                        : cacheDados.filter(reg => 
+                            Object.values(reg).some(v => String(v).toLowerCase().includes(termo))
+                        );
+                    
+                    renderizarLista(filtrados, listaUI, inputTexto, inputHidden);
+                };
+
+                // Abrir ao clicar no input
+                inputTexto.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    executarBusca();
+                });
+
+                // Filtrar ao digitar
+                inputTexto.addEventListener('input', executarBusca);
+
+                // Fechar ao clicar fora
+                document.addEventListener('click', (e) => {
+                    if (!container.contains(e.target)) {
+                        listaUI.classList.add('hidden');
+                    }
+                });
+
+                // Prevenir Enter de enviar o form e selecionar o item
+                inputTexto.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const primeiro = listaUI.querySelector('li');
+                        if (primeiro) primeiro.click();
+                    }
+                });
+            });
+        }
+
+        function renderizarLista(dados, listaUI, inputTexto, inputHidden) {
+            listaUI.innerHTML = '';
+
+            if (dados.length === 0) {
+                listaUI.innerHTML = '<li class="text-gray-400 italic text-sm text-center">Sem resultados...</li>';
+            } else {
+                dados.forEach(item => {
+                    const li = document.createElement('li');
+                    const principal = item.nome_completo || item.nome || item.descricao || Object.values(item)[1];
+                    const secundario = item.cpf || item.cnpj || item.email || "";
+
+                    li.innerHTML = `
+                        <span class="font-bold text-sm text-gray-800">${principal}</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider">${secundario}</span>
+                    `;
+                    
+                    li.onclick = () => {
+                        inputTexto.value = principal;
+                        if (inputHidden) inputHidden.value = item.id;
+                        listaUI.classList.add('hidden');
+                        console.log("ID Selecionado:", item.id);
+                    };
+                    
+                    listaUI.appendChild(li);
+                });
+            }
+            listaUI.classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', inicializarComponentesBusca);
+    </script>
 <!-- ############################################################################# --> 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/supabase_config.js"></script>
     <script src="js/validar_acesso.js"></script>
-    <script src="js/navbar.js"></script>
-<!-- ############################################################################# -->    
-</head>
-<body>
-
-<!-- NAVBAR -->
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- FIM DA NAVBAR -->
-
-<!-- BUSCA UNIVERSAL ############################################## -->
-<div class="componente-busca" data-tabela="entidades">
-<label>Cliente:</label>
-<div class="flex gap-2">
-<input type="text" class="input-busca-texto border p-2 w-full">
-<button type="button" class="btn-disparar-busca bg-blue-500 text-white px-3">Buscar</button>
-<input type="hidden" class="id-selecionado-hidden" name="cliente_id">
-</div>
-<ul class="lista-resultados-suspensa hidden border absolute bg-white w-full z-50"></ul>
-</div>
-<!-- repete a dive se quizer colocar mais de uma tabela troca apenas o  data-tabela="nome_da_tabela "-->
-<script src="js/buscar_universal.js"></script>
-
-<!-- FIM DA BUSCA UNIVERSAL ####################################### -->
- 
-    
+     <script src="js/navbar.js"></script>
+  
+  <!-- ############################################################################# -->   
 </body>
 </html>
