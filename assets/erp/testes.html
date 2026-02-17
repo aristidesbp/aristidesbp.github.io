@@ -6,19 +6,34 @@
     <title>PAGINA DE TESTES</title>
     <script src="https://cdn.tailwindcss.com"></script>    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link href="css/navbar.css" rel="stylesheet">
+   
     
     <!-- ############################################################################# --> 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/supabase_config.js"></script>
     <script src="js/validar_acesso.js"></script>
-    <script src="js/navbar.js"></script>
     <!-- ############################################################################# --> 
     
   
 </head>
 <body>
-
+    
+<!-- NAVBAR -->
+     <link href="css/navbar.css" rel="stylesheet">
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+    <script src="js/navbar.js"></script>
+<!-- FIM DA NAVBAR -->
+    
   
 <div class="relative w-full mb-4">
     <label class="block text-sm font-medium text-gray-700 font-bold mb-1">Buscar Entidade (Nome, CPF, Relação...)</label>
