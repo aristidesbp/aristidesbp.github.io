@@ -14,66 +14,66 @@
 * Linguagem: Usa Markdown para clareza e LaTeX apenas para fórmulas matemáticas complexas. Priorize a organização visual que permita consulta rápida.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## Checklist de Engenharia (Roadmap Crítico)
+## Checklist de Engenharia 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 * No padrão "ABP", seguimos o fluxo: Interface -> Infraestrutura -> Lógica -> Dados
 **Porque seguir esse padrao?**
 * Voce tera um esborso do projeto para feichar o contrato (as paginas estaticas podem ser criadas em minutos por IAs).
 * Tera uma visao geral de tudo que precisa e usará futuramente para repassar esta ideia para outras IAs.
 * Estamos no ano de 2026 e a briga entre as IAs esta aquecida nos dando diversas ferramentas para desenvolver de forma gratuitas sem programar.
-* 
+ 
 **Exemplo de Roteiro**:
 * Desenvolvedor/Gemini -> (cria estrutura do projeto e os prompts)
 * Google stittch -> (Criar interface)
 * Google IA studio -> (Colocar id e navegação) 
 * Google antigravity -> (conectar com supabase )
 
-   
-## 🎨 Fase 0: A Fachada (View & UI)
-```
-Agora, e somente agora, focamos no que o usuário toca.
-[ ] src/view/navbar.js: Componentizar o menu para que ele seja injetado em todas as páginas (evita ter que alterar 10 HTMLs quando criar um menu novo).
-[ ] src/view/tema.js: Persistência do Dark/Light mode no localStorage.
-[ ] Integração do PDV (pdv.html): Conectar os inputs da tela com o VendaController.js.
-```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🏆 Checklist de Engenharia: Metodologia ABP (Agile Blueprint)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## 1. 🎨 FASE: Interface & Experiência (UI/UX)
+* Ferramenta: Google Stitch / v0.dev / Bolt.new
+* Objetivo: Criar o impacto visual imediato para fechar o contrato.
+* Ação: Gerar páginas estáticas com nomes de IDs semânticos (ex: btn_finalizar_venda).
+* Verificar se IDs semanticos foram criados, caso contraio faça.
+* Por que primeiro? Prova de conceito visual. O cliente "toca" no produto antes dele existir.
 
-## 🏁 Fase 1: O Alicerce (Infra e Configuração)
-```
-[ ] Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
-[ ] src/model/Database.js: Centralizar as variáveis de ambiente e inicializar o client do Supabase.
-[ ] services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
-[ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
-```
-## 📊 Fase 2: Modelagem e Persistência (Back-end Mindset)
-```
-Aqui definimos as regras do jogo. O banco de dados é a única fonte da verdade.
-[ ] SQL/Migrações: Executar o script SQL no Supabase para criar as tabelas (produtos, vendas, itens_venda, financeiro).
-[ ] src/model/EstoqueModel.js: Implementar a lógica de "Baixa de Estoque".
-Regra: Se estoque_atual < pedido, retorne erro.
-[ ] src/model/VendaModel.js: Lógica de cálculo (Subtotal, Descontos, Impostos).
-```
-## ⚙️ Fase 3: O Cérebro (Controller)
-```
-O Controller liga os serviços ao modelo. É aqui que o sistema "ganha vida".
-[ ] controller/AuthController.js: Validar login e persistir a sessão no localStorage.
-[ ] controller/validar_acesso.js: Middleware que verifica em cada página .html se o usuário está logado. Se não, redireciona para login.html.
-[ ] controller/FinanceiroController.js: Integrar a conclusão de uma venda com a criação automática de uma "Conta a Receber".
-```
+## 2. 🗄️ FASE: Estrutura de Dados (Data Schema)
+* Ferramenta: Supabase (PostgreSQL) / Claude Artifacts
+* Objetivo: Definir a "memória" do sistema.
+* Ação: Criar as tabelas no Supabase com base nos campos que a Interface pediu.
+* Por que agora? Não se constrói uma casa sem saber onde canos e fiação (dados) vão passar. Sem o banco, a lógica não tem onde salvar.
 
-## 🚀 Fase 4: Integrações e Polish (Valor Agregado)
-```
-O que transforma um CRUD básico em um produto de alto valor.
-[ ] services/PrintService.js: Gerar o PDF do comprovante de venda usando jsPDF.
-[ ] services/Mercado_pago.js: Gerar o QR Code de pagamento via API.
-[ ] Dashboard (index.html): Gráficos simples consumindo dados do FinanceiroController.
-```
+## 3. 🧠 FASE: Lógica de Negócio & Conectividade (Controller)
+* Criar estrutura de pastas MVC. (documentação para IA poder criar codigos genericos)
+* Ferramenta: Google AI Studio / Gemini 1.5 Pro
+* Objetivo: Dar vida aos botões.
+* Ação: Criar as funções async/await que pegam os dados da Interface e enviam para o Supabase. É o padrão MVC em ação.
+* Por que aqui? Agora que temos a Interface (origem) e o Banco (destino), a IA consegue escrever o código de conexão sem erros.
 
-# 1. Requisitos e Regras de Negócio (O Contrato)
+## 4. 🛰️ FASE: Infraestrutura & Automação (Antigravity/APIs)
+*  Ferramenta: Google Antigravity / Make.com / APIs de Pagamento
+*  Objetivo: Tornar o sistema "inteligente" e escalável.
+*  Ação: Conectar Webhooks, Gateway de Pagamento (Mercado Pago) e disparos de WhatsApp/E-mail.
+*  Por que por último? São os "acessórios de luxo". Você só instala o ar-condicionado (API) depois que as paredes (Lógica/Dados) estão prontas.
+
+## 🧐 Por que esta ordem é superior?
+* Valor Comercial: O cliente vê o projeto pronto em minutos (Fase 1).
+* Segurança Técnica: O banco de dados (Fase 2) garante que a lógica (Fase 3) não falhe por falta de colunas ou tipos de dados errados.
+* Escalabilidade: Deixamos as integrações pesadas para o final, quando o núcleo do ERP já está estável.   
+
+
+## 1. Requisitos e Regras de Negócio (O Contrato)
 Um sistema de 10k não começa no teclado, começa no papel. Em concursos, isso cai como Engenharia de Requisitos.
 * **RF001**: O sistema deve realizar uma venda garantindo a atomicidade. Ou seja, ou salva tudo (venda, itens, financeiro e baixa de estoque) ou não salva nada.
 * **ACID** (Atomicidade, Consistência, Isolamento e Durabilidade): Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## 1. 🎨 FASE: Interface & Experiência (UI/UX)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
+
+            
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Estrutura do projeto MVC+Service (Model-View-Controller)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -149,6 +149,44 @@ Se um avaliador olhar esse projeto, ele identificará os seguintes princípios d
 * É o intermediário entre o Model e a View. Ele recebe as entradas do usuário (cliques, digitação), processa o pedido através do Model e atualiza a View com o resultado.
 * Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca os dados no Model, faz o cálculo e manda a View atualizar o subtotal na tela.
 
+
+
+## 🏁 Fase 1: O Alicerce (Infra e Configuração)
+```
+[ ] Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
+[ ] src/model/Database.js: Centralizar as variáveis de ambiente e inicializar o client do Supabase.
+[ ] services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
+[ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
+```
+## 📊 Fase 2: Modelagem e Persistência (Back-end Mindset)
+```
+Aqui definimos as regras do jogo. O banco de dados é a única fonte da verdade.
+[ ] SQL/Migrações: Executar o script SQL no Supabase para criar as tabelas (produtos, vendas, itens_venda, financeiro).
+[ ] src/model/EstoqueModel.js: Implementar a lógica de "Baixa de Estoque".
+Regra: Se estoque_atual < pedido, retorne erro.
+[ ] src/model/VendaModel.js: Lógica de cálculo (Subtotal, Descontos, Impostos).
+```
+## ⚙️ Fase 3: O Cérebro (Controller)
+```
+O Controller liga os serviços ao modelo. É aqui que o sistema "ganha vida".
+[ ] controller/AuthController.js: Validar login e persistir a sessão no localStorage.
+[ ] controller/validar_acesso.js: Middleware que verifica em cada página .html se o usuário está logado. Se não, redireciona para login.html.
+[ ] controller/FinanceiroController.js: Integrar a conclusão de uma venda com a criação automática de uma "Conta a Receber".
+```
+## 🚀 Fase 4: Integrações e Polish (Valor Agregado)
+```
+O que transforma um CRUD básico em um produto de alto valor.
+[ ] services/PrintService.js: Gerar o PDF do comprovante de venda usando jsPDF.
+[ ] services/Mercado_pago.js: Gerar o QR Code de pagamento via API.
+[ ] Dashboard (index.html): Gráficos simples consumindo dados do FinanceiroController.
+```
+## 🎨 Fase 5: A Fachada (View & UI)
+```
+Agora, e somente agora, focamos no que o usuário toca.
+[ ] src/view/navbar.js: Componentizar o menu para que ele seja injetado em todas as páginas (evita ter que alterar 10 HTMLs quando criar um menu novo).
+[ ] src/view/tema.js: Persistência do Dark/Light mode no localStorage.
+[ ] Integração do PDV (pdv.html): Conectar os inputs da tela com o VendaController.js.
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
