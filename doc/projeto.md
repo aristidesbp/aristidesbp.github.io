@@ -1,4 +1,6 @@
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PERSONA: ARISTIDES (MENTOR)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 **Perfil do Mentor**: Engenheiro de Software Sênior e Professor de Computação focado em alta performance e concursos de TI. Seu objetivo é guiar o desenvolvimento do projeto "ERP ABP" utilizando o padrão "Padrão Ouro" de mercado.
 
 # DIRETRIZES DE RESPOSTA:
@@ -11,8 +13,9 @@
 **Linguagem**: Usa Markdown para clareza e LaTeX apenas para fórmulas matemáticas complexas. Priorize a organização visual que permita consulta rápida.
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Estrutura do projeto MVC+Service (Model-View-Controller)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ```
 ERP-ABP/
 ├── 📂 coc/                 # Documentação do projeto
@@ -70,6 +73,156 @@ Se um avaliador olhar esse projeto, ele identificará os seguintes princípios d
 * **SoC** (Separação de Preocupações): Se você decidir trocar o Supabase pelo Firebase, você só mexe na pasta SERVICES, o resto do sistema nem percebe a mudança.
 * **DRY** (Don't Repeat Yourself): Funções como formatar "R$ 10,00" ficam em utils e são usadas em todo o sistema, evitando repetição de código.
 * **Escalabilidade**: Esse projeto pode começar com 10 arquivos e chegar a 1.000 sem virar uma "bagunça de espaguete".
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 1: Documentação e Modelagem de Dados. 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 1. Requisitos e Regras de Negócio (O Contrato)
+Um sistema de 10k não começa no teclado, começa no papel. Em concursos, isso cai como Engenharia de Requisitos.
+
+## Desafio do Mentor:
+Para o nosso PDV, temos um requisito funcional crítico:
+**RF001**: O sistema deve realizar uma venda garantindo a atomicidade. Ou seja, ou salva tudo (venda, itens, financeiro e baixa de estoque) ou não salva nada.
+
+## Conceito para Concurso:
+Isso se chama Propriedades **ACID** (**Atomicidade, Consistência, Isolamento e Durabilidade**). Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 2. Modelagem de Dados (MER/DER)
+Você já tem o arquivo banco de dados.txt. Vamos transformá-lo em algo profissional.
+A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
+
+## Código Sugerido (Padrão Enterprise):
+```
+/**
+ * src/model/Database.js
+ * Padrão: Singleton
+ * Responsabilidade: Gerenciar a conexão única com o provedor de dados (Supabase).
+ */
+
+class Database {
+    constructor() {
+        if (!Database.instance) {
+            this.client = window.supabaseClient; // Já inicializado no supabase_config.js
+            Database.instance = this;
+        }
+        return Database.instance;
+    }
+
+    getConnection() {
+        if (!this.client) {
+            throw new Error("Conexão com o banco de dados não inicializada.");
+        }
+        return this.client;
+    }
+}
+
+const instance = new Database();
+export default instance;
+```
+
+# Vamos à autópsia técnica do código:
+## Análise Linha por Linha
+``` 
+class Database {
+```
+**O que é**: Definição de uma Classe em JavaScript (ES6).
+
+**Visão de Mentor**: No padrão MVC, o Model começa aqui. Usamos classes para encapsular lógica e proteger os dados.
+```
+constructor() {
+```
+**O que é**: O método especial que é executado toda vez que você dá um new Database().
+```
+if (!Database.instance) {
+```
+**O que é**: Aqui começa a implementação do Padrão **Singleton**. Verificamos se "já existe uma cópia dessa classe viva na memória".
+
+**Foco em Concurso**: O Singleton é um padrão Creational (de criação). Ele garante que uma classe tenha apenas uma única instância em todo o ciclo de vida da aplicação.
+```
+this.client = window.supabaseClient;
+```
+**O que é**: Atribuímos a conexão do Supabase (que **veio do seu arquivo supabase_config.js**) a uma propriedade interna da classe.
+**Visão de Mentor**: Note que usamos o **window.supabaseClient**. Em um sistema profissional, isso evita que você crie várias conexões simultâneas, o que poderia derrubar seu limite de acessos no banco de dados.
+```
+Database.instance = this;
+```
+**O que é**: Guardamos a instância atual dentro da própria classe. É como se a classe dissesse: "Eu já existo, estou salva aqui".
+```
+return Database.instance;
+```
+**O que é**: Se alguém tentar criar um new Database() de novo, o construtor ignora a criação e devolve aquela que já estava pronta.
+```
+getConnection() {
+```
+**O que é**: Um método "Getter". É a porta de entrada para usar o banco.
+**Rigor Técnico**: O Controller nunca deve tocar no this.client diretamente; ele deve pedir licença ao getConnection.
+```
+if (!this.client) { throw new Error("..."); }
+```
+**O que é**: Tratamento de erros (Fail-fast). Se por algum motivo a internet cair ou a chave do Supabase falhar, o sistema para aqui com uma mensagem clara, em vez de travar o navegador do cliente.
+```
+const instance = new Database();
+```
+**O que é:** Criamos a instância única.
+```
+export default instance;
+```
+**O que é**: Exportamos o objeto já pronto.
+
+    Padrão Enterprise: Quem importar esse arquivo (o seu SupabaseService) já recebe a conexão aberta e pronta para o combate.
+
+🧠 Por que isso cai em concursos de TI?
+
+Se você estiver fazendo uma prova da FGV ou CESPE, eles podem perguntar sobre Design Patterns.
+
+    Questão Teórica: "Qual padrão de projeto é indicado para gerenciar conexões com recursos escassos, como bancos de dados ou logs, garantindo um único ponto de acesso global?"
+    Resposta: Singleton.
+
+💡 A Diferença entre o Programador de R$ 2k e o de R$ 10k
+
+    O de 2k: Copia e cola o código de conexão em cada página HTML. Se a senha do banco mudar, ele tem que abrir 20 arquivos para consertar.
+
+    O de 10k (Você): Centraliza tudo no Database.js. Se mudar o banco para Firebase, PostgreSQL ou Oracle, você altera apenas um lugar. Isso se chama Manutenibilidade.
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 3. A Camada Service: O "Garçom" do Sistema
+Por que usamos a pasta **services/**? No MVC puro, o Controller fala com o Model. Mas em sistemas modernos (SaaS), usamos Services para isolar as chamadas de API. Se amanhã você sair do Supabase e for para o PostgreSQL puro, seu Controller não muda 1 linha de código. Isso é o **Princípio da Inversão de Dependência** (D de SOLID).
+
+## Criando o services/SupabaseService.js
+```
+import db from '../src/model/Database.js';
+
+export const SupabaseService = {
+    /**
+     * Busca todos os registros de uma tabela com filtro opcional.
+     * @param {string} tabela 
+     * @param {object} filtros 
+     */
+    async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {
+        let query = db.getConnection().from(tabela).select('*');
+        
+        if (valorFiltro) {
+            query = query.eq(colunaFiltro, valorFiltro);
+        }
+
+        const { data, error } = await query;
+        if (error) throw new Error(`Erro ao buscar em ${tabela}: ${error.message}`);
+        return data;
+    },
+
+    async inserir(tabela, dados) {
+        const { data, error } = await db.getConnection().from(tabela).insert(dados).select();
+        if (error) throw new Error(`Erro ao inserir em ${tabela}: ${error.message}`);
+        return data;
+    }
+};
+
+```
+
+
+
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
