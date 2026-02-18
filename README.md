@@ -6,7 +6,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 📱 **WhatsApp:** +55 (91) 99242-0981
 * 🌐 **GitHub:** [https://github.com/aristidesbp](https://github.com/aristidesbp)
 * 🌐 **Meu_site:** [https://aristidesbp.github.io](https://aristidesbp.github.io)
-* 🌐 **Doc_erp:** [https://aristidesbp.github.io](https://github.com/aristidesbp/doc/projeto.md)
+* 🌐 **Doc_erp:** [https://aristidesbp.github.io](https://aristidesbp.github.io/doc/projeto.md)
 * 🌐 **Aulas:** [https://aristidesbp.github.io](https://aristidesbp.github.io/doc/aulas.md)
 
 
