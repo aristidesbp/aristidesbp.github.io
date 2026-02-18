@@ -374,87 +374,30 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
    ON DELETE CASCADE;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# MEU MODO DE PROGRAMAR
+# Estrutura do projeto MVC+Service (Model-View-Controller)
 ```
-1- sempre pergunto ao cliente se ja existe um banco de dados , e espero a resposta do mesmo, caso ele não mande.
-2- em todos os meus códigos SEMPRE ADICIONO comentários explicativos .
-3- Coloco id en todos os elementos (principalmente nos formulários, para facilitar utilização dos Campos).
-4- todos os códigos que não forem html, coloco um comentário no topo falando o nome do arquivo e para que ele serve.
-Exemplo:
-/**
- * Nome do arquivo: alternar_senha.js
- * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
- */
-
-5- faço códigos modulares e reutilizáveis orientado a objeto
-6- Exemplo da Arquitetura de Pastas e Arquivos:
-aristidesbp:erp$ tree
-.
-├── css
-│   ├── Arquivo sem título
-│   ├── entidades.css
-│   ├── financeiro.css
-│   ├── index.css
-│   ├── navbar.css
-│   ├── pdv.css
-│   ├── produto.css
-│   ├── produtos.css
-│   └── vitrine.css
-├── entidades.html
-├── financeiro2.html
-├── financeiro.html
-├── index.html
-├── js
-│   ├── alternar_senha.js
-│   ├── carrinho.js
-│   ├── entidades.js
-│   ├── finalizar_venda.js
-│   ├── financeiro.js
-│   ├── login_google.js
-│   ├── login.js
-│   ├── navbar.js
-│   ├── pdv2.js
-│   ├── pdv.js
-│   ├── processar_imagem.js
-│   ├── produto.js
-│   ├── realizar_cadastro.js
-│   ├── realizar_login.js
-│   ├── recuperar_senha.js
-│   ├── salvar_produto.js
-│   ├── supabase_config.js
-│   ├── validar_acesso.js
-│   └── vitrine.js
-├── login.html
-├── mercadopago_supabase
-│   ├── doc.md
-│   ├── index.html
-│   ├── servicos.json
-│   ├── site.html
-│   ├── sucesso.html
-│   └── supabase
-│       ├── config.toml
-│       └── functions
-│           └── checkout
-│               ├── deno.json
-│               └── index.ts
-├── pdv-completo.html
-├── pdv.html
-├── produtos.html
-├── redefinir_senha.html
-├── sql
-│   └── banco de dados.txt
-└── vitrine.html
-
-## EXEMPLOS DE CHAMADAS REALIZADAS DENTRO DOS ARQUIVOS HTML.
-<!-- LOGIN.HTML ############################################################### --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="js/supabase_config.js"></script>
-    <script src="js/alternar_senha.js"></script>
-    <script src="js/realizar_login.js"></script>
-    <script src="js/realizar_cadastro.js"></script>
-    <script src="js/recuperar_senha.js"></script>
-    <script src="js/login_google.js"></script>
-<!-- ###################################################################### --> 
+ERP-ABP/
+├── 📂 assets/              # Arquivos estáticos (imagens, logos, banners)
+├── 📂 css/                 # Estilização
+│   ├── navbar.css
+│   └── main.css
+├── 📂 src/                 # Código fonte organizado (MVC)
+│   ├── 📂 model/           # Definição dos dados e Regras de Negócio
+│   │   ├── Database.js     # Configuração (Supabase)
+│   │   └── Schema.js       # Estrutura das tabelas (como o seu arquivo .txt)
+│   ├── 📂 view/            # Interface e Componentes Visuais
+│   │   ├── 📂 components/  # Partes reutilizáveis (modais, cards)
+│   │   └── Render.js       # Funções que manipulam o DOM (desenham na tela)
+│   └── 📂 controller/      # Orquestrador (Liga a View ao Model)
+│       ├── AuthController.js
+│       └── PdvController.js
+├── 📂 services/            # Integrações Externas
+│   ├── SupabaseService.js  # Chamadas diretas ao banco
+│   └── PrintService.js     # Lógica de PDF (jsPDF)
+├── 📂 utils/               # Funções utilitárias (formatar data, moeda, etc)
+│   └── Formatter.js
+├── index.html              # Dashboard principal
+└── pdv.html                # Frente de Caixa
 ```
 
 
