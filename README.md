@@ -377,27 +377,40 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
 # Estrutura do projeto MVC+Service (Model-View-Controller)
 ```
 ERP-ABP/
-├── 📂 assets/              # Arquivos estáticos (imagens, logos, banners)
-├── 📂 css/                 # Estilização
-│   ├── navbar.css
-│   └── main.css
-├── 📂 src/                 # Código fonte organizado (MVC)
-│   ├── 📂 model/           # Definição dos dados e Regras de Negócio
-│   │   ├── Database.js     # Configuração (Supabase)
-│   │   └── Schema.js       # Estrutura das tabelas (como o seu arquivo .txt)
-│   ├── 📂 view/            # Interface e Componentes Visuais
-│   │   ├── 📂 components/  # Partes reutilizáveis (modais, cards)
-│   │   └── Render.js       # Funções que manipulam o DOM (desenham na tela)
-│   └── 📂 controller/      # Orquestrador (Liga a View ao Model)
+├── 📂 assets/              # Imagens, logos e ícones
+├── 📂 css/                 # Estilos (Global e específicos)
+│   ├── main.css
+│   └── navbar.css
+├── 📂 src/                 # Código-fonte principal (MVC)
+│   ├── 📂 model/           # Camada de Dados e Regras de Negócio
+│   │   ├── Database.js     # Configuração Supabase
+│   │   ├── EstoqueModel.js # Regras de baixa e validação
+│   │   └── VendaModel.js   # Regras de cálculo e descontos
+│   ├── 📂 view/            # Camada de Interface (DOM)
+│   │   ├── PdvView.js      # Renderiza carrinho e grid
+│   │   ├── FinanceiroView.js
+│   │   └── Componentes.js  # Renderiza elementos comuns (modais, loaders)
+│   └── 📂 controller/      # Camada de Controle (O "Maestro")
 │       ├── AuthController.js
-│       └── PdvController.js
-├── 📂 services/            # Integrações Externas
-│   ├── SupabaseService.js  # Chamadas diretas ao banco
-│   └── PrintService.js     # Lógica de PDF (jsPDF)
-├── 📂 utils/               # Funções utilitárias (formatar data, moeda, etc)
-│   └── Formatter.js
-├── index.html              # Dashboard principal
-└── pdv.html                # Frente de Caixa
+│       ├── PdvController.js
+│       └── FinanceiroController.js
+├── 📂 services/            # Serviços de terceiros e APIs
+│   ├── SupabaseService.js  # Abstração do banco (Select/Insert)
+│   └── PrintService.js     # Lógica de geração de PDF (jsPDF)
+├── 📂 utils/               # Funções auxiliares (Globais)
+│   ├── Formatador.js       # Datas e Moeda (R$)
+│   └── Validadores.js      # CPF/CNPJ e Senhas
+│
+├── entidades.html
+├── financeiro.html
+├── produtos.html
+├── pdv.html
+├── loja_virtual.html
+├── tarefas.html
+├── configuracoes.html
+├── vendas.html
+├── index.html              # Dashboard Principal
+└── login.html              # Tela de Acesso
 ```
 
 
