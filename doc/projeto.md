@@ -108,30 +108,34 @@ Não se escreve uma linha de lógica sem antes ter onde guardar os dados e como 
 [ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
 
 ## 📊 Fase 1: Modelagem e Persistência (Back-end Mindset)
+```
 Aqui definimos as regras do jogo. O banco de dados é a única fonte da verdade.
 [ ] SQL/Migrações: Executar o script SQL no Supabase para criar as tabelas (produtos, vendas, itens_venda, financeiro).
 [ ] src/model/EstoqueModel.js: Implementar a lógica de "Baixa de Estoque".
 Regra: Se estoque_atual < pedido, retorne erro.
 [ ] src/model/VendaModel.js: Lógica de cálculo (Subtotal, Descontos, Impostos).
-
+```
+```
 ## ⚙️ Fase 2: O Cérebro (Controller)
 O Controller liga os serviços ao modelo. É aqui que o sistema "ganha vida".
 [ ] controller/AuthController.js: Validar login e persistir a sessão no localStorage.
 [ ] controller/validar_acesso.js: Middleware que verifica em cada página .html se o usuário está logado. Se não, redireciona para login.html.
 [ ] controller/FinanceiroController.js: Integrar a conclusão de uma venda com a criação automática de uma "Conta a Receber".
-
+```
+```
 ## 🎨 Fase 3: A Fachada (View & UI)
 Agora, e somente agora, focamos no que o usuário toca.
 [ ] src/view/navbar.js: Componentizar o menu para que ele seja injetado em todas as páginas (evita ter que alterar 10 HTMLs quando criar um menu novo).
 [ ] src/view/tema.js: Persistência do Dark/Light mode no localStorage.
 [ ] Integração do PDV (pdv.html): Conectar os inputs da tela com o VendaController.js.
-
+```
+```
 ## 🚀 Fase 4: Integrações e Polish (Valor Agregado)
 O que transforma um CRUD básico em um produto de alto valor.
 [ ] services/PrintService.js: Gerar o PDF do comprovante de venda usando jsPDF.
 [ ] services/Mercado_pago.js: Gerar o QR Code de pagamento via API.
 [ ] Dashboard (index.html): Gráficos simples consumindo dados do FinanceiroController.
-
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FASE 1: Documentação e Modelagem de Dados. 
