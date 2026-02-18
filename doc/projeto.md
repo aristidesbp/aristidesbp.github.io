@@ -219,7 +219,80 @@ export const SupabaseService = {
 };
 
 ```
+Se o Database.js é o coração que bombeia a conexão, o SupabaseService.js são as artérias. Na engenharia de software, chamamos isso de Camada de Serviço (Service Layer) ou Data Access Object (DAO).
 
+Este código é o que separa um sistema amador de um sistema de R$ 10k. Vamos à análise técnica:
+Análise Linha por Linha
+
+import db from '../src/model/Database.js';
+
+    O que faz: Importa a instância única (Singleton) que criamos anteriormente.
+
+    Rigor Técnico: Note que não importamos o Supabase diretamente aqui. Importamos o nosso "Gerenciador". Isso garante que o Service use a conexão oficial e protegida do sistema.
+
+export const SupabaseService = {
+
+    O que faz: Exporta um objeto literal contendo métodos reutilizáveis.
+
+    Visão de Mentor: Em vez de escrever o código do Supabase em cada página (PDV, Estoque, Clientes), você centraliza aqui. Se o Supabase atualizar a versão da biblioteca deles, você só conserta neste arquivo.
+
+async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {
+
+    O que faz: Uma função assíncrona genérica para buscar dados.
+
+    Parâmetros:
+
+        tabela: Qual tabela queremos (ex: 'produtos').
+
+        colunaFiltro: Qual coluna testar (padrão é 'id').
+
+        valorFiltro: O valor que buscamos. Se for null, ele traz tudo.
+
+    Foco em Concurso: Isso demonstra Abstração. O Controller não precisa saber "como" o banco busca, apenas pede os dados.
+
+let query = db.getConnection().from(tabela).select('*');
+
+    O que faz: Prepara a "pergunta" (query) para o banco de dados.
+
+    Linha Crítica: db.getConnection() chama aquele método que explicamos antes, garantindo que a conexão exista.
+
+if (valorFiltro) { query = query.eq(colunaFiltro, valorFiltro); }
+
+    O que faz: Se você passou um filtro (ex: buscar apenas o produto com código '123'), ele adiciona a cláusula .eq (equal/igual). Se não passou, a query continua configurada para trazer todos os registros.
+
+const { data, error } = await query;
+
+    O que faz: Executa a busca de fato e espera (await) o servidor responder.
+
+    Rigor Técnico: O Supabase sempre retorna um objeto com data (sucesso) ou error (falha).
+
+if (error) throw new Error(...);
+
+    O que faz: Tratamento de Exceção. Se o banco estiver fora do ar ou a tabela não existir, o código "lança" um erro.
+
+    Visão de Mentor: Um sistema de 10k nunca esconde erros. Ele os trata para que o desenvolvedor saiba exatamente o que falhou.
+
+async inserir(tabela, dados) { ... }
+
+    O que faz: Método genérico para salvar qualquer coisa (Vendas, Clientes, Tarefas).
+
+    .insert(dados).select(): Insere os dados e pede para o banco retornar o registro que acabou de ser criado (útil para pegar o ID gerado automaticamente).
+
+🧠 Por que isso é "Padrão Ouro"? (Visão de Concurso)
+
+Em provas de Desenvolvimento de Sistemas, costuma-se cobrar o conceito de Desacoplamento.
+
+Observe a hierarquia:
+
+    View (HTML): Não sabe que o banco existe.
+
+    Controller: Sabe que precisa de dados, mas não sabe "como" pegar. Ele chama o Service.
+
+    Service: Sabe "como" falar com o Supabase.
+
+    Database (Singleton): Sabe "onde" está a chave e a URL de conexão.
+
+Vantagem Comercial: Se você quiser vender esse ERP para uma empresa que não usa nuvem e prefere um banco de dados local (MySQL), você só precisaria reescrever este arquivo SupabaseService.js. Todo o resto do seu sistema (PDV, Financeiro, etc.) continuaria funcionando sem mudar uma vírgula.
 
 
 
