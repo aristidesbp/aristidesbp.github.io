@@ -94,19 +94,19 @@ Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca 
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Checklist de Engenharia (Roadmap Crítico)
+## Checklist de Engenharia (Roadmap Crítico)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 * No padrão "Padrão Ouro", seguimos o fluxo: Infraestrutura -> Dados -> Lógica -> Interface.
-
-## Aqui está o seu Checklist de Engenharia (Roadmap Crítico), dividido por sprints lógicas para que o código não fique "solto no vento".
+* Aqui está o seu Checklist de Engenharia (Roadmap Crítico), dividido por sprints lógicas para que o código não fique "solto no vento".
 Não se escreve uma linha de lógica sem antes ter onde guardar os dados e como acessá-los.
 
 ## 🏁 Fase 0: O Alicerce (Infra e Configuração)
+```
 [ ] Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
 [ ] src/model/Database.js: Centralizar as variáveis de ambiente e inicializar o client do Supabase.
 [ ] services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
 [ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
-
+```
 ## 📊 Fase 1: Modelagem e Persistência (Back-end Mindset)
 ```
 Aqui definimos as regras do jogo. O banco de dados é a única fonte da verdade.
@@ -115,45 +115,47 @@ Aqui definimos as regras do jogo. O banco de dados é a única fonte da verdade.
 Regra: Se estoque_atual < pedido, retorne erro.
 [ ] src/model/VendaModel.js: Lógica de cálculo (Subtotal, Descontos, Impostos).
 ```
-```
 ## ⚙️ Fase 2: O Cérebro (Controller)
+```
 O Controller liga os serviços ao modelo. É aqui que o sistema "ganha vida".
 [ ] controller/AuthController.js: Validar login e persistir a sessão no localStorage.
 [ ] controller/validar_acesso.js: Middleware que verifica em cada página .html se o usuário está logado. Se não, redireciona para login.html.
 [ ] controller/FinanceiroController.js: Integrar a conclusão de uma venda com a criação automática de uma "Conta a Receber".
 ```
-```
 ## 🎨 Fase 3: A Fachada (View & UI)
+```
 Agora, e somente agora, focamos no que o usuário toca.
 [ ] src/view/navbar.js: Componentizar o menu para que ele seja injetado em todas as páginas (evita ter que alterar 10 HTMLs quando criar um menu novo).
 [ ] src/view/tema.js: Persistência do Dark/Light mode no localStorage.
 [ ] Integração do PDV (pdv.html): Conectar os inputs da tela com o VendaController.js.
 ```
-```
 ## 🚀 Fase 4: Integrações e Polish (Valor Agregado)
+```
 O que transforma um CRUD básico em um produto de alto valor.
 [ ] services/PrintService.js: Gerar o PDF do comprovante de venda usando jsPDF.
 [ ] services/Mercado_pago.js: Gerar o QR Code de pagamento via API.
 [ ] Dashboard (index.html): Gráficos simples consumindo dados do FinanceiroController.
 ```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASE 1: Documentação e Modelagem de Dados. 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 1. Requisitos e Regras de Negócio (O Contrato)
 Um sistema de 10k não começa no teclado, começa no papel. Em concursos, isso cai como Engenharia de Requisitos.
-
-## Desafio do Mentor:
-Para o nosso PDV, temos um requisito funcional crítico:
 **RF001**: O sistema deve realizar uma venda garantindo a atomicidade. Ou seja, ou salva tudo (venda, itens, financeiro e baixa de estoque) ou não salva nada.
+**ACID** (Atomicidade, Consistência, Isolamento e Durabilidade): Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🏁 Fase 0: O Alicerce (Infra e Configuração)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+[ ] Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
+```
 
-## Conceito para Concurso:
-Isso se chama Propriedades **ACID** (**Atomicidade, Consistência, Isolamento e Durabilidade**). Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
+```
+[ ] src/model/Database.js: Centralizar as variáveis de ambiente e inicializar o client do Supabase.
+[ ] services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
+[ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 2. Modelagem de Dados (MER/DER)
-Você já tem o arquivo banco de dados.txt. Vamos transformá-lo em algo profissional.
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
 
 ## Código Sugerido (Padrão Enterprise):
