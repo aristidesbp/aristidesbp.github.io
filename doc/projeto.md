@@ -2,22 +2,21 @@
 # PERSONA: ARISTIDES (MENTOR)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-**Perfil do Mentor**: Engenheiro de Software Sênior e Professor de Computação focado em alta performance e concursos de TI. Seu objetivo é guiar o desenvolvimento do projeto "ERP ABP" utilizando o padrão "Padrão Ouro" de mercado.
+* Perfil do Mentor: Engenheiro de Software Sênior e Professor de Computação focado em alta performance e concursos de TI. Seu objetivo é guiar o desenvolvimento do projeto "ERP ABP" utilizando o padrão "Padrão Ouro" de mercado.
+  
+**DIRETRIZES DE RESPOSTA**:
+* Metodologia Prática: Não entregua apenas códigos isolados; explica onde o código se encaixa na arquitetura MVC (Model-View-Controller).
+* Rigor Técnico: Trata o projeto como um sistema real de alto valor comercial (R$ 10k+). Usando boas práticas de Engenharia de Software: Princípios SOLID, DRY (Don't Repeat Yourself) e Clean Code.
 
-# DIRETRIZES DE RESPOSTA:
-**Metodologia Prática**: Não entregua apenas códigos isolados; explica onde o código se encaixa na arquitetura MVC (Model-View-Controller).
-**Rigor Técnico**: Trata o projeto como um sistema real de alto valor comercial (R$ 10k+). Usando boas práticas de Engenharia de Software: Princípios SOLID, DRY (Don't Repeat Yourself) e Clean Code.
-
-# CICLO DE DESENVOLVIMENTO: 
-**Guia o projeto por fases**: Documentação e Requisitos -> Modelagem de Dados (MER/DER) -> Arquitetura de Pastas -> Desenvolvimento Modular -> Integrações (APIs/Automações) -> Testes e Deploy.
-**Modernidade**: Sempre sugeri integrações inteligentes (Webhooks, APIs de pagamento, Automações com IA, Supabase para Backend as a Service) e tendências de UI/UX que valorizem o produto final.
-**Linguagem**: Usa Markdown para clareza e LaTeX apenas para fórmulas matemáticas complexas. Priorize a organização visual que permita consulta rápida.
+**CICLO DE DESENVOLVIMENTO**: 
+* Guia o projeto por fases: Documentação e Requisitos -> Modelagem de Dados (MER/DER) -> Arquitetura de Pastas -> Desenvolvimento Modular -> Integrações (APIs/Automações) -> Testes e Deploy.
+* Modernidade: Sempre sugeri integrações inteligentes (Webhooks, APIs de pagamento, Automações com IA, Supabase para Backend as a Service) e tendências de UI/UX que valorizem o produto final.
+* Linguagem: Usa Markdown para clareza e LaTeX apenas para fórmulas matemáticas complexas. Priorize a organização visual que permita consulta rápida.
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Estrutura do projeto MVC+Service (Model-View-Controller)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
 ```
 ERP-ABP/
 ├── 📂 coc/                 # Documentação do projeto
@@ -78,27 +77,21 @@ Se um avaliador olhar esse projeto, ele identificará os seguintes princípios d
 
 # src/model (modelo/db)
 * É o cérebro do sistema, ele gerencia os dados, a lógica de negócio e as regras de armazenamento. O Model é representado pelas tabelas do Supabase (produtos, vendas, financeiro, tarefas) e pelas funções que manipulam esses dados antes de salvá-los.
-
-Exemplo: A regra que impede a venda de um produto se o estoque_atual for menor que a quantidade desejada.
+* Exemplo: A regra que impede a venda de um produto se o estoque_atual for menor que a quantidade desejada.
 
 # src/view (js para construir a pagina, não interage com model)
-É a interface com a qual o usuário interage (o que ele vê na tela).
-View é o arquivo HTML.
-
-Exemplo: O grid de produtos, o visor do carrinho e o botão "FINALIZAR (F2)".
+* É a interface com a qual o usuário interage (o que ele vê na tela).
+* Exemplo: O grid de produtos, o visor do carrinho e o botão "FINALIZAR (F2)".
 
 # src/Controller 
 * Pega os dados da view, trata e manda pro model.
 * pega os dados do model, e manda para view.
 * É o intermediário entre o Model e a View. Ele recebe as entradas do usuário (cliques, digitação), processa o pedido através do Model e atualiza a View com o resultado.
+* Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca os dados no Model, faz o cálculo e manda a View atualizar o subtotal na tela.
 
-Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca os dados no Model, faz o cálculo e manda a View atualizar o subtotal na tela.
-
----
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## Checklist de Engenharia (Roadmap Crítico)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
 * No padrão "Padrão Ouro", seguimos o fluxo: Infraestrutura -> Dados -> Lógica -> Interface.
 * Aqui está o seu Checklist de Engenharia (Roadmap Crítico), dividido por sprints lógicas para que o código não fique "solto no vento".
 Não se escreve uma linha de lógica sem antes ter onde guardar os dados e como acessá-los.
@@ -141,20 +134,16 @@ O que transforma um CRUD básico em um produto de alto valor.
 ```
 # 1. Requisitos e Regras de Negócio (O Contrato)
 Um sistema de 10k não começa no teclado, começa no papel. Em concursos, isso cai como Engenharia de Requisitos.
-**RF001**: O sistema deve realizar uma venda garantindo a atomicidade. Ou seja, ou salva tudo (venda, itens, financeiro e baixa de estoque) ou não salva nada.
-**ACID** (Atomicidade, Consistência, Isolamento e Durabilidade): Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
+* **RF001**: O sistema deve realizar uma venda garantindo a atomicidade. Ou seja, ou salva tudo (venda, itens, financeiro e baixa de estoque) ou não salva nada.
+* **ACID** (Atomicidade, Consistência, Isolamento e Durabilidade): Se o banco de dados falhar no meio do processo e você já tiver dado baixa no estoque mas não salvou o financeiro, seu sistema é lixo.
 
----
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🏁 Fase 0: O Alicerce (Infra e Configuração)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-* Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
+## Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
 
-# 🟥 src/model/Database.js: 
-* Centralizar as variáveis de ambiente e inicializar o client do Supabase.
-* Código Sugerido (Padrão Enterprise):
-A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
-
+## 🟥 src/model/Database.js: 
 ```
 /**
  * src/model/Database.js
@@ -182,38 +171,50 @@ class Database {
 const instance = new Database();
 export default instance;
 ```
+* Centralizar as variáveis de ambiente e inicializar o client do Supabase.
+* Código Sugerido (Padrão Enterprise):
+* A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
 
-# Vamos à autópsia técnica do código:
-## Análise Linha por Linha
+## Vamos à autópsia técnica do código:
+** Análise Linha por Linha**:
+
 ``` class Database {```
-**O que é**: Definição de uma Classe em JavaScript (ES6).
-**Visão de Mentor**: No padrão MVC, o Model começa aqui. Usamos classes para encapsular lógica e proteger os dados.
+* O que é: Definição de uma Classe em JavaScript (ES6).
+* Visão de Mentor: No padrão MVC, o Model começa aqui. Usamos classes para encapsular lógica e proteger os dados.
+
 ```constructor() {```
-**O que é**: O método especial que é executado toda vez que você dá um new Database().
+* O que é: O método especial que é executado toda vez que você dá um new Database().
+  
 ```if (!Database.instance) {```
-**O que é**: Aqui começa a implementação do Padrão **Singleton**. Verificamos se "já existe uma cópia dessa classe viva na memória".
-**Foco em Concurso**: O Singleton é um padrão Creational (de criação). Ele garante que uma classe tenha apenas uma única instância em todo o ciclo de vida da aplicação.
+* O que é: Aqui começa a implementação do Padrão **Singleton**. Verificamos se "já existe uma cópia dessa classe viva na memória".
+* Foco em Concurso: O Singleton é um padrão Creational (de criação). Ele garante que uma classe tenha apenas uma única instância em todo o ciclo de vida da aplicação.
+  
 ```this.client = window.supabaseClient;```
-**O que é**: Atribuímos a conexão do Supabase (que **veio do seu arquivo supabase_config.js**) a uma propriedade interna da classe.
-**Visão de Mentor**: Note que usamos o **window.supabaseClient**. Em um sistema profissional, isso evita que você crie várias conexões simultâneas, o que poderia derrubar seu limite de acessos no banco de dados.
+* O que é: Atribuímos a conexão do Supabase (que **veio do seu arquivo supabase_config.js**) a uma propriedade interna da classe.
+* Visão de Mentor: Note que usamos o **window.supabaseClient**. Em um sistema profissional, isso evita que você crie várias conexões simultâneas, o que poderia derrubar seu limite de acessos no banco de dados.
+  
 ```Database.instance = this;```
-**O que é**: Guardamos a instância atual dentro da própria classe. É como se a classe dissesse: "Eu já existo, estou salva aqui".
+* O que é: Guardamos a instância atual dentro da própria classe. É como se a classe dissesse: "Eu já existo, estou salva aqui".
+  
 ```return Database.instance;```
-**O que é**: Se alguém tentar criar um new Database() de novo, o construtor ignora a criação e devolve aquela que já estava pronta.
+* O que é: Se alguém tentar criar um new Database() de novo, o construtor ignora a criação e devolve aquela que já estava pronta.
+  
 ```getConnection() {```
-**O que é**: Um método "Getter". É a porta de entrada para usar o banco.
-**Rigor Técnico**: O Controller nunca deve tocar no this.client diretamente; ele deve pedir licença ao getConnection.
+* O que é: Um método "Getter". É a porta de entrada para usar o banco.
+* Rigor Técnico: O Controller nunca deve tocar no this.client diretamente; ele deve pedir licença ao getConnection.
+  
 ```if (!this.client) { throw new Error("..."); }```
-**O que é**: Tratamento de erros (Fail-fast). Se por algum motivo a internet cair ou a chave do Supabase falhar, o sistema para aqui com uma mensagem clara, em vez de travar o navegador do cliente.
+* O que é: Tratamento de erros (Fail-fast). Se por algum motivo a internet cair ou a chave do Supabase falhar, o sistema para aqui com uma mensagem clara, em vez de travar o navegador do cliente.
+  
 ```const instance = new Database();```
-**O que é:** Criamos a instância única.
+* O que é: Criamos a instância única.
+  
 ```export default instance;```
-**O que é**: Exportamos o objeto já pronto.
-**Padrão Enterprise**: Quem importar esse arquivo (o seu SupabaseService) já recebe a conexão aberta e pronta para o combate.
-#### 🧠 Por que isso cai em concursos de TI?
-Se você estiver fazendo uma prova da FGV ou CESPE, eles podem perguntar sobre Design Patterns.
-**Questão Teórica**: "Qual padrão de projeto é indicado para gerenciar conexões com recursos escassos, como bancos de dados ou logs, garantindo um único ponto de acesso global?" Resposta: Singleton.
-#### 💡 A Diferença entre o Programador de R$ 2k e o de R$ 10k
+* O que é: Exportamos o objeto já pronto.
+* Padrão Enterprise: Quem importar esse arquivo (o seu SupabaseService) já recebe a conexão aberta e pronta para o combate.
+* 🧠 Por que isso cai em concursos de TI? Se você estiver fazendo uma prova da FGV ou CESPE, eles podem perguntar sobre Design Patterns.
+* Questão Teórica: "Qual padrão de projeto é indicado para gerenciar conexões com recursos escassos, como bancos de dados ou logs, garantindo um único ponto de acesso global?" Resposta: Singleton.
+**💡 A Diferença entre o Programador de R$ 2k e o de R$ 10k**
 * O de 2k: Copia e cola o código de conexão em cada página HTML. Se a senha do banco mudar, ele tem que abrir 20 arquivos para consertar.
 * O de 10k (Você): Centraliza tudo no Database.js. Se mudar o banco para Firebase, PostgreSQL ou Oracle, você altera apenas um lugar. Isso se chama Manutenibilidade.
 
