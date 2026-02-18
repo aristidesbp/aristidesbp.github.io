@@ -74,6 +74,26 @@ Se um avaliador olhar esse projeto, ele identificará os seguintes princípios d
 * **DRY** (Don't Repeat Yourself): Funções como formatar "R$ 10,00" ficam em utils e são usadas em todo o sistema, evitando repetição de código.
 * **Escalabilidade**: Esse projeto pode começar com 10 arquivos e chegar a 1.000 sem virar uma "bagunça de espaguete".
 
+# src/model (modelo/db)
+* É o cérebro do sistema, ele gerencia os dados, a lógica de negócio e as regras de armazenamento. O Model é representado pelas tabelas do Supabase (produtos, vendas, financeiro, tarefas) e pelas funções que manipulam esses dados antes de salvá-los.
+
+Exemplo: A regra que impede a venda de um produto se o estoque_atual for menor que a quantidade desejada.
+
+# src/view (js para construir a pagina, não interage com model)
+É a interface com a qual o usuário interage (o que ele vê na tela).
+View é o arquivo HTML.
+
+Exemplo: O grid de produtos, o visor do carrinho e o botão "FINALIZAR (F2)".
+
+
+# src/Controller 
+* Pega os dados da view, trata e manda pro model.
+* pega os dados do model, e manda para view.
+* É o intermediário entre o Model e a View. Ele recebe as entradas do usuário (cliques, digitação), processa o pedido através do Model e atualiza a View com o resultado.
+
+Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca os dados no Model, faz o cálculo e manda a View atualizar o subtotal na tela.
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FASE 1: Documentação e Modelagem de Dados. 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -297,27 +317,6 @@ Vantagem Comercial: Se você quiser vender esse ERP para uma empresa que não us
 
 
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model (modelo/db)
-* É o cérebro do sistema, ele gerencia os dados, a lógica de negócio e as regras de armazenamento. O Model é representado pelas tabelas do Supabase (produtos, vendas, financeiro, tarefas) e pelas funções que manipulam esses dados antes de salvá-los.
-
-Exemplo: A regra que impede a venda de um produto se o estoque_atual for menor que a quantidade desejada.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/view (js para construir a pagina, não interage com model)
-É a interface com a qual o usuário interage (o que ele vê na tela).
-View é o arquivo HTML.
-
-Exemplo: O grid de produtos, o visor do carrinho e o botão "FINALIZAR (F2)".
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/Controller 
-* Pega os dados da view, trata e manda pro model.
-* pega os dados do model, e manda para view.
-* É o intermediário entre o Model e a View. Ele recebe as entradas do usuário (cliques, digitação), processa o pedido através do Model e atualiza a View com o resultado.
-
-Exemplo: Quando o usuário clica em "adicionar ao carrinho", o Controller busca os dados no Model, faz o cálculo e manda a View atualizar o subtotal na tela.
 
 
 
