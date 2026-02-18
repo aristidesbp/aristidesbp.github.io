@@ -150,6 +150,181 @@ Um sistema de 10k não começa no teclado, começa no papel. Em concursos, isso 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 * Configuração Supabase: Criar o projeto no Dashboard e obter URL e ANON_KEY.
 
+# 🟥 src/model/Database.js: 
+* Centralizar as variáveis de ambiente e inicializar o client do Supabase.
+* Código Sugerido (Padrão Enterprise):
+A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
+
+```
+/**
+ * src/model/Database.js
+ * Padrão: Singleton
+ * Responsabilidade: Gerenciar a conexão única com o provedor de dados (Supabase).
+ */
+
+class Database {
+    constructor() {
+        if (!Database.instance) {
+            this.client = window.supabaseClient; // Já inicializado no supabase_config.js
+            Database.instance = this;
+        }
+        return Database.instance;
+    }
+
+    getConnection() {
+        if (!this.client) {
+            throw new Error("Conexão com o banco de dados não inicializada.");
+        }
+        return this.client;
+    }
+}
+
+const instance = new Database();
+export default instance;
+```
+
+# Vamos à autópsia técnica do código:
+## Análise Linha por Linha
+``` class Database {```
+**O que é**: Definição de uma Classe em JavaScript (ES6).
+**Visão de Mentor**: No padrão MVC, o Model começa aqui. Usamos classes para encapsular lógica e proteger os dados.
+```constructor() {```
+**O que é**: O método especial que é executado toda vez que você dá um new Database().
+```if (!Database.instance) {```
+**O que é**: Aqui começa a implementação do Padrão **Singleton**. Verificamos se "já existe uma cópia dessa classe viva na memória".
+**Foco em Concurso**: O Singleton é um padrão Creational (de criação). Ele garante que uma classe tenha apenas uma única instância em todo o ciclo de vida da aplicação.
+```this.client = window.supabaseClient;```
+**O que é**: Atribuímos a conexão do Supabase (que **veio do seu arquivo supabase_config.js**) a uma propriedade interna da classe.
+**Visão de Mentor**: Note que usamos o **window.supabaseClient**. Em um sistema profissional, isso evita que você crie várias conexões simultâneas, o que poderia derrubar seu limite de acessos no banco de dados.
+```Database.instance = this;```
+**O que é**: Guardamos a instância atual dentro da própria classe. É como se a classe dissesse: "Eu já existo, estou salva aqui".
+```return Database.instance;```
+**O que é**: Se alguém tentar criar um new Database() de novo, o construtor ignora a criação e devolve aquela que já estava pronta.
+```getConnection() {```
+**O que é**: Um método "Getter". É a porta de entrada para usar o banco.
+**Rigor Técnico**: O Controller nunca deve tocar no this.client diretamente; ele deve pedir licença ao getConnection.
+```if (!this.client) { throw new Error("..."); }```
+**O que é**: Tratamento de erros (Fail-fast). Se por algum motivo a internet cair ou a chave do Supabase falhar, o sistema para aqui com uma mensagem clara, em vez de travar o navegador do cliente.
+```const instance = new Database();```
+**O que é:** Criamos a instância única.
+```export default instance;```
+**O que é**: Exportamos o objeto já pronto.
+**Padrão Enterprise**: Quem importar esse arquivo (o seu SupabaseService) já recebe a conexão aberta e pronta para o combate.
+#### 🧠 Por que isso cai em concursos de TI?
+Se você estiver fazendo uma prova da FGV ou CESPE, eles podem perguntar sobre Design Patterns.
+**Questão Teórica**: "Qual padrão de projeto é indicado para gerenciar conexões com recursos escassos, como bancos de dados ou logs, garantindo um único ponto de acesso global?" Resposta: Singleton.
+#### 💡 A Diferença entre o Programador de R$ 2k e o de R$ 10k
+* O de 2k: Copia e cola o código de conexão em cada página HTML. Se a senha do banco mudar, ele tem que abrir 20 arquivos para consertar.
+* O de 10k (Você): Centraliza tudo no Database.js. Se mudar o banco para Firebase, PostgreSQL ou Oracle, você altera apenas um lugar. Isso se chama Manutenibilidade.
+
+## 🟥 services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
+* A Camada Service: O "Garçom" do Sistema:
+
+## Criando o services/SupabaseService.js
+```
+import db from '../src/model/Database.js';
+
+export const SupabaseService = {
+    /**
+     * Busca todos os registros de uma tabela com filtro opcional.
+     * @param {string} tabela 
+     * @param {object} filtros 
+     */
+    async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {
+        let query = db.getConnection().from(tabela).select('*');
+        
+        if (valorFiltro) {
+            query = query.eq(colunaFiltro, valorFiltro);
+        }
+
+        const { data, error } = await query;
+        if (error) throw new Error(`Erro ao buscar em ${tabela}: ${error.message}`);
+        return data;
+    },
+
+    async inserir(tabela, dados) {
+        const { data, error } = await db.getConnection().from(tabela).insert(dados).select();
+        if (error) throw new Error(`Erro ao inserir em ${tabela}: ${error.message}`);
+        return data;
+    }
+};
+
+```
+
+## Por que usamos a pasta services/? 
+* No MVC puro, o Controller fala com o Model. Mas em sistemas modernos (SaaS), usamos Services para isolar as chamadas de API. Se amanhã você sair do Supabase e for para o PostgreSQL puro, seu Controller não muda 1 linha de código. Isso é o **Princípio da Inversão de Dependência** (D de SOLID).
+* Se o Database.js é o coração que bombeia a conexão, o SupabaseService.js são as artérias. Na engenharia de software, chamamos isso de Camada de Serviço (Service Layer) ou Data Access Object (DAO).
+
+#### Este código é o que separa um sistema amador de um sistema de R$ 10k. Vamos à análise técnica:(Análise Linha por Linha)
+
+``` import db from '../src/model/Database.js';```
+* O que faz: Importa a instância única (Singleton) que criamos anteriormente.
+* Rigor Técnico: Note que não importamos o Supabase diretamente aqui. Importamos o nosso "Gerenciador". Isso garante que o Service use a conexão oficial e protegida do sistema.
+* 
+```export const SupabaseService = {```
+* O que faz: Exporta um objeto literal contendo métodos reutilizáveis.
+* Visão de Mentor: Em vez de escrever o código do Supabase em cada página (PDV, Estoque, Clientes), você centraliza aqui. Se o Supabase atualizar a versão da biblioteca deles, você só conserta neste arquivo.
+* 
+```async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {```
+* O que faz: Uma função assíncrona genérica para buscar dados.
+**Parâmetros**:
+* tabela: Qual tabela queremos (ex: 'produtos').
+* colunaFiltro: Qual coluna testar (padrão é 'id').
+* valorFiltro: O valor que buscamos. Se for null, ele traz tudo.
+*Foco em Concurso: Isso demonstra Abstração. O Controller não precisa saber "como" o banco busca, apenas pede os dados.
+
+```let query = db.getConnection().from(tabela).select('*');```
+* O que faz: Prepara a "pergunta" (query) para o banco de dados.
+* Linha Crítica: db.getConnection() chama aquele método que explicamos antes, garantindo que a conexão exista.
+
+if (valorFiltro) { query = query.eq(colunaFiltro, valorFiltro); }
+
+    O que faz: Se você passou um filtro (ex: buscar apenas o produto com código '123'), ele adiciona a cláusula .eq (equal/igual). Se não passou, a query continua configurada para trazer todos os registros.
+
+const { data, error } = await query;
+
+    O que faz: Executa a busca de fato e espera (await) o servidor responder.
+
+    Rigor Técnico: O Supabase sempre retorna um objeto com data (sucesso) ou error (falha).
+
+if (error) throw new Error(...);
+
+    O que faz: Tratamento de Exceção. Se o banco estiver fora do ar ou a tabela não existir, o código "lança" um erro.
+
+    Visão de Mentor: Um sistema de 10k nunca esconde erros. Ele os trata para que o desenvolvedor saiba exatamente o que falhou.
+
+async inserir(tabela, dados) { ... }
+
+    O que faz: Método genérico para salvar qualquer coisa (Vendas, Clientes, Tarefas).
+
+    .insert(dados).select(): Insere os dados e pede para o banco retornar o registro que acabou de ser criado (útil para pegar o ID gerado automaticamente).
+
+🧠 Por que isso é "Padrão Ouro"? (Visão de Concurso)
+
+Em provas de Desenvolvimento de Sistemas, costuma-se cobrar o conceito de Desacoplamento.
+
+Observe a hierarquia:
+
+    View (HTML): Não sabe que o banco existe.
+
+    Controller: Sabe que precisa de dados, mas não sabe "como" pegar. Ele chama o Service.
+
+    Service: Sabe "como" falar com o Supabase.
+
+    Database (Singleton): Sabe "onde" está a chave e a URL de conexão.
+
+Vantagem Comercial: Se você quiser vender esse ERP para uma empresa que não usa nuvem e prefere um banco de dados local (MySQL), você só precisaria reescrever este arquivo SupabaseService.js. Todo o resto do seu sistema (PDV, Financeiro, etc.) continuaria funcionando sem mudar uma vírgula.
+
+
+
+
+## 🟥 utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 2. Modelagem de Dados (MER/DER)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ## 🟥 TABELA COMPLETA:
 ```
 -- WARNING: This schema is for context only and is not meant to be run.
@@ -300,223 +475,15 @@ ON notes FOR DELETE
 USING (auth.uid() = user_id);
 ```
 
-# 🟥 src/model/Database.js: 
-* Centralizar as variáveis de ambiente e inicializar o client do Supabase.
-* Código Sugerido (Padrão Enterprise):
-A camada **src/model/Database.js**: Este arquivo não deve apenas conter a chave do Supabase. Ele deve ser o **Singleton** (padrão de projeto) que garante que teremos apenas uma instância de conexão com o banco, economizando memória e recursos.
 
-```
-/**
- * src/model/Database.js
- * Padrão: Singleton
- * Responsabilidade: Gerenciar a conexão única com o provedor de dados (Supabase).
- */
 
-class Database {
-    constructor() {
-        if (!Database.instance) {
-            this.client = window.supabaseClient; // Já inicializado no supabase_config.js
-            Database.instance = this;
-        }
-        return Database.instance;
-    }
 
-    getConnection() {
-        if (!this.client) {
-            throw new Error("Conexão com o banco de dados não inicializada.");
-        }
-        return this.client;
-    }
-}
 
-const instance = new Database();
-export default instance;
-```
-```
 
-[ ] services/SupabaseService.js: Criar as funções genéricas de CRUD (insert, select, update, delete). Isso evita que você repita código do SDK em todo arquivo.
-[ ] utils/Formatador.js: Criar a função de formatação de moeda e data. Você usará isso do Dashboard ao PDV.
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 2. Modelagem de Dados (MER/DER)
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-
-
-
-# Vamos à autópsia técnica do código:
-## Análise Linha por Linha
-``` 
-class Database {
-```
-**O que é**: Definição de uma Classe em JavaScript (ES6).
-
-**Visão de Mentor**: No padrão MVC, o Model começa aqui. Usamos classes para encapsular lógica e proteger os dados.
-```
-constructor() {
-```
-**O que é**: O método especial que é executado toda vez que você dá um new Database().
-```
-if (!Database.instance) {
-```
-**O que é**: Aqui começa a implementação do Padrão **Singleton**. Verificamos se "já existe uma cópia dessa classe viva na memória".
-
-**Foco em Concurso**: O Singleton é um padrão Creational (de criação). Ele garante que uma classe tenha apenas uma única instância em todo o ciclo de vida da aplicação.
-```
-this.client = window.supabaseClient;
-```
-**O que é**: Atribuímos a conexão do Supabase (que **veio do seu arquivo supabase_config.js**) a uma propriedade interna da classe.
-**Visão de Mentor**: Note que usamos o **window.supabaseClient**. Em um sistema profissional, isso evita que você crie várias conexões simultâneas, o que poderia derrubar seu limite de acessos no banco de dados.
-```
-Database.instance = this;
-```
-**O que é**: Guardamos a instância atual dentro da própria classe. É como se a classe dissesse: "Eu já existo, estou salva aqui".
-```
-return Database.instance;
-```
-**O que é**: Se alguém tentar criar um new Database() de novo, o construtor ignora a criação e devolve aquela que já estava pronta.
-```
-getConnection() {
-```
-**O que é**: Um método "Getter". É a porta de entrada para usar o banco.
-**Rigor Técnico**: O Controller nunca deve tocar no this.client diretamente; ele deve pedir licença ao getConnection.
-```
-if (!this.client) { throw new Error("..."); }
-```
-**O que é**: Tratamento de erros (Fail-fast). Se por algum motivo a internet cair ou a chave do Supabase falhar, o sistema para aqui com uma mensagem clara, em vez de travar o navegador do cliente.
-```
-const instance = new Database();
-```
-**O que é:** Criamos a instância única.
-```
-export default instance;
-```
-**O que é**: Exportamos o objeto já pronto.
-
-    Padrão Enterprise: Quem importar esse arquivo (o seu SupabaseService) já recebe a conexão aberta e pronta para o combate.
-
-🧠 Por que isso cai em concursos de TI?
-
-Se você estiver fazendo uma prova da FGV ou CESPE, eles podem perguntar sobre Design Patterns.
-
-    Questão Teórica: "Qual padrão de projeto é indicado para gerenciar conexões com recursos escassos, como bancos de dados ou logs, garantindo um único ponto de acesso global?"
-    Resposta: Singleton.
-
-💡 A Diferença entre o Programador de R$ 2k e o de R$ 10k
-
-    O de 2k: Copia e cola o código de conexão em cada página HTML. Se a senha do banco mudar, ele tem que abrir 20 arquivos para consertar.
-
-    O de 10k (Você): Centraliza tudo no Database.js. Se mudar o banco para Firebase, PostgreSQL ou Oracle, você altera apenas um lugar. Isso se chama Manutenibilidade.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 3. A Camada Service: O "Garçom" do Sistema
-Por que usamos a pasta **services/**? No MVC puro, o Controller fala com o Model. Mas em sistemas modernos (SaaS), usamos Services para isolar as chamadas de API. Se amanhã você sair do Supabase e for para o PostgreSQL puro, seu Controller não muda 1 linha de código. Isso é o **Princípio da Inversão de Dependência** (D de SOLID).
-
-## Criando o services/SupabaseService.js
-```
-import db from '../src/model/Database.js';
-
-export const SupabaseService = {
-    /**
-     * Busca todos os registros de uma tabela com filtro opcional.
-     * @param {string} tabela 
-     * @param {object} filtros 
-     */
-    async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {
-        let query = db.getConnection().from(tabela).select('*');
-        
-        if (valorFiltro) {
-            query = query.eq(colunaFiltro, valorFiltro);
-        }
-
-        const { data, error } = await query;
-        if (error) throw new Error(`Erro ao buscar em ${tabela}: ${error.message}`);
-        return data;
-    },
-
-    async inserir(tabela, dados) {
-        const { data, error } = await db.getConnection().from(tabela).insert(dados).select();
-        if (error) throw new Error(`Erro ao inserir em ${tabela}: ${error.message}`);
-        return data;
-    }
-};
-
-```
-Se o Database.js é o coração que bombeia a conexão, o SupabaseService.js são as artérias. Na engenharia de software, chamamos isso de Camada de Serviço (Service Layer) ou Data Access Object (DAO).
-
-Este código é o que separa um sistema amador de um sistema de R$ 10k. Vamos à análise técnica:
-Análise Linha por Linha
-
-import db from '../src/model/Database.js';
-
-    O que faz: Importa a instância única (Singleton) que criamos anteriormente.
-
-    Rigor Técnico: Note que não importamos o Supabase diretamente aqui. Importamos o nosso "Gerenciador". Isso garante que o Service use a conexão oficial e protegida do sistema.
-
-export const SupabaseService = {
-
-    O que faz: Exporta um objeto literal contendo métodos reutilizáveis.
-
-    Visão de Mentor: Em vez de escrever o código do Supabase em cada página (PDV, Estoque, Clientes), você centraliza aqui. Se o Supabase atualizar a versão da biblioteca deles, você só conserta neste arquivo.
-
-async buscarTodos(tabela, colunaFiltro = 'id', valorFiltro = null) {
-
-    O que faz: Uma função assíncrona genérica para buscar dados.
-
-    Parâmetros:
-
-        tabela: Qual tabela queremos (ex: 'produtos').
-
-        colunaFiltro: Qual coluna testar (padrão é 'id').
-
-        valorFiltro: O valor que buscamos. Se for null, ele traz tudo.
-
-    Foco em Concurso: Isso demonstra Abstração. O Controller não precisa saber "como" o banco busca, apenas pede os dados.
-
-let query = db.getConnection().from(tabela).select('*');
-
-    O que faz: Prepara a "pergunta" (query) para o banco de dados.
-
-    Linha Crítica: db.getConnection() chama aquele método que explicamos antes, garantindo que a conexão exista.
-
-if (valorFiltro) { query = query.eq(colunaFiltro, valorFiltro); }
-
-    O que faz: Se você passou um filtro (ex: buscar apenas o produto com código '123'), ele adiciona a cláusula .eq (equal/igual). Se não passou, a query continua configurada para trazer todos os registros.
-
-const { data, error } = await query;
-
-    O que faz: Executa a busca de fato e espera (await) o servidor responder.
-
-    Rigor Técnico: O Supabase sempre retorna um objeto com data (sucesso) ou error (falha).
-
-if (error) throw new Error(...);
-
-    O que faz: Tratamento de Exceção. Se o banco estiver fora do ar ou a tabela não existir, o código "lança" um erro.
-
-    Visão de Mentor: Um sistema de 10k nunca esconde erros. Ele os trata para que o desenvolvedor saiba exatamente o que falhou.
-
-async inserir(tabela, dados) { ... }
-
-    O que faz: Método genérico para salvar qualquer coisa (Vendas, Clientes, Tarefas).
-
-    .insert(dados).select(): Insere os dados e pede para o banco retornar o registro que acabou de ser criado (útil para pegar o ID gerado automaticamente).
-
-🧠 Por que isso é "Padrão Ouro"? (Visão de Concurso)
-
-Em provas de Desenvolvimento de Sistemas, costuma-se cobrar o conceito de Desacoplamento.
-
-Observe a hierarquia:
-
-    View (HTML): Não sabe que o banco existe.
-
-    Controller: Sabe que precisa de dados, mas não sabe "como" pegar. Ele chama o Service.
-
-    Service: Sabe "como" falar com o Supabase.
-
-    Database (Singleton): Sabe "onde" está a chave e a URL de conexão.
-
-Vantagem Comercial: Se você quiser vender esse ERP para uma empresa que não usa nuvem e prefere um banco de dados local (MySQL), você só precisaria reescrever este arquivo SupabaseService.js. Todo o resto do seu sistema (PDV, Financeiro, etc.) continuaria funcionando sem mudar uma vírgula.
 
 
 
