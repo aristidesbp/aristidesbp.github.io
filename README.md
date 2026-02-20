@@ -62,6 +62,33 @@ Digite o seguinte endereço na barra de URL:
 http://localhost:8080/admin.html
 ```
 
+---
+# 🟥 COMO BAIXAR MIDIAS COM TERMUX 
+```
+# instale o yt-dlp com o comando:
+pip install yt-dlp
+```
+```
+# ffmpeg permite baixar vídeos com áudio ou converter formatos:
+pkg install ffmpeg -y
+```
+```
+# Baixar apenas o áudio em MP3:
+yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
+```
+```
+# Escolher qualidade de vídeo (exemplo:720p)
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
+```
+```
+# Salvar com nome personalizado:
+yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
+```
+```
+# Ver formatos disponíveis:
+yt-dlp -F "URL_DO_VÍDEO
+```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # GITHUB 
 
@@ -134,8 +161,8 @@ ls -a
 tree
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+---
+# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 ```
 git clone git@github.com:aristidesbp/aristidesbp.github.io
 ## Clona o repositório com chave SSH
@@ -180,8 +207,9 @@ git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 git push origin main
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SERVIDOR PYTHON 
+
+---
+# 🟥 SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
  * Navegue até a pasta onde seus arquivos estão 
@@ -221,11 +249,9 @@ No navegador do outro dispositivo, acesse:
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ADICIONANDO COLABORADORES NO GITHUB 
-
-
-Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
+---
+# 🟥 ADICIONANDO COLABORADORES NO GITHUB 
+* Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
 
 ---
 🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
@@ -257,38 +283,8 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO BAIXAR MIDIAS COM TERMUX 
-```
-# instale o yt-dlp com o comando:
-pip install yt-dlp
-```
-```
-# ffmpeg permite baixar vídeos com áudio ou converter formatos:
-pkg install ffmpeg -y
-```
-```
-# Baixar apenas o áudio em MP3:
-yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
-```
-```
-# Escolher qualidade de vídeo (exemplo:720p)
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
-```
-```
-# Salvar com nome personalizado:
-yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
-```
-```
-# Ver formatos disponíveis:
-yt-dlp -F "URL_DO_VÍDEO
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## COMO FAZER BKP DO SUPABASE
+---
+## 🟥 COMO FAZER BKP DO SUPABASE
 ```
 SELECT 
     'CREATE POLICY ' || quote_ident(policyname) || 
@@ -302,8 +298,8 @@ WHERE schemaname = 'public'
   AND tablename = 'NOME_DA_SUA_TABELA';
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
+---
+# 🟥 SUPABASE
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
@@ -328,8 +324,8 @@ begin
 end $$;
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# sql (exemplo de como criar uma tabela chada notas)
+---
+# 🟥 sql (exemplo de como criar uma tabela chada notas)
 ```
 -- 1. Criar a tabela de notas
 CREATE TABLE notes (
@@ -341,8 +337,7 @@ CREATE TABLE notes (
 );
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Habilitar o Row Level Security (Segurança de Linha)
+# 🟥 Habilitar o Row Level Security (Segurança de Linha)
 ```
 -- 2. Habilitar o Row Level Security (Segurança de Linha)
 ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
@@ -368,8 +363,8 @@ ON notes FOR DELETE
 USING (auth.uid() = user_id);
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## COMO APAGAR USUARIO E SUAS DEPENDENCIAS
+
+## 🟥 COMO APAGAR USUARIO E SUAS DEPENDENCIAS
 ```
 -- 1. Tabela de PRODUTOS
 ALTER TABLE public.produtos
