@@ -297,20 +297,6 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 * Senha do banco: ***********
 * Região: brasil
   
-# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
-@ 👉 Isso é o mais próximo possível de um banco novo.
-``` 
--- Apagar tabelas públicas
-do $$
-declare
-  r record;
-begin
-  for r in (select tablename from pg_tables where schemaname = 'public') loop
-    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
-  end loop;
-end $$;
-```
-
 ---
 # 🟥 sql (exemplo de como criar uma tabela chada notas)
 ```
@@ -410,6 +396,19 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
    ON DELETE CASCADE;
 ```
 
+# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
+@ 👉 Isso é o mais próximo possível de um banco novo.
+``` 
+-- Apagar tabelas públicas
+do $$
+declare
+  r record;
+begin
+  for r in (select tablename from pg_tables where schemaname = 'public') loop
+    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
+  end loop;
+end $$;
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Estrutura do projeto MVC+Service (Model-View-Controller)
