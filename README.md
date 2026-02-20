@@ -419,44 +419,41 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
 # Estrutura do projeto MVC+Service (Model-View-Controller)
 ```
 httsps://aristidesbp.github.io
-├── 📂 assets/              # Imagens, logos e ícones
-├── 📂 css/                 # Estilos (Global e específicos)
-│   ├── main.css
-│   └── navbar.css
-├── 📂 src/                 # Código-fonte principal (MVC)
-│   ├── 📂 model/           # Camada de Dados e Regras de Negócio
-│   │   ├── Database.js     # Configuração Supabase
-│   │   ├── EstoqueModel.js # Regras de baixa e validação
-│   │   └── VendaModel.js   # Regras de cálculo e descontos
-│   ├── 📂 view/            # Camada de Interface (DOM)
-│   │   ├── PdvView.js      # Renderiza carrinho e grid
-│   │   ├── FinanceiroView.js
-│   │   └── Componentes.js  # Renderiza elementos comuns (modais, loaders)
-│   └── 📂 controller/      # Camada de Controle (O "Maestro")
-│       ├── AuthController.js
-│       ├── PdvController.js
-│       └── FinanceiroController.js
-├── 📂 services/            # Serviços de terceiros e APIs
-│   ├── SupabaseService.js  # Abstração do banco (Select/Insert)
-│   └── PrintService.js     # Lógica de geração de PDF (jsPDF)
-├── 📂 utils/               # Funções auxiliares (Globais)
-│   ├── Formatador.js       # Datas e Moeda (R$)
-│   └── Validadores.js      # CPF/CNPJ e Senhas
+├── 📂 assets/                 
+│   ├── 📂 img/                # Logos e backgrounds
+│   ├── 📂 icons/              # SVGs e ícones do sistema
+│   └── 📂 styles/             # CSS organizado
+│       ├── global.css         # Reset e variáveis (Cores, Fontes)
+│       ├── layout.css         # Grid, Navbar, Sidebar
+│       └── components.css     # Botões, Cards, Modais
+├── 📂 src/                    
+│   ├── 📂 models/             # REGRAS DE NEGÓCIO E DADOS
+│   │   ├── Entidade.js        # Classe/Objeto de dados
+│   │   ├── EstoqueModel.js    # Lógica: "Pode vender? Tem saldo?"
+│   │   └── VendaModel.js      # Lógica: "Cálculo de impostos e descontos"
+│   ├── 📂 views/              # INTERFACE (DOM MANIPULATION)
+│   │   ├── PdvView.js         # Métodos: renderizarTabela(), atualizarTotal()
+│   │   ├── FinanceiroView.js  # Métodos: mostrarGrafico(), limparForm()
+│   │   └── ui-components.js   # Renderizadores de componentes genéricos
+│   ├── 📂 controllers/        # O MAESTRO (ORQUESTRAÇÃO)
+│   │   ├── PdvController.js   # Escuta View -> Valida no Model -> Salva no Service
+│   │   └── AuthController.js  # Gerencia login e permissões
+│   └── 📂 services/           # INFRAESTRUTURA (APIs EXTERNAS)
+│       ├── SupabaseClient.js  # Instância única do cliente Supabase
+│       ├── ApiService.js      # Métodos genéricos (GET, POST, patch)
+│       ├── StorageService.js  # LocalStorage (Cache de sessão)
+│       └── 📂 MercadoPago/    # INFRAESTRUTURA (APIs EXTERNAS)
+│ 
+├── 📂 utils/                  # AUXILIARES TÉCNICOS
+│   ├── Mask.js                # Máscaras de input (CPF, Telefone)
+│   ├── Format.js              # Formatação de saída (Moeda, Data ISO)
+│   └── Validators.js          # Regex e validações lógicas puras
 │
-├── entidades.html
-├── financeiro.html
-├── produtos.html
-├── pdv.html
-├── loja_virtual.html
-├── tarefas.html
-├── configuracoes.html
-├── vendas.html
-├── menu.html              # Dashboard Principal
-├── index.html             # site
-├── logon.html             # Dashboard Principal
-└── README.md              # Tela de Acesso
+├── index.html                 # Landing Page / Site Institucional
+├── app.html                   # O "Core" do sistema (Dashboard/Menu)
+├── login.html                 # Tela de acesso isolada
+└── README.md
 ```
-
 
 # EXEMPLOS DOS CODIGOS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
