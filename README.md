@@ -418,7 +418,7 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Estrutura do projeto MVC+Service (Model-View-Controller)
 ```
-ERP-ABP/
+httsps://aristidesbp.github.io
 ├── 📂 assets/              # Imagens, logos e ícones
 ├── 📂 css/                 # Estilos (Global e específicos)
 │   ├── main.css
@@ -451,8 +451,10 @@ ERP-ABP/
 ├── tarefas.html
 ├── configuracoes.html
 ├── vendas.html
-├── index.html              # Dashboard Principal
-└── login.html              # Tela de Acesso
+├── menu.html              # Dashboard Principal
+├── index.html             # site
+├── logon.html             # Dashboard Principal
+└── README.md              # Tela de Acesso
 ```
 
 
