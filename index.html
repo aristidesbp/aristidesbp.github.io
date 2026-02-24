@@ -8,75 +8,8 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <style>
-/* Custom Glassmorphism e Classes auxiliares */
-@layer components {
-    .glass {
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-}
-
-/* Light Theme overrides */
-.light body { 
-    background-color: #f6f6f8; 
-    color: #1e293b; 
-}
-
-.light .glass { 
-    background: rgba(255, 255, 255, 0.7); 
-    border: 1px solid rgba(0, 0, 0, 0.1); 
-}
-
-.light .service-card { 
-    background: white; 
-    border-color: #e2e8f0; 
-}
-
-/* Utilitários de Hover */
-.service-card:hover { 
-    border-color: #2563eb; 
-    transform: translateY(-4px); 
-}
-
-/* Estilização para o feedback de sucesso no botão */
-.bg-success {
-    background-color: #10b981 !important; /* emerald-500 */
-}
-
-/* Spinner de carregamento */
-.loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
- </style>
-        
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#2563eb",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#020617",
-                        "slate-border": "#1e293b",
-                    },
-                    fontFamily: { "display": ["Inter", "sans-serif"] },
-                },
-            },
-        }
-    </script>
+    <link href="assets/style.css" rel="stylesheet"/>
+   
 
    
 </head>
@@ -197,137 +130,13 @@
         </section>
     </main>
 
-<script>
- //src="index/tema.js" 
-  /**
- * Nome do arquivo: tema.js
- * Objetivo: Alternar entre os temas dark e light no documento.
- */
-function toggleTheme() {
-    const html = document.documentElement;
-    const icon = document.getElementById('themeIcon');
-    
-    if (html.classList.contains('dark')) {
-        html.classList.remove('dark'); 
-        html.classList.add('light');
-        icon.innerText = 'dark_mode'; // Ícone para quando estiver claro
-    } else {
-        html.classList.remove('light'); 
-        html.classList.add('dark');
-        icon.innerText = 'light_mode'; // Ícone para quando estiver escuro
-    }
-}  
-</script>
-    
-<script>
-    // src="index/idioma.js"
-    /**
- * Nome do arquivo: idioma.js
- * Objetivo: Alterar o texto principal (Hero) conforme o idioma selecionado.
- */
-function changeLang() {
-    const lang = document.getElementById('langSelect').value;
-    const title = document.getElementById('heroTitle');
-    
-    // Dicionário de traduções
-    const translations = {
-        es: 'Transformando Necesidades Reales en <span class="text-primary">Soluciones Digitales</span>',
-        en: 'Transforming Real Needs into Functional <span class="text-primary">Digital Solutions</span>',
-        pt: 'Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais'
-    };
 
-    // Aplica a tradução ou mantém o padrão em português
-    title.innerHTML = translations[lang] || translations.pt;
-}
-</script>
-<script>
-    // src="index/carrinho.js"
-/**
- * Nome do arquivo: carrinho.js
- * Objetivo: Gerenciar a inclusão de serviços no carrinho e atualizar o resumo de preços.
- */
+<script src="src/controller/tema.js"></script>
+<script src="src/controller/idioma.js"></script>
+<script src="src/controller/carrinho.js"></script>   
+<script src="src/controller/pagamento.js"></script>  
 
-// Variável global para armazenar os itens
-let carrinho = [];
 
-function addServico(btn, nome, preco) {
-    // 1. Adiciona o objeto ao array de carrinho
-    carrinho.push({ nome, preco });
-
-    // 2. Calcula o novo total
-    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-    
-    // 3. Atualiza o elemento de resumo na tela
-    const resumoTotal = document.getElementById('resumoTotal');
-    if (resumoTotal) {
-        resumoTotal.innerText = total.toFixed(2);
-    }
-
-    // 4. Feedback Visual no botão (Muda para verde/sucesso)
-    btn.classList.remove('bg-primary');
-    btn.classList.add('bg-success'); // Classe definida no seu CSS
-    btn.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> Adicionado`;
-}    
-</script>
-<script>
-    // src="index/pagamento.js"
- /**
- * Nome do arquivo: pagamento.js
- * Objetivo: Enviar os dados do carrinho para a função de checkout e redirecionar para o pagamento.
- */
-
-async function processarPagamento() {
-    const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
-    
-    // Verifica o total do carrinho (variável global do carrinho.js)
-    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-    
-    if (total <= 0) return alert("Selecione um serviço primeiro.");
-    
-    const nome = document.getElementById('cliente_nome').value;
-    const email = document.getElementById('cliente_email').value;
-    
-    if(!nome || !email) return alert("Preencha seu nome e e-mail para continuar.");
-
-    const btn = document.getElementById('btnPagar');
-    btn.disabled = true;
-    const originalText = btn.innerText;
-    
-    // Animação de carregamento
-    btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loading-spinner"></div> PROCESSANDO...</div>`;
-
-    try {
-        const response = await fetch(functionUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nome, 
-                email, 
-                total,
-                itens: carrinho.map(i => ({ nome: i.nome, preco: i.preco, qtd: 1 }))
-            })
-        });
-
-        if (!response.ok) throw new Error('Erro na comunicação com o servidor de checkout.');
-
-        const data = await response.json();
-
-        // init_point é a URL gerada pelo Mercado Pago via Edge Function
-        if (data.init_point) {
-            window.location.href = data.init_point;
-        } else {
-            throw new Error('Ponto de início de pagamento não recebido.');
-        }
-    } catch (e) {
-        alert("Erro ao conectar com o servidor de pagamento. Tente novamente.");
-        console.error("Erro no Checkout:", e);
-        
-        // Restaura o botão em caso de erro
-        btn.disabled = false;
-        btn.innerText = originalText;
-    }
-}   
-</script>
     
 </body>
 </html>
