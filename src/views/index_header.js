@@ -3,7 +3,7 @@
  * @param {string} selector - O seletor onde o header será injetado (ex: 'body' ou '#app').
  */
 function createIndexHeader(selector = 'body') {
-  const headerHTML = `
+  const container = `
 
   
     
