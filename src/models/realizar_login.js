@@ -27,7 +27,7 @@ async function realizarLogin() {
         } else {
             console.log("Bem-vindo de volta!", data.user.email);
             // Redireciona para o painel principal após o sucesso
-            window.location.href = 'index.html';
+            window.location.href = 'menu.html';
         }
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
