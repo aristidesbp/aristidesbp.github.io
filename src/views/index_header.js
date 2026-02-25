@@ -2,7 +2,7 @@
  * Gera e insere o Header dinamicamente no DOM.
  * @param {string} selector - O seletor onde o header será injetado (ex: 'body' ou '#app').
  */
-function createHeader(selector = 'body') {
+function createIndexHeader(selector = 'body') {
   const headerHTML = `
 
   
@@ -130,8 +130,8 @@ container.insertAdjacentHTML('afterbegin', headerHTML);
 
 // Execução
 // Adicione o ID da sua div aqui
-createOlaMundo('#index_login'); 
+createIndexHeader('#index_header'); 
 /* COMO CHAMAR NO HTML:
-<div id="index_login"></div>
-<script src="src/view/index_login.js"></script>
+<div id="index_heard"></div>
+<script src="src/view/index_header.js"></script>
 */
