@@ -1,400 +1,70 @@
 <!DOCTYPE html>
-<html class="dark" lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Aristidesbp | Digital Solutions</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#2563eb",
-                        "background-light": "#f8fafc",
-                        "background-dark": "#020617",
-                        "slate-border-light": "#e2e8f0",
-                        "slate-border-dark": "#1e293b",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style type="text/tailwindcss">
-        @layer components {
-            .glass {
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-            }
-            .service-card:hover {
-                box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.2);
-                border-color: #2563eb;
-            }
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        .theme-toggle .light-icon { display: none; }
-        .theme-toggle .dark-icon { display: block; }
-        :root.dark .theme-toggle .light-icon { display: block; }
-        :root.dark .theme-toggle .dark-icon { display: none; }
-        #mobile-menu-toggle:checked ~ #mobile-menu {
-            transform: translateX(0);
-        }
-        #mobile-menu-toggle:checked ~ #menu-overlay {
-            display: block;
-        }
-    </style>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aristidesbp | Digital Solutions</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/styles/components.css">
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-[#f8fafc] font-display">
-<input class="hidden" id="mobile-menu-toggle" type="checkbox"/>
-<div class="fixed inset-0 bg-black/60 z-[60] hidden transition-opacity lg:hidden" id="menu-overlay"></div>
-<header class="fixed top-0 left-0 right-0 z-50 glass bg-white/70 dark:bg-[#0f172a]/60 border-b border-slate-border-light dark:border-slate-border-dark px-6 md:px-16 py-3">
-<div class="max-w-7xl mx-auto flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-<span class="material-symbols-outlined">code</span>
-</div>
-<h1 class="text-xl font-black tracking-tight text-[#1e293b] dark:text-white uppercase">Aristidesbp</h1>
-</div>
-<nav class="hidden lg:flex items-center gap-10">
-<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#home">Início</a>
-<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#about">Sobre</a>
-<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#services">Serviços</a>
-<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#contact">Contato</a>
-</nav>
-<div class="flex items-center gap-4">
-<div class="hidden lg:flex items-center gap-4">
-<button class="theme-toggle size-10 flex items-center justify-center rounded-lg border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-all bg-white/50 dark:bg-slate-800/50 shadow-sm" onclick="document.documentElement.classList.toggle('dark')">
-<span class="material-symbols-outlined light-icon">light_mode</span>
-<span class="material-symbols-outlined dark-icon">dark_mode</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-border-light dark:border-slate-border-dark text-xs font-bold text-slate-700 dark:text-white transition-all">
-<span class="material-symbols-outlined text-sm">language</span>
-<span>PT-BR</span>
-</button>
-<div class="size-10 rounded-full border border-primary p-0.5">
-<div class="w-full h-full rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDg0BMoeQ3v50PaL3SkEJMK4MZM2EP3WLtg3yEqPdds1n6L_a_Vmadn3sWgw6KHnLNdlfIPXWZWVGtJ3MBKTYBfSZCgStZ9XXbVvlHcDlwbwMuf8RuDC12PZ2f9EMHV-799kQZOTW-wjlFs0cVu44VWa7AUecDJpTRVO1HwG3yMaHMjXALNHypiluMojejMywLY6yGWbgiuTRsHmZHu2FO4JQMFIiwvksDn0rV8ntVl8C_FjoJRXAnhLVGIGzrEzPC4FUvCxqFIVhfv');"></div>
-</div>
-</div>
-<label class="lg:hidden size-10 flex items-center justify-center rounded-lg bg-white/50 dark:bg-slate-800/50 border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 cursor-pointer" for="mobile-menu-toggle">
-<span class="material-symbols-outlined">menu</span>
-</label>
-</div>
-</div>
-</header>
-<div class="fixed top-0 right-0 w-80 h-full bg-white dark:bg-[#0f172a] z-[70] translate-x-full transition-transform duration-300 shadow-2xl lg:hidden flex flex-col" id="mobile-menu">
-<div class="p-6 flex items-center justify-between border-b border-slate-border-light dark:border-slate-border-dark">
-<div class="flex items-center gap-3">
-<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-<span class="material-symbols-outlined">code</span>
-</div>
-<h1 class="text-lg font-black tracking-tight text-[#1e293b] dark:text-white uppercase">Aristidesbp</h1>
-</div>
-<label class="size-10 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer" for="mobile-menu-toggle">
-<span class="material-symbols-outlined">close</span>
-</label>
-</div>
-<nav class="flex-grow p-6 flex flex-col gap-2">
-<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-semibold hover:bg-primary/10 hover:text-primary transition-all" href="#home" onclick="document.getElementById('mobile-menu-toggle').checked = false">
-<span class="material-symbols-outlined">home</span> Início
-        </a>
-<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-semibold hover:bg-primary/10 hover:text-primary transition-all" href="#about" onclick="document.getElementById('mobile-menu-toggle').checked = false">
-<span class="material-symbols-outlined">person</span> Sobre
-        </a>
-
-        <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-semibold hover:bg-primary/10 hover:text-primary transition-all" href="#services" onclick="document.getElementById('mobile-menu-toggle').checked = false">
-<span class="material-symbols-outlined">grid_view</span> Serviços
-        </a>
-
-        
-<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-semibold hover:bg-primary/10 hover:text-primary transition-all" href="#contact" onclick="document.getElementById('mobile-menu-toggle').checked = false">
-<span class="material-symbols-outlined">mail</span> Contato
-        </a>
-</nav>
-<div class="p-6 border-t border-slate-border-light dark:border-slate-border-dark space-y-4">
-<div class="flex items-center justify-between">
-<span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Ações</span>
-</div>
-<div class="grid grid-cols-2 gap-3">
-<button class="theme-toggle flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-border-light dark:border-slate-border-dark text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" onclick="document.documentElement.classList.toggle('dark')">
-<span class="material-symbols-outlined text-lg light-icon">light_mode</span>
-<span class="material-symbols-outlined text-lg dark-icon">dark_mode</span>
-<span>Tema</span>
-</button>
-<button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-border-light dark:border-slate-border-dark text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-<span class="material-symbols-outlined text-lg">language</span>
-<span>Idioma</span>
-</button>        
-</div>
-
-<!-- minha conta      
-<div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-border-light dark:border-slate-border-dark">
-<div class="size-10 rounded-full border border-primary p-0.5">
-<div class="w-full h-full rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDg0BMoeQ3v50PaL3SkEJMK4MZM2EP3WLtg3yEqPdds1n6L_a_Vmadn3sWgw6KHnLNdlfIPXWZWVGtJ3MBKTYBfSZCgStZ9XXbVvlHcDlwbwMuf8RuDC12PZ2f9EMHV-799kQZOTW-wjlFs0cVu44VWa7AUecDJpTRVO1HwG3yMaHMjXALNHypiluMojejMywLY6yGWbgiuTRsHmZHu2FO4JQMFIiwvksDn0rV8ntVl8C_FjoJRXAnhLVGIGzrEzPC4FUvCxqFIVhfv');"></div>
-</div>
-      
-<div>
-<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Minha Conta</p>
-<p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1">Premium Partner</p>
-</div>
--->
-        
-<a href="login.html" class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-border-light dark:border-slate-border-dark hover:border-primary transition-all">
-    <div class="size-10 rounded-full border border-primary p-0.5">
-        <div class="w-full h-full rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDg0BMoeQ3v50PaL3SkEJMK4MZM2EP3WLtg3yEqPdds1n6L_a_Vmadn3sWgw6KHnLNdlfIPXWZWVGtJ3MBKTYBfSZCgStZ9XXbVvlHcDlwbwMuf8RuDC12PZ2f9EMHV-799kQZOTW-wjlFs0cVu44VWa7AUecDJpTRVO1HwG3yMaHMjXALNHypiluMojejMywLY6yGWbgiuTRsHmZHu2FO4JQMFIiwvksDn0rV8ntVl8C_FjoJRXAnhLVGIGzrEzPC4FUvCxqFIVhfv');"></div>
-    </div>
-    <div>
-        <p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Minha Conta</p>
-        <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1">Premium Partner</p>
-    </div>
-</a>
-<!-- final minha conta-->
-
-        
-        
-        
-</div>
-</div>
-</div>
-<main class="pt-20">
-<section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
-<div class="absolute inset-0 z-0">
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 blur-[120px] rounded-full"></div>
-</div>
-<div class="relative z-10 max-w-4xl text-center flex flex-col items-center gap-8">
-<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 dark:bg-transparent glass border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest shadow-sm">
-<span class="relative flex h-2 w-2">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-</span>
-                Disponível para novos projetos
+    <section class="py-24 px-6 md:px-16" id="services">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="service-card bg-white dark:bg-slate-900/40 glass p-6 border border-slate-border-light dark:border-slate-border-dark rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Desenvolvimento Web</h3>
+                    <p class="text-sm mb-6">Websites e aplicações personalizadas.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold">R$ 5.000,00</span>
+                        <button data-name="Desenvolvimento Web" data-price="5000" class="add-to-cart-btn px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all">
+                            Adicionar
+                        </button>
+                    </div>
+                </div>
+                <div class="service-card bg-white dark:bg-slate-900/40 glass p-6 border border-slate-border-light dark:border-slate-border-dark rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Consultoria em Tráfego</h3>
+                    <p class="text-sm mb-6">Google Ads e Meta Ads.</p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="font-bold">R$ 1.500,00</span>
+                        <button data-name="Consultoria em Tráfego" data-price="1500" class="add-to-cart-btn px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all">
+                            Adicionar
+                        </button>
+                    </div>
+                </div>
             </div>
-<h1 class="text-4xl md:text-7xl font-black leading-[1.1] tracking-tight dark:text-[#f8fafc] text-slate-900">
-                Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais
-            </h1>
-<p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-medium">
-                Escalando negócios e automatizando processos através de tecnologia de ponta, desenvolvimento sob medida e estratégias de alta performance.
-            </p>
-<div class="flex flex-col sm:flex-row gap-4 mt-4">
-<a class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/25 text-center" href="#services">
-                    Ver Serviços
-                </a>
-<a class="px-8 py-4 bg-white dark:bg-transparent glass hover:bg-slate-50 dark:hover:bg-white/5 dark:text-white text-slate-900 font-bold rounded-xl transition-all border border-slate-border-light dark:border-slate-border-dark shadow-sm text-center" href="#about">
-                    Saiba Mais
-                </a>
-</div>
-</div>
-</section>
-<section class="py-24 px-6 md:px-16 bg-white dark:bg-background-dark" id="about">
-<div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-<div class="relative">
-<div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-primary rounded-tl-xl"></div>
-<div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-primary rounded-br-xl"></div>
-<div class="aspect-square rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-border-light dark:border-slate-border-dark shadow-xl">
-<div class="w-full h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBftCEwdx2BMcEqArxLSKvwf9bYtMthTH7ncGJPbIL_t6bAn3IslfIy_d8irkwwMx73TWqDiSWPzFjfa0aew5Ox0XGqVcBHQ4JYoc2JomxLAQALnxJIVCI6Hl6JxPLVuWh6DPRrsmV5-_o2e_xpQzfOJInQaGpGoFPCNBa_fwRkK3KUDCb6d_K4ubiZVtpjEX_itKPmisYIG2soiEUNY4xJu8AYBKpovrwEAuz261cDXkm6397HnwZhVyZO-MVFjzgMCs-tRbVW_LAX');"></div>
-</div>
-</div>
-<div class="flex flex-col gap-6">
-<span class="text-primary font-bold tracking-widest uppercase text-sm">Perfil Profissional</span>
-<h2 class="text-3xl md:text-5xl font-bold leading-tight dark:text-white text-slate-900">Sobre o Especialista</h2>
-<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-medium">
-                    Como Analista de Sistemas e Programador experiente, sou apaixonado por arquitetar sistemas que resolvem problemas reais. Meu foco principal é a entrega de código limpo, sustentável e eficiente.
-                </p>
-<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-medium">
-                    Especialista em transformar requisitos complexos em fluxos de trabalho simplificados, garantindo que cada linha de código contribua para a escalabilidade e o sucesso do seu ecossistema digital.
-                </p>
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div class="p-6 rounded-xl bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark shadow-sm">
-<h4 class="text-2xl font-bold dark:text-white text-slate-900">50+</h4>
-<p class="text-slate-500 text-sm font-semibold">Projetos Entregues</p>
-</div>
-<div class="p-6 rounded-xl bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark shadow-sm">
-<h4 class="text-2xl font-bold dark:text-white text-slate-900">100%</h4>
-<p class="text-slate-500 text-sm font-semibold">Satisfação</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="py-24 px-6 md:px-16 relative bg-background-light dark:bg-background-dark" id="services">
-<div class="max-w-7xl mx-auto">
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-<div class="max-w-2xl">
-<h2 class="text-3xl md:text-5xl font-bold mb-4 dark:text-white text-slate-900">Nossos Serviços Premium</h2>
-<p class="text-slate-600 dark:text-slate-400 font-medium">Descubra como podemos ajudar seu negócio a escalar com tecnologia de ponta e estratégias orientadas a dados.</p>
-</div>
-<div class="w-full md:w-80">
-<div class="relative group">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
-<input class="w-full bg-white dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark focus:border-primary focus:ring-0 rounded-xl py-3 pl-12 pr-4 dark:text-white text-slate-900 placeholder:text-slate-400 transition-all shadow-sm" id="search_service" placeholder="Buscar serviços..." type="text"/>
-</div>
-</div>
-</div>
-<div class="flex flex-wrap gap-3 mb-10">
-<button class="px-5 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md shadow-primary/10">Todas Categorias</button>
-<button class="px-5 py-2 rounded-full bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary text-sm font-semibold transition-all shadow-sm">Desenvolvimento</button>
-<button class="px-5 py-2 rounded-full bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary text-sm font-semibold transition-all shadow-sm">Consultoria</button>
-<button class="px-5 py-2 rounded-full bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary text-sm font-semibold transition-all shadow-sm">Tráfego Pago</button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
-<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-3xl">developer_mode_tv</span>
-</div>
-<h3 class="text-xl font-bold mb-3 dark:text-white text-slate-900">Desenvolvimento Web Sob Medida</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow font-medium leading-relaxed">Websites e aplicações web personalizadas construídas com frameworks modernos como React, Vue e backends de alta performance.</p>
-<div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
-<span class="dark:text-white text-slate-900 font-bold">R$ 5.000,00</span>
-<button class="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
-</div>
-</div>
-<div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
-<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-3xl">query_stats</span>
-</div>
-<h3 class="text-xl font-bold mb-3 dark:text-white text-slate-900">Consultoria em Tráfego</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow font-medium leading-relaxed">Campanhas de marketing orientadas por dados no Google Ads e Meta para maximizar o ROI e a visibilidade da sua marca.</p>
-<div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
-<span class="dark:text-white text-slate-900 font-bold">R$ 1.500,00</span>
-<!--
-<button class="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
--->
-   <button 
-    data-name="Desenvolvimento Web" 
-    data-price="5000" 
-    class="add-to-cart-btn ...">
-    <span class="material-symbols-outlined text-sm">add</span> Adicionar
-   </button>
-
-        
-</div>
-</div>
-<div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
-<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-3xl">terminal</span>
-</div>
-<h3 class="text-xl font-bold mb-3 dark:text-white text-slate-900">Análise de Sistemas</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow font-medium leading-relaxed">Diagnóstico completo e design de arquitetura para processos internos e otimização de sistemas legados da sua empresa.</p>
-<div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
-<span class="dark:text-white text-slate-900 font-bold">R$ 3.200,00</span>
-<button class="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">add</span> Adicionar
-                        </button>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="py-24 px-6 md:px-16 bg-white dark:bg-[#020617]/50" id="contact">
-<div class="max-w-7xl mx-auto">
-<div class="grid lg:grid-cols-12 gap-12">
-<div class="lg:col-span-7">
-<h2 class="text-3xl font-bold mb-2 dark:text-white text-slate-900">Finalize seu Pedido</h2>
-<p class="text-slate-600 dark:text-slate-400 mb-8 font-medium">Preencha seus dados abaixo e nossa equipe entrará em contato com uma proposta formal em até 24 horas.</p>
-<form class="space-y-6">
-<div class="grid md:grid-cols-2 gap-6">
-<div class="flex flex-col gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-slate-500" for="cliente_nome">Nome</label>
-<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark focus:border-primary focus:ring-0 rounded-xl py-3 px-4 dark:text-white text-slate-900 transition-all" id="cliente_nome" placeholder="Seu nome completo" type="text"/>
-</div>
-<div class="flex flex-col gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-slate-500" for="cliente_email">E-mail</label>
-<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark focus:border-primary focus:ring-0 rounded-xl py-3 px-4 dark:text-white text-slate-900 transition-all" id="cliente_email" placeholder="seu@email.com" type="email"/>
-</div>
-</div>
-<div class="flex flex-col gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-slate-500" for="cliente_tel">Telefone</label>
-<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark focus:border-primary focus:ring-0 rounded-xl py-3 px-4 dark:text-white text-slate-900 transition-all" id="cliente_tel" placeholder="+55 (00) 00000-0000" type="tel"/>
-</div>
-<div class="flex flex-col gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-slate-500" for="cliente_obs">Observações</label>
-<textarea class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark focus:border-primary focus:ring-0 rounded-xl py-3 px-4 dark:text-white text-slate-900 resize-none transition-all" id="cliente_obs" placeholder="Descreva brevemente as necessidades do seu projeto..." rows="4"></textarea>
-</div>
-</form>
-</div>
-<div class="lg:col-span-5">
-<div class="bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark rounded-2xl p-8 sticky top-28 shadow-xl shadow-slate-200/50 dark:shadow-none">
-<div class="flex items-center justify-between mb-6">
-<h3 class="text-xl font-bold dark:text-white text-slate-900">Resumo do Projeto</h3>
-<span class="bg-primary/20 text-primary text-[10px] font-black uppercase px-2 py-1 rounded">2 itens</span>
-</div>
-<div class="space-y-4 mb-8">
-<div class="flex justify-between items-start text-sm">
-<div>
-<p class="dark:text-white text-slate-900 font-bold">Desenvolvimento Web</p>
-<p class="text-slate-500 text-[11px] font-semibold">Frameworks Modernos</p>
-</div>
-<span class="dark:text-white text-slate-900 font-bold">R$ 5.000,00</span>
-</div>
-<div class="flex justify-between items-start text-sm">
-<div>
-<p class="dark:text-white text-slate-900 font-bold">Consultoria em Tráfego</p>
-<p class="text-slate-500 text-[11px] font-semibold">Google &amp; Meta Ads</p>
-</div>
-<span class="dark:text-white text-slate-900 font-bold">R$ 1.500,00</span>
-</div>
-<div class="flex justify-between items-center text-sm pt-2">
-<span class="text-slate-500 dark:text-slate-400 font-semibold">Taxa de Setup</span>
-<span class="text-green-600 dark:text-green-400 font-bold">Grátis</span>
-</div>
-<div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex justify-between items-center">
-<span class="text-lg font-bold dark:text-white text-slate-900">Total Estimado</span>
-<div class="text-right">
-<span class="text-2xl font-black text-primary block">R$ 6.500,00</span>
-<span class="text-[10px] text-slate-500 uppercase tracking-tight font-bold">Pagamento em até 12x</span>
-</div>
-</div>
-</div>
-<button class="w-full py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20">
-                            Finalizar Pagamento
-                        </button>
-<p class="text-center text-[10px] text-slate-400 mt-4 uppercase tracking-widest font-bold">
-                            Transação segura &amp; Criptografada
-                        </p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</main>
-<footer class="py-12 border-t border-slate-border-light dark:border-slate-border-dark px-6 md:px-16 bg-white dark:bg-background-dark">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-<div class="flex items-center gap-3 opacity-70 grayscale hover:grayscale-0 transition-all">
-<div class="size-6 bg-slate-900 dark:bg-white rounded flex items-center justify-center dark:text-black text-white">
-<span class="material-symbols-outlined text-sm">code</span>
-</div>
-<h2 class="text-md font-bold tracking-tight dark:text-white text-slate-900 uppercase">Aristidesbp</h2>
-</div>
-<div class="text-slate-500 dark:text-slate-400 text-sm font-medium text-center md:text-left">
-            © 2024 Aristidesbp Digital Solutions. Todos os direitos reservados.
         </div>
-<div class="flex gap-6">
-<a class="text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">alternate_email</span>
-</a>
-<a class="text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">public</span>
-</a>
-<a class="text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">share</span>
-</a>
-</div>
-</div>
-</footer>
+    </section>
 
+    <section class="py-24 px-6 md:px-16 bg-white dark:bg-[#020617]/50" id="contact">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-7">
+                <h2 class="text-3xl font-bold mb-8">Dados do Cliente</h2>
+                <form id="checkout-form" class="space-y-6">
+                    <input type="text" id="cliente_nome" placeholder="Nome" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark rounded-xl p-3" required>
+                    <input type="email" id="cliente_email" placeholder="E-mail" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark rounded-xl p-3" required>
+                    <textarea id="cliente_obs" placeholder="Observações" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-border-light dark:border-slate-border-dark rounded-xl p-3"></textarea>
+                </form>
+            </div>
 
-<script src="src/controllers/CartController.js"></script>
-        
-</body></html>
+            <div class="lg:col-span-5">
+                <div class="bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark rounded-2xl p-8 sticky top-28">
+                    <h3 class="text-xl font-bold mb-6">Resumo do Projeto</h3>
+                    <div id="cart-items" class="space-y-4 mb-8">
+                        </div>
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-between items-center">
+                        <span class="text-lg font-bold">Total</span>
+                        <span id="cart-total" class="text-2xl font-black text-primary">R$ 0,00</span>
+                    </div>
+                    <button id="finish-order" class="w-full mt-6 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20">
+                        Finalizar Pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="src/controllers/PdvController.js"></script>
+</body>
+</html>
