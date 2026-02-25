@@ -10,7 +10,7 @@ async function loginComGoogle() {
         options: {
             // Define para onde o Google deve mandar o usuário após o login.
             // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
-            redirectTo: window.location.origin + '/assets/app/index.html'
+            redirectTo: window.location.origin + 'menu.html'
         }
     });
 
