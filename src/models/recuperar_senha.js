@@ -10,7 +10,7 @@ async function solicitarRecuperacao() {
 
     // O Supabase envia um link que redireciona o usuário para a página de redefinição
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
+        redirectTo: 'redefinir_senha.html',
     });
 
     if (error) alert(error.message);
@@ -28,7 +28,7 @@ async function salvarNovaSenha() {
         alert("Erro ao atualizar: " + error.message);
     } else {
         alert("Senha atualizada com sucesso!");
-        window.location.href = 'index.html';
+        window.location.href = 'menu.html';
     }
 }
  
