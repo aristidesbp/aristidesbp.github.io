@@ -124,29 +124,22 @@
 <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Ações</span>
 </div>
 <div class="grid grid-cols-2 gap-3">
+
+        
 <button class="theme-toggle flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-border-light dark:border-slate-border-dark text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" onclick="document.documentElement.classList.toggle('dark')">
 <span class="material-symbols-outlined text-lg light-icon">light_mode</span>
 <span class="material-symbols-outlined text-lg dark-icon">dark_mode</span>
 <span>Tema</span>
 </button>
+
+        
 <button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-border-light dark:border-slate-border-dark text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
 <span class="material-symbols-outlined text-lg">language</span>
 <span>Idioma</span>
 </button>        
 </div>
 
-<!-- minha conta      
-<div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-border-light dark:border-slate-border-dark">
-<div class="size-10 rounded-full border border-primary p-0.5">
-<div class="w-full h-full rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDg0BMoeQ3v50PaL3SkEJMK4MZM2EP3WLtg3yEqPdds1n6L_a_Vmadn3sWgw6KHnLNdlfIPXWZWVGtJ3MBKTYBfSZCgStZ9XXbVvlHcDlwbwMuf8RuDC12PZ2f9EMHV-799kQZOTW-wjlFs0cVu44VWa7AUecDJpTRVO1HwG3yMaHMjXALNHypiluMojejMywLY6yGWbgiuTRsHmZHu2FO4JQMFIiwvksDn0rV8ntVl8C_FjoJRXAnhLVGIGzrEzPC4FUvCxqFIVhfv');"></div>
-</div>
-      
-<div>
-<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Minha Conta</p>
-<p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1">Premium Partner</p>
-</div>
--->
-        
+<!-- minha conta  -->     
 <a href="login.html" class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-border-light dark:border-slate-border-dark hover:border-primary transition-all">
     <div class="size-10 rounded-full border border-primary p-0.5">
         <div class="w-full h-full rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDg0BMoeQ3v50PaL3SkEJMK4MZM2EP3WLtg3yEqPdds1n6L_a_Vmadn3sWgw6KHnLNdlfIPXWZWVGtJ3MBKTYBfSZCgStZ9XXbVvlHcDlwbwMuf8RuDC12PZ2f9EMHV-799kQZOTW-wjlFs0cVu44VWa7AUecDJpTRVO1HwG3yMaHMjXALNHypiluMojejMywLY6yGWbgiuTRsHmZHu2FO4JQMFIiwvksDn0rV8ntVl8C_FjoJRXAnhLVGIGzrEzPC4FUvCxqFIVhfv');"></div>
@@ -238,6 +231,8 @@
 </div>
 </div>
 </div>
+
+        
 <div class="flex flex-wrap gap-3 mb-10">
 <button class="px-5 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md shadow-primary/10">Todas Categorias</button>
 <button class="px-5 py-2 rounded-full bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary text-sm font-semibold transition-all shadow-sm">Desenvolvimento</button>
@@ -245,19 +240,29 @@
 <button class="px-5 py-2 rounded-full bg-white dark:bg-transparent glass border border-slate-border-light dark:border-slate-border-dark text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary text-sm font-semibold transition-all shadow-sm">Tráfego Pago</button>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- llllllllllllllllllllllllllllllllllllllllllllllll-->
+        
 <div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
 <div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-3xl">developer_mode_tv</span>
-</div>
+</div>        
 <h3 class="text-xl font-bold mb-3 dark:text-white text-slate-900">Desenvolvimento Web Sob Medida</h3>
 <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow font-medium leading-relaxed">Websites e aplicações web personalizadas construídas com frameworks modernos como React, Vue e backends de alta performance.</p>
 <div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
 <span class="dark:text-white text-slate-900 font-bold">R$ 5.000,00</span>
-<button class="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">add</span> Adicionar
+
+        <button onclick="carrinho.adicionar(1, 'Desenvolvimento Web', 5000)" class="px-4 py-2 bg-primary/10 ...">
+    <span class="material-symbols-outlined text-sm">add</span> Adicionar
+        </button>
+        
+        <span class="material-symbols-outlined text-sm">add</span> Adicionar
                         </button>
 </div>
 </div>
+
+        <!-- llllllllllllllllllllllllllllllllllllllllllllllll-->
+        
 <div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
 <div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-3xl">query_stats</span>
@@ -271,6 +276,8 @@
                         </button>
 </div>
 </div>
+
+          <!-- llllllllllllllllllllllllllllllllllllllllllllllll-->  
 <div class="service-card bg-white dark:bg-slate-900/40 glass rounded-[12px] p-6 border border-slate-border-light dark:border-slate-border-dark transition-all duration-300 flex flex-col group shadow-sm">
 <div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-3xl">terminal</span>
@@ -284,6 +291,8 @@
                         </button>
 </div>
 </div>
+        <!-- llllllllllllllllllllllllllllllllllllllllllllllll-->
+        
 </div>
 </div>
 </section>
@@ -322,6 +331,41 @@
 </div>
 <div class="space-y-4 mb-8">
 <div class="flex justify-between items-start text-sm">
+
+
+<!-- mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm -->
+
+<div class="bg-white dark:bg-transparent glass border ...">
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold dark:text-white text-slate-900">Resumo do Projeto</h3>
+        <span id="contador-itens" class="bg-primary/20 text-primary text-[10px] font-black uppercase px-2 py-1 rounded">0 itens</span>
+    </div>
+
+    <div id="lista-carrinho" class="space-y-4 mb-8 min-h-[50px]">
+        <p class="text-slate-500 text-sm text-center py-4">Nenhum serviço selecionado</p>
+    </div>
+
+    <div class="flex justify-between items-center text-sm pt-2">
+        <span class="text-slate-500 dark:text-slate-400 font-semibold">Taxa de Setup</span>
+        <span class="text-green-600 dark:text-green-400 font-bold">Grátis</span>
+    </div>
+
+    <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex justify-between items-center">
+        <span class="text-lg font-bold dark:text-white text-slate-900">Total Estimado</span>
+        <div class="text-right">
+            <span id="total-carrinho" class="text-2xl font-black text-primary block">R$ 0,00</span>
+            <span class="text-[10px] text-slate-500 uppercase tracking-tight font-bold">Pagamento em até 12x</span>
+        </div>
+    </div>
+</div>
+        
+
+
+<!-- mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+        
+
+        
+        
 <div>
 <p class="dark:text-white text-slate-900 font-bold">Desenvolvimento Web</p>
 <p class="text-slate-500 text-[11px] font-semibold">Frameworks Modernos</p>
@@ -339,6 +383,8 @@
 <span class="text-slate-500 dark:text-slate-400 font-semibold">Taxa de Setup</span>
 <span class="text-green-600 dark:text-green-400 font-bold">Grátis</span>
 </div>
+
+        mmmmm -->
 <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex justify-between items-center">
 <span class="text-lg font-bold dark:text-white text-slate-900">Total Estimado</span>
 <div class="text-right">
@@ -383,5 +429,57 @@
 </div>
 </div>
 </footer>
+<script>
+        const carrinho = (function() {
+    let itens = {}; // Estado: { id: {nome, preco, qtd} }
 
+    return {
+        adicionar: function(id, nome, preco) {
+            if (itens[id]) {
+                itens[id].qtd += 1;
+            } else {
+                itens[id] = { nome, preco, qtd: 1 };
+            }
+            this.atualizarInterface();
+        },
+
+        remover: function(id) {
+            delete itens[id];
+            this.atualizarInterface();
+        },
+
+        atualizarInterface: function() {
+            const container = document.getElementById('lista-carrinho');
+            const totalElement = document.getElementById('total-carrinho');
+            const contadorElement = document.getElementById('contador-itens');
+            
+            let html = '';
+            let total = 0;
+            let totalItens = 0;
+
+            for (let id in itens) {
+                const item = itens[id];
+                total += item.preco * item.qtd;
+                totalItens += item.qtd;
+
+                html += `
+                <div class="flex justify-between items-start text-sm mb-4 animate-in fade-in duration-300">
+                    <div>
+                        <p class="dark:text-white text-slate-900 font-bold">${item.nome}</p>
+                        <button onclick="carrinho.remover(${id})" class="text-red-500 text-[10px] uppercase font-bold hover:underline">Remover</button>
+                    </div>
+                    <span class="dark:text-white text-slate-900 font-bold">
+                        R$ ${(item.preco * item.qtd).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                    </span>
+                </div>`;
+            }
+
+            // Atualiza o HTML
+            container.innerHTML = html || '<p class="text-slate-500 text-sm text-center py-4">Nenhum serviço selecionado</p>';
+            totalElement.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            contadorElement.innerText = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;
+        }
+    };
+})();
+</script>
 </body></html>
