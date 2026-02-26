@@ -1,5 +1,4 @@
-
-    /**
+/**
  * Nome do arquivo: realizar_cadastro.js
  * Objetivo: Criar uma nova conta de usuário no sistema.
  */
@@ -26,4 +25,15 @@ async function realizarCadastro() {
         alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
     }
 }
- 
+
+/**
+ * Função de apoio para evitar cadastros acidentais (UX)
+ */
+function confirmarCadastro() {
+    const email = document.getElementById('email').value;
+    if (!email) return alert("Digite um e-mail!");
+    
+    if (confirm(`Deseja criar uma conta para: ${email}?`)) {
+        realizarCadastro(); 
+    }
+}
