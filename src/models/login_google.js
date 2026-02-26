@@ -1,4 +1,3 @@
-
 /**
  * Nome do arquivo: login_google.js
  * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
@@ -10,7 +9,7 @@ async function loginComGoogle() {
         options: {
             // Define para onde o Google deve mandar o usuário após o login.
             // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
-            redirectTo: window.location.origin + 'menu.html'
+            redirectTo: window.location.origin + '/assets/app/index.html'
         }
     });
 
@@ -19,4 +18,3 @@ async function loginComGoogle() {
         alert("Erro ao conectar com Google: " + error.message);
     }
 }
- 
