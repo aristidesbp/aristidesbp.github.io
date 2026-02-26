@@ -102,7 +102,7 @@ async function loginComGoogle() {
         options: {
             // Define para onde o Google deve mandar o usuário após o login.
             // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
-            redirectTo: window.location.origin + '/assets/app/index.html'
+            redirectTo: window.location.origin + 'index.html'
         }
     });
 
@@ -202,7 +202,7 @@ async function solicitarRecuperacao() {
 
     // O Supabase envia um link que redireciona o usuário para a página de redefinição
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
+        redirectTo: 'redefinir_senha.html',
     });
 
     if (error) alert(error.message);
