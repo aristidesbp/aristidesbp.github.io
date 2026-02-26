@@ -1,5 +1,4 @@
-
-    /**
+/**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
  */
@@ -10,7 +9,7 @@ async function solicitarRecuperacao() {
 
     // O Supabase envia um link que redireciona o usuário para a página de redefinição
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'redefinir_senha.html',
+        redirectTo: 'https://aristidesbp.github.io/assets/redefinir_senha.html',
     });
 
     if (error) alert(error.message);
@@ -28,7 +27,6 @@ async function salvarNovaSenha() {
         alert("Erro ao atualizar: " + error.message);
     } else {
         alert("Senha atualizada com sucesso!");
-        window.location.href = 'menu.html';
+        window.location.href = 'index.html';
     }
 }
- 
