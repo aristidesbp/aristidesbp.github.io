@@ -259,6 +259,16 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
     <div class="card" style="margin-bottom: 10px; padding: 15px;">
         <label><i class="fas fa-search"></i> BUSCAR ENTIDADE</label>
         <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
+
+
+        
+<div id="bulk-area" style="display: none; background: #fee2e2; padding: 15px; border-radius: 8px; border: 1px solid #fecaca; margin-top: 15px; display: flex; align-items: center; justify-content: space-between;">
+    <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
+    <button onclick="deleteSelectedEntities()" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+        <i class="fas fa-trash"></i> Excluir Selecionados
+    </button>
+</div>
+
         
         <div class="export-area">
             <button class="btn-export" onclick="exportarPDFListagem()">
@@ -272,14 +282,21 @@ td { padding: 15px; border-top: 1px solid #f1f5f9; }
 
     <div class="table-container">
         <table>
+
+            
             <thead>
-                <tr>
-                    <th>Nome / Tipo</th>
-                    <th>Telefone / E-mail</th>
-                    <th>Acesso / Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
+    <tr>
+        <th width="40"><input type="checkbox" id="select-all" onclick="toggleSelectAllEntities()"></th>
+        <th>Nome / Tipo</th>
+        <th>Telefone / E-mail</th>
+        <th>Acesso / Status</th>
+        <th>Ações</th>
+    </tr>
+</thead>
+
+
+
+            
             <tbody id="entities-list"></tbody>
         </table>
     </div>
@@ -435,26 +452,34 @@ async function loadEntities() {
     renderTable(data || []);
 }
 
+
 function renderTable(data) {
     const tbody = document.getElementById('entities-list');
     if (!tbody) return;
 
     tbody.innerHTML = data.map(e => `
         <tr>
+            <td><input type="checkbox" class="row-checkbox" value="${e.id}" onclick="updateSelectedCountEntities()"></td>
             <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
             <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
             <td><span class="status-tag">${e.status_entidade || 'Ativo'}</span></td>
             <td>
                 <button class="btn-edit" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
                 <button class="btn-del" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
-                ${e.telefone ? `<button class="btn-wpp" onclick="window.open('https://wa.me/55${e.telefone.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>` : ''}
             </td>
         </tr>
     `).join('');
 }
 
+
+
+
 // Inicia ao carregar a página
 document.addEventListener('DOMContentLoaded', loadEntities);
+
+
+
+    
 
 //##################################################################################
 /** * ERP ABP - utilidades.js
@@ -531,6 +556,48 @@ async function buscaCEP() {
         } catch (e) { console.error("Erro ao buscar CEP", e); }
     }
      }    
+
+    // ################
+    // Selecionar/Deselecionar todos
+function toggleSelectAllEntities() {
+    const master = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(cb => cb.checked = master.checked);
+    updateSelectedCountEntities();
+}
+
+// Atualizar contador e visibilidade da barra vermelha
+function updateSelectedCountEntities() {
+    const selecionados = document.querySelectorAll('.row-checkbox:checked').length;
+    const bulkArea = document.getElementById('bulk-area');
+    const countLabel = document.getElementById('selected-count');
+    
+    bulkArea.style.display = selecionados > 0 ? 'flex' : 'none';
+    countLabel.innerText = `${selecionados} selecionados`;
+}
+
+// Função de exclusão em massa no Supabase
+async function deleteSelectedEntities() {
+    const selecionados = document.querySelectorAll('.row-checkbox:checked');
+    const ids = Array.from(selecionados).map(cb => cb.value);
+
+    if (!confirm(`Tem certeza que deseja excluir ${ids.length} entidades permanentemente?`)) return;
+
+    const { error } = await window.supabaseClient
+        .from('entidades')
+        .delete()
+        .in('id', ids);
+
+    if (error) {
+        alert("Erro ao excluir em massa: " + error.message);
+    } else {
+        alert("Entidades excluídas com sucesso!");
+        document.getElementById('select-all').checked = false;
+        updateSelectedCountEntities();
+        loadEntities(); // Recarrega a tabela
+    }
+}
+    
 </script> 
      
 </body>
