@@ -522,48 +522,344 @@ begin
   end loop;
 end $$;
 ```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Estrutura do projeto MVC+Service (Model-View-Controller)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# index.html
 ```
-httsps://aristidesbp.github.io
-├── 📂 assets/                 
-│   ├── 📂 img/                # Logos e backgrounds
-│   ├── 📂 icons/              # SVGs e ícones do sistema
-│   └── 📂 styles/             # CSS organizado
-│       ├── global.css         # Reset e variáveis (Cores, Fontes)
-│       ├── layout.css         # Grid, Navbar, Sidebar
-│       └── components.css     # Botões, Cards, Modais
-├── 📂 src/                    
-│   ├── 📂 models/             # REGRAS DE NEGÓCIO E DADOS
-│   │   ├── Entidade.js        # Classe/Objeto de dados
-│   │   ├── EstoqueModel.js    # Lógica: "Pode vender? Tem saldo?"
-│   │   └── VendaModel.js      # Lógica: "Cálculo de impostos e descontos"
-│   ├── 📂 views/              # INTERFACE (DOM MANIPULATION)
-│   │   ├── PdvView.js         # Métodos: renderizarTabela(), atualizarTotal()
-│   │   ├── FinanceiroView.js  # Métodos: mostrarGrafico(), limparForm()
-│   │   └── ui-components.js   # Renderizadores de componentes genéricos
-│   ├── 📂 controllers/        # O MAESTRO (ORQUESTRAÇÃO)
-│   │   ├── PdvController.js   # Escuta View -> Valida no Model -> Salva no Service
-│   │   └── AuthController.js  # Gerencia login e permissões
-│   └── 📂 services/           # INFRAESTRUTURA (APIs EXTERNAS)
-│       ├── SupabaseClient.js  # Instância única do cliente Supabase
-│       ├── ApiService.js      # Métodos genéricos (GET, POST, patch)
-│       ├── StorageService.js  # LocalStorage (Cache de sessão)
-│       └── 📂 MercadoPago/    # INFRAESTRUTURA (APIs EXTERNAS)
-│ 
-├── 📂 utils/                  # AUXILIARES TÉCNICOS
-│   ├── Mask.js                # Máscaras de input (CPF, Telefone)
-│   ├── Format.js              # Formatação de saída (Moeda, Data ISO)
-│   └── Validators.js          # Regex e validações lógicas puras
-│
-├── index.html                 # Landing Page / Site Institucional
-├── app.html                   # O "Core" do sistema (Dashboard/Menu)
-├── login.html                 # Tela de acesso isolada
-└── README.md
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aristidesbp | Digital Solutions</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+/* Custom Glassmorphism e Classes auxiliares */
+@layer components {
+    .glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Light Theme overrides */
+.light body { 
+    background-color: #f6f6f8; 
+    color: #1e293b; 
+}
+
+.light .glass { 
+    background: rgba(255, 255, 255, 0.7); 
+    border: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+.light .service-card { 
+    background: white; 
+    border-color: #e2e8f0; 
+}
+
+/* Utilitários de Hover */
+.service-card:hover { 
+    border-color: #2563eb; 
+    transform: translateY(-4px); 
+}
+
+/* Estilização para o feedback de sucesso no botão */
+.bg-success {
+    background-color: #10b981 !important; /* emerald-500 */
+}
+
+/* Spinner de carregamento */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+ </style>
+        
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#020617",
+                        "slate-border": "#1e293b",
+                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
+                },
+            },
+        }
+    </script>
+
+   
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#f8fafc] dark:text-[#f8fafc] font-display transition-colors duration-300">  
+
+    <nav class="fixed w-full z-50 glass border-b border-gray-200 dark:border-slate-border">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+                <span class="font-black text-xl tracking-tighter dark:text-white">ABP<span class="text-primary text-xs uppercase ml-1">Digital</span></span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex gap-6 text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-400">
+                    <a href="#home" class="hover:text-primary transition-colors">Home</a>
+                    <a href="#projetos" class="hover:text-primary transition-colors">Projetos</a>
+                </div>
+
+                <select id="langSelect" onchange="changeLang()" class="bg-transparent border-none text-xs font-bold uppercase cursor-pointer focus:ring-0 dark:text-white">
+                    <option value="pt">PT</option>
+                    <option value="es">ES</option>
+                    <option value="en">EN</option>
+                </select>
+
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <span id="themeIcon" class="material-symbols-outlined text-gray-600 dark:text-gray-400">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20">
+        <section class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden" id="home">
+            <div class="relative z-10 max-w-4xl text-center flex flex-col items-center gap-8">
+                <h1 class="text-4xl md:text-7xl font-black leading-[1.1] tracking-tight" id="heroTitle">
+                    Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais
+                </h1>
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl">
+                    Escalando negócios e automatizando processos através de tecnologia de ponta.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                    <a class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20" href="#services">Ver Serviços</a>
+                    <a class="px-8 py-4 glass hover:bg-white/5 font-bold rounded-xl transition-all border border-slate-border" href="#about">Saiba Mais</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 md:px-16" id="about">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                <div class="aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-slate-border">
+                    <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop');"></div>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-3xl md:text-5xl font-bold">Sobre o Especialista</h2>
+                    <p class="text-slate-400 text-lg leading-relaxed">Analista de Sistemas e Programador com foco no desenvolvimento de soluções digitais práticas, eficientes e orientadas a resultados. Atuo desde a concepção até a entrega final.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 md:px-16" id="projetos">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center">Nossos Ecossistemas</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass p-8 border border-slate-border rounded-2xl flex flex-col hover:border-primary transition-all group">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="material-symbols-outlined text-primary text-5xl">desktop_windows</span>
+                            <span class="text-xs font-bold px-3 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-widest">Web Version</span>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-primary transition-colors">Sistema ERP Web</h3>
+                        <p class="text-slate-400 leading-relaxed mb-8 flex-grow">Gestão empresarial completa com módulos de financeiro, entidades, e controle de vendas.</p>
+                        <a href="login.html" class="inline-flex items-center justify-center gap-2 px-6 py-4 bg-white/5 hover:bg-primary text-white font-bold rounded-xl transition-all border border-slate-border hover:border-primary">
+                            Acessar Sistema <span class="material-symbols-outlined">open_in_new</span>
+                        </a>
+                    </div>
+
+               
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 md:px-16" id="services">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center">Pacote Completo de Soluções</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass p-6 border border-slate-border rounded-xl flex flex-col hover:border-primary transition-all">
+                        <span class="material-symbols-outlined text-primary text-4xl mb-4">developer_mode_tv</span>
+                        <h3 class="text-xl font-bold mb-2">Desenvolvimento Web</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">Sistemas web personalizados e sites institucionais.</p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="font-bold">R$ 3.500,00</span>
+                            <button onclick="addServico(this, 'Dev Web', 3500)" class="btn-add px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">add</span> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 md:px-16" id="contact">
+            <div class="max-w-4xl mx-auto glass p-8 rounded-2xl border border-slate-border">
+                <h2 class="text-2xl font-bold mb-8">Checkout Seguro</h2>
+                <form id="payForm" class="space-y-4">
+                    <input id="cliente_nome" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" placeholder="Nome Completo" required/>
+                    <input id="cliente_email" class="w-full bg-slate-900 border-slate-border rounded-xl p-3 text-white" type="email" placeholder="E-mail" required/>
+                    <div class="p-6 bg-primary/10 rounded-xl border border-primary/20 flex justify-between items-center">
+                        <div>
+                            <span class="block text-xs uppercase font-bold text-slate-500">Valor Total</span>
+                            <span class="text-3xl font-black text-primary">R$ <span id="resumoTotal">0.00</span></span>
+                        </div>
+                        <span class="material-symbols-outlined text-4xl text-primary opacity-50">account_balance_wallet</span>
+                    </div>
+                    <button type="button" onclick="processarPagamento()" id="btnPagar" class="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25">
+                        FINALIZAR NO MERCADO PAGO
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+<script>
+ //src="index/tema.js" 
+  /**
+ * Nome do arquivo: tema.js
+ * Objetivo: Alternar entre os temas dark e light no documento.
+ */
+function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    
+    if (html.classList.contains('dark')) {
+        html.classList.remove('dark'); 
+        html.classList.add('light');
+        icon.innerText = 'dark_mode'; // Ícone para quando estiver claro
+    } else {
+        html.classList.remove('light'); 
+        html.classList.add('dark');
+        icon.innerText = 'light_mode'; // Ícone para quando estiver escuro
+    }
+}  
+</script>
+    
+<script>
+    // src="index/idioma.js"
+    /**
+ * Nome do arquivo: idioma.js
+ * Objetivo: Alterar o texto principal (Hero) conforme o idioma selecionado.
+ */
+function changeLang() {
+    const lang = document.getElementById('langSelect').value;
+    const title = document.getElementById('heroTitle');
+    
+    // Dicionário de traduções
+    const translations = {
+        es: 'Transformando Necesidades Reales en <span class="text-primary">Soluciones Digitales</span>',
+        en: 'Transforming Real Needs into Functional <span class="text-primary">Digital Solutions</span>',
+        pt: 'Transformando Necessidades Reais em <span class="text-primary">Soluções Digitais</span> Funcionais'
+    };
+
+    // Aplica a tradução ou mantém o padrão em português
+    title.innerHTML = translations[lang] || translations.pt;
+}
+</script>
+<script>
+    // src="index/carrinho.js"
+/**
+ * Nome do arquivo: carrinho.js
+ * Objetivo: Gerenciar a inclusão de serviços no carrinho e atualizar o resumo de preços.
+ */
+
+// Variável global para armazenar os itens
+let carrinho = [];
+
+function addServico(btn, nome, preco) {
+    // 1. Adiciona o objeto ao array de carrinho
+    carrinho.push({ nome, preco });
+
+    // 2. Calcula o novo total
+    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+    
+    // 3. Atualiza o elemento de resumo na tela
+    const resumoTotal = document.getElementById('resumoTotal');
+    if (resumoTotal) {
+        resumoTotal.innerText = total.toFixed(2);
+    }
+
+    // 4. Feedback Visual no botão (Muda para verde/sucesso)
+    btn.classList.remove('bg-primary');
+    btn.classList.add('bg-success'); // Classe definida no seu CSS
+    btn.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> Adicionado`;
+}    
+</script>
+<script>
+    // src="index/pagamento.js"
+ /**
+ * Nome do arquivo: pagamento.js
+ * Objetivo: Enviar os dados do carrinho para a função de checkout e redirecionar para o pagamento.
+ */
+
+async function processarPagamento() {
+    const functionUrl = 'https://eisruaetsqrratemqswv.functions.supabase.co/checkout';
+    
+    // Verifica o total do carrinho (variável global do carrinho.js)
+    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+    
+    if (total <= 0) return alert("Selecione um serviço primeiro.");
+    
+    const nome = document.getElementById('cliente_nome').value;
+    const email = document.getElementById('cliente_email').value;
+    
+    if(!nome || !email) return alert("Preencha seu nome e e-mail para continuar.");
+
+    const btn = document.getElementById('btnPagar');
+    btn.disabled = true;
+    const originalText = btn.innerText;
+    
+    // Animação de carregamento
+    btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loading-spinner"></div> PROCESSANDO...</div>`;
+
+    try {
+        const response = await fetch(functionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome, 
+                email, 
+                total,
+                itens: carrinho.map(i => ({ nome: i.nome, preco: i.preco, qtd: 1 }))
+            })
+        });
+
+        if (!response.ok) throw new Error('Erro na comunicação com o servidor de checkout.');
+
+        const data = await response.json();
+
+        // init_point é a URL gerada pelo Mercado Pago via Edge Function
+        if (data.init_point) {
+            window.location.href = data.init_point;
+        } else {
+            throw new Error('Ponto de início de pagamento não recebido.');
+        }
+    } catch (e) {
+        alert("Erro ao conectar com o servidor de pagamento. Tente novamente.");
+        console.error("Erro no Checkout:", e);
+        
+        // Restaura o botão em caso de erro
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
+}   
+</script>
+    
+</body>
+</html>
 ```
 
-# EXEMPLOS DOS CODIGOS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # login.html
@@ -574,12 +870,31 @@ httsps://aristidesbp.github.io
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-       <link href="css/style.css" rel="stylesheet">
+
+   <!-- STYLE -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+   <!-- FIM DO STYLE -->
+
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
 </head>
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+
+
+<!-- FORMULÁRIO -->
+ <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
             <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
@@ -593,11 +908,13 @@ httsps://aristidesbp.github.io
         <div class="relative mb-6 text-center border-b border-slate-800">
             <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
         </div>
-        <div class="space-y-4">
+
+ <div class="space-y-4">
     <div>
         <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
         <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
     </div>
+    
     <div class="relative">
         <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
         <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
@@ -605,9 +922,11 @@ httsps://aristidesbp.github.io
             🔒
         </button>
     </div>
+
     <div class="text-right">
         <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
     </div>
+    
     <div class="flex gap-3 pt-2">
         <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
             ENTRAR
@@ -618,22 +937,10 @@ httsps://aristidesbp.github.io
     </div>
 </div>
     </div>
-    <!-- ############################################################################# --> 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="js/supabase_config.js"></script>
-    <script src="js/alternar_senha.js"></script>
-    <script src="js/realizar_login.js"></script>
-    <script src="js/realizar_cadastro.js"></script>
-    <script src="js/recuperar_senha.js"></script>
-    <script src="js/login_google.js"></script>
-    <!-- ############################################################################# --> 
-</body>
-</html>
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# login/alternar_senha.js
-```
-/**
+<!-- FIM DO FORMULÁRIO -->
+
+<script>
+    /**
  * Nome do arquivo: alternar_senha.js
  * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
  */
@@ -647,11 +954,9 @@ function alternarSenha() {
         campo.type = campo.type === 'password' ? 'text' : 'password';
     }
 }
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# login_google.js
-```
+    
+</script>   
+<script>
 /**
  * Nome do arquivo: login_google.js
  * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
@@ -672,12 +977,9 @@ async function loginComGoogle() {
         alert("Erro ao conectar com Google: " + error.message);
     }
 }
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# realizar_cadastro.js
-```
-/**
+</script>   
+<script>
+    /**
  * Nome do arquivo: realizar_cadastro.js
  * Objetivo: Criar uma nova conta de usuário no sistema.
  */
@@ -704,7 +1006,8 @@ async function realizarCadastro() {
         alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
     }
 }
-
+</script>   
+<script>
 /**
  * Função de apoio para evitar cadastros acidentais (UX)
  */
@@ -716,12 +1019,9 @@ function confirmarCadastro() {
         realizarCadastro(); 
     }
 }
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# realizar_login.js
-```
-/**
+</script>   
+<script>
+  /**
  * Nome do arquivo: realizar_login.js
  * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
  */
@@ -754,13 +1054,10 @@ async function realizarLogin() {
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
     }
-}
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# recuperar_senha.js
-```
-/**
+}  
+ </script>   
+<script>   
+    /**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
  */
@@ -792,9 +1089,10 @@ async function salvarNovaSenha() {
         window.location.href = 'index.html';
     }
 }
-
+</script>   
+</body>
+</html>        
 ```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # entidades.html (exemplo de codigo completo)
@@ -2304,9 +2602,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# menu.html
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+ <style>   
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
+
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
 
 
+</head>
+<body>
+<!-- navbar -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- fim navbar -->
 
+<div class="content">      
+<div class="grid">
+
+<!-- cardes do menu-->
+    
+    <a href="entidades.html" class="card">
+    <i class="fas fa-users"></i>
+    <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+    <i class="fas fa-box"></i>
+    <h3>Produtos</h3>
+    </a>
+    
+ 
+
+            
+            <a href="vitrine.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>vitrine</h3>
+            </a>
+            
+            <a href="pdv.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>pdv</h3>
+            </a>
+            
+             <a href="testes.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>testes</h3>
+            </a>
+
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</body>
+</html>
+
+```
 
 
 
