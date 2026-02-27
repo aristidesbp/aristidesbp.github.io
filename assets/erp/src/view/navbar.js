@@ -1,29 +1,42 @@
 /**
- * navbar.js - ERP ABP
- * Injeção automática da barra de navegação superior
+ * controller_navbar.js
+ * Controller responsável apenas por injetar a VIEW (HTML) da navbar
+ * Arquitetura MVC - ERP ABP
  */
 
-function renderNavbar() {
-    // Definimos o HTML da navbar
-    const navHTML = `
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="btn-nav btn-home">
-                <i class="fas fa-home"></i> Início
-            </a>
-            <button class="btn-nav" onclick="sairDaConta()" style="cursor:pointer;">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-    <div style="height: 20px;"></div> `;
+(function () {
 
-    // Injeta no início do body apenas se ainda não houver uma navbar
-    if (!document.querySelector('.navbar')) {
-        document.body.insertAdjacentHTML('afterbegin', navHTML);
+    function renderNavbarHTML() {
+        // Evita duplicação da VIEW
+        if (document.querySelector('.navbar')) return;
+
+        const html = `
+            <header class="navbar">
+                <div class="navbar-brand">
+                    <i class="fas fa-chart-line"></i>
+                    <span>ERP ABP</span>
+                </div>
+
+                <nav class="navbar-actions">
+                    <a href="index.html" class="btn-nav">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </a>
+
+                    <button class="btn-nav btn-logout" type="button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </nav>
+            </header>
+
+            <div class="navbar-spacer"></div>
+        `;
+
+        document.body.insertAdjacentHTML('afterbegin', html);
     }
-}
 
+    // Exporta apenas a renderização da VIEW
+    window.renderNavbarHTML = renderNavbarHTML;
+
+})();
