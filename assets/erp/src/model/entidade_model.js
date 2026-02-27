@@ -1,7 +1,7 @@
-// src/model/entidadeModel.js
+// src/model/entidade_model.js
 
 const entidadeModel = {
-    // Busca todas as entidades
+    // Busca todas as entidades do banco
     async listar() {
         const { data, error } = await supabase
             .from('entidades')
@@ -11,7 +11,7 @@ const entidadeModel = {
         return data;
     },
 
-    // Salva ou Atualiza uma entidade
+    // Salva (Insert) ou Atualiza (Update)
     async salvar(dados) {
         const { data, error } = await supabase
             .from('entidades')
@@ -20,7 +20,7 @@ const entidadeModel = {
         return data;
     },
 
-    // Exclui uma ou várias
+    // Deleta um ou vários IDs
     async excluir(ids) {
         const { error } = await supabase
             .from('entidades')
@@ -30,11 +30,16 @@ const entidadeModel = {
         return true;
     },
 
-    // Busca endereço via CEP
+    // Busca endereço via CEP (API Externa)
     async buscarCEP(cep) {
         const cleanCEP = cep.replace(/\D/g, '');
         if (cleanCEP.length !== 8) return null;
-        const res = await fetch(`https://viacep.com.br/ws/${cleanCEP}/json/`);
-        return await res.json();
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cleanCEP}/json/`);
+            return await res.json();
+        } catch (e) {
+            console.error("Erro na API de CEP", e);
+            return null;
+        }
     }
 };
