@@ -523,6 +523,22 @@ begin
 end $$;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# ARQUITETURA MVC
+```
+PROJETO_ERP/
+├── assets/              # Arquivos estáticos
+│   ├── css/             # Arquivos .css (estilos)
+│   ├── js/              # Bibliotecas de terceiros (Supabase, PDF, etc)
+│   └── img/             # Imagens e ícones
+├── src/                 # Código fonte da aplicação
+│   ├── models/          # Lógica de dados (Interação com Supabase)
+│   ├── controllers/     # Regras de negócio e ponte View <-> Model
+│   └── views/           # Apenas a interface (HTML puro)
+├── config/              # Configurações globais (API Keys)
+└── index.html           # Ponto de entrada (Dashboard)
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
 ```
 <!DOCTYPE html>
