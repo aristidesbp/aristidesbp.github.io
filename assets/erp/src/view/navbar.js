@@ -40,3 +40,19 @@
     window.renderNavbarHTML = renderNavbarHTML;
 
 })();
+
+
+// controller_auth.js
+document.addEventListener('DOMContentLoaded', () => {
+
+    renderNavbarHTML();
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-logout')) {
+            // regra de negócio fica AQUI
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    });
+
+});
