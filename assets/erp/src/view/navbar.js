@@ -11,7 +11,7 @@ function renderNavbar() {
             <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
         </div>
         <div class="nav-buttons">
-            <a href="/index.html" class="btn-nav btn-home">
+            <a href="index.html" class="btn-nav btn-home">
                 <i class="fas fa-home"></i> Início
             </a>
             <button class="btn-nav" onclick="sairDaConta()" style="cursor:pointer;">
@@ -43,10 +43,10 @@ async function sairDaConta() {
             sessionStorage.clear();
             
             // Redireciona para o login na raiz
-            window.location.href = '/login.html';
+            window.location.href = 'login.html';
         } catch (error) {
             console.error("Erro ao deslogar:", error);
-            window.location.href = '/login.html';
+            window.location.href = 'login.html';
         }
     }
 }
