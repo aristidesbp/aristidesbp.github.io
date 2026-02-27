@@ -27,33 +27,3 @@ function renderNavbar() {
     }
 }
 
-/**
- * Função de Logout integrada ao cliente global 'supabase'
- */
-async function sairDaConta() {
-    if (confirm("Deseja realmente encerrar sua sessão no ERP ABP?")) {
-        try {
-            // Verifica se a variável 'supabase' (do seu config) está disponível
-            if (typeof supabase !== 'undefined') {
-                await supabase.auth.signOut();
-            }
-            
-            // Limpa tudo para segurança
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // Redireciona para o login na raiz
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error("Erro ao deslogar:", error);
-            window.location.href = 'login.html';
-        }
-    }
-}
-
-// Inicializa a renderização
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderNavbar);
-} else {
-    renderNavbar();
-}
