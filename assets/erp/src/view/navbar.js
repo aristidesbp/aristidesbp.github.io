@@ -1,52 +1,103 @@
 /**
- * controller_navbar.js
- * Injeta automaticamente a VIEW (HTML) da navbar
- * Arquitetura MVC - ERP ABP
+ * navbar.js
+ * Navbar 100% autônoma
+ * Não depende de nenhum outro JS ou CSS
  */
 
 (function () {
 
-    function injectNavbar() {
-        // Garante que o DOM existe
-        if (!document.body) {
-            document.addEventListener('DOMContentLoaded', injectNavbar);
-            return;
-        }
+    function createNavbar() {
+        const container = document.getElementById('navbar');
+
+        // Se não existir o container, não faz nada
+        if (!container) return;
 
         // Evita duplicação
-        if (document.querySelector('.navbar')) return;
+        if (container.dataset.loaded === "true") return;
+        container.dataset.loaded = "true";
 
-        const html = `
-            <header class="navbar">
-                <div class="navbar-brand">
-                    <i class="fas fa-chart-line"></i>
-                    <span>ERP ABP</span>
+        // Injeta CSS automaticamente
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .abp-navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 64px;
+                background: #ffffff;
+                border-bottom: 1px solid #e5e7eb;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 20px;
+                font-family: Arial, sans-serif;
+                z-index: 1000;
+            }
+
+            .abp-navbar-brand {
+                font-size: 1.1rem;
+                font-weight: bold;
+                color: #0f172a;
+            }
+
+            .abp-navbar-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .abp-navbar-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 0.95rem;
+                color: #0f172a;
+            }
+
+            .abp-navbar-btn:hover {
+                text-decoration: underline;
+            }
+
+            body {
+                padding-top: 64px;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Injeta HTML
+        container.innerHTML = `
+            <header class="abp-navbar">
+                <div class="abp-navbar-brand">
+                    ERP ABP
                 </div>
 
-                <nav class="navbar-actions">
-                    <a href="index.html" class="btn-nav">
-                        <i class="fas fa-home"></i>
-                        <span>Início</span>
-                    </a>
-
-                    <button class="btn-nav btn-logout" type="button">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Sair</span>
-                    </button>
-                </nav>
+                <div class="abp-navbar-actions">
+                    <button class="abp-navbar-btn" data-action="home">Início</button>
+                    <button class="abp-navbar-btn" data-action="logout">Sair</button>
+                </div>
             </header>
-
-            <div class="navbar-spacer"></div>
         `;
 
-        document.body.insertAdjacentHTML('afterbegin', html);
+        // Comportamento básico (opcional, mas interno)
+        container.addEventListener('click', function (e) {
+            const action = e.target.getAttribute('data-action');
+            if (!action) return;
+
+            if (action === 'home') {
+                window.location.href = 'index.html';
+            }
+
+            if (action === 'logout') {
+                alert('Logout disparado (implemente sua regra aqui)');
+            }
+        });
     }
 
-    // Autoexecução segura
+    // Garante execução mesmo sem defer
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectNavbar);
+        document.addEventListener('DOMContentLoaded', createNavbar);
     } else {
-        injectNavbar();
+        createNavbar();
     }
 
 })();
