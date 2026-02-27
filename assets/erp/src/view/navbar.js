@@ -18,21 +18,22 @@
 
         // HTML da navbar (APENAS VIEW)
         container.innerHTML = `
-            <header class="navbar">
-                <div class="navbar-brand">
-                    <span class="navbar-title">ERP ABP</span>
-                </div>
 
-                <nav class="navbar-actions">
-                    <a href="index.html" class="btn-nav">
-                        Início
-                    </a>
-
-                    <button class="btn-nav btn-logout" type="button">
-                        Sair
-                    </button>
-                </nav>
-            </header>
+        
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- FIM DA NAVBAR -->
+            
         `;
     }
 
