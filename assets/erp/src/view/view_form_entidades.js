@@ -1,3 +1,21 @@
+// view_form_entidades.js
+(function () {
+
+    function formEntidades() {
+        const container = document.getElementById('form_entidades');
+
+        // Se não existir o container, não faz nada
+        if (!container) return;
+
+        // Evita reinjeção
+        if (container.dataset.loaded === 'true') return;
+        container.dataset.loaded = 'true';
+
+        // HTML da navbar (APENAS VIEW)
+        container.innerHTML = `
+ <!-- HTML GERADO PELO CONTAINER -->
+ 
+    
 <!-- FORMULARIO -->
 <div class="container">
     <div class="card">
@@ -113,3 +131,19 @@
         </table>
     </div>
 </div>
+
+
+<!-- FIM DO HTML GERADO PELO CONTÊINER -->
+ `;
+    }
+
+    // Execução segura, com ou sem defer
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', formEntidades);
+    } else {
+        formEntidades();
+    }
+
+})();
+
+
