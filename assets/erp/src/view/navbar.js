@@ -1,13 +1,19 @@
 /**
  * controller_navbar.js
- * Controller responsável apenas por injetar a VIEW (HTML) da navbar
+ * Injeta automaticamente a VIEW (HTML) da navbar
  * Arquitetura MVC - ERP ABP
  */
 
 (function () {
 
-    function renderNavbarHTML() {
-        // Evita duplicação da VIEW
+    function injectNavbar() {
+        // Garante que o DOM existe
+        if (!document.body) {
+            document.addEventListener('DOMContentLoaded', injectNavbar);
+            return;
+        }
+
+        // Evita duplicação
         if (document.querySelector('.navbar')) return;
 
         const html = `
@@ -36,23 +42,11 @@
         document.body.insertAdjacentHTML('afterbegin', html);
     }
 
-    // Exporta apenas a renderização da VIEW
-    window.renderNavbarHTML = renderNavbarHTML;
+    // Autoexecução segura
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectNavbar);
+    } else {
+        injectNavbar();
+    }
 
 })();
-
-
-// controller_auth.js
-document.addEventListener('DOMContentLoaded', () => {
-
-    renderNavbarHTML();
-
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-logout')) {
-            // regra de negócio fica AQUI
-            localStorage.clear();
-            window.location.href = 'login.html';
-        }
-    });
-
-});
