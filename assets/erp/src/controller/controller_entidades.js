@@ -119,3 +119,45 @@ async function deleteSelectedEntities() {
     }
 }
 
+document.getElementById('formCadastro')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const nome = document.getElementById('nome').value;
+    const tipo_acesso = document.getElementById('tipo_acesso').value;
+
+    try {
+        // 1. Cria o usuário no Auth do Supabase
+        const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
+            email: email,
+            password: password
+        });
+
+        if (authError) throw authError;
+
+        const userId = authData.user.id;
+
+        // 2. Salva os detalhes na tabela 'entidades'
+        const { error: dbError } = await window.supabaseClient
+            .from('entidades')
+            .insert([
+                { 
+                    user_id: userId, 
+                    nome_completo: nome, 
+                    email: email, 
+                    tipo_acesso: tipo_acesso,
+                    tipo_entidade: 'Colaborador'
+                }
+            ]);
+
+        if (dbError) throw dbError;
+
+        alert("Usuário " + nome + " cadastrado com sucesso!");
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Erro no cadastro:", error);
+        alert("Erro ao cadastrar: " + error.message);
+    }
+});
