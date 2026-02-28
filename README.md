@@ -535,9 +535,60 @@ PROJETO_ERP/
 │   ├── controllers/     # Regras de negócio e ponte View <-> Model
 │   └── views/           # Apenas a interface (HTML puro)
 ├── config/              # Configurações globais (API Keys)
-└── index.html           # Ponto de entrada (Dashboard)
+└── index.html           # Redireciona para pasta view
+```
 ```
 
+PROJETO_ERP/
+├── index.html
+├── config/
+│   └── supabase_config.js
+├── assets
+│   └── style
+│       ├── pdv.css
+│       ├── style_entidades.css
+│       ├── style_index.css
+│       └── style_navbar.css
+└── src
+    ├── controller
+    │   ├── controller_entidades.js
+    │   ├── entidade_controller.js
+    │   ├── entidades_form.js
+    │   ├── entidades_list.js
+    │   ├── login.js
+    │   ├── navbar.js
+    │   └── pdv.js
+    ├── model
+    │   ├── model_entidades.js
+    │   └── verificar_login.js
+    ├── services
+    │   └── mercadopago_supabase
+    │       ├── doc.md
+    │       ├── index.html
+    │       ├── servicos.json
+    │       ├── site.html
+    │       ├── sucesso.html
+    │       └── supabase
+    │           ├── config.toml
+    │           └── functions
+    │               └── checkout
+    │                   ├── deno.json
+    │                   └── index.ts
+    └── view
+        ├── entidades.html
+        ├── financeiro.html
+        ├── index.html
+        ├── login.html
+        ├── pdv.html
+        ├── produtos.html
+        ├── redefinir_senha.html
+        ├── testes.html
+        └── vitrine.html
+
+12 directories, 32 files
+aristidesbp@aristidesbp-C464C:~/Documentos/aristidesbp.github.io/assets/erp$ 
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
 ```
