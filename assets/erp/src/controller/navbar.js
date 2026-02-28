@@ -26,7 +26,7 @@
             <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
         </div>
         <div class="nav-buttons">
-     <a href="../../index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+     <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
             <button class="btn-nav" onclick="sairDaConta()">
                 <i class="fas fa-sign-out-alt"></i> Sair
             </button>
