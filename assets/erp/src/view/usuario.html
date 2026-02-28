@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../../config/supabase_config.js"></script>
+    <script src="../../src/model/verificar_login.js"></script>
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen p-8">
+
+    <div class="max-w-2xl mx-auto bg-slate-900/50 p-8 rounded-2xl border border-slate-800 shadow-xl">
+        <div class="mb-8">
+            <h1 class="text-3xl font-black text-blue-500">Novo Usuário</h1>
+            <p class="text-slate-400">Cadastre colaboradores e defina permissões de acesso.</p>
+        </div>
+
+        <form id="formCadastro" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold mb-2 text-slate-400 uppercase">Nome Completo</label>
+                    <input type="text" id="nome" required class="w-full bg-slate-800 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-400 uppercase">E-mail (Login)</label>
+                    <input type="email" id="email" required class="w-full bg-slate-800 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-400 uppercase">Nível de Acesso</label>
+                    <select id="tipo_acesso" class="w-full bg-slate-800 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                        <option value="Comum">Comum (Total)</option>
+                        <option value="Financeiro">Financeiro (Apenas Financeiro)</option>
+                        <option value="Vendedor">Vendedor (PDV)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-400 uppercase">Senha Temporária</label>
+                    <input type="password" id="password" required class="w-full bg-slate-800 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+            </div>
+
+            <div class="pt-4 flex gap-4">
+                <button type="submit" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">
+                    CADASTRAR USUÁRIO
+                </button>
+                <a href="index.html" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all">
+                    VOLTAR
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../controller/entidade_controller.js"></script>
+</body>
+</html>
