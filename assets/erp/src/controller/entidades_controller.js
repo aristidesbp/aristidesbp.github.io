@@ -1,15 +1,9 @@
-
-
-    
-
-//##################################################################################
-/** * ERP ABP - utilidades.js
- * Funções auxiliares e automação de interface
+/** * ERP ABP - entidades_controller.js
+ * Centraliza funções de interface, utilitários e cadastro de usuários/entidades
  */
 
 // 1. Limpa todos os campos e volta o formulário ao estado inicial
 function resetForm() {
-    // Limpa Inputs, Selects e Textareas
     document.querySelectorAll('input, select, textarea').forEach(campo => {
         if (campo.id === 'avaliacao') {
             campo.value = '5';
@@ -20,7 +14,6 @@ function resetForm() {
         }
     });
 
-    // Reset de elementos visuais de edição
     const editId = document.getElementById('edit-id');
     if (editId) editId.value = '';
 
@@ -36,9 +29,12 @@ function resetForm() {
     console.log("🧹 Campos limpos com sucesso!");
 }
 
-// 2. Filtro de busca em tempo real (sem precisar de botão)
+// 2. Filtro de busca em tempo real
 function filtrarTabela() {
-    const termo = document.getElementById('inputBusca').value.toLowerCase();
+    const input = document.getElementById('inputBusca');
+    if (!input) return;
+    
+    const termo = input.value.toLowerCase();
     const linhas = document.querySelectorAll('#entities-list tr');
 
     linhas.forEach(linha => {
@@ -49,37 +45,43 @@ function filtrarTabela() {
 
 // 3. Função para alternar visibilidade da senha
 function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('senha_acesso');
+    // Tenta encontrar por 'senha_acesso' ou 'password' (para cobrir os dois formulários)
+    const passwordInput = document.getElementById('senha_acesso') || document.getElementById('password');
     const toggleIcon = document.getElementById('togglePassword');
-    if (passwordInput && passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else if (passwordInput) {
-        passwordInput.type = 'password';
-        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    
+    if (passwordInput) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            if (toggleIcon) toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            if (toggleIcon) toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
     }
 }
 
 // 4. Busca de CEP automática (ViaCEP)
 async function buscaCEP() {
-    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    const campoCep = document.getElementById('cep');
+    if (!campoCep) return;
+
+    const cep = campoCep.value.replace(/\D/g, '').trim();
     if (cep.length === 8) {
         try {
             const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
             const data = await res.json();
             if (!data.erro) {
-                document.getElementById('logradouro').value = data.logradouro || '';
-                document.getElementById('bairro').value = data.bairro || '';
-                document.getElementById('cidade').value = data.localidade || '';
-                document.getElementById('estado').value = data.uf || '';
+                if(document.getElementById('logradouro')) document.getElementById('logradouro').value = data.logradouro || '';
+                if(document.getElementById('bairro')) document.getElementById('bairro').value = data.bairro || '';
+                if(document.getElementById('cidade')) document.getElementById('cidade').value = data.localidade || '';
+                if(document.getElementById('estado')) document.getElementById('estado').value = data.uf || '';
                 console.log("📍 Endereço preenchido via CEP");
             }
         } catch (e) { console.error("Erro ao buscar CEP", e); }
     }
-     }    
+}
 
-    // ################
-    // Selecionar/Deselecionar todos
+// 5. Seleção em massa
 function toggleSelectAllEntities() {
     const master = document.getElementById('select-all');
     const checkboxes = document.querySelectorAll('.row-checkbox');
@@ -87,22 +89,22 @@ function toggleSelectAllEntities() {
     updateSelectedCountEntities();
 }
 
-// Atualizar contador e visibilidade da barra vermelha
 function updateSelectedCountEntities() {
     const selecionados = document.querySelectorAll('.row-checkbox:checked').length;
     const bulkArea = document.getElementById('bulk-area');
     const countLabel = document.getElementById('selected-count');
     
-    bulkArea.style.display = selecionados > 0 ? 'flex' : 'none';
-    countLabel.innerText = `${selecionados} selecionados`;
+    if (bulkArea) bulkArea.style.display = selecionados > 0 ? 'flex' : 'none';
+    if (countLabel) countLabel.innerText = `${selecionados} selecionados`;
 }
 
-// Função de exclusão em massa no Supabase
+// 6. Exclusão em massa
 async function deleteSelectedEntities() {
     const selecionados = document.querySelectorAll('.row-checkbox:checked');
     const ids = Array.from(selecionados).map(cb => cb.value);
 
-    if (!confirm(`Tem certeza que deseja excluir ${ids.length} entidades permanentemente?`)) return;
+    if (ids.length === 0) return;
+    if (!confirm(`Tem certeza que deseja excluir ${ids.length} registros permanentemente?`)) return;
 
     const { error } = await window.supabaseClient
         .from('entidades')
@@ -110,15 +112,22 @@ async function deleteSelectedEntities() {
         .in('id', ids);
 
     if (error) {
-        alert("Erro ao excluir em massa: " + error.message);
+        alert("Erro ao excluir: " + error.message);
     } else {
-        alert("Entidades excluídas com sucesso!");
-        document.getElementById('select-all').checked = false;
+        alert("Excluído com sucesso!");
+        if (document.getElementById('select-all')) document.getElementById('select-all').checked = false;
         updateSelectedCountEntities();
-        loadEntities(); // Recarrega a tabela
+        
+        // Verifica se a função de carregar tabela existe, senão recarrega a página
+        if (typeof loadEntities === 'function') {
+            loadEntities();
+        } else {
+            window.location.reload();
+        }
     }
 }
 
+// 7. Lógica de Cadastro de Novo Usuário (Auth + Tabela Entidades)
 document.getElementById('formCadastro')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -128,6 +137,12 @@ document.getElementById('formCadastro')?.addEventListener('submit', async (e) =>
     const tipo_acesso = document.getElementById('tipo_acesso').value;
 
     try {
+        // Mostra um feedback visual simples
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.innerText;
+        btn.innerText = "CADASTRANDO...";
+        btn.disabled = true;
+
         // 1. Cria o usuário no Auth do Supabase
         const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
             email: email,
@@ -136,28 +151,36 @@ document.getElementById('formCadastro')?.addEventListener('submit', async (e) =>
 
         if (authError) throw authError;
 
-        const userId = authData.user.id;
-
-        // 2. Salva os detalhes na tabela 'entidades'
+        // 2. Salva os detalhes na tabela 'entidades' vinculando ao ID do Auth
         const { error: dbError } = await window.supabaseClient
             .from('entidades')
             .insert([
                 { 
-                    user_id: userId, 
+                    user_id: authData.user.id, 
                     nome_completo: nome, 
                     email: email, 
                     tipo_acesso: tipo_acesso,
-                    tipo_entidade: 'Colaborador'
+                    tipo_entidade: 'Colaborador',
+                    status_entidade: 'Ativo'
                 }
             ]);
 
         if (dbError) throw dbError;
 
         alert("Usuário " + nome + " cadastrado com sucesso!");
-        window.location.reload();
+        
+        // Pequeno delay para garantir que o banco processou antes de recarregar
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
 
     } catch (error) {
         console.error("Erro no cadastro:", error);
         alert("Erro ao cadastrar: " + error.message);
+        
+        // Restaura o botão em caso de erro
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "CADASTRAR USUÁRIO";
+        btn.disabled = false;
     }
 });
