@@ -5,20 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
 
-   <!-- STYLE -->
+   <!-- Estilos -->
    <script src="https://cdn.tailwindcss.com"></script>
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-   <!-- FIM DO STYLE -->
+ 
+<!-- ############################################################################# --> 
+  <!-- CSS locais -->
+  <link rel="stylesheet" href="../../assets/style/login.css">
+  <link rel="stylesheet" href="../../assets/style/style_navbar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
- <!-- CONEXÃO SUPABASE -->   
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="src/model/supabase_config.js"></script>
-    
+<!-- ############################################################################# --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
+<script src="../model/supabase_config.js"></script> 
+<script src="../controller/login.js"></script>   
+  
 </head>
+
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
 
+  <!-- Navbar -->
+  <div id="navbar"></div>
+  <script src="../controller/navbar.js"></script>
 
-<!-- FORMULÁRIO -->
+  <!-- Formulário -->
+  <!-- FORMULÁRIO -->
  <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
@@ -55,8 +66,7 @@
     </div>
 </div>
     </div>
-<!-- FIM DO FORMULÁRIO -->
-<script src="src/controller/login.js"></script>
 
 </body>
-</html>        
+</html>
+
