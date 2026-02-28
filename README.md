@@ -527,59 +527,49 @@ end $$;
 
 ```
 PROJETO_ERP/
-├── index.html # Redireciona para pasta view
-│
-├── config/ # Configurações globais (API Keys)
+├── index.html                   # Redireciona para src/view/index.html
+├── config/                      # Configurações globais
 │   └── supabase_config.js
-│ 
-├── assets/  # Arquivos estáticos
-│   ├── img/ # Imagens (icons etc...)
-│   └── style/ # Arquivos .css (estilos)
-│       ├── style_navbar.css
-│       ├── style_index.css
-│       └── style_entidades.css
-│ 
-└── src/ # Código fonte da aplicação
-    ├── controller/ # Regras de negócio e ponte View <-> Model
-    │   ├── controller_entidades.js
-    │   ├── entidade_controller.js
-    │   ├── entidades_form.js
-    │   ├── entidades_list.js
-    │   ├── login.js
-    │   ├── navbar.js
-    │   └── pdv.js
-    │ 
-    ├── model/  # Lógica de dados (Interação com Supabase)
-    │   ├── model_entidades.js
-    │   └── verificar_login.js
-    │ 
-    ├── services
-    │   └── mercadopago_supabase
-    │       ├── doc.md
-    │       ├── index.html
-    │       ├── servicos.json
-    │       ├── site.html
-    │       ├── sucesso.html
-    │       └── supabase
-    │           ├── config.toml
-    │           └── functions
-    │               └── checkout
-    │                   ├── deno.json
-    │                   └── index.ts
-    │
-    └── view/ # Apenas a interface (HTML puro)
-        ├── login.html
-        ├── index.html
-        ├── entidades.html
-        ├── financeiro.html
-        ├── pdv.html
-        ├── produtos.html
-        ├── redefinir_senha.html
-        ├── testes.html
-        └── vitrine.html
-
-12 directories, 32 files
-aristidesbp@aristidesbp-C464C:~/Documentos/aristidesbp.github.io/assets/erp$ 
+├── assets/                      # Arquivos estáticos (CSS, Imagens)
+│   ├── img/                     # Ícones e logos
+│   └── style/                   # Estilos CSS segmentados
+│       ├── style_entidades.css
+│       ├── style_index.css
+│       └── style_navbar.css
+└── src/                         # Código fonte da aplicação
+    ├── view/                    # Interface do usuário (HTML puro)
+    │   ├── entidades.html
+    │   ├── financeiro.html
+    │   ├── index.html
+    │   ├── login.html
+    │   ├── pdv.html
+    │   ├── produtos.html
+    │   ├── redefinir_senha.html
+    │   ├── testes.html
+    │   └── vitrine.html
+    ├── controller/              # Lógica de interface e ponte MVC
+    │   ├── controller_entidades.js
+    │   ├── entidade_controller.js
+    │   ├── entidades_form.js
+    │   ├── entidades_list.js
+    │   ├── login.js
+    │   ├── navbar.js
+    │   └── pdv.js
+    ├── model/                   # Interação com Banco de Dados (Supabase)
+    │   ├── model_entidades.js
+    │   └── verificar_login.js
+    └── services/                # Integrações externas e Backend (Edge Functions)
+        └── mercadopago_supabase/
+            ├── doc.md
+            ├── index.html
+            ├── servicos.json
+            ├── site.html
+            ├── sucesso.html
+            └── supabase/
+                └── functions/
+                    └── checkout/
+                        ├── deno.json
+                        └── index.ts
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
