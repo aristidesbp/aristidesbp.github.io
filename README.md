@@ -524,33 +524,23 @@ end $$;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ARQUITETURA MVC
-```
-PROJETO_ERP/
-├── assets/              # Arquivos estáticos
-│   ├── css/             # Arquivos .css (estilos)
-│   ├── js/              # Bibliotecas de terceiros (Supabase, PDF, etc)
-│   └── img/             # Imagens e ícones
-├── src/                 # Código fonte da aplicação
-│   ├── models/          # Lógica de dados (Interação com Supabase)
-│   ├── controllers/     # Regras de negócio e ponte View <-> Model
-│   └── views/           # Apenas a interface (HTML puro)
-├── config/              # Configurações globais (API Keys)
-└── index.html           # Redireciona para pasta view
-```
-```
 
+```
 PROJETO_ERP/
-├── index.html
-├── config/
+├── index.html # Redireciona para pasta view
+│
+├── config/ # Configurações globais (API Keys)
 │   └── supabase_config.js
-├── assets
-│   └── style
-│       ├── pdv.css
-│       ├── style_entidades.css
+│ 
+├── assets/  # Arquivos estáticos
+│   ├── img/ # Imagens (icons etc...)
+│   └── style/ # Arquivos .css (estilos)
+│       ├── style_navbar.css
 │       ├── style_index.css
-│       └── style_navbar.css
-└── src
-    ├── controller
+│       └── style_entidades.css
+│ 
+└── src/ # Código fonte da aplicação
+    ├── controller/ # Regras de negócio e ponte View <-> Model
     │   ├── controller_entidades.js
     │   ├── entidade_controller.js
     │   ├── entidades_form.js
@@ -558,9 +548,11 @@ PROJETO_ERP/
     │   ├── login.js
     │   ├── navbar.js
     │   └── pdv.js
-    ├── model
+    │ 
+    ├── model/  # Lógica de dados (Interação com Supabase)
     │   ├── model_entidades.js
     │   └── verificar_login.js
+    │ 
     ├── services
     │   └── mercadopago_supabase
     │       ├── doc.md
@@ -574,11 +566,12 @@ PROJETO_ERP/
     │               └── checkout
     │                   ├── deno.json
     │                   └── index.ts
-    └── view
+    │
+    └── view/ # Apenas a interface (HTML puro)
+        ├── login.html
+        ├── index.html
         ├── entidades.html
         ├── financeiro.html
-        ├── index.html
-        ├── login.html
         ├── pdv.html
         ├── produtos.html
         ├── redefinir_senha.html
@@ -589,6 +582,471 @@ PROJETO_ERP/
 aristidesbp@aristidesbp-C464C:~/Documentos/aristidesbp.github.io/assets/erp$ 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# index.html (redirecionando para view)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carregando...</title>
+    
+    <meta http-equiv="refresh" content="0; url=src/view/index.html">
+
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
+        .loader { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="loader">
+      <!--
+        <p><a href="src/view/index.html">Clique aqui se não for redirecionado automaticamente.</a></p>
+   -->
+    </div>
+
+    <script>
+        // Reforço via JavaScript para garantir o redirecionamento imediato
+        window.location.href = "src/view/index.html";
+    </script>
+
+</body>
+</html>
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# config/supabase_config.js
+```
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://seu_endereço';
+const supabaseKey = 'sua_senha';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase; 
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# assets/style/style_navbar.css
+```
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# assets/style/style_index.css
+```
+ /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
+
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# assets/style/style_entidades.html (view)
+```
+ 
+:root {
+    --primary: #3ecf8e;
+    --dark: #0f172a;
+    --bg: #f1f5f9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    padding-top: 85px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: var(--primary);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Estilo para o campo de senha com Olho */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper i {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #64748b;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #64748b;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; }
+
+.btn-edit { color: #3b82f6; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-del { color: #ef4444; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-wpp { color: #25d366; cursor: pointer; font-size: 18px; background: none; border: none; margin-right: 10px;}
+.btn-mail { color: #ea4335; cursor: pointer; font-size: 18px; background: none; border: none; }
+
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; background: white;
+    padding: 15px 25px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
+}
+.nav-buttons { display: flex; gap: 15px; align-items: center; }
+.btn-nav-back { text-decoration: none; color: #64748b; font-weight: bold; }
+.btn-logout-nav {
+    background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px;
+    font-weight: bold; font-size: 14px; border: none; cursor: pointer;
+}
+
+.export-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.btn-export {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export-full {
+    background: #1e293b;
+}
+ 
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# index.html (view)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+<!-- ############################################################################# --> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../../assets/style/style_index.css">
+<link rel="stylesheet" href="../../assets/style/style_navbar.css">  
+<!-- ############################################################################# --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
+<script src="../../config/supabase_config.js"></script> 
+<script src="../model/verificar_login.js"></script> 
+<!-- ############################################################################# --> 
+    
+</head>
+<body>
+    
+ <!-- Navbar -->
+  <div id="navbar"></div>
+  <script src="../controller/navbar.js"></script>
+
+<!-- CONTEÚDO DA PÁGINA -->
+<div class="content">      
+  <div class="grid">
+
+   <a href="usuario.html" class="card">
+      <i class="fas fa-users"></i>
+      <h3>Gestão de usuarios</h3>
+    </a>
+    <a href="entidades.html" class="card">
+      <i class="fas fa-users"></i>
+      <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+      <i class="fas fa-hand-holding-usd"></i>
+      <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+      <i class="fas fa-box"></i>
+      <h3>Produtos</h3>
+    </a>
+
+ 
+
+    <a href="pdv.html" class="card">
+      <i class="fas fa-shopping-basket"></i>
+      <h3>PDV</h3>
+    </a>
+
+  </div>        
+</div>
+
+</body>
+</html>
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# login.html (view)
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+
+   <!-- Estilos -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+ 
+<!-- ############################################################################# --> 
+  <!-- CSS locais -->
+  <link rel="stylesheet" href="../../assets/style/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- ############################################################################# --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>    
+<script src="../../config/supabase_config.js"></script> 
+<script src="../controller/login.js"></script>
+  
+</head>
+
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+
+
+  <!-- FORMULÁRIO -->
+ <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+<!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+        </div>
+
+ <div class="space-y-4">
+    <div>
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    
+    <div class="relative">
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+            🔒
+        </button>
+    </div>
+
+    <div class="text-right">
+        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+    </div>
+    
+    <div class="flex gap-3 pt-2">
+        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            ENTRAR
+        </button>
+        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+            CADASTRAR
+        </button>
+    </div>
+</div>
+    </div>
+<!-- FIM DO FORMULÁRIO -->
+
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CODIGOS COMPLETOS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
 ```
