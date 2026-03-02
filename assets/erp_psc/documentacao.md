@@ -4,6 +4,34 @@
 * Plataforma para controle de pacientes e resolução de exercicios
 * RESUMO:
   O proficional ira cadastrar seus pacientes , que por sua vez tera acesso ao site para realização dos tarefas e acompanhamento do seu progresso.
+
+# REGRAS DE NEGOCIO:
+* Cada Proficional so podera ver os dados cadastrados por ele mesmo, (financeiro, pacientes etc...)
+* quando cadastrar um usuario o mesmo deve tambem ser cadastrado na tabela entidades.
+* as entidades cadastradas como paciente so teram acesso aos dados e tarefas relacionadas ao seu usuario (cpf).
+
+1. Gestão de Utilizadores e Acessos
+* Perfis de Utilizador: O sistema deve suportar pelo menos três tipos de entidades: Colaborador (Psicopedagogo), Paciente e Responsável.
+* Controle de Acesso (RBAC): Cada utilizador visualiza apenas o conteúdo permitido pelo seu nível de acesso, validado pelo script controle_de_acesso.js.
+* Autenticação Obrigatória: Nenhuma página interna (view) deve ser acessível sem uma sessão ativa no Supabase Auth. Caso não haja sessão, o utilizador deve ser redirecionado para login.html.
+* Validação de Credenciais: O login exige obrigatoriamente e-mail e senha; a ausência de qualquer um destes campos deve interromper a tentativa de autenticação antes do envio ao servidor.
+
+2. Gestão Psicopedagógica
+*  Cadastro de Pacientes: Apenas profissionais (colaboradores) podem registar novos pacientes no sistema.
+* Ciclo de Atividades:
+  - O profissional é responsável por cadastrar e listar , categorias, exercícios,financerio e determinar o acesso especifico para cada paciente.
+  - Os exercícios são atribuídos aos pacientes para resolução através da plataforma (o paciente usara suas credenciais cadastradas na tabela "entidades" pelo proficional).
+  - Acompanhamento: O progresso das tarefas realizadas pelo paciente deve ser passível de monitorização pelo profissional.
+
+3. Gestão Financeira e Cobranças
+*  Fluxo de Caixa: O sistema deve permitir o registo e a listagem de movimentações financeiras e o controlo de parcelas.
+*  Pagamentos Externos: A integração com o Mercado Pago via Edge Functions do Supabase é o método padrão para processar checkouts e pagamentos.
+*  Estados de Pagamento: O sistema deve gerir retornos de sucesso ou falha nas transações através das páginas de resposta (sucesso.html).
+
+4. Integridade e Persistência de Dados
+*  Backend as a Service: Todas as operações de leitura e escrita devem ser realizadas através do cliente window.supabaseClient configurado no ficheiro de conexão.
+*  Segurança de Dados: As chaves de API e o URL do projeto Supabase devem estar centralizados no ficheiro supabase_config.js para garantir a consistência da comunicação.
+*  Relatórios: O sistema deve consolidar os dados de entidades e financeiro para a geração de relatórios de gestão.
   
 # ARQUITETURA MVC DO ERP-PSC
 
@@ -74,8 +102,7 @@ PROJETO_ERP/
 * Região: brasil 
 ---
 
-
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/model/supabase_config.js
 ```
 // SUPABASE_CONFIG.JS
