@@ -103,6 +103,41 @@ PROJETO_ERP/
 ---
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabela categorias.sql
+```
+CREATE TABLE public.categorias (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(), -- Vincula a categoria ao profissional logado
+  nome text NOT NULL,
+  descricao text,
+  tipo_categoria text DEFAULT 'exercicio', -- Ex: 'exercicio', 'produto', 'financeiro'
+  cor_identificadora text, -- Hexadecimal para usar na interface (opcional)
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  
+  CONSTRAINT categorias_pkey PRIMARY KEY (id),
+  CONSTRAINT categorias_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabela categorias.sql
+```
+CREATE TABLE public.controle_de_acesso (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  perfil text NOT NULL, -- Ex: 'Administrador', 'Psicopedagogo', 'Paciente'
+  modulo text NOT NULL, -- Ex: 'Financeiro', 'Exercicios', 'Relatorios'
+  pode_ler boolean DEFAULT true,
+  pode_escrever boolean DEFAULT false,
+  pode_excluir boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  
+  CONSTRAINT controle_de_acesso_pkey PRIMARY KEY (id),
+  -- Garante que não haja duplicidade de regras para o mesmo perfil e módulo
+  CONSTRAINT perfil_modulo_unique UNIQUE (perfil, modulo)
+);
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/model/supabase_config.js
 ```
 // SUPABASE_CONFIG.JS
