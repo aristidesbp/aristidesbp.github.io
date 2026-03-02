@@ -40,7 +40,7 @@ PROJETO_ERP/
     │
     ├── controller/              # Lógica de interface e ponte MVC
     │   ├── navbar.js
-    │   └── pdv.js
+    │   └── acesso.js
     │ 
     └── services/                # Integrações externas e Backend (Edge Functions)
         └── mercadopago_supabase/
