@@ -523,7 +523,13 @@ end $$;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETO ERP-ABP  (ARQUITETURA MVC)
+# PROJETO ERP-PSC 
+* Projeto consiste em criar uma plataforma para Pisco-Pegagogos
+* Plataforma para controle de pacientes e resolução de exercicios
+* RESUMO:
+  O proficional ira cadastrar seus pacientes , que por sua vez tera acesso ao site para realização dos tarefas e acompanhamento do seu progresso.
+  
+# ARQUITETURA MVC DO ERP-PSC
 
 ```
 PROJETO_ERP/
