@@ -21,6 +21,8 @@ PROJETO_ERP/
     ├── model/                     # Interação com Banco de Dados (Supabase)
     │   ├── supabase_config.js     # cofiguraçao de chaves (Supabase)
     │   ├── login.js               # cadastra e faz o login
+    │   ├── entidades.js           # tabela dos usuario (colaborador/paciente/responsavel)
+    │   ├── financeiro.js          # controle de fluxo de caixas (parcelas)
     │   ├── verificar_login.js     # verifica se o usuario esta logado
     │   └── controle_de_acesso.js  # verifica oque o usuario pode ver ou fazer
     │
@@ -34,8 +36,10 @@ PROJETO_ERP/
     │   ├── cadastrar_categorias.html
     │   ├── listar_exercicios.html
     │   ├── cadastrar_exercicios.html
-    │   ├── listar_usuarios.html
-    │   ├── cadastrar_usuarios.html
+    │   ├── listar_entidades.html
+    │   ├── cadastrar_entidades.html
+    │   ├── listar_financeiro.html
+    │   ├── cadastrar_financeiro.html
     │   └── relatorios.html
     │
     ├── controller/              # Lógica de interface e ponte MVC
