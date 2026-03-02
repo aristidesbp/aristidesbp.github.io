@@ -103,7 +103,7 @@ PROJETO_ERP/
 ---
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela categorias.sql
+# tabela public.categorias.sql
 ```
 CREATE TABLE public.categorias (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -120,7 +120,7 @@ CREATE TABLE public.categorias (
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela categorias.sql
+# tabela public.controle_de_acesso.sql
 ```
 CREATE TABLE public.controle_de_acesso (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
