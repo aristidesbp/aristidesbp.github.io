@@ -2,7 +2,10 @@
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # 1. VISÃO GERAL DO PROJETO
-O ERP-PSC é um ecossistema digital de alta performance desenvolvido exclusivamente para Psicopedagogos. O sistema centraliza a gestão de pacientes, o acompanhamento terapêutico e o controle financeiro em um ambiente que garante o sigilo absoluto das informações clínicas, respeitando a ética profissional e a privacidade dos dados.
+* O ERP-PSC é um ecossistema digital de alta performance desenvolvido exclusivamente para Psicopedagogos. 
+* O sistema centraliza a gestão de pacientes, o acompanhamento terapêutico e o controle financeiro em um ambiente que garante o sigilo absoluto das informações clínicas, respeitando a ética profissional e a privacidade dos dados.
+* O sistema terá trez niveis de acesso (supervisor/master - Psicopedagogos/funcionarios- Pacientes/clientes) cada um podendo acessar interface com nivel de acesso a sua categoria.
+  
 
 # 2. DIFERENCIAIS DE SEGURANÇA (DADOS SENSÍVEIS)
 Considerando que o sistema lida com diagnósticos e prontuários, a segurança foi construída em nível bancário:
