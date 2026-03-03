@@ -107,7 +107,30 @@ Sua tabela entidades no banco de dados deve refletir essa hierarquia:
 * Encrypted_Data (Opcional): Campos extremamente sensíveis podem ser salvos com uma camada extra de proteção.
 
 
+## VISAR ESCALABILIDADES PARA:
+### 1. Segurança Jurídica e Conformidade (Além do RLS)
+* Assinatura Digital de Prontuários: Para que o prontuário tenha validade jurídica plena (em caso de perícias ou solicitações judiciais), implemente uma função de "Fechamento de Evolução". Uma vez que o profissional escreve a nota do dia e a "assina" (pode ser via certificado digital ou um hash de integridade), o sistema impede edições retroativas.
+* Trilha de Auditoria Expositiva (Audit Log): O Supabase permite rastrear mudanças, mas seria ideal ter uma interface para o Administrador/Supervisor ver quem acessou qual prontuário e quando. Isso é um requisito forte da LGPD para dados sensíveis.
 
+### 2. Melhorias na Experiência do Paciente/Responsável
+* Notificações via WhatsApp/E-mail: Integrar uma API (como Twilio ou Evolution API) para enviar lembretes de consultas automáticos. Em clínicas psicopedagógicas, o índice de faltas diminui drasticamente com lembretes 24h antes.
+* Repositório de Documentos: Uma área onde o responsável possa fazer upload de laudos médicos anteriores, exames ou relatórios escolares, centralizando todo o histórico do paciente em um só lugar seguro.
+
+### 3. Funcionalidades Clínicas Avançadas
+* Gerador de Relatórios Automatizado: Criar modelos (templates) de relatórios psicopedagógicos onde o sistema puxa automaticamente os dados do paciente e as últimas evoluções, economizando horas de digitação para o profissional.
+* Anamnese Personalizável: Em vez de um formulário fixo, permitir que o Supervisor crie campos personalizados para a anamnese, já que cada clínica pode ter um protocolo diferente.
+
+### 4. Gestão e Business Intelligence (BI)
+* Dashboard de Conversão: Para o nível "Supervisor", um gráfico que mostre quantos pacientes iniciaram a avaliação e quantos seguiram para o tratamento (retenção).
+* Controle de Fluxo de Caixa com DRE: Além de registrar entradas e saídas, gerar um demonstrativo simples para que o dono da clínica entenda o lucro real após impostos e custos fixos.
+
+### 5. Melhorias Técnicas (Performance e UX)
+* Modo Offline para Evoluções: Psicopedagogos muitas vezes atendem em locais com internet instável. Usar Service Workers (PWA) para permitir que o profissional escreva a evolução mesmo sem rede e o sistema sincronize com o Supabase assim que a conexão voltar.
+* Máscaras e Validações no Frontend: No código que vi no arquivo, a validação é simples. Adicionar bibliotecas de máscara para CPF, Telefone e Datas evita que dados "sujos" cheguem ao banco de dados.
+
+### 6. Automação de Marketing (Diferencial Comercial)
+* Lista de Espera Inteligente: Se um paciente desmarcar, o sistema poderia sugerir automaticamente o próximo da lista de espera que tenha disponibilidade naquele horário.
+   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## ARQUITETURA MVC DO ERP-PSC
 
