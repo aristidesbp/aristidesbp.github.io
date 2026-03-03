@@ -1,39 +1,72 @@
-# PLANEJAMENTO DO PROJETO ERP_PSC
+# PROJETO ERP_PSC
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## PROJETO ERP-PSC 
+## DESCRIÇÃO DO PROJETO:
 * Projeto consiste em criar uma plataforma para Pisco-Pegagogos
 * Plataforma para controle de pacientes e resolução de exercicios
 * RESUMO:
   O proficional ira cadastrar seus pacientes , que por sua vez tera acesso ao site para realização dos tarefas e acompanhamento do seu progresso.
 
-## REGRAS DE NEGOCIO:
-* Cada Proficional so podera ver os dados cadastrados por ele mesmo, (financeiro, pacientes etc...)
-* quando cadastrar um usuario o mesmo deve tambem ser cadastrado na tabela entidades.
-* as entidades cadastradas como paciente so teram acesso aos dados e tarefas relacionadas ao seu usuario (cpf).
+# PLANEJAMENTO
+## 1. Arquitetura de Segurança (O Core do Projeto)
+* Para dados sensíveis, não confiamos no JavaScript do navegador para proteger nada. O navegador serve apenas para exibir; quem protege é o Banco de Dados.
+* Camada 1: RLS (Row Level Security) - Obrigatório: No Supabase, nenhuma tabela pode ser lida sem uma política de segurança.
+- Regra: auth.uid() == profissional_responsavel_id. Isso garante que mesmo que um hacker descubra o ID de um paciente, ele não conseguirá puxar os dados se não for o "dono" do registro.
+* Camada 2: Proteção de PII (Personally Identifiable Information): Dados como CPF e Diagnósticos devem ter políticas de acesso restritas.
+* Camada 3: Auditoria: Criar uma tabela de logs_acesso para registrar quem visualizou qual ficha de paciente e quando.
 
-1. Gestão de Utilizadores e Acessos
-* Perfis de Utilizador: O sistema deve suportar pelo menos três tipos de entidades: Colaborador (Psicopedagogo), Paciente e Responsável.
-* Controle de Acesso (RBAC): Cada utilizador visualiza apenas o conteúdo permitido pelo seu nível de acesso, validado pelo script controle_de_acesso.js.
-* Autenticação Obrigatória: Nenhuma página interna (view) deve ser acessível sem uma sessão ativa no Supabase Auth. Caso não haja sessão, o utilizador deve ser redirecionado para login.html.
-* Validação de Credenciais: O login exige obrigatoriamente e-mail e senha; a ausência de qualquer um destes campos deve interromper a tentativa de autenticação antes do envio ao servidor.
+## 2. Cronograma de Fases (Focado em Robustez)
+* Fase 1: Infraestrutura e Autenticação Blindada (Concluída/Ajuste)
+- Ajuste de Segurança: Mover as chaves do Supabase para variáveis de ambiente ou garantir que a anon_key tenha permissões mínimas.
+- Middleware de Proteção: Criar um script security.js que roda antes de qualquer elemento da página carregar, verificando a validão do JWT (Token) do usuário.
+- Mecanismo de Logout Automático: Se o usuário ficar inativo por 30 minutos, o sistema deve encerrar a sessão para evitar que terceiros vejam os dados em computadores compartilhados.
 
-2. Gestão Psicopedagógica
-*  Cadastro de Pacientes: Apenas profissionais (colaboradores) podem registar novos pacientes no sistema.
-* Ciclo de Atividades:
-  - O profissional é responsável por cadastrar e listar , categorias, exercícios,financerio e determinar o acesso especifico para cada paciente.
-  - Os exercícios são atribuídos aos pacientes para resolução através da plataforma (o paciente usara suas credenciais cadastradas na tabela "entidades" pelo proficional).
-  - Acompanhamento: O progresso das tarefas realizadas pelo paciente deve ser passível de monitorização pelo profissional.
+* Fase 2: Gestão de Entidades e Vínculo de Dados
+- Criação do Perfil do Profissional: Ao logar pela primeira vez, o sistema obriga o preenchimento dos dados do psicopedagogo.
+- Cadastro de Pacientes com Hash: O sistema deve validar CPFs e evitar duplicidade.
+- Vínculo Forte: Todo registro nas tabelas tarefas, financeiro e evolucoes deve carregar obrigatoriamente o user_id do profissional e o paciente_id.
 
-3. Gestão Financeira e Cobranças
-*  Fluxo de Caixa: O sistema deve permitir o registo e a listagem de movimentações financeiras e o controlo de parcelas.
-*  Pagamentos Externos: A integração com o Mercado Pago via Edge Functions do Supabase é o método padrão para processar checkouts e pagamentos.
-*  Estados de Pagamento: O sistema deve gerir retornos de sucesso ou falha nas transações através das páginas de resposta (sucesso.html).
+* Fase 3: Módulo Clínico (Área Crítica)
+- Evoluções Diárias: Registro de sessões com texto criptografado ou protegido por RLS.
+- Upload de Documentos: Utilizar o Supabase Storage com pastas privadas. O link do arquivo deve expirar em poucos minutos (Signed URLs).
+- Tarefa e Exercícios: O paciente acessa apenas com seu CPF e uma senha simplificada, vendo exclusivamente o que lhe foi atribuído.
 
-4. Integridade e Persistência de Dados
-*  Backend as a Service: Todas as operações de leitura e escrita devem ser realizadas através do cliente window.supabaseClient configurado no ficheiro de conexão.
-*  Segurança de Dados: As chaves de API e o URL do projeto Supabase devem estar centralizados no ficheiro supabase_config.js para garantir a consistência da comunicação.
-*  Relatórios: O sistema deve consolidar os dados de entidades e financeiro para a geração de relatórios de gestão.
-  
+* Fase 4: Financeiro e Conformidade (LGPD)
+- Relatórios: Geração de recibos e controle de pagamentos.
+- Termos de Consentimento: O sistema deve gerar um termo digital onde o responsável pelo paciente aceita o tratamento dos dados, conforme a LGPD brasileira.
+
+## 3. Plano de Implementação Técnica (Próximos Passos)
+Para garantir a robustez, recomendo as seguintes ações imediatas:
+* A. Central de Segurança (src/middleware/auth_check.js)
+- Não use apenas um redirecionamento simples. Use um verificador que bloqueie o render do HTML:
+
+```
+// Este script deve ser o primeiro no <head>
+(async () => {
+    const session = await supabase.auth.getSession();
+    if (!session.data.session) {
+        window.location.replace('login.html');
+    } else {
+        document.documentElement.style.display = 'block';
+    }
+})();
+```
+
+* B. Padronização de Erros
+- Nunca exiba erros técnicos do banco para o usuário (ex: "Postgres Error 42P01"). Crie uma função de tratamento que apenas diga "Ocorreu um erro ao processar os dados. Tente novamente".
+
+* C. Proteção no GitHub
+- Arquivo .gitignore: Certifique-se de que arquivos de configuração com chaves privadas nunca sejam enviados para o repositório público.
+- GitHub Actions: Configurar para que qualquer código enviado passe por uma análise básica de segurança.
+
+## 4. Modelo de Dados Seguro (Tabela Entidades)
+Sua tabela entidades no banco de dados deve refletir essa hierarquia:
+* UUID (Internal): Para o sistema.
+* Professional_ID: Quem é o dono do dado.
+* Encrypted_Data (Opcional): Campos extremamente sensíveis podem ser salvos com uma camada extra de proteção.
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## ARQUITETURA MVC DO ERP-PSC
 
 ```
