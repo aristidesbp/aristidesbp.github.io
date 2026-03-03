@@ -107,7 +107,7 @@ Sua tabela entidades no banco de dados deve refletir essa hierarquia:
 * Encrypted_Data (Opcional): Campos extremamente sensíveis podem ser salvos com uma camada extra de proteção.
 
 
-## VISAR ESCALABILIDADES PARA:
+## 5. VISAR ESCALABILIDADES PARA:
 ### 1. Segurança Jurídica e Conformidade (Além do RLS)
 * Assinatura Digital de Prontuários: Para que o prontuário tenha validade jurídica plena (em caso de perícias ou solicitações judiciais), implemente uma função de "Fechamento de Evolução". Uma vez que o profissional escreve a nota do dia e a "assina" (pode ser via certificado digital ou um hash de integridade), o sistema impede edições retroativas.
 * Trilha de Auditoria Expositiva (Audit Log): O Supabase permite rastrear mudanças, mas seria ideal ter uma interface para o Administrador/Supervisor ver quem acessou qual prontuário e quando. Isso é um requisito forte da LGPD para dados sensíveis.
