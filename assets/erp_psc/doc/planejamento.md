@@ -140,38 +140,23 @@ PROJETO_ERP/
 ├── assets/                      # Arquivos estáticos (CSS, Imagens)
 │   ├── img/                     # Ícones e logos
 │   └── style/                   # Estilos CSS segmentados
-│       ├── style_login.css
-│       ├── style_index.css
-│       └── style_navbar.css
+│       
 │ 
 └── src/                           # Código fonte da aplicação
     ├── model/                     # Interação com Banco de Dados (Supabase)
     │   ├── supabase_config.js     # cofiguraçao de chaves (Supabase)
     │   ├── login.js               # cadastra e faz o login
-    │   ├── entidades.js           # tabela dos usuario (colaborador/paciente/responsavel)
-    │   ├── financeiro.js          # controle de fluxo de caixas (parcelas)
-    │   ├── verificar_login.js     # verifica se o usuario esta logado
-    │   └── controle_de_acesso.js  # verifica oque o usuario pode ver ou fazer
+    │   └── etc..  
     │
     │ 
     ├── view/                       # Interface do usuário (HTML puro)
     │   ├── index.html
     │   ├── login.html
-    │   ├── listar_nivel_acesso.html
-    │   ├── cadastrar_nivel_acesso.html
-    │   ├── listar_categorias.html
-    │   ├── cadastrar_categorias.html
-    │   ├── listar_exercicios.html
-    │   ├── cadastrar_exercicios.html
-    │   ├── listar_entidades.html
-    │   ├── cadastrar_entidades.html
-    │   ├── listar_financeiro.html
-    │   ├── cadastrar_financeiro.html
-    │   └── relatorios.html
+    │   └── etc ...
     │
     ├── controller/              # Lógica de interface e ponte MVC
     │   ├── navbar.js
-    │   └── acesso.js
+    │   └── tec ...
     │ 
     └── services/                # Integrações externas e Backend (Edge Functions)
         └── mercadopago_supabase/
