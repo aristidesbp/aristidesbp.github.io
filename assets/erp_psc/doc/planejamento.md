@@ -181,10 +181,12 @@ PROJETO_ERP/
 * Criar e configurar projeto no supabase               # Projeto que sera responsavel pelo banco de dados
 * Criar arquivo src/model/supabase_config.js           # Arquivo com as credenciais e chaves do supabase
 * Criar arquivo src/model/model_login.js               # arquivo para verificar os dados e fazer requisições no banco de dados (usuarios)
-* Criar arquivo src/controller/controller_login.js     # arquivo responsavel em pegar os dados da pagina e chamar as funcoes do model_login.js 
+* Criar arquivo src/controller/controller_login.js     # arquivo responsavel em pegar os dados da pagina e chamar as funcoes do model_login.js
 * Criar arquivo src/model/verificar_login.js           # arquivo responsavel por bloquear acesso as paginas caso usuario nao esteja logago.
-  
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ## FASE 2: CATEGORIAS
 * Criar pagina src/view/listar_categorias.html (google stitch)
 * Criar pagina src/view/cadastar_categorias.html(google stitch)
@@ -194,7 +196,32 @@ PROJETO_ERP/
 * Criar src/model/model_categorias.js
 * Criar src/controller/controller_categorias.js
 * Substituir cardes estaticos por função de geração via db
+
+Com base no planejamento de segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
+### 🛡️ Central de Segurança (Middleware e Autenticação)
+*   [ ] **Implementar `src/middleware/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
+*   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
+*   [ ] **Validar `verificar_login.js`:** Garantir que o script de bloqueio esteja protegendo todas as páginas sensíveis, exceto a tela de login e a index pública.
+
+### 🔐 Proteção de Dados e Banco (Supabase/PostgreSQL)
+*   [ ] **Habilitar RLS (Row Level Security):** Ativar a segurança de linha em todas as tabelas, garantindo que nenhuma informação seja lida sem uma política definida.
+*   [ ] **Configurar Regra de "Dono do Dado":** Aplicar a política `auth.uid() == profissional_responsavel_id` para blindar o acesso a prontuários e pacientes.
+*   [ ] **Criar Tabela de Auditoria (`logs_acesso`):** Implementar o registro de rastreabilidade para identificar quem visualizou dados sensíveis e quando, conforme exigido pela LGPD.
+*   [ ] **Restrição de PII:** Aplicar políticas de acesso restrito especificamente para campos de **CPF e Diagnósticos**.
+
+### 📂 Infraestrutura e Repositório (GitHub/Produção)
+*   [ ] **Migração para Variáveis de Ambiente:** Mover as chaves do Supabase (`anon_key` e `URL`) para um arquivo `.env` seguro, removendo-as do código-fonte.
+*   [ ] **Configurar `.gitignore`:** Garantir que o arquivo `.env` e outros arquivos de configuração local nunca sejam enviados ao repositório público.
+*   [ ] **Ajuste de Permissões da `anon_key`:** Verificar no console do Supabase se a chave pública possui apenas as permissões mínimas necessárias.
+*   [ ] **Ativar GitHub Actions:** Configurar o fluxo de automação para realizar análise de segurança básica em cada novo *commit*.
+
+### ⚠️ Tratamento de Erros e UX
+*   [ ] **Padronização de Mensagens de Erro:** Criar uma função global para interceptar erros do banco de dados (ex: Postgres Error 42P01) e exibir apenas mensagens amigáveis ao usuário.
+*   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
+
+**Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
   
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## FASE 3: NIVEL DE ACESSO
 * Criar pagina src/view/personalizar_nivel_de_acesso_user.html (google stitch)
