@@ -1,11 +1,12 @@
+# PLANEJAMENTO DO PROJETO ERP_PSC
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETO ERP-PSC 
+## PROJETO ERP-PSC 
 * Projeto consiste em criar uma plataforma para Pisco-Pegagogos
 * Plataforma para controle de pacientes e resolução de exercicios
 * RESUMO:
   O proficional ira cadastrar seus pacientes , que por sua vez tera acesso ao site para realização dos tarefas e acompanhamento do seu progresso.
 
-# REGRAS DE NEGOCIO:
+## REGRAS DE NEGOCIO:
 * Cada Proficional so podera ver os dados cadastrados por ele mesmo, (financeiro, pacientes etc...)
 * quando cadastrar um usuario o mesmo deve tambem ser cadastrado na tabela entidades.
 * as entidades cadastradas como paciente so teram acesso aos dados e tarefas relacionadas ao seu usuario (cpf).
@@ -33,7 +34,7 @@
 *  Segurança de Dados: As chaves de API e o URL do projeto Supabase devem estar centralizados no ficheiro supabase_config.js para garantir a consistência da comunicação.
 *  Relatórios: O sistema deve consolidar os dados de entidades e financeiro para a geração de relatórios de gestão.
   
-# ARQUITETURA MVC DO ERP-PSC
+## ARQUITETURA MVC DO ERP-PSC
 
 ```
 PROJETO_ERP/
@@ -89,8 +90,268 @@ PROJETO_ERP/
 
 ```
 
+# FASES DO RPOJETO
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASE1: LOGIN 
+## FASE 1: LOGIN 
+* Criar arquivo src/view/login.html (google stitch)    # Tela html para o usuario fazer o login
+* Criar arquivo src/view/index.html (google stitch)    # Tela html dando boas vindas (destino, caso o login seja realizado)
+* Criar e configurar projeto no supabase               # Projeto que sera responsavel pelo banco de dados
+* Criar arquivo src/model/supabase_config.js           # Arquivo com as credenciais e chaves do supabase
+* Criar arquivo src/model/model_login.js               # arquivo para verificar os dados e fazer requisições no banco de dados (usuarios)
+* Criar arquivo src/controller/controller_login.js     # arquivo responsavel em pegar os dados da pagina e chamar as funcoes do model_login.js 
+* Criar arquivo src/model/verificar_login.js           # arquivo responsavel por bloquear acesso as paginas caso usuario nao esteja logago.
+  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## FASE 2: CATEGORIAS
+* Criar pagina src/view/listar_categorias.html (google stitch)
+* Criar pagina src/view/cadastar_categorias.html(google stitch)
+* Criar sql da tabela categorias
+* Criar sql da apoliceis para tabela categorias
+* Criar sql functions triger (caso precisar)
+* Criar src/model/model_categorias.js
+* Criar src/controller/controller_categorias.js
+* Substituir cardes estaticos por função de geração via db
+  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 3: NIVEL DE ACESSO
+* Criar pagina src/view/personalizar_nivel_de_acesso_user.html (google stitch)
+* Criar pagina src/view/index_proficional (google stitch)
+* Criar pagina src/view/index_paciente (google stitch)
+* Criar sql da tabela nivel_acesso
+* Criar sql apolicies da tabela nivel_acesso
+* Criar sql functions triger (caso precisar)
+* Criar src/model/model_nivel_acesso.js
+* Criar src/controller/controller_nivel_acesso.js
+* Substituir cardes estaticos por função de geração via db
+  
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 4: ENTIDADES (USUARIOS: PROFICIONAIS/PACIENTES/RESPONSAVEIS/COLABORADORES)
+* Criar pagina src/view/listar_entidades.html (google stitch                        # mostra uma lista com todos os usuarios cadastrados
+* Criar pagina src/view/cadastrar_entidades.html (google stitch                     # cadastra um novo usuario
+* Criar sql da tabela                                                               # cria a tabela no banco de dados
+* Criar sql da apoliceis para tabela entidades                                      # cria as aplolices da tabela
+* * Criar sql functions triger (caso precisar)                                      # todos usuarios cadastrados sao cadastrados em emtidades
+* Criar arquivo src/model/model_entidades.                                          # crud da tabela entidades
+* Criar arquivo src/controller_entidades.js                                         # prepara e chama as funçoes do crud
+* Substituir cardes estaticos por função de geração via db                          # gerar daos dinamicos do banco
+* Adicionar funçao de verificação na tela index.htm                                 # apos apertar no botao acessar o usuario deve ser colocado no ambiente certo
+* testar se esta esta funcionando o acesso apenas para paginas correspondentes
+* adicionar a proteção de acesso em todas as paginas com excessao de (index.html e login.html)
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 1: LOGIN
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/view/login.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ERP-PSC - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display flex flex-col items-center justify-center p-6">
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl overflow-hidden flex flex-col items-center p-8 border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col items-center mb-10">
+<div class="bg-primary/10 p-4 rounded-2xl mb-4">
+<span class="material-symbols-outlined text-primary text-5xl">psychology</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-bold tracking-tight">ERP-PSC</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 text-center">Acesse sua Conta</p>
+</div>
+<form class="w-full space-y-5">
+<div class="flex flex-col gap-1.5">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="email">E-mail</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="email" name="email" placeholder="nome@exemplo.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="password">Senha</label>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">lock</span>
+</div>
+<input class="block w-full pl-11 pr-12 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-primary focus:outline-none transition-colors duration-200" onclick="const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; this.querySelector('span').innerText = p.type === 'password' ? 'visibility' : 'visibility_off';" type="button">
+<span class="material-symbols-outlined text-[22px]">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 active:scale-[0.98]" type="submit">
+<span>Entrar</span>
+<span class="material-symbols-outlined text-xl">login</span>
+</button>
+</form>
+<div class="mt-8 flex flex-col items-center gap-6 w-full">
+<a class="text-primary hover:text-primary/80 text-sm font-semibold transition-colors" href="#">
+                Esqueci minha senha
+            </a>
+<div class="w-full flex items-center gap-4">
+<div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] text-center">
+                Desenvolvido para Psicopedagogos
+            </p>
+</div>
+</div>
+<!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+<script src="../model/model_login.js"></script>
+<script src="../controller/controller_login.js"></script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+</body></html>
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/view/index.html
+```
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .ios-status-bar {
+            height: 44px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Top Status Bar Placeholder (iOS Style) -->
+<div class="ios-status-bar w-full flex justify-between items-center px-6 pt-4">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">9:41</span>
+<div class="flex gap-1 items-center">
+<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">wifi</span>
+<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">battery_full</span>
+</div>
+</div>
+<main class="flex-1 flex flex-col items-center justify-center px-6 py-12">
+<div class="w-full max-w-[480px] flex flex-col items-center text-center">
+<!-- Welcome Illustration / Icon Area -->
+<div class="@container w-full mb-10">
+<div class="relative w-full aspect-square max-w-[280px] mx-auto flex items-center justify-center rounded-full bg-primary/5 dark:bg-primary/10 overflow-hidden">
+<!-- Abstract geometric pattern for a welcoming feel -->
+<div class="absolute inset-0 opacity-20 bg-gradient-to-br from-primary via-transparent to-primary/40" data-alt="Suave padrão abstrato de boas-vindas em tons de azul"></div>
+<div class="relative flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[80px] mb-2" style="font-variation-settings: 'FILL' 1">sentiment_satisfied</span>
+<div class="w-16 h-1.5 bg-primary/20 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Content Section -->
+<div class="space-y-4">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">
+                    Bem-vindo de volta!
+                </h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed max-w-[320px] mx-auto">
+                    É um prazer ver você novamente. Estamos preparando tudo para o seu atendimento.
+                </p>
+</div>
+<!-- Action Area -->
+<div class="w-full mt-12 mb-6">
+<button class="w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary text-white text-lg font-semibold leading-normal tracking-wide transition-all active:scale-[0.98] shadow-lg shadow-primary/25">
+<span class="truncate">Acessar meu Painel</span>
+</button>
+</div>
+<!-- Subtle secondary hint -->
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+<span class="text-xs uppercase tracking-widest font-medium">Ambiente Seguro</span>
+</div>
+</div>
+</main>
+<!-- Bottom Indicator (iOS Style) -->
+<div class="flex justify-center pb-2 pt-6">
+<div class="w-32 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
+</div>
+
+
+<!-- ############################################################################# --> 
+<!-- supabase -->         
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
+<script src="../model/supabase_config.js"></script> 
+<script src="../model/verificar_login.js"></script>    
+<!-- ############################################################################# --> 
+</body></html>
+```
+
+
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
 
@@ -98,11 +359,21 @@ PROJETO_ERP/
 * Acesse: https://supabase.com
 * Crie uma conta
 * Clique em New Project
-## Escolha:
+  
+## Config do projeto
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
 * selecina o ssh
+* criar!
+* Authentication/URL Configuration/Site URL: https://url_do_seu_site
+* Authentication/URL Configuration/Redirect URLs: https://url_do_seu_site
+  
+## Chaves de acesso
+* Data API/API URL: copiar_url_do_danco_de_dados
+* API Keys/Legacy anon, service_role API keys/anon
+public: copiar_chave_de_acesso_do_supabase.
+  
 ---
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -285,158 +556,7 @@ async function salvarNovaSenha() {
 }
  ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/verificar_acesso_login.js
-```
-    /** * Estrutura do verificar_login.js
- * Para começar, vamos focar na função de Verificação de Sessão. 
- * O comando básico do Supabase é: supabase.auth.getSession()
- */
 
-// Esta função garante que apenas usuários logados acessem a página atual
-async function checarAutenticacao() {
-    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
-    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-
-    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
-    if (error || !session) {
-        console.log("Acesso negado: Usuário não autenticado.");
-        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
-        window.location.href = "login.html";
-    } else {
-        // Se a sessão existir, permitimos que ele continue na página
-        console.log("Acesso autorizado para:", session.user.email);
-    }
-}
-
-// Executamos a verificação imediatamente ao carregar o script
-checarAutenticacao();
-
-    
-//############################################################################# -->       
-        async function sairDaConta() {
-    if(confirm("Deseja realmente sair do sistema?")) {
-        try {
-            // Verifica se o cliente supabase existe antes de tentar deslogar
-            if (typeof _supabase !== 'undefined') {
-                await _supabase.auth.signOut();
-            }
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error("Erro ao sair:", error);
-            window.location.href = 'login.html';
-        }
-    }
-        }   
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/view/login.html
-```
-<!DOCTYPE html>
-<html lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ERP-PSC - Login</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f8fafc",
-                        "background-dark": "#0f172a",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-<style type="text/tailwindcss">
-        body {
-            min-height: 100dvh;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark font-display flex flex-col items-center justify-center p-6">
-<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl overflow-hidden flex flex-col items-center p-8 border border-slate-100 dark:border-slate-800">
-<div class="flex flex-col items-center mb-10">
-<div class="bg-primary/10 p-4 rounded-2xl mb-4">
-<span class="material-symbols-outlined text-primary text-5xl">psychology</span>
-</div>
-<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-bold tracking-tight">ERP-PSC</h1>
-<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 text-center">Acesse sua Conta</p>
-</div>
-<form class="w-full space-y-5">
-<div class="flex flex-col gap-1.5">
-<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="email">E-mail</label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">mail</span>
-</div>
-<input class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="email" name="email" placeholder="nome@exemplo.com" type="email"/>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<div class="flex justify-between items-center">
-<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="password">Senha</label>
-</div>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">lock</span>
-</div>
-<input class="block w-full pl-11 pr-12 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="password" name="password" placeholder="••••••••" type="password"/>
-<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-primary focus:outline-none transition-colors duration-200" onclick="const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; this.querySelector('span').innerText = p.type === 'password' ? 'visibility' : 'visibility_off';" type="button">
-<span class="material-symbols-outlined text-[22px]">visibility</span>
-</button>
-</div>
-</div>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 active:scale-[0.98]" type="submit">
-<span>Entrar</span>
-<span class="material-symbols-outlined text-xl">login</span>
-</button>
-</form>
-<div class="mt-8 flex flex-col items-center gap-6 w-full">
-<a class="text-primary hover:text-primary/80 text-sm font-semibold transition-colors" href="#">
-                Esqueci minha senha
-            </a>
-<div class="w-full flex items-center gap-4">
-<div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
-</div>
-<p class="text-slate-400 dark:text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] text-center">
-                Desenvolvido para Psicopedagogos
-            </p>
-</div>
-</div>
-<!-- CONEXÃO SUPABASE -->   
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../model/supabase_config.js"></script>
-<script src="../model/model_login.js"></script>
-<script src="../controller/controller_login.js"></script>
-<!-- FIM DO CONEXÃO SUPABASE -->
-</body></html>
-
- 
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/conntroller/controller_login.js
 ```
@@ -516,201 +636,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
  */
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/view/index.html
-```
-<!DOCTYPE html>
 
-<html lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style>
-        body {
-            font-family: 'Lexend', sans-serif;
-        }
-        .ios-status-bar {
-            height: 44px;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/model/verificar_acesso_login.js
+```
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
     }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
-<!-- Top Status Bar Placeholder (iOS Style) -->
-<div class="ios-status-bar w-full flex justify-between items-center px-6 pt-4">
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">9:41</span>
-<div class="flex gap-1 items-center">
-<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">signal_cellular_alt</span>
-<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">wifi</span>
-<span class="material-symbols-outlined text-sm text-slate-900 dark:text-slate-100">battery_full</span>
-</div>
-</div>
-<main class="flex-1 flex flex-col items-center justify-center px-6 py-12">
-<div class="w-full max-w-[480px] flex flex-col items-center text-center">
-<!-- Welcome Illustration / Icon Area -->
-<div class="@container w-full mb-10">
-<div class="relative w-full aspect-square max-w-[280px] mx-auto flex items-center justify-center rounded-full bg-primary/5 dark:bg-primary/10 overflow-hidden">
-<!-- Abstract geometric pattern for a welcoming feel -->
-<div class="absolute inset-0 opacity-20 bg-gradient-to-br from-primary via-transparent to-primary/40" data-alt="Suave padrão abstrato de boas-vindas em tons de azul"></div>
-<div class="relative flex flex-col items-center">
-<span class="material-symbols-outlined text-primary text-[80px] mb-2" style="font-variation-settings: 'FILL' 1">sentiment_satisfied</span>
-<div class="w-16 h-1.5 bg-primary/20 rounded-full"></div>
-</div>
-</div>
-</div>
-<!-- Content Section -->
-<div class="space-y-4">
-<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">
-                    Bem-vindo de volta!
-                </h1>
-<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed max-w-[320px] mx-auto">
-                    É um prazer ver você novamente. Estamos preparando tudo para o seu atendimento.
-                </p>
-</div>
-<!-- Action Area -->
-<div class="w-full mt-12 mb-6">
-<button class="w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary text-white text-lg font-semibold leading-normal tracking-wide transition-all active:scale-[0.98] shadow-lg shadow-primary/25">
-<span class="truncate">Acessar meu Painel</span>
-</button>
-</div>
-<!-- Subtle secondary hint -->
-<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
-<span class="material-symbols-outlined text-lg">verified_user</span>
-<span class="text-xs uppercase tracking-widest font-medium">Ambiente Seguro</span>
-</div>
-</div>
-</main>
-<!-- Bottom Indicator (iOS Style) -->
-<div class="flex justify-center pb-2 pt-6">
-<div class="w-32 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
-</div>
+}
 
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
 
-<!-- ############################################################################# --> 
-<!-- supabase -->         
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
-<script src="../model/supabase_config.js"></script> 
-<script src="../model/verificar_login.js"></script>    
-<!-- ############################################################################# --> 
-</body></html>
+    
+//############################################################################# -->       
+        async function sairDaConta() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            // Verifica se o cliente supabase existe antes de tentar deslogar
+            if (typeof _supabase !== 'undefined') {
+                await _supabase.auth.signOut();
+            }
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+        }   
+
 ```
 
-
-
-
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FAZE 2
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.categorias.sql
-```
-CREATE TABLE public.categorias (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid DEFAULT auth.uid(), -- Vincula a categoria ao profissional logado
-  nome text NOT NULL,
-  descricao text,
-  tipo_categoria text DEFAULT 'exercicio', -- Ex: 'exercicio', 'produto', 'financeiro'
-  cor_identificadora text, -- Hexadecimal para usar na interface (opcional)
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT categorias_pkey PRIMARY KEY (id),
-  CONSTRAINT categorias_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.controle_de_acesso.sql
-```
-CREATE TABLE public.controle_de_acesso (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  perfil text NOT NULL, -- Ex: 'Administrador', 'Psicopedagogo', 'Paciente'
-  modulo text NOT NULL, -- Ex: 'Financeiro', 'Exercicios', 'Relatorios'
-  pode_ler boolean DEFAULT true,
-  pode_escrever boolean DEFAULT false,
-  pode_excluir boolean DEFAULT false,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT controle_de_acesso_pkey PRIMARY KEY (id),
-  -- Garante que não haja duplicidade de regras para o mesmo perfil e módulo
-  CONSTRAINT perfil_modulo_unique UNIQUE (perfil, modulo)
-);
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.entidades.sql
-```
-CREATE TABLE public.entidades (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid NULL DEFAULT auth.uid(), -- ID do Supabase Auth (se o usuário tiver login)
-  profissional_responsavel_id uuid NULL, -- Referência ao psicopedagogo (caso a entidade seja um paciente)
-  
-  nome_completo text NOT NULL,
-  cpf text NULL,
-  data_nascimento date NULL,
-  genero text NULL,
-  
-  -- Uso de CHECK para consistência de dados
-  tipo_entidade text NULL CHECK (tipo_entidade IN ('Colaborador', 'Paciente', 'Responsável')),
-  status_entidade text NULL DEFAULT 'Ativo' CHECK (status_entidade IN ('Ativo', 'Inativo', 'Suspenso')),
-  tipo_acesso text NULL CHECK (tipo_acesso IN ('Admin', 'Profissional', 'Paciente')),
-  
-  email text NULL,
-  telefone text NULL,
-  -- campo senha_acesso removido (utilize o Supabase Auth)
-  
-  -- Endereço
-  cep text NULL,
-  logradouro text NULL,
-  numero text NULL,
-  bairro text NULL,
-  cidade text NULL,
-  estado text NULL,
-  
-  -- Dados Clínicos Iniciais
-  avaliacao integer NULL DEFAULT 5,
-  observacoes text NULL,
-  arquivos_url text[] NULL, -- Mantido como array de texto para múltiplos links
-  
-  created_at timestamp with time zone NULL DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT entidades_pkey PRIMARY KEY (id),
-  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id),
-  CONSTRAINT entidades_profissional_fkey FOREIGN KEY (profissional_responsavel_id) REFERENCES public.entidades (id),
-  CONSTRAINT entidades_email_unique UNIQUE (email),
-  CONSTRAINT entidades_cpf_unique UNIQUE (cpf)
-);
-
--- Índice para busca rápida por nome ou tipo
-CREATE INDEX idx_entidades_tipo ON public.entidades(tipo_entidade);
-CREATE INDEX idx_entidades_nome ON public.entidades(nome_completo);
-```
 
 
 
