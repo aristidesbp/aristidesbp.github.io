@@ -113,7 +113,7 @@ PROJETO_ERP/
 * Substituir cardes estaticos por função de geração via db
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASE 3: NIVEL DE ACESSO
+## FASE 3: NIVEL DE ACESSO
 * Criar pagina src/view/personalizar_nivel_de_acesso_user.html (google stitch)
 * Criar pagina src/view/index_proficional (google stitch)
 * Criar pagina src/view/index_paciente (google stitch)
@@ -125,7 +125,7 @@ PROJETO_ERP/
 * Substituir cardes estaticos por função de geração via db
   
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASE 4: ENTIDADES (USUARIOS: PROFICIONAIS/PACIENTES/RESPONSAVEIS/COLABORADORES)
+## FASE 4: ENTIDADES (USUARIOS: PROFICIONAIS/PACIENTES/RESPONSAVEIS/COLABORADORES)
 * Criar pagina src/view/listar_entidades.html (google stitch                        # mostra uma lista com todos os usuarios cadastrados
 * Criar pagina src/view/cadastrar_entidades.html (google stitch                     # cadastra um novo usuario
 * Criar sql da tabela                                                               # cria a tabela no banco de dados
@@ -638,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/verificar_acesso_login.js
+# src/model/verificar_login.js
 ```
     /** * Estrutura do verificar_login.js
  * Para começar, vamos focar na função de Verificação de Sessão. 
