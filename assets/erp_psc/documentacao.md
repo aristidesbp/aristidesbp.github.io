@@ -90,6 +90,8 @@ PROJETO_ERP/
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE1: LOGIN 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
 
 ## Criar conta e projeto
@@ -99,92 +101,10 @@ PROJETO_ERP/
 ## Escolha:
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
-* Região: brasil 
+* Região: brasil
+* selecina o ssh
 ---
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.categorias.sql
-```
-CREATE TABLE public.categorias (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid DEFAULT auth.uid(), -- Vincula a categoria ao profissional logado
-  nome text NOT NULL,
-  descricao text,
-  tipo_categoria text DEFAULT 'exercicio', -- Ex: 'exercicio', 'produto', 'financeiro'
-  cor_identificadora text, -- Hexadecimal para usar na interface (opcional)
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT categorias_pkey PRIMARY KEY (id),
-  CONSTRAINT categorias_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.controle_de_acesso.sql
-```
-CREATE TABLE public.controle_de_acesso (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  perfil text NOT NULL, -- Ex: 'Administrador', 'Psicopedagogo', 'Paciente'
-  modulo text NOT NULL, -- Ex: 'Financeiro', 'Exercicios', 'Relatorios'
-  pode_ler boolean DEFAULT true,
-  pode_escrever boolean DEFAULT false,
-  pode_excluir boolean DEFAULT false,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT controle_de_acesso_pkey PRIMARY KEY (id),
-  -- Garante que não haja duplicidade de regras para o mesmo perfil e módulo
-  CONSTRAINT perfil_modulo_unique UNIQUE (perfil, modulo)
-);
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tabela public.entidades.sql
-```
-CREATE TABLE public.entidades (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid NULL DEFAULT auth.uid(), -- ID do Supabase Auth (se o usuário tiver login)
-  profissional_responsavel_id uuid NULL, -- Referência ao psicopedagogo (caso a entidade seja um paciente)
-  
-  nome_completo text NOT NULL,
-  cpf text NULL,
-  data_nascimento date NULL,
-  genero text NULL,
-  
-  -- Uso de CHECK para consistência de dados
-  tipo_entidade text NULL CHECK (tipo_entidade IN ('Colaborador', 'Paciente', 'Responsável')),
-  status_entidade text NULL DEFAULT 'Ativo' CHECK (status_entidade IN ('Ativo', 'Inativo', 'Suspenso')),
-  tipo_acesso text NULL CHECK (tipo_acesso IN ('Admin', 'Profissional', 'Paciente')),
-  
-  email text NULL,
-  telefone text NULL,
-  -- campo senha_acesso removido (utilize o Supabase Auth)
-  
-  -- Endereço
-  cep text NULL,
-  logradouro text NULL,
-  numero text NULL,
-  bairro text NULL,
-  cidade text NULL,
-  estado text NULL,
-  
-  -- Dados Clínicos Iniciais
-  avaliacao integer NULL DEFAULT 5,
-  observacoes text NULL,
-  arquivos_url text[] NULL, -- Mantido como array de texto para múltiplos links
-  
-  created_at timestamp with time zone NULL DEFAULT timezone('utc'::text, now()),
-  
-  CONSTRAINT entidades_pkey PRIMARY KEY (id),
-  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id),
-  CONSTRAINT entidades_profissional_fkey FOREIGN KEY (profissional_responsavel_id) REFERENCES public.entidades (id),
-  CONSTRAINT entidades_email_unique UNIQUE (email),
-  CONSTRAINT entidades_cpf_unique UNIQUE (cpf)
-);
-
--- Índice para busca rápida por nome ou tipo
-CREATE INDEX idx_entidades_tipo ON public.entidades(tipo_entidade);
-CREATE INDEX idx_entidades_nome ON public.entidades(nome_completo);
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/model/supabase_config.js
 ```
@@ -411,8 +331,91 @@ checarAutenticacao();
 
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FAZE 2
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabela public.categorias.sql
+```
+CREATE TABLE public.categorias (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(), -- Vincula a categoria ao profissional logado
+  nome text NOT NULL,
+  descricao text,
+  tipo_categoria text DEFAULT 'exercicio', -- Ex: 'exercicio', 'produto', 'financeiro'
+  cor_identificadora text, -- Hexadecimal para usar na interface (opcional)
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  
+  CONSTRAINT categorias_pkey PRIMARY KEY (id),
+  CONSTRAINT categorias_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabela public.controle_de_acesso.sql
+```
+CREATE TABLE public.controle_de_acesso (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  perfil text NOT NULL, -- Ex: 'Administrador', 'Psicopedagogo', 'Paciente'
+  modulo text NOT NULL, -- Ex: 'Financeiro', 'Exercicios', 'Relatorios'
+  pode_ler boolean DEFAULT true,
+  pode_escrever boolean DEFAULT false,
+  pode_excluir boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  
+  CONSTRAINT controle_de_acesso_pkey PRIMARY KEY (id),
+  -- Garante que não haja duplicidade de regras para o mesmo perfil e módulo
+  CONSTRAINT perfil_modulo_unique UNIQUE (perfil, modulo)
+);
+```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabela public.entidades.sql
+```
+CREATE TABLE public.entidades (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NULL DEFAULT auth.uid(), -- ID do Supabase Auth (se o usuário tiver login)
+  profissional_responsavel_id uuid NULL, -- Referência ao psicopedagogo (caso a entidade seja um paciente)
+  
+  nome_completo text NOT NULL,
+  cpf text NULL,
+  data_nascimento date NULL,
+  genero text NULL,
+  
+  -- Uso de CHECK para consistência de dados
+  tipo_entidade text NULL CHECK (tipo_entidade IN ('Colaborador', 'Paciente', 'Responsável')),
+  status_entidade text NULL DEFAULT 'Ativo' CHECK (status_entidade IN ('Ativo', 'Inativo', 'Suspenso')),
+  tipo_acesso text NULL CHECK (tipo_acesso IN ('Admin', 'Profissional', 'Paciente')),
+  
+  email text NULL,
+  telefone text NULL,
+  -- campo senha_acesso removido (utilize o Supabase Auth)
+  
+  -- Endereço
+  cep text NULL,
+  logradouro text NULL,
+  numero text NULL,
+  bairro text NULL,
+  cidade text NULL,
+  estado text NULL,
+  
+  -- Dados Clínicos Iniciais
+  avaliacao integer NULL DEFAULT 5,
+  observacoes text NULL,
+  arquivos_url text[] NULL, -- Mantido como array de texto para múltiplos links
+  
+  created_at timestamp with time zone NULL DEFAULT timezone('utc'::text, now()),
+  
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id),
+  CONSTRAINT entidades_profissional_fkey FOREIGN KEY (profissional_responsavel_id) REFERENCES public.entidades (id),
+  CONSTRAINT entidades_email_unique UNIQUE (email),
+  CONSTRAINT entidades_cpf_unique UNIQUE (cpf)
+);
+
+-- Índice para busca rápida por nome ou tipo
+CREATE INDEX idx_entidades_tipo ON public.entidades(tipo_entidade);
+CREATE INDEX idx_entidades_nome ON public.entidades(nome_completo);
+```
 
 
 
