@@ -234,9 +234,23 @@ PROJETO_ERP/
 * Substituir cardes estaticos por função de geração via db                          # gerar daos dinamicos do banco
 * Adicionar funçao de verificação na tela index.htm                                 # apos apertar no botao acessar o usuario deve ser colocado no ambiente certo
 * testar se esta esta funcionando o acesso apenas para paginas correspondentes
-* adicionar a proteção de acesso em todas as paginas com excessao de (index.html e login.html)
+* adicionar a proteção de acesso em todas as paginas com excessao de (index.html e login.html
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 5: INTELIGÊNCIA, BI E ESCALABILIDADE
+* Foco: Gestão de alto nível e automação.
+* RELATÓRIOS AUTOMATIZADOS: Gerador de relatórios de desempenho clínico baseados nas evoluções cadastradas.
+* DASHBOARD FINANCEIRO AVANÇADO: Gráficos de inadimplência, projeção de faturamento e custos por profissional.
+* OTIMIZAÇÃO DE PERFORMANCE: Implementação de Cache no Frontend para carregamento instantâneo de listas grandes.
+* AUDITORIA EXPOSITIVA: Tela para o Supervisor consultar quem acessou quais dados (Log de Segurança LGPD).
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## 6. PADRÃO DE CORREÇÕES TÉCNICAS (PRÓXIMOS PASSOS)
+* SEGURANÇA: Revisar as Políticas de RLS para a tabela de documentos_paciente para garantir que apenas o profissional responsável e o supervisor leiam os arquivos.
+* UX/UI: Padronizar componentes de "Loading" e "Feedback de Erro" no Tailwind para todas as chamadas assíncronas ao banco.
+* PRODUÇÃO: Migrar as chaves do Supabase para um arquivo .env seguro antes do deploy final na Vercel.
+
+    
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FASE 1: LOGIN
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
