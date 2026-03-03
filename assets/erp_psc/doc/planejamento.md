@@ -173,7 +173,7 @@ PROJETO_ERP/
 
 ```
 
-# FASES DO RPOJETO
+# LISTA DE TAREFAS:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## FASE 1: LOGIN 
 * Criar arquivo src/view/login.html (google stitch)    # Tela html para o usuario fazer o login
