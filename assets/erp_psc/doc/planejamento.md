@@ -143,6 +143,10 @@ PROJETO_ERP/
 │       
 │ 
 └── src/                           # Código fonte da aplicação
+    ├── middleware/              
+    │   ├── auth_check.js          # validação em tempo real do JWT (JSON Web Token) 
+    │   └── etc..  
+    │
     ├── model/                     # Interação com Banco de Dados (Supabase)
     │   ├── supabase_config.js     # cofiguraçao de chaves (Supabase)
     │   ├── login.js               # cadastra e faz o login
@@ -182,8 +186,7 @@ PROJETO_ERP/
 * Criar arquivo src/model/supabase_config.js           # Arquivo com as credenciais e chaves do supabase
 * Criar arquivo src/model/model_login.js               # arquivo para verificar os dados e fazer requisições no banco de dados (usuarios)
 * Criar arquivo src/controller/controller_login.js     # arquivo responsavel em pegar os dados da pagina e chamar as funcoes do model_login.js
-* Criar arquivo src/model/verificar_login.js           # arquivo responsavel por bloquear acesso as paginas caso usuario nao esteja logago.
-
+* Criar arquivo src/middleware/auth_check.js           # arquivo responsavel por bloquear acesso as paginas caso usuario nao esteja logago.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
@@ -468,7 +471,7 @@ Com base no planejamento de segurança em "nível bancário" e nas diretrizes de
 <!-- supabase -->         
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
 <script src="../model/supabase_config.js"></script> 
-<script src="../model/verificar_login.js"></script>    
+<script src="../middleware/auth_check.js"></script>    
 <!-- ############################################################################# --> 
 </body></html>
 ```
@@ -762,49 +765,51 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/verificar_login.js
+# src/middleware/auth_check.js
 ```
-    /** * Estrutura do verificar_login.js
- * Para começar, vamos focar na função de Verificação de Sessão. 
- * O comando básico do Supabase é: supabase.auth.getSession()
+ /**
+ * MIDDLEWARE DE PROTEÇÃO - ERP-PSC
+ * Finalidade: Bloquear a renderização do HTML antes da validação do JWT.
+ * Referência: Planejamento Fase 1 - Central de Segurança [3, 4]
  */
 
-// Esta função garante que apenas usuários logados acessem a página atual
-async function checarAutenticacao() {
-    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
-    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+(async function validateAccess() {
+    // 1. Bloqueio imediato da interface (Prevenção de FOUC - Flicker of Unauthenticated Content)
+    document.documentElement.style.display = 'none';
 
-    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
-    if (error || !session) {
-        console.log("Acesso negado: Usuário não autenticado.");
-        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
-        window.location.href = "login.html";
-    } else {
-        // Se a sessão existir, permitimos que ele continue na página
-        console.log("Acesso autorizado para:", session.user.email);
-    }
-}
+    // Importação dinâmica da configuração do Supabase (ajustar caminho se necessário)
+    // Nota: O projeto utiliza supabase_config.js para chaves de acesso [5, 6]
+    try {
+        const { supabase } = await import('../model/supabase_config.js');
 
-// Executamos a verificação imediatamente ao carregar o script
-checarAutenticacao();
+        // 2. Verificação da Sessão e do Token JWT
+        const { data: { session }, error } = await supabase.auth.getSession();
 
-    
-//############################################################################# -->       
-        async function sairDaConta() {
-    if(confirm("Deseja realmente sair do sistema?")) {
-        try {
-            // Verifica se o cliente supabase existe antes de tentar deslogar
-            if (typeof _supabase !== 'undefined') {
-                await _supabase.auth.signOut();
-            }
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error("Erro ao sair:", error);
-            window.location.href = 'login.html';
+        // 3. Lógica de Redirecionamento Blindado
+        if (error || !session) {
+            console.warn("Acesso não autorizado ou sessão expirada. Redirecionando...");
+            window.location.href = 'login.html'; 
+            return;
         }
-    }
-        }   
 
+        // 4. Verificação de Integridade (Opcional: validar se o token ainda é aceito pelo backend)
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 5. Liberação da Interface
+        // Se o usuário estiver autenticado com um JWT válido, o sistema permite o carregamento
+        document.documentElement.style.display = 'block';
+
+    } catch (err) {
+        console.error("Erro crítico na validação de segurança:", err);
+        // Em caso de falha técnica no script de segurança, o sistema bloqueia o acesso por padrão
+        window.location.href = 'login.html';
+    }
+})();   
 ```
 
 
