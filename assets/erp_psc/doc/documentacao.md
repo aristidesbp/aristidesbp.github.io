@@ -21,16 +21,23 @@ O sistema utiliza o que há de mais moderno em desenvolvimento web para garantir
 • SEGURANÇA: Camada intermediária de validação de acesso em tempo real.
 
 # 4. FUNCIONALIDADES PRINCIPAIS (FASE 1 e 2)
-
-### [PARA O PROFISSIONAL]
+### [PARA O SUPERVISOR]
+* ACESSO MASTER: Controle Total do Sistema.
 • DASHBOARD ESTRATÉGICO: Resumo de pacientes, tarefas e saúde financeira.
 • GESTÃO DE ENTIDADES: Cadastro completo (Colaboradores, Pacientes e Responsáveis).
 • EVOLUÇÕES CLÍNICAS: Prontuário digital com histórico de sessões protegido.
 • CONTROLE FINANCEIRO: Gestão de mensalidades e recebimentos.
 
+### [PARA O PROFISSIONAL]
+• DASHBOARD ESTRATÉGICO: Resumo de pacientes, tarefas e saúde financeira (APENAS LEITURA).
+• GESTÃO DE ENTIDADES: Cadastro completo (Pacientes e Responsáveis).
+• EVOLUÇÕES CLÍNICAS: Prontuário digital com histórico de sessões protegido.
+• CONTROLE FINANCEIRO: Gestão de mensalidades e recebimentos.(APENAS LEITURA).
+
 ### [PARA O PACIENTE/RESPONSÁVEL]
 • ÁREA DE ATIVIDADES: Acesso restrito via CPF para realização de tarefas e exercícios propostos.
 • FEEDBACK TERAPÊUTICO: Visualização do progresso lúdico e feedbacks do profissional.
+• CONTROLE FINANCEIRO: Gestão de mensalidades.(APENAS LEITURA).
 
 # 5. HOSPEDAGEM E DISPONIBILIDADE
 O sistema será hospedado em servidores de alta disponibilidade (GitHub Pages/Vercel) e os dados residirão em um dos servidores mais seguros do mundo (Supabase/PostgreSQL), garantindo 99.9% de tempo de atividade e backups automáticos.
