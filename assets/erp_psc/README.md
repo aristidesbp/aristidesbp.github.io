@@ -267,7 +267,7 @@ Com base no planejamento de segurança em "nível bancário" e nas diretrizes de
 
     
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# FASE 1: LOGIN
+# CODIGOS CONSTRUIDOS : ( tarefas ja realizadas)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/view/login.html
 ```
