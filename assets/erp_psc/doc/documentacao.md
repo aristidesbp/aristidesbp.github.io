@@ -1,11 +1,41 @@
-# PROJETO ERP_PSC
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## DESCRIÇÃO DO PROJETO:
-* Projeto consiste em criar uma plataforma para Pisco-Pegagogos
-* Plataforma para controle de pacientes e resolução de exercicios
-* RESUMO:
-  O proficional ira cadastrar seus pacientes , que por sua vez tera acesso ao site para realização dos tarefas e acompanhamento do seu progresso.
+===========================================================================
+PROPOSTA TÉCNICA E COMERCIAL: ERP-PSC (PLATAFORMA CLÍNICA SEGURA)
+===========================================================================
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
+# 1. VISÃO GERAL DO PROJETO
+O ERP-PSC é um ecossistema digital de alta performance desenvolvido exclusivamente para Psicopedagogos. O sistema centraliza a gestão de pacientes, o acompanhamento terapêutico e o controle financeiro em um ambiente que garante o sigilo absoluto das informações clínicas, respeitando a ética profissional e a privacidade dos dados.
+
+# 2. DIFERENCIAIS DE SEGURANÇA (DADOS SENSÍVEIS)
+Considerando que o sistema lida com diagnósticos e prontuários, a segurança foi construída em nível bancário:
+
+• PROTEÇÃO RLS (Row Level Security): Os dados são blindados diretamente no Banco de Dados. Mesmo em caso de tentativas de acesso indevido, um profissional tecnicamente jamais conseguirá visualizar dados de pacientes de outro profissional.
+• CONFORMIDADE COM A LGPD: O sistema segue as diretrizes da Lei Geral de Proteção de Dados, garantindo o direito ao sigilo e a rastreabilidade de acessos (Auditoria).
+• AUTENTICAÇÃO CRIPTOGRAFADA: Uso de tokens JWT (JSON Web Tokens) que expiram automaticamente, garantindo que a sessão seja encerrada em caso de inatividade.
+
+# 3. ARQUITETURA TECNOLÓGICA
+O sistema utiliza o que há de mais moderno em desenvolvimento web para garantir rapidez e robustez:
+• FRONTEND: Interface responsiva (PC e Celular) utilizando Tailwind CSS.
+• BACKEND: Infraestrutura em Nuvem (Supabase) com banco de dados PostgreSQL.
+• SEGURANÇA: Camada intermediária de validação de acesso em tempo real.
+
+# 4. FUNCIONALIDADES PRINCIPAIS (FASE 1 e 2)
+
+### [PARA O PROFISSIONAL]
+• DASHBOARD ESTRATÉGICO: Resumo de pacientes, tarefas e saúde financeira.
+• GESTÃO DE ENTIDADES: Cadastro completo (Colaboradores, Pacientes e Responsáveis).
+• EVOLUÇÕES CLÍNICAS: Prontuário digital com histórico de sessões protegido.
+• CONTROLE FINANCEIRO: Gestão de mensalidades e recebimentos.
+
+### [PARA O PACIENTE/RESPONSÁVEL]
+• ÁREA DE ATIVIDADES: Acesso restrito via CPF para realização de tarefas e exercícios propostos.
+• FEEDBACK TERAPÊUTICO: Visualização do progresso lúdico e feedbacks do profissional.
+
+# 5. HOSPEDAGEM E DISPONIBILIDADE
+O sistema será hospedado em servidores de alta disponibilidade (GitHub Pages/Vercel) e os dados residirão em um dos servidores mais seguros do mundo (Supabase/PostgreSQL), garantindo 99.9% de tempo de atividade e backups automáticos.
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PLANEJAMENTO
 ## 1. Arquitetura de Segurança (O Core do Projeto)
 * Para dados sensíveis, não confiamos no JavaScript do navegador para proteger nada. O navegador serve apenas para exibir; quem protege é o Banco de Dados.
