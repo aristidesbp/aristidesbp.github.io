@@ -1,6 +1,4 @@
-===========================================================================
-PROPOSTA TÉCNICA E COMERCIAL: ERP-PSC (PLATAFORMA CLÍNICA SEGURA)
-===========================================================================
+# PROPOSTA TÉCNICA E COMERCIAL: ERP-PSC (PLATAFORMA CLÍNICA SEGURA
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # 1. VISÃO GERAL DO PROJETO
