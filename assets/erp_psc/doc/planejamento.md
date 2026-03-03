@@ -6,7 +6,7 @@
 * O sistema centraliza a gestão de pacientes, o acompanhamento terapêutico e o controle financeiro em um ambiente que garante o sigilo absoluto das informações clínicas, respeitando a ética profissional e a privacidade dos dados.
 * O sistema terá trez niveis de acesso (supervisor/master - Psicopedagogos/funcionarios- Pacientes/clientes) cada um podendo acessar interface com nivel de acesso a sua categoria.
   
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 2. DIFERENCIAIS DE SEGURANÇA (DADOS SENSÍVEIS)
 Considerando que o sistema lida com diagnósticos e prontuários, a segurança foi construída em nível bancário:
 
@@ -14,12 +14,14 @@ Considerando que o sistema lida com diagnósticos e prontuários, a segurança f
 • CONFORMIDADE COM A LGPD: O sistema segue as diretrizes da Lei Geral de Proteção de Dados, garantindo o direito ao sigilo e a rastreabilidade de acessos (Auditoria).
 • AUTENTICAÇÃO CRIPTOGRAFADA: Uso de tokens JWT (JSON Web Tokens) que expiram automaticamente, garantindo que a sessão seja encerrada em caso de inatividade.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 3. ARQUITETURA TECNOLÓGICA
 O sistema utiliza o que há de mais moderno em desenvolvimento web para garantir rapidez e robustez:
 • FRONTEND: Interface responsiva (PC e Celular) utilizando Tailwind CSS.
 • BACKEND: Infraestrutura em Nuvem (Supabase) com banco de dados PostgreSQL.
 • SEGURANÇA: Camada intermediária de validação de acesso em tempo real.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 4. FUNCIONALIDADES PRINCIPAIS (FASE 1 e 2)
 ### [PARA O SUPERVISOR]
 * ACESSO MASTER: Controle Total do Sistema.
@@ -39,12 +41,14 @@ O sistema utiliza o que há de mais moderno em desenvolvimento web para garantir
 • FEEDBACK TERAPÊUTICO: Visualização do progresso lúdico e feedbacks do profissional.
 • CONTROLE FINANCEIRO: Gestão de mensalidades.(APENAS LEITURA).
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 5. HOSPEDAGEM E DISPONIBILIDADE
 O sistema será hospedado em servidores de alta disponibilidade (GitHub Pages/Vercel) e os dados residirão em um dos servidores mais seguros do mundo (Supabase/PostgreSQL), garantindo 99.9% de tempo de atividade e backups automáticos.
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PLANEJAMENTO
+# REGRAS DE NEGOCIO:
+
 ## 1. Arquitetura de Segurança (O Core do Projeto)
 * Para dados sensíveis, não confiamos no JavaScript do navegador para proteger nada. O navegador serve apenas para exibir; quem protege é o Banco de Dados.
 * Camada 1: RLS (Row Level Security) - Obrigatório: No Supabase, nenhuma tabela pode ser lida sem uma política de segurança.
@@ -53,22 +57,22 @@ O sistema será hospedado em servidores de alta disponibilidade (GitHub Pages/Ve
 * Camada 3: Auditoria: Criar uma tabela de logs_acesso para registrar quem visualizou qual ficha de paciente e quando.
 
 ## 2. Cronograma de Fases (Focado em Robustez)
-* Fase 1: Infraestrutura e Autenticação Blindada (Concluída/Ajuste)
+* Infraestrutura e Autenticação Blindada (Concluída/Ajuste)
 - Ajuste de Segurança: Mover as chaves do Supabase para variáveis de ambiente ou garantir que a anon_key tenha permissões mínimas.
 - Middleware de Proteção: Criar um script security.js que roda antes de qualquer elemento da página carregar, verificando a validão do JWT (Token) do usuário.
 - Mecanismo de Logout Automático: Se o usuário ficar inativo por 30 minutos, o sistema deve encerrar a sessão para evitar que terceiros vejam os dados em computadores compartilhados.
 
-* Fase 2: Gestão de Entidades e Vínculo de Dados
+* Gestão de Entidades e Vínculo de Dados
 - Criação do Perfil do Profissional: Ao logar pela primeira vez, o sistema obriga o preenchimento dos dados do psicopedagogo.
 - Cadastro de Pacientes com Hash: O sistema deve validar CPFs e evitar duplicidade.
 - Vínculo Forte: Todo registro nas tabelas tarefas, financeiro e evolucoes deve carregar obrigatoriamente o user_id do profissional e o paciente_id.
 
-* Fase 3: Módulo Clínico (Área Crítica)
+* Módulo Clínico (Área Crítica)
 - Evoluções Diárias: Registro de sessões com texto criptografado ou protegido por RLS.
 - Upload de Documentos: Utilizar o Supabase Storage com pastas privadas. O link do arquivo deve expirar em poucos minutos (Signed URLs).
 - Tarefa e Exercícios: O paciente acessa apenas com seu CPF e uma senha simplificada, vendo exclusivamente o que lhe foi atribuído.
 
-* Fase 4: Financeiro e Conformidade (LGPD)
+* Financeiro e Conformidade (LGPD)
 - Relatórios: Geração de recibos e controle de pagamentos.
 - Termos de Consentimento: O sistema deve gerar um termo digital onde o responsável pelo paciente aceita o tratamento dos dados, conforme a LGPD brasileira.
 
