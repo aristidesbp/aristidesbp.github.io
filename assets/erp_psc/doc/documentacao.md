@@ -332,6 +332,191 @@ checarAutenticacao();
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/view/login.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ERP-PSC - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display flex flex-col items-center justify-center p-6">
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl overflow-hidden flex flex-col items-center p-8 border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col items-center mb-10">
+<div class="bg-primary/10 p-4 rounded-2xl mb-4">
+<span class="material-symbols-outlined text-primary text-5xl">psychology</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-bold tracking-tight">ERP-PSC</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 text-center">Acesse sua Conta</p>
+</div>
+<form class="w-full space-y-5">
+<div class="flex flex-col gap-1.5">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="email">E-mail</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="email" name="email" placeholder="nome@exemplo.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold ml-1" for="password">Senha</label>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-200">lock</span>
+</div>
+<input class="block w-full pl-11 pr-12 py-3.5 bg-slate-50 dark:bg-slate-800 border-0 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-primary focus:outline-none transition-colors duration-200" onclick="const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; this.querySelector('span').innerText = p.type === 'password' ? 'visibility' : 'visibility_off';" type="button">
+<span class="material-symbols-outlined text-[22px]">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 active:scale-[0.98]" type="submit">
+<span>Entrar</span>
+<span class="material-symbols-outlined text-xl">login</span>
+</button>
+</form>
+<div class="mt-8 flex flex-col items-center gap-6 w-full">
+<a class="text-primary hover:text-primary/80 text-sm font-semibold transition-colors" href="#">
+                Esqueci minha senha
+            </a>
+<div class="w-full flex items-center gap-4">
+<div class="h-px flex-1 bg-slate-100 dark:bg-slate-800"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] text-center">
+                Desenvolvido para Psicopedagogos
+            </p>
+</div>
+</div>
+<!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+<script src="../model/model_login.js"></script>
+<script src="../controller/controller_login.js"></script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+</body></html>
+
+ 
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/conntroller/controller_login.js
+```
+
+/**
+ * Nome do arquivo: controller/login.js
+ * Objetivo: Escutar os eventos da interface (HTML) e acionar as funções do Modelo.
+ */
+
+// Aguarda o DOM (HTML) carregar completamente antes de aplicar os gatilhos
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Gatilho para o Formulário de Login (Evento Submit)
+    const loginForm = document.querySelector('form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (event) => {
+            // Impede que a página recarregue ao clicar no botão
+            event.preventDefault(); 
+            // Chama a função de autenticação que está no model/login.js
+            realizarLogin();
+        });
+    }
+
+    // 2. Gatilho para o Link "Esqueci minha senha"
+    // Procurei pelo link que contém o texto de recuperação
+    const linkRecuperar = document.querySelector('a[href="#"]');
+    if (linkRecuperar && linkRecuperar.innerText.includes("Esqueci minha senha")) {
+        linkRecuperar.addEventListener('click', (event) => {
+            event.preventDefault();
+            solicitarRecuperacao();
+        });
+    }
+
+    // 3. Gatilho para o Botão de Mostrar/Esconder Senha
+    // Substitui o código inline do HTML pela função organizada do model
+    const btnAlternarSenha = document.querySelector('button[type="button"]');
+    if (btnAlternarSenha) {
+        // Removemos o atributo onclick antigo via JS para usar o novo listener
+        btnAlternarSenha.removeAttribute('onclick');
+        btnAlternarSenha.addEventListener('click', () => {
+            alternarSenha();
+            
+            // Ajuste visual do ícone (opcional, já que a função alternarSenha foca no tipo do campo)
+            const spanIcon = btnAlternarSenha.querySelector('span');
+            const inputSenha = document.getElementById('password');
+            if (spanIcon && inputSenha) {
+                spanIcon.innerText = inputSenha.type === 'password' ? 'visibility' : 'visibility_off';
+            }
+        });
+    }
+
+});
+
+
+/**
+ * src/controller/login.js
+ * Escutador de eventos para o formulário
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // Seleciona o formulário do HTML
+    const formulario = document.querySelector('form');
+
+    if (formulario) {
+        formulario.addEventListener('submit', async (event) => {
+            // 1. Impede a página de recarregar (essencial para o Supabase)
+            event.preventDefault();
+
+            // 2. Chama a função que está no seu model_login.js
+            console.log("Iniciando processo de login...");
+            await realizarLogin();
+        });
+    }
+
+});
+
+ */
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # FAZE 2
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # tabela public.categorias.sql
@@ -416,6 +601,7 @@ CREATE TABLE public.entidades (
 CREATE INDEX idx_entidades_tipo ON public.entidades(tipo_entidade);
 CREATE INDEX idx_entidades_nome ON public.entidades(nome_completo);
 ```
+
 
 
 
