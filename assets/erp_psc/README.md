@@ -504,10 +504,8 @@ window.supabaseClient = _supabase;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/login.js
+# src/model/realizar_login.js
 ```
-/* ####################################################################################################################### */
-/* ####################################################################################################################### */
 /*
 * Nome do arquivo: realizar_login.js
 * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
@@ -584,12 +582,11 @@ O Supabase também oferece métodos para login com Google, GitHub ou "Magic Link
         console.error("Ocorreu um erro inesperado no sistema:", err);
     }
 }  
-
-/* ####################################################################################################################### */
-/* ####################################################################################################################### */
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/model/realizar_cadastro.js
+```
 /* 
-* Nome do arquivo: cadastrar_novo_usuario.js
 * Objetivo: Criar uma nova conta de usuário no sistema.
 * [window.supabaseClient.auth.signUp]: Chama o método de cadastro oficial do SDK do Supabase.
 */
@@ -607,10 +604,10 @@ async function realizarCadastro() {
     else { alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login."); }
 }
 
-
-/* ####################################################################################################################### */
-/* ####################################################################################################################### */
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  src/model/confirmar_cadastro.js
+```
 /* Função de alerta confirmando se é para realmente cadastrar */
 function confirmarCadastro() {
     const email = document.getElementById('email').value;
@@ -619,10 +616,10 @@ function confirmarCadastro() {
         realizarCadastro(); 
     }
 }
-
-/* ####################################################################################################################### */
-/* ####################################################################################################################### */
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/model/alterar_senha.js
+```
 /* Objetivo:VER A SENHA DIGITADA, Alternar a visibilidade do campo de senha entre texto e asteriscos */
 function alternarSenha() {
     // Busca o elemento de entrada pelo ID
@@ -633,11 +630,10 @@ function alternarSenha() {
         campo.type = campo.type === 'password' ? 'text' : 'password';
     }
 }
-
-/* ####################################################################################################################### */
-/* ####################################################################################################################### */
-  
-    /**
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/model/solicitar_senha.js
+/**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
  */
