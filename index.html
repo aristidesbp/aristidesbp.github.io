@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Aristidesbp | Digital Solutions</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aristidesbp | Digital Solutions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- 
+Cérebro visual" da página. Ele serve para configurar e personalizar o Tailwind CSS  
+-->  
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -32,9 +35,14 @@
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
         .dark .glass { background: rgba(15, 23, 42, 0.8); }
     </style>
+    
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
+<!-- 
+navbar:  A Barra de Navegação (<nav>)
+Esta é a parte superior fixa que contém sua marca e botões de ação.
+--> 
     <nav class="fixed top-0 w-full z-50 glass border-b border-slate-border-light dark:border-slate-border-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -62,6 +70,11 @@
         </div>
     </nav>
 
+    
+<!--
+Menu Lateral Mobile (id="mobile-menu")
+Este bloco é o que "desliza" da direita quando você clica no menu pelo celular.    
+    -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
         <div class="absolute right-0 top-0 h-full w-64 bg-white dark:bg-slate-900 shadow-xl p-6">
@@ -79,9 +92,18 @@
         </div>
     </div>
 
+    
+<!--
+3. Área de Conteúdo Principal (<main>)
+Este é o "palco" do seu sistema.    
+    -->
     <main id="app-content" class="pt-24 min-h-screen px-4 max-w-7xl mx-auto">
         </main>
-
+    
+<!--
+   4. Modal de Login (id="modalLogin")
+A "caixa flutuante" para o usuário entrar no sistema. 
+    -->
     <div id="modalLogin" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-8">
             <div class="flex justify-between items-center mb-6">
@@ -122,11 +144,64 @@
             menu.classList.toggle('hidden');
         }
 
-        // Função botaoLogin conforme solicitado
+        /*
+        A função responsável por mostrar a caixa de login no seu código 
+        */
         function botaoLogin() {
             const modal = document.getElementById('modalLogin');
             modal.classList.toggle('hidden');
         }
+
+        /* ############################################# */
+        
+// src/model/supabase_config.js
+//Data API:
+const supabaseUrl = 'https://vrsiiwuifapobeiguldf.supabase.co';
+// Legacy anon, service_role API keys:
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2lpd3VpZmFwb2JlaWd1bGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NjM0MTgsImV4cCI6MjA4ODAzOTQxOH0.F5eLwudxDdlRrQJF2IEJ_P5YoaKL98_qSkgr8faots0';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase; 
+
+/* ##################################################################### */
+/*
+* Nome do arquivo: realizar_login.js
+* Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
+* OBS: criar usuario diretamente no supabase para testar!
+*/
+async function realizarLogin() {  
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+   
+    // Validação básica de campos vazios
+    if (!email || !senha) {
+        alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
+        return;
+    }
+
+    try {
+        // Chamada oficial ao método de Sign In do Supabase
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: senha,
+        });
+
+        if (error) {
+            console.error("Erro na autenticação:", error.message);
+            alert("Erro ao entrar: " + error.message);
+
+          } else {
+            console.log("Bem-vindo de volta!", data.user.email);
+            // Redireciona para o painel principal após o sucesso
+            window.location.href = '../view/index.html';
+        }
+    } catch (err) {
+        console.error("Ocorreu um erro inesperado no sistema:", err);
+    }
+}  
+
+        
 
         /* Lógica de Autenticação Supabase */
         async function solicitarRecuperacao() {
