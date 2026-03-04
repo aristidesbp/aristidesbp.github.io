@@ -633,6 +633,7 @@ function alternarSenha() {
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/model/solicitar_senha.js
+```
 /**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
@@ -720,8 +721,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
-
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/controller/login.js
+```
 /**
  * src/controller/login.js
  * Escutador de eventos para o formulário
