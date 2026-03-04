@@ -136,32 +136,23 @@ Sua tabela entidades no banco de dados deve refletir essa hierarquia:
 
 ```
 PROJETO_ERP/
-├── index.html                   # Redireciona para src/view/index.html
-├── assets/                      # Arquivos estáticos (CSS, Imagens)
-│   ├── img/                     # Ícones e logos
-│   └── style/                   # Estilos CSS segmentados
-│       
-│ 
-└── src/                           # Código fonte da aplicação
-    ├── middleware/              
-    │   ├── auth_check.js          # validação em tempo real do JWT (JSON Web Token) 
-    │   └── etc..  
-    │
-    ├── model/                     # Interação com Banco de Dados (Supabase)
-    │   ├── supabase_config.js     # cofiguraçao de chaves (Supabase)
-    │   ├── login.js               # cadastra e faz o login
-    │   └── etc..  
-    │
-    │ 
+├── index.html # Redireciona para src/view/index.html
+├── assets/ # Arquivos estáticos (CSS, Imagens)
+│   ├── img/ # Ícones e logos
+│   └── style/ # Estilos CSS segmentados
+└── src/   # Código fonte da aplicação
+    ├── model/ # Interação com Banco de Dados (Supabase)
+    │   ├── supabase_config.js # cofiguraçao de chaves (Supabase)
+    │   ├── login.js # cadastra e faz o login
+    │   ├── auth_check.js. # validação em tempo real do JWT (JSON Web Token) 
+    │   └── ...
     ├── view/                       # Interface do usuário (HTML puro)
     │   ├── index.html
     │   ├── login.html
-    │   └── etc ...
-    │
+    │   └── ...
     ├── controller/              # Lógica de interface e ponte MVC
     │   ├── navbar.js
-    │   └── tec ...
-    │ 
+    │   └── ...
     └── services/                # Integrações externas e Backend (Edge Functions)
         └── mercadopago_supabase/
             ├── doc.md
@@ -188,19 +179,7 @@ PROJETO_ERP/
 * Criar arquivo src/controller/controller_login.js     # arquivo responsavel em pegar os dados da pagina e chamar as funcoes do model_login.js
 * Criar arquivo src/middleware/auth_check.js           # arquivo responsavel por bloquear acesso as paginas caso usuario nao esteja logago.
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-## FASE 2: CATEGORIAS
-* Criar pagina src/view/listar_categorias.html (google stitch)
-* Criar pagina src/view/cadastar_categorias.html(google stitch)
-* Criar sql da tabela categorias
-* Criar sql da apoliceis para tabela categorias
-* Criar sql functions triger (caso precisar)
-* Criar src/model/model_categorias.js
-* Criar src/controller/controller_categorias.js
-* Substituir cardes estaticos por função de geração via db
-
-Com base no planejamento de segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
+  Com base no planejamento de segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
 ### 🛡️ Central de Segurança (Middleware e Autenticação)
 *   [ ] **Implementar `src/middleware/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
 *   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
@@ -224,6 +203,20 @@ Com base no planejamento de segurança em "nível bancário" e nas diretrizes de
 
 **Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
   
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+## FASE 2: CATEGORIAS
+* Criar pagina src/view/listar_categorias.html (google stitch)
+* Criar pagina src/view/cadastar_categorias.html(google stitch)
+* Criar sql da tabela categorias
+* Criar sql da apoliceis para tabela categorias
+* Criar sql functions triger (caso precisar)
+* Criar src/model/model_categorias.js
+* Criar src/controller/controller_categorias.js
+* Substituir cardes estaticos por função de geração via db
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## FASE 3: NIVEL DE ACESSO
