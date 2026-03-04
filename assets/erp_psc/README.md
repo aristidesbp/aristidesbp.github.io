@@ -504,7 +504,7 @@ window.supabaseClient = _supabase;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/realizar_login.js
+# src/model/login_model.js
 ```
 /*
 * Nome do arquivo: realizar_login.js
@@ -582,10 +582,7 @@ O Supabase também oferece métodos para login com Google, GitHub ou "Magic Link
         console.error("Ocorreu um erro inesperado no sistema:", err);
     }
 }  
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/realizar_cadastro.js
-```
+
 /* 
 * Objetivo: Criar uma nova conta de usuário no sistema.
 * [window.supabaseClient.auth.signUp]: Chama o método de cadastro oficial do SDK do Supabase.
@@ -604,10 +601,7 @@ async function realizarCadastro() {
     else { alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login."); }
 }
 
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  src/model/confirmar_cadastro.js
-```
+
 /* Função de alerta confirmando se é para realmente cadastrar */
 function confirmarCadastro() {
     const email = document.getElementById('email').value;
@@ -616,10 +610,7 @@ function confirmarCadastro() {
         realizarCadastro(); 
     }
 }
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/alterar_senha.js
-```
+
 /* Objetivo:VER A SENHA DIGITADA, Alternar a visibilidade do campo de senha entre texto e asteriscos */
 function alternarSenha() {
     // Busca o elemento de entrada pelo ID
@@ -630,10 +621,7 @@ function alternarSenha() {
         campo.type = campo.type === 'password' ? 'text' : 'password';
     }
 }
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/model/solicitar_senha.js
-```
+
 /**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
@@ -863,16 +851,71 @@ function setupActivityListeners() {
 // Inicia o monitoramento de segurança
 setupActivityListeners();
 
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# FASE 2 : NIVEIS DE ACESSO
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Sql - tabela public.profiles
+```
+CREATE TABLE public.profiles (
+  id uuid REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
+  email text,
+  role text CHECK (role IN ('master', 'psicopedagogo', 'paciente')) DEFAULT 'psicopedagogo'
+);
 
+-- Habilitar RLS nela
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/model/access_control.js
+```
+import { supabase } from '../model/supabase_config.js';
 
+class AccessControl {
+    constructor() {
+        this.user = null;
+        this.userRole = null;
+    }
 
+    /**
+     * Verifica se o usuário tem permissão para estar na página atual
+     * @param {Array} allowedRoles - Ex: ['master', 'psicopedagogo']
+     */
+    async checkAccess(allowedRoles) {
+        // 1. Verifica se há um usuário logado
+        const { data: { session }, error } = await supabase.auth.getSession();
 
+        if (error || !session) {
+            this.redirect('login.html?reason=unauthorized');
+            return;
+        }
+
+        // 2. Busca o nível de acesso (role) no perfil do banco
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+
+        if (profileError || !allowedRoles.includes(profile.role)) {
+            console.error("Acesso negado: Nível insuficiente.");
+            this.redirect('dashboard.html?error=forbidden'); 
+            return;
+        }
+
+        console.log(`Acesso concedido: Bem-vindo, ${profile.role}`);
+        this.user = session.user;
+        this.userRole = profile.role;
+    }
+
+    redirect(url) {
+        window.location.href = url;
+    }
+}
+
+export const accessControl = new AccessControl();
 
 ```
-
-
-
-
 
 
 
