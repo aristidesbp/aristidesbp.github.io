@@ -752,7 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/middleware/auth_check.js
+# src/model/auth_check.js
 ```
  /**
  * MIDDLEWARE DE PROTEÇÃO - ERP-PSC
@@ -801,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/middleware/session_timeout.js
+# src/model/session_timeout.js
 ```
 
 /**
