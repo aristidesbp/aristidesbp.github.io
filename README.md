@@ -576,6 +576,7 @@ PROJETO_ERP/
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## FASE 1: LOGIN 
+```
 * Criar arquivo src/view/login.html (google stitch)    # Tela html para o usuario fazer o login
 * Criar arquivo src/view/index.html (google stitch)    # dashboard/ menu
 * Criar src/controller/navbar.js.                      # botão menu e logoff
@@ -607,7 +608,7 @@ PROJETO_ERP/
 *   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
 
 **Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
-  
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html (redirecionando para view)
