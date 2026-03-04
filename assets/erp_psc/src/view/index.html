@@ -107,7 +107,13 @@
   
 </style>
 
-
+<style>
+    /* Esconde todos os cards que possuem o atributo data-role por padrão */
+    .card[data-role] {
+        display: none;
+    }
+</style>
+    
 </head>
 <body>
 <!-- navbar -->
@@ -130,22 +136,22 @@
 <!-- cardes do menu-->
 
     
-    <a href="entidades.html" class="card">
+    <a href="entidades.html" data-role="master,psicopedagogo" class="card">
     <i class="fas fa-users"></i>
     <h3>Gestão de Entidades</h3>
     </a>
 
-    <a href="financeiro.html" class="card">
+    <a href="financeiro.html" class="card" data-role="psicopedagogo">
     <i class="fas fa-hand-holding-usd"></i>
     <h3>Financeiro</h3>
     </a>
 
-    <a href="tarefas.html" class="card">
+    <a href="tarefas.html" class="card" data-role="master,psicopedagogo,paciente">
     <i class="fas fa-users"></i>
     <h3>Tarefas</h3>
     </a>
 
-    <a href="acompanhamento.html" class="card">
+    <a href="acompanhamento.html" class="card" data-role="master,psicopedagogo">
     <i class="fas fa-hand-holding-usd"></i>
     <h3>Acompanhamento</h3>
     </a>
