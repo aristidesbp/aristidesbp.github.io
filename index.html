@@ -124,18 +124,10 @@ A "caixa flutuante" para o usuário entrar no sistema.
         </div>
     </div>
 
-    
+
+<script src="assets/erp_psc/rsc/model/supabase_config.js">
+<script src="assets/erp_psc/rsc/model/model_login.js"> 
 <script>       
-/* ##################################################################### */
-/* CONFIGURAÇÃO SUPABASE */
-/* ##################################################################### */
-const supabaseUrl = 'https://vrsiiwuifapobeiguldf.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2lpd3VpZmFwb2JlaWd1bGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NjM0MTgsImV4cCI6MjA4ODAzOTQxOH0.F5eLwudxDdlRrQJF2IEJ_P5YoaKL98_qSkgr8faots0';
-
-// Inicializa o cliente e expõe globalmente
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-window.supabaseClient = _supabase;
-
 /* ##################################################################### */
 /* CONTROLE DE INTERFACE (UI) */
 /* ##################################################################### */
@@ -205,78 +197,6 @@ function atualizarInterfaceUsuario(user) {
             btn.classList.add('bg-primary');
         }
     });
-}
-
-/* ##################################################################### */
-/* LÓGICA DE AUTENTICAÇÃO (SUPABASE) */
-/* ##################################################################### */
-
-/**
- * Realiza o login com e-mail e senha
- */
-async function realizarLogin() {
-    // Certifique-se que os IDs dos inputs no HTML são 'email' e 'password'
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('password').value;
-
-    if (!email || !senha) {
-        alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
-        return;
-    }
-
-    try {
-        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: senha,
-        });
-
-        if (error) {
-            console.error("Erro na autenticação:", error.message);
-            alert("Erro ao entrar: " + error.message);
-        } else {
-            console.log("Bem-vindo de volta!", data.user.email);
-            
-            botaoLogin(); // Fecha o modal
-            atualizarInterfaceUsuario(data.user); // Transforma o botão em "Sair"
-            
-            // Caso queira limpar os campos após o login
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-        }
-    } catch (err) {
-        console.error("Erro inesperado:", err);
-    }
-}
-
-/**
- * Finaliza a sessão do usuário
- */
-async function logout() {
-    const { error } = await window.supabaseClient.auth.signOut();
-    if (error) {
-        alert("Erro ao sair: " + error.message);
-    } else {
-        alert("Você saiu do sistema.");
-        // Atualiza a interface para o estado deslogado
-        atualizarInterfaceUsuario(null);
-        // Opcional: recarrega a página para resetar todos os estados da SPA
-        window.location.reload();
-    }
-}
-
-/**
- * Solicita link de recuperação de senha
- */
-async function solicitarRecuperacao() {
-    const email = document.getElementById('email').value; // Usa o e-mail digitado no campo de login
-    if (!email) return alert("Digite seu e-mail no campo de login primeiro.");
-
-    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href,
-    });
-
-    if (error) alert(error.message);
-    else alert("Link de recuperação enviado para seu e-mail!");
 }
 
 /* ##################################################################### */
