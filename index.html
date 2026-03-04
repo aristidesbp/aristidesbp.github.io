@@ -57,7 +57,7 @@ Esta é a parte superior fixa que contém sua marca e botões de ação.
                     <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                         <span id="theme-icon" class="material-symbols-outlined text-[20px]">light_mode</span>
                     </button>
-                    <button onclick="botaoLogin()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-700 transition-all">
+                    <button id="btn-login-desktop" onclick="botaoLogin()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white hover:bg-blue-700 transition-all">
                         <span class="material-symbols-outlined text-[20px]">account_circle</span>
                         <span class="font-medium text-sm">Minha Conta</span>
                     </button>
@@ -82,7 +82,7 @@ Este bloco é o que "desliza" da direita quando você clica no menu pelo celular
                 <button onclick="toggleMobileMenu()"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="flex flex-col gap-6">
-                <button onclick="botaoLogin()" class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                <button id="btn-login-mobile" onclick="botaoLogin()" class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
                     <span class="material-symbols-outlined">account_circle</span> Minha Conta
                 </button>
                 <button onclick="toggleDarkMode()" class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
@@ -124,64 +124,107 @@ A "caixa flutuante" para o usuário entrar no sistema.
         </div>
     </div>
 
-    <script>
-        // Tema Dark/Light
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('theme-icon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.innerText = 'dark_mode';
-            } else {
-                html.classList.add('dark');
-                icon.innerText = 'light_mode';
-            }
-        }
-
-        // Menu Mobile
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        /*
-        A função responsável por mostrar a caixa de login no seu código 
-        */
-        function botaoLogin() {
-            const modal = document.getElementById('modalLogin');
-            modal.classList.toggle('hidden');
-        }
-
-        /* ############################################# */
-        
-// src/model/supabase_config.js
-//Data API:
+    
+<script>       
+/* ##################################################################### */
+/* CONFIGURAÇÃO SUPABASE */
+/* ##################################################################### */
 const supabaseUrl = 'https://vrsiiwuifapobeiguldf.supabase.co';
-// Legacy anon, service_role API keys:
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2lpd3VpZmFwb2JlaWd1bGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NjM0MTgsImV4cCI6MjA4ODAzOTQxOH0.F5eLwudxDdlRrQJF2IEJ_P5YoaKL98_qSkgr8faots0';
-// Inicializa o cliente Supabase
+
+// Inicializa o cliente e expõe globalmente
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-// Exporta para ser usado em outros scripts
-window.supabaseClient = _supabase; 
+window.supabaseClient = _supabase;
 
 /* ##################################################################### */
-/*
-* Nome do arquivo: realizar_login.js
-* Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
-* OBS: criar usuario diretamente no supabase para testar!
-*/
-async function realizarLogin() {  
+/* CONTROLE DE INTERFACE (UI) */
+/* ##################################################################### */
+
+// Alternar entre Tema Dark e Light
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const icon = document.getElementById('theme-icon');
+    if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        icon.innerText = 'dark_mode';
+    } else {
+        html.classList.add('dark');
+        icon.innerText = 'light_mode';
+    }
+}
+
+// Abrir/Fechar Menu Mobile
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+}
+
+// Abrir/Fechar Modal de Login
+function botaoLogin() {
+    const modal = document.getElementById('modalLogin');
+    modal.classList.toggle('hidden');
+}
+
+/**
+ * Altera o texto, ícone e cor dos botões de login para "Sair" e vice-versa
+ * @param {Object|null} user - Objeto do usuário do Supabase ou null
+ */
+function atualizarInterfaceUsuario(user) {
+    // Busca os botões pelos IDs que devem estar no seu HTML
+    const botoes = [
+        document.getElementById('btn-login-desktop'),
+        document.getElementById('btn-login-mobile')
+    ];
+
+    botoes.forEach(btn => {
+        if (!btn) return;
+
+        // Procura os elementos internos (texto e ícone)
+        const textSpan = btn.querySelector('.btn-text') || btn.querySelector('span:not(.material-symbols-outlined)');
+        const iconSpan = btn.querySelector('.material-symbols-outlined');
+
+        if (user) {
+            // ESTADO: LOGADO
+            if (textSpan) textSpan.innerText = "Sair da Conta";
+            if (iconSpan) iconSpan.innerText = "logout";
+            
+            btn.onclick = logout; // Muda função para sair
+            
+            // Troca as cores (de azul para vermelho)
+            btn.classList.remove('bg-primary');
+            btn.classList.add('bg-red-600', 'hover:bg-red-700');
+        } else {
+            // ESTADO: DESLOGADO
+            if (textSpan) textSpan.innerText = "Minha Conta";
+            if (iconSpan) iconSpan.innerText = "account_circle";
+            
+            btn.onclick = botaoLogin; // Muda função para abrir modal
+            
+            // Volta as cores originais
+            btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            btn.classList.add('bg-primary');
+        }
+    });
+}
+
+/* ##################################################################### */
+/* LÓGICA DE AUTENTICAÇÃO (SUPABASE) */
+/* ##################################################################### */
+
+/**
+ * Realiza o login com e-mail e senha
+ */
+async function realizarLogin() {
+    // Certifique-se que os IDs dos inputs no HTML são 'email' e 'password'
     const email = document.getElementById('email').value;
     const senha = document.getElementById('password').value;
-   
-    // Validação básica de campos vazios
+
     if (!email || !senha) {
         alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
         return;
     }
 
     try {
-        // Chamada oficial ao método de Sign In do Supabase
         const { data, error } = await window.supabaseClient.auth.signInWithPassword({
             email: email,
             password: senha,
@@ -190,37 +233,67 @@ async function realizarLogin() {
         if (error) {
             console.error("Erro na autenticação:", error.message);
             alert("Erro ao entrar: " + error.message);
-
-          } else {
+        } else {
             console.log("Bem-vindo de volta!", data.user.email);
-            // Redireciona para o painel principal após o sucesso
-            window.location.href = '../view/index.html';
+            
+            botaoLogin(); // Fecha o modal
+            atualizarInterfaceUsuario(data.user); // Transforma o botão em "Sair"
+            
+            // Caso queira limpar os campos após o login
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
         }
     } catch (err) {
-        console.error("Ocorreu um erro inesperado no sistema:", err);
+        console.error("Erro inesperado:", err);
     }
-}  
+}
 
-        
+/**
+ * Finaliza a sessão do usuário
+ */
+async function logout() {
+    const { error } = await window.supabaseClient.auth.signOut();
+    if (error) {
+        alert("Erro ao sair: " + error.message);
+    } else {
+        alert("Você saiu do sistema.");
+        // Atualiza a interface para o estado deslogado
+        atualizarInterfaceUsuario(null);
+        // Opcional: recarrega a página para resetar todos os estados da SPA
+        window.location.reload();
+    }
+}
 
-        /* Lógica de Autenticação Supabase */
-        async function solicitarRecuperacao() {
-            const email = document.getElementById('loginEmail').value;
-            if (!email) return alert("Digite seu e-mail.");
-            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href,
-            });
-            if (error) alert(error.message);
-            else alert("Link enviado!");
-        }
+/**
+ * Solicita link de recuperação de senha
+ */
+async function solicitarRecuperacao() {
+    const email = document.getElementById('email').value; // Usa o e-mail digitado no campo de login
+    if (!email) return alert("Digite seu e-mail no campo de login primeiro.");
 
-        async function salvarNovaSenha() {
-            const novaSenha = document.getElementById('novaSenha')?.value;
-            if (!novaSenha || novaSenha.length < 6) return alert("Senha curta demais.");
-            const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
-            if (error) alert("Erro: " + error.message);
-            else alert("Senha atualizada!");
-        }
-    </script>
+    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href,
+    });
+
+    if (error) alert(error.message);
+    else alert("Link de recuperação enviado para seu e-mail!");
+}
+
+/* ##################################################################### */
+/* INICIALIZAÇÃO */
+/* ##################################################################### */
+
+// Esta função roda assim que a página termina de carregar
+window.addEventListener('load', async () => {
+    // Verifica se já existe uma sessão ativa no Supabase
+    const { data: { user } } = await window.supabaseClient.auth.getUser();
+    
+    if (user) {
+        // Se o usuário já estiver logado (ex: deu F5), ajusta o botão para "Sair"
+        atualizarInterfaceUsuario(user);
+    }
+});
+</script>
+    
 </body>
 </html>
