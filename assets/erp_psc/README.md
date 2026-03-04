@@ -59,7 +59,7 @@ O sistema será hospedado em servidores de alta disponibilidade (GitHub Pages/Ve
 ## 2. Cronograma de Fases (Focado em Robustez)
 * Infraestrutura e Autenticação Blindada (Concluída/Ajuste)
 - Ajuste de Segurança: Mover as chaves do Supabase para variáveis de ambiente ou garantir que a anon_key tenha permissões mínimas.
-- Middleware de Proteção: Criar um script security.js que roda antes de qualquer elemento da página carregar, verificando a validão do JWT (Token) do usuário.
+- Middleware de Proteção na pasta model: Criar um script security.js que roda antes de qualquer elemento da página carregar, verificando a validão do JWT (Token) do usuário.
 - Mecanismo de Logout Automático: Se o usuário ficar inativo por 30 minutos, o sistema deve encerrar a sessão para evitar que terceiros vejam os dados em computadores compartilhados.
 
 * Gestão de Entidades e Vínculo de Dados
