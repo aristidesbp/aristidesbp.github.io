@@ -133,28 +133,23 @@ Sua tabela entidades no banco de dados deve refletir essa hierarquia:
    
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## ARQUITETURA MVC DO ERP-PSC
-
+* CADA FUNÇÃO O JAVA SCRIPT, DEVE SER UM ARQUIVO ISOLADO COM O MESMO NOME DA FUNÇÃO!
 ```
 PROJETO_ERP/
 ├── index.html # Redireciona para src/view/index.html
-├── assets/ # Arquivos estáticos (CSS, Imagens)
+├── assets/ 
 │   ├── img/ # Ícones e logos
 │   └── style/ # Estilos CSS segmentados
 └── src/   # Código fonte da aplicação
-    ├── model/ # Interação com Banco de Dados (Supabase)
-    │   ├── supabase_config.js # cofiguraçao de chaves (Supabase)
-    │   ├── login.js # cadastra e faz o login
-    │   ├── auth_check.js. # validação em tempo real do JWT (JSON Web Token) 
-    │   └── ...
-    ├── view/                       # Interface do usuário (HTML puro)
-    │   ├── index.html
-    │   ├── login.html
-    │   └── ...
-    ├── controller/              # Lógica de interface e ponte MVC
-    │   ├── navbar.js
-    │   └── ...
-    └── services/                # Integrações externas e Backend (Edge Functions)
-        └── mercadopago_supabase/
+    ├── model/
+    │   └── ...  # Interação com Banco de Dados (Supabase)
+    ├── view/                       
+    │   └── ... # Interface do usuário (HTML puro)
+    ├── controller/            
+    │   └── ...# Lógica de interface e ponte MVC
+    └── services/                
+          ├── # Integrações externas e Backend (Edge Functions)
+          └── mercadopago_supabase/
             ├── doc.md
             ├── index.html
             ├── servicos.json
