@@ -1,146 +1,115 @@
-
-    /**
- * Nome do arquivo: alternar_senha.js
- * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+// src/controller/controller_login.js
+/**
+ * ARQUIVO: src/controller/controller_login.js
+ * FUNÇÃO:  Liga os eventos da interface (HTML) às funções do model.
+ *          É o único arquivo que conhece tanto a View quanto o Model.
  */
 
-function alternarSenha() {
-    // Busca o elemento de entrada pelo ID
-    const campo = document.getElementById('password');
-    
-    if (campo) {
-        // Se for password, vira text (visível). Se for text, vira password (oculto).
-        campo.type = campo.type === 'password' ? 'text' : 'password';
-    }
-}
-    
+// Importa as funções de autenticação do model
+import { realizarLogin, solicitarRecuperacaoSenha } from '../model/model_login.js';
+
+// Importa o utilitário de tratamento de erros
+import { mostrarFeedback, mostrarErro } from '../model/ui_helpers.js';
 
 /**
- * Nome do arquivo: login_google.js
- * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
+ * DOMContentLoaded: espera o HTML carregar completamente
+ * antes de tentar encontrar botões e formulários.
+ * Sem isso, o JavaScript tentaria encontrar elementos
+ * que ainda não existem na página.
  */
+document.addEventListener('DOMContentLoaded', () => {
 
-async function loginComGoogle() {
-    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            // Define para onde o Google deve mandar o usuário após o login.
-            // Usamos window.location.origin para garantir que funcione em qualquer ambiente.
-            redirectTo: window.location.origin + 'index.html'
-        }
-    });
+    // ── GATILHO DO FORMULÁRIO DE LOGIN ─────────────────────────
+    const formLogin = document.getElementById('form-login');
 
-    if (error) {
-        console.error("Erro no login Google:", error.message);
-        alert("Erro ao conectar com Google: " + error.message);
-    }
-}
+    if (formLogin) {
+        formLogin.addEventListener('submit', async (event) => {
 
-    /**
- * Nome do arquivo: realizar_cadastro.js
- * Objetivo: Criar uma nova conta de usuário no sistema.
- */
+            // Impede o comportamento padrão do form (recarregar a página)
+            // Sem isso, a página recarregaria e perderíamos os dados
+            event.preventDefault();
+    // Captura os valores dos campos pelo ID do elemento HTML
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
 
-async function realizarCadastro() {
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('password').value;
+            // Validação básica no frontend (antes de chamar o banco)
+            if (!email || !senha) {
+                mostrarErro('Preencha e-mail e senha para continuar.');
+                return;
+            }
 
-    if (!email || !senha) {
-        alert("Preencha e-mail e senha primeiro!");
-        return;
-    }
+            // Desabilita o botão para evitar cliques duplos
+            const btnSubmit = document.getElementById('btn-login');
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Entrando...';
 
-    // Cria o usuário no Supabase. 
-    // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
-    const { data, error } = await window.supabaseClient.auth.signUp({ 
-        email, 
-        password: senha 
-    });
+            // Chama o model para fazer o login no Supabase
+            const { data, error } = await realizarLogin(email, senha);
 
-    if (error) {
-        alert("Erro no cadastro: " + error.message);
-    } else {
-        alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
-    }
-}
+            if (error) {
+                // Reativa o botão em caso de erro
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Entrar';
 
-/**
- * Função de apoio para evitar cadastros acidentais (UX)
- */
-function confirmarCadastro() {
-    const email = document.getElementById('email').value;
-    if (!email) return alert("Digite um e-mail!");
-    
-    if (confirm(`Deseja criar uma conta para: ${email}?`)) {
-        realizarCadastro(); 
-    }
-}
+                // Traduz erros técnicos em mensagens amigáveis
+                const mensagens = {
+                    'Invalid login credentials': 'E-mail ou senha incorretos.',
+                    'Email not confirmed': 'Confirme seu e-mail antes de entrar.',
+                    'Too many requests': 'Muitas tentativas. Aguarde alguns minutos.',
+                };
+                const msg = mensagens[error.message] || 'Erro ao fazer login. Tente novamente.';
+                mostrarErro(msg);
+                return;
+            }
 
-  /**
- * Nome do arquivo: realizar_login.js
- * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
- */
-
-async function realizarLogin() {
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('password').value;
-
-    // Validação básica de campos vazios
-    if (!email || !senha) {
-        alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
-        return;
-    }
-
-    try {
-        // Chamada oficial ao método de Sign In do Supabase
-        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: senha,
+            // Login bem-sucedido!
+            // Redireciona para a página de boas-vindas.
+            // O access_control.js nessa página vai decidir
+            // para qual dashboard o usuário vai.
+            window.location.href = '../view/index.html';
         });
-
-        if (error) {
-            console.error("Erro na autenticação:", error.message);
-            alert("Erro ao entrar: " + error.message);
-        } else {
-            console.log("Bem-vindo de volta!", data.user.email);
-            // Redireciona para o painel principal após o sucesso
-            window.location.href = 'index.html';
-        }
-    } catch (err) {
-        console.error("Ocorreu um erro inesperado no sistema:", err);
     }
-}  
-  
-    /**
- * Nome do arquivo: recuperar_senha.js
- * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
- */
 
-async function solicitarRecuperacao() {
-    const email = document.getElementById('email').value;
-    if (!email) return alert("Digite seu e-mail.");
+    // ── GATILHO DO LINK "ESQUECI MINHA SENHA" ──────────────────
+    const linkRecuperar = document.getElementById('link-recuperar-senha');
 
-    // O Supabase envia um link que redireciona o usuário para a página de redefinição
-    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'redefinir_senha.html',
-    });
+    if (linkRecuperar) {
+        linkRecuperar.addEventListener('click', async (event) => {
+            event.preventDefault();
 
-    if (error) alert(error.message);
-    else alert("Link enviado! Verifique sua caixa de entrada.");
-}
+            const email = document.getElementById('email').value;
 
-async function salvarNovaSenha() {
-    const novaSenha = document.getElementById('novaSenha').value;
-    if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+            if (!email) {
+                mostrarErro('Digite seu e-mail no campo acima para recuperar a senha.');
+                return;
+            }
 
-    // Atualiza os dados do usuário que clicou no link de recuperação
-    const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
+            const { error } = await solicitarRecuperacaoSenha(email);
 
-    if (error) {
-        alert("Erro ao atualizar: " + error.message);
-    } else {
-        alert("Senha atualizada com sucesso!");
-        window.location.href = 'index.html';
+            if (error) {
+                mostrarErro('Não foi possível enviar o e-mail. Verifique o endereço digitado.');
+            } else {
+                mostrarFeedback('Link enviado! Verifique sua caixa de entrada e spam.');
+            }
+        });
     }
-}
- 
+
+    // ── GATILHO DO BOTÃO MOSTRAR/OCULTAR SENHA ─────────────────
+    const btnToggleSenha = document.getElementById('btn-toggle-senha');
+    const campoSenha = document.getElementById('password');
+
+    if (btnToggleSenha && campoSenha) {
+        btnToggleSenha.addEventListener('click', () => {
+            // Alterna entre "password" (oculto) e "text" (visível)
+            const visivel = campoSenha.type === 'text';
+            campoSenha.type = visivel ? 'password' : 'text';
+
+            // Atualiza o ícone do botão visualmente
+            const icone = btnToggleSenha.querySelector('span');
+            if (icone) {
+                icone.textContent = visivel ? 'visibility' : 'visibility_off';
+            }
+        });
+    }
+
+});
