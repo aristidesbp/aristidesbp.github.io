@@ -299,49 +299,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 * Região: brasil
   
 ---
-# 🟥 sql (exemplo de como criar uma tabelas)
-```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
 
-CREATE TABLE public.notes (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid DEFAULT auth.uid(),
-  title text NOT NULL,
-  content text,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  CONSTRAINT notes_pkey PRIMARY KEY (id),
-  CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-
-```
-
-# 🟥 Habilitar o Row Level Security (Segurança de Linha)
-```
--- 2. Habilitar o Row Level Security (Segurança de Linha)
-ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
-
--- 3. Criar política: Usuários podem ver apenas suas próprias notas
-CREATE POLICY "Usuários podem ver suas próprias notas" 
-ON notes FOR SELECT 
-USING (auth.uid() = user_id);
-
--- 4. Criar política: Usuários podem inserir apenas suas próprias notas
-CREATE POLICY "Usuários podem inserir suas próprias notas" 
-ON notes FOR INSERT 
-WITH CHECK (auth.uid() = user_id);
-
--- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
-CREATE POLICY "Usuários podem atualizar suas próprias notas" 
-ON notes FOR UPDATE 
-USING (auth.uid() = user_id);
-
--- 6. Criar política: Usuários podem deletar apenas suas próprias notas
-CREATE POLICY "Usuários podem deletar suas próprias notas" 
-ON notes FOR DELETE 
-USING (auth.uid() = user_id);
-
-```
 ---
 ## 🟥 COMO FAZER BKP DO SUPABASE
 ```
@@ -415,6 +373,50 @@ begin
   end loop;
 end $$;
 ```
+# 🟥 sql (exemplo de como criar uma tabelas)
+```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.notes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT notes_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+
+```
+
+# 🟥 Habilitar o Row Level Security (Segurança de Linha)
+```
+-- 2. Habilitar o Row Level Security (Segurança de Linha)
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+
+-- 3. Criar política: Usuários podem ver apenas suas próprias notas
+CREATE POLICY "Usuários podem ver suas próprias notas" 
+ON notes FOR SELECT 
+USING (auth.uid() = user_id);
+
+-- 4. Criar política: Usuários podem inserir apenas suas próprias notas
+CREATE POLICY "Usuários podem inserir suas próprias notas" 
+ON notes FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+-- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
+CREATE POLICY "Usuários podem atualizar suas próprias notas" 
+ON notes FOR UPDATE 
+USING (auth.uid() = user_id);
+
+-- 6. Criar política: Usuários podem deletar apenas suas próprias notas
+CREATE POLICY "Usuários podem deletar suas próprias notas" 
+ON notes FOR DELETE 
+USING (auth.uid() = user_id);
+
+```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ARQUITETURA MVC
 
@@ -468,17 +470,9 @@ PROJETO_ERP/
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## FASE 1: LOGIN 
+## SEGURANÇA 
 ```
-* Criar arquivo src/view/login.html (google stitch)    # Tela html para o usuario fazer o login
-* Criar arquivo src/view/index.html (google stitch)    # dashboard/ menu
-* Criar src/controller/navbar.js.                      # botão menu e logoff
-* Criar arquivo src/model/supabase_config.js           # Arquivo com as credenciais e chaves do supabase
-* Criar arquivo src/model/login.js                     # faz requisições no banco de dados
-* Criar arquivo src/controller/login.js                # prepara e chamar as funcoes do model
-* Criar arquivo src/middleware/auth_check.js           # bloquear acesso as paginas caso usuario nao esteja logago.
-
-  Com base no planejamento de segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
+Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
 ### 🛡️ Central de Segurança (Middleware e Autenticação)
 *   [ ] **Implementar `src/middleware/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
 *   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
@@ -503,7 +497,11 @@ PROJETO_ERP/
 **Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
 ```
 
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CODIGOS COMPLETOS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # index.html (redirecionando para view)
 ```
 <!DOCTYPE html>
@@ -537,8 +535,7 @@ PROJETO_ERP/
 </html>
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CODIGOS COMPLETOS
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
 ```
