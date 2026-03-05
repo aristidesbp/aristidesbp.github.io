@@ -423,36 +423,15 @@ USING (auth.uid() = user_id);
 ```
 PROJETO_ERP/
 ├── index.html                   # Redireciona para src/view/index.html
-├── config/                      # Configurações globais
-│   └── supabase_config.js
 ├── assets/                      # Arquivos estáticos (CSS, Imagens)
 │   ├── img/                     # Ícones e logos
 │   └── style/                   # Estilos CSS segmentados
-│       ├── style_entidades.css
-│       ├── style_index.css
-│       └── style_navbar.css
+│
 └── src/                         # Código fonte da aplicação
     ├── view/                    # Interface do usuário (HTML puro)
-    │   ├── entidades.html
-    │   ├── financeiro.html
-    │   ├── index.html
-    │   ├── login.html
-    │   ├── pdv.html
-    │   ├── produtos.html
-    │   ├── redefinir_senha.html
-    │   ├── testes.html
-    │   └── vitrine.html
-    ├── controller/              # Lógica de interface e ponte MVC
-    │   ├── controller_entidades.js
-    │   ├── entidade_controller.js
-    │   ├── entidades_form.js
-    │   ├── entidades_list.js
-    │   ├── login.js
-    │   ├── navbar.js
-    │   └── pdv.js
+    ├── controller/              # Lógica de interface e ponte MVC 
     ├── model/                   # Interação com Banco de Dados (Supabase)
-    │   ├── model_entidades.js
-    │   └── verificar_login.js
+    ├── middleware               # Segurança login chek
     └── services/                # Integrações externas e Backend (Edge Functions)
         └── mercadopago_supabase/
             ├── doc.md
