@@ -133,7 +133,7 @@ Sua tabela entidades no banco de dados deve refletir essa hierarquia:
    
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## ARQUITETURA MVC DO ERP-PSC
-* CADA FUNÇÃO O JAVA SCRIPT, DEVE SER UM ARQUIVO ISOLADO COM O MESMO NOME DA FUNÇÃO!
+
 ```
 PROJETO_ERP/
 ├── index.html # Redireciona para src/view/index.html
