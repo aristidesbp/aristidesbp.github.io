@@ -920,4 +920,30 @@ export const accessControl = new AccessControl();
 
 
 
+# function triger user p/  profiles
+
+```
+-- 1. Criar a função que será disparada
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, role)
+  VALUES (
+    new.id, 
+    new.email, 
+    'psicopedagogo' -- Aqui definimos o nível padrão para novos cadastros
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 2. Criar o gatilho (Trigger) que chama a função acima
+-- Ele observa a tabela auth.users (onde o Authentication salva)
+CREATE OR REPLACE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+```
+
+
 
