@@ -6,11 +6,10 @@
     <title>SISTEMA ERP ABP - Inicio</title>
 <!-- ############################################################################# --> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="../../assets/style/style_index.css">
-<link rel="stylesheet" href="../../assets/style/style_navbar.css">  
+<link rel="stylesheet" href="../../assets/style/index.css">
 <!-- ############################################################################# --> 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
-<script src="../../config/supabase_config.js"></script> 
+<script src="../../model/supabase_config.js"></script> 
 <script src="../model/verificar_login.js"></script> 
 
 <!-- ############################################################################# --> 
@@ -19,8 +18,9 @@
 <body>
     
  <!-- Navbar -->
-  <div id="navbar"></div>
-  <script src="../controller/navbar.js"></script>
+ <link rel="stylesheet" href="../../assets/style/navbar.css">  
+ <div id="navbar"></div>
+ <script src="../controller/navbar.js"></script>
 
 <!-- CONTEÚDO DA PÁGINA -->
 <div class="content">      
