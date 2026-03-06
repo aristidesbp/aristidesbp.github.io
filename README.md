@@ -862,14 +862,64 @@ async function processarPagamento() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA ERP ABP - Inicio</title>
-    
+<!-- ############################################################################# --> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../../assets/style/index.css">
+<!-- ############################################################################# --> 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
+<script src="../../model/supabase_config.js"></script> 
+<script src="../model/verificar_login.js"></script> 
 
+<!-- ############################################################################# --> 
+    
+</head>
+<body>
+    
+ <!-- Navbar -->
+ <link rel="stylesheet" href="../../assets/style/navbar.css">  
+ <div id="navbar"></div>
+ <script src="../controller/navbar.js"></script>
 
- <!-- ############################################## --> 
-<!-- <link rel="stylesheet" href="../../asets/style/index.css"> -->
- <style>   
-     /* index.css */
+<!-- CONTEÚDO DA PÁGINA -->
+<div class="content">      
+  <div class="grid">
+
+   <a href="usuario.html" class="card">
+      <i class="fas fa-users"></i>
+      <h3>Gestão de usuarios</h3>
+    </a>
+    <a href="entidades.html" class="card">
+      <i class="fas fa-users"></i>
+      <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+      <i class="fas fa-hand-holding-usd"></i>
+      <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+      <i class="fas fa-box"></i>
+      <h3>Produtos</h3>
+    </a>
+
+ 
+
+    <a href="pdv.html" class="card">
+      <i class="fas fa-shopping-basket"></i>
+      <h3>PDV</h3>
+    </a>
+
+  </div>        
+</div>
+
+</body>
+</html>
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# assets/style/index.css
+```
+ /* index.css */
         /* Configurações Gerais */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -923,67 +973,102 @@ async function processarPagamento() {
             font-size: 1.1rem;
             margin: 0;
         }
-
-        
-  
-</style>
-</head>
-<body>
-
-<div class="content">      
-<div class="grid">
-
-<!-- ############################################## -->
-<!-- cardes do menu-->
-    
-    <a href="entidades.html" class="card">
-    <i class="fas fa-users"></i>
-    <h3>Gestão de Entidades</h3>
-    </a>
-
-    <a href="financeiro.html" class="card">
-    <i class="fas fa-hand-holding-usd"></i>
-    <h3>Financeiro</h3>
-    </a>
-
-    <a href="produtos.html" class="card">
-    <i class="fas fa-box"></i>
-    <h3>Produtos</h3>
-    </a>
-    
- 
-
-            
-            <a href="vitrine.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>vitrine</h3>
-            </a>
-            
-            <a href="pdv.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>pdv</h3>
-            </a>
-            
-             <a href="testes.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>testes</h3>
-            </a>
-
- <!-- ############################################## -->
-<!-- fim cardes do menu-->         
-</div>        
-</div>
-
- <!-- ############################################## -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../model/supabase_config.js"></script>
-<script src="../src/middleware/auth_check.js"></script>
-<script src="../controller/navbar.js"></script>
-</body>
-</html>
-
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# src/controller/navbarjs
+```
+/**
+ * navbar.js
+ * Injeta automaticamente a navbar dentro de #navbar
+ * Depende apenas do CSS externo já existente
+ */
+
+(function () {
+
+    function initNavbar() {
+        const container = document.getElementById('navbar');
+
+        // Se não existir o container, não faz nada
+        if (!container) return;
+
+        // Evita reinjeção
+        if (container.dataset.loaded === 'true') return;
+        container.dataset.loaded = 'true';
+
+        // HTML da navbar (APENAS VIEW)
+        container.innerHTML = `
+
+        
+    <!-- NAVBAR -->
+<style>
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- FIM DA NAVBAR -->
+            
+        `;
+    }
+
+    // Execução segura, com ou sem defer
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNavbar);
+    } else {
+        initNavbar();
+    }
+
+})();
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 SUPABASE
 * Criar conta e projeto
