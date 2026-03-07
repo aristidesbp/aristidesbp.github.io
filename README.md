@@ -673,7 +673,7 @@ using (
   (select role from public.profiles where id = auth.uid()) = 'admin'
 );
 
-``
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Policies para a Tabela entidades
 ```
