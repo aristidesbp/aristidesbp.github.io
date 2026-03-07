@@ -1,7 +1,6 @@
 /**
  * navbar.js
- * Injeta automaticamente a navbar dentro de #navbar
- * Depende apenas do CSS externo já existente
+ * Injeta a navbar e adiciona a lógica de Logout (Nível Bancário)
  */
 
 (function () {
@@ -9,35 +8,91 @@
     function initNavbar() {
         const container = document.getElementById('navbar');
 
-        // Se não existir o container, não faz nada
         if (!container) return;
-
-        // Evita reinjeção
         if (container.dataset.loaded === 'true') return;
         container.dataset.loaded = 'true';
 
-        // HTML da navbar (APENAS VIEW)
+        // HTML da navbar
         container.innerHTML = `
-
-        
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        <style>
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 15px 25px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                box-sizing: border-box;
+            }
+            .nav-buttons {
+                display: flex;
+                gap: 15px;
+            }
+            .btn-nav {
+                background: #ef4444;
+                color: white !important;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-weight: bold;
+                font-size: 14px;
+                border: none;
+                cursor: pointer;
+                transition: 0.3s;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn-home {
+                background: #3ecf8e !important;
+            }
+        </style>
+        <div class="navbar">
+            <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+                <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+            </div>
+            <div class="nav-buttons">
+                <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+                <button class="btn-nav" onclick="sairDaConta()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
         </div>
-        <div class="nav-buttons">
-     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- FIM DA NAVBAR -->
-            
         `;
     }
 
-    // Execução segura, com ou sem defer
+    // --- LOGICA DE LOGOUT (NÍVEL BANCÁRIO) ---
+    // Anexamos ao objeto 'window' para que o onclick="sairDaConta()" funcione
+    window.sairDaConta = async function() {
+        // Confirmação simples para evitar cliques acidentais
+        if (!confirm("Deseja realmente sair do sistema?")) return;
+
+        try {
+            // 1. Encerra a sessão no servidor do Supabase
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) throw error;
+
+            // 2. Limpa dados sensíveis do navegador (Token, Cache, etc)
+            localStorage.clear();
+            sessionStorage.clear();
+
+            // 3. Redireciona para a página de login/index
+            // Como você está no GitHub Pages, o ideal é usar um caminho relativo ou a raiz
+            window.location.href = 'index.html'; 
+
+        } catch (error) {
+            console.error('Erro ao encerrar sessão:', error.message);
+            alert('Erro de segurança ao sair. Por favor, feche o navegador.');
+        }
+    };
+
+    // Execução
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initNavbar);
     } else {
