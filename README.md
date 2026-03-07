@@ -285,176 +285,8 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
-
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-  
----
-
----
-## 🟥 COMO FAZER BKP DO SUPABASE
-```
-SELECT 
-    'CREATE POLICY ' || quote_ident(policyname) || 
-    ' ON ' || tablename || 
-    ' FOR ' || cmd || 
-    ' TO ' || array_to_string(roles, ',') || 
-    ' USING (' || qual || ')' || 
-    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
-FROM pg_policies
-WHERE schemaname = 'public' 
-  AND tablename = 'NOME_DA_SUA_TABELA';
-```
----
-## 🟥 COMO APAGAR USUARIO E SUAS DEPENDENCIAS
-```
--- 1. Tabela de PRODUTOS
-ALTER TABLE public.produtos
-DROP CONSTRAINT IF EXISTS produtos_entidade_id_fkey,
-ADD CONSTRAINT produtos_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
--- 2. Tabela de FINANCEIRO
-ALTER TABLE public.financeiro
-DROP CONSTRAINT IF EXISTS financeiro_entidade_id_fkey,
-ADD CONSTRAINT financeiro_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
--- 3. Tabela de VENDAS
-ALTER TABLE public.vendas
-DROP CONSTRAINT IF EXISTS vendas_entidade_id_fkey,
-ADD CONSTRAINT vendas_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
-```
-```
--- 1. Ajusta o vínculo entre Itens da Venda e Produtos
-ALTER TABLE public.venda_itens
-DROP CONSTRAINT IF EXISTS venda_itens_produto_id_fkey,
-ADD CONSTRAINT venda_itens_produto_id_fkey 
-   FOREIGN KEY (produto_id) 
-   REFERENCES public.produtos(id) 
-   ON DELETE CASCADE;
-
--- 2. Por segurança, garante que o vínculo entre Item e Venda também seja cascata
-ALTER TABLE public.venda_itens
-DROP CONSTRAINT IF EXISTS venda_itens_venda_id_fkey,
-ADD CONSTRAINT venda_itens_venda_id_fkey 
-   FOREIGN KEY (venda_id) 
-   REFERENCES public.vendas(id) 
-   ON DELETE CASCADE;
-```
-
-# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
-@ 👉 Isso é o mais próximo possível de um banco novo.
-``` 
--- Apagar tabelas públicas
-do $$
-declare
-  r record;
-begin
-  for r in (select tablename from pg_tables where schemaname = 'public') loop
-    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
-  end loop;
-end $$;
-```
-# 🟥 sql (exemplo de como criar uma tabelas)
-* Criação da tabela de Entidades
-* 
-```
--- Criação da tabela de Entidades
-create table public.entidades (
-  -- Identificador único (Primary Key)
-  id uuid not null default gen_random_uuid(),
-  primary key (id),
-
-  -- Metadados de controle
-  created_at timestamp with time zone not null default now(),
-  updated_at timestamp with time zone not null default now(),
-  
-  -- Dados Principais
-  nome_razao_social text not null,
-  nome_fantasia text,
-  cpf_cnpj text unique, -- Unique para evitar duplicidade de cadastros
-  tipo_entidade text check (tipo_entidade in ('PF', 'PJ')), -- Pessoa Física ou Jurídica
-  
-  -- Contato
-  email text,
-  telefone text,
-  celular text,
-  
-  -- Endereço
-  cep text,
-  logradouro text,
-  numero text,
-  complemento text,
-  bairro text,
-  cidade text,
-  estado char(2),
-  
-  -- Classificação (Útil para o controller filtrar)
-  is_cliente boolean default false,
-  is_fornecedor boolean default false,
-  is_colaborador boolean default false,
-  ativo boolean default true
-);
-
--- Habilitar Row Level Security (Segurança do Supabase)
-alter table public.entidades enable row level security;
-
--- Criar política de acesso (Permitir leitura/escrita para usuários autenticados)
-create policy "Permitir tudo para usuários autenticados" 
-on public.entidades 
-for all 
-to authenticated 
-using (true);
-
-```
-
-# 🟥 Habilitar o Row Level Security (Segurança de Linha)
-```
--- 2. Habilitar o Row Level Security (Segurança de Linha)
-ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
-
--- 3. Criar política: Usuários podem ver apenas suas próprias notas
-CREATE POLICY "Usuários podem ver suas próprias notas" 
-ON notes FOR SELECT 
-USING (auth.uid() = user_id);
-
--- 4. Criar política: Usuários podem inserir apenas suas próprias notas
-CREATE POLICY "Usuários podem inserir suas próprias notas" 
-ON notes FOR INSERT 
-WITH CHECK (auth.uid() = user_id);
-
--- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
-CREATE POLICY "Usuários podem atualizar suas próprias notas" 
-ON notes FOR UPDATE 
-USING (auth.uid() = user_id);
-
--- 6. Criar política: Usuários podem deletar apenas suas próprias notas
-CREATE POLICY "Usuários podem deletar suas próprias notas" 
-ON notes FOR DELETE 
-USING (auth.uid() = user_id);
-
-```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ARQUITETURA MVC
+# CRIANDO UM PROJETO COM O SUPABASE (ARQUITETURA MVC)
 
 ```
 PROJETO_ERP/
@@ -512,9 +344,271 @@ Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-P
 **Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
 ```
 
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CODIGOS COMPLETOS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SUPABASE
+
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+  
+---
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## 🟥 COMO FAZER BKP DO SUPABASE
+```
+SELECT 
+    'CREATE POLICY ' || quote_ident(policyname) || 
+    ' ON ' || tablename || 
+    ' FOR ' || cmd || 
+    ' TO ' || array_to_string(roles, ',') || 
+    ' USING (' || qual || ')' || 
+    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'NOME_DA_SUA_TABELA';
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
+@ 👉 Isso é o mais próximo possível de um banco novo.
+``` 
+-- Apagar tabelas públicas
+do $$
+declare
+  r record;
+begin
+  for r in (select tablename from pg_tables where schemaname = 'public') loop
+    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
+  end loop;
+end $$;
+``` 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## 🟥 COMO APAGAR USUARIO E SUAS DEPENDENCIAS
+```
+-- 1. Tabela de PRODUTOS
+ALTER TABLE public.produtos
+DROP CONSTRAINT IF EXISTS produtos_entidade_id_fkey,
+ADD CONSTRAINT produtos_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 2. Tabela de FINANCEIRO
+ALTER TABLE public.financeiro
+DROP CONSTRAINT IF EXISTS financeiro_entidade_id_fkey,
+ADD CONSTRAINT financeiro_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 3. Tabela de VENDAS
+ALTER TABLE public.vendas
+DROP CONSTRAINT IF EXISTS vendas_entidade_id_fkey,
+ADD CONSTRAINT vendas_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+```
+```
+-- 1. Ajusta o vínculo entre Itens da Venda e Produtos
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_produto_id_fkey,
+ADD CONSTRAINT venda_itens_produto_id_fkey 
+   FOREIGN KEY (produto_id) 
+   REFERENCES public.produtos(id) 
+   ON DELETE CASCADE;
+
+-- 2. Por segurança, garante que o vínculo entre Item e Venda também seja cascata
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_venda_id_fkey,
+ADD CONSTRAINT venda_itens_venda_id_fkey 
+   FOREIGN KEY (venda_id) 
+   REFERENCES public.vendas(id) 
+   ON DELETE CASCADE;
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# 🟥 sql (exemplo de como criar uma tabelas)
+* Criação da tabela de Entidades
+* 
+```
+-- Criação da tabela de Entidades
+create table public.entidades (
+  -- Identificador único (Primary Key)
+  id uuid not null default gen_random_uuid(),
+  primary key (id),
+
+  -- Metadados de controle
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+  
+  -- Dados Principais
+  nome_razao_social text not null,
+  nome_fantasia text,
+  cpf_cnpj text unique, -- Unique para evitar duplicidade de cadastros
+  tipo_entidade text check (tipo_entidade in ('PF', 'PJ')), -- Pessoa Física ou Jurídica
+  
+  -- Contato
+  email text,
+  telefone text,
+  celular text,
+  
+  -- Endereço
+  cep text,
+  logradouro text,
+  numero text,
+  complemento text,
+  bairro text,
+  cidade text,
+  estado char(2),
+  
+  -- Classificação (Útil para o controller filtrar)
+  is_cliente boolean default false,
+  is_fornecedor boolean default false,
+  is_colaborador boolean default false,
+  ativo boolean default true
+);
+
+-- Habilitar Row Level Security (Segurança do Supabase)
+alter table public.entidades enable row level security;
+
+-- Criar política de acesso (Permitir leitura/escrita para usuários autenticados)
+create policy "Permitir tudo para usuários autenticados" 
+on public.entidades 
+for all 
+to authenticated 
+using (true);
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO ADICIONAR CAMPOS NA  TABELA:
+```
+alter table public.entidades 
+add column url_foto_avatar text;
+-- Opcional: Adicionar um comentário para documentação
+comment on column public.entidades.url_foto_avatar is 'URL da imagem de perfil armazenada no Storage';
+```
+```
+-- Adiciona a coluna de vínculo com o usuário autenticado
+alter table public.entidades 
+add column created_by uuid references auth.users(id) default auth.uid();
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO PAGAR UM CAMPO DA TABELA:
+```
+alter table public.entidades 
+drop column url_foto_avatar;
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Criando a Tabela de Perfis (Nível Bancário)
+```
+-- Tabela para definir quem é Admin ou Usuário Comum
+create table public.profiles (
+  id uuid references auth.users on delete cascade primary key,
+  role text check (role in ('admin', 'usuario')) default 'usuario'
+);
+
+-- Habilita RLS na tabela de perfis
+alter table public.profiles enable row level security;
+
+-- Permite que usuários leiam seus próprios perfis
+create policy "Usuários veem próprio perfil" 
+on public.profiles for select 
+using ( auth.uid() = id );
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥 Habilitar o Row Level Security (Segurança de Linha)
+```
+-- Remove políticas antigas para evitar conflito
+drop policy if exists "Permitir tudo para usuários autenticados" on public.entidades;
+drop policy if exists "Acesso restrito a usuários autorizados" on public.entidades;
+
+-- Cria a política robusta
+create policy "Acesso restrito a usuários autorizados" 
+on public.entidades 
+for all 
+to authenticated 
+using (
+  auth.uid() = created_by 
+  or exists (
+    select 1 from public.profiles 
+    where id = auth.uid() and role = 'admin'
+  )
+);
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo colaborador:
+```
+-- 1. Garanta que a tabela entidades tem o campo para o ID do usuário
+alter table public.entidades add column user_id uuid references auth.users(id);
+
+-- 2. Função que o banco vai executar sozinha
+create or replace function public.criar_entidade_do_novo_usuario()
+returns trigger as $$
+begin
+  insert into public.entidades (id, nome_razao_social, email, is_colaborador, user_id)
+  values (new.id, new.raw_user_meta_data->>'nome', new.email, true, new.id);
+  return new;
+end;
+$$ language plpgsql security definer;
+
+-- 3. O Gatilho (Trigger)
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.criar_entidade_do_novo_usuario();
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Policies para a Tabela entidades
+```
+-- Habilitar o RLS
+alter table public.entidades enable row level security;
+
+-- POLÍTICA DE LEITURA (SELECT)
+create policy "Usuários veem seus próprios dados e admins veem tudo"
+on public.entidades
+for select
+to authenticated
+using (
+  auth.uid() = user_id  -- Vê o próprio registro de colaborador
+  or created_by = auth.uid() -- Vê os clientes/fornecedores que ele cadastrou
+  or (select role from public.profiles where id = auth.uid()) = 'admin' -- Admin vê tudo
+);
+
+-- POLÍTICA DE INSERÇÃO (INSERT)
+create policy "Usuários autenticados podem cadastrar entidades"
+on public.entidades
+for insert
+to authenticated
+with check (auth.uid() = created_by);
+
+-- POLÍTICA DE ATUALIZAÇÃO (UPDATE)
+create policy "Apenas o dono ou admin pode atualizar"
+on public.entidades
+for update
+to authenticated
+using (
+  auth.uid() = created_by 
+  or (select role from public.profiles where id = auth.uid()) = 'admin'
+);
+```
+
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html (site)
