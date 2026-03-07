@@ -10,8 +10,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **Aulas:** [https://aristidesbp.github.io](https://aristidesbp.github.io/doc/aulas.md)
 
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
 * Download do aplicativo direto no github:
 Acesse o link oficial (não uso da Play Store)
@@ -299,7 +298,157 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 * Região: brasil
   
 ---
+# 🟥 sql (exemplo de como criar uma tabelas)
+```
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
 
+CREATE TABLE public.entidades (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  genero text,
+  estado_civil text,
+  tipo_entidade text,
+  status_entidade text,
+  tipo_acesso text,
+  email text,
+  telefone text,
+  senha_acesso text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado text,
+  avaliacao integer DEFAULT 5,
+  observacoes text,
+  arquivos_url ARRAY,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.financeiro (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id uuid,
+  tipo text CHECK (tipo = ANY (ARRAY['Pagar'::text, 'Receber'::text, 'pagar'::text, 'receber'::text])),
+  descricao text NOT NULL,
+  categoria text,
+  forma_pagamento text,
+  data_vencimento date,
+  data_pagamento date,
+  valor numeric DEFAULT 0,
+  status text CHECK (status = ANY (ARRAY['Pendente'::text, 'Pago'::text, 'pendente'::text, 'pago'::text])),
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financeiro_pkey PRIMARY KEY (id),
+  CONSTRAINT financeiro_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financeiro_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.notes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT notes_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.pedidos (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  cliente_nome text,
+  total numeric,
+  status text DEFAULT 'pendente'::text,
+  itens jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT pedidos_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.produtos (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  nome text NOT NULL,
+  codigo_de_barras text,
+  marca text,
+  sku text,
+  categoria_prod text,
+  entidade_id uuid,
+  descricao text,
+  data_vencimento date,
+  preco_custo numeric DEFAULT 0,
+  preco_venda numeric DEFAULT 0,
+  estoque_atual integer DEFAULT 0,
+  estoque_minimo integer DEFAULT 5,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  data_compra date,
+  imagem_url text,
+  CONSTRAINT produtos_pkey PRIMARY KEY (id),
+  CONSTRAINT produtos_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT produtos_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.tarefas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  title text NOT NULL,
+  content text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  entidade text,
+  tarefa_descricao text,
+  status text DEFAULT 'pendente'::text,
+  observacao text,
+  CONSTRAINT tarefas_pkey PRIMARY KEY (id),
+  CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.venda_itens (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  venda_id uuid,
+  produto_id uuid,
+  quantidade integer NOT NULL,
+  preco_unitario numeric NOT NULL,
+  CONSTRAINT venda_itens_pkey PRIMARY KEY (id),
+  CONSTRAINT venda_itens_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id),
+  CONSTRAINT venda_itens_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id)
+);
+CREATE TABLE public.vendas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id uuid,
+  total_venda numeric NOT NULL,
+  metodo_pagamento text,
+  data_venda timestamp with time zone DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT vendas_pkey PRIMARY KEY (id),
+  CONSTRAINT vendas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT vendas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+```
+
+# 🟥 Habilitar o Row Level Security (Segurança de Linha)
+```
+-- 2. Habilitar o Row Level Security (Segurança de Linha)
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+
+-- 3. Criar política: Usuários podem ver apenas suas próprias notas
+CREATE POLICY "Usuários podem ver suas próprias notas" 
+ON notes FOR SELECT 
+USING (auth.uid() = user_id);
+
+-- 4. Criar política: Usuários podem inserir apenas suas próprias notas
+CREATE POLICY "Usuários podem inserir suas próprias notas" 
+ON notes FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+-- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
+CREATE POLICY "Usuários podem atualizar suas próprias notas" 
+ON notes FOR UPDATE 
+USING (auth.uid() = user_id);
+
+-- 6. Criar política: Usuários podem deletar apenas suas próprias notas
+CREATE POLICY "Usuários podem deletar suas próprias notas" 
+ON notes FOR DELETE 
+USING (auth.uid() = user_id);
+
+```
 ---
 ## 🟥 COMO FAZER BKP DO SUPABASE
 ```
@@ -373,115 +522,24 @@ begin
   end loop;
 end $$;
 ```
-# 🟥 sql (exemplo de como criar uma tabelas)
-```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
-
-CREATE TABLE public.notes (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid DEFAULT auth.uid(),
-  title text NOT NULL,
-  content text,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  CONSTRAINT notes_pkey PRIMARY KEY (id),
-  CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-
-```
-
-# 🟥 Habilitar o Row Level Security (Segurança de Linha)
-```
--- 2. Habilitar o Row Level Security (Segurança de Linha)
-ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
-
--- 3. Criar política: Usuários podem ver apenas suas próprias notas
-CREATE POLICY "Usuários podem ver suas próprias notas" 
-ON notes FOR SELECT 
-USING (auth.uid() = user_id);
-
--- 4. Criar política: Usuários podem inserir apenas suas próprias notas
-CREATE POLICY "Usuários podem inserir suas próprias notas" 
-ON notes FOR INSERT 
-WITH CHECK (auth.uid() = user_id);
-
--- 5. Criar política: Usuários podem atualizar apenas suas próprias notas
-CREATE POLICY "Usuários podem atualizar suas próprias notas" 
-ON notes FOR UPDATE 
-USING (auth.uid() = user_id);
-
--- 6. Criar política: Usuários podem deletar apenas suas próprias notas
-CREATE POLICY "Usuários podem deletar suas próprias notas" 
-ON notes FOR DELETE 
-USING (auth.uid() = user_id);
-
-```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ARQUITETURA MVC
-
 ```
 PROJETO_ERP/
-├── index.html                   # Redireciona para src/view/index.html
-├── assets/                      # Arquivos estáticos (CSS, Imagens)
-│   ├── img/                     # Ícones e logos
-│   └── style/                   # Estilos CSS segmentados
-│
-└── src/                         # Código fonte da aplicação
-    ├── view/                    # Interface do usuário (HTML puro)
-    ├── controller/              # Lógica de interface e ponte MVC 
-    ├── model/                   # Interação com Banco de Dados (Supabase)
-    ├── middleware               # Segurança login chek
-    └── services/                # Integrações externas e Backend (Edge Functions)
-        └── mercadopago_supabase/
-            ├── doc.md
-            ├── index.html
-            ├── servicos.json
-            ├── site.html
-            ├── sucesso.html
-            └── supabase/
-                └── functions/
-                    └── checkout/
-                        ├── deno.json
-                        └── index.ts
-
+├── assets/              # Arquivos estáticos
+│   ├── css/             # Arquivos .css (estilos)
+│   ├── js/              # Bibliotecas de terceiros (Supabase, PDF, etc)
+│   └── img/             # Imagens e ícones
+├── src/                 # Código fonte da aplicação
+│   ├── models/          # Lógica de dados (Interação com Supabase)
+│   ├── controllers/     # Regras de negócio e ponte View <-> Model
+│   └── views/           # Apenas a interface (HTML puro)
+├── config/              # Configurações globais (API Keys)
+└── index.html           # Ponto de entrada (Dashboard)
 ```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## SEGURANÇA 
-```
-Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
-### 🛡️ Central de Segurança (Middleware e Autenticação)
-*   [ ] **Implementar `src/middleware/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
-*   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
-*   [ ] **Validar `verificar_login.js`:** Garantir que o script de bloqueio esteja protegendo todas as páginas sensíveis, exceto a tela de login e a index pública.
-
-### 🔐 Proteção de Dados e Banco (Supabase/PostgreSQL)
-*   [ ] **Habilitar RLS (Row Level Security):** Ativar a segurança de linha em todas as tabelas, garantindo que nenhuma informação seja lida sem uma política definida.
-*   [ ] **Configurar Regra de "Dono do Dado":** Aplicar a política `auth.uid() == profissional_responsavel_id` para blindar o acesso a prontuários e pacientes.
-*   [ ] **Criar Tabela de Auditoria (`logs_acesso`):** Implementar o registro de rastreabilidade para identificar quem visualizou dados sensíveis e quando, conforme exigido pela LGPD.
-*   [ ] **Restrição de PII:** Aplicar políticas de acesso restrito especificamente para campos de **CPF e Diagnósticos**.
-
-### 📂 Infraestrutura e Repositório (GitHub/Produção)
-*   [ ] **Migração para Variáveis de Ambiente:** Mover as chaves do Supabase (`anon_key` e `URL`) para um arquivo `.env` seguro, removendo-as do código-fonte.
-*   [ ] **Configurar `.gitignore`:** Garantir que o arquivo `.env` e outros arquivos de configuração local nunca sejam enviados ao repositório público.
-*   [ ] **Ajuste de Permissões da `anon_key`:** Verificar no console do Supabase se a chave pública possui apenas as permissões mínimas necessárias.
-*   [ ] **Ativar GitHub Actions:** Configurar o fluxo de automação para realizar análise de segurança básica em cada novo *commit*.
-
-### ⚠️ Tratamento de Erros e UX
-*   [ ] **Padronização de Mensagens de Erro:** Criar uma função global para interceptar erros do banco de dados (ex: Postgres Error 42P01) e exibir apenas mensagens amigáveis ao usuário.
-*   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
-
-**Este checklist cobre todas as ações imediatas necessárias para garantir que o sistema seja robusto o suficiente antes de iniciar o cadastro de categorias na Fase 2.** Deseja que eu detalhe o plano para alguma dessas tarefas específicas?
-```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CODIGOS COMPLETOS
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# index.html (site)
+# index.html
 ```
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
@@ -820,339 +878,7 @@ async function processarPagamento() {
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# assets/erp/index.html (redirecionando para src/view/index.html)
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carregando...</title>
-    
-    <meta http-equiv="refresh" content="0; url=src/view/index.html">
-
-    <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
-        .loader { text-align: center; }
-    </style>
-</head>
-<body>
-
-    <div class="loader">
-      <!--
-        <p><a href="src/view/index.html">Clique aqui se não for redirecionado automaticamente.</a></p>
-   -->
-    </div>
-
-    <script>
-        // Reforço via JavaScript para garantir o redirecionamento imediato
-        window.location.href = "src/view/index.html";
-    </script>
-
-</body>
-</html>
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/view/index.thtm (menu/dashbord)
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA ERP ABP - Inicio</title>
-<!-- ############################################################################# --> 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
-<script src="../../model/supabase_config.js"></script> 
-<script src="../model/verificar_login.js"></script> 
-<!-- ############################################################################# --> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
- /* index.css */
-        /* Configurações Gerais */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding-top: 80px; /* Espaço para a navbar fixa */
-        }
-
-        /* Grid de Cards */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-color: #3ecf8e;
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: #3ecf8e;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-</style>
-<!-- ############################################################################# -->
-
-</head>
-<body>
-    
- <!-- Navbar -->
- <div id="navbar"></div>
- <script src="../controller/navbar.js"></script>
-
-<!-- CONTEÚDO DA PÁGINA -->
-<div class="content">      
-  <div class="grid">
-
-   <a href="usuario.html" class="card">
-      <i class="fas fa-users"></i>
-      <h3>Gestão de usuarios</h3>
-    </a>
-    <a href="entidades.html" class="card">
-      <i class="fas fa-users"></i>
-      <h3>Gestão de Entidades</h3>
-    </a>
-
-    <a href="financeiro.html" class="card">
-      <i class="fas fa-hand-holding-usd"></i>
-      <h3>Financeiro</h3>
-    </a>
-
-    <a href="produtos.html" class="card">
-      <i class="fas fa-box"></i>
-      <h3>Produtos</h3>
-    </a>
-
- 
-
-    <a href="pdv.html" class="card">
-      <i class="fas fa-shopping-basket"></i>
-      <h3>PDV</h3>
-    </a>
-
-  </div>        
-</div>
-
-</body>
-</html>
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# src/controller/navbarjs
-```
-/**
- * navbar.js
- * Injeta automaticamente a navbar dentro de #navbar
- * Depende apenas do CSS externo já existente
- */
-
-(function () {
-
-    function initNavbar() {
-        const container = document.getElementById('navbar');
-
-        // Se não existir o container, não faz nada
-        if (!container) return;
-
-        // Evita reinjeção
-        if (container.dataset.loaded === 'true') return;
-        container.dataset.loaded = 'true';
-
-        // HTML da navbar (APENAS VIEW)
-        container.innerHTML = `
-
-        
-    <!-- NAVBAR -->
-<style>
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-nav {
-            background: #ef4444;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-home {
-            background: #3ecf8e !important;
-        }
-  
-</style>
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-     <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- FIM DA NAVBAR -->
-            
-        `;
-    }
-
-    // Execução segura, com ou sem defer
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initNavbar);
-    } else {
-        initNavbar();
-    }
-
-})();
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-SUPABASE
-* Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-Config do projeto
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-* selecina o ssh
-* criar!
-Configuure:
-* Authentication/URL Configuration/Site URL: https://url_do_seu_site
-* Authentication/URL Configuration/Redirect URLs: https://url_do_seu_site
-Chaves de acesso
-* Data API/API URL: copiar_url_do_danco_de_dados
-* API Keys/Legacy anon, service_role API keys/anon public: copiar_chave_de_acesso_do_supabase.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# src/model/supabase_config.js
-```
-// SUPABASE_CONFIG.JS
-const supabaseUrl = 'https://seu_endereço';
-const supabaseKey = 'sua_senha';
-// Inicializa o cliente Supabase
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-// Exporta para ser usado em outros scripts
-window.supabaseClient = _supabase; 
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# navbar.j
-```
-/**
- * navbar.js
- * Injeta automaticamente a navbar dentro de #navbar
- * Depende apenas do CSS externo já existente
- */
-
-(function () {
-
-    function initNavbar() {
-        const container = document.getElementById('navbar');
-
-        // Se não existir o container, não faz nada
-        if (!container) return;
-
-        // Evita reinjeção
-        if (container.dataset.loaded === 'true') return;
-        container.dataset.loaded = 'true';
-
-        // HTML da navbar (APENAS VIEW)
-        container.innerHTML = `
-
-        
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-     <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- FIM DA NAVBAR -->
-            
-        `;
-    }
-
-    // Execução segura, com ou sem defer
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initNavbar);
-    } else {
-        initNavbar();
-    }
-
-})();
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# src/view/login.html
+# login.html
 ```
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
@@ -2892,7 +2618,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# index.thtml(menu.html erp)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+ <style>   
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
 
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
+
+
+</head>
+<body>
+<!-- navbar -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- fim navbar -->
+
+<div class="content">      
+<div class="grid">
+
+<!-- cardes do menu-->
+    
+    <a href="entidades.html" class="card">
+    <i class="fas fa-users"></i>
+    <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+    <i class="fas fa-box"></i>
+    <h3>Produtos</h3>
+    </a>
+    
+ 
+
+            
+            <a href="vitrine.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>vitrine</h3>
+            </a>
+            
+            <a href="pdv.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>pdv</h3>
+            </a>
+            
+             <a href="testes.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>testes</h3>
+            </a>
+
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</body>
+</html>
+
+```
 
 
 

@@ -1,4 +1,79 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
 
+   <!-- STYLE -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+   <!-- FIM DO STYLE -->
+
+ <!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+
+<!-- FORMULÁRIO -->
+ <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+<!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+        </div>
+
+ <div class="space-y-4">
+    <div>
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    
+    <div class="relative">
+        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+            🔒
+        </button>
+    </div>
+
+    <div class="text-right">
+        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+    </div>
+    
+    <div class="flex gap-3 pt-2">
+        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            ENTRAR
+        </button>
+        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+            CADASTRAR
+        </button>
+    </div>
+</div>
+    </div>
+<!-- FIM DO FORMULÁRIO -->
+
+<script>
     /**
  * Nome do arquivo: alternar_senha.js
  * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
@@ -14,7 +89,8 @@ function alternarSenha() {
     }
 }
     
-
+</script>   
+<script>
 /**
  * Nome do arquivo: login_google.js
  * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
@@ -35,7 +111,8 @@ async function loginComGoogle() {
         alert("Erro ao conectar com Google: " + error.message);
     }
 }
-
+</script>   
+<script>
     /**
  * Nome do arquivo: realizar_cadastro.js
  * Objetivo: Criar uma nova conta de usuário no sistema.
@@ -63,7 +140,8 @@ async function realizarCadastro() {
         alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
     }
 }
-
+</script>   
+<script>
 /**
  * Função de apoio para evitar cadastros acidentais (UX)
  */
@@ -75,7 +153,8 @@ function confirmarCadastro() {
         realizarCadastro(); 
     }
 }
-
+</script>   
+<script>
   /**
  * Nome do arquivo: realizar_login.js
  * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
@@ -110,7 +189,8 @@ async function realizarLogin() {
         console.error("Ocorreu um erro inesperado no sistema:", err);
     }
 }  
-  
+ </script>   
+<script>   
     /**
  * Nome do arquivo: recuperar_senha.js
  * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
@@ -143,4 +223,6 @@ async function salvarNovaSenha() {
         window.location.href = 'index.html';
     }
 }
- 
+</script>   
+</body>
+</html>        

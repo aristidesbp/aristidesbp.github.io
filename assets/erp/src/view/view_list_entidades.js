@@ -12,8 +12,6 @@ async function loadEntities() {
     renderTable(data || []);
 }
 
-
-
 function renderTable(data) {
     const tbody = document.getElementById('entities-list');
     if (!tbody) return;
@@ -51,8 +49,3 @@ function renderTable(data) {
     `}).join('');
 }
 
-// Dispara o carregamento assim que o conteúdo do navegador estiver pronto
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Iniciando carregamento automático das entidades...");
-    loadEntities();
-});

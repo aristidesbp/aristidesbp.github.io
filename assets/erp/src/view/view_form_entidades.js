@@ -91,8 +91,8 @@
         <input type="text" id="inputBusca" placeholder="Digite o nome para filtrar..." onkeyup="filtrarTabela()">
 
 
-
-<div id="bulk-area" style="display: none; background: #fee2e2; padding: 10px; border-radius: 8px; margin-bottom: 15px; align-items: center; justify-content: space-between;">
+        
+<div id="bulk-area" style="display: none; background: #fee2e2; padding: 15px; border-radius: 8px; border: 1px solid #fecaca; margin-top: 15px; display: flex; align-items: center; justify-content: space-between;">
     <span id="selected-count" style="font-weight:bold; color:#b91c1c;">0 selecionados</span>
     <button onclick="deleteSelectedEntities()" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold;">
         <i class="fas fa-trash"></i> Excluir Selecionados
