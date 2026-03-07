@@ -427,21 +427,23 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
    ON DELETE CASCADE;
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-SUPABASE
-* Criar conta e projeto
+# Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
 * Clique em New Project
-Config do projeto
+  
+## Config do projeto
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
 * selecina o ssh
 * criar!
-Configuure:
+  
+## Configuure:
 * Authentication/URL Configuration/Site URL: https://url_do_seu_site
 * Authentication/URL Configuration/Redirect URLs: https://url_do_seu_site
-Chaves de acesso
+
+## Chaves de acesso
 * Data API/API URL: copiar_url_do_danco_de_dados
 * API Keys/Legacy anon, service_role API keys/anon public: copiar_chave_de_acesso_do_supabase.
 
@@ -450,8 +452,11 @@ Chaves de acesso
 # src/model/supabase_config.js
 ```
 // SUPABASE_CONFIG.JS
-const supabaseUrl = 'https://seu_endereço';
-const supabaseKey = 'sua_senha';
+// * Data API/API URL: copiar_url_do_danco_de_dados
+const supabaseUrl = 'https://seu_banco';
+
+// * API Keys/Legacy anon, service_role API keys/anon public: copiar_chave_de_acesso_do_supabase.
+const supabaseKey = 'sua_chave_anon_public';
 // Inicializa o cliente Supabase
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // Exporta para ser usado em outros scripts
