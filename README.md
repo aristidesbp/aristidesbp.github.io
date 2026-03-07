@@ -349,7 +349,6 @@ Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-P
 
 ```
 
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
 * **OBS**: CASO JA TENHA UM BANCO DE DADOS VC PODE:
@@ -461,86 +460,6 @@ const supabaseKey = 'sua_chave_anon_public';
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // Exporta para ser usado em outros scripts
 window.supabaseClient = _supabase; 
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🟥 SQL DA TABELA: public.entidades 
-  
-```
--- Criação da tabela de Entidades
-create table public.entidades (
-  -- Identificador único (Primary Key)
-  id uuid not null default gen_random_uuid(),
-  primary key (id),
-
-  -- Metadados de controle
-  created_at timestamp with time zone not null default now(),
-  updated_at timestamp with time zone not null default now(),
-  
-  -- Dados Principais
-  nome_razao_social text not null,
-  nome_fantasia text,
-  cpf_cnpj text unique, -- Unique para evitar duplicidade de cadastros
-  tipo_entidade text check (tipo_entidade in ('PF', 'PJ')), -- Pessoa Física ou Jurídica
-  
-  -- Contato
-  email text,
-  telefone text,
-  celular text,
-  
-  -- Endereço
-  cep text,
-  logradouro text,
-  numero text,
-  complemento text,
-  bairro text,
-  cidade text,
-  estado char(2),
-  
-  -- Classificação (Útil para o controller filtrar)
-  is_cliente boolean default false,
-  is_fornecedor boolean default false,
-  is_colaborador boolean default false,
-  ativo boolean default true
-);
-
--- Habilitar Row Level Security (Segurança do Supabase)
-alter table public.entidades enable row level security;
-
--- Criar política de acesso (Permitir leitura/escrita para usuários autenticados)
-create policy "Permitir tudo para usuários autenticados" 
-on public.entidades 
-for all 
-to authenticated 
-using (true);
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO ADICIONAR CAMPOS NA  TABELA:
-```
-alter table public.entidades 
-add column url_foto_avatar text;
--- Opcional: Adicionar um comentário para documentação
-comment on column public.entidades.url_foto_avatar is 'URL da imagem de perfil armazenada no Storage';
-```
-```
--- Adiciona a coluna de vínculo com o usuário autenticado
-alter table public.entidades 
-add column created_by uuid references auth.users(id) default auth.uid();
-```
-```
--- Adiciona as colunas necessárias caso não existam
-alter table public.entidades 
-add column if not exists user_id uuid references auth.users(id),
-add column if not exists created_by uuid references auth.users(id) default auth.uid(),
-add column if not exists is_cliente boolean default true,
-add column if not exists is_colaborador boolean default false,
-add column if not exists ativo boolean default true;
-```
-# COMO PAGAR UM CAMPO DA TABELA (CASO PRECISE)
-```
-alter table public.entidades 
-drop column url_foto_avatar;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -693,40 +612,7 @@ using (
 );
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Policies para a Tabela entidades
-```
--- Habilitar o RLS
-alter table public.entidades enable row level security;
 
--- POLÍTICA DE LEITURA (SELECT)
-create policy "Usuários veem seus próprios dados e admins veem tudo"
-on public.entidades
-for select
-to authenticated
-using (
-  auth.uid() = user_id  -- Vê o próprio registro de colaborador
-  or created_by = auth.uid() -- Vê os clientes/fornecedores que ele cadastrou
-  or (select role from public.profiles where id = auth.uid()) = 'admin' -- Admin vê tudo
-);
-
--- POLÍTICA DE INSERÇÃO (INSERT)
-create policy "Usuários autenticados podem cadastrar entidades"
-on public.entidades
-for insert
-to authenticated
-with check (auth.uid() = created_by);
-
--- POLÍTICA DE ATUALIZAÇÃO (UPDATE)
-create policy "Apenas o dono ou admin pode atualizar"
-on public.entidades
-for update
-to authenticated
-using (
-  auth.uid() = created_by 
-  or (select role from public.profiles where id = auth.uid()) = 'admin'
-);
-```
 # FINALIZANDO FAZE_1 DE SEGURANÇA
 ```
 -- 1. CRIAR TABELA DE AUDITORIA (LOGS DE ACESSO)
