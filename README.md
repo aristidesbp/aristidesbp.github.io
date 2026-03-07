@@ -528,6 +528,15 @@ comment on column public.entidades.url_foto_avatar is 'URL da imagem de perfil a
 alter table public.entidades 
 add column created_by uuid references auth.users(id) default auth.uid();
 ```
+```
+-- Adiciona as colunas necessárias caso não existam
+alter table public.entidades 
+add column if not exists user_id uuid references auth.users(id),
+add column if not exists created_by uuid references auth.users(id) default auth.uid(),
+add column if not exists is_cliente boolean default true,
+add column if not exists is_colaborador boolean default false,
+add column if not exists ativo boolean default true;
+```
 # COMO PAGAR UM CAMPO DA TABELA (CASO PRECISE)
 ```
 alter table public.entidades 
