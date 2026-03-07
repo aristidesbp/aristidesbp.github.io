@@ -379,7 +379,16 @@ begin
     execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
   end loop;
 end $$;
-``` 
+```
+
+## APAGAR GATILHOS
+```
+-- 1. Apaga o Gatilho da tabela de usuários
+drop trigger if exists on_auth_user_created on auth.users;
+
+-- 2. Apaga a função que o gatilho executava (opcional, mas limpa o banco)
+drop function if exists public.handle_new_user();
+```
 
 ## 🟥 APAGAR USUARIO E SUAS DEPENDENCIAS
 ```
@@ -425,6 +434,8 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
    REFERENCES public.vendas(id) 
    ON DELETE CASCADE;
 ```
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Criar conta e projeto
 * Acesse: https://supabase.com
