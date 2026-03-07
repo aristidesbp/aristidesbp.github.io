@@ -564,7 +564,7 @@ using (
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo colaborador:
+# OPÇÃO 1: toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo COLABORADOR:
 ```
 -- 1. Garanta que a tabela entidades tem o campo para o ID do usuário
 alter table public.entidades add column user_id uuid references auth.users(id);
@@ -585,6 +585,95 @@ create trigger on_auth_user_created
   for each row execute procedure public.criar_entidade_do_novo_usuario();
 ```
 
+# OPÇÃO 2: toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo CLIENTE:
+```
+-- 1. ADICIONAR COLUNAS FALTANTES (caso não existam)
+do $$ 
+begin
+    if not exists (select 1 from pg_attribute where attrelid = 'public.entidades'::regclass and attname = 'url_foto_avatar') then
+        alter table public.entidades add column url_foto_avatar text;
+    end if;
+
+    if not exists (select 1 from pg_attribute where attrelid = 'public.entidades'::regclass and attname = 'user_id') then
+        alter table public.entidades add column user_id uuid references auth.users(id);
+    end if;
+end $$;
+
+-- 2. AJUSTAR A FUNÇÃO DE GATILHO (O CORAÇÃO DO SISTEMA)
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  -- Cria o perfil de acesso
+  insert into public.profiles (id, role)
+  values (new.id, 'usuario');
+
+  -- Cria o registro na tabela Entidades como CLIENTE
+  insert into public.entidades (
+    user_id, 
+    nome_razao_social, 
+    email, 
+    is_cliente,      
+    is_fornecedor,
+    is_colaborador,  
+    created_by,
+    ativo
+  )
+  values (
+    new.id, 
+    coalesce(new.raw_user_meta_data->>'nome', 'Novo Cliente'), 
+    new.email, 
+    true,   -- Seta como cliente
+    false, 
+    false, 
+    new.id, -- Ele é o dono do próprio registro
+    true
+  );
+
+  return new;
+end;
+$$ language plpgsql security definer;
+
+-- 3. RESETAR E APLICAR POLÍTICAS DE SEGURANÇA (RLS)
+-- Removemos as antigas para não haver conflito
+drop policy if exists "RLS_SELECT_ENTIDADES" on public.entidades;
+drop policy if exists "RLS_INSERT_ENTIDADES" on public.entidades;
+drop policy if exists "RLS_UPDATE_ENTIDADES" on public.entidades;
+drop policy if exists "RLS_DELETE_ENTIDADES" on public.entidades;
+
+-- Habilitar RLS
+alter table public.entidades enable row level security;
+
+-- LEITURA: Usuário vê a si mesmo / Admin vê tudo
+create policy "RLS_SELECT_ENTIDADES" on public.entidades
+for select to authenticated
+using (
+  auth.uid() = user_id 
+  or (select role from public.profiles where id = auth.uid()) = 'admin'
+);
+
+-- INSERÇÃO: Apenas ADM pode cadastrar novas entidades manualmente
+create policy "RLS_INSERT_ENTIDADES" on public.entidades
+for insert to authenticated
+with check (
+  (select role from public.profiles where id = auth.uid()) = 'admin'
+);
+
+-- ATUALIZAÇÃO: Usuário altera apenas seus dados / Admin altera tudo
+create policy "RLS_UPDATE_ENTIDADES" on public.entidades
+for update to authenticated
+using (
+  auth.uid() = user_id 
+  or (select role from public.profiles where id = auth.uid()) = 'admin'
+);
+
+-- EXCLUSÃO: Só ADM
+create policy "RLS_DELETE_ENTIDADES" on public.entidades
+for delete to authenticated
+using (
+  (select role from public.profiles where id = auth.uid()) = 'admin'
+);
+
+``
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Policies para a Tabela entidades
 ```
