@@ -713,7 +713,52 @@ using (
   or (select role from public.profiles where id = auth.uid()) = 'admin'
 );
 ```
+# FINALIZANDO FAZE_1 DE SEGURANÇA
+```
+-- 1. CRIAR TABELA DE AUDITORIA (LOGS DE ACESSO)
+create table if not exists public.logs_acesso (
+  id uuid primary key default gen_random_uuid(),
+  usuario_id uuid references auth.users(id),
+  tabela text,
+  operacao text,
+  registro_id uuid,
+  data_hora timestamp with time zone default now(),
+  detalhes jsonb -- Guarda o que foi alterado
+);
 
+-- 2. FUNÇÃO PARA REGISTRAR LOG AUTOMÁTICO
+create or replace function public.processar_log_auditoria()
+returns trigger as $$
+begin
+  insert into public.logs_acesso (usuario_id, tabela, operacao, registro_id, detalhes)
+  values (
+    auth.uid(), 
+    TG_TABLE_NAME, 
+    TG_OP, 
+    coalesce(new.id, old.id),
+    row_to_json(new)::jsonb
+  );
+  return new;
+end;
+$$ language plpgsql security definer;
+
+-- 3. GATILHO DE AUDITORIA PARA A TABELA ENTIDADES
+drop trigger if exists trg_auditoria_entidades on public.entidades;
+create trigger trg_auditoria_entidades
+after insert or update or delete on public.entidades
+for each row execute function public.processar_log_auditoria();
+
+-- 4. RESTRIÇÃO DE PII (Campos Sensíveis como CPF)
+-- Criamos uma View para usuários comuns que esconde o CPF completo ou diagnósticos
+-- Ou, via Policy, garantimos que apenas Admins possam dar Update no CPF
+create policy "Apenas Admins editam CPF" 
+on public.entidades 
+for update 
+to authenticated
+using ( (select role from public.profiles where id = auth.uid()) = 'admin' )
+with check ( (select role from public.profiles where id = auth.uid()) = 'admin' );
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html (redireciona para src/view/index.html)
 ```
