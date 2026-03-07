@@ -374,19 +374,55 @@ begin
 end $$;
 ```
 # 🟥 sql (exemplo de como criar uma tabelas)
+* Criação da tabela de Entidades
+* 
 ```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
+-- Criação da tabela de Entidades
+create table public.entidades (
+  -- Identificador único (Primary Key)
+  id uuid not null default gen_random_uuid(),
+  primary key (id),
 
-CREATE TABLE public.notes (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid DEFAULT auth.uid(),
-  title text NOT NULL,
-  content text,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
-  CONSTRAINT notes_pkey PRIMARY KEY (id),
-  CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
+  -- Metadados de controle
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+  
+  -- Dados Principais
+  nome_razao_social text not null,
+  nome_fantasia text,
+  cpf_cnpj text unique, -- Unique para evitar duplicidade de cadastros
+  tipo_entidade text check (tipo_entidade in ('PF', 'PJ')), -- Pessoa Física ou Jurídica
+  
+  -- Contato
+  email text,
+  telefone text,
+  celular text,
+  
+  -- Endereço
+  cep text,
+  logradouro text,
+  numero text,
+  complemento text,
+  bairro text,
+  cidade text,
+  estado char(2),
+  
+  -- Classificação (Útil para o controller filtrar)
+  is_cliente boolean default false,
+  is_fornecedor boolean default false,
+  is_colaborador boolean default false,
+  ativo boolean default true
 );
+
+-- Habilitar Row Level Security (Segurança do Supabase)
+alter table public.entidades enable row level security;
+
+-- Criar política de acesso (Permitir leitura/escrita para usuários autenticados)
+create policy "Permitir tudo para usuários autenticados" 
+on public.entidades 
+for all 
+to authenticated 
+using (true);
 
 ```
 
