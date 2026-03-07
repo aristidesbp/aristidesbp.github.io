@@ -325,28 +325,11 @@ PROJETO_ERP/
 *   [ ] **Configurar Regra de "Dono do Dado":** Aplicar a política `auth.uid() == profissional_responsavel_id` para blindar o acesso.
 *   [ ] **Criar Tabela de Auditoria (`logs_acesso`):** Implementar o registro de rastreabilidade para identificar quem visualizou dados sensíveis e quando, conforme exigido pela LGPD.
 *   [ ] **Restrição de PII:** Aplicar políticas de acesso restrito especificamente para campos de **CPF e Diagnósticos**.
-```
-```
-## FASE_2:
-### 📂 Infraestrutura e Repositório (GitHub/Produção)
-*   [ ] **Migração para Variáveis de Ambiente:** Mover as chaves do Supabase (`anon_key` e `URL`) para um arquivo `.env` seguro, removendo-as do código-fonte.
-*   [ ] **Configurar `.gitignore`:** Garantir que o arquivo `.env` e outros arquivos de configuração local nunca sejam enviados ao repositório público.
-*   [ ] **Ajuste de Permissões da `anon_key`:** Verificar no console do Supabase se a chave pública possui apenas as permissões mínimas necessárias.
-*   [ ] **Ativar GitHub Actions:** Configurar o fluxo de automação para realizar análise de segurança básica em cada novo *commit*.
-```
-```
-## FASE_3:
-Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-PSC, aqui está o **checklist detalhado** para o refinamento da **Fase 1 (Segurança e Infraestrutura)**:
-### 🛡️ Central de Segurança (Middleware e Autenticação)
 *   [ ] **Implementar `src/controller/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
 *   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
-```
-```
-## FASE_4:
 ### ⚠️ Tratamento de Erros e UX
 *   [ ] **Padronização de Mensagens de Erro:** Criar uma função global para interceptar erros do banco de dados (ex: Postgres Error 42P01) e exibir apenas mensagens amigáveis ao usuário.
 *   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
-
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -491,185 +474,6 @@ on public.profiles for select
 using ( auth.uid() = id );
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🟥 Habilitar o Row Level Security (Segurança de Linha)
-```
--- Remove políticas antigas para evitar conflito
-drop policy if exists "Permitir tudo para usuários autenticados" on public.entidades;
-drop policy if exists "Acesso restrito a usuários autorizados" on public.entidades;
-
--- Cria a política robusta
-create policy "Acesso restrito a usuários autorizados" 
-on public.entidades 
-for all 
-to authenticated 
-using (
-  auth.uid() = created_by 
-  or exists (
-    select 1 from public.profiles 
-    where id = auth.uid() and role = 'admin'
-  )
-);
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# OPÇÃO 1: toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo COLABORADOR:
-```
--- 1. Garanta que a tabela entidades tem o campo para o ID do usuário
-alter table public.entidades add column user_id uuid references auth.users(id);
-
--- 2. Função que o banco vai executar sozinha
-create or replace function public.criar_entidade_do_novo_usuario()
-returns trigger as $$
-begin
-  insert into public.entidades (id, nome_razao_social, email, is_colaborador, user_id)
-  values (new.id, new.raw_user_meta_data->>'nome', new.email, true, new.id);
-  return new;
-end;
-$$ language plpgsql security definer;
-
--- 3. O Gatilho (Trigger)
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.criar_entidade_do_novo_usuario();
-```
-
-# OPÇÃO 2: toda vez que alguém se cadastrar, ele vire automaticamente uma "Entidade" do tipo CLIENTE:
-```
--- 1. ADICIONAR COLUNAS FALTANTES (caso não existam)
-do $$ 
-begin
-    if not exists (select 1 from pg_attribute where attrelid = 'public.entidades'::regclass and attname = 'url_foto_avatar') then
-        alter table public.entidades add column url_foto_avatar text;
-    end if;
-
-    if not exists (select 1 from pg_attribute where attrelid = 'public.entidades'::regclass and attname = 'user_id') then
-        alter table public.entidades add column user_id uuid references auth.users(id);
-    end if;
-end $$;
-
--- 2. AJUSTAR A FUNÇÃO DE GATILHO (O CORAÇÃO DO SISTEMA)
-create or replace function public.handle_new_user()
-returns trigger as $$
-begin
-  -- Cria o perfil de acesso
-  insert into public.profiles (id, role)
-  values (new.id, 'usuario');
-
-  -- Cria o registro na tabela Entidades como CLIENTE
-  insert into public.entidades (
-    user_id, 
-    nome_razao_social, 
-    email, 
-    is_cliente,      
-    is_fornecedor,
-    is_colaborador,  
-    created_by,
-    ativo
-  )
-  values (
-    new.id, 
-    coalesce(new.raw_user_meta_data->>'nome', 'Novo Cliente'), 
-    new.email, 
-    true,   -- Seta como cliente
-    false, 
-    false, 
-    new.id, -- Ele é o dono do próprio registro
-    true
-  );
-
-  return new;
-end;
-$$ language plpgsql security definer;
-
--- 3. RESETAR E APLICAR POLÍTICAS DE SEGURANÇA (RLS)
--- Removemos as antigas para não haver conflito
-drop policy if exists "RLS_SELECT_ENTIDADES" on public.entidades;
-drop policy if exists "RLS_INSERT_ENTIDADES" on public.entidades;
-drop policy if exists "RLS_UPDATE_ENTIDADES" on public.entidades;
-drop policy if exists "RLS_DELETE_ENTIDADES" on public.entidades;
-
--- Habilitar RLS
-alter table public.entidades enable row level security;
-
--- LEITURA: Usuário vê a si mesmo / Admin vê tudo
-create policy "RLS_SELECT_ENTIDADES" on public.entidades
-for select to authenticated
-using (
-  auth.uid() = user_id 
-  or (select role from public.profiles where id = auth.uid()) = 'admin'
-);
-
--- INSERÇÃO: Apenas ADM pode cadastrar novas entidades manualmente
-create policy "RLS_INSERT_ENTIDADES" on public.entidades
-for insert to authenticated
-with check (
-  (select role from public.profiles where id = auth.uid()) = 'admin'
-);
-
--- ATUALIZAÇÃO: Usuário altera apenas seus dados / Admin altera tudo
-create policy "RLS_UPDATE_ENTIDADES" on public.entidades
-for update to authenticated
-using (
-  auth.uid() = user_id 
-  or (select role from public.profiles where id = auth.uid()) = 'admin'
-);
-
--- EXCLUSÃO: Só ADM
-create policy "RLS_DELETE_ENTIDADES" on public.entidades
-for delete to authenticated
-using (
-  (select role from public.profiles where id = auth.uid()) = 'admin'
-);
-
-```
-
-# FINALIZANDO FAZE_1 DE SEGURANÇA
-```
--- 1. CRIAR TABELA DE AUDITORIA (LOGS DE ACESSO)
-create table if not exists public.logs_acesso (
-  id uuid primary key default gen_random_uuid(),
-  usuario_id uuid references auth.users(id),
-  tabela text,
-  operacao text,
-  registro_id uuid,
-  data_hora timestamp with time zone default now(),
-  detalhes jsonb -- Guarda o que foi alterado
-);
-
--- 2. FUNÇÃO PARA REGISTRAR LOG AUTOMÁTICO
-create or replace function public.processar_log_auditoria()
-returns trigger as $$
-begin
-  insert into public.logs_acesso (usuario_id, tabela, operacao, registro_id, detalhes)
-  values (
-    auth.uid(), 
-    TG_TABLE_NAME, 
-    TG_OP, 
-    coalesce(new.id, old.id),
-    row_to_json(new)::jsonb
-  );
-  return new;
-end;
-$$ language plpgsql security definer;
-
--- 3. GATILHO DE AUDITORIA PARA A TABELA ENTIDADES
-drop trigger if exists trg_auditoria_entidades on public.entidades;
-create trigger trg_auditoria_entidades
-after insert or update or delete on public.entidades
-for each row execute function public.processar_log_auditoria();
-
--- 4. RESTRIÇÃO DE PII (Campos Sensíveis como CPF)
--- Criamos uma View para usuários comuns que esconde o CPF completo ou diagnósticos
--- Ou, via Policy, garantimos que apenas Admins possam dar Update no CPF
-create policy "Apenas Admins editam CPF" 
-on public.entidades 
-for update 
-to authenticated
-using ( (select role from public.profiles where id = auth.uid()) = 'admin' )
-with check ( (select role from public.profiles where id = auth.uid()) = 'admin' );
-
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html (redireciona para src/view/index.html)
 ```
@@ -820,7 +624,6 @@ with check ( (select role from public.profiles where id = auth.uid()) = 'admin' 
 </body>
 </html>
 ```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/controller/navbarjs
