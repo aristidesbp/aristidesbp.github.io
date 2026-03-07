@@ -347,21 +347,8 @@ Segurança em "nível bancário" e nas diretrizes de infraestrutura para o ERP-P
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SUPABASE
-
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-* 
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-* Marcar sl
----
-
-
-# OBS: CASO JA TENHA UM BANCO DE DADOS VC PODE:
+* **OBS**: CASO JA TENHA UM BANCO DE DADOS VC PODE:
+  
 ## 🟥 FAZER BKP DO SUPABASE
 ```
 SELECT 
@@ -434,12 +421,41 @@ ADD CONSTRAINT venda_itens_venda_id_fkey
    REFERENCES public.vendas(id) 
    ON DELETE CASCADE;
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+SUPABASE
+* Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+Config do projeto
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+* selecina o ssh
+* criar!
+Configuure:
+* Authentication/URL Configuration/Site URL: https://url_do_seu_site
+* Authentication/URL Configuration/Redirect URLs: https://url_do_seu_site
+Chaves de acesso
+* Data API/API URL: copiar_url_do_danco_de_dados
+* API Keys/Legacy anon, service_role API keys/anon public: copiar_chave_de_acesso_do_supabase.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# 🟥 sql (exemplo de como criar uma tabelas)
-* Criação da tabela de Entidades
-* 
+# src/model/supabase_config.js
+```
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://seu_endereço';
+const supabaseKey = 'sua_senha';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase; 
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥 SQL DA TABELA: public.entidades 
+  
 ```
 -- Criação da tabela de Entidades
 create table public.entidades (
@@ -604,10 +620,8 @@ using (
 );
 ```
 
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# assets/erp/index.html (redirecionando para src/view/index.html)
+# index.html (redireciona para src/view/index.html)
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -852,38 +866,6 @@ using (
 
 })();
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-SUPABASE
-* Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-Config do projeto
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-* selecina o ssh
-* criar!
-Configuure:
-* Authentication/URL Configuration/Site URL: https://url_do_seu_site
-* Authentication/URL Configuration/Redirect URLs: https://url_do_seu_site
-Chaves de acesso
-* Data API/API URL: copiar_url_do_danco_de_dados
-* API Keys/Legacy anon, service_role API keys/anon public: copiar_chave_de_acesso_do_supabase.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# src/model/supabase_config.js
-```
-// SUPABASE_CONFIG.JS
-const supabaseUrl = 'https://seu_endereço';
-const supabaseKey = 'sua_senha';
-// Inicializa o cliente Supabase
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-// Exporta para ser usado em outros scripts
-window.supabaseClient = _supabase; 
-```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # navbar.j
