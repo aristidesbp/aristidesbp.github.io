@@ -1237,6 +1237,47 @@ USING (true);
 ```
 
 
+# sql para criar apolicies 
+```
+-- 1. Habilitar a Segurança ao Nível de Linha (RLS) na tabela
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- 2. Remover políticas existentes (para evitar erros de duplicado se estiver a reexecutar)
+DROP POLICY IF EXISTS "Permitir leitura para utilizadores autenticados" ON public.entidades;
+DROP POLICY IF EXISTS "Permitir inserção para utilizadores autenticados" ON public.entidades;
+DROP POLICY IF EXISTS "Permitir atualização para utilizadores autenticados" ON public.entidades;
+DROP POLICY IF EXISTS "Permitir exclusão para utilizadores autenticados" ON public.entidades;
+
+-- 3. Criar Política de LEITURA (SELECT)
+-- Permite que qualquer pessoa que tenha feito login veja os dados
+CREATE POLICY "Permitir leitura para utilizadores autenticados" 
+ON public.entidades FOR SELECT 
+TO authenticated 
+USING (true);
+
+-- 4. Criar Política de INSERÇÃO (INSERT)
+-- Permite que utilizadores logados criem novos registos
+CREATE POLICY "Permitir inserção para utilizadores autenticados" 
+ON public.entidades FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+-- 5. Criar Política de ATUALIZAÇÃO (UPDATE)
+-- Permite que utilizadores logados alterem registos existentes
+CREATE POLICY "Permitir atualização para utilizadores autenticados" 
+ON public.entidades FOR UPDATE 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+
+-- 6. Criar Política de EXCLUSÃO (DELETE)
+-- Permite que utilizadores logados apaguem registos
+CREATE POLICY "Permitir exclusão para utilizadores autenticados" 
+ON public.entidades FOR DELETE 
+TO authenticated 
+USING (true);
+```
+
 
 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 
