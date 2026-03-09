@@ -15,28 +15,6 @@ function alternarSenha() {
 }
     
 
-/**
- * Nome do arquivo: login_google.js
- * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
- */
-async function loginComGoogle() {
-    const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            // Isso pega a URL atual (login.html) e troca por index.html
-            redirectTo: window.location.href.replace('login.html', 'index.html')
-        }
-    });
-
-    if (error) {
-        console.error("Erro no login Google:", error.message);
-        alert("Erro ao conectar com Google: " + error.message);
-    }
-}
-
-
-
-
 
     /**
  * Nome do arquivo: realizar_cadastro.js
