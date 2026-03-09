@@ -401,6 +401,8 @@ PROJETO_ERP/
                         └── index.ts
 
 ```
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/vew/login.html
 ```
@@ -644,25 +646,6 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // Exporta para ser usado em outros scripts
 window.supabaseClient = _supabase; 
 ```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Criando a Tabela de Perfis (Nível Bancário)
-```
--- Tabela para definir quem é Admin ou Usuário Comum
-create table public.profiles (
-  id uuid references auth.users on delete cascade primary key,
-  role text check (role in ('admin', 'usuario')) default 'usuario'
-);
-
--- Habilita RLS na tabela de perfis
-alter table public.profiles enable row level security;
-
--- Permite que usuários leiam seus próprios perfis
-create policy "Usuários veem próprio perfil" 
-on public.profiles for select 
-using ( auth.uid() = id );
-```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html (redireciona para src/view/index.html)
 ```
@@ -696,217 +679,52 @@ using ( auth.uid() = id );
 </body>
 </html>
 ```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/view/index.thtm (menu/dashbord)
 ```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA ERP ABP - Inicio</title>
-<!-- ############################################################################# --> 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>     
-<script src="../../model/supabase_config.js"></script> 
-<script src="../model/verificar_login.js"></script> 
-<!-- ############################################################################# --> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
- /* index.css */
-        /* Configurações Gerais */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding-top: 80px; /* Espaço para a navbar fixa */
-        }
 
-        /* Grid de Cards */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-color: #3ecf8e;
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: #3ecf8e;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-</style>
-<!-- ############################################################################# -->
-
-</head>
-<body>
-    
- <!-- Navbar -->
- <div id="navbar"></div>
- <script src="../controller/navbar.js"></script>
-
-<!-- CONTEÚDO DA PÁGINA -->
-<div class="content">      
-  <div class="grid">
-
-   <a href="usuario.html" class="card">
-      <i class="fas fa-users"></i>
-      <h3>Gestão de usuarios</h3>
-    </a>
-    <a href="entidades.html" class="card">
-      <i class="fas fa-users"></i>
-      <h3>Gestão de Entidades</h3>
-    </a>
-
-    <a href="financeiro.html" class="card">
-      <i class="fas fa-hand-holding-usd"></i>
-      <h3>Financeiro</h3>
-    </a>
-
-    <a href="produtos.html" class="card">
-      <i class="fas fa-box"></i>
-      <h3>Produtos</h3>
-    </a>
-
- 
-
-    <a href="pdv.html" class="card">
-      <i class="fas fa-shopping-basket"></i>
-      <h3>PDV</h3>
-    </a>
-
-  </div>        
-</div>
-
-</body>
-</html>
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Criando a Tabela de Perfis (Nível Bancário)
+```
+-- Tabela para definir quem é Admin ou Usuário Comum
+create table public.profiles (
+  id uuid references auth.users on delete cascade primary key,
+  role text check (role in ('admin', 'usuario')) default 'usuario'
+);
+
+-- Habilita RLS na tabela de perfis
+alter table public.profiles enable row level security;
+
+-- Permite que usuários leiam seus próprios perfis
+create policy "Usuários veem próprio perfil" 
+on public.profiles for select 
+using ( auth.uid() = id );
+```
+
+
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/controller/navbarjs
 ```
-/**
- * navbar.js
- * Injeta automaticamente a navbar dentro de #navbar
- * Depende apenas do CSS externo já existente
- */
 
-(function () {
-
-    function initNavbar() {
-        const container = document.getElementById('navbar');
-
-        // Se não existir o container, não faz nada
-        if (!container) return;
-
-        // Evita reinjeção
-        if (container.dataset.loaded === 'true') return;
-        container.dataset.loaded = 'true';
-
-        // HTML da navbar (APENAS VIEW)
-        container.innerHTML = `
-
-        
-    <!-- NAVBAR -->
-<style>
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-nav {
-            background: #ef4444;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-home {
-            background: #3ecf8e !important;
-        }
-  
-</style>
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-     <a href="https://aristidesbp.github.io/assets/erp" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- FIM DA NAVBAR -->
-            
-        `;
-    }
-
-    // Execução segura, com ou sem defer
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initNavbar);
-    } else {
-        initNavbar();
-    }
-
-})();
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
