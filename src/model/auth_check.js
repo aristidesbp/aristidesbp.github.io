@@ -1,29 +1,34 @@
 /**
- * MIDDLEWARE DE PROTEÇÃO - ERP-PSC
- * Finalidade: Bloquear a renderização do HTML antes da validação do JWT.
- * Referência: Planejamento Fase 1 - Central de Segurança [3, 4]
+ * MIDDLEWARE DE PROTEÇÃO CORRIGIDO
  */
-
 (async function validateAccess() {
-    // 1. Bloqueio imediato da interface (Prevenção de FOUC - Flicker of Unauthenticated Content)
+    // 1. Bloqueia a interface para evitar que dados apareçam antes da checagem
     document.documentElement.style.display = 'none';
 
-    // Importação dinâmica da configuração do Supabase (ajustar caminho se necessário)
-    // Nota: O projeto utiliza supabase_config.js para chaves de acesso [5, 6]
     try {
-        const { supabase } = await import('../model/supabase_config.js');
+        // Aguarda um instante para garantir que o supabase_config.js carregou a variável global
+        if (!window.supabaseClient) {
+            // Se o script de config ainda não carregou, esperamos um pouco
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
 
-        // 2. Verificação da Sessão e do Token JWT
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const supabase = window.supabaseClient;
 
-        // 3. Lógica de Redirecionamento Blindado
-        if (error || !session) {
-            console.warn("Acesso não autorizado ou sessão expirada. Redirecionando...");
-            window.location.href = 'login.html'; 
+        if (!supabase) {
+            console.error("Erro: supabaseClient não configurado.");
+            window.location.href = 'login.html';
             return;
         }
 
-        // 4. Verificação de Integridade (Opcional: validar se o token ainda é aceito pelo backend)
+        // 2. Verificação da Sessão
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error || !session) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 3. Verificação de Integridade (valida o token no servidor)
         const { data: { user }, error: userError } = await supabase.auth.getUser();
 
         if (userError || !user) {
@@ -31,13 +36,28 @@
             return;
         }
 
-        // 5. Liberação da Interface
-        // Se o usuário estiver autenticado com um JWT válido, o sistema permite o carregamento
+        // 4. Liberação da Interface
         document.documentElement.style.display = 'block';
 
     } catch (err) {
-        console.error("Erro crítico na validação de segurança:", err);
-        // Em caso de falha técnica no script de segurança, o sistema bloqueia o acesso por padrão
+        console.error("Erro crítico na validação:", err);
         window.location.href = 'login.html';
     }
 })();
+
+// Função global de logout para substituir a que estava dando erro
+window.sairDaConta = async function() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            if (window.supabaseClient) {
+                await window.supabaseClient.auth.signOut();
+            }
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+};
