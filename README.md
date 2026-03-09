@@ -1277,6 +1277,51 @@ ON public.entidades FOR DELETE
 TO authenticated 
 USING (true);
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# sql tabela public.profiles
+```
+-- 1. Criação da Tabela Profiles
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id uuid NOT NULL PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email text,
+  role text DEFAULT 'usuario'::text CHECK (role = ANY (ARRAY['admin'::text, 'usuario'::text])),
+  nome_completo text,
+  avatar_url text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Habilitar RLS (Segurança)
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- 3. Políticas de Acesso
+-- Qualquer usuário logado pode ver o próprio perfil
+CREATE POLICY "Usuários podem ver o próprio perfil" 
+ON public.profiles FOR SELECT 
+USING (auth.uid() = id);
+
+-- Apenas o próprio usuário ou um admin pode atualizar o perfil
+CREATE POLICY "Usuários podem atualizar o próprio perfil" 
+ON public.profiles FOR UPDATE 
+USING (auth.uid() = id);
+
+-- 4. Função para Criar Perfil Automático (Trigger)
+-- Esta função copia o e-mail do cadastro para a tabela profiles
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, role)
+  VALUES (new.id, new.email, 'usuario');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 5. Gatilho que dispara após um novo registro em auth.users
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+```
 
 
 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
