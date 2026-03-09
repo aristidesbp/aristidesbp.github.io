@@ -68,29 +68,36 @@
 
     // --- LOGICA DE LOGOUT (NÍVEL BANCÁRIO) ---
     // Anexamos ao objeto 'window' para que o onclick="sairDaConta()" funcione
+    
+    
     window.sairDaConta = async function() {
-        // Confirmação simples para evitar cliques acidentais
-        if (!confirm("Deseja realmente sair do sistema?")) return;
+    if (!confirm("Deseja realmente sair do sistema?")) return;
 
-        try {
-            // 1. Encerra a sessão no servidor do Supabase
-            const { error } = await supabase.auth.signOut();
-            
+    try {
+        // CORREÇÃO: Usando o nome correto do cliente global
+        if (window.supabaseClient) {
+            const { error } = await window.supabaseClient.auth.signOut();
             if (error) throw error;
-
-            // 2. Limpa dados sensíveis do navegador (Token, Cache, etc)
-            localStorage.clear();
-            sessionStorage.clear();
-
-            // 3. Redireciona para a página de login/index
-            // Como você está no GitHub Pages, o ideal é usar um caminho relativo ou a raiz
-            window.location.href = 'index.html'; 
-
-        } catch (error) {
-            console.error('Erro ao encerrar sessão:', error.message);
-            alert('Erro de segurança ao sair. Por favor, feche o navegador.');
         }
-    };
+
+        // Limpa tudo
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Redireciona para o login
+        window.location.href = 'login.html'; 
+
+    } catch (error) {
+        console.error('Erro ao encerrar sessão:', error.message);
+        // Se falhar o logout no servidor, limpamos o local e saímos assim mesmo
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+};
+
+    
+    
+    
 
     // Execução
     if (document.readyState === 'loading') {
