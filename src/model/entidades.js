@@ -73,6 +73,58 @@ async function loadEntities() {
     }
 }
 
+
+function renderTable(data) {
+    const tbody = document.getElementById('entities-list');
+    if (!tbody) return;
+
+    tbody.innerHTML = data.map(e => {
+        // Limpa o telefone para o link do WhatsApp (remove espaços, parênteses e traços)
+        const telLimpo = e.telefone ? e.telefone.replace(/\D/g, '') : '';
+        // Se o número não tiver DDI (55), adicionamos por padrão
+        const whatsappLink = telLimpo.length <= 11 ? `55${telLimpo}` : telLimpo;
+
+        return `
+        <tr class="border-t">
+            <td class="p-3">
+                <strong>${e.nome_completo}</strong><br>
+                <small class="text-gray-500 uppercase text-xs">${e.relacionamento || ''}</small>
+            </td>
+            <td class="p-3">
+                ${e.telefone || '-'}<br>
+                <small class="text-gray-400">${e.email || '-'}</small>
+            </td>
+            <td class="p-3">
+                <span class="px-2 py-1 rounded text-xs font-bold ${e.status === 'ativo' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                    ${e.status || 'Ativo'}
+                </span>
+            </td>
+            <td class="p-3 text-lg flex gap-2">
+                ${e.telefone ? `
+                    <a href="https://wa.me/${whatsappLink}" target="_blank" class="text-green-500 hover:text-green-700" title="Enviar WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                ` : ''}
+
+                ${e.email ? `
+                    <a href="mailto:${e.email}" class="text-orange-500 hover:text-orange-700" title="Enviar E-mail">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                ` : ''}
+
+                <div class="border-l mx-1 h-6"></div> <button class="text-blue-500 hover:text-blue-700" onclick="editFull('${e.id}')" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-700" onclick="deleteEntity('${e.id}')" title="Excluir">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `}).join('');
+}
+
+
+/*
 function renderTable(data) {
     const tbody = document.getElementById('entities-list');
     if (!tbody) return;
@@ -88,7 +140,7 @@ function renderTable(data) {
             </td>
         </tr>
     `).join('');
-}
+}*/
 
 function resetForm() {
     document.getElementById('edit-id').value = '';
