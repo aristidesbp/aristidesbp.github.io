@@ -285,6 +285,93 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SUPABASE
+* **OBS**: CASO JA TENHA UM BANCO DE DADOS VC PODE:
+  
+## 🟥 FAZER BKP DO SUPABASE
+```
+SELECT 
+    'CREATE POLICY ' || quote_ident(policyname) || 
+    ' ON ' || tablename || 
+    ' FOR ' || cmd || 
+    ' TO ' || array_to_string(roles, ',') || 
+    ' USING (' || qual || ')' || 
+    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'NOME_DA_SUA_TABELA';
+```
+
+# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
+@ 👉 Isso é o mais próximo possível de um banco novo.
+``` 
+-- Apagar tabelas públicas
+do $$
+declare
+  r record;
+begin
+  for r in (select tablename from pg_tables where schemaname = 'public') loop
+    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
+  end loop;
+end $$;
+```
+
+## APAGAR GATILHOS
+```
+-- 1. Apaga o Gatilho da tabela de usuários
+drop trigger if exists on_auth_user_created on auth.users;
+
+-- 2. Apaga a função que o gatilho executava (opcional, mas limpa o banco)
+drop function if exists public.handle_new_user();
+```
+
+## 🟥 APAGAR USUARIO E SUAS DEPENDENCIAS
+```
+-- 1. Tabela de PRODUTOS
+ALTER TABLE public.produtos
+DROP CONSTRAINT IF EXISTS produtos_entidade_id_fkey,
+ADD CONSTRAINT produtos_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 2. Tabela de FINANCEIRO
+ALTER TABLE public.financeiro
+DROP CONSTRAINT IF EXISTS financeiro_entidade_id_fkey,
+ADD CONSTRAINT financeiro_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+-- 3. Tabela de VENDAS
+ALTER TABLE public.vendas
+DROP CONSTRAINT IF EXISTS vendas_entidade_id_fkey,
+ADD CONSTRAINT vendas_entidade_id_fkey 
+   FOREIGN KEY (entidade_id) 
+   REFERENCES public.entidades(id) 
+   ON DELETE CASCADE;
+
+```
+```
+-- 1. Ajusta o vínculo entre Itens da Venda e Produtos
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_produto_id_fkey,
+ADD CONSTRAINT venda_itens_produto_id_fkey 
+   FOREIGN KEY (produto_id) 
+   REFERENCES public.produtos(id) 
+   ON DELETE CASCADE;
+
+-- 2. Por segurança, garante que o vínculo entre Item e Venda também seja cascata
+ALTER TABLE public.venda_itens
+DROP CONSTRAINT IF EXISTS venda_itens_venda_id_fkey,
+ADD CONSTRAINT venda_itens_venda_id_fkey 
+   FOREIGN KEY (venda_id) 
+   REFERENCES public.vendas(id) 
+   ON DELETE CASCADE;
+```
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CRIANDO UM PROJETO COM O SUPABASE (ARQUITETURA MVC)
 
@@ -392,109 +479,6 @@ PROJETO_ERP/
 </html>
 
 ```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SEGURANÇA 
-```
-## FASE_1:
-### 🔐 Proteção de Dados e Banco (Supabase/PostgreSQL)
-*   [ ] **Habilitar RLS (Row Level Security):** Ativar a segurança de linha em todas as tabelas, garantindo que nenhuma informação seja lida sem uma política definida.
-*   [ ] **Configurar Regra de "Dono do Dado":** Aplicar a política `auth.uid() == profissional_responsavel_id` para blindar o acesso.
-*   [ ] **Criar Tabela de Auditoria (`logs_acesso`):** Implementar o registro de rastreabilidade para identificar quem visualizou dados sensíveis e quando, conforme exigido pela LGPD.
-*   [ ] **Restrição de PII:** Aplicar políticas de acesso restrito especificamente para campos de **CPF e Diagnósticos**.
-*   [ ] **Implementar `src/controller/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
-*   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
-### ⚠️ Tratamento de Erros e UX
-*   [ ] **Padronização de Mensagens de Erro:** Criar uma função global para interceptar erros do banco de dados (ex: Postgres Error 42P01) e exibir apenas mensagens amigáveis ao usuário.
-*   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
-* **OBS**: CASO JA TENHA UM BANCO DE DADOS VC PODE:
-  
-## 🟥 FAZER BKP DO SUPABASE
-```
-SELECT 
-    'CREATE POLICY ' || quote_ident(policyname) || 
-    ' ON ' || tablename || 
-    ' FOR ' || cmd || 
-    ' TO ' || array_to_string(roles, ',') || 
-    ' USING (' || qual || ')' || 
-    COALESCE(' WITH CHECK (' || with_check || ')', '') || ';' AS sql_backup
-FROM pg_policies
-WHERE schemaname = 'public' 
-  AND tablename = 'NOME_DA_SUA_TABELA';
-```
-
-# 🧨 RESET TOTAL DO SUPABASE CASO NAO QUEIRA EXCLUIR O PROJETO (DADOS + AUTH + STORAGE)
-@ 👉 Isso é o mais próximo possível de um banco novo.
-``` 
--- Apagar tabelas públicas
-do $$
-declare
-  r record;
-begin
-  for r in (select tablename from pg_tables where schemaname = 'public') loop
-    execute 'drop table if exists public.' || quote_ident(r.tablename) || ' cascade';
-  end loop;
-end $$;
-```
-
-## APAGAR GATILHOS
-```
--- 1. Apaga o Gatilho da tabela de usuários
-drop trigger if exists on_auth_user_created on auth.users;
-
--- 2. Apaga a função que o gatilho executava (opcional, mas limpa o banco)
-drop function if exists public.handle_new_user();
-```
-
-## 🟥 APAGAR USUARIO E SUAS DEPENDENCIAS
-```
--- 1. Tabela de PRODUTOS
-ALTER TABLE public.produtos
-DROP CONSTRAINT IF EXISTS produtos_entidade_id_fkey,
-ADD CONSTRAINT produtos_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
--- 2. Tabela de FINANCEIRO
-ALTER TABLE public.financeiro
-DROP CONSTRAINT IF EXISTS financeiro_entidade_id_fkey,
-ADD CONSTRAINT financeiro_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
--- 3. Tabela de VENDAS
-ALTER TABLE public.vendas
-DROP CONSTRAINT IF EXISTS vendas_entidade_id_fkey,
-ADD CONSTRAINT vendas_entidade_id_fkey 
-   FOREIGN KEY (entidade_id) 
-   REFERENCES public.entidades(id) 
-   ON DELETE CASCADE;
-
-```
-```
--- 1. Ajusta o vínculo entre Itens da Venda e Produtos
-ALTER TABLE public.venda_itens
-DROP CONSTRAINT IF EXISTS venda_itens_produto_id_fkey,
-ADD CONSTRAINT venda_itens_produto_id_fkey 
-   FOREIGN KEY (produto_id) 
-   REFERENCES public.produtos(id) 
-   ON DELETE CASCADE;
-
--- 2. Por segurança, garante que o vínculo entre Item e Venda também seja cascata
-ALTER TABLE public.venda_itens
-DROP CONSTRAINT IF EXISTS venda_itens_venda_id_fkey,
-ADD CONSTRAINT venda_itens_venda_id_fkey 
-   FOREIGN KEY (venda_id) 
-   REFERENCES public.vendas(id) 
-   ON DELETE CASCADE;
-```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Criar conta e projeto
@@ -2931,6 +2915,22 @@ async function processarPagamento() {
 </html>
 ```
 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SEGURANÇA 
+```
+## FASE_1:
+### 🔐 Proteção de Dados e Banco (Supabase/PostgreSQL)
+*   [ ] **Habilitar RLS (Row Level Security):** Ativar a segurança de linha em todas as tabelas, garantindo que nenhuma informação seja lida sem uma política definida.
+*   [ ] **Configurar Regra de "Dono do Dado":** Aplicar a política `auth.uid() == profissional_responsavel_id` para blindar o acesso.
+*   [ ] **Criar Tabela de Auditoria (`logs_acesso`):** Implementar o registro de rastreabilidade para identificar quem visualizou dados sensíveis e quando, conforme exigido pela LGPD.
+*   [ ] **Restrição de PII:** Aplicar políticas de acesso restrito especificamente para campos de **CPF e Diagnósticos**.
+*   [ ] **Implementar `src/controller/auth_check.js`:** Criar o script verificador que bloqueia a renderização de qualquer elemento HTML antes de validar a integridade do Token JWT.
+*   [ ] **Configurar Logout por Inatividade:** Programar o encerramento automático da sessão após **30 minutos** sem interação do usuário.
+### ⚠️ Tratamento de Erros e UX
+*   [ ] **Padronização de Mensagens de Erro:** Criar uma função global para interceptar erros do banco de dados (ex: Postgres Error 42P01) e exibir apenas mensagens amigáveis ao usuário.
+*   [ ] **Feedback Visual (Tailwind):** Padronizar componentes de "Loading" para todas as chamadas assíncronas, melhorando a percepção de performance.
+```
 
 
 
