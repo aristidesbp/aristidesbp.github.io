@@ -682,13 +682,245 @@ window.supabaseClient = _supabase;
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # src/view/index.thtm (menu/dashbord)
 ```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../../assets/style/index.css">
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>   
+<script src="../controller/verificar_login.js"></script>   
+
+    
+    
+</head>
+<body>
+
+<div id="navbar"></div>
+<script src="../controller/navbar.js"></script>  
+
+<div class="content">      
+<div class="grid">
+<!-- cardes do menu-->
+
+<a href="testes.html" class="card">
+<i class="fas fa-shopping-basket"></i>
+<h3>testes</h3>
+</a>
+    
+    
+    <a href="entidades.html" class="card">
+    <i class="fas fa-users"></i>
+    <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+    <i class="fas fa-box"></i>
+    <h3>Produtos</h3>
+    </a>
+    
+ 
+
+            
+            <a href="vitrine.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>vitrine</h3>
+            </a>
+            
+            <a href="pdv.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>pdv</h3>
+            </a>
+            
+             
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+
+</body>
+</html>
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# assets/style/index.js
 ```
 
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
 
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
 
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
 
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# assets/controller/verificar_login.js
+```
+/**
+ * MIDDLEWARE DE PROTEÇÃO CORRIGIDO
+ */
+(async function validateAccess() {
+    // 1. Bloqueia a interface para evitar que dados apareçam antes da checagem
+    document.documentElement.style.display = 'none';
+
+    try {
+        // Aguarda um instante para garantir que o supabase_config.js carregou a variável global
+        if (!window.supabaseClient) {
+            // Se o script de config ainda não carregou, esperamos um pouco
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        const supabase = window.supabaseClient;
+
+        if (!supabase) {
+            console.error("Erro: supabaseClient não configurado.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 2. Verificação da Sessão
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error || !session) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 3. Verificação de Integridade (valida o token no servidor)
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 4. Liberação da Interface
+        document.documentElement.style.display = 'block';
+
+    } catch (err) {
+        console.error("Erro crítico na validação:", err);
+        window.location.href = 'login.html';
+    }
+})();
+
+// Função global de logout para substituir a que estava dando erro
+window.sairDaConta = async function() {
+    if(confirm("Deseja realmente sair do sistema?")) {
+        try {
+            if (window.supabaseClient) {
+                await window.supabaseClient.auth.signOut();
+            }
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            window.location.href = 'login.html';
+        }
+    }
+};
+```
 
 
 
