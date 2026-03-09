@@ -1171,6 +1171,70 @@ window.sairDaConta = async function() {
 ```
 
 
+# sql para ceiar a tabela entidades
+```
+-- 1. Criação da Tabela
+CREATE TABLE IF NOT EXISTS public.entidades (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    
+    -- Informações Básicas
+    nome_completo TEXT NOT NULL,
+    cpf TEXT,
+    data_nascimento DATE,
+    email TEXT,
+    telefone TEXT NOT NULL,
+    senha_acesso TEXT, -- Senha interna do sistema
+    
+    -- Classificação
+    relacionamento TEXT DEFAULT 'cliente', -- cliente, funcionario, fornecedor, etc.
+    status TEXT DEFAULT 'ativo',           -- ativo, desativado
+    
+    -- Endereço
+    cep TEXT,
+    logradouro TEXT,
+    bairro TEXT,
+    cidade TEXT,
+    estado TEXT,
+    
+    -- Complementos
+    avaliacao INTEGER DEFAULT 5,
+    observacoes TEXT,
+    arquivos_url TEXT,
+    
+    -- Metadata (Opcional: ID do usuário que criou o registro)
+    user_id UUID REFERENCES auth.users(id) DEFAULT auth.uid()
+);
+
+-- 2. Habilitar o Row Level Security (RLS)
+-- Isso impede que qualquer pessoa apague seus dados sem permissão
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- 3. Criar Políticas de Acesso (Policies)
+-- Política: Permitir que usuários autenticados leiam todos os registros
+CREATE POLICY "Permitir leitura para usuários autenticados" 
+ON public.entidades FOR SELECT 
+TO authenticated 
+USING (true);
+
+-- Política: Permitir que usuários autenticados insiram novos registros
+CREATE POLICY "Permitir inserção para usuários autenticados" 
+ON public.entidades FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+-- Política: Permitir que usuários autenticados atualizem registros
+CREATE POLICY "Permitir atualização para usuários autenticados" 
+ON public.entidades FOR UPDATE 
+TO authenticated 
+USING (true);
+
+-- Política: Permitir que usuários autenticados excluam registros
+CREATE POLICY "Permitir exclusão para usuários autenticados" 
+ON public.entidades FOR DELETE 
+TO authenticated 
+USING (true);
+```
 
 
 
