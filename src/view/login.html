@@ -5,65 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
 
-   <!-- STYLE -->
-   <script src="https://cdn.tailwindcss.com"></script>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-   <!-- FIM DO STYLE -->
-
- <!-- CONEXÃO SUPABASE -->   
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../src/model/login.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <script src="../model/supabase_config.js"></script>
+    
+    <script src="../model/login.js"></script>
     
 </head>
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
 
-
-<!-- FORMULÁRIO -->
- <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
-            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seu sistema</p>
         </div>
-<!--
+
         <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
-            Entrar com Gmail
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
+            Entrar com Google
         </button>
--->
-        <div class="relative mb-6 text-center border-b border-slate-800">
-            <span class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou e-mail</span>
+
+        <div class="relative flex py-4 items-center">
+            <div class="flex-grow border-t border-slate-800"></div>
+            <span class="flex-shrink mx-4 text-slate-500 text-xs uppercase">ou e-mail</span>
+            <div class="flex-grow border-t border-slate-800"></div>
         </div>
 
- <div class="space-y-4">
-    <div>
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
-        <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-    </div>
-    
-    <div class="relative">
-        <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
-        <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-        <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
-            🔒
-        </button>
-    </div>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com" 
+                       class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+            
+            <div class="relative">
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+                <input type="password" id="password" placeholder="••••••••" 
+                       class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <button type="button" onclick="alternarSenha()" class="absolute right-3 top-8 text-slate-500 hover:text-white">
+                    👁️
+                </button>
+            </div>
 
-    <div class="text-right">
-        <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
-    </div>
-    
-    <div class="flex gap-3 pt-2">
-        <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
-            ENTRAR
-        </button>
-        <button onclick="confirmarCadastro()" class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-            CADASTRAR
-        </button>
-    </div>
-</div>
-    </div>
-<!-- FIM DO FORMULÁRIO -->
+            <div class="text-right">
+                <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a senha?</button>
+            </div>
+            
+            <div class="flex gap-3 pt-2">
+                <button onclick="realizarLogin()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+                    Entrar
+                </button>
+            </div>
 
+            <p class="text-center text-slate-500 text-xs mt-6">
+                Não tem uma conta? <a href="#" onclick="realizarCadastro()" class="text-blue-400 hover:underline">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
 
 </body>
-</html>        
+</html>
