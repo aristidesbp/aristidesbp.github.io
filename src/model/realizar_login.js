@@ -1,34 +1,34 @@
 /**
  * Nome do arquivo: realizar_login.js
- * Objetivo: Classe universal para autenticação no Supabase.
+ * Objetivo: Classe universal de autenticação.
  */
-export class Autenticador {
+export class RealizarLogin {
+    constructor() {
+        // Verifica se o cliente foi inicializado pelo supabase_config.js
+        this.supabase = window.supabaseClient;
+    }
+
     /**
-     * Realiza o login no Supabase
+     * Método universal para autenticar usuários
      * @param {string} email 
      * @param {string} senha 
-     * @returns {Promise<Object>} Retorna um objeto com {sucesso: bool, data: obj, erro: string}
      */
-    async realizar_login(email, senha) {
-        try {
-            // Verifica se o cliente Supabase está configurado globalmente
-            if (!window.supabaseClient) {
-                throw new Error("Supabase não configurado. Verifique o supabase_config.js");
-            }
+    async executar(email, senha) {
+        if (!this.supabase) {
+            return { sucesso: false, erro: "Erro: Cliente Supabase não inicializado." };
+        }
 
-            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+        try {
+            const { data, error } = await this.supabase.auth.signInWithPassword({
                 email: email,
                 password: senha,
             });
 
-            if (error) {
-                return { sucesso: false, erro: error.message };
-            }
-
-            return { sucesso: true, data: data };
+            if (error) return { sucesso: false, erro: error.message };
             
+            return { sucesso: true, data };
         } catch (err) {
-            return { sucesso: false, erro: err.message };
+            return { sucesso: false, erro: "Falha na conexão com o servidor." };
         }
     }
 }
