@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Entidades</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" id="btn-menu-entidades">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-lg font-bold flex-1 px-3" id="titulo-entidades">Gestão de Entidades</h1>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" id="btn-busca">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Tabs -->
+<div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-[61px] z-10">
+<div class="flex px-2 overflow-x-auto no-scrollbar">
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-bold border-b-2 border-primary text-primary" id="tab-pacientes">
+                Pacientes
+            </button>
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 border-b-2 border-transparent" id="tab-colaboradores">
+                Colaboradores
+            </button>
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 border-b-2 border-transparent" id="tab-responsaveis">
+                Responsáveis
+            </button>
+</div>
+</div>
+<!-- Main Content / List -->
+<main class="flex-1 p-4 space-y-3 pb-24">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col gap-4" id="card-entidade-1">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Avatar de um paciente masculino" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSyRjK4I_Fkn9akHo-LYNKeN0OsupNAzGMSWVl9S1v-iu5nx75Ika54lczJgNGfjmCRhfeQpFYIVfyhTRbjJ7uxn4aREYD8OOnkRJKNX-jN-d6grw8PFsHqJCAYvJEPI1bDHC4cyPedvRZCy3TNzTeWGyRLm2lNp3UDGZX6dQ-8TzLR2b0PAcvSO5J8KJJFDMvocARX6zDGp3Y7f2yneiWd_3OQLxV8vDm3tu3B8yJ6OKmBJZClA_SU9eVfubsztaojznapOh-oxuz"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<h3 class="font-bold text-base truncate">João Silva</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">(11) 98888-7777</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors" id="whatsapp-1">
+<span class="material-symbols-outlined text-lg">chat</span> WhatsApp
+                </button>
+<button class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors" id="email-1">
+<span class="material-symbols-outlined text-lg">mail</span> E-mail
+                </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col gap-4" id="card-entidade-2">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Avatar de uma paciente feminina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Oju3dwje-Qh77y0CWVaJs8utaJOxUlfMBEwUXg2QSwvM5ZcF9gfMzEDDC_ZqkXJkB154WJCChA0p6QCA1Bxa6z5lPkT9z_0w47MYny45fEN4awtOCa9I0OsysX5XxyPfs39rCd9Vw530AB_H3BpMa9C4uAUnxUBbuuOlfXXTB8AkpmrFclfIV6rcTds1zgEutnPdCZtHyzx2JyxrUAZY8bb0EAFJEOp9ERubTOZAaEB-tOg7r8kkQS0LmEDrkvqL5xe6ixi1VXWt"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<h3 class="font-bold text-base truncate">Maria Oliveira</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">(11) 97777-6666</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">chat</span> WhatsApp
+                </button>
+<button class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">mail</span> E-mail
+                </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col gap-4" id="card-entidade-3">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Avatar de um paciente masculino jovem" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEriMdD1PEk6HhDnKPtsbc6aeKN667ZUlLQ5Y2hjJa8c4uxWRw4crZDqiEeGRlpFCEAbx8Nz0vRZf5SKujAHqz7u4-n_ZFmPgB66lQfY1EfKgKh4Wg7p4ZIXPPmQrfKM0ZzyAJ_anF8TK9T_IPdTzN7xhe2fJpNa4rLEPjh2vTgULkPl2ZzCFPYgLjfvRBjOwXUGHe_ekTljt9SOfMTin7Cxwe3daGEqN04I_RaQNekeCeLgMr6U-U1RAOX7u0AWA2vIfEoug90yag"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<h3 class="font-bold text-base truncate">Ricardo Santos</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">(11) 96666-5555</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">chat</span> WhatsApp
+                </button>
+<button class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">mail</span> E-mail
+                </button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col gap-4" id="card-entidade-4">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Avatar de uma paciente feminina idosa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDChUrSjxBQX084akKCb5_86bBPsS-Dhdddxi7W_lZExdXG8FUSZ9rU0s9BrJAalNxsop55ArL5PNoOv9riXsSwv1ROf2-Co06UCcjIWjm5gtcuyTnsWA-NR3WU-LNGx-p_9u7INDij9aInx9I_1pYsTNarZmSZEGZm-YNp4WZLP_iBLxNURnEniQgkD98BxnD3spDzoJii7sSdoY04OY4JfGcVH_TBW1Rafjt9Kw8ZxSLCqgDkMrySLwjD_J802n46cIxrIwPbT9T_"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<h3 class="font-bold text-base truncate">Ana Paula Souza</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">(11) 95555-4444</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">chat</span> WhatsApp
+                </button>
+<button class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg">mail</span> E-mail
+                </button>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 size-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition-all" id="btn-nova-entidade">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-around items-center px-2 py-3">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">group</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Entidades</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Agenda</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Perfil</span>
+</a>
+</nav>
+</body></html>

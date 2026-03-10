@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-checkbox:checked {
+            background-color: #137fec;
+            border-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen shadow-sm">
+<!-- TopAppBar -->
+<header class="flex items-center p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+<a class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="plano_lista.html">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+</a>
+<h1 class="text-lg font-bold ml-2">Criar Plano</h1>
+</header>
+<main class="p-4 pb-24">
+<form action="plano_detalhe.html" id="form_criar_plano" method="GET">
+<!-- Informações do Plano -->
+<section class="mb-8">
+<h2 class="text-base font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">info</span>
+                        Informações do Plano
+                    </h2>
+<div class="space-y-4">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="paciente_select">Paciente</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">person</span>
+<select class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" id="paciente_select">
+<option disabled="" selected="" value="">Selecionar paciente</option>
+<option value="1">João Silva</option>
+<option value="2">Maria Oliveira</option>
+<option value="3">Pedro Santos</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="data_inicio">Data Início</label>
+<input class="w-full p-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm" id="data_inicio" type="date"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="data_termino">Data Término</label>
+<input class="w-full p-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm" id="data_termino" type="date"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Habilidades Section -->
+<section class="mb-8">
+<h2 class="text-base font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">psychology</span>
+                        Habilidades
+                    </h2>
+<div class="grid grid-cols-1 gap-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_leitura_bastao" type="checkbox"/>
+<span class="text-sm">Leitura bastão</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_leitura_cursiva" type="checkbox"/>
+<span class="text-sm">Leitura cursiva</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_leitura_imprensa" type="checkbox"/>
+<span class="text-sm">Leitura imprensa</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_escrita_bastao" type="checkbox"/>
+<span class="text-sm">Escrita bastão</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_escrita_cursiva" type="checkbox"/>
+<span class="text-sm">Escrita cursiva</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_ortografia" type="checkbox"/>
+<span class="text-sm">Ortografia</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_interpretacao" type="checkbox"/>
+<span class="text-sm">Interpretação</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_matematica" type="checkbox"/>
+<span class="text-sm">Matemática</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_meses" type="checkbox"/>
+<span class="text-sm">Meses</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_memoria" type="checkbox"/>
+<span class="text-sm">Memória</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 cursor-pointer">
+<input checked="" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" id="hab_autonomia" type="checkbox"/>
+<span class="text-sm">Autonomia</span>
+</label>
+</div>
+</section>
+<!-- Observações -->
+<section class="mb-24">
+<h2 class="text-base font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notes</span>
+                        Observações
+                    </h2>
+<textarea class="w-full p-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm" id="observacoes_text" placeholder="Adicione informações adicionais aqui..." rows="4"></textarea>
+</section>
+<!-- Action Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 max-w-md mx-auto">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2" id="btn_criar_plano" type="submit">
+<span>Criar Plano</span>
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</form>
+</main>
+</div>
+</body></html>
