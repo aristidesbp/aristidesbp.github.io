@@ -1,4 +1,32 @@
-/**
+// src/controller/login_clinica_controller.js
+
+import { realizarLogin } from '../model/login.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btnEntrar = document.getElementById('btn-entrar');
+    
+    if (btnEntrar) {
+        btnEntrar.addEventListener('click', (event) => {
+            event.preventDefault(); // Evita que a página recarregue
+            
+            // Capturamos os dados do formulário
+            const email = document.getElementById('input-email').value;
+            const senha = document.getElementById('input-senha').value;
+
+            // Verificação básica antes de enviar para o model
+            if (!email || !senha) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Chamamos a função do model
+            // Se o seu model login.js espera parâmetros, passe-os aqui.
+            // Se o model busca direto do DOM, certifique-se que os IDs lá 
+            // sejam os mesmos do HTML (input-email e input-senha).
+            realizarLogin(email, senha);
+        });
+    }
+});/**
  * Nome do arquivo: login_clinica_controller.js
  * Objetivo: Mediar a interação entre a interface (HTML) e a lógica de autenticação.
  */
