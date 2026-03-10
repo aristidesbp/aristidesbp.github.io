@@ -26,7 +26,7 @@ async function realizarLogin() {
         } else {
             console.log("Bem-vindo de volta!", data.user.email);
             // Redireciona para o painel principal após o sucesso
-            window.location.href = 'bem_vindo.html';
+            window.location.href = 'analizar_nivel_acesso.html';
         }
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
