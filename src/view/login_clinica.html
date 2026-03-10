@@ -4,8 +4,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ERP-PSC - Login</title>
-<script type="module" src="../controller/login_clinica_controller.js"></script>
-  
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -33,12 +31,11 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  </head>
+</head>
 <body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4">
 <div class="w-full max-w-md flex flex-col items-center">
 <!-- Login Card -->
 <div class="w-full bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden p-8 flex flex-col gap-8 border border-slate-200 dark:border-slate-800">
-
 <!-- Header Section -->
 <div class="flex flex-col items-center gap-4 text-center">
 <div class="w-20 h-20 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary" id="logo-icon">
@@ -49,10 +46,8 @@
 <p class="text-slate-500 dark:text-slate-400 font-medium" id="app-subtitle">Acesse sua Conta</p>
 </div>
 </div>
-        
 <!-- Form Section -->
 <div class="flex flex-col gap-5">
-        
 <!-- E-mail Input -->
 <div class="flex flex-col gap-2">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="input-email">E-mail</label>
@@ -99,4 +94,16 @@
             </p>
 </footer>
 </div>
-</body></html>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('input-senha');
+    const toggleBtn = document.getElementById('btn-toggle-senha');
+    const toggleIcon = toggleBtn.querySelector('.material-symbols-outlined');
+
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = passwordInput.getAttribute('type') === 'password';
+      passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+      toggleIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+    });
+  });
+</script></body></html>
