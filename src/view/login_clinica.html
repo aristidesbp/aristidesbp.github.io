@@ -55,7 +55,7 @@
 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined">mail</span>
 </div>
-<input class="block w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none" id="input-email" placeholder="exemplo@email.com" type="email"/>
+<input class="block w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none" id="email" placeholder="exemplo@email.com" type="email"/>
 </div>
 </div>
 <!-- Password Input -->
@@ -67,7 +67,7 @@
 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined">lock</span>
 </div>
-<input class="block w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none" id="input-senha" placeholder="••••••••" type="password"/>
+<input class="block w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none" id="password" placeholder="••••••••" type="password"/>
 <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-primary transition-colors" id="btn-toggle-senha" type="button">
 <span class="material-symbols-outlined">visibility</span>
 </button>
@@ -75,7 +75,7 @@
 </div>
 <!-- Actions -->
 <div class="flex flex-col gap-4 mt-2">
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-6 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-primary/20" id="btn-entrar">
+<button onclick="realizarLogin()"  class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-6 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-primary/20" id="btn-entrar">
 <span class="material-symbols-outlined">login</span>
 <span>Entrar</span>
 </button>
