@@ -4,6 +4,23 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ERP-PSC - Plataforma para Psicopedagogos</title>
+
+
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+
+<script src="../model/analizar_nivel_acesso.js"></script>
+<script src="../controller/login_clinica_controller.js"></script>
+
+
+        
+
+
+
+
+
+        
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -73,7 +90,10 @@
 </div>
 <div class="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md px-4">
 <a class="flex-1 flex min-w-[160px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-14 px-6 bg-primary text-white text-lg font-bold leading-normal tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95" href="src/view/login.html" id="btn-start">
-<span>Começar</span>
+<button onclick="login_clinica_controller()" id="btn-entrar">
+    Entrar
+</button>
+        <span>Começar</span>
 <span class="material-symbols-outlined">arrow_forward</span>
 </a>
 </div>
