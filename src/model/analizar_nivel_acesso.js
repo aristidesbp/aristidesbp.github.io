@@ -1,41 +1,55 @@
 /**
- * Nome do arquivo: analizar_nivel_acesso.js
- * Objetivo: Analisar nível de acesso (Versão Clássica)
+ * Lógica de Redirecionamento - ERP-PSC
+ * Este script lê a 'role' definida na tabela 'profiles' e envia o usuário
+ * para a dashboard correspondente.
  */
 
-async function analisarNivelAcesso() {
-    // 1. Verifica se o Supabase está disponível
-    const supabase = window.supabaseClient;
-    if (!supabase) {
-        console.error("Supabase não configurado.");
-        return 'login_clinica.html';
-    }
-
+async function executarRedirecionamento() {
     try {
-        // 2. Obtém o usuário logado
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError || !user) throw new Error("Usuário não encontrado");
+        // 1. Obtém o usuário logado
+        const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
 
-        // 3. Busca o nível na tabela 'usuarios' (ajuste o nome da tabela se necessário)
-        const { data: perfil, error: perfilError } = await supabase
-            .from('usuarios') 
-            .select('nivel_acesso')
+        if (authError || !user) {
+            window.location.href = 'login_clinica.html';
+            return;
+        }
+
+        // 2. Busca o nível de acesso (role) na tabela profiles
+        const { data: profile, error: dbError } = await window.supabaseClient
+            .from('profiles')
+            .select('role')
             .eq('id', user.id)
             .single();
 
-        if (perfilError) throw perfilError;
+        if (dbError || !profile) {
+            console.error("Perfil não encontrado:", dbError);
+            alert("Erro ao identificar perfil de acesso.");
+            return;
+        }
 
-        // 4. Define a rota baseada no nível
-        const rotas = {
-            'admin': 'dashbord_supervisor.html',
-            'psicopedagogo': 'dashbord_supervisor.html',
-            'paciente': 'dashbord_paciente.html'
-        };
+        // 3. Decisão de destino baseada na 'role' do banco
+        const nivel = profile.role;
 
-        return rotas[perfil.nivel_acesso] || 'bem_vindo.html';
+        switch (nivel) {
+            case 'admin':
+                window.location.href = 'dashboard_supervisor.html';
+                break;
+            case 'usuario':
+                window.location.href = 'dashbord_pedagogo.html';
+                break;
+            case 'paciente':
+                window.location.href = 'dashbord_paciente.html';
+                break;
+            default:
+                // Caso algo esteja errado, manda para o bem-vindo ou login
+                window.location.href = 'bem_vindo.html';
+                break;
+        }
 
     } catch (err) {
-        console.error("Erro na análise:", err.message);
-        return 'login_clinica.html';
+        console.error("Erro inesperado:", err);
     }
 }
+
+// Executa a função automaticamente ao carregar a página
+document.addEventListener('DOMContentLoaded', executarRedirecionamento);
