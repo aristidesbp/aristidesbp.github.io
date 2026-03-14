@@ -10,7 +10,7 @@ async function executarRedirecionamento() {
         const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
 
         if (authError || !user) {
-            window.location.href = 'login_clinica.html';
+            window.location.href = 'login.html';
             return;
         }
 
