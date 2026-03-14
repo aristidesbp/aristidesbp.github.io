@@ -26,7 +26,7 @@ async function realizarLogin() {
         } else {
             console.log("Bem-vindo de volta!", data.user.email);
             // Redireciona para o painel principal após o sucesso
-            window.location.href = 'analizar_nivel_acesso.html';
+            window.location.href = 'index.html';
         }
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
@@ -123,7 +123,7 @@ async function salvarNovaSenha() {
         alert("Erro ao atualizar: " + error.message);
     } else {
         alert("Senha atualizada com sucesso!");
-        window.location.href = 'verificar_nivel_de_acesso.html';
+        window.location.href = 'index.html';
     }
 }
  
