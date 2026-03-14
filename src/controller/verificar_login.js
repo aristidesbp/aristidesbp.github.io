@@ -16,7 +16,7 @@
 
         if (!supabase) {
             console.error("Erro: supabaseClient não configurado.");
-            window.location.href = 'login_clinica.html';
+            window.location.href = 'login.html';
             return;
         }
 
