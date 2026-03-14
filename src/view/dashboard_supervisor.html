@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
-<html lang="pt-BR"><head>
+<html class="light" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Painel do Supervisor</title>
+<title>Painel do Supervisor - ERP-PSC</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="../model/supabase_config.js"></script>   
@@ -13,12 +13,11 @@
 <script type="module">
     import { accessControl } from '../model/access_control.js';    
     // Só permite entrar se a role for 'paciente'
-    accessControl.checkAccess(['admin']);
+    accessControl.checkAccess(['usuario']);
 </script>
         
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -41,157 +40,94 @@
 <style>
         body {
             font-family: 'Lexend', sans-serif;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .filled-icon {
-            font-variation-settings: 'FILL' 1;
+            min-height: 100dvh;
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
+</head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
 
-
-     <div id="navbar"></div>
-<script src="../controller/navbar.js"></script>   
-
-
-<!-- Header -->
-<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 sticky top-0 z-10">
-<div class="flex items-center justify-between gap-3">
+        
+    <div id="navbar"></div>
+<script src="../controller/navbar.js"></script>      
+        
+        
+        <!-- Main Container (Mobile Optimized) -->
+<div class="flex-1 w-full max-w-[430px] mx-auto bg-white dark:bg-slate-900 shadow-xl flex flex-col min-h-screen">
+<!-- Header Section -->
+<header class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary text-3xl">shield</span>
-<h1 class="text-xl font-bold tracking-tight">Painel do Supervisor</h1>
+<div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary" id="header-supervisor-icon">
+<span class="material-symbols-outlined">shield</span>
 </div>
-<span class="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                Somente Leitura
-            </span>
+<h1 class="text-lg font-bold tracking-tight" id="titulo-supervisor">Painel do Supervisor</h1>
 </div>
 </header>
-<main class="flex-1 overflow-y-auto p-4 space-y-6">
-<!-- Cards de Resumo -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Pacientes</p>
-<p class="text-3xl font-bold mt-1">128</p>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- Summary Cards Section -->
+<section class="p-4 grid grid-cols-2 gap-3">
+<!-- Pacientes Ativos -->
+<div class="col-span-2 p-4 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/10 flex flex-col gap-1 relative" id="stat-total-pacientes">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Pacientes Ativos</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-bold text-primary">128</span>
+<a aria-label="Ver Pacientes" class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-sm active:scale-95 transition-transform" href="entidades.html">
+<span class="material-symbols-outlined text-xl">groups</span>
+</a>
 </div>
-<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Média Adesão</p>
-<div class="flex items-end gap-2">
-<p class="text-3xl font-bold mt-1">84%</p>
-<span class="text-green-500 text-sm font-medium mb-1">↑ 2%</span>
 </div>
-</div>
-<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Pacientes em Atraso</p>
-<p class="text-3xl font-bold mt-1 text-red-500">12</p>
-</div>
-</section>
-<!-- Lista de Pacientes -->
-<section class="space-y-4">
-<div class="flex items-center justify-between px-1">
-<h2 class="text-lg font-bold">Monitoramento Recente</h2>
-<button class="text-primary text-sm font-semibold">Ver todos</button>
-</div>
-<!-- Card Paciente 1 -->
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-4">
-<div class="relative">
-<img alt="Avatar Paciente" class="w-14 h-14 rounded-full object-cover" data-alt="Portrait photo of a smiling man for user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNxIz0uKgJmrkRgPSPOO_pEaSw_GWyKyvQq-JLWN_vf1uwYTCflE6iHr0LAizSxGBJmUzaBXAuoLkTwmw9Un3lInXbOMcNesWksc0PRuucNffClc_vUB8tlhiWJXU2ol9_7UuyGNXMsU0tmEZZvBgYu4IvAKW61v10owTkgpbFxGvi8TxYR-_4SCn5Ea_4L1swhSoTWytZmlhYGFYDyXHFP6675NttLK6xTecmY9GvuPCwGMRGfAVW6IDJSYFWd_BgbngLuP-lH-Kw"/>
-<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-bold text-base">João Silva</h3>
-<p class="text-slate-500 dark:text-slate-400 text-xs">Última atividade: Hoje, 09:45</p>
-</div>
-<span class="material-symbols-outlined text-green-500 text-lg filled-icon" title="Plano Ativo">verified_user</span>
-</div>
-<div class="mt-3">
-<div class="flex justify-between items-center mb-1">
-<span class="text-xs font-medium text-slate-500">Adesão</span>
-<span class="text-xs font-bold text-slate-900 dark:text-slate-100">92%</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-green-500 h-full rounded-full" style="width: 92%"></div>
+<!-- Média Adesão -->
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col gap-1" id="stat-media-adesao">
+<span class="text-[10px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide leading-tight">Média Adesão Semanal</span>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold">84%</span>
+<div class="flex items-center text-emerald-500 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>5%</span>
 </div>
 </div>
 </div>
-</div>
-<!-- Card Paciente 2 -->
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-4">
-<div class="relative">
-<img alt="Avatar Paciente" class="w-14 h-14 rounded-full object-cover" data-alt="Portrait photo of a woman with glasses for user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEA14hn7gtlKYn4o6L__4lRTP_H_gUIXSJ5wPbWCxgLAnNDLg7vEUk8b3-ML7Pj4HEG_cytNxq4BIeMC4WVUQp6KIrlwscubUjV-2aJKmKWwLNz3aDXdepNfqG9iUr1T27jIj-p-2vvCtC-1P7AMqPgj_lRStwormxp-TN5bepy624smT99_wZ-aR0uf2UoslQe0EsXdh2jgJOhNxwzHYaIzj2tp5KngP5CqgE2qso956Oc2WnnHM-00a9nbfUBIB3XHtQw43ZyLLq"/>
-<span class="absolute bottom-0 right-0 w-3 h-3 bg-yellow-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-bold text-base">Maria Oliveira</h3>
-<p class="text-slate-500 dark:text-slate-400 text-xs">Última atividade: Ontem, 18:20</p>
-</div>
-<span class="material-symbols-outlined text-green-500 text-lg filled-icon" title="Plano Ativo">verified_user</span>
-</div>
-<div class="mt-3">
-<div class="flex justify-between items-center mb-1">
-<span class="text-xs font-medium text-slate-500">Adesão</span>
-<span class="text-xs font-bold text-slate-900 dark:text-slate-100">65%</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-yellow-500 h-full rounded-full" style="width: 65%"></div>
+<!-- Tarefas em Atraso -->
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col gap-1" id="stat-atraso">
+<span class="text-[10px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide leading-tight">Tarefas em Atraso</span>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-rose-500">12</span>
+<span class="material-symbols-outlined text-rose-500/50 text-sm">schedule</span>
 </div>
 </div>
+<!-- Quick Actions Grid -->
+<div class="col-span-2 pt-2 pb-1">
+<h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Módulos do Sistema</h2>
 </div>
+<!-- Novo Cadastro -->
+<a class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 text-center shadow-sm active:bg-slate-50 dark:active:bg-slate-700 transition-colors" href="listar_entidades.html" id="link-modulo-entidades">
+<div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">groups</span>
 </div>
-<!-- Card Paciente 3 -->
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-4">
-<div class="relative">
-<img alt="Avatar Paciente" class="w-14 h-14 rounded-full object-cover" data-alt="Portrait photo of a bearded man for user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK2jmKh-r6eRx8CFDAxy6s-qYWaOTmDGdM9S0xal2fpxPORmbgocZ5SHGG3zFLIenjJ2Vv8vXnwsgQs5Jtv8XYT5ForjbcBX6FegyGtX_xUmCOex1qwxhZafohHvNDgt9mzP190_7Fm0C5CE6vqQyF20tAOeqV3-Gp8oWQIhHaSle68YC_3Uk9bWa0A96rGGfvdU2fd2aVCNFzSMPap4ORmY-VFtxDpM2W2PGpWxCWbU3WJV0cA8A5F5Mkg8lnPsQcGAO0kZkKgGHB"/>
-<span class="absolute bottom-0 right-0 w-3 h-3 bg-red-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
+<span class="text-xs font-semibold">Entidades</span>
+</a>
+<!-- Financeiro -->
+<a class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 text-center shadow-sm active:bg-slate-50 dark:active:bg-slate-700 transition-colors" href="listar_financeiro.html" id="link-modulo-financeiro">
+<div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">payments</span>
 </div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-bold text-base">Ricardo Santos</h3>
-<p class="text-slate-500 dark:text-slate-400 text-xs">Última atividade: 3 dias atrás</p>
+<span class="text-xs font-semibold">Financeiro</span>
+</a>
+<!-- Planos 6M (Relatórios) -->
+<a class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 text-center shadow-sm active:bg-slate-50 dark:active:bg-slate-700 transition-colors" href="plano_lista.html" id="link-modulo-planos">
+<div class="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">description</span>
 </div>
-<span class="material-symbols-outlined text-slate-400 text-lg" title="Plano Pendente">history_toggle_off</span>
+<span class="text-xs font-semibold">Planos 6M</span>
+</a>
+<!-- Agenda -->
+<a class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 text-center shadow-sm active:bg-slate-50 dark:active:bg-slate-700 transition-colors" href="https://calendar.google.com" id="link-modulo-agenda" target="_blank">
+<div class="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined">calendar_month</span>
 </div>
-<div class="mt-3">
-<div class="flex justify-between items-center mb-1">
-<span class="text-xs font-medium text-slate-500">Adesão</span>
-<span class="text-xs font-bold text-slate-900 dark:text-slate-100">32%</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-red-500 h-full rounded-full" style="width: 32%"></div>
-</div>
-</div>
-</div>
-</div>
+<span class="text-xs font-semibold">Agenda</span>
+</a>
 </section>
 </main>
-<!-- Bottom Navigation Bar -->
-<nav class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-3">
-<div class="flex items-center justify-between max-w-md mx-auto">
-<a class="flex flex-col items-center gap-1 text-primary" href="#">
-<span class="material-symbols-outlined filled-icon">dashboard</span>
-<span class="text-[10px] font-bold uppercase tracking-wider">Painel</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">group</span>
-<span class="text-[10px] font-bold uppercase tracking-wider">Pacientes</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="text-[10px] font-bold uppercase tracking-wider">Perfil</span>
-</a>
 </div>
-</nav>
 </body></html>
-
