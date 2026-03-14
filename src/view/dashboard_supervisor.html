@@ -4,6 +4,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Painel do Supervisor</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>   
+<script src="../controller/verificar_login.js"></script>
+<script src="../controller/analizar_nivel_de_acesso.js"></script>        
+        
+<script type="module">
+    import { accessControl } from '../model/access_control.js';    
+    // Só permite entrar se a role for 'paciente'
+    accessControl.checkAccess(['admin']);
+</script>
+        
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
