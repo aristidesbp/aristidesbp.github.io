@@ -123,7 +123,7 @@ async function salvarNovaSenha() {
         alert("Erro ao atualizar: " + error.message);
     } else {
         alert("Senha atualizada com sucesso!");
-        window.location.href = 'index.html';
+        window.location.href = 'verificar_nivel_de_acesso.html';
     }
 }
  
