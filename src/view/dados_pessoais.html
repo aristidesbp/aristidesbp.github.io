@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dados Pessoais - ERP ABP</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../model/supabase_config.js"></script>
+    <script src="../model/verificar_login.js"></script>
+    <script src="../model/dados_pessoais.js"></script> <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: { "display": ["Inter"] }
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="flex items-center justify-between px-4 h-16">
+        <a class="flex items-center gap-1 text-primary font-medium hover:opacity-80 transition-opacity" href="entidades.html">
+            <span class="material-symbols-outlined text-[20px]">arrow_back_ios</span>
+            <span>Voltar</span>
+        </a>
+        <h1 class="text-lg font-bold tracking-tight">Dados Pessoais</h1>
+        <div class="w-16"></div>
+    </div>
+</header>
+
+<main class="flex-1 overflow-y-auto pb-32">
+    <div class="max-w-md mx-auto p-4">
+        <div class="bg-primary/10 p-4 rounded-xl border border-primary/20 mb-6">
+            <label class="text-xs font-bold text-primary uppercase block mb-2">1. Selecionar Usuário para Editar</label>
+            <select id="select-usuario" onchange="carregarDadosUsuario(this.value)" class="w-full h-12 rounded-lg border-none focus:ring-2 focus:ring-primary text-sm bg-white dark:bg-slate-800">
+                <option value="">Selecione um perfil...</option>
+            </select>
+        </div>
+
+        <form id="form-dados" class="space-y-8">
+            <input type="hidden" id="user_id">
+
+            <div class="flex flex-col items-center justify-center pt-4">
+                <div class="relative group">
+                    <div class="w-28 h-28 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-sm flex items-center justify-center overflow-hidden">
+                        <img id="avatar-preview" src="" class="hidden w-full h-full object-cover">
+                        <span id="avatar-placeholder" class="material-symbols-outlined text-slate-400 text-5xl">person</span>
+                    </div>
+                    <label class="absolute bottom-0 right-0 w-8 h-8 bg-primary text-white rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center cursor-pointer shadow-md active:scale-95 transition-transform" for="avatar-upload">
+                        <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+                    </label>
+                    <input accept="image/*" class="hidden" id="avatar-upload" type="file" onchange="uploadFoto(this)"/>
+                </div>
+            </div>
+
+            <section class="space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <span class="material-symbols-outlined text-primary">person</span>
+                    <h2 class="text-lg font-bold">Informações Básicas</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium px-1">Nome Completo</label>
+                        <input id="nome_completo" class="w-full h-12 rounded-xl border-slate-200 bg-gray-100 dark:bg-slate-800" type="text" readonly/>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm font-medium px-1">CPF</label>
+                            <input id="cpf" class="w-full h-12 rounded-xl border-slate-200" placeholder="000.000.000-00" type="text"/>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium px-1">Nascimento</label>
+                            <input id="data_nascimento" class="w-full h-12 rounded-xl border-slate-200" type="date"/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium px-1">Acesso ao Sistema</label>
+                        <select id="tipo_acesso" class="w-full h-12 rounded-xl border-slate-200 bg-white dark:bg-background-dark">
+                            <option value="usuario">Usuário Comum</option>
+                            <option value="admin">Administrador</option>
+                            <option value="paciente">Paciente</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <span class="material-symbols-outlined text-primary">call</span>
+                    <h2 class="text-lg font-bold">Contato</h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium px-1">E-mail</label>
+                        <input id="email" class="w-full h-12 rounded-xl border-slate-200 bg-gray-100" type="email" readonly/>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium px-1">Telefone / WhatsApp</label>
+                        <input id="telefone" class="w-full h-12 rounded-xl border-slate-200" placeholder="(00) 00000-0000" type="tel"/>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <span class="material-symbols-outlined text-primary">location_on</span>
+                    <h2 class="text-lg font-bold">Endereço</h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium px-1">CEP</label>
+                        <input id="cep" onblur="buscaCEP()" class="w-full h-12 rounded-xl border-slate-200" placeholder="00000-000" type="text"/>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="col-span-3">
+                            <label class="text-sm font-medium px-1">Logradouro</label>
+                            <input id="logradouro" class="w-full h-12 rounded-xl border-slate-200" type="text"/>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium px-1">Nº</label>
+                            <input id="numero" class="w-full h-12 rounded-xl border-slate-200" type="text"/>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input id="bairro" placeholder="Bairro" class="w-full h-12 rounded-xl border-slate-200" type="text"/>
+                        <div class="flex gap-2">
+                            <input id="cidade" placeholder="Cidade" class="w-full h-12 rounded-xl border-slate-200 grow" type="text"/>
+                            <input id="estado" placeholder="UF" maxlength="2" class="w-full h-12 rounded-xl border-slate-200 w-16 uppercase" type="text"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="pt-6 pb-20">
+                <button type="button" onclick="handleSaveDadosPessoais()" class="w-full h-14 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 active:scale-[0.98] transition-all">
+                    Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 z-50">
+    <div class="max-w-md mx-auto flex justify-between items-center">
+        <a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="dashboard.html">
+            <span class="material-symbols-outlined">home</span>
+            <p class="text-[10px] font-medium uppercase tracking-wider">Início</p>
+        </a>
+        <a class="flex flex-1 flex-col items-center gap-1 text-primary" href="entidades.html">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">group</span>
+            <p class="text-[10px] font-medium uppercase tracking-wider">Entidades</p>
+        </a>
+        </div>
+</nav>
+
+</body>
+</html>
