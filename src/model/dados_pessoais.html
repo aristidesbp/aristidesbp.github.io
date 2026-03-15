@@ -1,86 +1,102 @@
+
 /**
- * model/dados_pessoais.js - Gestão de Perfis e Dados Pessoais ERP ABP
+ * model/dados_pessoais.js - Busca Dinâmica e Gestão de Perfis
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    carregarListaUsuarios();
-});
-
-// 1. Carrega todos os utilizadores no Select para escolha
-async function carregarListaUsuarios() {
-    try {
-        // Vamos buscar à tabela profiles que tem o nome e email básicos
-        const { data, error } = await window.supabaseClient
-            .from('profiles')
-            .select('id, nome_completo, email')
-            .order('nome_completo');
-
-        if (error) throw error;
-
-        const select = document.getElementById('select-usuario');
-        select.innerHTML = '<option value="">Selecione um perfil...</option>';
-
-        data.forEach(user => {
-            const option = document.createElement('option');
-            option.value = user.id;
-            option.text = `${user.nome_completo || 'Sem Nome'} (${user.email})`;
-            select.appendChild(option);
-        });
-    } catch (err) {
-        console.error("Erro ao carregar utilizadores:", err.message);
-    }
-}
-
-// 2. Quando seleciona um utilizador, puxa os dados das duas tabelas
-async function carregarDadosUsuario(userId) {
-    if (!userId) {
-        document.getElementById('form-dados').reset();
+// 1. Busca dinâmica de e-mails no banco de dados
+async function buscarUsuariosEmail(termo) {
+    const lista = document.getElementById('lista-busca');
+    
+    // Só pesquisa se tiver pelo menos 3 caracteres
+    if (termo.length < 3) {
+        lista.innerHTML = '';
+        lista.classList.add('hidden');
         return;
     }
 
     try {
-        // Puxa dados da tabela dados_pessoais vinculada pelo user_id
         const { data, error } = await window.supabaseClient
+            .from('profiles')
+            .select('id, nome_completo, email')
+            .ilike('email', `%${termo}%`) 
+            .limit(6);
+
+        if (error) throw error;
+
+        lista.innerHTML = '';
+        if (data && data.length > 0) {
+            data.forEach(user => {
+                const item = document.createElement('div');
+                item.className = 'p-4 hover:bg-primary/5 cursor-pointer border-b border-slate-100 dark:border-slate-700 last:border-none flex flex-col';
+                item.innerHTML = `
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">${user.nome_completo || 'Utilizador sem nome'}</span>
+                    <span class="text-xs text-slate-500">${user.email}</span>
+                `;
+                item.onclick = () => selecionarUsuario(user);
+                lista.appendChild(item);
+            });
+            lista.classList.remove('hidden');
+        } else {
+            lista.innerHTML = '<div class="p-4 text-xs text-slate-500 italic">Nenhum e-mail encontrado...</div>';
+            lista.classList.remove('hidden');
+        }
+    } catch (err) {
+        console.error("Erro na busca:", err);
+    }
+}
+
+// 2. Ação ao selecionar um utilizador da lista de sugestões
+async function selecionarUsuario(user) {
+    document.getElementById('busca-email').value = user.email;
+    document.getElementById('lista-busca').classList.add('hidden');
+    
+    // Ativa o formulário (estava bloqueado)
+    const form = document.getElementById('form-dados');
+    form.classList.remove('opacity-50', 'pointer-events-none');
+
+    // Carrega os dados
+    await carregarDadosUsuario(user.id);
+}
+
+// 3. Carregar dados das tabelas Profiles e Dados_Pessoais
+async function carregarDadosUsuario(userId) {
+    try {
+        // Tenta buscar dados complementares
+        const { data: dp, error: errDp } = await window.supabaseClient
             .from('dados_pessoais')
             .select('*')
             .eq('user_id', userId)
             .single();
 
-        if (error && error.code !== 'PGRST116') throw error; // PGRST116 é "não encontrado"
+        // Busca dados do profile (garante nome e email)
+        const { data: prof } = await window.supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
 
-        // Se não existir na dados_pessoais, vamos buscar o básico à profiles
-        let userData = data;
-        if (!data) {
-            const { data: profile } = await window.supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
-            userData = profile;
-        }
+        const dadosFinais = dp || prof;
 
-        // Preencher os campos
+        // Preencher IDs e Campos Fixos
         document.getElementById('user_id').value = userId;
-        document.getElementById('nome_completo').value = userData.nome_completo || '';
-        document.getElementById('email').value = userData.email || '';
-        
-        // Campos específicos de dados_pessoais
+        document.getElementById('nome_completo').value = prof.nome_completo || '';
+        document.getElementById('email').value = prof.email || '';
+
+        // Preencher campos editáveis
         const campos = ['cpf', 'data_nascimento', 'telefone', 'cep', 'logradouro', 'numero', 'bairro', 'cidade', 'estado', 'tipo_acesso'];
         campos.forEach(campo => {
             const el = document.getElementById(campo);
-            if (el) el.value = userData[campo] || '';
+            if (el) el.value = dadosFinais[campo] || (campo === 'tipo_acesso' ? 'paciente' : '');
         });
 
     } catch (err) {
-        alert("Erro ao carregar dados: " + err.message);
+        console.error("Erro ao carregar dados:", err);
     }
 }
 
-// 3. Salva ou Atualiza os dados
+// 4. Salvar Alterações
 async function handleSaveDadosPessoais() {
     const userId = document.getElementById('user_id').value;
-    const btn = document.querySelector('button[onclick="handleSaveDadosPessoais()"]');
-
     if (!userId) return alert("Selecione um utilizador primeiro!");
 
     const getVal = (id) => document.getElementById(id)?.value || null;
@@ -102,60 +118,51 @@ async function handleSaveDadosPessoais() {
         status: 'ativo'
     };
 
-    btn.disabled = true;
-    btn.innerText = "A guardar...";
-
     try {
-        // Upsert: Se existir o user_id, atualiza. Se não, insere.
+        // Salva/Atualiza na dados_pessoais
         const { error } = await window.supabaseClient
             .from('dados_pessoais')
             .upsert(payload, { onConflict: 'user_id' });
 
         if (error) throw error;
 
-        // Opcional: Se mudou o acesso, vamos sincronizar com a tabela profiles também
+        // Sincroniza o role na tabela profiles
         await window.supabaseClient
             .from('profiles')
             .update({ role: payload.tipo_acesso })
             .eq('id', userId);
 
-        alert("Dados guardados com sucesso!");
+        alert("Dados atualizados com sucesso!");
     } catch (err) {
         alert("Erro ao guardar: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "Salvar Alterações";
     }
 }
 
-// Funções Auxiliares (CEP)
+// Auxiliares
+function limparBusca() {
+    document.getElementById('busca-email').value = '';
+    document.getElementById('lista-busca').classList.add('hidden');
+    document.getElementById('form-dados').reset();
+    document.getElementById('form-dados').classList.add('opacity-50', 'pointer-events-none');
+}
+
 async function buscaCEP() {
     const cep = document.getElementById('cep').value.replace(/\D/g, '');
     if (cep.length === 8) {
-        try {
-            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const d = await res.json();
-            if (!d.erro) {
-                document.getElementById('logradouro').value = d.logradouro;
-                document.getElementById('bairro').value = d.bairro;
-                document.getElementById('cidade').value = d.localidade;
-                document.getElementById('estado').value = d.uf;
-            }
-        } catch (e) { console.error("Erro CEP"); }
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const d = await res.json();
+        if (!d.erro) {
+            document.getElementById('logradouro').value = d.logradouro;
+            document.getElementById('bairro').value = d.bairro;
+            document.getElementById('cidade').value = d.localidade;
+            document.getElementById('estado').value = d.uf;
+        }
     }
 }
 
-// Mock para foto (necessita configuração de bucket no Supabase)
-async function uploadFoto(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const preview = document.getElementById('avatar-preview');
-        const placeholder = document.getElementById('avatar-placeholder');
-        
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-        
-        // Aqui adicionarias a lógica de supabase.storage se quiseres guardar a imagem
+// Fechar lista ao clicar fora
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#busca-email')) {
+        document.getElementById('lista-busca').classList.add('hidden');
     }
-}
+});
