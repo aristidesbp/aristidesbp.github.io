@@ -1,0 +1,43 @@
+<div class="p-8 bg-slate-50 min-h-screen">
+    <header class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Dashboard Financeiro</h1>
+        <div id="user-profile" class="flex items-center gap-3">
+            <span id="user-name" class="text-sm font-medium">Carregando...</span>
+            <img id="user-avatar" class="w-10 h-10 rounded-full border border-slate-200" src="" alt="Avatar">
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Total Entradas</p>
+            <h2 id="total-entradas" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Total Saídas</p>
+            <h2 id="total-saidas" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Previsão de Caixa</p>
+            <h2 id="total-previsao" class="text-2xl font-bold text-blue-600">R$ 0,00</h2>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100">
+            <h3 class="font-semibold text-slate-700">Últimas Transações</h3>
+        </div>
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                <tr>
+                    <th class="p-4 font-medium">Descrição</th>
+                    <th class="p-4 font-medium">Categoria</th>
+                    <th class="p-4 font-medium">Valor</th>
+                    <th class="p-4 font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody id="lista-transacoes-dashboard" class="text-sm text-slate-600">
+                </tbody>
+        </table>
+    </div>
+</div>
+
