@@ -283,7 +283,8 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETO ERP_ABP (ARQUITETURA MVC)
+# PROJETO ERP_ABP 
+## ARQUITETURA DAS PASTAS MVC
 ```
 erp_abp/
 ├── assets/              # Arquivos estáticos
@@ -291,6 +292,7 @@ erp_abp/
 │   ├── js/              # Bibliotecas de terceiros (Supabase, PDF, etc)
 │   └── img/             # Imagens e ícones
 ├── src/                 # Código fonte da aplicação
+│   ├── sql/             # Código SQL para banco de dados (Interação com Supabase)
 │   ├── models/          # Lógica de dados (Interação com Supabase)
 │   ├── controllers/     # Regras de negócio e ponte View <-> Model
 │   └── views/           # Apenas a interface (HTML puro)
@@ -306,7 +308,7 @@ erp_abp/
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
+
 ## src/model/supabase_config.js
 ```
 // config/supabase_config.js
@@ -380,6 +382,7 @@ CREATE TABLE public.financeiro (
 # PASSO_02: Database/Functions 
 * Para apagar, você precisa remover a dependência primeiro. Vá até o SQL Editor do Supabase e execute este comando:
 ```
+drop function public.handle_new_user cascade;
 drop function public.rls_auto_enable cascade;
 ```
 ## prompt para tabela usuario criar automaticament:
