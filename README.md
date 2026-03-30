@@ -532,7 +532,7 @@ left join
 ```
 
 # aplolicies usuario (crud completo/ apenas o propio usuario)
-* selecione a tabela/Add RLS policy/Create policy
+* dentro de cada tabela: Add RLS policy/Create policy
 * Policy Name:                 usuario_master
 * Policy Command for clause:   ALL
 * Target Roles to clause:      authenticated
