@@ -477,10 +477,13 @@ CREATE TABLE public.usuarios (
   CONSTRAINT usuarios_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
 ```
-## Script SQL: Criando a View `v_financeiro`
 
+## Script SQL: Criando a View `v_financeiro`
+* Para selecionar sls das tabelas que compoem a view adicione: with (security_invoker)
+* Exemplo: create or replace view public.v_financeiro **with (security_invoker)** as
+select .....
 ```
-create or replace view public.v_financeiro as
+create or replace view public.v_financeiro with (security_invoker) as
 select 
     -- Dados principais do financeiro
     f.id,
@@ -527,17 +530,12 @@ left join
     public.tipo_tranzacao tt on f.tipo = tt.id;
 
 ```
-# para selecionar sls das tabelas que compoem a view adicione: with (security_invoker)
-* Exemplo: create or replace view public.v_financeiro with (security_invoker) as
-select .....
 
-```
 # aplolicies usuario (crud completo/ apenas o propio usuario)
 * selecione a tabela/Add RLS policy/Create policy
 * Policy Name:                 usuario_master
 * Policy Command for clause:   ALL
 * Target Roles to clause:      authenticated
-
 
 Use options above to edit
 create policy "usuario_master"
@@ -550,7 +548,6 @@ using (
 ```
 (user_id = auth.uid())
 ```
-
 ) with check (
 
 ```
