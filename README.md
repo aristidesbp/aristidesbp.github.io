@@ -378,6 +378,10 @@ CREATE TABLE public.financeiro (
 ```
 ---
 # PASSO_02: Database/Functions 
+* Para apagar, você precisa remover a dependência primeiro. Vá até o SQL Editor do Supabase e execute este comando:
+```
+drop function public.rls_auto_enable cascade;
+```
 ## prompt para tabela usuario criar automaticament:
 ```
 Crie uma função trigger que para ser implementado no Supabase com o seguinte objetivo;
