@@ -294,7 +294,6 @@ erp_abp/
 │   ├── models/          # Lógica de dados (Interação com Supabase)
 │   ├── controllers/     # Regras de negócio e ponte View <-> Model
 │   └── views/           # Apenas a interface (HTML puro)
-├── config/              # Configurações globais (API Keys)
 └── index.html           # Ponto de entrada (Dashboard)
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -307,8 +306,8 @@ erp_abp/
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
-  
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
+## src/model/supabase_config.js
 
 
 
