@@ -528,49 +528,8 @@ left join
 
 ```
 # para selecionar sls das tabelas que compoem a view adicione: with (security_invoker)
-
-```
-create or replace view public.v_financeiro with (security_invoker) as
-select 
-    -- Dados do Movimento Financeiro
-    f.id,
-    f.created_at,
-    f.descricao,
-    f.valor,
-    f.data_vencimento,
-    f.data_pagamento,
-    f.status,
-    f.categoria as categoria_nome,
-    
-    -- Detalhes do Autor (Relacionamento com a tabela usuarios)
-    u.nome_completo as autor_nome,
-    u.avatar_url as autor_avatar,
-    
-    -- Nome da Categoria/Tipo (Relacionamento com tipo_tranzacao)
-    tt.categorias as tipo_movimentacao,
-
-    -- Cálculos de Caixa (Lógica Condicional)
-    case 
-        when tt.categorias ilike '%entrada%' and f.data_pagamento is not null then f.valor 
-        else 0 
-    end as valor_entrada,
-
-    case 
-        when tt.categorias ilike '%saida%' and f.data_pagamento is not null then f.valor 
-        else 0 
-    end as valor_saida,
-
-    case 
-        when f.data_pagamento is null then f.valor 
-        else 0 
-    end as valor_previsao
-
-from 
-    public.financeiro f
-left join 
-    public.usuarios u on f.user_id = u.id
-left join 
-    public.tipo_tranzacao tt on f.tipo = tt.id;
+* Exemplo: create or replace view public.v_financeiro with (security_invoker) as
+select .....
 
 ```
 # aplolicies usuario (crud completo/ apenas o propio usuario)
