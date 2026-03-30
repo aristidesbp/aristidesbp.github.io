@@ -1,121 +1,27 @@
+// Dados Pessoais e Endereço
+        const nome = document.getElementById('input_nome').value.trim();
+        const cpf = document.getElementById('input_cpf').value.replace(/\D/g, ''); // Remove máscara se houver
+        const nascimento = document.getElementById('input_nascimento').value;
+        const email = document.getElementById('input_email').value.trim();
+        const telefone = document.getElementById('input_telefone').value.trim();
+        const cep = document.getElementById('input_cep').value.replace(/\D/g, '');
+        const logradouro = document.getElementById('input_logradouro').value.trim();
+        const numero = document.getElementById('input_numero').value.trim();
+        const bairro = document.getElementById('input_bairro').value.trim();
+        const cidade = document.getElementById('input_cidade').value.trim();
+        const uf = document.getElementById('input_uf').value;
 
+        // Permissões de Acesso (Checkboxes)
+        const permissoes = {
+            ler: document.getElementById('check_permissao_ler').checked,
+            editar: document.getElementById('check_permissao_editar').checked,
+            cadastrar: document.getElementById('check_permissao_cadastrar').checked,
+            deletar: document.getElementById('check_permissao_deletar').checked
+        };
 
-    
-
-//##################################################################################
-/** * ERP ABP - utilidades.js
- * Funções auxiliares e automação de interface
- */
-
-// 1. Limpa todos os campos e volta o formulário ao estado inicial
-function resetForm() {
-    // Limpa Inputs, Selects e Textareas
-    document.querySelectorAll('input, select, textarea').forEach(campo => {
-        if (campo.id === 'avaliacao') {
-            campo.value = '5';
-        } else if (campo.tagName === 'SELECT') {
-            campo.selectedIndex = 0;
-        } else {
-            campo.value = '';
-        }
-    });
-
-    // Reset de elementos visuais de edição
-    const editId = document.getElementById('edit-id');
-    if (editId) editId.value = '';
-
-    const formTitle = document.getElementById('form-title');
-    if (formTitle) formTitle.innerText = "Novo Cadastro de Entidade";
-
-    const btnSave = document.getElementById('btn-save');
-    if (btnSave) btnSave.innerText = "Salvar Entidade";
-
-    const btnCancel = document.getElementById('btn-cancel');
-    if (btnCancel) btnCancel.style.display = "none";
-
-    console.log("🧹 Campos limpos com sucesso!");
-}
-
-// 2. Filtro de busca em tempo real (sem precisar de botão)
-function filtrarTabela() {
-    const termo = document.getElementById('inputBusca').value.toLowerCase();
-    const linhas = document.querySelectorAll('#entities-list tr');
-
-    linhas.forEach(linha => {
-        const texto = linha.innerText.toLowerCase();
-        linha.style.display = texto.includes(termo) ? '' : 'none';
-    });
-}
-
-// 3. Função para alternar visibilidade da senha
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('senha_acesso');
-    const toggleIcon = document.getElementById('togglePassword');
-    if (passwordInput && passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else if (passwordInput) {
-        passwordInput.type = 'password';
-        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
-    }
-}
-
-// 4. Busca de CEP automática (ViaCEP)
-async function buscaCEP() {
-    const cep = document.getElementById('cep').value.replace(/\D/g, '');
-    if (cep.length === 8) {
-        try {
-            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await res.json();
-            if (!data.erro) {
-                document.getElementById('logradouro').value = data.logradouro || '';
-                document.getElementById('bairro').value = data.bairro || '';
-                document.getElementById('cidade').value = data.localidade || '';
-                document.getElementById('estado').value = data.uf || '';
-                console.log("📍 Endereço preenchido via CEP");
-            }
-        } catch (e) { console.error("Erro ao buscar CEP", e); }
-    }
-     }    
-
-    // ################
-    // Selecionar/Deselecionar todos
-function toggleSelectAllEntities() {
-    const master = document.getElementById('select-all');
-    const checkboxes = document.querySelectorAll('.row-checkbox');
-    checkboxes.forEach(cb => cb.checked = master.checked);
-    updateSelectedCountEntities();
-}
-
-// Atualizar contador e visibilidade da barra vermelha
-function updateSelectedCountEntities() {
-    const selecionados = document.querySelectorAll('.row-checkbox:checked').length;
-    const bulkArea = document.getElementById('bulk-area');
-    const countLabel = document.getElementById('selected-count');
-    
-    bulkArea.style.display = selecionados > 0 ? 'flex' : 'none';
-    countLabel.innerText = `${selecionados} selecionados`;
-}
-
-// Função de exclusão em massa no Supabase
-async function deleteSelectedEntities() {
-    const selecionados = document.querySelectorAll('.row-checkbox:checked');
-    const ids = Array.from(selecionados).map(cb => cb.value);
-
-    if (!confirm(`Tem certeza que deseja excluir ${ids.length} entidades permanentemente?`)) return;
-
-    const { error } = await window.supabaseClient
-        .from('entidades')
-        .delete()
-        .in('id', ids);
-
-    if (error) {
-        alert("Erro ao excluir em massa: " + error.message);
-    } else {
-        alert("Entidades excluídas com sucesso!");
-        document.getElementById('select-all').checked = false;
-        updateSelectedCountEntities();
-        loadEntities(); // Recarrega a tabela
-    }
-}
-
+        // URLs Permitidas (Transforma o texto em Array)
+        const urlsTexto = document.getElementById('textarea_urls_acesso').value;
+        const urlsAcesso = urlsTexto
+            .split(/[\n,]+/)           // Divide por nova linha ou vírgula
+            .map(url => url.trim())    // Remove espaços extras
+            .filter(url => url !== ""); // Remove itens vazios
