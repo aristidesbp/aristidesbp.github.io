@@ -182,12 +182,15 @@ loginForm.addEventListener('submit', async (e) => {
     }
 });
 
-// 6. Lógica de Recuperação de Senha
+// 6. Lógica de Recuperação de Senha (CORRIGIDA)
 recoveryForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('recovery-email').value;
 
-    const { error } = await _supabase.auth.resetPasswordForEmail(email);
+    const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+        // Esta linha é essencial para forçar o redirecionamento correto
+        redirectTo: 'https://aristidesbp.github.io/src/view/resetar_senha.html',
+    });
 
     if (error) {
         alert("Erro ao enviar: " + error.message);
@@ -196,6 +199,7 @@ recoveryForm.addEventListener('submit', async (e) => {
         toggleView('login');
     }
 });
+
         
     </script>
 </body>
