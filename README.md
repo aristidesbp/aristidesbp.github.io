@@ -327,6 +327,213 @@ function sairDaConta() {
 }
 console.log("✅ Conexão Supabase configurada.");
 ```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
+# src/view/login.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ClinicaPro - Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#137fec", "background-light": "#f8f9fc", "background-dark": "#0f172a" },
+                    fontFamily: { "display": ["Public Sans", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar e correções finas */
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+input:focus {
+    outline: none !important;
+    border-color: #137fec !important;
+    box-shadow: 0 0 0 3px rgba(19, 127, 236, 0.2) !important;
+}
+
+/* Animação simples de fade */
+#login-section, #recovery-section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+        </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+    <div class="relative flex min-h-screen w-full flex-col items-center justify-center p-4">
+        <div class="absolute inset-0 z-0 opacity-10 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary blur-[120px]"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-primary blur-[120px]"></div>
+        </div>
+
+        <div class="z-10 w-full max-w-md bg-white dark:bg-slate-900 shadow-xl rounded-xl border border-slate-200 dark:border-slate-800 p-8">
+            
+            <div id="login-section">
+                <div class="flex flex-col items-center mb-8">
+                    <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <span class="material-symbols-outlined !text-4xl">health_and_safety</span>
+                    </div>
+                    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">ClinicaPro</h1>
+                    <p class="text-slate-500">Plataforma Clínica Segura</p>
+                </div>
+
+                <form class="space-y-5" id="loginForm">
+                    <div class="hidden p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm" id="errorMessage"></div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">person</span>
+                            <input class="w-full rounded-lg border-slate-300 pl-10 py-3 dark:bg-slate-800 dark:border-slate-700 dark:text-white" id="email" type="email" placeholder="seu@email.com" required />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Senha</label>
+                            <button type="button" onclick="toggleView('recovery')" class="text-xs font-semibold text-primary hover:underline">Esqueci a senha</button>
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">lock</span>
+                            <input class="w-full rounded-lg border-slate-300 pl-10 pr-10 py-3 dark:bg-slate-800 dark:border-slate-700 dark:text-white" id="password" type="password" placeholder="••••••••" required />
+                            <button type="button" id="togglePassword" class="absolute right-3 top-3 text-slate-400"><span class="material-symbols-outlined" id="eyeIcon">visibility</span></button>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-primary py-3 rounded-lg text-white font-bold hover:bg-primary/90 transition-all flex justify-center items-center gap-2" type="submit" id="submitBtn">
+                        <span id="btnText">Entrar</span>
+                        <span class="material-symbols-outlined text-xl">login</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="recovery-section" class="hidden">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-primary text-2xl">lock_reset</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recuperar Acesso</h2>
+                    <p class="text-xs text-slate-500 mt-2">Enviaremos instruções para o seu e-mail.</p>
+                </div>
+                <form id="recoveryForm" class="space-y-4">
+                    <input class="w-full rounded-lg border-slate-300 py-3 px-4 dark:bg-slate-800 dark:border-slate-700 dark:text-white" id="recovery-email" type="email" placeholder="seu@email.com" required />
+                    <button class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary/90 transition-all" type="submit">Enviar Link</button>
+                </form>
+                <div class="mt-6 text-center">
+                    <button onclick="toggleView('login')" class="text-sm text-slate-500 hover:text-primary flex items-center justify-center gap-1 mx-auto">
+                        <span class="material-symbols-outlined text-lg">arrow_back</span> Voltar ao login
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        // 1. Configuração do Supabase
+const SUPABASE_URL = "https://flbcktmujsjxukmtqriq.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYmNrdG11anNqeHVrbXRxcmlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODA3NjIsImV4cCI6MjA5MDQ1Njc2Mn0.kigBNnujASjlkFcm5xGOqauz6zrgFGVu_rdQJuJkxnE";
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// 2. Elementos da DOM
+const loginForm = document.getElementById('loginForm');
+const recoveryForm = document.getElementById('recoveryForm');
+const errorDiv = document.getElementById('errorMessage');
+
+// 3. Alternar entre Login e Recuperação
+function toggleView(view) {
+    const loginSec = document.getElementById('login-section');
+    const recoverySec = document.getElementById('recovery-section');
+    
+    if (view === 'recovery') {
+        loginSec.classList.add('hidden');
+        recoverySec.classList.remove('hidden');
+    } else {
+        loginSec.classList.remove('hidden');
+        recoverySec.classList.add('hidden');
+    }
+}
+
+// 4. Mostrar/Ocultar Senha
+document.getElementById('togglePassword').addEventListener('click', () => {
+    const passInput = document.getElementById('password');
+    const icon = document.getElementById('eyeIcon');
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        icon.innerText = 'visibility_off';
+    } else {
+        passInput.type = 'password';
+        icon.innerText = 'visibility';
+    }
+});
+
+// 5. Lógica de Login
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const btnText = document.getElementById('btnText');
+
+    errorDiv.classList.add('hidden');
+    btnText.innerText = "Entrando...";
+
+    const { data, error } = await _supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        errorDiv.innerText = "Erro: " + error.message;
+        errorDiv.classList.remove('hidden');
+        btnText.innerText = "Entrar";
+    } else {
+        alert("Login realizado com sucesso! Redirecionando...");
+        window.location.href = "index.html"; 
+    }
+});
+
+// 6. Lógica de Recuperação de Senha
+recoveryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('recovery-email').value;
+
+    const { error } = await _supabase.auth.resetPasswordForEmail(email);
+
+    if (error) {
+        alert("Erro ao enviar: " + error.message);
+    } else {
+        alert("Link de recuperação enviado para o e-mail informado!");
+        toggleView('login');
+    }
+});
+        
+    </script>
+</body>
+</html>
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 
 # TUTORIAL PROJETO ERP_ABP (BANCO DE DADOS SUPABASE):
 ---
