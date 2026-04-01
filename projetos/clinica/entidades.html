@@ -291,7 +291,7 @@
                 }
             });
 
-            // registration Function
+            // registration Function using Insert
             async function cadastrarEntidade() {
                 // UI Loading State
                 btnSalvar.disabled = true;
@@ -299,11 +299,11 @@
                 btnSalvarLoader.classList.remove('hidden');
 
                 try {
-                    const formData = {
+                    const dadosParaSalvar = {
                         tipo: document.querySelector('input[name="tipo_entidade"]:checked').value,
-                        nome: document.getElementById('input_nome').value,
+                        nome_completo: document.getElementById('input_nome').value,
                         cpf: document.getElementById('input_cpf').value,
-                        nascimento: document.getElementById('input_nascimento').value,
+                        data_nascimento: document.getElementById('input_nascimento').value,
                         email: document.getElementById('input_email').value,
                         telefone: document.getElementById('input_telefone').value,
                         cep: document.getElementById('input_cep').value,
@@ -316,11 +316,13 @@
                         permissao_editar: document.getElementById('check_permissao_editar').checked,
                         permissao_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
                         permissao_deletar: document.getElementById('check_permissao_deletar').checked,
-                        urls_acesso: document.getElementById('textarea_urls_acesso').value
+                        urls_permitidas: document.getElementById('textarea_urls_acesso').value
                     };
 
-                    // Execute RPC call to Supabase
-                    const { data, error } = await supabase.rpc('cadastrar_entidade', formData);
+                    // Execute Insert call to Supabase table 'entidades'
+                    const { data, error } = await window.supabaseClient
+                        .from('entidades')
+                        .insert([dadosParaSalvar]);
 
                     if (error) throw error;
 
