@@ -1,6 +1,4 @@
-
-  
- <!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="pt-BR"><head>
 <meta charset="utf-8"/>
@@ -87,7 +85,7 @@
 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined !text-xl" data-icon="person">person</span>
 </div>
-<input class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-3 pl-11 pr-4 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" id="email" placeholder="exemplo@clinica.com" required="" type="email"/>
+<input class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-3 pl-11 pr-4 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" id="input-email" placeholder="exemplo@clinica.com" required="" type="email"/>
 </div>
 </div>
 <div>
@@ -99,7 +97,7 @@
 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined !text-xl" data-icon="lock">lock</span>
 </div>
-<input class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-3 pl-11 pr-12 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" id="password" placeholder="••••••••" required="" type="password"/>
+<input class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-3 pl-11 pr-12 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" id="input-senha" placeholder="••••••••" required="" type="password"/>
 <button class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" id="togglePassword" type="button">
 <span class="material-symbols-outlined !text-xl" data-icon="visibility" id="eyeIcon">visibility</span>
 </button>
@@ -165,118 +163,62 @@
 </div>
 </div>
 <script>
-    
         // Simulation of shared component initialization and app ready state
         window.addEventListener('DOMContentLoaded', () => {
-            // Give a tiny buffer for CSS/Fonts to settle
             setTimeout(() => {
                 const loader = document.getElementById('app-loader');
                 const content = document.getElementById('app-content');
-                
                 if (loader) loader.style.display = 'none';
                 if (content) content.removeAttribute('v-cloak');
             }, 300);
         });
 
-        // Supabase Configuration Initialization
-        const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqbXNrc3JoZGVkd3JsYW5wbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNDE5ODQsImV4cCI6MjA5MDYxNzk4NH0.X2S4UZ3WGLoxx9LsNNbJ6-kyM0DAQoTr8wY57O6m4ZA';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        // Configuration and Auth from DataStore
+        const supabaseUrl = 'https://jnvfdnyzharfiwptmmcs.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpudmZkbnl6aGFyZml3cHRtbWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODUyMjYsImV4cCI6MjA4OTE2MTIyNn0.kK4d5lyNSZtvP-rOwRNZ2p0fYD3auXQh-zvgzKNWxh0';
+        window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // DOM Elements
-        const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const togglePasswordBtn = document.getElementById('togglePassword');
-        const eyeIcon = document.getElementById('eyeIcon');
-        const recaptchaCheckbox = document.getElementById('recaptcha');
-        const recaptchaBox = document.getElementById('recaptcha-box');
-        const errorMessageDiv = document.getElementById('errorMessage');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
+        (async function verificarSessao() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session && !window.location.pathname.includes('login.html') && !window.location.pathname.endsWith('index.html')) {
+                // If on a protected page without session, redirect to login
+                // For this demo, we stay on login if no session
+            }
+        })();
 
-        // 1. Password Visibility Toggle
-        togglePasswordBtn.addEventListener('click', () => {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            eyeIcon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
-        });
+        async function realizar_login() {
+            const email = document.getElementById('input-email').value;
+            const password = document.getElementById('input-senha').value;
 
-        // 2. & 4. Functional Login Logic
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Reset state
-            errorMessageDiv.classList.add('hidden');
-            errorMessageDiv.textContent = '';
-            recaptchaBox.classList.remove('invalid');
-
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-
-            // Validation
             if (!email || !password) {
-                showError("Por favor, preencha todos os campos obrigatórios.");
+                alert('Por favor, preencha todos os campos.');
                 return;
             }
 
-            if (!recaptchaCheckbox.checked) {
-                recaptchaBox.classList.add('invalid');
-                showError("Por favor, confirme que você não é um robô.");
-                return;
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert('Erro ao entrar: ' + error.message);
+            } else {
+                window.location.href = 'pedagogo_dashboard.html';
             }
+        }
 
-            // UI Loading State
-            setLoading(true);
-
-            try {
-                // Supabase Sign In
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password,
-                });
-
-                if (error) {
-                    showError(translateError(error.message));
-                    setLoading(false);
-                } else {
-                    // Success - Redirect to loading screen (index.html per requirements)
-                    console.log("Login successful:", data);
-                    window.location.href = 'index.html';
-                }
-            } catch (err) {
-                console.error(err);
-                showError("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-                setLoading(false);
-            }
+        // Bind form
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            realizar_login();
         });
 
-        function showError(message) {
-            errorMessageDiv.textContent = message;
-            errorMessageDiv.classList.remove('hidden');
-        }
-
-        function setLoading(isLoading) {
-            if (isLoading) {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
-                btnText.textContent = 'Autenticando...';
-                btnIcon.textContent = 'sync';
-                btnIcon.classList.add('animate-spin');
-            } else {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
-                btnText.textContent = 'Entrar';
-                btnIcon.textContent = 'login';
-                btnIcon.classList.remove('animate-spin');
-            }
-        }
-
-        function translateError(message) {
-            if (message.includes('Invalid login credentials')) return 'E-mail ou senha incorretos.';
-            if (message.includes('Email not confirmed')) return 'Por favor, confirme seu e-mail antes de entrar.';
-            return message;
-        }
+        // UI Extras
+        document.getElementById('togglePassword').addEventListener('click', () => {
+            const input = document.getElementById('input-senha');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            document.getElementById('eyeIcon').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+        });
     </script>
 </body></html>
