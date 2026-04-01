@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: max(884px, 100dvh);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+<title>Cadastrar Entidade</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header Section -->
+<header class="flex items-center bg-white dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-800 justify-between sticky top-0 z-50">
+<a class="text-primary flex size-10 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors" href="listar_entidades.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Novo Cadastro</h2>
+<div class="relative" id="menu_wrapper">
+<button class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" id="btn_menu">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded shadow-xl z-50 overflow-hidden" id="dropdown_menu">
+<button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-100 dark:border-slate-800" id="menu_link_form">
+<span class="material-symbols-outlined mr-3 text-primary text-[20px]">edit_note</span>
+                        Formulário
+                    </button>
+<button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" id="menu_link_list">
+<span class="material-symbols-outlined mr-3 text-primary text-[20px]">list_alt</span>
+                        Listar Entidades
+                    </button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto w-full pb-12" id="form_section">
+<!-- Avatar Section -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center group cursor-pointer" id="avatar_container">
+<div class="flex items-center justify-center bg-primary/10 dark:bg-primary/20 aspect-square rounded-full min-h-32 w-32 border-2 border-dashed border-primary/40 group-hover:border-primary transition-all overflow-hidden" id="preview_placeholder">
+<span class="material-symbols-outlined text-primary text-5xl" id="avatar_icon">person</span>
+<img alt="Preview" class="hidden w-full h-full object-cover" id="image_preview"/>
+</div>
+<p class="text-primary text-sm font-bold leading-tight tracking-[-0.015em] text-center" id="avatar_text">Adicionar Foto</p>
+<input accept="image/*" class="hidden" id="input_foto" type="file"/>
+</div>
+</div>
+</div>
+<!-- Segmented Toggle -->
+<div class="flex px-4 py-3">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Paciente</span>
+<input checked="" class="hidden" name="tipo_entidade" type="radio" value="Paciente"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Responsável</span>
+<input class="hidden" name="tipo_entidade" type="radio" value="Responsável"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Colaborador</span>
+<input class="hidden" name="tipo_entidade" type="radio" value="Colaborador"/>
+</label>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 px-4 py-3">
+<!-- Nome -->
+<div class="flex flex-col flex-1 py-2 md:col-span-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Nome Completo</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all" id="input_nome" placeholder="Digite o nome completo"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">badge</span>
+</div>
+</div>
+</div>
+<!-- CPF -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">CPF</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cpf" placeholder="000.000.000-00"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">fingerprint</span>
+</div>
+</div>
+</div>
+<!-- Nascimento -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Nascimento</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_nascimento" type="date"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- E-mail -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">E-mail</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_email" placeholder="email@exemplo.com" type="email"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">mail</span>
+</div>
+</div>
+</div>
+<!-- Telefone -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Telefone</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_telefone" placeholder="(00) 00000-0000"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">call</span>
+</div>
+</div>
+</div>
+<!-- CEP -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">CEP</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cep" placeholder="00000-000"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">map</span>
+</div>
+</div>
+</div>
+<!-- Logradouro -->
+<div class="flex flex-col flex-1 py-2 md:col-span-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Logradouro</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_logradouro" placeholder="Rua, Avenida, etc."/>
+</div>
+<!-- Número & Bairro -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Número</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_numero" placeholder="Ex: 123"/>
+</div>
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Bairro</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_bairro" placeholder="Seu bairro"/>
+</div>
+<!-- Cidade & UF -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Cidade</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cidade" placeholder="Sua cidade"/>
+</div>
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">UF</p>
+<select class="form-select flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_uf">
+<option value="">Selecione</option>
+<option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+</select>
+</div>
+</div>
+<!-- Permissões de Acesso Section -->
+<div class="px-4 py-3">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-4">Permissões de Acesso</h3>
+<div class="flex flex-wrap gap-4 py-2 mb-4">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_ler" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Ler</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_editar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Editar</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_cadastrar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Cadastrar</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_deletar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Deletar</span>
+</label>
+</div>
+<div class="flex flex-col py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">URLs Permitidas</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<textarea class="form-textarea flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary min-h-[100px] px-4 py-3 text-base transition-all resize-none" id="textarea_urls_acesso" placeholder="Digite as URLs separadas por vírgula ou uma por linha"></textarea>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-start pt-3 justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">link</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 px-4 py-8">
+<button class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-70 disabled:cursor-not-allowed" id="btn_salvar">
+<span id="btn_salvar_text">Salvar Registro</span>
+<span class="hidden" id="btn_salvar_loader"><span class="material-symbols-outlined loading-spinner">progress_activity</span></span>
+</button>
+<button class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-base font-bold tracking-wide hover:bg-slate-300 dark:hover:bg-slate-700 transition-all" id="btn_cancelar">
+                    Cancelar
+                </button>
+</div>
+</main>
+</div>
+<script src="supabase_config.js"></script>
+<script src="navbar.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatarContainer = document.getElementById('avatar_container');
+            const inputFoto = document.getElementById('input_foto');
+            const imagePreview = document.getElementById('image_preview');
+            const avatarIcon = document.getElementById('avatar_icon');
+            const avatarText = document.getElementById('avatar_text');
+            const inputCep = document.getElementById('input_cep');
+            const btnSalvar = document.getElementById('btn_salvar');
+            const btnSalvarText = document.getElementById('btn_salvar_text');
+            const btnSalvarLoader = document.getElementById('btn_salvar_loader');
+            const btnCancelar = document.getElementById('btn_cancelar');
+
+            // Image Preview Functionality
+            avatarContainer.addEventListener('click', () => inputFoto.click());
+            inputFoto.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imagePreview.src = event.target.result;
+                        imagePreview.classList.remove('hidden');
+                        avatarIcon.classList.add('hidden');
+                        avatarText.innerText = 'Alterar Foto';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // CEP Auto-fill
+            inputCep.addEventListener('blur', async (e) => {
+                const cep = e.target.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    try {
+                        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const data = await response.json();
+                        if (!data.erro) {
+                            document.getElementById('input_logradouro').value = data.logradouro || '';
+                            document.getElementById('input_bairro').value = data.bairro || '';
+                            document.getElementById('input_cidade').value = data.localidade || '';
+                            document.getElementById('input_uf').value = data.uf || '';
+                            document.getElementById('input_numero').focus();
+                        }
+                    } catch (err) {
+                        console.error('Erro ao buscar CEP:', err);
+                    }
+                }
+            });
+
+            // registration Function
+            async function cadastrarEntidade() {
+                // UI Loading State
+                btnSalvar.disabled = true;
+                btnSalvarText.classList.add('hidden');
+                btnSalvarLoader.classList.remove('hidden');
+
+                try {
+                    const formData = {
+                        tipo: document.querySelector('input[name="tipo_entidade"]:checked').value,
+                        nome: document.getElementById('input_nome').value,
+                        cpf: document.getElementById('input_cpf').value,
+                        nascimento: document.getElementById('input_nascimento').value,
+                        email: document.getElementById('input_email').value,
+                        telefone: document.getElementById('input_telefone').value,
+                        cep: document.getElementById('input_cep').value,
+                        logradouro: document.getElementById('input_logradouro').value,
+                        numero: document.getElementById('input_numero').value,
+                        bairro: document.getElementById('input_bairro').value,
+                        cidade: document.getElementById('input_cidade').value,
+                        uf: document.getElementById('input_uf').value,
+                        permissao_ler: document.getElementById('check_permissao_ler').checked,
+                        permissao_editar: document.getElementById('check_permissao_editar').checked,
+                        permissao_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
+                        permissao_deletar: document.getElementById('check_permissao_deletar').checked,
+                        urls_acesso: document.getElementById('textarea_urls_acesso').value
+                    };
+
+                    // Execute RPC call to Supabase
+                    const { data, error } = await supabase.rpc('cadastrar_entidade', formData);
+
+                    if (error) throw error;
+
+                    alert('Entidade cadastrada com sucesso!');
+                    window.location.href = 'listar_entidades.html';
+
+                } catch (error) {
+                    console.error('Erro ao cadastrar:', error);
+                    alert('Ocorreu um erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+                } finally {
+                    btnSalvar.disabled = false;
+                    btnSalvarText.classList.remove('hidden');
+                    btnSalvarLoader.classList.add('hidden');
+                }
+            }
+
+            // Event Listeners
+            btnSalvar.addEventListener('click', (e) => {
+                e.preventDefault();
+                cadastrarEntidade();
+            });
+
+            btnCancelar.addEventListener('click', () => {
+                window.location.href = 'listar_entidades.html';
+            });
+
+            // Toggle menu logic
+            const btnMenu = document.getElementById('btn_menu');
+            const dropdownMenu = document.getElementById('dropdown_menu');
+            btnMenu?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu?.classList.toggle('hidden');
+            });
+            document.addEventListener('click', () => dropdownMenu?.classList.add('hidden'));
+        });
+    </script>
+</body></html>
