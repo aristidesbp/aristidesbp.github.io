@@ -162,7 +162,7 @@
 </div>
 </div>
 </div>
-<script>
+<script src="supabase_config.js"></script><script>
         // Simulation of shared component initialization and app ready state
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
@@ -172,9 +172,6 @@
                 if (content) content.removeAttribute('v-cloak');
             }, 300);
         });
-
-        
-<script src="supabase_config.js></script>
 
         (async function verificarSessao() {
             const { data: { session } } = await window.supabaseClient.auth.getSession();
