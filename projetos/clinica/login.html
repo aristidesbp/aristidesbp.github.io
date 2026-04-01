@@ -8,21 +8,115 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f8f9fc",
-                        "background-dark": "#0f172a",
-                    },
-                    fontFamily: {
-                        "display": ["Public Sans", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
+        // Helper to remove loading state
+        function revealApp() {
+            const loader = document.getElementById('app-loader');
+            const content = document.getElementById('app-content');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 300);
+            }
+            if (content) {
+                content.classList.remove('opacity-0');
+            }
+        }
+
+        // Initialize App and Session Check
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Ensure Supabase is available
+                if (!window.supabaseClient) {
+                    console.error('Supabase client not initialized. Check supabase_config.js.');
+                    revealApp();
+                    return;
+                }
+
+                // Check for existing session
+                const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+                
+                if (session) {
+                    // Redirect to dashboard if already logged in
+                    window.location.href = 'pedagogo_dashboard.html';
+                } else {
+                    // Stay on login and show content
+                    revealApp();
+                }
+            } catch (err) {
+                console.error('Error during initialization:', err);
+                revealApp();
+            }
+        });
+
+        async function realizar_login() {
+            const email = document.getElementById('input-email').value;
+            const password = document.getElementById('input-senha').value;
+            const recaptcha = document.getElementById('recaptcha');
+            const recaptchaBox = document.getElementById('recaptcha-box');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Reset states
+            errorMessage.classList.add('hidden');
+            recaptchaBox.classList.remove('border-red-500', 'bg-red-50');
+
+            // Validation
+            if (!recaptcha.checked) {
+                errorMessage.textContent = 'Por favor, confirme que você não é um robô.';
+                errorMessage.classList.remove('hidden');
+                recaptchaBox.classList.add('border-red-500', 'bg-red-50');
+                return;
+            }
+
+            if (!email || !password) {
+                errorMessage.textContent = 'Por favor, preencha todos os campos.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // UI feedback
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            try {
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    errorMessage.textContent = 'Erro ao entrar: ' + (error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
+                    errorMessage.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                } else {
+                    window.location.href = 'pedagogo_dashboard.html';
+                }
+            } catch (err) {
+                errorMessage.textContent = 'Erro de conexão. Tente novamente.';
+                errorMessage.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        }
+
+        // Bind form
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                realizar_login();
+            });
+        }
+
+        // UI Extras
+        const toggleBtn = document.getElementById('togglePassword');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const input = document.getElementById('input-senha');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                document.getElementById('eyeIcon').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+            });
         }
     </script>
 <style>
@@ -184,7 +278,7 @@
                 // Ensure Supabase is available
                 if (!window.supabaseClient) {
                     console.error('Supabase client not initialized. Check supabase_config.js.');
-                    revealApp(); // Reveal anyway so user sees something is wrong vs infinite loading
+                    revealApp();
                     return;
                 }
 
@@ -192,8 +286,8 @@
                 const { data: { session }, error } = await window.supabaseClient.auth.getSession();
                 
                 if (session) {
-                    // Redirect to home/dashboard if already logged in
-                    window.location.href = 'index.html';
+                    // Redirect to dashboard if already logged in
+                    window.location.href = 'pedagogo_dashboard.html';
                 } else {
                     // Stay on login and show content
                     revealApp();
@@ -207,31 +301,52 @@
         async function realizar_login() {
             const email = document.getElementById('input-email').value;
             const password = document.getElementById('input-senha').value;
+            const recaptcha = document.getElementById('recaptcha');
+            const recaptchaBox = document.getElementById('recaptcha-box');
             const submitBtn = document.getElementById('submitBtn');
             const errorMessage = document.getElementById('errorMessage');
 
+            // Reset states
+            errorMessage.classList.add('hidden');
+            recaptchaBox.classList.remove('border-red-500', 'bg-red-50');
+
+            // Validation
+            if (!recaptcha.checked) {
+                errorMessage.textContent = 'Por favor, confirme que você não é um robô.';
+                errorMessage.classList.remove('hidden');
+                recaptchaBox.classList.add('border-red-500', 'bg-red-50');
+                return;
+            }
+
             if (!email || !password) {
-                alert('Por favor, preencha todos os campos.');
+                errorMessage.textContent = 'Por favor, preencha todos os campos.';
+                errorMessage.classList.remove('hidden');
                 return;
             }
 
             // UI feedback
             submitBtn.disabled = true;
             submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-            errorMessage.classList.add('hidden');
 
-            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            try {
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
 
-            if (error) {
-                errorMessage.textContent = 'Erro ao entrar: ' + error.message;
+                if (error) {
+                    errorMessage.textContent = 'Erro ao entrar: ' + (error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
+                    errorMessage.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                } else {
+                    window.location.href = 'pedagogo_dashboard.html';
+                }
+            } catch (err) {
+                errorMessage.textContent = 'Erro de conexão. Tente novamente.';
                 errorMessage.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-            } else {
-                window.location.href = 'pedagogo_dashboard.html';
             }
         }
 
