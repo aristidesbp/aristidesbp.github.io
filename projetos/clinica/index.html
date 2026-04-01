@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 
-<html class="light" lang="pt-BR"><head><script>
-        (function() {
-            // Check for Supabase session in localStorage (common pattern)
-            const supabaseSession = localStorage.getItem('sb-access-token') || localStorage.getItem('supabase.auth.token');
-            
-            // If no session or token is found, redirect immediately
-            if (!supabaseSession) {
-                window.location.replace('login.html');
-            }
-        })();
-    </script>
+<html class="light" lang="pt-BR"><head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Arquivo: src/js/supabase_config.js
+    const supabaseUrl = 'SUA_SUPABASE_URL';
+    const supabaseKey = 'SUA_SUPABASE_ANON_KEY';
+    window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Arquivo: src/js/auth/verificar_login.js
+    (async function verificarSessao() {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session && !window.location.pathname.includes('login.html') && !window.location.pathname.endsWith('index.html')) {
+            window.location.href = 'login.html';
+        }
+    })();
+</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Painel do Supervisor - ERP-PSC</title>
