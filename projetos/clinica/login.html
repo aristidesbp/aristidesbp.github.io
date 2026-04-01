@@ -48,6 +48,7 @@
             align-items: center;
             justify-content: center;
             background-color: #f8f9fc;
+            transition: opacity 0.3s ease-out;
         }
         .dark #app-loader {
             background-color: #0f172a;
@@ -63,7 +64,7 @@
 </div>
 </div>
 <!-- Main Content Container with Cloak -->
-<div class="relative flex min-h-screen w-full flex-col items-center justify-center overflow-x-hidden p-4" id="app-content" v-cloak="">
+<div class="relative flex min-h-screen w-full flex-col items-center justify-center overflow-x-hidden p-4 opacity-0 transition-opacity duration-500" id="app-content">
 <div class="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary blur-[120px]"></div>
 <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-primary blur-[120px]"></div>
@@ -80,7 +81,7 @@
 <!-- Error Message Container -->
 <div class="hidden p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm font-medium" id="errorMessage"></div>
 <div>
-<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5" for="email">E-mail</label>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5" for="input-email">E-mail</label>
 <div class="relative group">
 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined !text-xl" data-icon="person">person</span>
@@ -90,7 +91,7 @@
 </div>
 <div>
 <div class="flex items-center justify-between mb-1.5">
-<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300" for="password">Senha</label>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300" for="input-senha">Senha</label>
 <a class="text-xs font-semibold text-primary hover:underline" href="#">Esqueci minha senha</a>
 </div>
 <div class="relative group">
@@ -162,33 +163,62 @@
 </div>
 </div>
 </div>
-<script src="supabase_config.js"></script><script>
-        // Simulation of shared component initialization and app ready state
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('app-loader');
-                const content = document.getElementById('app-content');
-                if (loader) loader.style.display = 'none';
-                if (content) content.removeAttribute('v-cloak');
-            }, 300);
-        });
-
-        (async function verificarSessao() {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (!session && !window.location.pathname.includes('login.html') && !window.location.pathname.endsWith('index.html')) {
-                // If on a protected page without session, redirect to login
-                // For this demo, we stay on login if no session
+<script src="supabase_config.js"></script>
+<script>
+        // Helper to remove loading state
+        function revealApp() {
+            const loader = document.getElementById('app-loader');
+            const content = document.getElementById('app-content');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 300);
             }
-        })();
+            if (content) {
+                content.classList.remove('opacity-0');
+            }
+        }
+
+        // Initialize App and Session Check
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Ensure Supabase is available
+                if (!window.supabaseClient) {
+                    console.error('Supabase client not initialized. Check supabase_config.js.');
+                    revealApp(); // Reveal anyway so user sees something is wrong vs infinite loading
+                    return;
+                }
+
+                // Check for existing session
+                const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+                
+                if (session) {
+                    // Redirect to home/dashboard if already logged in
+                    window.location.href = 'index.html';
+                } else {
+                    // Stay on login and show content
+                    revealApp();
+                }
+            } catch (err) {
+                console.error('Error during initialization:', err);
+                revealApp();
+            }
+        });
 
         async function realizar_login() {
             const email = document.getElementById('input-email').value;
             const password = document.getElementById('input-senha').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMessage = document.getElementById('errorMessage');
 
             if (!email || !password) {
                 alert('Por favor, preencha todos os campos.');
                 return;
             }
+
+            // UI feedback
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+            errorMessage.classList.add('hidden');
 
             const { data, error } = await window.supabaseClient.auth.signInWithPassword({
                 email: email,
@@ -196,24 +226,33 @@
             });
 
             if (error) {
-                alert('Erro ao entrar: ' + error.message);
+                errorMessage.textContent = 'Erro ao entrar: ' + error.message;
+                errorMessage.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
             } else {
                 window.location.href = 'pedagogo_dashboard.html';
             }
         }
 
         // Bind form
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            realizar_login();
-        });
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                realizar_login();
+            });
+        }
 
         // UI Extras
-        document.getElementById('togglePassword').addEventListener('click', () => {
-            const input = document.getElementById('input-senha');
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-            document.getElementById('eyeIcon').textContent = type === 'password' ? 'visibility' : 'visibility_off';
-        });
+        const toggleBtn = document.getElementById('togglePassword');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const input = document.getElementById('input-senha');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                document.getElementById('eyeIcon').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+            });
+        }
     </script>
 </body></html>
