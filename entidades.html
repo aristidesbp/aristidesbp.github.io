@@ -322,4 +322,62 @@
         }
     </script>
 </body>
+    
+<!--
+    
+-- 1. Criação da tabela 'entidades'
+CREATE TABLE entidades (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE, -- Vinculação com Auth
+    nome_completo TEXT NOT NULL,
+    cpf TEXT,
+    data_nascimento DATE,
+    email TEXT,
+    telefone TEXT,
+    senha_acesso TEXT,
+    tipo_acesso TEXT DEFAULT 'cliente',
+    tipo_entidade TEXT DEFAULT 'cliente',
+    status_entidade TEXT DEFAULT 'ativo',
+    avaliacao INTEGER DEFAULT 5,
+    cep TEXT,
+    logradouro TEXT,
+    numero TEXT,
+    bairro TEXT,
+    cidade TEXT,
+    estado VARCHAR(2), -- CORRIGIDO: De TEXT(2) para VARCHAR(2)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Habilitar Row Level Security (RLS)
+-- Isso é fundamental para que as políticas de acesso funcionem
+ALTER TABLE entidades ENABLE ROW LEVEL SECURITY;
+
+-- 3. Criação de Políticas de Segurança (Policies)
+-- Só permite o CRUD se o usuário estiver autenticado (logado)
+
+-- Política para LEITURA (SELECT)
+CREATE POLICY "Permitir leitura para usuários logados" 
+ON entidades FOR SELECT 
+TO authenticated 
+USING (true);
+
+-- Política para INSERÇÃO (INSERT)
+CREATE POLICY "Permitir inserção para usuários logados" 
+ON entidades FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+-- Política para ATUALIZAÇÃO (UPDATE)
+CREATE POLICY "Permitir atualização para usuários logados" 
+ON entidades FOR UPDATE 
+TO authenticated 
+USING (true);
+
+-- Política para EXCLUSÃO (DELETE)
+CREATE POLICY "Permitir exclusão para usuários logados" 
+ON entidades FOR DELETE 
+TO authenticated 
+USING (true);
+-->
+    
 </html>
