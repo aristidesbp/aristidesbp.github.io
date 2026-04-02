@@ -380,21 +380,29 @@ TO authenticated
 USING (true);
   
 -- function tregger  (tabela entidade vira espelho auth_user_id)
-create or replace function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-begin
-  insert into public.entidaded (user_id, nome_completo, avatar_url)
-  values (
-    new.id,
-    new.raw_user_meta_data->>'full_name',
-    new.raw_user_meta_data->>'avatar_url'
+-- 1. Criar a função que será executada pelo gatilho
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.entidades (user_id, email, nome_completo, status_entidade, tipo_acesso, tipo_entidade)
+  VALUES (
+    new.id, 
+    new.email, 
+    COALESCE(new.raw_user_meta_data->>'full_name', 'Utilizador Novo'),
+    'ativo',
+    'cliente',
+    'cliente'
   );
-  return new;
-end;
-$$;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 2. Criar o gatilho (trigger) que chama a função
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+    
+    
 -->
     
 </html>
