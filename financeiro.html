@@ -415,5 +415,55 @@
         }
     </script>
 </body>
+<!--
+    -- ============================================================================
+-- MÓDULO FINANCEIRO: LIMPEZA PREVENTIVA
+-- ============================================================================
+-- Apaga a tabela antiga se ela existir para evitar conflitos
+DROP TABLE IF EXISTS public.financeiro CASCADE;
 
+-- ============================================================================
+-- 1. CRIAÇÃO DA TABELA FINANCEIRA
+-- ============================================================================
+CREATE TABLE public.financeiro (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    tipo TEXT NOT NULL CHECK (tipo IN ('receita', 'despesa')),
+    categoria TEXT,
+    descricao TEXT NOT NULL,
+    valor NUMERIC(10,2) NOT NULL DEFAULT 0.00,
+    data_vencimento DATE,
+    data_pagamento DATE,
+    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY)
+-- ============================================================================
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================================
+-- 3. REGRAS DE SEGURANÇA POR CARGO
+-- ============================================================================
+-- Master pode fazer tudo (Ler, Inserir, Atualizar e Apagar)
+CREATE POLICY "Master ver tudo financeiro" ON public.financeiro 
+FOR ALL TO authenticated 
+USING (public.get_user_role() = 'master');
+
+-- Funcionário pode ler, inserir e atualizar (Mas NÃO PODE APAGAR)
+CREATE POLICY "Funcionario ler financeiro" ON public.financeiro 
+FOR SELECT TO authenticated 
+USING (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario inserir financeiro" ON public.financeiro 
+FOR INSERT TO authenticated 
+WITH CHECK (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario atualizar financeiro" ON public.financeiro 
+FOR UPDATE TO authenticated 
+USING (public.get_user_role() = 'funcionario');
+
+-- Nota: Não criamos política para 'cliente', logo eles estão bloqueados!
+    -->
 </html>
