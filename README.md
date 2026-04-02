@@ -281,6 +281,43 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SUPABASE
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+
+## src/model/supabase_config.js
+```
+// config/supabase_config.js
+// Substitua pelos seus dados reais do painel do Supabase (Project Settings > API)
+const _supabaseUrl = 'url_ProjectID';
+const _supabaseKey = 'anon_key;
+
+// Inicializa o cliente globalmente
+const supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+// Função utilitária global para logout (usada na navbar)
+function sairDaConta() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "../../index.html"; // Ajuste o caminho conforme necessário
+}
+console.log("✅ Conexão Supabase configurada.");
+```
+# APAGENDO FUNCTIONS A FORÇA
+```
+-- Força a exclusão da função rls_auto_enable (que você apontou na imagem)
+DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
+
+-- Se quiser aproveitar e forçar a limpeza da handle_new_user também, rode esta:
+DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PERSONA [aristidesbp]
@@ -702,35 +739,6 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
   -->
 
   ME PERGUNTE SE EU TENHO ALGUMA PAGINA QUE EU QUEIRA TRANSFORMAR EM UM "SPA" !
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-
-## src/model/supabase_config.js
-```
-// config/supabase_config.js
-// Substitua pelos seus dados reais do painel do Supabase (Project Settings > API)
-const _supabaseUrl = 'url_ProjectID';
-const _supabaseKey = 'anon_key;
-
-// Inicializa o cliente globalmente
-const supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
-
-// Função utilitária global para logout (usada na navbar)
-function sairDaConta() {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.href = "../../index.html"; // Ajuste o caminho conforme necessário
-}
-console.log("✅ Conexão Supabase configurada.");
 ```
 
 
