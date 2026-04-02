@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="light">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Gestão de Entidades - ERP ABP</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3ecf8e", /* Ajustado para o teu verde padrão */
+                        "background-light": "#f1f5f9",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; background: var(--background-light); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        .loading-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .tonal-layering-card { background-color: #ffffff; transition: all 0.3s ease; }
+        .dark .tonal-layering-card { background-color: #1e2123; }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%; border-radius: 0.5rem; border: 1px solid #cbd5e1; height: 3rem; padding: 0 1rem;
+            outline: none; transition: all 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #3ecf8e; box-shadow: 0 0 0 2px rgba(62, 207, 142, 0.2);
+        }
+        .input-group-icon {
+            display: flex; align-items: center; justify-content: center; padding: 0 1rem;
+            background: #f8fafc; border: 1px solid #cbd5e1; border-left: none; border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        /* Ocultar elementos */
+        .hidden-view { display: none !important; }
+    </style>
+
+    <script>
+        // --- 1. CONFIGURAÇÃO DO SUPABASE ---
+        const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
+        const supabaseKey = 'SUA_CHAVE_AQUI'; // COLOCA A TUA CHAVE AQUI
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- 2. CONTROLO DE SESSÃO E LOGIN ---
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                document.getElementById('tela-login').classList.remove('hidden-view');
+                document.getElementById('tela-sistema').classList.add('hidden-view');
+            } else {
+                document.getElementById('tela-login').classList.add('hidden-view');
+                document.getElementById('tela-sistema').classList.remove('hidden-view');
+                loadEntities(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !senha) return alert("Preencha e-mail e senha.");
+            
+            btn.innerHTML = '<span class="material-symbols-outlined loading-spinner">progress_activity</span>';
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) {
+                alert("Erro ao fazer login: " + error.message);
+                btn.innerHTML = 'Entrar no Sistema';
+            } else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                btn.innerHTML = 'Entrar no Sistema';
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body class="text-slate-900 dark:text-slate-100">
+
+    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900 hidden-view">
+        <div class="bg-white p-10 rounded-2xl w-full max-w-md shadow-2xl text-center">
+            <span class="material-symbols-outlined text-primary text-6xl mb-4">admin_panel_settings</span>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Acesso Restrito</h2>
+            <p class="text-slate-500 mb-8">Gestão de Entidades ABP</p>
+            
+            <input type="email" id="login-email" class="form-input mb-4 w-full" placeholder="Seu e-mail">
+            <input type="password" id="login-senha" class="form-input mb-6 w-full" placeholder="Sua senha">
+            
+            <button id="btn-login" class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-opacity-90 transition-all flex justify-center items-center" onclick="fazerLogin()">
+                Entrar no Sistema
+            </button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" class="relative flex min-h-screen w-full flex-col bg-background-light hidden-view">
+        
+        <header class="flex items-center bg-white p-4 border-b border-slate-200 justify-between sticky top-0 z-50 shadow-sm">
+            <a class="text-primary flex size-10 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors" href="index.html">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+            <h2 class="text-slate-900 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Gestão de Entidades</h2>
+            
+            <div class="relative" id="menu_wrapper">
+                <button class="text-slate-500 hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-slate-100" id="btn_menu" onclick="toggleMenu()">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden" id="dropdown_menu">
+                    <button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors border-b border-slate-100" onclick="showView('form_section')">
+                        <span class="material-symbols-outlined mr-3 text-primary">person_add</span> Novo Cadastro
+                    </button>
+                    <button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors border-b border-slate-100" onclick="showView('list_section')">
+                        <span class="material-symbols-outlined mr-3 text-primary">list_alt</span> Listar Entidades
+                    </button>
+                    <button class="flex w-full items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors" onclick="sairDaConta()">
+                        <span class="material-symbols-outlined mr-3">logout</span> Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-3xl mx-auto w-full pb-12" id="form_section">
+            <input type="hidden" id="edit-id">
+
+            <div class="flex p-6 justify-center">
+                <div class="flex gap-4 flex-col items-center group" id="avatar_container">
+                    <div class="flex items-center justify-center bg-primary/10 aspect-square rounded-full h-32 w-32 border-2 border-dashed border-primary/40 group-hover:border-primary transition-all overflow-hidden relative">
+                        <span class="material-symbols-outlined text-primary text-5xl" id="avatar_icon">person</span>
+                        <img alt="Preview" class="hidden w-full h-full object-cover absolute top-0 left-0" id="image_preview"/>
+                    </div>
+                    <button class="mt-2 px-6 py-2 bg-primary text-white text-sm font-bold rounded-full hover:bg-opacity-90 transition-all shadow-md" onclick="document.getElementById('foto').click()" type="button">
+                        Escolher Foto
+                    </button>
+                    <input accept="image/*" class="hidden" id="foto" type="file" onchange="previewImage(this)"/>
+                </div>
+            </div>
+
+            <div class="px-4 pb-2 text-center">
+                <h3 id="form-title" class="text-xl font-bold text-slate-800">Nova Entidade</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 px-4 py-3">
+                
+                <div class="md:col-span-2">
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Nome Completo *</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" id="nome_completo" placeholder="Digite o nome completo">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">badge</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">CPF / CNPJ</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" id="cpf" placeholder="000.000.000-00">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">fingerprint</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Data de Nascimento</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" type="date" id="data_nascimento">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">calendar_month</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">E-mail</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" type="email" id="email" placeholder="email@exemplo.com">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">mail</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Telefone *</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" id="telefone" placeholder="(00) 00000-0000">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">call</span></div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 mt-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-primary border-b border-slate-200 pb-2 mb-4">Configurações e Acesso</h3>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Tipo de Acesso (Login)</label>
+                    <select class="form-select" id="tipo_acesso">
+                        <option value="cliente">Cliente (Apenas visualiza)</option>
+                        <option value="funcionario">Funcionário (Edita e Cadastra)</option>
+                        <option value="master">Master (Acesso Total)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Relacionamento (Categoria)</label>
+                    <select class="form-select" id="tipo_entidade">
+                        <option value="cliente">Cliente / Paciente</option>
+                        <option value="fornecedor">Fornecedor</option>
+                        <option value="funcionario">Funcionário / Médico</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Status</label>
+                    <select class="form-select" id="status_entidade">
+                        <option value="ativo">Ativo</option>
+                        <option value="desativado">Desativado</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Avaliação (0 a 10)</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" type="number" id="avaliacao" min="0" max="10" value="5">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">star</span></div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 mt-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-primary border-b border-slate-200 pb-2 mb-4">Endereço</h3>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">CEP</label>
+                    <div class="flex w-full">
+                        <input class="form-input rounded-r-none border-r-0" id="cep" maxlength="8" onblur="buscaCEP()" placeholder="00000000">
+                        <div class="input-group-icon"><span class="material-symbols-outlined text-slate-400">map</span></div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Logradouro</label>
+                    <input class="form-input" id="logradouro" placeholder="Rua, Avenida, etc.">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Número</label>
+                    <input class="form-input" id="numero" placeholder="Ex: 123">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Bairro</label>
+                    <input class="form-input" id="bairro">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">Cidade</label>
+                    <input class="form-input" id="cidade">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold pb-1 block text-slate-700">UF</label>
+                    <input class="form-input" id="estado" maxlength="2">
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 px-4 py-8">
+                <button class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold tracking-wide hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20" id="btn-save" onclick="handleSave()">
+                    Salvar Entidade
+                </button>
+                <button class="hidden flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 text-slate-600 text-base font-bold tracking-wide hover:bg-slate-300 transition-all" id="btn-cancel" onclick="resetForm()">
+                    Cancelar Edição
+                </button>
+            </div>
+        </main>
+
+        <main class="max-w-3xl mx-auto w-full pb-12 pt-6 px-4 hidden-view" id="list_section">
+            <h3 class="text-slate-900 text-2xl font-bold mb-6">Listagem</h3>
+            
+            <div class="relative mb-8">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
+                <input class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" id="inputBusca" placeholder="Buscar por nome ou tipo..." onkeyup="filtrarCards()" type="text"/>
+            </div>
+
+            <div class="grid gap-4" id="entities-list">
+                </div>
+        </main>
+
+    </div>
+
+    <script>
+        // --- NAVEGAÇÃO DE TELAS (UI) ---
+        function toggleMenu() {
+            const menu = document.getElementById('dropdown_menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function showView(viewId) {
+            document.getElementById('form_section').classList.add('hidden-view');
+            document.getElementById('list_section').classList.add('hidden-view');
+            document.getElementById(viewId).classList.remove('hidden-view');
+            document.getElementById('dropdown_menu').classList.add('hidden');
+            
+            if(viewId === 'list_section') loadEntities();
+            window.scrollTo(0,0);
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('image_preview');
+            const icon = document.getElementById('avatar_icon');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- LÓGICA DE DADOS (CRUD) ---
+        async function loadEntities() {
+            const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
+            if (error) return console.error(error);
+            renderCards(data);
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById('entities-list');
+            container.innerHTML = data.map(e => {
+                const avatar = e.foto_url ? e.foto_url : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+                
+                // Lógica Visual do Status
+                const statusColor = e.status_entidade === 'ativo' ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700';
+                const statusText = e.status_entidade;
+
+                // Barra de Progresso (Avaliação 0 a 10 transformada em %)
+                const nota = e.avaliacao || 0;
+                const pct = (nota / 10) * 100;
+                const barColor = pct >= 70 ? 'bg-primary' : (pct >= 40 ? 'bg-orange-500' : 'bg-red-500');
+
+                return `
+                <div class="entity-card tonal-layering-card p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-all bg-white">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex gap-4">
+                            <img class="w-14 h-14 rounded-full object-cover ring-2 ring-primary/10" src="${avatar}"/>
+                            <div>
+                                <h3 class="entity-name font-semibold text-slate-900 text-base leading-tight">${e.nome_completo}</h3>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="material-symbols-outlined text-primary text-sm">call</span>
+                                    <span class="text-slate-500 text-sm">${e.telefone || 'Sem contato'}</span>
+                                </div>
+                                <div class="entity-type text-xs text-slate-400 mt-1 uppercase font-bold">${e.tipo_entidade} • ${e.tipo_acesso}</div>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full ${statusColor} text-[10px] font-bold uppercase tracking-wider">${statusText}</span>
+                    </div>
+                    
+                    <div class="space-y-2 mt-4">
+                        <div class="flex justify-between items-center text-[11px] text-slate-500 font-bold uppercase tracking-widest">
+                            <span>Nível de Avaliação</span>
+                            <span>${nota}/10</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="h-full ${barColor} rounded-full" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-5 border-t border-slate-100 pt-4">
+                        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 transition-colors" onclick="editFull('${e.id}')">
+                            <span class="material-symbols-outlined text-lg">edit</span>
+                        </button>
+                        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-red-100 hover:text-red-600 transition-colors" onclick="deleteEntity('${e.id}')">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[#22c55e] text-white shadow-lg shadow-green-500/20 active:scale-90 transition-transform" onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')">
+                            <span class="material-symbols-outlined text-lg">chat</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function handleSave() {
+            const btnSave = document.getElementById('btn-save');
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<span class="material-symbols-outlined loading-spinner">progress_activity</span>';
+
+            try {
+                const id = document.getElementById('edit-id').value;
+                let fotoUrl = null;
+                const inputFoto = document.getElementById('foto');
+
+                // 1. Upload de Foto
+                if (inputFoto.files && inputFoto.files.length > 0) {
+                    const file = inputFoto.files[0];
+                    const fileName = `${Date.now()}_${Math.random()}.${file.name.split('.').pop()}`;
+                    
+                    const { error: uploadError } = await _supabase.storage.from('avatares').upload(`public/${fileName}`, file);
+                    if (uploadError) throw uploadError;
+
+                    const { data: publicUrlData } = _supabase.storage.from('avatares').getPublicUrl(`public/${fileName}`);
+                    fotoUrl = publicUrlData.publicUrl;
+                }
+
+                // 2. Coletar campos
+                const campos = [
+                    'nome_completo', 'cpf', 'data_nascimento', 'email', 'telefone',
+                    'cep', 'logradouro', 'numero', 'bairro', 'cidade',
+                    'estado', 'avaliacao', 'tipo_acesso', 'tipo_entidade', 'status_entidade'
+                ];
+
+                const payload = {};
+                campos.forEach(c => {
+                    const el = document.getElementById(c);
+                    if (el) payload[c] = el.value === "" && el.type === "date" ? null : el.value;
+                });
+                
+                if (fotoUrl) payload.foto_url = fotoUrl;
+                
+                const { data: userData } = await _supabase.auth.getUser();
+                if(userData && userData.user) payload.user_id = userData.user.id;
+
+                // 3. Salvar no Banco
+                const { error } = id 
+                    ? await _supabase.from('entidades').update(payload).eq('id', id)
+                    : await _supabase.from('entidades').insert([payload]);
+
+                if (error) throw error;
+                
+                alert("Entidade salva com sucesso!");
+                resetForm();
+                showView('list_section'); // Vai para a lista após salvar
+
+            } catch (error) {
+                alert("Erro: " + error.message);
+                console.error(error);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerText = "Salvar Entidade";
+            }
+        }
+
+        async function editFull(id) {
+            const { data } = await _supabase.from('entidades').select('*').eq('id', id).single();
+            if (!data) return;
+
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el && key !== 'foto') el.value = data[key] || '';
+            });
+
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
+            document.getElementById('btn-save').innerText = "Atualizar Registro";
+            document.getElementById('btn-cancel').classList.remove('hidden');
+            
+            // Preview da imagem existente
+            if(data.foto_url){
+                document.getElementById('image_preview').src = data.foto_url;
+                document.getElementById('image_preview').classList.remove('hidden');
+                document.getElementById('avatar_icon').classList.add('hidden');
+            }
+
+            showView('form_section');
+        }
+
+        async function deleteEntity(id) {
+            if (!confirm("Tem certeza que deseja excluir esta entidade?")) return;
+            await _supabase.from('entidades').delete().eq('id', id);
+            loadEntities();
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-title').innerText = "Nova Entidade";
+            document.getElementById('btn-save').innerText = "Salvar Entidade";
+            document.getElementById('btn-cancel').classList.add('hidden');
+            
+            document.querySelectorAll('input:not([type="file"]), select').forEach(el => {
+                if(el.id === 'avaliacao') el.value = '5';
+                else if(el.id === 'tipo_acesso' || el.id === 'tipo_entidade') el.value = 'cliente';
+                else if(el.id === 'status_entidade') el.value = 'ativo';
+                else el.value = '';
+            });
+            
+            document.getElementById('foto').value = ''; 
+            document.getElementById('image_preview').classList.add('hidden');
+            document.getElementById('avatar_icon').classList.remove('hidden');
+        }
+
+        // Busca CEP via API Externa
+        async function buscaCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await res.json();
+                if (!data.erro) {
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                }
+            }
+        }
+
+        function filtrarCards() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('.entity-card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(termo) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
