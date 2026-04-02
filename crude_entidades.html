@@ -369,14 +369,14 @@
         }
     </script>
 </body>
-    <!-- 
-  -- ============================================================================
+    <!-- -- ============================================================================
 -- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
 -- ============================================================================
 -- Remove os gatilhos e funções antigas
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 DROP FUNCTION IF EXISTS public.handle_new_user();
-DROP FUNCTION IF EXISTS auth.get_user_role();
+-- CORREÇÃO AQUI: Procuramos na pasta public, não na auth
+DROP FUNCTION IF EXISTS public.get_user_role(); 
 
 -- Remove as políticas do Storage antigas (se existirem)
 DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
@@ -420,8 +420,8 @@ CREATE TABLE public.entidades (
 -- Ativamos a segurança a nível de linha (ninguém acede sem permissão)
 ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
 
--- Função segura para descobrir o cargo do utilizador que está a tentar aceder
-CREATE OR REPLACE FUNCTION auth.get_user_role() 
+-- CORREÇÃO AQUI: Função segura criada na pasta 'public'
+CREATE OR REPLACE FUNCTION public.get_user_role() 
 RETURNS TEXT AS $$
   SELECT tipo_acesso FROM public.entidades WHERE user_id = auth.uid() LIMIT 1;
 $$ LANGUAGE sql SECURITY DEFINER;
@@ -431,20 +431,20 @@ $$ LANGUAGE sql SECURITY DEFINER;
 -- REGRA MASTER: Tem poder absoluto
 CREATE POLICY "Master faz tudo" ON public.entidades 
 FOR ALL TO authenticated 
-USING (auth.get_user_role() = 'master');
+USING (public.get_user_role() = 'master');
 
 -- REGRA FUNCIONÁRIO: Pode ler, inserir e editar (Não pode apagar)
 CREATE POLICY "Funcionario le" ON public.entidades 
 FOR SELECT TO authenticated 
-USING (auth.get_user_role() = 'funcionario');
+USING (public.get_user_role() = 'funcionario');
 
 CREATE POLICY "Funcionario insere" ON public.entidades 
 FOR INSERT TO authenticated 
-WITH CHECK (auth.get_user_role() = 'funcionario');
+WITH CHECK (public.get_user_role() = 'funcionario');
 
 CREATE POLICY "Funcionario atualiza" ON public.entidades 
 FOR UPDATE TO authenticated 
-USING (auth.get_user_role() = 'funcionario');
+USING (public.get_user_role() = 'funcionario');
 
 -- REGRA CLIENTE/FORNECEDOR: O utilizador só vê e altera A SUA PRÓPRIA LINHA
 CREATE POLICY "Pessoa ve e edita os proprios dados" ON public.entidades 
