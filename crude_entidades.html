@@ -502,5 +502,41 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
 CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+    
+
+    -- ============================================================================
+-- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
+-- ============================================================================
+
+-- A. LIMPEZA PREVENTIVA (Isto é o que evita o teu erro!)
+DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
+DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
+
+
+-- B. CRIA O BUCKET AUTOMATICAMENTE (Se ele ainda não existir)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatares', 'avatares', true)
+ON CONFLICT (id) DO NOTHING;
+
+
+-- C. APLICA AS REGRAS DE SEGURANÇA
+CREATE POLICY "Imagens publicas para visualizacao"
+ON storage.objects FOR SELECT TO public
+USING ( bucket_id = 'avatares' );
+
+CREATE POLICY "Upload apenas para logados"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK ( bucket_id = 'avatares' );
+
+CREATE POLICY "Usuario edita a propria foto"
+ON storage.objects FOR UPDATE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+
+CREATE POLICY "Usuario apaga a propria foto"
+ON storage.objects FOR DELETE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+    
   -->
 </html>
