@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos - ERP ABP</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --accent: #6366f1; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); padding-top: 85px; }
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-add:hover { opacity: 0.9; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; }
+        .img-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; }
+        
+        /* Barcode Input Group */
+        .input-group { display: flex; align-items: stretch; }
+        .input-group input { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: none; }
+        .input-group button { background: var(--dark); color: white; border: none; padding: 0 15px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; cursor: pointer; }
+
+        /* Leitor Modal */
+        #leitor-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .leitor-content { background: white; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
+        #reader { width: 100%; }
+
+        /* --- TELA DE LOGIN --- */
+        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--dark); margin-top:-85px; }
+        .login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; }
+        .login-box h2 { margin-bottom: 20px; color: var(--dark); font-size: 24px; }
+        .login-box input { margin-bottom: 15px; width:100%; }
+        .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; }
+
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-logout { background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }
+    </style>
+
+    <script>
+        // --- 1. CONFIGURAÇÃO DO SUPABASE ---
+        const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
+        const supabaseKey = 'SUA_CHAVE_AQUI'; // COLOCA A TUA CHAVE AQUI!
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- 2. CONTROLO DE SESSÃO E LOGIN ---
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                document.getElementById('tela-login').style.display = 'flex';
+                document.getElementById('tela-sistema').style.display = 'none';
+            } else {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('tela-sistema').style.display = 'block';
+                loadProdutos(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            if(!email || !senha) return alert("Preencha e-mail e senha.");
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro: " + error.message);
+            else verificar_login(); 
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body>
+
+    <div id="tela-login" class="login-wrapper" style="display: none;">
+        <div class="login-box">
+            <h2><i class="fas fa-box-open" style="color: var(--primary);"></i> Produtos ABP</h2>
+            <input type="email" id="login-email" placeholder="Digite seu e-mail">
+            <input type="password" id="login-senha" placeholder="Digite sua senha">
+            <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        
+        <div class="navbar">
+            <a href="index.html" style="font-weight: bold; color: #0f172a; font-size: 1.2rem; text-decoration: none;">
+                <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+            </a>
+            <button class="btn-logout" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Novo Produto</h3>
+                <input type="hidden" id="edit-id">
+
+                <div class="section-title">Dados Principais</div>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;"><label>Nome do Produto *</label><input type="text" id="nome"></div>
+                    <div>
+                        <label>Código de Barras</label>
+                        <div class="input-group">
+                            <input type="text" id="codigo_barras">
+                            <button type="button" onclick="abrirLeitor()"><i class="fas fa-barcode"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Categoria</label>
+                        <select id="categoria">
+                            <option value="Bebidas">Bebidas</option>
+                            <option value="Alimentos">Alimentos</option>
+                            <option value="Limpeza">Limpeza</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Valores e Estoque</div>
+                <div class="form-grid">
+                    <div><label>Preço de Custo (R$)</label><input type="number" id="preco_custo" step="0.01" value="0.00"></div>
+                    <div><label>Preço de Venda (R$)</label><input type="number" id="preco_venda" step="0.01" value="0.00"></div>
+                    <div><label>Estoque Atual</label><input type="number" id="estoque_atual" value="0"></div>
+                    <div><label>Estoque Mínimo</label><input type="number" id="estoque_minimo" value="5"></div>
+                    <div>
+                        <label>Unidade de Medida</label>
+                        <select id="unidade_medida">
+                            <option value="UN">Unidade (UN)</option>
+                            <option value="KG">Quilograma (KG)</option>
+                            <option value="CX">Caixa (CX)</option>
+                            <option value="LT">Litro (LT)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Imagem (Upload Storage)</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Selecione uma foto</label>
+                        <input type="file" id="imagem_produto" accept="image/*">
+                    </div>
+                </div>
+
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Produto</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </div>
+
+            <div class="card">
+                <input type="text" id="inputBusca" placeholder="Filtrar por nome ou código..." onkeyup="filtrarProdutos()" class="mb-4">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Imagem</th>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th>Valores</th>
+                                <th>Estoque</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="produtos-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leitor-modal">
+        <div class="leitor-content">
+            <h3 class="font-bold mb-4">Escanear Código</h3>
+            <div id="reader"></div>
+            <button class="bg-red-500 text-white px-4 py-2 rounded mt-4 w-full font-bold" onclick="fecharLeitor()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        let html5QrcodeScanner;
+
+        async function loadProdutos() {
+            const { data, error } = await _supabase.from('produtos').select('*').order('nome');
+            if (error) return console.error(error);
+            renderTable(data);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('produtos-list');
+            tbody.innerHTML = data.map(p => {
+                const alertaEstoque = p.estoque_atual <= p.estoque_minimo ? '<span style="color:red; font-size:10px;"><i class="fas fa-exclamation-triangle"></i> Baixo</span>' : '';
+                const img = p.imagem_url ? p.imagem_url : 'https://placehold.co/100x100?text=Sem+Foto';
+                
+                return `
+                <tr>
+                    <td><img src="${img}" class="img-thumb" alt="Produto"></td>
+                    <td><strong>${p.nome}</strong><br><small style="color:#64748b;">CB: ${p.codigo_barras || 'N/A'}</small></td>
+                    <td><span style="background:#e2e8f0; padding:2px 6px; border-radius:4px; font-size:10px;">${p.categoria}</span></td>
+                    <td>
+                        <small>Custo: R$ ${parseFloat(p.preco_custo).toFixed(2)}</small><br>
+                        <strong>Venda: R$ ${parseFloat(p.preco_venda).toFixed(2)}</strong>
+                    </td>
+                    <td><strong>${p.estoque_atual}</strong> ${p.unidade_medida} <br>${alertaEstoque}</td>
+                    <td>
+                        <button style="color:#3b82f6; background:none; border:none; cursor:pointer; margin-right:10px;" onclick="editFull('${p.id}')"><i class="fas fa-edit"></i></button>
+                        <button style="color:#ef4444; background:none; border:none; cursor:pointer;" onclick="deleteProduto('${p.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        async function handleSave() {
+            const btnSave = document.getElementById('btn-save');
+            btnSave.disabled = true;
+            btnSave.innerText = "Salvando...";
+
+            try {
+                const id = document.getElementById('edit-id').value;
+                let fotoUrl = null;
+                const inputFoto = document.getElementById('imagem_produto');
+
+                // UPLOAD DE IMAGEM
+                if (inputFoto.files && inputFoto.files.length > 0) {
+                    const file = inputFoto.files[0];
+                    const fileName = `${Date.now()}_${Math.random()}.${file.name.split('.').pop()}`;
+                    
+                    const { error: uploadError } = await _supabase.storage
+                        .from('produtos')
+                        .upload(`public/${fileName}`, file);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: publicUrlData } = _supabase.storage.from('produtos').getPublicUrl(`public/${fileName}`);
+                    fotoUrl = publicUrlData.publicUrl;
+                }
+
+                // DADOS DO FORMULÁRIO
+                const payload = {
+                    nome: document.getElementById('nome').value,
+                    codigo_barras: document.getElementById('codigo_barras').value,
+                    categoria: document.getElementById('categoria').value,
+                    preco_custo: parseFloat(document.getElementById('preco_custo').value),
+                    preco_venda: parseFloat(document.getElementById('preco_venda').value),
+                    estoque_atual: parseInt(document.getElementById('estoque_atual').value),
+                    estoque_minimo: parseInt(document.getElementById('estoque_minimo').value),
+                    unidade_medida: document.getElementById('unidade_medida').value
+                };
+
+                if(fotoUrl) payload.imagem_url = fotoUrl;
+
+                const { data: userData } = await _supabase.auth.getUser();
+                if(userData && userData.user) payload.user_id = userData.user.id;
+
+                const { error } = id 
+                    ? await _supabase.from('produtos').update(payload).eq('id', id)
+                    : await _supabase.from('produtos').insert([payload]);
+
+                if (error) throw error;
+                
+                alert("Produto salvo!");
+                resetForm();
+                loadProdutos();
+
+            } catch (error) {
+                alert("Erro: " + error.message);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerText = "Salvar Produto";
+            }
+        }
+
+        async function editFull(id) {
+            const { data } = await _supabase.from('produtos').select('*').eq('id', id).single();
+            if (!data) return;
+
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el && key !== 'imagem_produto') el.value = data[key];
+            });
+
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('form-title').innerText = "Editando Produto";
+            document.getElementById('btn-save').innerText = "Atualizar";
+            document.getElementById('btn-cancel').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteProduto(id) {
+            if (!confirm("Excluir permanentemente?")) return;
+            await _supabase.from('produtos').delete().eq('id', id);
+            loadProdutos();
+        }
+
+        function resetForm() {
+            document.querySelectorAll('input, select').forEach(c => {
+                if (c.id === 'estoque_minimo') c.value = '5';
+                else if (c.type === 'number') c.value = '0.00';
+                else if (c.id !== 'login-email' && c.id !== 'login-senha' && c.id !== 'inputBusca') c.value = '';
+            });
+            document.getElementById('categoria').value = 'Bebidas';
+            document.getElementById('unidade_medida').value = 'UN';
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-title').innerText = "Novo Produto";
+            document.getElementById('btn-save').innerText = "Salvar Produto";
+            document.getElementById('btn-cancel').style.display = "none";
+        }
+
+        function filtrarProdutos() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('#produtos-list tr').forEach(linha => {
+                linha.style.display = linha.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+
+        // --- LÓGICA DO SCANNER DE CÓDIGO DE BARRAS ---
+        function abrirLeitor() {
+            document.getElementById('leitor-modal').style.display = 'flex';
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 150} }, false);
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        }
+
+        function fecharLeitor() {
+            document.getElementById('leitor-modal').style.display = 'none';
+            if(html5QrcodeScanner) html5QrcodeScanner.clear();
+        }
+
+        function onScanSuccess(decodedText) {
+            document.getElementById('codigo_barras').value = decodedText;
+            fecharLeitor();
+            
+            // Toca um beep
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            osc.connect(ctx.destination);
+            osc.frequency.value = 1000;
+            osc.start();
+            setTimeout(() => osc.stop(), 100);
+        }
+
+        function onScanFailure(error) { /* Silencia erros de leitura contínua */ }
+    </script>
+</body>
+
+</html>
