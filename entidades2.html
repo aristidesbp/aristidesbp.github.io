@@ -1,75 +1,282 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Entidades V2 - ERP ABP</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ERP ABP - Cadastro de Entidades</title>
     
-    <style>
-        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
-        
-        /* --- ESTILOS DO SISTEMA CRUD --- */
-        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.3s; }
-        input:focus, select:focus { border-color: var(--primary); }
-        
-        /* Ajuste para o botão de senha */
-        .password-wrapper { position: relative; display: flex; align-items: center; }
-        .password-wrapper i { position: absolute; right: 10px; cursor: pointer; color: #64748b; }
-        
-        /* Botões */
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-add:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; transition: 0.3s; }
-        .btn-cancel:hover { opacity: 0.9; }
-        
-        /* Tabela */
-        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
-        td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; }
-        
-        /* Elementos Visuais */
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .btn-nav { padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .btn-logout { background: #ef4444; color: white; border: none; cursor: pointer; }
-        .btn-logout:hover { background: #dc2626; }
-        .tag { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
-        .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #eee; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-        /* --- ESTILOS DA TELA DE LOGIN --- */
-        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--dark); }
-        .login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
-        .login-box h2 { margin-bottom: 20px; color: var(--dark); font-size: 24px; }
-        .login-box input { margin-bottom: 15px; }
-        .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
-        .btn-login:hover { opacity: 0.9; }
-    </style>
-
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
+    
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Spinner de Carregamento */
+        .loader {
+            border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #137fec;
+            width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen custom-scrollbar">
+
+    <div id="tela-login" class="flex min-h-screen items-center justify-center p-4 transition-all duration-500">
+        <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
+                    <span class="material-symbols-outlined text-4xl">admin_panel_settings</span>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Acesso ao Sistema</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Faça login para gerenciar as entidades</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
+                    <input type="email" id="login-email" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:ring-2 focus:ring-primary outline-none" placeholder="seu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Senha</label>
+                    <input type="password" id="login-senha" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:ring-2 focus:ring-primary outline-none" placeholder="••••••••">
+                </div>
+                <button onclick="fazerLogin()" id="btn-entrar" class="w-full mt-6 bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/90 transition-all shadow-lg flex justify-center items-center gap-2">
+                    Entrar <span class="material-symbols-outlined text-sm">login</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tela-sistema" style="display: none;" class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        
+        <header class="flex items-center bg-white dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-800 justify-between sticky top-0 z-10">
+            <button onclick="resetForm()" class="text-primary flex size-10 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors" title="Novo Cadastro">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight flex-1 text-center" id="form_title">Novo Cadastro</h2>
+            <div class="flex items-center justify-end">
+                <button onclick="sairDaConta()" class="text-rose-500 flex items-center gap-1 text-sm font-bold hover:bg-rose-50 dark:hover:bg-rose-500/10 px-3 py-2 rounded-lg transition-colors">
+                    Sair <span class="material-symbols-outlined text-[18px]">logout</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="max-w-2xl mx-auto w-full pb-12">
+            <input type="hidden" id="edit-id" value="">
+
+            <div class="flex p-6 @container">
+                <div class="flex w-full flex-col gap-4 items-center">
+                    <div class="flex gap-4 flex-col items-center group cursor-pointer" id="avatar_container">
+                        <div class="flex items-center justify-center bg-primary/10 dark:bg-primary/20 aspect-square rounded-full min-h-32 w-32 border-2 border-dashed border-primary/40 group-hover:border-primary transition-all overflow-hidden" id="avatar_preview_box">
+                            <span class="material-symbols-outlined text-primary text-5xl" id="avatar_placeholder_icon">person</span>
+                            <img alt="Preview" class="hidden w-full h-full object-cover" id="avatar_img_preview" src=""/>
+                        </div>
+                        <p class="text-primary text-sm font-bold text-center">Adicionar Foto</p>
+                        <input accept="image/*" class="hidden" id="input_foto" type="file"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex px-4 py-3">
+                <div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 p-1">
+                    <label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold transition-all">
+                        <span class="truncate">Paciente</span>
+                        <input checked class="hidden" id="tipo_paciente" name="tipo_entidade" type="radio" value="Paciente"/>
+                    </label>
+                    <label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold transition-all">
+                        <span class="truncate">Responsável</span>
+                        <input class="hidden" id="tipo_responsavel" name="tipo_entidade" type="radio" value="Responsável"/>
+                    </label>
+                    <label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold transition-all">
+                        <span class="truncate">Colaborador</span>
+                        <input class="hidden" id="tipo_colaborador" name="tipo_entidade" type="radio" value="Colaborador"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 px-4 py-3">
+                <div class="flex flex-col flex-1 py-2 md:col-span-2">
+                    <p class="text-sm font-semibold pb-2">Nome Completo</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_nome" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="Digite o nome completo"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">badge</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">CPF</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_cpf" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="000.000.000-00"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">fingerprint</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">Nascimento</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_nascimento" type="date" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">calendar_month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">E-mail</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_email" type="email" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="email@exemplo.com"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">mail</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">Telefone</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_telefone" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="(00) 00000-0000"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">call</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2 md:col-span-2 mt-4 border-t border-slate-200 dark:border-slate-800 pt-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-2">Endereço</h3>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">CEP</p>
+                    <div class="flex w-full items-stretch rounded-lg">
+                        <input id="input_cep" onblur="buscaCEP()" class="form-input flex w-full flex-1 rounded-l-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="00000-000"/>
+                        <div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center px-4 rounded-r-lg">
+                            <span class="material-symbols-outlined text-slate-500">map</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2 md:col-span-2">
+                    <p class="text-sm font-semibold pb-2">Logradouro</p>
+                    <input id="input_logradouro" class="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="Rua, Avenida..."/>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">Número</p>
+                    <input id="input_numero" class="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="Ex: 123"/>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">Bairro</p>
+                    <input id="input_bairro" class="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="Bairro"/>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">Cidade</p>
+                    <input id="input_cidade" class="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12" placeholder="Cidade"/>
+                </div>
+
+                <div class="flex flex-col flex-1 py-2">
+                    <p class="text-sm font-semibold pb-2">UF</p>
+                    <select id="input_uf" class="form-select w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 h-12">
+                        <option value="">Selecione</option>
+                        <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="px-4 py-3 mt-4 border-t border-slate-200 dark:border-slate-800 pt-6">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 pb-4">Permissões de Acesso</h3>
+                <div class="flex flex-wrap gap-4 py-2 mb-4">
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input id="check_permissao_ler" type="checkbox" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary bg-white transition-all"/>
+                        <span class="text-sm font-medium">Ler</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input id="check_permissao_editar" type="checkbox" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary bg-white transition-all"/>
+                        <span class="text-sm font-medium">Editar</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input id="check_permissao_cadastrar" type="checkbox" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary bg-white transition-all"/>
+                        <span class="text-sm font-medium">Cadastrar</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input id="check_permissao_deletar" type="checkbox" class="form-checkbox w-5 h-5 rounded border-slate-300 text-primary bg-white transition-all"/>
+                        <span class="text-sm font-medium">Deletar</span>
+                    </label>
+                </div>
+                <div class="flex flex-col py-2">
+                    <p class="text-sm font-semibold pb-2">URLs Permitidas</p>
+                    <textarea id="textarea_urls_acesso" class="form-textarea w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 min-h-[100px] resize-none" placeholder="Digite as URLs separadas por vírgula"></textarea>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 px-4 py-8">
+                <button onclick="handleSave()" id="btn_salvar" class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                    Salvar Registro
+                </button>
+                <button onclick="resetForm()" id="btn_cancelar" style="display: none;" class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-300 transition-all">
+                    Cancelar Edição
+                </button>
+            </div>
+
+            <section class="mt-8 px-4 space-y-6 pb-12 border-t border-slate-200 dark:border-slate-800 pt-8">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">history</span> Cadastros
+                    </h2>
+                    <div class="relative w-full">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                        <input oninput="filtrarTabela()" id="input_search_list" type="text" class="pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm w-full outline-none focus:ring-primary" placeholder="Buscar entidade..."/>
+                    </div>
+                </div>
+
+                <div id="entity_list_container" class="space-y-3">
+                    <p class="text-center text-sm text-slate-500 py-4">Carregando dados...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
     <script>
-        // ==========================================
-        // 1. CONFIGURAÇÃO DO SUPABASE
-        // ==========================================
-        const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
-        // PARCEIRO: Coloque sua Anon Key abaixo
+        // 1. Configuração do Supabase (Atenção parceiro: Substitua pela sua URL e Anon Key)
+        const supabaseUrl = 'https://SUA_URL_AQUI.supabase.co';
         const supabaseKey = 'SUA_CHAVE_ANON_AQUI'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // ==========================================
-        // 2. AUTENTICAÇÃO E CONTROLE DE TELAS (SPA)
-        // ==========================================
+        // --- SISTEMA DE ESTADOS E AUTENTICAÇÃO ---
         async function verificar_login() {
             const { data: { session } } = await _supabase.auth.getSession();
             const telaLogin = document.getElementById('tela-login');
@@ -80,32 +287,28 @@
                 telaSistema.style.display = 'none';
             } else {
                 telaLogin.style.display = 'none';
-                telaSistema.style.display = 'block';
-                loadEntities(); 
+                telaSistema.style.display = 'flex';
+                loadEntities(); // Carrega os dados se logado
             }
         }
 
         async function fazerLogin() {
             const email = document.getElementById('login-email').value;
             const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-entrar');
             
             if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
 
-            const btn = document.querySelector('.btn-login');
-            btn.innerText = "Aguarde...";
-            btn.disabled = true;
-
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            btn.innerHTML = `<span class="loader"></span> Acessando...`;
             
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
             if (error) {
                 alert("Erro ao fazer login: " + error.message);
-                btn.innerText = "Entrar";
-                btn.disabled = false;
+                btn.innerHTML = `Entrar <span class="material-symbols-outlined text-sm">login</span>`;
             } else {
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-senha').value = '';
-                btn.innerText = "Entrar";
-                btn.disabled = false;
+                btn.innerHTML = `Entrar <span class="material-symbols-outlined text-sm">login</span>`;
                 verificar_login(); 
             }
         }
@@ -115,198 +318,173 @@
             verificar_login();
         }
 
+        // Executa ao carregar a página
         document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-</head>
-<body>
 
-    <div id="tela-login" class="login-wrapper" style="display: none;">
-        <div class="login-box">
-            <h2><i class="fas fa-shield-alt" style="color: var(--primary);"></i> Entidades V2</h2>
-            <p style="color: #64748b; margin-top:-10px; margin-bottom: 20px;">Acesso Seguro</p>
-            <input type="email" id="login-email" placeholder="Digite seu e-mail">
-            <input type="password" id="login-senha" placeholder="Digite sua senha">
-            <button class="btn-login" onclick="fazerLogin()">Entrar no Sistema</button>
-        </div>
-    </div>
 
-    <div id="tela-sistema" style="display: none;">
-        
-        <div class="navbar">
-            <a href="#" style="font-weight: bold; color: #0f172a; font-size: 1.2rem; text-decoration: none;">
-                <i class="fas fa-layer-group" style="color: #3ecf8e;"></i> ERP ABP - Entidades V2
-            </a>
-            <div class="flex gap-4">
-                <button class="btn-nav btn-logout" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair</button>
-            </div>
-        </div>
+        // --- MANIPULAÇÃO DE FOTOS (FRONT-END) ---
+        document.getElementById('avatar_container').addEventListener('click', () => {
+            document.getElementById('input_foto').click();
+        });
 
-        <div class="container">
-            <div class="card">
-                <h3 id="form-title" class="text-xl font-bold mb-4">Novo Cadastro - Entidade 2</h3>
-                <input type="hidden" id="edit-id">
+        document.getElementById('input_foto').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('avatar_img_preview');
+                    const icon = document.getElementById('avatar_placeholder_icon');
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
-                <div class="section-title">Informações e Acesso</div>
-                <div class="form-grid">
-                    <div><label>Foto de Perfil</label><input type="file" id="foto" accept="image/*"></div>
-                    <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
-                    <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
-                    <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
-                    <div><label>E-mail</label><input type="email" id="email"></div>
-                    <div><label>Telefone *</label><input type="text" id="telefone"></div>
-                    <div>
-                        <label>Senha Interna (Auth)</label>
-                        <div class="password-wrapper">
-                            <input type="password" id="senha_acesso" placeholder="(Gerido pelo Supabase Auth)">
-                            <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <label>Tipo de Acesso</label>
-                        <select id="tipo_acesso">
-                            <option value="cliente">Cliente</option>
-                            <option value="funcionario">Funcionário</option>
-                            <option value="master">Master</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Relacionamento</label>
-                        <select id="tipo_entidade">
-                            <option value="cliente">Cliente</option>
-                            <option value="fornecedor">Fornecedor</option>
-                            <option value="funcionario">Funcionário</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Status</label>
-                        <select id="status_entidade">
-                            <option value="ativo">Ativo</option>
-                            <option value="desativado">Desativado</option>
-                        </select>
-                    </div>
-                    <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
-                </div>
 
-                <div class="section-title">Endereço</div>
-                <div class="form-grid">
-                    <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
-                    <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
-                    <div><label>Número</label><input type="text" id="numero"></div>
-                    <div><label>Bairro</label><input type="text" id="bairro"></div>
-                    <div><label>Cidade</label><input type="text" id="cidade"></div>
-                    <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
-                </div>
-
-                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
-            </div>
-
-            <div class="card">
-                <input type="text" id="inputBusca" placeholder="Filtrar por nome..." onkeyup="filtrarTabela()" class="mb-4">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Foto</th>
-                                <th>Nome / Tipo</th>
-                                <th>Contato</th>
-                                <th>Acesso / Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="entities-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Alterado para buscar da nova tabela 'entidades2'
-        async function loadEntities() {
-            const { data, error } = await _supabase.from('entidades2').select('*').order('nome_completo');
-            if (error) return console.error("Erro ao carregar:", error.message);
-            renderTable(data || []);
+        // --- INTEGRAÇÃO VIA CEP ---
+        async function buscaCEP() {
+            const cep = document.getElementById('input_cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                try {
+                    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const data = await res.json();
+                    if (!data.erro) {
+                        document.getElementById('input_logradouro').value = data.logradouro;
+                        document.getElementById('input_bairro').value = data.bairro;
+                        document.getElementById('input_cidade').value = data.localidade;
+                        document.getElementById('input_uf').value = data.uf;
+                    }
+                } catch(e) { console.error("Erro ViaCEP", e); }
+            }
         }
 
-        function renderTable(data) {
-            const tbody = document.getElementById('entities-list');
-            tbody.innerHTML = data.map(e => {
+
+        // --- CRUD SUPABASE ---
+        
+        // 1. CARREGAR (READ)
+        async function loadEntities() {
+            const { data, error } = await _supabase.from('entidades').select('*').order('created_at', { ascending: false });
+            if (error) return console.error(error);
+            renderList(data);
+        }
+
+        function renderList(data) {
+            const container = document.getElementById('entity_list_container');
+            if(data.length === 0) {
+                container.innerHTML = `<p class="text-center text-sm text-slate-500 py-4">Nenhum registro encontrado.</p>`;
+                return;
+            }
+
+            container.innerHTML = data.map(e => {
                 const avatar = e.foto_url ? e.foto_url : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
                 
+                // Definindo a cor da tag baseada no tipo
+                let tagColor = "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
+                if(e.tipo_entidade === 'Paciente') tagColor = "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400";
+                if(e.tipo_entidade === 'Colaborador') tagColor = "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
+                if(e.tipo_entidade === 'Responsável') tagColor = "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+
                 return `
-                <tr>
-                    <td><img src="${avatar}" class="avatar-img" alt="Foto"></td>
-                    <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
-                    <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
-                    <td><span class="tag">${e.tipo_acesso}</span> | ${e.status_entidade}</td>
-                    <td>
-                        <button class="text-blue-500 mr-2" onclick="editFull('${e.id}')" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="text-red-500 mr-2" onclick="deleteEntity('${e.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                        <button class="text-green-500" onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                    </td>
-                </tr>
+                <div class="entity-card group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 hover:border-primary/30 transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
+                        <img alt="Avatar" class="w-full h-full object-cover" src="${avatar}"/>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <h3 class="entity-name text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${e.nome_completo || 'Sem Nome'}</h3>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="px-2 py-0.5 ${tagColor} text-[10px] font-bold rounded-full uppercase">${e.status_entidade || 'Ativo'}</span>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400">${e.tipo_entidade || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button onclick="editFull('${e.id}')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Editar">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                        </button>
+                        <button onclick="deleteEntity('${e.id}')" class="text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-2 rounded-full transition-colors" title="Apagar">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                        </button>
+                    </div>
+                </div>
                 `;
             }).join('');
         }
 
+        // 2. SALVAR (CREATE / UPDATE)
         async function handleSave() {
-            const btnSave = document.getElementById('btn-save');
+            const btnSave = document.getElementById('btn_salvar');
             btnSave.disabled = true;
-            btnSave.innerText = "Salvando aguarde...";
+            btnSave.innerHTML = `<span class="loader"></span> Salvando...`;
 
             try {
                 const id = document.getElementById('edit-id').value;
                 let fotoUrl = null;
-                const inputFoto = document.getElementById('foto');
+                const inputFoto = document.getElementById('input_foto');
 
-                // 1. UPLOAD DE IMAGEM NO NOVO BUCKET 'avatares2'
+                // A. Upload de Foto (Se selecionada)
                 if (inputFoto.files && inputFoto.files.length > 0) {
                     const file = inputFoto.files[0];
                     const fileExt = file.name.split('.').pop();
                     const fileName = `${Date.now()}_${Math.random()}.${fileExt}`;
                     
                     const { data: uploadData, error: uploadError } = await _supabase.storage
-                        .from('avatares2')
+                        .from('avatares')
                         .upload(`public/${fileName}`, file);
 
                     if (uploadError) throw uploadError;
 
                     const { data: publicUrlData } = _supabase.storage
-                        .from('avatares2')
+                        .from('avatares')
                         .getPublicUrl(`public/${fileName}`);
 
                     fotoUrl = publicUrlData.publicUrl;
                 }
 
-                // 2. COLETAR DADOS
-                const campos = [
-                    'nome_completo', 'cpf', 'data_nascimento', 'email', 'telefone',
-                    'cep', 'logradouro', 'numero', 'bairro', 'cidade',
-                    'estado', 'avaliacao', 'tipo_acesso', 'tipo_entidade', 'status_entidade'
-                ];
+                // B. Pegar valor do Radio Button (Tipo Entidade)
+                let tipoEntidade = 'Paciente';
+                const radios = document.getElementsByName('tipo_entidade');
+                for(let i = 0; i < radios.length; i++) {
+                    if(radios[i].checked) tipoEntidade = radios[i].value;
+                }
 
-                const payload = {};
-                campos.forEach(c => {
-                    const el = document.getElementById(c);
-                    if (el) payload[c] = el.value === "" && el.type === "date" ? null : el.value;
-                });
+                // C. Montar o Pacote de Dados
+                const payload = {
+                    tipo_entidade: tipoEntidade,
+                    nome_completo: document.getElementById('input_nome').value,
+                    cpf: document.getElementById('input_cpf').value,
+                    data_nascimento: document.getElementById('input_nascimento').value || null,
+                    email: document.getElementById('input_email').value,
+                    telefone: document.getElementById('input_telefone').value,
+                    cep: document.getElementById('input_cep').value,
+                    logradouro: document.getElementById('input_logradouro').value,
+                    numero: document.getElementById('input_numero').value,
+                    bairro: document.getElementById('input_bairro').value,
+                    cidade: document.getElementById('input_cidade').value,
+                    uf: document.getElementById('input_uf').value,
+                    perm_ler: document.getElementById('check_permissao_ler').checked,
+                    perm_editar: document.getElementById('check_permissao_editar').checked,
+                    perm_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
+                    perm_deletar: document.getElementById('check_permissao_deletar').checked,
+                    urls_permitidas: document.getElementById('textarea_urls_acesso').value
+                };
                 
                 if (fotoUrl) payload.foto_url = fotoUrl;
                 
+                // Pega o ID do usuário logado (segurança)
                 const { data: userData } = await _supabase.auth.getUser();
-                if(userData && userData.user) {
+                if(userData && userData.user && !id) {
                     payload.user_id = userData.user.id;
                 }
 
-                // 3. PERSISTIR NA TABELA 'entidades2'
+                // D. Inserir ou Atualizar no Banco
                 const { error } = id 
-                    ? await _supabase.from('entidades2').update(payload).eq('id', id)
-                    : await _supabase.from('entidades2').insert([payload]);
+                    ? await _supabase.from('entidades').update(payload).eq('id', id)
+                    : await _supabase.from('entidades').insert([payload]);
 
                 if (error) throw error;
                 
-                alert("Operação realizada com sucesso, parceiro!");
+                alert("Salvo com sucesso, parceiro!");
                 resetForm();
                 loadEntities();
 
@@ -315,75 +493,98 @@
                 console.error(error);
             } finally {
                 btnSave.disabled = false;
-                btnSave.innerText = "Salvar Entidade";
+                btnSave.innerHTML = "Salvar Registro";
             }
         }
 
+        // 3. EDITAR
         async function editFull(id) {
-            const { data } = await _supabase.from('entidades2').select('*').eq('id', id).single();
+            const { data } = await _supabase.from('entidades').select('*').eq('id', id).single();
             if (!data) return;
 
-            Object.keys(data).forEach(key => {
-                const el = document.getElementById(key);
-                if (el && key !== 'foto') el.value = data[key] || '';
-            });
-
+            // Preenche o ID oculto e campos de texto
             document.getElementById('edit-id').value = data.id;
-            document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
-            document.getElementById('btn-save').innerText = "Atualizar";
-            document.getElementById('btn-cancel').style.display = "block";
+            document.getElementById('input_nome').value = data.nome_completo || '';
+            document.getElementById('input_cpf').value = data.cpf || '';
+            document.getElementById('input_nascimento').value = data.data_nascimento || '';
+            document.getElementById('input_email').value = data.email || '';
+            document.getElementById('input_telefone').value = data.telefone || '';
+            document.getElementById('input_cep').value = data.cep || '';
+            document.getElementById('input_logradouro').value = data.logradouro || '';
+            document.getElementById('input_numero').value = data.numero || '';
+            document.getElementById('input_bairro').value = data.bairro || '';
+            document.getElementById('input_cidade').value = data.cidade || '';
+            document.getElementById('input_uf').value = data.uf || '';
+            document.getElementById('textarea_urls_acesso').value = data.urls_permitidas || '';
+
+            // Checkboxes
+            document.getElementById('check_permissao_ler').checked = data.perm_ler || false;
+            document.getElementById('check_permissao_editar').checked = data.perm_editar || false;
+            document.getElementById('check_permissao_cadastrar').checked = data.perm_cadastrar || false;
+            document.getElementById('check_permissao_deletar').checked = data.perm_deletar || false;
+
+            // Radio Buttons
+            if(data.tipo_entidade) {
+                const mapId = {
+                    'Paciente': 'tipo_paciente',
+                    'Responsável': 'tipo_responsavel',
+                    'Colaborador': 'tipo_colaborador'
+                };
+                if(mapId[data.tipo_entidade]) document.getElementById(mapId[data.tipo_entidade]).checked = true;
+            }
+
+            // Foto
+            if(data.foto_url) {
+                document.getElementById('avatar_img_preview').src = data.foto_url;
+                document.getElementById('avatar_img_preview').classList.remove('hidden');
+                document.getElementById('avatar_placeholder_icon').classList.add('hidden');
+            }
+
+            document.getElementById('form_title').innerText = "Editando: " + data.nome_completo;
+            document.getElementById('btn_salvar').innerText = "Atualizar Registro";
+            document.getElementById('btn_cancelar').style.display = "flex";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // 4. EXCLUIR
         async function deleteEntity(id) {
-            if (!confirm("Tem certeza que deseja excluir esta entidade? Esta ação é irreversível.")) return;
-            // O RLS vai bloquear a exclusão se não for Master
-            const { error } = await _supabase.from('entidades2').delete().eq('id', id);
-            if (error) {
-                alert("Erro ao excluir: " + error.message);
-            } else {
-                loadEntities();
-            }
+            if (!confirm("Tem certeza que deseja apagar este registro definitivamente?")) return;
+            const { error } = await _supabase.from('entidades').delete().eq('id', id);
+            if(error) alert("Erro ao deletar: " + error.message);
+            else loadEntities();
         }
 
+        // 5. LIMPAR FORMULÁRIO
         function resetForm() {
             document.getElementById('edit-id').value = '';
-            document.getElementById('form-title').innerText = "Novo Cadastro - Entidade 2";
-            document.getElementById('btn-save').innerText = "Salvar Entidade";
-            document.getElementById('btn-cancel').style.display = "none";
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = el.id === 'avaliacao' ? '5' : '');
-            document.getElementById('foto').value = ''; 
+            document.getElementById('form_title').innerText = "Novo Cadastro";
+            document.getElementById('btn_salvar').innerText = "Salvar Registro";
+            document.getElementById('btn_cancelar').style.display = "none";
+            
+            // Limpa todos os inputs visíveis e textareas
+            document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], input[type="file"], textarea, select').forEach(el => el.value = '');
+            
+            // Reseta Checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            
+            // Reseta Foto
+            document.getElementById('avatar_img_preview').src = '';
+            document.getElementById('avatar_img_preview').classList.add('hidden');
+            document.getElementById('avatar_placeholder_icon').classList.remove('hidden');
+
+            // Default Radio
+            document.getElementById('tipo_paciente').checked = true;
         }
 
-        async function buscaCEP() {
-            const cep = document.getElementById('cep').value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                const data = await res.json();
-                if (!data.erro) {
-                    document.getElementById('logradouro').value = data.logradouro;
-                    document.getElementById('bairro').value = data.bairro;
-                    document.getElementById('cidade').value = data.localidade;
-                    document.getElementById('estado').value = data.uf;
-                }
-            }
-        }
-
+        // 6. BUSCA / FILTRO NA LISTA
         function filtrarTabela() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            document.querySelectorAll('#entities-list tr').forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            const termo = document.getElementById('input_search_list').value.toLowerCase();
+            document.querySelectorAll('.entity-card').forEach(card => {
+                const nome = card.querySelector('.entity-name').innerText.toLowerCase();
+                card.style.display = nome.includes(termo) ? 'flex' : 'none';
             });
         }
-
-        function togglePasswordVisibility() {
-            const input = document.getElementById('senha_acesso');
-            const icon = document.getElementById('togglePassword');
-            input.type = input.type === 'password' ? 'text' : 'password';
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        }
     </script>
-</body>
-    
+
+    </body>
 </html>
