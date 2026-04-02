@@ -1,181 +1,160 @@
+// 1. CONFIGURAÇÃO DO CLIENTE (Certifique-se que o supabase_config.js defina estas variáveis)
+// Se não usar o config.js, preencha aqui:
+// const _supabase = supabase.createClient('SUA_URL', 'SUA_ANON_KEY');
 
- 
-// CONFIGURAÇÃO SUPABASE
-const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqbXNrc3JoZGVkd3JsYW5wbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNDE5ODQsImV4cCI6MjA5MDYxNzk4NH0.X2S4UZ3WGLoxx9LsNNbJ6-kyM0DAQoTr8wY57O6m4ZA'; 
-
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-let currentFilter = 'all';
-
-// INICIALIZAÇÃO
+// 2. INICIALIZAÇÃO
 document.addEventListener('DOMContentLoaded', () => {
-    loadEntities();
-    setupEventListeners();
+    // Configura o evento de busca de CEP
+    const inputCep = document.getElementById('input_cep');
+    if (inputCep) {
+        inputCep.addEventListener('blur', buscaCEP);
+    }
+
+    // Configura o preview da imagem
+    const inputFoto = document.getElementById('input_foto');
+    if (inputFoto) {
+        inputFoto.addEventListener('change', handleImagePreview);
+    }
+
+    // Configura o Menu Dropdown (Toggle)
+    const btnMenu = document.getElementById('btn_menu');
+    const dropdown = document.getElementById('dropdown_menu');
+    if (btnMenu && dropdown) {
+        btnMenu.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
+    }
+
+    // Carrega a lista inicial
+    if (typeof fetchEntidades === 'function') {
+        fetchEntidades();
+    }
 });
 
-function setupEventListeners() {
-    // Foto
-    document.getElementById('avatar_container').addEventListener('click', () => document.getElementById('input_foto').click());
-    document.getElementById('input_foto').addEventListener('change', handlePreview);
-
-    // Salvar
-    document.getElementById('btn_salvar').addEventListener('click', handleSave);
-
-    // Filtros
-    document.getElementById('filter_all').addEventListener('click', () => setActiveFilter('all'));
-    document.getElementById('filter_pacientes').addEventListener('click', () => setActiveFilter('Paciente'));
-    document.getElementById('filter_colaboradores').addEventListener('click', () => setActiveFilter('Colaborador'));
-
-    // Busca
-    document.getElementById('input_search_list').addEventListener('input', renderList);
-
-    // CEP Automático
-    document.getElementById('input_cep').addEventListener('blur', buscaCEP);
-}
-
-// LÓGICA DE FOTO
-function handlePreview(event) {
+// 3. LOGICA DE PREVIEW DA IMAGEM
+function handleImagePreview(event) {
     const file = event.target.files[0];
+    const preview = document.getElementById('image_preview');
+    const placeholder = document.getElementById('avatar_icon');
+    
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('avatar_img_preview').src = e.target.result;
-            document.getElementById('avatar_img_preview').classList.remove('hidden');
-            document.getElementById('avatar_placeholder_icon').classList.add('hidden');
-        }
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        };
         reader.readAsDataURL(file);
     }
 }
 
-// BUSCA CEP
+// 4. BUSCA DE CEP (ViaCEP)
 async function buscaCEP() {
     const cep = this.value.replace(/\D/g, '');
     if (cep.length === 8) {
-        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        const data = await res.json();
-        if (!data.erro) {
-            document.getElementById('input_logradouro').value = data.logradouro;
-            document.getElementById('input_bairro').value = data.bairro;
-            document.getElementById('input_cidade').value = data.localidade;
-            document.getElementById('input_uf').value = data.uf;
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+            
+            if (!data.erro) {
+                document.getElementById('input_logradouro').value = data.logradouro;
+                document.getElementById('input_bairro').value = data.bairro;
+                document.getElementById('input_cidade').value = data.localidade;
+                document.getElementById('input_uf').value = data.uf;
+            }
+        } catch (error) {
+            console.error("Erro ao buscar CEP:", error);
         }
     }
 }
 
-// SALVAR NO BANCO
+// 5. FUNÇÃO PRINCIPAL: SALVAR NO BANCO
 async function handleSave() {
     const btn = document.getElementById('btn_salvar');
+    const btnText = document.getElementById('btn_salvar_text');
+    const btnLoader = document.getElementById('btn_salvar_loader');
+
+    // Estado de carregamento
     btn.disabled = true;
-    btn.innerText = "Salvando...";
+    btnText.classList.add('hidden');
+    btnLoader.classList.remove('hidden');
 
     try {
-        const file = document.getElementById('input_foto').files[0];
+        // A. Upload da Foto para o Storage
         let fotoUrl = null;
+        const fotoFile = document.getElementById('input_foto').files[0];
+        
+        if (fotoFile) {
+            const fileExt = fotoFile.name.split('.').pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `public/${fileName}`;
 
-        if (file) {
-            const fileName = `${Date.now()}_${file.name}`;
-            const { data: upData, error: upErr } = await _supabase.storage.from('avatares').upload(`public/${fileName}`, file);
-            if (upErr) throw upErr;
-            fotoUrl = _supabase.storage.from('avatares').getPublicUrl(`public/${fileName}`).data.publicUrl;
+            const { error: uploadError } = await _supabase.storage
+                .from('avatares')
+                .upload(filePath, fotoFile);
+
+            if (uploadError) throw uploadError;
+
+            const { data: urlData } = _supabase.storage
+                .from('avatares')
+                .getPublicUrl(filePath);
+            
+            fotoUrl = urlData.publicUrl;
         }
 
+        // B. Coleta dos Dados do formulário
+        // Importante: No seu SQL 'tipo' é obrigatório. 
+        // Como o toggle foi removido, definimos um padrão ou capturamos de um campo novo.
         const payload = {
             nome_completo: document.getElementById('input_nome').value,
-            tipo_entidade: document.querySelector('input[name="tipo_entidade"]:checked').value,
+            tipo: 'Paciente', // Valor padrão para satisfazer o CONSTRAINT do seu SQL
             cpf: document.getElementById('input_cpf').value,
+            data_nascimento: document.getElementById('input_nascimento').value || null,
             email: document.getElementById('input_email').value,
             telefone: document.getElementById('input_telefone').value,
-            data_nascimento: document.getElementById('input_nascimento').value || null,
             cep: document.getElementById('input_cep').value,
             logradouro: document.getElementById('input_logradouro').value,
             numero: document.getElementById('input_numero').value,
             bairro: document.getElementById('input_bairro').value,
             cidade: document.getElementById('input_cidade').value,
-            estado: document.getElementById('input_uf').value,
-            perm_ler: document.getElementById('check_permissao_ler').checked,
-            perm_editar: document.getElementById('check_permissao_editar').checked,
-            perm_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
-            perm_deletar: document.getElementById('check_permissao_deletar').checked,
-            urls_acesso: document.getElementById('textarea_urls_acesso').value,
+            uf: document.getElementById('input_uf').value,
+            permissao_ler: document.getElementById('check_permissao_ler').checked,
+            permissao_editar: document.getElementById('check_permissao_editar').checked,
+            permissao_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
+            permissao_deletar: document.getElementById('check_permissao_deletar').checked,
+            urls_permitidas: document.getElementById('textarea_urls_acesso').value,
             foto_url: fotoUrl
         };
 
-        const { error } = await _supabase.from('entidades').insert([payload]);
+        // Validação simples
+        if (!payload.nome_completo) {
+            alert("Por favor, preencha o nome completo.");
+            btn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoader.classList.add('hidden');
+            return;
+        }
+
+        // C. Inserção no Database
+        const { data, error } = await _supabase
+            .from('entidades')
+            .insert([payload]);
+
         if (error) throw error;
 
-        alert('Sucesso!');
-        location.reload();
-    } catch (e) {
-        alert(e.message);
+        // Sucesso
+        alert("✅ Registro salvo com sucesso!");
+        
+        // Limpar formulário e recarregar
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Erro completo:", error);
+        alert("❌ Erro ao salvar: " + error.message);
     } finally {
+        // Restaura o botão
         btn.disabled = false;
-        btn.innerText = "Salvar Registro";
+        btnText.classList.remove('hidden');
+        btnLoader.classList.add('hidden');
     }
-}
-
-// LISTAGEM DINÂMICA
-let allEntities = [];
-
-async function loadEntities() {
-    const { data, error } = await _supabase.from('entidades').select('*').order('created_at', { ascending: false });
-    if (error) return console.error(error);
-    allEntities = data;
-    renderList();
-}
-
-function renderList() {
-    const container = document.getElementById('entity_list_container');
-    const searchTerm = document.getElementById('input_search_list').value.toLowerCase();
-    
-    const filtered = allEntities.filter(e => {
-        const matchesSearch = e.nome_completo.toLowerCase().includes(searchTerm);
-        const matchesFilter = currentFilter === 'all' || e.tipo_entidade === currentFilter;
-        return matchesSearch && matchesFilter;
-    });
-
-    container.innerHTML = filtered.map(e => `
-        <div class="entity-card group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 hover:border-primary/30 transition-colors">
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
-                <img src="${e.foto_url || 'https://ui-avatars.com/api/?name='+e.nome_completo}" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-grow min-w-0">
-                <h3 class="entity-name text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${e.nome_completo}</h3>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold rounded-full uppercase">Ativo</span>
-                    <span class="text-[10px] text-slate-500 dark:text-slate-400">${e.tipo_entidade}</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 flex-shrink-0">
-                <button onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')" class="text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 p-2 rounded-full transition-colors">
-                    <span class="material-symbols-outlined text-[20px]">chat</span>
-                </button>
-                <button onclick="location.href='mailto:${e.email}'" class="text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-2 rounded-full transition-colors">
-                    <span class="material-symbols-outlined text-[20px]">mail</span>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function setActiveFilter(filter) {
-    currentFilter = filter;
-    
-    // UI Update
-    const btns = {
-        all: document.getElementById('filter_all'),
-        Paciente: document.getElementById('filter_pacientes'),
-        Colaborador: document.getElementById('filter_colaboradores')
-    };
-
-    Object.values(btns).forEach(b => {
-        b.classList.remove('bg-white', 'dark:bg-slate-700', 'text-primary', 'dark:text-white', 'shadow-sm');
-        b.classList.add('text-slate-500', 'dark:text-slate-400');
-    });
-
-    const active = btns[filter] || btns.all;
-    active.classList.add('bg-white', 'dark:bg-slate-700', 'text-primary', 'dark:text-white', 'shadow-sm');
-    active.classList.remove('text-slate-500', 'dark:text-slate-400');
-
-    renderList();
 }
