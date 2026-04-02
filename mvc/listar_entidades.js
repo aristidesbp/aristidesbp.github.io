@@ -1,7 +1,3 @@
-// CONFIGURAÇÃO DO SUPABASE
-const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
-const supabaseKey = 'SUA_ANON_KEY_AQUI'; // Use a sua anon key (public)
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // INICIALIZAÇÃO
 document.addEventListener('DOMContentLoaded', () => {
