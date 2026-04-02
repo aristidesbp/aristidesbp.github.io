@@ -229,16 +229,35 @@
 </div>
 </div>
 </div>
+
+
+        
 <!-- Action Buttons -->
 <div class="flex flex-col gap-3 px-4 py-8">
-<button class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-70 disabled:cursor-not-allowed" id="btn_salvar">
-<span id="btn_salvar_text">Salvar Registro</span>
-<span class="hidden" id="btn_salvar_loader"><span class="material-symbols-outlined loading-spinner">progress_activity</span></span>
-</button>
-<button class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-base font-bold tracking-wide hover:bg-slate-300 dark:hover:bg-slate-700 transition-all" id="btn_cancelar">
-                Cancelar
-            </button>
+    <button 
+        type="button"
+        onclick="handleSave()" 
+        class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-70 disabled:cursor-not-allowed" 
+        id="btn_salvar">
+        
+        <span id="btn_salvar_text">Salvar Registro</span>
+        
+        <span class="hidden" id="btn_salvar_loader">
+            <span class="material-symbols-outlined loading-spinner">progress_activity</span>
+        </span>
+    </button>
+
+    <button 
+        type="button"
+        class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-base font-bold tracking-wide hover:bg-slate-300 dark:hover:bg-slate-700 transition-all" 
+        id="btn_cancelar">
+        Cancelar
+    </button>
 </div>
+        
+
+
+        
 <!-- Entity List Section (Imported from SCREEN_199) -->
 <div class="mt-8 px-4 border-t border-slate-200 dark:border-slate-800 pt-8">
 <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold mb-6">Listagem de Entidades</h3>
