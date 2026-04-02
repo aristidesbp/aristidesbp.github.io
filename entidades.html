@@ -368,8 +368,9 @@
             icon.classList.toggle('fa-eye-slash');
         }
     </script>
-</body>
-    <!-- -- ============================================================================
+
+<!-- 
+-- ============================================================================
 -- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
 -- ============================================================================
 -- Remove os gatilhos e funções antigas
@@ -537,56 +538,6 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
 CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-
-
-
-    Com muito gosto, parceiro! É fundamental entenderes perfeitamente o que construímos, pois esta página será a "espinha dorsal" do teu ERP. 
-
-Vamos fazer um raio-X completo ao teu sistema, com uma linguagem simples e direta, separando o que acontece na tela (Front-end) e o que acontece nos bastidores (Back-end).
-
----
-
-### 1. O Panorama Geral: Como a página funciona?
-
-A página que criámos é o que chamamos de **Single Page Application (SPA)** simplificada. Isso significa que, embora pareça ter várias telas, tudo acontece num único ficheiro HTML. 
-
-A página funciona com base em **"Estados"**:
-* **Estado 1 (Não Logado):** Quando alguém abre o link da página, o nosso código JavaScript pergunta ao Supabase: *"Esta pessoa tem a chave de acesso (Sessão)?"*. Se a resposta for não, o JavaScript esconde o sistema inteiro e mostra apenas a caixinha de **Login**.
-* **Estado 2 (Logado):** Assim que a pessoa digita o e-mail e senha, o Supabase valida os dados e devolve uma "chave virtual". O nosso JavaScript deteta isso, esconde o Login, mostra o painel do **ERP ABP** e puxa os dados da tabela para preencher a listagem.
-
-**O Fluxo de Cadastro:**
-Quando preenches o formulário e clicas em "Salvar", o sistema faz duas viagens:
-1.  Pega na foto, envia para a pasta `avatares` no Supabase e recebe de volta um link (URL) público dessa foto.
-2.  Junta esse link da foto com os textos (Nome, CPF, etc.) e envia tudo num "pacote" para ser guardado na tabela `entidades`.
-
----
-
-### 2. Quem pode aceder à página e o que pode fazer?
-
-Qualquer pessoa que tenha o link do teu site vai conseguir ver a **tela de login**. No entanto, **só quem tem conta criada** no teu Supabase (na aba *Authentication*) conseguirá entrar no sistema.
-
-A verdadeira magia de segurança que implementámos (o RLS - *Row Level Security*) funciona como um "segurança de discoteca" invisível que verifica o **Cargo (`tipo_acesso`)** de quem entrou, limitando o que essa pessoa pode ver e fazer:
-
-* 👑 **Master (Dono/Administrador):** * **Pode:** Ver todos os clientes, funcionários e fornecedores. Pode adicionar novas pessoas, editar qualquer informação e apagar registos. Tem poder absoluto.
-* 👔 **Funcionário:** * **Pode:** Ver a lista de toda a gente, adicionar novos cadastros e editar cadastros existentes (útil para atualizar o telefone de um cliente, por exemplo).
-    * **Não pode:** Apagar (excluir) registos. Protegemos o botão de apagar para que um funcionário não apague a base de dados por engano (ou de propósito).
-* 🤝 **Cliente / Fornecedor:**
-    * **Pode:** Ver **apenas o seu próprio cadastro** na tabela e atualizar os seus próprios dados (como mudar a sua foto ou morada).
-    * **Não pode:** Ver os dados de mais ninguém no sistema. Para eles, a tabela só terá 1 linha (a deles).
-
----
-
-### 3. Tudo o que foi feito nos Bastidores (Banco de Dados e SQL)
-
-Para que essa página visual funcione com a segurança bancária que pediste, nós construímos uma infraestrutura robusta no Supabase:
-
-1.  **A Tabela Principal (`entidades`):** Criámos as colunas para guardar os dados (nome, cpf, cep, etc.). Adicionámos colunas estratégicas como o `user_id` (que liga o registo da tabela ao sistema secreto de senhas do Supabase) e a `foto_url` (para guardar o link da imagem).
-2.  **O Storage (`avatares`):** Criámos um balde (bucket) automático para guardar ficheiros. Configurámos regras para que **apenas utilizadores logados** possam fazer upload, impedindo que hackers encham o teu servidor de lixo.
-3.  **O Gatilho (Trigger Automático):** Criámos um robô invisível no banco de dados. Sempre que tu fores à aba *Authentication* do Supabase e criares um utilizador novo com e-mail e senha, esse robô vai imediatamente à tabela `entidades` e cria uma linha para essa pessoa, com o status "Ativo" e tipo "Cliente".
-4.  **As Políticas de Segurança (RLS):** Foram as regras escritas em SQL que garantem o funcionamento dos "cargos" explicados no tópico 2. A segurança não está no HTML, está "chumbada" no banco de dados. Mesmo que um hacker tente alterar o código HTML da página, o banco de dados bloqueia a ação.
-
----
-
-  -->
+-->
+    </body>
 </html>
