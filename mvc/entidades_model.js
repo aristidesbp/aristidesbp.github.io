@@ -1,160 +1,166 @@
-// 1. CONFIGURAÇÃO DO CLIENTE (Certifique-se que o supabase_config.js defina estas variáveis)
-// Se não usar o config.js, preencha aqui:
-// const _supabase = supabase.createClient('SUA_URL', 'SUA_ANON_KEY');
 
-// 2. INICIALIZAÇÃO
-document.addEventListener('DOMContentLoaded', () => {
-    // Configura o evento de busca de CEP
-    const inputCep = document.getElementById('input_cep');
-    if (inputCep) {
-        inputCep.addEventListener('blur', buscaCEP);
-    }
+        // Carregar dados na tabela
+        async function loadEntities() {
+            const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
+            if (error) return console.error(error);
+            renderTable(data);
+        }
 
-    // Configura o preview da imagem
-    const inputFoto = document.getElementById('input_foto');
-    if (inputFoto) {
-        inputFoto.addEventListener('change', handleImagePreview);
-    }
+        // Renderizar Tabela
+        function renderTable(data) {
+            const tbody = document.getElementById('entities-list');
+            tbody.innerHTML = data.map(e => {
+                const avatar = e.foto_url ? e.foto_url : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+                
+                return `
+                <tr>
+                    <td><img src="${avatar}" class="avatar-img" alt="Foto"></td>
+                    <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
+                    <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
+                    <td><span class="tag">${e.tipo_acesso}</span> | ${e.status_entidade}</td>
+                    <td>
+                        <button class="text-blue-500 mr-2" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="text-red-500 mr-2" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="text-green-500" onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
 
-    // Configura o Menu Dropdown (Toggle)
-    const btnMenu = document.getElementById('btn_menu');
-    const dropdown = document.getElementById('dropdown_menu');
-    if (btnMenu && dropdown) {
-        btnMenu.addEventListener('click', () => {
-            dropdown.classList.toggle('hidden');
-        });
-    }
+        // Salvar (Inserir ou Atualizar) com Upload de Foto
+        async function handleSave() {
+            const btnSave = document.getElementById('btn-save');
+            btnSave.disabled = true;
+            btnSave.innerText = "Salvando aguarde...";
 
-    // Carrega a lista inicial
-    if (typeof fetchEntidades === 'function') {
-        fetchEntidades();
-    }
-});
+            try {
+                const id = document.getElementById('edit-id').value;
+                let fotoUrl = null;
+                const inputFoto = document.getElementById('foto');
 
-// 3. LOGICA DE PREVIEW DA IMAGEM
-function handleImagePreview(event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('image_preview');
-    const placeholder = document.getElementById('avatar_icon');
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-            placeholder.classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-    }
-}
+                // 1. Upload de Foto
+                if (inputFoto.files && inputFoto.files.length > 0) {
+                    const file = inputFoto.files[0];
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}_${Math.random()}.${fileExt}`;
+                    
+                    const { data: uploadData, error: uploadError } = await _supabase.storage
+                        .from('avatares')
+                        .upload(`public/${fileName}`, file);
 
-// 4. BUSCA DE CEP (ViaCEP)
-async function buscaCEP() {
-    const cep = this.value.replace(/\D/g, '');
-    if (cep.length === 8) {
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
-            
-            if (!data.erro) {
-                document.getElementById('input_logradouro').value = data.logradouro;
-                document.getElementById('input_bairro').value = data.bairro;
-                document.getElementById('input_cidade').value = data.localidade;
-                document.getElementById('input_uf').value = data.uf;
+                    if (uploadError) throw uploadError;
+
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('avatares')
+                        .getPublicUrl(`public/${fileName}`);
+
+                    fotoUrl = publicUrlData.publicUrl;
+                }
+
+                // 2. Coletar campos
+                const campos = [
+                    'nome_completo', 'cpf', 'data_nascimento', 'email', 'telefone',
+                    'cep', 'logradouro', 'numero', 'bairro', 'cidade',
+                    'estado', 'avaliacao', 'tipo_acesso', 'tipo_entidade', 'status_entidade'
+                ];
+
+                const payload = {};
+                campos.forEach(c => {
+                    const el = document.getElementById(c);
+                    if (el) payload[c] = el.value === "" && el.type === "date" ? null : el.value;
+                });
+                
+                if (fotoUrl) payload.foto_url = fotoUrl;
+                
+                const { data: userData } = await _supabase.auth.getUser();
+                if(userData && userData.user) {
+                    payload.user_id = userData.user.id;
+                }
+
+                // 3. Salvar no Banco
+                const { error } = id 
+                    ? await _supabase.from('entidades').update(payload).eq('id', id)
+                    : await _supabase.from('entidades').insert([payload]);
+
+                if (error) throw error;
+                
+                alert("Sucesso!");
+                resetForm();
+                loadEntities();
+
+            } catch (error) {
+                alert("Erro: " + error.message);
+                console.error(error);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerText = "Salvar Entidade";
             }
-        } catch (error) {
-            console.error("Erro ao buscar CEP:", error);
-        }
-    }
-}
-
-// 5. FUNÇÃO PRINCIPAL: SALVAR NO BANCO
-async function handleSave() {
-    const btn = document.getElementById('btn_salvar');
-    const btnText = document.getElementById('btn_salvar_text');
-    const btnLoader = document.getElementById('btn_salvar_loader');
-
-    // Estado de carregamento
-    btn.disabled = true;
-    btnText.classList.add('hidden');
-    btnLoader.classList.remove('hidden');
-
-    try {
-        // A. Upload da Foto para o Storage
-        let fotoUrl = null;
-        const fotoFile = document.getElementById('input_foto').files[0];
-        
-        if (fotoFile) {
-            const fileExt = fotoFile.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `public/${fileName}`;
-
-            const { error: uploadError } = await _supabase.storage
-                .from('avatares')
-                .upload(filePath, fotoFile);
-
-            if (uploadError) throw uploadError;
-
-            const { data: urlData } = _supabase.storage
-                .from('avatares')
-                .getPublicUrl(filePath);
-            
-            fotoUrl = urlData.publicUrl;
         }
 
-        // B. Coleta dos Dados do formulário
-        // Importante: No seu SQL 'tipo' é obrigatório. 
-        // Como o toggle foi removido, definimos um padrão ou capturamos de um campo novo.
-        const payload = {
-            nome_completo: document.getElementById('input_nome').value,
-            tipo: 'Paciente', // Valor padrão para satisfazer o CONSTRAINT do seu SQL
-            cpf: document.getElementById('input_cpf').value,
-            data_nascimento: document.getElementById('input_nascimento').value || null,
-            email: document.getElementById('input_email').value,
-            telefone: document.getElementById('input_telefone').value,
-            cep: document.getElementById('input_cep').value,
-            logradouro: document.getElementById('input_logradouro').value,
-            numero: document.getElementById('input_numero').value,
-            bairro: document.getElementById('input_bairro').value,
-            cidade: document.getElementById('input_cidade').value,
-            uf: document.getElementById('input_uf').value,
-            permissao_ler: document.getElementById('check_permissao_ler').checked,
-            permissao_editar: document.getElementById('check_permissao_editar').checked,
-            permissao_cadastrar: document.getElementById('check_permissao_cadastrar').checked,
-            permissao_deletar: document.getElementById('check_permissao_deletar').checked,
-            urls_permitidas: document.getElementById('textarea_urls_acesso').value,
-            foto_url: fotoUrl
-        };
+        // Editar
+        async function editFull(id) {
+            const { data } = await _supabase.from('entidades').select('*').eq('id', id).single();
+            if (!data) return;
 
-        // Validação simples
-        if (!payload.nome_completo) {
-            alert("Por favor, preencha o nome completo.");
-            btn.disabled = false;
-            btnText.classList.remove('hidden');
-            btnLoader.classList.add('hidden');
-            return;
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el && key !== 'foto') el.value = data[key] || '';
+            });
+
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
+            document.getElementById('btn-save').innerText = "Atualizar";
+            document.getElementById('btn-cancel').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // C. Inserção no Database
-        const { data, error } = await _supabase
-            .from('entidades')
-            .insert([payload]);
+        // Excluir
+        async function deleteEntity(id) {
+            if (!confirm("Excluir permanentemente?")) return;
+            await _supabase.from('entidades').delete().eq('id', id);
+            loadEntities();
+        }
 
-        if (error) throw error;
+        // Reset
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
+            document.getElementById('btn-save').innerText = "Salvar Entidade";
+            document.getElementById('btn-cancel').style.display = "none";
+            document.querySelectorAll('input, select, textarea').forEach(el => el.value = el.id === 'avaliacao' ? '5' : '');
+            document.getElementById('foto').value = ''; 
+        }
 
-        // Sucesso
-        alert("✅ Registro salvo com sucesso!");
-        
-        // Limpar formulário e recarregar
-        window.location.reload();
+        // Busca CEP
+        async function buscaCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await res.json();
+                if (!data.erro) {
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                }
+            }
+        }
 
-    } catch (error) {
-        console.error("Erro completo:", error);
-        alert("❌ Erro ao salvar: " + error.message);
-    } finally {
-        // Restaura o botão
-        btn.disabled = false;
-        btnText.classList.remove('hidden');
-        btnLoader.classList.add('hidden');
-    }
-}
+        // Filtro Tabela
+        function filtrarTabela() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('#entities-list tr').forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+
+        // Visibilidade Senha
+        function togglePasswordVisibility() {
+            const input = document.getElementById('senha_acesso');
+            const icon = document.getElementById('togglePassword');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+    
