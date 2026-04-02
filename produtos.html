@@ -362,5 +362,83 @@
         function onScanFailure(error) { /* Silencia erros de leitura contínua */ }
     </script>
 </body>
+<!--
+    -- ============================================================================
+-- MÓDULO PRODUTOS: LIMPEZA PREVENTIVA
+-- ============================================================================
+-- Limpa regras antigas do Storage (se existirem)
+DROP POLICY IF EXISTS "Fotos produtos publicas" ON storage.objects;
+DROP POLICY IF EXISTS "Upload foto produto para logados" ON storage.objects;
+DROP POLICY IF EXISTS "Editar foto produto" ON storage.objects;
+DROP POLICY IF EXISTS "Deletar foto produto" ON storage.objects;
 
+-- Apaga a tabela antiga se ela existir
+DROP TABLE IF EXISTS public.produtos CASCADE;
+
+-- ============================================================================
+-- 1. CRIAÇÃO DA TABELA PRODUTOS
+-- ============================================================================
+CREATE TABLE public.produtos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    codigo_barras TEXT,
+    categoria TEXT,
+    preco_custo NUMERIC(10,2) DEFAULT 0.00,
+    preco_venda NUMERIC(10,2) DEFAULT 0.00,
+    estoque_atual INTEGER DEFAULT 0,
+    estoque_minimo INTEGER DEFAULT 5,
+    unidade_medida TEXT DEFAULT 'UN',
+    imagem_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY)
+-- ============================================================================
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================================
+-- 3. REGRAS DA TABELA POR CARGO
+-- ============================================================================
+-- Master faz tudo
+CREATE POLICY "Master faz tudo produtos" ON public.produtos 
+FOR ALL TO authenticated USING (public.get_user_role() = 'master');
+
+-- Funcionário insere, edita e lê (Não apaga)
+CREATE POLICY "Funcionario edita produtos" ON public.produtos 
+FOR SELECT TO authenticated USING (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario insere produtos" ON public.produtos 
+FOR INSERT TO authenticated WITH CHECK (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario atualiza produtos" ON public.produtos 
+FOR UPDATE TO authenticated USING (public.get_user_role() = 'funcionario');
+
+-- Cliente (Apenas leitura - caso no futuro queiras fazer um catálogo/loja online)
+CREATE POLICY "Cliente apenas ve produtos" ON public.produtos 
+FOR SELECT TO authenticated USING (public.get_user_role() = 'cliente');
+
+-- ============================================================================
+-- 4. CRIAÇÃO E SEGURANÇA DO STORAGE PARA FOTOS DOS PRODUTOS
+-- ============================================================================
+
+-- A. Cria o bucket 'produtos' automaticamente!
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('produtos', 'produtos', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- B. Regras de Segurança do Storage
+CREATE POLICY "Fotos produtos publicas"
+ON storage.objects FOR SELECT TO public USING ( bucket_id = 'produtos' );
+
+CREATE POLICY "Upload foto produto para logados"
+ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id = 'produtos' );
+
+CREATE POLICY "Editar foto produto"
+ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id = 'produtos' AND auth.uid() = owner );
+
+CREATE POLICY "Deletar foto produto"
+ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'produtos' AND auth.uid() = owner );
+    -->
 </html>
