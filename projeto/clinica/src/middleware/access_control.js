@@ -39,3 +39,34 @@ if (error || !perfil) {
 window.location.replace('login.html');
 
 return null;
+}
+
+// Verifica se o role tem acesso a esta página
+
+if (!rolesPermitidos.includes(perfil.role)) {
+
+redirecionarParaDashboard(perfil.role);
+
+return null;
+
+}
+
+return { user: session.user, role: perfil.role };
+
+}
+
+export function redirecionarParaDashboard(role) {
+
+const destinos = {
+
+'master': '../view/dashboard_master.html',
+
+'psicopedagogo': '../view/dashboard_profissional.html',
+
+'paciente': '../view/dashboard_paciente.html',
+
+};
+
+window.location.replace(destinos[role] || 'login.html');
+
+}
