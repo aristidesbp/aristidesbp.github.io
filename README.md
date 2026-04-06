@@ -65,28 +65,16 @@ http://localhost:8080/admin.html
 ---
 # 🟥 COMO BAIXAR MIDIAS COM TERMUX 
 ```
-# instale o yt-dlp com o comando:
-pip install yt-dlp
+pkg update && pkg upgrade
+pkg install python ffmpeg
+
 ```
 ```
-# ffmpeg permite baixar vídeos com áudio ou converter formatos:
-pkg install ffmpeg -y
+python3 -m pip install --upgrade yt-dlp
 ```
 ```
-# Baixar apenas o áudio em MP3:
-yt-dlp -x --audio-format mp3 "URL_DO_VÍDEO"
-```
-```
-# Escolher qualidade de vídeo (exemplo:720p)
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "URL_DO_VÍDEO"
-```
-```
-# Salvar com nome personalizado:
-yt-dlp -o "meu_video.%(ext)s" "URL_DO_VÍDEO"
-```
-```
-# Ver formatos disponíveis:
-yt-dlp -F "URL_DO_VÍDEO
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
