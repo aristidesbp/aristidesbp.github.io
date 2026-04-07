@@ -8,7 +8,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuração do Supabase (Atenção: substitui a chave abaixo pela tua verdadeira)
+        const supabaseUrl = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqbXNrc3JoZGVkd3JsYW5wbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNDE5ODQsImV4cCI6MjA5MDYxNzk4NH0.X2S4UZ3WGLoxx9LsNNbJ6-kyM0DAQoTr8wY57O6m4ZA'; 
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- FUNÇÕES DE AUTENTICAÇÃO E CONTROLE DE TELA ---
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
+
+            if (!session) {
+                telaLogin.style.display = 'flex';
+                telaSistema.style.display = 'none';
+            } else {
+                telaLogin.style.display = 'none';
+                telaSistema.style.display = 'block';
+                loadEntities(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro ao fazer login: " + error.message);
+            else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+
+
+
+
+
+
+
+
+
+    
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
     <style>
@@ -233,10 +288,12 @@
     </div>
 
     <script>
-        // Configuração do Supabase
+        
+          // Configuração do Supabase
         const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      
         
         let entidadesCache = [];
         let html5QrCode = null;
