@@ -1,0 +1,23 @@
+-- Criação da tabela financeiro
+CREATE TABLE IF NOT EXISTS public.financeiro (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    tipo TEXT NOT NULL, -- 'pagar' ou 'receber'
+    descricao TEXT NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    data_vencimento DATE NOT NULL,
+    data_pagamento DATE,
+    status TEXT DEFAULT 'pendente', -- 'pendente' ou 'pago'
+    categoria TEXT,
+    forma_pagamento TEXT,
+    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
+    user_id UUID DEFAULT auth.uid()
+);
+
+-- Habilitar RLS
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
+
+-- Política de acesso total para usuários logados
+CREATE POLICY "Acesso total financeiro para autenticados" 
+ON public.financeiro FOR ALL TO authenticated 
+USING (true) WITH CHECK (true);

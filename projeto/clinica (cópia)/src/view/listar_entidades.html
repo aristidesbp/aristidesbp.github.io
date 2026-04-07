@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Entidades - ERP-PSC</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c3cf6",
+                        "background-light": "#f5f5f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Navbar Container -->
+<div id="navbar"></div>
+<main class="max-w-md mx-auto pb-24 min-h-screen">
+<!-- Header & Search Section -->
+<div class="p-4 space-y-4">
+<div class="flex items-center justify-between">
+<h1 class="text-2xl font-bold tracking-tight">Entidades</h1>
+<div class="flex gap-2">
+<button class="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-white dark:bg-slate-800 rounded-xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 focus:ring-2 focus:ring-primary outline-none text-sm" placeholder="Buscar por nome, CPF ou email..." type="text"/>
+</div>
+<!-- Add Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-primary/20" onclick="document.getElementById('entityForm').classList.toggle('hidden')">
+<span class="material-symbols-outlined">add_circle</span>
+            Nova Entidade
+        </button>
+</div>
+<!-- Entity Form (Hidden by default) -->
+<section class="hidden px-4 mb-6" id="entityForm">
+<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+<div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+<h2 class="text-lg font-semibold">Dados da Entidade</h2>
+<button class="text-slate-400" onclick="document.getElementById('entityForm').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="Nome Completo" type="text"/>
+<div class="grid grid-cols-2 gap-3">
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="CPF/CNPJ" type="text"/>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="Telefone" type="text"/>
+</div>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="Email" type="email"/>
+<div class="grid grid-cols-2 gap-3">
+<select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary">
+<option value="">Relacionamento</option>
+<option>Cliente</option>
+<option>Funcionário</option>
+<option>Fornecedor</option>
+</select>
+<select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary">
+<option value="ativo">Ativo</option>
+<option value="inativo">Inativo</option>
+</select>
+</div>
+<div class="space-y-3 pt-2">
+<p class="text-xs font-bold uppercase text-slate-400 tracking-wider">Endereço</p>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="CEP" type="text"/>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary" placeholder="Logradouro" type="text"/>
+</div>
+<button class="w-full bg-primary text-white font-bold py-3 rounded-xl mt-2">Salvar Entidade</button>
+</div>
+</div>
+</section>
+<!-- Filters/Tabs -->
+<div class="px-4 overflow-x-auto whitespace-nowrap scrollbar-hide flex gap-2 mb-4">
+<button class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">Todos</button>
+<button class="px-4 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">Clientes</button>
+<button class="px-4 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">Fornecedores</button>
+<button class="px-4 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">Funcionários</button>
+</div>
+<!-- Entities List -->
+<div class="px-4 space-y-3" id="entitiesList">
+<!-- Entity Card Item -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">João da Silva Pereira</h3>
+<span class="text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded-full font-bold uppercase tracking-tighter">Cliente</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="flex items-center gap-1 text-[10px] text-primary font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ativo
+                    </span>
+</div>
+</div>
+<div class="text-sm text-slate-500 space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+<span>joao.silva@email.com</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>(11) 98765-4321</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-slate-50 dark:border-slate-700">
+<div class="flex gap-2">
+<button class="w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-red-50 text-red-500 border border-red-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<button class="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-lg font-bold text-sm">
+<span class="material-symbols-outlined text-xl">chat</span>
+                    WhatsApp
+                </button>
+</div>
+</div>
+<!-- Another Entity Card -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">store</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">Tech Solutions LTDA</h3>
+<span class="text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded-full font-bold uppercase tracking-tighter">Fornecedor</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="flex items-center gap-1 text-[10px] text-primary font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ativo
+                    </span>
+</div>
+</div>
+<div class="text-sm text-slate-500 space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">badge</span>
+<span>12.345.678/0001-90</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>(11) 3344-5566</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-slate-50 dark:border-slate-700">
+<div class="flex gap-2">
+<button class="w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-red-50 text-red-500 border border-red-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<button class="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-lg font-bold text-sm">
+<span class="material-symbols-outlined text-xl">chat</span>
+                    WhatsApp
+                </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Placeholder -->
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe">
+<div class="flex items-center justify-around h-16">
+<a class="flex flex-col items-center text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] mt-1 font-medium">Início</span>
+</a>
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined font-variation-fill">group</span>
+<span class="text-[10px] mt-1 font-medium">Entidades</span>
+</a>
+<a class="flex flex-col items-center text-slate-400" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] mt-1 font-medium">Vendas</span>
+</a>
+<a class="flex flex-col items-center text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] mt-1 font-medium">Ajustes</span>
+</a>
+</div>
+</div>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+<script src="../model/verificar_login.js"></script>
+<script src="../controller/navbar.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Gestão de Entidades Initialized');
+        
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('#entitiesList > div');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? 'flex' : 'none';
+            });
+        });
+    });
+</script>
+</body></html>

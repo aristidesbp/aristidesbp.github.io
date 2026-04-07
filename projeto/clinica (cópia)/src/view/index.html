@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ERP-PSC - Menu Principal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c3cf6",
+                        "background-light": "#f5f5f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            padding-top: 70px; /* Space for fixed navbar */
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Navbar Container populated by navbar.js -->
+<div id="navbar"></div>
+<!-- Main Content -->
+<main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Menu Principal</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Selecione um módulo para começar a trabalhar.</p>
+</div>
+<!-- Grid Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1: Gestão de Entidades -->
+<a class="group bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
+<span class="material-symbols-outlined text-3xl">group</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Gestão de Entidades</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Gerenciar usuários, permissões e perfis de acesso ao sistema.</p>
+</a>
+<!-- Card 2: Gestão Financeira -->
+<a class="group bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
+<span class="material-symbols-outlined text-3xl">payments</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Gestão Financeira</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Controle de fluxo de caixa, faturamento e contas a pagar/receber.</p>
+</a>
+<!-- Card 3: Criar Tarefas -->
+<a class="group bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
+<span class="material-symbols-outlined text-3xl">checklist</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Criar Tarefas</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Organização de atividades diárias e acompanhamento de prazos.</p>
+</a>
+<!-- Card 4: Planos 6M -->
+<a class="group bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
+<span class="material-symbols-outlined text-3xl">description</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Planos 6M</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Visualização e edição de documentos e planejamentos semestrais.</p>
+</a>
+<!-- Card 5: Dashboard Paciente -->
+<a class="group bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
+<span class="material-symbols-outlined text-3xl">monitoring</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Dashboard Paciente</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Análise de indicadores de saúde e evolução clínica dos pacientes.</p>
+</a>
+</div>
+</main>
+<!-- Bottom Nav (Mobile Only) -->
+<!-- External Scripts Required -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+<script src="../model/verificar_login.js"></script>
+<script src="../controller/navbar.js"></script>
+</body></html>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nome": "Tapioca de Carne Seca",
+    "descricao": "Carne seca com queijo",
+    "preco": 18,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/carne-seca.jpg"
+  },
+  {
+    "id": 2,
+    "nome": "Suco Natural",
+    "descricao": "Suco gelado",
+    "preco": 6,
+    "categoria": "Bebidas",
+    "imagem": "assets/img/produtos/suco.jpg"
+  },
+  {
+    "id": 1767709985801,
+    "nome": "Tapioca de morango",
+    "descricao": "Tapioca de morango recheada com leite condensado",
+    "preco": 15,
+    "categoria": "lanches",
+    "imagem": "assets/img/produtos/morango.jpg"
+  }
+]

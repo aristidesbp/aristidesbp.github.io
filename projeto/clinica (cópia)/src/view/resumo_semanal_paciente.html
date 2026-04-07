@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#20df60",
+              "background-light": "#f6f8f6",
+              "background-dark": "#112116",
+            },
+            fontFamily: {
+              "display": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<title>Resumo da Semana</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-4 justify-between sticky top-0 z-10 shadow-sm">
+<a class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="treino_hoje.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Resumo da Semana</h2>
+</div>
+<div class="p-4 space-y-6 max-w-2xl mx-auto w-full">
+<!-- Week Summary Card -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col justify-center gap-1 flex-[2_2_0px]">
+<p class="text-primary text-sm font-bold uppercase tracking-wider">Acompanhamento</p>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Semana 04</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Livro: A Jornada do Herói</p>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="Capa do livro A Jornada do Herói em uma mesa" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzPMoDaMg6IdYA1hjmixXehLrVpWMPNhoIeMgprGJ2jrmtG_MfTKNikwaQKdtAKRZGaRM6VCapg8J2lOddQ52MowWGXm3eIbXpa7Pd13nyIGsnPA5oiO_CLg3giOm2RA_6EcdnS5yfsCe4pQqp7MD1F6h8yhwTCmVWVoTHA6NA5NfB0z6jefgHm-l3XBkud7iNRY_uLXoEG8EXqfcIKeLS63IKmQ9b3PbNRAJeh26G9MllTVu93NLVXp8oWi58IU45cMx6IeZDk62x");'></div>
+</div>
+<!-- Weekly Frequency -->
+<section>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight px-1 pb-4">Frequência Semanal</h3>
+<div class="grid grid-cols-5 gap-2">
+<div class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+<span class="text-slate-400 text-xs font-bold uppercase">Seg</span>
+<span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+<span class="text-slate-400 text-xs font-bold uppercase">Ter</span>
+<span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+<span class="text-slate-400 text-xs font-bold uppercase">Qua</span>
+<span class="material-symbols-outlined text-red-500 text-3xl">cancel</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+<span class="text-slate-400 text-xs font-bold uppercase">Qui</span>
+<span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+<span class="text-slate-400 text-xs font-bold uppercase">Sex</span>
+<span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Module Summary Grid -->
+<section>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight px-1 pb-4">Desempenho por Módulo</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-semibold">Leitura Crítica</span>
+<span class="text-slate-500 text-xs">Módulo 01</span>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full font-bold">
+<span>4/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-semibold">Interpretação</span>
+<span class="text-slate-500 text-xs">Módulo 02</span>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full font-bold">
+<span>4/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-semibold">Vocabulário</span>
+<span class="text-slate-500 text-xs">Módulo 03</span>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full font-bold">
+<span>3/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Feedback Section -->
+<section class="space-y-4">
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-100 font-bold px-1" for="feedback-semanal">Como foi a semana?</label>
+<textarea class="w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary" id="feedback-semanal" placeholder="Descreva as percepções sobre o progresso e dificuldades..." rows="4"></textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-100 font-bold px-1" for="nome-responsavel">Nome do Responsável</label>
+<input class="w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary" id="nome-responsavel" placeholder="Digite seu nome completo" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-100 font-bold px-1">Assinatura Digital</label>
+<div class="w-full h-32 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900/50">
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">draw</span>
+<p class="text-sm">Assine aqui</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Button -->
+<div class="pt-4 pb-8">
+<a class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-slate-900 font-bold text-lg shadow-lg hover:brightness-105 active:scale-[0.98] transition-all" href="paciente_dashboard.html">
+<span>Enviar Relatório Semanal</span>
+<span class="material-symbols-outlined">send</span>
+</a>
+</div>
+</div>
+</div>
+</body></html>

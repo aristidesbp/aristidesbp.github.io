@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ERP-PSC | Redirecionando</title>
+</head>
+<body>
+    <script>
+        (function() {
+            // 1. Pega o caminho base do site (ex: https://aristidesbp.github.io/)
+            const origin = window.location.origin;
+            
+            // 2. Define o caminho exato do login a partir da raiz
+            // Importante: Começa com "/" para resetar qualquer caminho anterior
+            const loginPath = "/src/view/login.html";
+            
+            // 3. Se estiver no GitHub Pages, precisamos garantir que o nome do repositório 
+            // não se perca, mas para o seu caso (domínio principal), o replace resolve:
+            const finalUrl = origin + loginPath;
+
+            console.log("Redirecionando para:", finalUrl);
+            window.location.replace(finalUrl);
+        })();
+    </script>
+    
+    <noscript>
+        <p>Você precisa de JavaScript ativo. <a href="./src/view/login.html">Clique aqui para entrar</a>.</p>
+    </noscript>
+</body>
+</html>

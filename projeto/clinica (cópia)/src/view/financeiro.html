@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Financeira - ERP ABP</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../../assets/style/style_navbar.css">
+    <style>
+        :root { --primary: #3ecf8e; --danger: #ef4444; --bg: #f1f5f9; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; padding-top: 80px; }
+        .card { background: white; padding: 20px; border-radius: 12px; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-weight: bold; border-bottom: 2px solid #eee; margin: 15px 0; padding-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; }
+        .status-pago { background: #dcfce7; color: #166534; }
+        .status-pendente { background: #fef9c3; color: #854d0e; }
+    </style>
+
+    <script src="../model/supabase_config.js"></script>
+    <script src="../model/verificar_login.js"></script>
+    <script src="../model/financeiro.js"></script>
+    <script src="../controller/navbar.js"></script>
+</head>
+<body>
+
+    <div id="navbar"></div>
+
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="card">
+            <h3 id="form-title" class="text-xl font-bold mb-4 text-slate-800">Novo Lançamento Financeiro</h3>
+            <input type="hidden" id="edit-id">
+            
+            <div class="section-title">Dados Básicos e Parcelamento</div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tipo *</label>
+                    <select id="tipo" class="mt-1 block w-full border rounded-md p-2">
+                        <option value="pagar">Saída (A Pagar)</option>
+                        <option value="receber">Entrada (A Receber)</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700">Descrição *</label>
+                    <input type="text" id="descricao" class="mt-1 block w-full border rounded-md p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Valor Parcela (R$) *</label>
+                    <input type="number" id="valor" step="0.01" class="mt-1 block w-full border rounded-md p-2">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Parcelas</label>
+                    <input type="number" id="parcelas" value="1" min="1" class="mt-1 block w-full border rounded-md p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">1º Vencimento *</label>
+                    <input type="date" id="data_vencimento" class="mt-1 block w-full border rounded-md p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Data Pagamento</label>
+                    <input type="date" id="data_pagamento" class="mt-1 block w-full border rounded-md p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="status" class="mt-1 block w-full border rounded-md p-2">
+                        <option value="pendente">Pendente</option>
+                        <option value="pago">Pago / Recebido</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title">Classificação</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Entidade (Cliente/Fornecedor)</label>
+                    <select id="entidade_id" class="mt-1 block w-full border rounded-md p-2">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Categoria</label>
+                    <input type="text" id="categoria" placeholder="Ex: Aluguel, Venda..." class="mt-1 block w-full border rounded-md p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Forma de Pagamento</label>
+                    <input type="text" id="forma_pagamento" placeholder="Ex: Pix, Cartão..." class="mt-1 block w-full border rounded-md p-2">
+                </div>
+            </div>
+            
+            <div class="flex gap-2 mt-6">
+                <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg w-full transition" id="btn-save" onclick="handleSave()">
+                    Salvar Lançamento(s)
+                </button>
+                <button class="bg-gray-500 text-white py-3 px-6 rounded-lg hidden" id="btn-cancel" onclick="resetForm()">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="card md:col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-1">
+                        <label class="text-xs font-bold text-gray-500">Busca Rápida</label>
+                        <input type="text" id="inputBusca" onkeyup="filtrarTabela()" placeholder="Filtrar..." class="w-full border rounded p-2">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Início</label>
+                        <input type="date" id="dataInicio" onchange="filtrarTabela()" class="w-full border rounded p-2">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Fim</label>
+                        <input type="date" id="dataFim" onchange="filtrarTabela()" class="w-full border rounded p-2">
+                    </div>
+                </div>
+                <button onclick="exportarPDF()" class="mt-4 bg-slate-800 text-white px-4 py-2 rounded text-sm font-bold hover:bg-slate-900 transition">
+                    <i class="fas fa-file-pdf mr-2"></i> Exportar PDF
+                </button>
+            </div>
+
+            <div class="grid grid-rows-3 gap-2">
+                <div class="bg-emerald-100 p-3 rounded-lg border-l-4 border-emerald-500 flex justify-between items-center">
+                    <span class="text-emerald-800 font-bold text-sm">Entradas</span>
+                    <b id="total-receber" class="text-emerald-700">R$ 0,00</b>
+                </div>
+                <div class="bg-red-100 p-3 rounded-lg border-l-4 border-red-500 flex justify-between items-center">
+                    <span class="text-red-800 font-bold text-sm">Saídas</span>
+                    <b id="total-pagar" class="text-red-700">R$ 0,00</b>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg border-l-4 border-blue-500 flex justify-between items-center">
+                    <span class="text-blue-800 font-bold text-sm">Saldo</span>
+                    <b id="total-saldo" class="text-blue-700">R$ 0,00</b>
+                </div>
+            </div>
+        </div>
+
+        <div id="bulk-area" class="hidden bg-red-50 p-4 rounded-lg border border-red-200 mb-4 flex justify-between items-center">
+            <span id="selected-count" class="font-bold text-red-700">0 selecionados</span>
+            <button onclick="deleteSelected()" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700 transition">
+                <i class="fas fa-trash mr-2"></i> Excluir Selecionados
+            </button>
+        </div>
+
+        <div class="card overflow-x-auto p-0">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b">
+                        <th class="p-4 w-10"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase">Tipo</th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase">Descrição / Entidade</th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase">Vencimento</th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase">Valor</th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase">Status</th>
+                        <th class="p-4 text-xs font-bold text-slate-500 uppercase text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="financeiro-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

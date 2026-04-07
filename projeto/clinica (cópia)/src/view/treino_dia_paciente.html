@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Treino de Hoje</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#20df60",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#112116",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-background-dark/50 p-4 sticky top-0 z-10 border-b border-primary/10">
+<a class="text-slate-900 dark:text-slate-100 size-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors" href="paciente_dashboard.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<div class="ml-2">
+<h1 class="text-lg font-bold leading-tight tracking-tight">Treino de Hoje</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400" id="current-date">Segunda-feira, 22 de Maio</p>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Daily Highlight Card -->
+<div class="p-4">
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-slate-800/50 p-4 shadow-sm border border-primary/10">
+<div class="flex flex-col gap-1 flex-[2_2_0px]">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">menu_book</span>
+<p class="text-xs font-semibold uppercase tracking-wider">Plano de Estudo</p>
+</div>
+<p class="text-lg font-bold leading-tight mt-1">Cognição e Foco</p>
+<div class="flex items-center gap-3 mt-1">
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+<span>Semana 3</span>
+</div>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined text-base">schedule</span>
+<span>45 min total</span>
+</div>
+</div>
+</div>
+<div class="w-24 h-24 bg-primary/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl">psychology</span>
+</div>
+</div>
+</div>
+<!-- Progress Section -->
+<div class="px-4 py-2">
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-4 border border-primary/5">
+<div class="flex justify-between items-center mb-2">
+<p class="text-sm font-medium">Progresso do dia</p>
+<p class="text-sm font-bold text-primary">65%</p>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-2">4 de 6 módulos concluídos</p>
+</div>
+</div>
+<!-- Modules List -->
+<div class="px-4 mt-6">
+<h3 class="text-base font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">format_list_bulleted</span>
+                Módulos de Hoje
+            </h3>
+<div class="space-y-3">
+<!-- Module Item: Completed -->
+<div class="flex items-center gap-4 p-3 bg-white dark:bg-slate-800/40 rounded-xl border border-primary/5">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">Aquecimento Mental</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold">CONCLUÍDO</span>
+</div>
+<a class="text-primary text-xs font-bold border border-primary/30 px-3 py-1.5 rounded-lg hover:bg-primary/5" href="modulo_revisao.html">
+                        Revisar
+                    </a>
+</div>
+<!-- Module Item: In Progress/Next -->
+<div class="flex items-center gap-4 p-3 bg-white dark:bg-slate-800/80 rounded-xl border-2 border-primary shadow-md">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Exercício de Memória A1</p>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-[10px]">
+<span class="material-symbols-outlined text-xs">timer</span>
+<span>15 min</span>
+</div>
+</div>
+<a class="bg-primary text-slate-900 text-xs font-bold px-4 py-2 rounded-lg shadow-sm" href="modulo_execucao.html">
+                        Iniciar
+                    </a>
+</div>
+<!-- Module Item: Locked/Pending -->
+<div class="flex items-center gap-4 p-3 bg-slate-100 dark:bg-slate-800/20 rounded-xl border border-slate-200 dark:border-slate-700 opacity-70">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex-1">
+<p class="font-medium text-sm text-slate-500">Raciocínio Lógico</p>
+<p class="text-[10px] text-slate-400 italic">Libera após anterior</p>
+</div>
+<button class="text-slate-400 text-xs font-bold px-4 py-2" disabled="">
+                        Pendente
+                    </button>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="p-6 mt-4">
+<button class="w-full bg-primary text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">done_all</span>
+                Encerrar o Dia
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-6 pb-6 pt-3 flex justify-between items-center z-20">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="paciente_dashboard.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="treino_hoje.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">fitness_center</span>
+<span class="text-[10px] font-bold">Treino</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="historico.html">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-medium">Histórico</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="perfil.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</a>
+</nav>
+</body></html>
