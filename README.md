@@ -4,11 +4,13 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
-* 🌐 **GitHub:** [https://github.com/aristidesbp](https://github.com/aristidesbp)
-* 🌐 **Meu_site:** [https://aristidesbp.github.io](https://aristidesbp.github.io)
-* 🌐 **entidades:** [https://aristidesbp.github.io](https://aristidesbp.github.io/projeto/entidades/)
-* 🌐 **financeiro:** [https://aristidesbp.github.io](https://aristidesbp.github.io/projeto/financeiro/)
-* 🌐 **tarefas:** [https://aristidesbp.github.io](https://aristidesbp.github.io/projeto/tarefas/)
+* 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
+
+## PROJETO
+* 🌐 **Meu_site:** [ENTRAR](https://aristidesbp.github.io)
+* 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/projeto/entidades/)
+* 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/projeto/financeiro/)
+* 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/projeto/tarefas/)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
