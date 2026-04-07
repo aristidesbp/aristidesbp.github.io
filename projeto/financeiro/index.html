@@ -27,7 +27,6 @@
         
         label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
         input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-        input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
         
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -59,22 +58,9 @@
         <div class="card mb-8">
             <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
             
-            <input type="hidden" id="f-editando-id">
-            <input type="hidden" id="f-editando-financa-id">
-
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div class="md:col-span-2"><label>Descrição da Conta *</label><input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
-                
-                <div>
-                    <label>Tipo de Valor</label>
-                    <select id="f-tipo-calculo" onchange="ajustarLabelsValor()">
-                        <option value="total">Valor Total</option>
-                        <option value="parcela">Valor da Parcela</option>
-                    </select>
-                </div>
-                
-                <div><label id="label-valor">Valor Total (R$) *</label><input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
-                
+                <div><label>Valor Total (R$) *</label><input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
                 <div><label>Tipo de Operação</label>
                     <select id="f-tipo">
                         <option value="despesa">Despesa (Saída)</option>
@@ -82,27 +68,9 @@
                     </select>
                 </div>
 
-                <div><label>Categoria</label>
-                    <select id="f-categoria">
-                        <option value="Geral">Geral</option>
-                        <option value="Aluguel">Aluguel</option>
-                        <option value="Serviços">Serviços</option>
-                        <option value="Vendas">Vendas</option>
-                        <option value="Impostos">Impostos</option>
-                    </select>
-                </div>
-
-                <div><label>Status do Lançamento</label>
-                    <select id="f-status">
-                        <option value="aberto">Aberto</option>
-                        <option value="finalizado">Finalizado</option>
-                        <option value="cancelado">Cancelado</option>
-                    </select>
-                </div>
-
-                <div class="relative md:col-span-1">
+                <div class="relative md:col-span-2">
                     <label>Entidade / Cliente</label>
-                    <input type="text" id="f-entidade-busca" placeholder="Buscar..." autocomplete="off">
+                    <input type="text" id="f-entidade-busca" placeholder="Digite para buscar entidade..." autocomplete="off">
                     <input type="hidden" id="f-entidade-id">
                     <ul id="lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden custom-scroll"></ul>
                 </div>
@@ -114,8 +82,7 @@
                         <option value="3">Trimestral</option>
                         <option value="6">Semestral</option>
                         <option value="12">Anual</option>
-                        <option value="diario">Diário</option> 
-                    </select>
+                        <option value="diario">Diário</option> </select>
                 </div>
 
                 <div class="p-2 rounded highlight-parcelas">
@@ -123,11 +90,11 @@
                     <input type="number" id="f-parcelas" value="1" min="1" class="border-blue-300 font-bold text-blue-700">
                 </div>
 
-                <div><label>Data Vencimento *</label><input type="date" id="f-vencimento"></div>
+                <div><label>Data 1º Vencimento *</label><input type="date" id="f-vencimento"></div>
                 
-                <div><label>Data de Pagamento</label><input type="date" id="f-data-pagamento"></div>
+                <div><label>Data de Pagamento (Se já pago)</label><input type="date" id="f-data-pagamento"></div>
 
-                <div class="md:col-span-4">
+                <div class="md:col-span-3">
                     <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
                     <div class="flex gap-2">
                         <input type="text" id="f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
@@ -155,28 +122,17 @@
                 </div>
             </div>
             
-            <div class="flex gap-4 mt-6">
-                <button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
-                    <i class="fas fa-save"></i> Gravar Lançamento
-                </button>
-                <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
-                    Cancelar
-                </button>
-            </div>
+            <button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="mt-6 w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+                <i class="fas fa-save"></i> Gravar Lançamento e Gerar Parcelas
+            </button>
         </div>
 
         <div class="card">
-            <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
-                <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
-                    <i class="fas fa-trash"></i> Excluir Selecionados
-                </button>
-            </div>
+            <h3 class="font-bold mb-4 text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
-                            <th class="p-3 w-10 text-center"><input type="checkbox" id="check-all" onclick="toggleTodosChecks(this)"></th>
                             <th class="p-3">Datas (Venc. / Pag.)</th>
                             <th class="p-3">Descrição / Anexos</th>
                             <th class="p-3">Nº Parcela</th>
@@ -192,7 +148,7 @@
     </div>
 
     <script>
-        // Configuração do Supabase
+        // Configuração do Supabase (Atenção: substitui a chave abaixo pela tua verdadeira)
         const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -204,11 +160,6 @@
             loadEntidades();
             loadDashboard();
             loadParcelas();
-        }
-
-        function ajustarLabelsValor() {
-            const tipo = document.getElementById('f-tipo-calculo').value;
-            document.getElementById('label-valor').innerText = tipo === 'total' ? 'Valor Total (R$)' : 'Valor da Parcela (R$)';
         }
 
         async function loadEntidades() {
@@ -279,11 +230,8 @@
 
             try {
                 const desc = document.getElementById('f-desc').value;
-                const tipoCalculo = document.getElementById('f-tipo-calculo').value;
-                const valorInput = parseFloat(document.getElementById('f-valor').value);
+                const valorTotal = parseFloat(document.getElementById('f-valor').value);
                 const tipo = document.getElementById('f-tipo').value;
-                const categoria = document.getElementById('f-categoria').value;
-                const statusLancamento = document.getElementById('f-status').value;
                 const qtd = parseInt(document.getElementById('f-parcelas').value);
                 const recorrenciaVal = document.getElementById('f-recorrencia').value;
                 const dataVenc = document.getElementById('f-vencimento').value;
@@ -293,91 +241,59 @@
                 
                 const fileBoleto = document.getElementById('f-boleto').files[0];
                 const fileComprovante = document.getElementById('f-comprovante').files[0];
-                
-                const editandoId = document.getElementById('f-editando-id').value;
-                const financaId = document.getElementById('f-editando-financa-id').value;
 
-                if(!desc || !valorInput || !dataVenc) throw new Error("Preencha Descrição, Valor e Data de Vencimento!");
-
-                let valorTotal, valorParcela;
-                if (tipoCalculo === 'total') {
-                    valorTotal = valorInput;
-                    valorParcela = (valorTotal / qtd).toFixed(2);
-                } else {
-                    valorParcela = valorInput;
-                    valorTotal = (valorParcela * qtd).toFixed(2);
-                }
+                if(!desc || !valorTotal || !dataVenc) throw new Error("Preencha Descrição, Valor Total e 1º Vencimento!");
 
                 let boletoUrl = null;
                 let comprovanteUrl = null;
 
                 if (fileBoleto) {
                     const fileName = `bol_${Date.now()}_${fileBoleto.name}`;
-                    const { error } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileBoleto);
+                    const { data, error } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileBoleto);
                     if(!error) boletoUrl = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
                 }
 
                 if (fileComprovante) {
                     const fileName = `comp_${Date.now()}_${fileComprovante.name}`;
-                    const { error } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileComprovante);
+                    const { data, error } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileComprovante);
                     if(!error) comprovanteUrl = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
                 }
 
-                if (editandoId) {
-                    // Modo Edição (Atualiza apenas a parcela específica e o cabeçalho base)
-                    await _supabase.from('financas').update({
-                        descricao: desc, tipo: tipo, categoria: categoria, status_lancamento: statusLancamento, entidade_id: entidade
-                    }).eq('id', financaId);
+                const { data: financa, error: errF } = await _supabase.from('financas').insert([{
+                    descricao: desc, valor_total: valorTotal, tipo, num_parcelas: qtd, entidade_id: entidade
+                }]).select().single();
+                if(errF) throw errF;
 
-                    const payloadUpdate = {
+                const valorParcela = (valorTotal / qtd).toFixed(2);
+                let parcelas = [];
+
+                for(let i = 1; i <= qtd; i++) {
+                    let venc = new Date(dataVenc + 'T12:00:00'); 
+                    
+                    // Lógica de Recorrência Diária vs Outras
+                    if (recorrenciaVal === 'diario') {
+                        venc.setDate(venc.getDate() + (i - 1));
+                    } else {
+                        venc.setMonth(venc.getMonth() + ((i - 1) * parseInt(recorrenciaVal))); 
+                    }
+                    
+                    parcelas.push({
+                        financa_id: financa.id,
+                        num_parcela: i,
                         valor_parcela: valorParcela,
-                        data_vencimento: dataVenc,
+                        data_vencimento: venc.toISOString().split('T')[0],
                         status: dataPagamentoForm ? 'pago' : 'pendente',
                         data_pagamento: dataPagamentoForm || null,
-                        codigo_barra: barras
-                    };
-                    if (boletoUrl) payloadUpdate.boleto_url = boletoUrl;
-                    if (comprovanteUrl) payloadUpdate.comprovante_url = comprovanteUrl;
-
-                    const { error: errUpdate } = await _supabase.from('parcelas').update(payloadUpdate).eq('id', editandoId);
-                    if (errUpdate) throw errUpdate;
-
-                    alert("Parcela atualizada com sucesso!");
-                } else {
-                    // Modo Novo Lançamento
-                    const { data: financa, error: errF } = await _supabase.from('financas').insert([{
-                        descricao: desc, valor_total: valorTotal, tipo, categoria, status_lancamento: statusLancamento, num_parcelas: qtd, entidade_id: entidade
-                    }]).select().single();
-                    if(errF) throw errF;
-
-                    let parcelas = [];
-                    for(let i = 1; i <= qtd; i++) {
-                        let venc = new Date(dataVenc + 'T12:00:00'); 
-                        if (recorrenciaVal === 'diario') {
-                            venc.setDate(venc.getDate() + (i - 1));
-                        } else {
-                            venc.setMonth(venc.getMonth() + ((i - 1) * parseInt(recorrenciaVal))); 
-                        }
-                        
-                        parcelas.push({
-                            financa_id: financa.id,
-                            num_parcela: i,
-                            valor_parcela: valorParcela,
-                            data_vencimento: venc.toISOString().split('T')[0],
-                            status: dataPagamentoForm ? 'pago' : 'pendente',
-                            data_pagamento: dataPagamentoForm || null,
-                            codigo_barra: barras,
-                            boleto_url: boletoUrl,
-                            comprovante_url: comprovanteUrl
-                        });
-                    }
-
-                    const { error: errP } = await _supabase.from('parcelas').insert(parcelas);
-                    if(errP) throw errP;
-
-                    alert("Lançamento salvo!");
+                        codigo_barra: barras,
+                        boleto_url: boletoUrl,
+                        comprovante_url: comprovanteUrl
+                    });
                 }
-                
+
+                const { error: errP } = await _supabase.from('parcelas').insert(parcelas);
+                if(errP) throw errP;
+
+                alert("Lançamento salvo!");
                 location.reload();
             } catch (error) {
                 alert(error.message);
@@ -386,7 +302,7 @@
         }
 
         async function loadParcelas() {
-            const { data } = await _supabase.from('parcelas').select('*, financas(descricao, tipo, categoria)').order('data_vencimento', { ascending: true });
+            const { data } = await _supabase.from('parcelas').select('*, financas(descricao, tipo)').order('data_vencimento', { ascending: true });
             if(!data) return;
             const tbody = document.getElementById('lista-parcelas');
             const hoje = new Date().toISOString().split('T')[0];
@@ -405,15 +321,12 @@
 
                 return `
                 <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
-                    <td class="p-3 text-center">
-                        <input type="checkbox" class="check-parcela" value="${p.id}">
-                    </td>
                     <td class="p-3">
                         <div class="text-slate-800 font-bold"><i class="far fa-calendar-alt text-slate-400"></i> ${dtVenc}</div>
                         <div class="text-xs text-slate-500 mt-1"><i class="fas fa-check text-emerald-400"></i> ${dtPag}</div>
                     </td>
                     <td class="p-3">
-                        <div class="font-bold text-slate-700 mb-1">${p.financas.descricao} <span class="text-[10px] font-normal bg-gray-200 text-gray-600 px-1 rounded ml-1">${p.financas.categoria || 'Geral'}</span></div>
+                        <div class="font-bold text-slate-700 mb-1">${p.financas.descricao}</div>
                         <div class="flex gap-1 mb-1">${iconeBoleto}${iconeComp}</div>
                         ${txtBarras}
                     </td>
@@ -423,80 +336,102 @@
                     </td>
                     <td class="p-3 text-center"><span class="${statusClass}">${statusTxt}</span></td>
                     <td class="p-3 text-center">
-                        <button onclick="prepararEdicao('${p.id}')" class="bg-blue-100 text-blue-600 px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition text-sm">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
+                        ${p.status === 'pendente' ? 
+                            `<button onclick="darBaixa('${p.id}')" class="bg-emerald-100 text-emerald-600 px-3 py-2 rounded hover:bg-emerald-500 hover:text-white transition text-sm">
+                                <i class="fas fa-hand-holding-usd"></i> Pagar
+                            </button>` : `<button class="bg-slate-100 text-slate-400 px-3 py-2 rounded cursor-not-allowed text-sm" disabled><i class="fas fa-check-double"></i> Pago</button>`
+                        }
                     </td>
                 </tr>`;
             }).join('');
         }
 
-        async function prepararEdicao(id) {
-            const { data: p } = await _supabase.from('parcelas').select('*, financas(*)').eq('id', id).single();
-            if (p) {
-                document.getElementById('f-editando-id').value = p.id;
-                document.getElementById('f-editando-financa-id').value = p.financas.id;
-                
-                document.getElementById('f-desc').value = p.financas.descricao;
-                document.getElementById('f-tipo').value = p.financas.tipo;
-                document.getElementById('f-categoria').value = p.financas.categoria || 'Geral';
-                document.getElementById('f-status').value = p.financas.status_lancamento || 'aberto';
-                
-                document.getElementById('f-tipo-calculo').value = 'parcela';
-                ajustarLabelsValor();
-                document.getElementById('f-valor').value = p.valor_parcela;
-                document.getElementById('f-parcelas').value = 1;
-                document.getElementById('f-parcelas').disabled = true; // Impede alterar qtd na edição de uma parcela
-                document.getElementById('f-recorrencia').disabled = true;
-                
-                document.getElementById('f-vencimento').value = p.data_vencimento;
-                document.getElementById('f-data-pagamento').value = p.data_pagamento || '';
-                document.getElementById('f-barras').value = p.codigo_barra || '';
-                
-                document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Parcela';
-                document.getElementById('btn-cancelar').classList.remove('hidden');
-                
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function cancelarEdicao() {
-            document.getElementById('f-editando-id').value = '';
-            document.getElementById('f-editando-financa-id').value = '';
-            document.getElementById('f-parcelas').disabled = false;
-            document.getElementById('f-recorrencia').disabled = false;
-            document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-save"></i> Gravar Lançamento';
-            document.getElementById('btn-cancelar').classList.add('hidden');
-            
-            // Limpa campos
-            document.getElementById('f-desc').value = '';
-            document.getElementById('f-valor').value = '';
-            document.getElementById('f-vencimento').value = '';
-            document.getElementById('f-data-pagamento').value = '';
-            document.getElementById('f-barras').value = '';
-        }
-
-        function toggleTodosChecks(source) {
-            const checkboxes = document.querySelectorAll('.check-parcela');
-            checkboxes.forEach(cb => cb.checked = source.checked);
-        }
-
-        async function excluirSelecionados() {
-            const selecionados = Array.from(document.querySelectorAll('.check-parcela:checked')).map(cb => cb.value);
-            if (selecionados.length === 0) return alert("Selecione ao menos uma parcela para excluir.");
-
-            if (confirm(`Atenção: Deseja realmente excluir ${selecionados.length} parcela(s)?`)) {
-                const { error } = await _supabase.from('parcelas').delete().in('id', selecionados);
-                if (!error) {
-                    alert('Excluído com sucesso!');
-                    location.reload();
-                } else {
-                    alert('Erro ao excluir: ' + error.message);
-                }
-            }
+        async function darBaixa(id) {
+            const dataPag = prompt("Data do pagamento? (AAAA-MM-DD)", new Date().toISOString().split('T')[0]);
+            if(!dataPag) return; 
+            await _supabase.from('parcelas').update({ status: 'pago', data_pagamento: dataPag }).eq('id', id);
+            init();
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-    </html>
+    <!--
+    
+   -- ============================================================================
+-- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
+-- ============================================================================
+
+-- Tabela Pai: Lançamento Financeiro Geral (O "Cabeçalho" da conta)
+CREATE TABLE public.financas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    -- O default auth.uid() preenche automaticamente com o ID de quem está logado
+    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL, -- Se apagar o cliente, a conta financeira não some
+    descricao TEXT NOT NULL,
+    valor_total DECIMAL(10,2) NOT NULL,
+    tipo TEXT CHECK (tipo IN ('receita', 'despesa')),
+    num_parcelas INTEGER DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabela Filha: Parcelas Individuais (As "Linhas" de pagamento)
+CREATE TABLE public.parcelas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    financa_id UUID REFERENCES public.financas(id) ON DELETE CASCADE, -- Se apagar o "cabeçalho", apaga as parcelas junto
+    num_parcela INTEGER NOT NULL,
+    valor_parcela DECIMAL(10,2) NOT NULL,
+    data_vencimento DATE NOT NULL,
+    data_pagamento DATE,
+    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago', 'atrasado')),
+    codigo_barra TEXT,       -- Campo para o leitor de barras
+    boleto_url TEXT,         -- Link do boleto salvo no storage
+    comprovante_url TEXT,    -- Link do comprovante salvo no storage
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
+-- ============================================================================
+
+ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
+
+-- Regras para Finanças (Usuário só acessa as contas que ele mesmo criou)
+CREATE POLICY "Pessoa ve as proprias financas" ON public.financas FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa insere as proprias financas" ON public.financas FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Pessoa atualiza as proprias financas" ON public.financas FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa apaga as proprias financas" ON public.financas FOR DELETE USING (auth.uid() = user_id);
+
+-- Regras para Parcelas (Usuário só acessa parcelas amarradas às suas finanças)
+CREATE POLICY "Pessoa ve as proprias parcelas" ON public.parcelas FOR SELECT USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa insere as proprias parcelas" ON public.parcelas FOR INSERT WITH CHECK (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+
+-- ============================================================================
+-- 3. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'comprovantes')
+-- ============================================================================
+
+-- Cria o bucket 'comprovantes' automaticamente se ele ainda não existir
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('comprovantes', 'comprovantes', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Aplica as Regras de quem pode mexer nos arquivos
+CREATE POLICY "Comprovantes publicos" ON storage.objects FOR SELECT TO public USING ( bucket_id = 'comprovantes' );
+CREATE POLICY "Upload de comprovantes" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id = 'comprovantes' );
+CREATE POLICY "Edicao de comprovantes" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner );
+CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner ); 
+    
+    
+    -->
+</html>
