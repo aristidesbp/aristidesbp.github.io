@@ -9,7 +9,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ## PROJETO
 * 🌐 **Meu_site:** [ENTRAR](https://aristidesbp.github.io)
 * 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/projeto/entidades/)
-* 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/projeto/financeiro/)
+* 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/projeto/financeiro/script_src/financeiro.html)
 * 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/projeto/tarefas/)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
