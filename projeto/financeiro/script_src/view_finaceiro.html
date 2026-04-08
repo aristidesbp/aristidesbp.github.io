@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <script src="model_supabase_config.js"></script>
+    <script src="controller_navbar.js"></script>
+    <link rel="stylesheet" href="../link_rel_stylesheet/href_financeiro.css">
+</head>
+<body>
+
+    <div id="navbar"></div>
+
+    <div id="tela-sistema">
+        <div class="container">
+            
+            <div class="summary-grid">
+                <div class="summary-card receitas">
+                    <div>
+                        <h3>Receitas (Mês)</h3>
+                        <p id="total-receitas">R$ 0,00</p>
+                    </div>
+                    <i class="fas fa-arrow-up" style="color: var(--success);"></i>
+                </div>
+                <div class="summary-card despesas">
+                    <div>
+                        <h3>Despesas (Mês)</h3>
+                        <p id="total-despesas">R$ 0,00</p>
+                    </div>
+                    <i class="fas fa-arrow-down" style="color: var(--danger);"></i>
+                </div>
+                <div class="summary-card saldo">
+                    <div>
+                        <h3>Saldo Atual</h3>
+                        <p id="total-saldo">R$ 0,00</p>
+                    </div>
+                    <i class="fas fa-wallet" style="color: var(--primary);"></i>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+                
+                <div id="reader" style="width: 100%; max-width: 500px; display: none; margin: 0 auto 20px;"></div>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Tipo *</label>
+                        <select id="tipo_lancamento">
+                            <option value="receita">Receita (+)</option>
+                            <option value="despesa">Despesa (-)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Descrição *</label>
+                        <input type="text" id="descricao" placeholder="Ex: Conta de Luz, Venda Produto X">
+                    </div>
+                    <div>
+                        <label>Categoria</label>
+                        <input type="text" id="categoria" placeholder="Ex: Fixa, Variável, Geral" value="Geral">
+                    </div>
+                    <div>
+                        <label>Valor Total (R$) *</label>
+                        <input type="number" id="valor_total" step="0.01" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Nº de Parcelas</label>
+                        <input type="number" id="num_parcelas" value="1" min="1">
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-scan" onclick="iniciarLeitor()"><i class="fas fa-barcode"></i> Ler Boleto</button>
+                    <button class="btn-add" onclick="salvarLancamento()"><i class="fas fa-save"></i> Registrar Lançamento</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title"><i class="fas fa-list"></i> Histórico de Lançamentos</h3>
+                <input type="text" id="buscaFinanceiro" placeholder="Filtrar por descrição..." onkeyup="filtrarFinanceiro()" style="margin-bottom: 15px; max-width: 300px;">
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição / Categoria</th>
+                                <th>Tipo</th>
+                                <th>Valor Total</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-financeira">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="model_financeiro.js"></script>
+
+</body>
+</html>
