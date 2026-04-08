@@ -5,27 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Principal - ERP ABP</title>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="model_supabase_config.js"></script>
-  <script src="controller_navbar.js"></script>
-
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="model_supabase_config.js"></script>
+    <script src="controller_navbar.js"></script>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-     <link rel="stylesheet" href="../link_rel_stylesheet/href_index.css"> 
-   
-
-   
-    
+    <link rel="stylesheet" href="../link_rel_stylesheet/href_index.css"> 
 </head>
 <body>
 
-  <div id="navbar"></div>
+    <div id="navbar"></div>
 
-    <div id="tela-sistema" style="display: none;">
+    <div id="tela-sistema">
         
-
         <div class="container">
             
             <div class="welcome-box">
@@ -35,13 +29,13 @@
 
             <div class="dashboard-grid">
                 
-                <a href="entidades.html" class="module-card">
+                <a href="view_entidades.html" class="module-card">
                     <i class="fas fa-users"></i>
                     <h3>Gestão de Entidades</h3>
                     <p>Clientes, Funcionários e Fornecedores</p>
                 </a>
 
-           <a href="produtos.html" class="module-card">
+                <a href="#" class="module-card" onclick="alert('Módulo em construção!'); return false;">
                     <i class="fas fa-box-open" style="color: #6366f1;"></i>
                     <h3>Estoque & Produtos</h3>
                     <p>Controle de inventário e categorias</p>
@@ -53,16 +47,16 @@
                     <p>Faturamento e gestão de pedidos</p>
                 </a>
 
-                <a href="financeiro.html" class="module-card">
+                <a href="view_finaceiro_completo.html" class="module-card">
                     <i class="fas fa-wallet" style="color: #ec4899;"></i>
                     <h3>Financeiro</h3>
                     <p>Contas a Pagar, Receber e Fluxo de Caixa</p>
                 </a>
 
-                  <a href="tarefas.html" class="module-card">
-                    <i class="fas fa-wallet" style="color: #ec4899;"></i>
+                <a href="#" class="module-card" onclick="alert('Módulo em construção!'); return false;">
+                    <i class="fas fa-tasks" style="color: #10b981;"></i>
                     <h3>Tarefas</h3>
-                    <p>Contas a Pagar, Receber e Fluxo de Caixa</p>
+                    <p>Controle de atividades e pendências</p>
                 </a>
                 
             </div>
