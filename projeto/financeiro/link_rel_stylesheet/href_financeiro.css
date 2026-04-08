@@ -1,0 +1,54 @@
+/* --- VARIÁVEIS E ESTILOS GERAIS --- */
+:root { 
+    --primary: #3ecf8e; 
+    --dark: #0f172a; 
+    --bg: #f1f5f9; 
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+}
+
+body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
+
+/* --- ESTRUTURA DO DASHBOARD FINANCEIRO --- */
+.container { max-width: 1200px; margin: auto; padding: 20px; padding-top: 85px; }
+
+/* Cartões de Resumo (Cards Superiores) */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
+.summary-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border-left: 5px solid #ccc; }
+.summary-card.receitas { border-color: var(--success); }
+.summary-card.despesas { border-color: var(--danger); }
+.summary-card.saldo { border-color: var(--primary); }
+.summary-card h3 { margin: 0; font-size: 14px; color: #64748b; text-transform: uppercase; }
+.summary-card p { margin: 5px 0 0; font-size: 24px; font-weight: bold; color: var(--dark); }
+.summary-card i { font-size: 30px; opacity: 0.2; }
+
+/* Formulário e Tabelas */
+.card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 0 0 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background: #f8fafc; }
+input:focus, select:focus { outline: none; border-color: var(--primary); background: white; }
+
+/* Botões */
+.btn-group { display: flex; gap: 10px; margin-top: 15px; }
+.btn-add { background: var(--primary); color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; transition: 0.3s; }
+.btn-add:hover { opacity: 0.9; }
+.btn-scan { background: var(--dark); color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.btn-scan:hover { opacity: 0.9; }
+
+/* Tabela */
+.table-container { background: white; border-radius: 8px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; font-size: 14px; }
+
+/* Tags de Status */
+.tag { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; text-transform: uppercase; }
+.status-pago { background: #d1fae5; color: #065f46; }
+.status-pendente { background: #fef3c7; color: #b45309; }
+.status-atrasado { background: #fee2e2; color: #991b1b; }
+.tipo-receita { color: var(--success); font-weight: bold; }
+.tipo-despesa { color: var(--danger); font-weight: bold; }
