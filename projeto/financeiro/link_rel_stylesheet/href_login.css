@@ -1,0 +1,105 @@
+/* --- VARIÁVEIS GERAIS --- */
+:root { 
+    --primary: #3ecf8e; 
+    --primary-hover: #34b57a;
+    --dark: #0f172a; 
+    --bg: #f1f5f9; 
+}
+
+/* Fundo escuro e centralização total para a tela de login */
+body { 
+    margin: 0; 
+    font-family: 'Inter', sans-serif; 
+    background-color: var(--dark); 
+    background-image: radial-gradient(circle at center, #1e293b 0%, var(--dark) 100%);
+    height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.login-wrapper { 
+    width: 100%; 
+    padding: 20px; 
+    display: flex; 
+    justify-content: center; 
+}
+
+.login-box { 
+    background: white; 
+    padding: 40px 30px; 
+    border-radius: 12px; 
+    width: 100%; 
+    max-width: 380px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+    text-align: center; 
+}
+
+/* Logotipo */
+.logo-container { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    margin-bottom: 5px; 
+}
+.logo-container i { font-size: 32px; color: var(--primary); }
+.logo-container h2 { margin: 0; color: var(--dark); font-size: 26px; font-weight: 800; }
+.subtitle { color: #64748b; margin-top: 0; margin-bottom: 30px; font-size: 14px; }
+
+/* Inputs com ícones */
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #475569; font-weight: bold; }
+
+.input-icon-wrapper { position: relative; }
+.input-icon-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+
+.input-icon-wrapper input { 
+    width: 100%; 
+    padding: 12px 12px 12px 40px; /* Espaço à esquerda para o ícone */
+    border: 1px solid #cbd5e1; 
+    border-radius: 8px; 
+    font-size: 14px; 
+    outline: none; 
+    transition: all 0.3s ease; 
+    box-sizing: border-box; 
+    background-color: #f8fafc;
+}
+.input-icon-wrapper input:focus { 
+    border-color: var(--primary); 
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.2);
+}
+
+/* Botão de Login */
+.btn-login { 
+    background: var(--primary); 
+    color: white; 
+    padding: 14px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    width: 100%; 
+    font-size: 15px; 
+    transition: background 0.3s ease; 
+    margin-top: 10px;
+}
+.btn-login:hover { background: var(--primary-hover); }
+.btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* Mensagem de Erro */
+.error-message { 
+    background: #fee2e2; 
+    color: #ef4444; 
+    padding: 12px; 
+    border-radius: 8px; 
+    font-size: 13px; 
+    margin-bottom: 20px; 
+    border: 1px solid #f87171;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: bold;
+}
