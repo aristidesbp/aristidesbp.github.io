@@ -1,0 +1,43 @@
+
+        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
+        
+        /* --- ESTILOS DO SISTEMA CRUD --- */
+        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        /* Ajuste para o botão de senha */
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper i { position: absolute; right: 10px; cursor: pointer; color: #64748b; }
+        
+        /* Botões */
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-add:hover { opacity: 0.9; }
+        .btn-add:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        
+        /* Tabela */
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; }
+        
+        /* Elementos Visuais */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-nav { padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-logout { background: #ef4444; color: white; border: none; cursor: pointer; }
+        .tag { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #eee; }
+
+        /* --- ESTILOS DA TELA DE LOGIN --- */
+        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--dark); }
+        .login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
+        .login-box h2 { margin-bottom: 20px; color: var(--dark); font-size: 24px; }
+        .login-box input { margin-bottom: 15px; }
+        .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        .btn-login:hover { opacity: 0.9; }
