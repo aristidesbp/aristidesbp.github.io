@@ -1,10 +1,9 @@
-
-// Cria o cliente Supabase (pressupõe que a biblioteca do Supabase foi importada no HTML)
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
 // ============================================================================
 // COMPONENTE VISUAL DA NAVBAR (HTML + CSS)
 // ============================================================================
+// Nota: O Supabase (_supabase) já foi inicializado no arquivo 'model_supabase_config.js',
+// por isso não precisamos declarar as variáveis de conexão aqui.
+
 const navbarHTML = `
 <style>
     /* Estilos exclusivos da Navbar */
@@ -35,7 +34,7 @@ const navbarHTML = `
 </style>
 
 <div class="navbar-container">
-    <a href="menu.html" class="navbar-logo">
+    <a href="index.html" class="navbar-logo">
         <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
     </a>
     <div style="display: flex; gap: 1rem;">
@@ -47,24 +46,33 @@ const navbarHTML = `
 `;
 
 // ============================================================================
-// FUNÇÕES DE AUTENTICAÇÃO E CONTROLO
+// FUNÇÕES DE AUTENTICAÇÃO E CONTROLE
 // ============================================================================
 
 // Verifica se o utilizador está logado
 async function verificar_login() {
-    const { data: { session } } = await _supabase.auth.getSession();
+    const { data: { session }, error } = await _supabase.auth.getSession();
     
-    if (!session) {
-        // Se não houver sessão ativa, manda de volta para a tela de login
-        // Ajuste o caminho 'login.html' conforme a estrutura das suas pastas
+    if (error || !session) {
+        // Se não houver sessão ativa, manda de volta para a tela de login.
+        // Ajuste este link para o nome real do seu arquivo de login (ex: login.html ou view_entidades.html)
         window.location.href = 'login.html'; 
+    } else {
+        // BÔNUS: Substitui o texto "Utilizador" no index.html pelo nome real ou e-mail da pessoa
+        const spanNomeUsuario = document.getElementById('nome-usuario');
+        if (spanNomeUsuario) {
+            // Tenta pegar o nome completo, se não tiver, pega a parte antes do @ do e-mail
+            const nome = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+            spanNomeUsuario.textContent = nome;
+        }
     }
 }
 
 // Função para fazer logout
 async function sairDaConta() {
     await _supabase.auth.signOut();
-    window.location.href = 'login.html';
+    // Ajuste este link para o nome real do seu arquivo de login
+    window.location.href = 'login.html'; 
 }
 
 // ============================================================================
