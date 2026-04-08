@@ -55,8 +55,8 @@ async function verificar_login() {
     
     if (error || !session) {
         // Se não houver sessão ativa, manda de volta para a tela de login.
-        // Ajuste este link para o nome real do seu arquivo de login (ex: login.html ou view_entidades.html)
-        window.location.href = 'login.html'; 
+        // Ajuste este link para o nome real do seu arquivo de login (ex: view_login.html ou view_entidades.html)
+        window.location.href = 'view_login.html'; 
     } else {
         // BÔNUS: Substitui o texto "Utilizador" no index.html pelo nome real ou e-mail da pessoa
         const spanNomeUsuario = document.getElementById('nome-usuario');
@@ -72,7 +72,7 @@ async function verificar_login() {
 async function sairDaConta() {
     await _supabase.auth.signOut();
     // Ajuste este link para o nome real do seu arquivo de login
-    window.location.href = 'login.html'; 
+    window.location.href = 'view_login.html'; 
 }
 
 // ============================================================================
