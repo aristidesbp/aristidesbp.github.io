@@ -254,5 +254,16 @@ CREATE TRIGGER on_auth_user_created_clinica
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_clinica_user();
     
+ 
+INSERT INTO public.clinica_perfis (id, nome, role)
+VALUES (
+  'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
+  'Nome do Usuário',              -- Nome que aparecerá no sistema
+  'psicopedagoga'                 -- Pode ser: 'psicopedagoga', 'supervisor' ou 'paciente'
+)
+ON CONFLICT (id) DO UPDATE 
+SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
     -->
+
+
 </html>
