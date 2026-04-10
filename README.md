@@ -314,6 +314,45 @@ DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
 ```
 
+## CRIAR UMA TABELA:
+```
+-- Tabela de Perfis/Usuários do Sistema
+CREATE TABLE public.clinica_perfis (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    nome TEXT NOT NULL,
+    role TEXT CHECK (role IN ('psicopedagoga', 'supervisor', 'paciente')) DEFAULT 'paciente',
+    avatar_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+
+-- POLÍTICAS PARA clinica_perfis
+ALTER TABLE public.clinica_perfis ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Perfis visíveis por todos autenticados" 
+ON public.clinica_perfis FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Usuário atualiza próprio perfil" 
+ON public.clinica_perfis FOR UPDATE TO authenticated USING (auth.uid() = id);
+
+-- 4. AUTOMAÇÃO (TRIGGER PARA NOVOS USUÁRIOS)
+-- Cria automaticamente o perfil clinica_perfis ao registrar no Auth
+CREATE OR REPLACE FUNCTION public.handle_new_clinica_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.clinica_perfis (id, nome, role)
+  VALUES (new.id, COALESCE(new.raw_user_meta_data->>'full_name', 'Novo Usuário'), 'paciente');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql security definer;
+
+-- Remove o gatilho se já existir e cria novamente
+DROP TRIGGER IF EXISTS on_auth_user_created_clinica ON auth.users;
+CREATE TRIGGER on_auth_user_created_clinica
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_clinica_user();
+```
+
 ## INSERINDO DADOS
 ```
 INSERT INTO public.clinica_perfis (id, nome, role)
@@ -326,6 +365,32 @@ ON CONFLICT (id) DO UPDATE
 SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
  
 ```
+
+## UPDATE
+```
+UPDATE public.clinica_perfis
+SET 
+    nome = 'Novo Nome Corrigido',
+    role = 'supervisor' -- Pode alterar para o cargo desejado
+WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
+```
+
+##  LIST (Listar / Select)
+* Existem duas formas principais de listar: ver todos os usuários ou buscar um específico.
+###  A) Listar TODOS os usuários do sistema:
+```
+SELECT id, nome, role, created_at
+FROM public.clinica_perfis
+ORDER BY created_at DESC; -- Mostra os mais recentes primeiro
+```
+### Listar APENAS os pacientes (Filtrando por cargo):
+```
+SELECT nome, role 
+FROM public.clinica_perfis
+WHERE role = 'paciente';
+```
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PERSONA [aristidesbp]
 ```
