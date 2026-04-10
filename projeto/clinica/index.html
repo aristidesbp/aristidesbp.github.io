@@ -103,7 +103,7 @@
         }
 
         async function verificarPerfil(uid) {
-            const { data } = await _supabase.from('perfis').select('role').eq('id', uid).single();
+            const { data } = await _supabase.from('clinica_perfis').select('role').eq('id', uid).single();
             userRole = data.role;
             
             document.getElementById('tela-login').classList.add('hidden');
