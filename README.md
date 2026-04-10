@@ -304,7 +304,8 @@ function sairDaConta() {
 }
 console.log("✅ Conexão Supabase configurada.");
 ```
-# APAGENDO FUNCTIONS A FORÇA
+
+## APAGENDO FUNCTIONS A FORÇA
 ```
 -- Força a exclusão da função rls_auto_enable (que você apontou na imagem)
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
@@ -313,6 +314,18 @@ DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
 ```
 
+## INSERINDO DADOS
+```
+INSERT INTO public.clinica_perfis (id, nome, role)
+VALUES (
+  'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
+  'Nome do Usuário',              -- Nome que aparecerá no sistema
+  'psicopedagoga'                 -- Pode ser: 'psicopedagoga', 'supervisor' ou 'paciente'
+)
+ON CONFLICT (id) DO UPDATE 
+SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
+ 
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PERSONA [aristidesbp]
 ```
