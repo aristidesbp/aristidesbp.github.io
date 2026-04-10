@@ -198,5 +198,20 @@ FOR ALL USING (EXISTS (SELECT 1 FROM perfis WHERE id = auth.uid() AND role IN ('
 CREATE POLICY "Acesso Paciente" ON public.atribuicoes 
 FOR SELECT USING (paciente_id = auth.uid());
 
+
+    -- Função que o Supabase vai executar
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.perfis (id, nome, role)
+  VALUES (new.id, new.raw_user_meta_data->>'full_name', 'paciente');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql security definer;
+
+-- Gatilho que dispara a função após o cadastro
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 -->
 </html>
