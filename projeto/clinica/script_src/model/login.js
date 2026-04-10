@@ -1,4 +1,3 @@
-
 // ==========================================
 // ARQUIVO: model/login.js
 // OBJETIVO: Processar a entrada do usuário
@@ -7,7 +6,7 @@
 async function fazer_login() {
     // 1. Captura os dados da tela
     const email = document.getElementById('input-email').value;
-    const password = document.getElementById('password-input').value;
+    const password = document.getElementById('input-password').value;
 
     // 2. Validação de campos vazios
     if (!email || !password) {
@@ -50,7 +49,7 @@ async function fazer_login() {
         
         // Limpa os campos por segurança
         document.getElementById('input-email').value = '';
-        document.getElementById('password-input').value = '';
+        document.getElementById('input-password').value = '';
 
         // O redirecionamento (ou a troca de divs) deve acontecer através do 
         // listener "onAuthStateChange" no arquivo principal do seu painel.
