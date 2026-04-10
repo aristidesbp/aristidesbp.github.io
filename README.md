@@ -386,7 +386,12 @@ async function fazer_login() {
 }
 
 ```
-
+## CHAMADA HTML
+```
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+<script src="../model/login.js"></script>
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
 ## APAGUANDO FUNCTIONS A FORÇA
