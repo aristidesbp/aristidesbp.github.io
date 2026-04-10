@@ -1,8 +1,9 @@
 // login.js
 
-// 1. Credenciais do Projeto (Substitua pelos seus dados reais)
+/* 
 const _supabaseUrl = 'SUA_URL_AQUI';
 const _supabaseKey = 'SUA_CHAVE_ANON_AQUI';
+*/
 
 // 2. Inicialização do Cliente Global
 // Usamos window.supabase para garantir que ele seja acessível em qualquer arquivo JS do projeto
