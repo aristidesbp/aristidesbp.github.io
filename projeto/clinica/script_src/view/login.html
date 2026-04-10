@@ -128,8 +128,8 @@
 <label class="block text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1.5 ml-1 font-label">SENHA</label>
 
 <div class="bg-surface-container-lowest rounded-xl p-0.5 border border-outline-variant/15 transition-all duration-300 focus-within:bg-primary-fixed/20 focus-within:border-b-primary flex items-center">
-<!--input_senha/id="password-input"-->
-<input class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="password-input" placeholder="••••••••" type="password"/>
+<!--input_senha/id="input-password"-->
+<input class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="input-password" placeholder="••••••••" type="password"/>
 <!-- visibility/id="password-toggle"-->        
 <button class="px-4 text-outline hover:text-primary transition-colors" id="password-toggle" type="button">
 <span class="material-symbols-outlined" data-icon="visibility">visibility</span>
@@ -162,7 +162,7 @@
 <!--################################-->  
 /*
 * email id="input-email"
-* senha id="password-input"     
+* senha id="input-password"     
 */ 
 <script src="../model/supabase_config.js"></script>        
 <script src="../model/login.js"></script>
@@ -217,7 +217,7 @@
 
         
 document.getElementById('password-toggle').addEventListener('click', function() {
-  const passwordInput = document.getElementById('password-input');
+  const passwordInput = document.getElementById('input-password');
   const icon = this.querySelector('.material-symbols-outlined');
   if (passwordInput.type === 'password') {
     passwordInput.type = 'text';
