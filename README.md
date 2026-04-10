@@ -13,7 +13,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/projeto/tarefas/tarefas.html)
 * 🌐 **Clinica:** [ENTRAR](https://aristidesbp.github.io/projeto/clinica/)
 * 🌐 **erp_Clinica:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/erp_clinica.html)
-* 🌐 **erp_Clinica2:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/erp_clinica2/erp_clinica.html)
+* 🌐 **erp_Clinica2:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/clinica2/erp_clinica.html)
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
