@@ -397,6 +397,10 @@ NÃO ESQUECER DE ADICIONAR OS IDs:
 // 1. Captura os dados da tela
     const email = document.getElementById('input-email').value;
     const password = document.getElementById('input-password').value;
+
+<button onclick="fazer_login()" class="...>
+<span>Entrar</span>
+</button>  
 -->
 ```
 
