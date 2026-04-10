@@ -328,7 +328,7 @@ console.log("✅ Conexão Supabase configurada com sucesso.");
 async function fazer_login() {
     // 1. Captura os dados da tela
     const email = document.getElementById('input-email').value;
-    const password = document.getElementById('password-input').value;
+    const password = document.getElementById('input-password').value;
 
     // 2. Validação de campos vazios
     if (!email || !password) {
@@ -371,7 +371,7 @@ async function fazer_login() {
         
         // Limpa os campos por segurança
         document.getElementById('input-email').value = '';
-        document.getElementById('password-input').value = '';
+        document.getElementById('input-password').value = '';
 
         // O redirecionamento (ou a troca de divs) deve acontecer através do 
         // listener "onAuthStateChange" no arquivo principal do seu painel.
@@ -391,7 +391,15 @@ async function fazer_login() {
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="../model/supabase_config.js"></script>
 <script src="../model/login.js"></script>
+
+<!--
+NÃO ESQUECER DE ADICIONAR OS IDs:
+// 1. Captura os dados da tela
+    const email = document.getElementById('input-email').value;
+    const password = document.getElementById('input-password').value;
+-->
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
 ## APAGUANDO FUNCTIONS A FORÇA
