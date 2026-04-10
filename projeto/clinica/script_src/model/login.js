@@ -62,3 +62,5 @@ async function fazer_login() {
         btn.classList.remove('opacity-70', 'cursor-not-allowed');
     }
 }
+
+console.log("✅ Conexão com: model/login.js");
