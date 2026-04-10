@@ -288,24 +288,108 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 ## src/model/supabase_config.js
 ```
-// config/supabase_config.js
-// Substitua pelos seus dados reais do painel do Supabase (Project Settings > API)
-const _supabaseUrl = 'url_ProjectID';
-const _supabaseKey = 'anon_key;
+// ==========================================
+// ARQUIVO: config/supabase_config.js
+// OBJETIVO: Conexão global e utilitários
+// ==========================================
 
-// Inicializa o cliente globalmente
-const supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
+// 1. Chaves de Acesso (Substitua pelas suas)
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
 
-// Função utilitária global para logout (usada na navbar)
-function sairDaConta() {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.href = "../../index.html"; // Ajuste o caminho conforme necessário
+// 2. Inicializa o Supabase globalmente
+// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
+window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// 3. Função Global de Logout (Segurança Nível Bancário)
+async function sairDaConta() {
+    try {
+        // Destrói a sessão no servidor do Supabase
+        await window.supabase.auth.signOut();
+    } catch (erro) {
+        console.error("Erro ao deslogar no servidor:", erro);
+    } finally {
+        // Limpa o navegador e expulsa o usuário para a tela inicial
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.replace("../../index.html"); 
+    }
 }
-console.log("✅ Conexão Supabase configurada.");
+
+console.log("✅ Conexão Supabase configurada com sucesso.");
+```
+## LOGIN.JS
+```
+// ==========================================
+// ARQUIVO: model/login.js
+// OBJETIVO: Processar a entrada do usuário
+// ==========================================
+
+async function fazer_login() {
+    // 1. Captura os dados da tela
+    const email = document.getElementById('input-email').value;
+    const password = document.getElementById('password-input').value;
+
+    // 2. Validação de campos vazios
+    if (!email || !password) {
+        alert("Por favor, preencha o e-mail e a senha.");
+        return;
+    }
+
+    // 3. Efeito visual no botão (Mostra que está carregando)
+    const btn = event.currentTarget || document.querySelector('button');
+    const textoOriginal = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+    btn.disabled = true;
+    btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+    try {
+        // 4. Envia o pedido de login usando a conexão global criada no supabase_config.js
+        const { data, error } = await window.supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        // 5. Lida com erros (Senha errada, usuário não existe)
+        if (error) {
+            if (error.message.includes('Invalid login credentials')) {
+                alert("Acesso negado: E-mail ou senha incorretos.");
+            } else {
+                alert("Erro ao tentar entrar: " + error.message);
+            }
+            
+            // Devolve o botão ao estado normal para o usuário tentar de novo
+            btn.innerHTML = textoOriginal;
+            btn.disabled = false;
+            btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            return;
+        }
+
+        // 6. Sucesso
+        console.log("Login aprovado! Bem-vindo.");
+        
+        // Limpa os campos por segurança
+        document.getElementById('input-email').value = '';
+        document.getElementById('password-input').value = '';
+
+        // O redirecionamento (ou a troca de divs) deve acontecer através do 
+        // listener "onAuthStateChange" no arquivo principal do seu painel.
+
+    } catch (err) {
+        console.error("Erro crítico:", err);
+        alert("Falha de conexão com o servidor.");
+        btn.innerHTML = textoOriginal;
+        btn.disabled = false;
+        btn.classList.remove('opacity-70', 'cursor-not-allowed');
+    }
+}
+
 ```
 
-## APAGENDO FUNCTIONS A FORÇA
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SQL
+## APAGUANDO FUNCTIONS A FORÇA
 ```
 -- Força a exclusão da função rls_auto_enable (que você apontou na imagem)
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
@@ -425,6 +509,8 @@ Entregue a resposta com uma breve saudação e logo em seguida o bloco de códig
 ABAIXO VOU TE MANDAR UM EXEMPLO DE COMO É UM CODIGO JA IMPLEMENTADO POR [aristidebp].
 
 ```
+
+
 # EXEMPLO DE CODIGO (SPA-entidades.html)
 ```
 <!DOCTYPE html>
