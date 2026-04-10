@@ -1,34 +1,65 @@
-// login.js
 
-/* 
-const _supabaseUrl = 'SUA_URL_AQUI';
-const _supabaseKey = 'SUA_CHAVE_ANON_AQUI';
-*/
+// ==========================================
+// ARQUIVO: model/login.js
+// OBJETIVO: Processar a entrada do usuário
+// ==========================================
 
-// 2. Inicialização do Cliente Global
-// Usamos window.supabase para garantir que ele seja acessível em qualquer arquivo JS do projeto
-const supabase = window.supabase.createClient(_supabaseUrl, _supabaseKey);
+async function fazer_login() {
+    // 1. Captura os dados da tela
+    const email = document.getElementById('input-email').value;
+    const password = document.getElementById('password-input').value;
 
-// 3. Função de Logout com Segurança de Nível Bancário
-async function sairDaConta() {
+    // 2. Validação de campos vazios
+    if (!email || !password) {
+        alert("Por favor, preencha o e-mail e a senha.");
+        return;
+    }
+
+    // 3. Efeito visual no botão (Mostra que está carregando)
+    const btn = event.currentTarget || document.querySelector('button');
+    const textoOriginal = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+    btn.disabled = true;
+    btn.classList.add('opacity-70', 'cursor-not-allowed');
+
     try {
-        // Passo 1: Invalida o token JWT diretamente no servidor do Supabase (Crucial para segurança)
-        const { error } = await supabase.auth.signOut();
-        
+        // 4. Envia o pedido de login usando a conexão global criada no supabase_config.js
+        const { data, error } = await window.supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        // 5. Lida com erros (Senha errada, usuário não existe)
         if (error) {
-            console.error("Aviso: Erro ao comunicar logout ao servidor:", error.message);
+            if (error.message.includes('Invalid login credentials')) {
+                alert("Acesso negado: E-mail ou senha incorretos.");
+            } else {
+                alert("Erro ao tentar entrar: " + error.message);
+            }
+            
+            // Devolve o botão ao estado normal para o usuário tentar de novo
+            btn.innerHTML = textoOriginal;
+            btn.disabled = false;
+            btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            return;
         }
-    } catch (err) {
-        console.error("Erro inesperado durante o logout:", err);
-    } finally {
-        // Passo 2: Limpa todos os rastros locais no navegador do paciente/profissional
-        localStorage.clear();
-        sessionStorage.clear();
+
+        // 6. Sucesso
+        console.log("Login aprovado! Bem-vindo.");
         
-        // Passo 3: Redireciona para a tela de login (Ajuste o caminho se sua index não for essa)
-        window.location.replace("../../index.html"); 
-        // Nota: usei replace() em vez de href para impedir que o usuário clique em "Voltar" no navegador
+        // Limpa os campos por segurança
+        document.getElementById('input-email').value = '';
+        document.getElementById('password-input').value = '';
+
+        // O redirecionamento (ou a troca de divs) deve acontecer através do 
+        // listener "onAuthStateChange" no arquivo principal do seu painel.
+
+    } catch (err) {
+        console.error("Erro crítico:", err);
+        alert("Falha de conexão com o servidor.");
+        btn.innerHTML = textoOriginal;
+        btn.disabled = false;
+        btn.classList.remove('opacity-70', 'cursor-not-allowed');
     }
 }
-
-console.log("✅ Conexão Supabase configurada com Segurança Nível Bancário.");
