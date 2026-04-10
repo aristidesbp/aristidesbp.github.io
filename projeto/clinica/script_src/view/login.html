@@ -4,13 +4,17 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+        
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="../controller/tailwind_config.js"></script>
-<link rel="stylesheet" href="../../link_rel_styleseet/href_login.css">
-        
+<link rel="stylesheet" href="../../link_rel_styleseet/href_login.css">      
 </head>
+        
 <body class="bg-background font-sans antialiased">
 <!-- Initial Loading State (Cloak) -->
 <div id="app-loader">
@@ -113,73 +117,9 @@
 <!-- Scripts -->
 <script src="supabase_config.js"></script>
 <script src="auth.js"></script>
-<script>
-        function revealApp() {
-            const loader = document.getElementById('app-loader');
-            const content = document.getElementById('app-content');
-            if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 300);
-            }
-            if (content) {
-                content.classList.remove('opacity-0');
-            }
-        }
+        
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // Check session with Supabase
-                const { data: { session } } = await window.supabaseClient.auth.getSession();
-                if (session) {
-                    window.location.href = 'pedagogo_dashboard.html';
-                } else {
-                    revealApp();
-                }
-            } catch (err) {
-                console.error('Initialization error:', err);
-                revealApp();
-            }
-        });
-
-        // Form Handling
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const recaptcha = document.getElementById('recaptcha');
-            const submitBtn = document.getElementById('submitBtn');
-            const errorMessage = document.getElementById('errorMessage');
-
-            if (!recaptcha.checked) {
-                errorMessage.textContent = 'Por favor, confirme que você não é um robô.';
-                errorMessage.classList.remove('hidden');
-                document.getElementById('recaptcha-box').classList.add('border-red-500', 'bg-red-50');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-            errorMessage.classList.add('hidden');
-
-            try {
-                // Calling Auth.login from auth.js
-                const success = await Auth.login(email, password);
-                if (success) {
-                    window.location.href = 'pedagogo_dashboard.html';
-                } else {
-                    errorMessage.textContent = 'Credenciais inválidas. Tente novamente.';
-                    errorMessage.classList.remove('hidden');
-                }
-            } catch (err) {
-                errorMessage.textContent = 'Erro ao realizar login. Verifique sua conexão.';
-                errorMessage.classList.remove('hidden');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-            }
-        });
-
+ <script>
         // Password Visibility Toggle
         const toggleBtn = document.getElementById('btn-toggle-senha');
         toggleBtn.addEventListener('click', () => {
@@ -197,4 +137,5 @@
             alert('Um link de recuperação será enviado se os dados coincidirem com nossos registros.');
         });
     </script>
+        
 </body></html>
