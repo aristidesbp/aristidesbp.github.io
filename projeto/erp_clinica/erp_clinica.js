@@ -1,8 +1,7 @@
 // erp_clinica.js
-
 // 1. Configuração do Supabase
-const SUPABASE_URL = 'SUA_URL_AQUI'; // Substitua pela sua URL
-const SUPABASE_ANON_KEY = 'SUA_KEY_AQUI'; // Substitua pela sua Key
+const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co'; // Substitua pela sua URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUserProfile = null;
