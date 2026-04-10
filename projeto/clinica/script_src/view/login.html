@@ -93,15 +93,22 @@
   </style>
 </head>
 <body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+<!--############################################################-->
+<!-- HEADER -->
+<!--############################################################-->        
 <header class="bg-slate-50 dark:bg-slate-950 flex items-center justify-between px-6 py-4 w-full top-0">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="shield_lock">shield_lock</span>
 <h1 class="text-xl font-bold tracking-tighter text-blue-800 dark:text-blue-300 font-headline">Fontes Comportamentais</h1>
-</div>
+</div><!--<div class="flex items-center gap-2">-->       
 <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center">
 <span class="material-symbols-outlined text-outline" data-icon="language">language</span>
-</div>
-</header>
+</div>       
+</header><!--<header class="bg-slate-50 dark:bg-slate-950 flex items-center justify-between px-6 py-4 w-full top-0">-->
+        
+<!--############################################################-->
+<!-- MAIN -->
+<!--############################################################-->     
 <main class="flex-1 flex flex-col px-6 pt-8 pb-32 max-w-md mx-auto w-full">
 <div class="mb-10">
 <h2 class="text-4xl font-extrabold font-headline tracking-tight text-primary mb-2">Bem-vindo</h2>
@@ -112,27 +119,36 @@
 <div class="group">
 <label class="block text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1.5 ml-1 font-label">E-MAIL</label>
 <div class="bg-surface-container-lowest rounded-xl p-0.5 border border-outline-variant/15 transition-all duration-300 focus-within:bg-primary-fixed/20 focus-within:border-b-primary">
+
+<!-- SENHA/id="input-email"-->
 <input class="w-full bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="email-input" placeholder="exemplo@curador.com" type="email"/>
 </div>
 </div>
 <div class="group">
 <label class="block text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1.5 ml-1 font-label">SENHA</label>
+
 <div class="bg-surface-container-lowest rounded-xl p-0.5 border border-outline-variant/15 transition-all duration-300 focus-within:bg-primary-fixed/20 focus-within:border-b-primary flex items-center">
+<!--input_senha/id="password-input"-->
 <input class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="password-input" placeholder="••••••••" type="password"/>
+<!-- visibility/id="password-toggle"-->        
 <button class="px-4 text-outline hover:text-primary transition-colors" id="password-toggle" type="button">
 <span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>
+</button>       
 </div>
-</div>
-</div>
+        
+</div><!--<div class="group">-->
+</div><!--<div class="space-y-4">-->
+        
 <div class="flex justify-end">
 <a class="text-tertiary text-sm font-semibold hover:underline decoration-2 underline-offset-4" href="#">Esqueceu a senha?</a>
 </div>
 <div class="bg-surface-container-high/70 glass-effect p-4 rounded-xl border border-outline-variant/15 flex items-center justify-between shadow-[0px_12px_32px_rgba(25,28,30,0.06)] translate-x-1">
+
 <div class="flex items-center gap-4">
 <div class="w-7 h-7 rounded border-2 border-outline-variant bg-white flex items-center justify-center cursor-pointer hover:border-primary transition-colors" id="captcha-checkbox-container"><span class="material-symbols-outlined text-primary hidden" id="captcha-check" style="font-size: 20px; font-weight: bold;">check</span></div>
 <span class="text-sm font-medium text-on-surface font-label">Não sou um robô</span>
 </div>
+        
 <div class="flex flex-col items-center">
 <div class="w-8 h-8 relative">
 <div class="absolute inset-0 bg-white rounded-full flex items-center justify-center shadow-sm">
@@ -142,8 +158,19 @@
 <span class="text-[8px] font-bold text-outline mt-1 uppercase tracking-tighter">reCAPTCHA</span>
 </div>
 </div>
-<button class="w-full py-4 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-<span>Entrar</span>
+
+<!--################################-->  
+/*
+* email id="input-email"
+* senha id="password-input"     
+*/ 
+<script src="../model/supabase_config.js"></script>        
+<script src="../model/fazer_login.js"></script>
+<button onclick="fazer_login()" class="w-full py-4 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+    <span>Entrar</span>
+</button>      
+<!--################################-->     
+        
 <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
 </button>
 <div class="flex items-center gap-4 py-4">
@@ -166,6 +193,8 @@
 <p class="text-sm text-on-surface-variant">Não tem uma conta? <a class="text-primary font-bold hover:underline" href="#">Registre-se</a></p>
 </div>
 </main>
+<!--############################################################-->
+<!--############################################################-->            
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-[0_-12px_32px_rgba(0,0,0,0.06)] rounded-t-2xl border-t border-slate-200/10 dark:border-slate-800/10">
 <a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-4 py-1 scale-95 active:scale-90 transition-transform" href="#">
 <span class="material-symbols-outlined mb-0.5" data-icon="login">login</span>
@@ -185,6 +214,8 @@
 <div class="absolute top-1/2 -left-48 w-[500px] h-[500px] rounded-full bg-secondary-container/10 blur-[150px]"></div>
 </div>
 <script>
+
+        
 document.getElementById('password-toggle').addEventListener('click', function() {
   const passwordInput = document.getElementById('password-input');
   const icon = this.querySelector('.material-symbols-outlined');
