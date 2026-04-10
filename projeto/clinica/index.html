@@ -155,74 +155,104 @@
 </body>
 <!--
 
-DROP TABLE IF EXISTS public.perfis CASCADE;
-DROP TABLE IF EXISTS public.exercicios CASCADE;
+-- ========================================================
+-- 1. LIMPEZA (RESET)
+-- Apaga tabelas e políticas anteriores para evitar conflitos
+-- ========================================================
+DROP TABLE IF EXISTS public.clinica_atribuicoes CASCADE;
+DROP TABLE IF EXISTS public.clinica_exercicios CASCADE;
+DROP TABLE IF EXISTS public.clinica_perfis CASCADE;
 
--- 1. Tabela de Perfis (Define quem é Psicopedagoga, Supervisor ou Paciente)
-CREATE TABLE public.perfis (
+-- ========================================================
+-- 2. CRIAÇÃO DAS TABELAS ISOLADAS (Prefixadas com clinica_)
+-- ========================================================
+
+-- Tabela de Perfis/Usuários do Sistema
+CREATE TABLE public.clinica_perfis (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     nome TEXT NOT NULL,
     role TEXT CHECK (role IN ('psicopedagoga', 'supervisor', 'paciente')) DEFAULT 'paciente',
+    avatar_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
--- 2. Tabela de Exercícios
-CREATE TABLE public.exercicios (
+-- Tabela de Repositório de Exercícios
+CREATE TABLE public.clinica_exercicios (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     titulo TEXT NOT NULL,
     descricao TEXT,
-    video_url TEXT, -- Link para tutorial
-    categoria TEXT, -- Ex: Memória, Concentração, Leitura
-    criado_por UUID REFERENCES auth.users(id)
+    video_url TEXT,
+    categoria TEXT, -- Ex: Cognitivo, Motor, Leitura
+    criado_por UUID REFERENCES auth.users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
--- 3. Atribuição de Exercícios aos Pacientes (Relacionamento)
-CREATE TABLE public.atribuicoes (
+-- Tabela de Atribuições e Acompanhamento (Onde o paciente interage)
+CREATE TABLE public.clinica_atribuicoes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     paciente_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    exercicio_id UUID REFERENCES public.exercicios(id) ON DELETE CASCADE,
+    exercicio_id UUID REFERENCES public.clinica_exercicios(id) ON DELETE CASCADE,
     status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'concluido')),
     feedback_paciente TEXT,
-    data_conclusao TIMESTAMP WITH TIME ZONE
+    data_conclusao TIMESTAMP WITH TIME ZONE,
+    atribuido_em TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
--- Habilitar RLS
-ALTER TABLE public.perfis ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.exercicios ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.atribuicoes ENABLE ROW LEVEL SECURITY;
+-- ========================================================
+-- 3. SEGURANÇA (RLS - Row Level Security)
+-- ========================================================
 
--- Políticas Simples: Supervisor e Psicopedagoga veem tudo. Paciente vê só o dele.
-CREATE POLICY "Acesso Total para Staff" ON public.atribuicoes 
-FOR ALL USING (EXISTS (SELECT 1 FROM perfis WHERE id = auth.uid() AND role IN ('psicopedagoga', 'supervisor')));
+ALTER TABLE public.clinica_perfis ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_exercicios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_atribuicoes ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Acesso Paciente" ON public.atribuicoes 
-FOR SELECT USING (paciente_id = auth.uid());
+-- POLÍTICAS PARA clinica_perfis
+CREATE POLICY "Perfis visíveis por todos autenticados" 
+ON public.clinica_perfis FOR SELECT TO authenticated USING (true);
 
+CREATE POLICY "Usuário atualiza próprio perfil" 
+ON public.clinica_perfis FOR UPDATE TO authenticated USING (auth.uid() = id);
 
-    -- Função que o Supabase vai executar
-CREATE OR REPLACE FUNCTION public.handle_new_user()
+-- POLÍTICAS PARA clinica_exercicios
+CREATE POLICY "Staff gerencia exercícios" 
+ON public.clinica_exercicios FOR ALL TO authenticated 
+USING (EXISTS (SELECT 1 FROM clinica_perfis WHERE id = auth.uid() AND role IN ('psicopedagoga', 'supervisor')));
+
+CREATE POLICY "Pacientes veem exercícios" 
+ON public.clinica_exercicios FOR SELECT TO authenticated USING (true);
+
+-- POLÍTICAS PARA clinica_atribuicoes
+CREATE POLICY "Staff vê todas atribuições" 
+ON public.clinica_atribuicoes FOR ALL TO authenticated 
+USING (EXISTS (SELECT 1 FROM clinica_perfis WHERE id = auth.uid() AND role IN ('psicopedagoga', 'supervisor')));
+
+CREATE POLICY "Paciente vê e atualiza as próprias tarefas" 
+ON public.clinica_atribuicoes FOR SELECT TO authenticated USING (paciente_id = auth.uid());
+
+CREATE POLICY "Paciente marca conclusão" 
+ON public.clinica_atribuicoes FOR UPDATE TO authenticated 
+USING (paciente_id = auth.uid())
+WITH CHECK (paciente_id = auth.uid());
+
+-- ========================================================
+-- 4. AUTOMAÇÃO (TRIGGER PARA NOVOS USUÁRIOS)
+-- Cria automaticamente o perfil clinica_perfis ao registrar no Auth
+-- ========================================================
+
+CREATE OR REPLACE FUNCTION public.handle_new_clinica_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.perfis (id, nome, role)
-  VALUES (new.id, new.raw_user_meta_data->>'full_name', 'paciente');
+  INSERT INTO public.clinica_perfis (id, nome, role)
+  VALUES (new.id, COALESCE(new.raw_user_meta_data->>'full_name', 'Novo Usuário'), 'paciente');
   RETURN new;
 END;
 $$ LANGUAGE plpgsql security definer;
 
--- Gatilho que dispara a função após o cadastro
-CREATE TRIGGER on_auth_user_created
+-- Remove o gatilho se já existir e cria novamente
+DROP TRIGGER IF EXISTS on_auth_user_created_clinica ON auth.users;
+CREATE TRIGGER on_auth_user_created_clinica
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
--->
-     <!--
-    INSERT INTO public.perfis (id, nome, role)
-VALUES (
-  'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
-  'Nome do Usuário',              -- Nome que aparecerá no sistema
-  'psicopedagoga'                 -- Pode ser: 'psicopedagoga', 'supervisor' ou 'paciente'
-)
-ON CONFLICT (id) DO UPDATE 
-SET role = EXCLUDED.role, nome = EXCLUDED.nome;
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_clinica_user();
     
     -->
 </html>
