@@ -1,0 +1,78 @@
+-- ============================================================================
+-- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
+-- ============================================================================
+
+-- Tabela Pai: Lançamento Financeiro Geral (O "Cabeçalho" da conta)
+CREATE TABLE public.financas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL, 
+    descricao TEXT NOT NULL,
+    valor_total DECIMAL(10,2) NOT NULL,
+    tipo TEXT CHECK (tipo IN ('receita', 'despesa')),
+    num_parcelas INTEGER DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabela Filha: Parcelas Individuais (As "Linhas" de pagamento)
+CREATE TABLE public.parcelas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    financa_id UUID REFERENCES public.financas(id) ON DELETE CASCADE, 
+    num_parcela INTEGER NOT NULL,
+    valor_parcela DECIMAL(10,2) NOT NULL,
+    data_vencimento DATE NOT NULL,
+    data_pagamento DATE,
+    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago', 'atrasado')),
+    codigo_barra TEXT,       
+    boleto_url TEXT,         
+    comprovante_url TEXT,    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
+-- ============================================================================
+
+ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Pessoa ve as proprias financas" ON public.financas FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa insere as proprias financas" ON public.financas FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Pessoa atualiza as proprias financas" ON public.financas FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa apaga as proprias financas" ON public.financas FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY "Pessoa ve as proprias parcelas" ON public.parcelas FOR SELECT USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa insere as proprias parcelas" ON public.parcelas FOR INSERT WITH CHECK (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
+    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+);
+
+-- ============================================================================
+-- 3. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'comprovantes')
+-- ============================================================================
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('comprovantes', 'comprovantes', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Comprovantes publicos" ON storage.objects FOR SELECT TO public USING ( bucket_id = 'comprovantes' );
+CREATE POLICY "Upload de comprovantes" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id = 'comprovantes' );
+CREATE POLICY "Edicao de comprovantes" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner );
+CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner ); 
+
+-- ============================================================================
+-- 4. ATUALIZAÇÕES DE CAMPOS (MIGRATIONS)
+-- ============================================================================
+
+ALTER TABLE public.financas ADD COLUMN IF NOT EXISTS categoria TEXT DEFAULT 'Geral';
+ALTER TABLE public.financas ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
+
+UPDATE public.financas SET categoria = 'Geral' WHERE categoria IS NULL;
+UPDATE public.financas SET status_lancamento = 'aberto' WHERE status_lancamento IS NULL;
