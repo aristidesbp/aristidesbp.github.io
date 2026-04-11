@@ -1,282 +1,121 @@
 <!DOCTYPE html>
-
-<html lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Fontes Comportamentais - Login</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Fontes Comportamentais - Login</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "tertiary": "#822800",
-                        "on-tertiary-fixed-variant": "#812800",
-                        "on-background": "#191c1e",
-                        "background": "#f7f9fb",
-                        "on-secondary-fixed-variant": "#344765",
-                        "surface-variant": "#e0e3e5",
-                        "surface-bright": "#f7f9fb",
-                        "on-surface-variant": "#424654",
-                        "secondary": "#4c5f7d",
-                        "tertiary-container": "#a93802",
-                        "on-tertiary-fixed": "#380d00",
-                        "error-container": "#ffdad6",
-                        "on-error-container": "#93000a",
-                        "inverse-on-surface": "#eff1f3",
-                        "surface": "#f7f9fb",
-                        "surface-dim": "#d8dadc",
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        title: ['Manrope', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: "#0062a0", // Ajuste para a cor exata do seu botão
+                        "primary-container": "#cfe4ff",
                         "on-primary": "#ffffff",
-                        "secondary-fixed": "#d5e3ff",
-                        "tertiary-fixed": "#ffdbcf",
-                        "on-secondary-fixed": "#051c37",
-                        "on-primary-fixed": "#001847",
-                        "surface-container-highest": "#e0e3e5",
-                        "secondary-fixed-dim": "#b4c7ea",
-                        "on-primary-container": "#ccd8ff",
-                        "secondary-container": "#c7dbff",
-                        "primary-fixed": "#dae2ff",
-                        "primary-container": "#0056d2",
-                        "inverse-primary": "#b2c5ff",
-                        "outline-variant": "#c3c6d6",
-                        "surface-container": "#eceef0",
-                        "tertiary-fixed-dim": "#ffb59b",
-                        "inverse-surface": "#2d3133",
-                        "on-tertiary-container": "#ffcebd",
-                        "on-error": "#ffffff",
-                        "outline": "#737785",
-                        "on-surface": "#191c1e",
-                        "error": "#ba1a1a",
-                        "primary-fixed-dim": "#b2c5ff",
-                        "on-primary-fixed-variant": "#0040a1",
-                        "surface-container-low": "#f2f4f6",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary": "#ffffff",
-                        "surface-tint": "#0056d2",
-                        "surface-container-lowest": "#ffffff",
-                        "primary": "#0040a1",
-                        "on-secondary-container": "#4d607e",
-                        "surface-container-high": "#e6e8ea"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
+                        background: "#f7f9fb",
+                        "on-background": "#191c1e",
+                        surface: "#ffffff",
+                        outline: "#73777f"
                     }
                 }
             }
         }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-effect {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
 </head>
-<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 font-sans antialiased">
+
+    <main class="bg-surface w-full max-w-md rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8">
         
-<!--############################################################-->
-<!-- HEADER -->
-<!--############################################################-->        
-<header class="bg-slate-50 dark:bg-slate-950 flex items-center justify-between px-6 py-4 w-full top-0">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="shield_lock">shield_lock</span>
-<h1 class="text-xl font-bold tracking-tighter text-blue-800 dark:text-blue-300 font-headline">Fontes Comportamentais</h1>
-</div><!--<div class="flex items-center gap-2">-->       
-<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center">
-<span class="material-symbols-outlined text-outline" data-icon="language">language</span>
-</div>       
-</header><!--<header class="bg-slate-50 dark:bg-slate-950 flex items-center justify-between px-6 py-4 w-full top-0">-->
+        <div class="text-center mb-8">
+            <h1 class="font-title text-3xl font-bold text-gray-900 mb-2">Bem-vindo(a)</h1>
+            <p class="text-gray-500 text-sm">Faça login para acessar o sistema clínico</p>
+        </div>
+
+        <form id="form-login" onsubmit="return false;" class="space-y-5">
+            
+            <div>
+                <label for="email-input" class="block text-sm font-medium text-gray-700 mb-1 ml-1">E-mail</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <span class="material-symbols-outlined text-xl">mail</span>
+                    </span>
+                    <input 
+                        id="email-input" 
+                        type="email" 
+                        placeholder="exemplo@clinica.com" 
+                        class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label for="input-password" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Senha</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <span class="material-symbols-outlined text-xl">lock</span>
+                    </span>
+                    <input 
+                        id="input-password" 
+                        type="password" 
+                        placeholder="••••••••" 
+                        class="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        required
+                    />
+                    <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600">
+                        <span class="material-symbols-outlined text-xl">visibility</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="captcha-checkbox-container" class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors select-none">
+                <div class="w-6 h-6 border-2 border-gray-400 rounded bg-white flex items-center justify-center shrink-0 transition-colors">
+                    <span id="captcha-check" class="material-symbols-outlined text-primary text-sm font-bold hidden">check</span>
+                </div>
+                <span class="text-sm font-medium text-gray-600 flex-1">Não sou um robô</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/RecaptchaLogo.svg/1200px-RecaptchaLogo.svg.png" alt="reCAPTCHA" class="h-6 opacity-80" onerror="this.style.display='none'">
+            </div>
+
+            <button 
+                id="btn-entrar"
+                onclick="fazer_login(event)" 
+                class="w-full py-4 mt-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-lg hover:shadow-xl hover:bg-blue-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <span>Entrar no Sistema</span>
+                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </button>
+            
+        </form>
+    </main>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+        // 2. Configuração do Supabase
+        const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
         
-<!--############################################################-->
-<!-- MAIN -->
-<!--############################################################-->     
-<main class="flex-1 flex flex-col px-6 pt-8 pb-32 max-w-md mx-auto w-full">
-<div class="mb-10">
-<h2 class="text-4xl font-extrabold font-headline tracking-tight text-primary mb-2">Bem-vindo</h2>
-<p class="text-on-surface-variant font-medium">Sua plataforma de análise e segurança comportamental.</p>
-</div>
-<section class="space-y-6">
-<div class="space-y-4">
-<div class="group">
-<label class="block text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1.5 ml-1 font-label">E-MAIL</label>
-<div class="bg-surface-container-lowest rounded-xl p-0.5 border border-outline-variant/15 transition-all duration-300 focus-within:bg-primary-fixed/20 focus-within:border-b-primary">
+        window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<!-- SENHA/id="input-email"-->
-<input class="w-full bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="email-input" placeholder="exemplo@curador.com" type="email"/>
-</div>
-</div>
-<div class="group">
-<label class="block text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1.5 ml-1 font-label">SENHA</label>
-
-<div class="bg-surface-container-lowest rounded-xl p-0.5 border border-outline-variant/15 transition-all duration-300 focus-within:bg-primary-fixed/20 focus-within:border-b-primary flex items-center">
-<!--input_senha/id="input-password"-->
-<input class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3.5 text-on-surface placeholder:text-outline/50 font-body" id="input-password" placeholder="••••••••" type="password"/>
-<!-- visibility/id="password-toggle"-->        
-<button class="px-4 text-outline hover:text-primary transition-colors" id="password-toggle" type="button">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>       
-</div>
-        
-</div><!--<div class="group">-->
-</div><!--<div class="space-y-4">-->
-        
-<div class="flex justify-end">
-<a class="text-tertiary text-sm font-semibold hover:underline decoration-2 underline-offset-4" href="#">Esqueceu a senha?</a>
-</div>
-<div class="bg-surface-container-high/70 glass-effect p-4 rounded-xl border border-outline-variant/15 flex items-center justify-between shadow-[0px_12px_32px_rgba(25,28,30,0.06)] translate-x-1">
-
-<div class="flex items-center gap-4">
-<div class="w-7 h-7 rounded border-2 border-outline-variant bg-white flex items-center justify-center cursor-pointer hover:border-primary transition-colors" id="captcha-checkbox-container"><span class="material-symbols-outlined text-primary hidden" id="captcha-check" style="font-size: 20px; font-weight: bold;">check</span></div>
-<span class="text-sm font-medium text-on-surface font-label">Não sou um robô</span>
-</div>
-        
-<div class="flex flex-col items-center">
-<div class="w-8 h-8 relative">
-<div class="absolute inset-0 bg-white rounded-full flex items-center justify-center shadow-sm">
-<span class="material-symbols-outlined text-[#4285F4] text-lg" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
-</div>
-</div>
-<span class="text-[8px] font-bold text-outline mt-1 uppercase tracking-tighter">reCAPTCHA</span>
-</div>
-</div>
-
-<!--################################-->  
-      
-<button onclick="fazer_login()" class="w-full py-4 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-    <span>Entrar</span>
-</button>      
-        
-<!--################################-->     
-        
-<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-</button>
-<div class="flex items-center gap-4 py-4">
-<div class="h-[1px] flex-1 bg-outline-variant/30"></div>
-<span class="text-[10px] font-bold text-outline uppercase tracking-widest">ou entrar com</span>
-<div class="h-[1px] flex-1 bg-outline-variant/30"></div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<button class="flex items-center justify-center gap-3 py-3.5 bg-surface-container-lowest border border-outline-variant/15 rounded-xl hover:bg-surface-container-low transition-colors">
-<img alt="Google" class="w-5 h-5" data-alt="Official colorful Google G logo icon simplified for clean interface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7g7Tbl7K-ZSywxiGB8-HMr1fD3CMAeFdHUbt2fFtFJql-gTHfxv3FXkxL3ieW9xZ50Jm6wZQnnXd5zRCMGrkX1SRCNU95Nijt5oLnKXWYLo93jBQ1_C8k36OjHBgF8EQoS6S0hjURzfaasDN4pUcgde6mLfMTp8ifIKvZgixOm_D53dVah2dBLE456ozsqnRrjX6HuHQn8cghNIKIKr5NFCa4riC1lzf6_hcN62UlUdh5_CevrH-Twr3a-blGZ6bMkjFtkR-q_aU"/>
-<span class="font-semibold text-sm">Google</span>
-</button>
-<button class="flex items-center justify-center gap-3 py-3.5 bg-surface-container-lowest border border-outline-variant/15 rounded-xl hover:bg-surface-container-low transition-colors">
-<span class="material-symbols-outlined text-xl" data-icon="apple" style="font-variation-settings: 'FILL' 1;">ios</span>
-<span class="font-semibold text-sm">Apple</span>
-</button>
-</div>
-</section>
-<div class="mt-auto pt-10 text-center">
-<p class="text-sm text-on-surface-variant">Não tem uma conta? <a class="text-primary font-bold hover:underline" href="#">Registre-se</a></p>
-</div>
-</main>
-<!--############################################################-->
-<!--############################################################-->            
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-[0_-12px_32px_rgba(0,0,0,0.06)] rounded-t-2xl border-t border-slate-200/10 dark:border-slate-800/10">
-<a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-4 py-1 scale-95 active:scale-90 transition-transform" href="#">
-<span class="material-symbols-outlined mb-0.5" data-icon="login">login</span>
-<span class="font-inter text-[10px] uppercase tracking-widest">Secure Login</span>
-</a>
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-1 hover:text-blue-500 transition-all scale-95 active:scale-90 transition-transform" href="#">
-<span class="material-symbols-outlined mb-0.5" data-icon="contact_support">contact_support</span>
-<span class="font-inter text-[10px] uppercase tracking-widest">Support</span>
-</a>
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-1 hover:text-blue-500 transition-all scale-95 active:scale-90 transition-transform" href="#">
-<span class="material-symbols-outlined mb-0.5" data-icon="person_add">person_add</span>
-<span class="font-inter text-[10px] uppercase tracking-widest">Register</span>
-</a>
-</nav>
-<div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden opacity-40">
-<div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary-container/20 blur-[120px]"></div>
-<div class="absolute top-1/2 -left-48 w-[500px] h-[500px] rounded-full bg-secondary-container/10 blur-[150px]"></div>
-</div>
-        
-<script>
-
-        
-document.getElementById('password-toggle').addEventListener('click', function() {
-  const passwordInput = document.getElementById('input-password');
-  const icon = this.querySelector('.material-symbols-outlined');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    icon.textContent = 'visibility_off';
-  } else {
-    passwordInput.type = 'password';
-    icon.textContent = 'visibility';
-  }
-});
-
-document.getElementById('captcha-checkbox-container').addEventListener('click', function() {
-  const checkIcon = document.getElementById('captcha-check');
-  checkIcon.classList.toggle('hidden');
-  if (!checkIcon.classList.contains('hidden')) {
-    this.classList.add('border-primary');
-  } else {
-    this.classList.remove('border-primary');
-  }
-});
-</script>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<script>
-    // ==========================================
-    // ARQUIVO: config/supabase_config.js
-    // OBJETIVO: Conexão global e utilitários
-    // ==========================================
-
-    const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
-    
-    // Inicializa o Supabase globalmente
-    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Função Global de Logout
-    async function sairDaConta() {
-        try {
-            await window.supabase.auth.signOut();
-        } catch (erro) {
-            console.error("Erro ao deslogar no servidor:", erro);
-        } finally {
-            localStorage.clear();
-            sessionStorage.clear();
-            window.location.replace("../../index.html"); 
-        }
-    }
-
-    console.log("✅ Conexão Supabase configurada com sucesso.");       
-</script>
-
-<script>
-    // Usamos DOMContentLoaded para garantir que o HTML carregou antes de buscar os IDs
-    document.addEventListener('DOMContentLoaded', () => {
-        // Toggle da Senha
-        const btnTogglePassword = document.getElementById('password-toggle');
-        const inputPassword = document.getElementById('input-password');
-        
-        if (btnTogglePassword && inputPassword) {
+        // 3. Interações de UI (Olho da Senha e Captcha)
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Toggle Senha
+            const btnTogglePassword = document.getElementById('password-toggle');
+            const inputPassword = document.getElementById('input-password');
+            
             btnTogglePassword.addEventListener('click', function() {
-                const icon = this.querySelector('.material-symbols-outlined');
+                const icon = this.querySelector('span');
                 if (inputPassword.type === 'password') {
                     inputPassword.type = 'text';
                     icon.textContent = 'visibility_off';
@@ -285,114 +124,76 @@ document.getElementById('captcha-checkbox-container').addEventListener('click', 
                     icon.textContent = 'visibility';
                 }
             });
-        }
 
-        // Toggle do Checkbox "Não sou um robô"
-        const captchaContainer = document.getElementById('captcha-checkbox-container');
-        const captchaCheck = document.getElementById('captcha-check');
+            // Toggle Captcha
+            const captchaContainer = document.getElementById('captcha-checkbox-container');
+            const captchaCheck = document.getElementById('captcha-check');
 
-        if (captchaContainer && captchaCheck) {
             captchaContainer.addEventListener('click', function() {
                 captchaCheck.classList.toggle('hidden');
-                if (!captchaCheck.classList.contains('hidden')) {
-                    this.classList.add('border-primary');
-                } else {
-                    this.classList.remove('border-primary');
-                }
             });
-        }
-    });
-</script>
+        });
 
-<script>
-    // ==========================================
-    // ARQUIVO: model/login.js
-    // OBJETIVO: Processar a entrada do usuário
-    // ==========================================
+        // 4. Lógica Principal de Login
+        async function fazer_login(event) {
+            // Evita envio de formulário padrão
+            event.preventDefault();
 
-    async function fazer_login(event) {
-        // 1. Captura os dados da tela (ID CORRIGIDO PARA email-input)
-        const emailInput = document.getElementById('email-input');
-        const passwordInput = document.getElementById('input-password');
+            const emailInput = document.getElementById('email-input');
+            const passwordInput = document.getElementById('input-password');
+            const btn = document.getElementById('btn-entrar');
 
-        if (!emailInput || !passwordInput) {
-            console.error("Inputs não encontrados no HTML. Verifique os IDs.");
-            return;
-        }
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
 
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        // 2. Validação de campos vazios
-        if (!email || !password) {
-            alert("Por favor, preencha o e-mail e a senha.");
-            return;
-        }
-
-        // 3. Efeito visual no botão (Capturando corretamente o botão clicado)
-        let btn = null;
-        let textoOriginal = "Entrar";
-
-        if (event && event.currentTarget) {
-            btn = event.currentTarget;
-            textoOriginal = btn.innerHTML;
-            
-            // Ícone animado do Google Material Symbols
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size: 20px;">sync</span> Autenticando...';
-            btn.disabled = true;
-            btn.classList.add('opacity-70', 'cursor-not-allowed');
-        }
-
-        try {
-            // 4. Envia o pedido de login para o Supabase
-            const { data, error } = await window.supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-            // 5. Lida com erros (Senha errada, usuário não existe)
-            if (error) {
-                if (error.message.includes('Invalid login credentials')) {
-                    alert("Acesso negado: E-mail ou senha incorretos.");
-                } else {
-                    alert("Erro ao tentar entrar: " + error.message);
-                }
-                
-                // Restaura o botão
-                if (btn) {
-                    btn.innerHTML = textoOriginal;
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
-                }
+            // Validação básica
+            if (!email || !password) {
+                alert("Por favor, preencha o e-mail e a senha.");
                 return;
             }
 
-            // 6. Sucesso
-            console.log("✅ Login aprovado! Redirecionando...");
-            
-            // Limpa os campos por segurança
-            emailInput.value = '';
-            passwordInput.value = '';
+            // Animação de Carregamento no Botão
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl">sync</span> <span>Autenticando...</span>';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
 
-            // 7. REDIRECIONAMENTO (Isso tira o usuário da tela de login)
-            // IMPORTANTE: Altere "painel.html" para o nome real da página do seu sistema
-            window.location.href = "painel.html"; 
+            try {
+                // Requisição ao Supabase
+                const { data, error } = await window.supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
 
-        } catch (err) {
-            console.error("Erro crítico:", err);
-            alert("Falha de conexão com o servidor.");
-            
-            // Restaura o botão
-            if (btn) {
+                if (error) {
+                    // Restaura botão
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+                    if (error.message.includes('Invalid login credentials')) {
+                        alert("Acesso negado: E-mail ou senha incorretos.");
+                    } else {
+                        alert("Erro: " + error.message);
+                    }
+                    return;
+                }
+
+                // SUCESSO: Redirecionar
+                console.log("Login aprovado! Redirecionando...");
+                
+                // Redirecionamento - Altere "painel.html" para a página correta do seu projeto
+                window.location.replace("painel.html"); 
+
+            } catch (err) {
+                console.error("Erro crítico de conexão:", err);
+                alert("Falha de conexão com o servidor. Verifique sua internet.");
+                
                 btn.innerHTML = textoOriginal;
                 btn.disabled = false;
                 btn.classList.remove('opacity-70', 'cursor-not-allowed');
             }
         }
-    }
-
-    console.log("✅ Conexão com: model/login.js estabelecida.");        
-</script>
-
-
-</body></html>
+    </script>
+</body>
+</html>
