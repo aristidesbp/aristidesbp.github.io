@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
+    <link rel="manifest" href="manifest.json">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
@@ -291,6 +292,7 @@
     </div> 
     
     <script>
+        
         // Configuração do Supabase
         const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
@@ -790,6 +792,54 @@
                 }
             }
         }
+
+
+//CRIAR APK
+// Registra o Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registrado com sucesso.'));
+}
+
+// Verifica se a página foi aberta via compartilhamento
+window.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('shared') === 'true') {
+        try {
+            // Abre a aba de formulário automaticamente
+            alternarAba('formulario');
+            
+            // Puxa o arquivo que o Service Worker salvou no cache
+            const cache = await caches.open('share-target-cache');
+            const response = await cache.match('/shared-file');
+            
+            if (response) {
+                const blob = await response.blob();
+                const file = new File([blob], "comprovante_compartilhado.jpg", { type: blob.type });
+                
+                // Cria uma lista de arquivos "falsa" para injetar no input file
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                
+                // Injeta o arquivo direto no input de comprovante que já criamos
+                const inputComprovante = document.getElementById('f-comprovante');
+                inputComprovante.files = dataTransfer.files;
+                
+                // Atualiza o texto na tela
+                mostrarNomeArquivo(inputComprovante, 'nome-comprovante');
+                
+                // Limpa o cache para o próximo compartilhamento
+                await cache.delete('/shared-file');
+                
+                // Limpa a URL para não engasgar se der F5
+                window.history.replaceState({}, document.title, "/index.html");
+            }
+        } catch (err) {
+            console.error('Erro ao processar arquivo compartilhado:', err);
+        }
+    }
+});
     </script>
 </body>
   </html>
