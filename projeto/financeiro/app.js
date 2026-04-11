@@ -504,59 +504,41 @@ if ('serviceWorker' in navigator) {
         .then(() => console.log('Service Worker Registrado.'));
 }
 
-// 2. Botão de Instalação do APP
-let eventoInstalacao;
+// 2. Botão de Instalação do APP (SEMPRE VISÍVEL NO MENU)
+let eventoInstalacao = null;
 const btnInstalar = document.getElementById('btn-instalar');
 
+// O Chrome avisa silenciosamente que o app cumpre os requisitos para instalação
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    eventoInstalacao = e;
-    btnInstalar.classList.remove('hidden');
+    eventoInstalacao = e; 
+    console.log("O PWA atendeu os requisitos e está pronto para ser instalado!");
 });
 
+// Quando o usuário clica no botão visível
 btnInstalar.addEventListener('click', async () => {
+    // Fecha o menu lateral automaticamente para o usuário ver a tela
+    if(typeof fecharMenu === 'function') fecharMenu();
+
     if (eventoInstalacao) {
+        // Dispara a janela nativa do Android
         eventoInstalacao.prompt();
         const { outcome } = await eventoInstalacao.userChoice;
+        
         if (outcome === 'accepted') {
-            btnInstalar.classList.add('hidden');
+            alert('Instalação autorizada! O ícone do ERP ABP aparecerá na sua tela inicial em instantes.');
+            eventoInstalacao = null;
+        } else {
+            alert('Instalação cancelada pelo usuário.');
         }
-        eventoInstalacao = null;
+    } else {
+        // Se clicou, mas o Android não liberou o evento (já está instalado ou acessando de modo incompatível)
+        alert("Atenção: A instalação automática não foi liberada pelo navegador.\n\nIsso acontece se o aplicativo JÁ ESTIVER instalado na sua tela inicial, ou se você estiver usando uma aba anônima.\n\nCaso não encontre o app, abra as opções do Chrome (3 pontinhos) e clique em 'Adicionar à tela inicial'.");
     }
 });
 
+// Mensagem de sucesso quando o Android confirma que terminou a instalação
 window.addEventListener('appinstalled', () => {
-    btnInstalar.classList.add('hidden');
     eventoInstalacao = null;
-});
-
-// 3. Captura do Arquivo via Menu "Compartilhar" do Celular
-window.addEventListener('DOMContentLoaded', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (urlParams.get('shared') === 'true') {
-        try {
-            alternarAba('formulario');
-            const cache = await caches.open('share-target-cache');
-            const response = await cache.match('/shared-file');
-            
-            if (response) {
-                const blob = await response.blob();
-                const file = new File([blob], "comprovante_compartilhado.jpg", { type: blob.type });
-                
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                
-                const inputComprovante = document.getElementById('f-comprovante');
-                inputComprovante.files = dataTransfer.files;
-                
-                mostrarNomeArquivo(inputComprovante, 'nome-comprovante');
-                
-                await cache.delete('/shared-file');
-                window.history.replaceState({}, document.title, "/index.html");
-            }
-        } catch (err) {
-            console.error('Erro ao processar arquivo compartilhado:', err);
-        }
-    }
+    alert("Pronto! ERP ABP foi instalado com sucesso na sua tela inicial!");
 });
