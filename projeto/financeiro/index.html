@@ -236,20 +236,27 @@
                         <label class="text-xs">Pesquisar Descrição</label>
                         <input type="text" id="filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key === 'Enter') loadParcelas()">
                     </div>
+                    
+                   
+
+                    
                     <div>
+                        <label class="text-xs">Data Início</label>
+                        <input type="date" id="filtro-inicio" onchange="loadParcelas()">
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs">Data Fim</label>
+                        <input type="date" id="filtro-fim" onchange="loadParcelas()">
+                    </div>
+
+                     <div>
                         <label class="text-xs">Filtrar Categoria</label>
                         <select id="filtro-categoria" onchange="loadParcelas()">
                             <option value="">Todas</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-xs">Data Início</label>
-                        <input type="date" id="filtro-inicio" onchange="loadParcelas()">
-                    </div>
-                    <div>
-                        <label class="text-xs">Data Fim</label>
-                        <input type="date" id="filtro-fim" onchange="loadParcelas()">
-                    </div>
+                    
                     <div class="flex gap-2">
                         <button onclick="loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
                             <i class="fas fa-search"></i> Filtrar
