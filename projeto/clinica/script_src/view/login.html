@@ -210,6 +210,7 @@
 <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary-container/20 blur-[120px]"></div>
 <div class="absolute top-1/2 -left-48 w-[500px] h-[500px] rounded-full bg-secondary-container/10 blur-[150px]"></div>
 </div>
+        
 <script>
 
         
@@ -236,108 +237,162 @@ document.getElementById('captcha-checkbox-container').addEventListener('click', 
 });
 </script>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <script>
-// ==========================================
-// ARQUIVO: config/supabase_config.js
-// OBJETIVO: Conexão global e utilitários
-// ==========================================
+    // ==========================================
+    // ARQUIVO: config/supabase_config.js
+    // OBJETIVO: Conexão global e utilitários
+    // ==========================================
 
-// 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
-  
-
-// 2. Inicializa o Supabase globalmente
-// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
-window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// 3. Função Global de Logout (Segurança Nível Bancário)
-async function sairDaConta() {
-    try {
-        // Destrói a sessão no servidor do Supabase
-        await window.supabase.auth.signOut();
-    } catch (erro) {
-        console.error("Erro ao deslogar no servidor:", erro);
-    } finally {
-        // Limpa o navegador e expulsa o usuário para a tela inicial
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.replace("../../index.html"); 
-    }
-}
-
-console.log("✅ Conexão Supabase configurada com sucesso.");       
-</script>
-<script>
-// ==========================================
-// ARQUIVO: model/login.js
-// OBJETIVO: Processar a entrada do usuário
-// ==========================================
-
-async function fazer_login() {
-    // 1. Captura os dados da tela
-    const email = document.getElementById('input-email').value;
-    const password = document.getElementById('input-password').value;
-
-    // 2. Validação de campos vazios
-    if (!email || !password) {
-        alert("Por favor, preencha o e-mail e a senha.");
-        return;
-    }
-
-    // 3. Efeito visual no botão (Mostra que está carregando)
-    const btn = event.currentTarget || document.querySelector('button');
-    const textoOriginal = btn.innerHTML;
+    const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
     
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
-    btn.disabled = true;
-    btn.classList.add('opacity-70', 'cursor-not-allowed');
+    // Inicializa o Supabase globalmente
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    try {
-        // 4. Envia o pedido de login usando a conexão global criada no supabase_config.js
-        const { data, error } = await window.supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+    // Função Global de Logout
+    async function sairDaConta() {
+        try {
+            await window.supabase.auth.signOut();
+        } catch (erro) {
+            console.error("Erro ao deslogar no servidor:", erro);
+        } finally {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.replace("../../index.html"); 
+        }
+    }
 
-        // 5. Lida com erros (Senha errada, usuário não existe)
-        if (error) {
-            if (error.message.includes('Invalid login credentials')) {
-                alert("Acesso negado: E-mail ou senha incorretos.");
-            } else {
-                alert("Erro ao tentar entrar: " + error.message);
-            }
-            
-            // Devolve o botão ao estado normal para o usuário tentar de novo
-            btn.innerHTML = textoOriginal;
-            btn.disabled = false;
-            btn.classList.remove('opacity-70', 'cursor-not-allowed');
+    console.log("✅ Conexão Supabase configurada com sucesso.");       
+</script>
+
+<script>
+    // Usamos DOMContentLoaded para garantir que o HTML carregou antes de buscar os IDs
+    document.addEventListener('DOMContentLoaded', () => {
+        // Toggle da Senha
+        const btnTogglePassword = document.getElementById('password-toggle');
+        const inputPassword = document.getElementById('input-password');
+        
+        if (btnTogglePassword && inputPassword) {
+            btnTogglePassword.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined');
+                if (inputPassword.type === 'password') {
+                    inputPassword.type = 'text';
+                    icon.textContent = 'visibility_off';
+                } else {
+                    inputPassword.type = 'password';
+                    icon.textContent = 'visibility';
+                }
+            });
+        }
+
+        // Toggle do Checkbox "Não sou um robô"
+        const captchaContainer = document.getElementById('captcha-checkbox-container');
+        const captchaCheck = document.getElementById('captcha-check');
+
+        if (captchaContainer && captchaCheck) {
+            captchaContainer.addEventListener('click', function() {
+                captchaCheck.classList.toggle('hidden');
+                if (!captchaCheck.classList.contains('hidden')) {
+                    this.classList.add('border-primary');
+                } else {
+                    this.classList.remove('border-primary');
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    // ==========================================
+    // ARQUIVO: model/login.js
+    // OBJETIVO: Processar a entrada do usuário
+    // ==========================================
+
+    async function fazer_login(event) {
+        // 1. Captura os dados da tela (ID CORRIGIDO PARA email-input)
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('input-password');
+
+        if (!emailInput || !passwordInput) {
+            console.error("Inputs não encontrados no HTML. Verifique os IDs.");
             return;
         }
 
-        // 6. Sucesso
-        console.log("Login aprovado! Bem-vindo.");
-        
-        // Limpa os campos por segurança
-        document.getElementById('input-email').value = '';
-        document.getElementById('input-password').value = '';
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-        // O redirecionamento (ou a troca de divs) deve acontecer através do 
-        // listener "onAuthStateChange" no arquivo principal do seu painel.
+        // 2. Validação de campos vazios
+        if (!email || !password) {
+            alert("Por favor, preencha o e-mail e a senha.");
+            return;
+        }
 
-    } catch (err) {
-        console.error("Erro crítico:", err);
-        alert("Falha de conexão com o servidor.");
-        btn.innerHTML = textoOriginal;
-        btn.disabled = false;
-        btn.classList.remove('opacity-70', 'cursor-not-allowed');
+        // 3. Efeito visual no botão (Capturando corretamente o botão clicado)
+        let btn = null;
+        let textoOriginal = "Entrar";
+
+        if (event && event.currentTarget) {
+            btn = event.currentTarget;
+            textoOriginal = btn.innerHTML;
+            
+            // Ícone animado do Google Material Symbols
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size: 20px;">sync</span> Autenticando...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+        }
+
+        try {
+            // 4. Envia o pedido de login para o Supabase
+            const { data, error } = await window.supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            // 5. Lida com erros (Senha errada, usuário não existe)
+            if (error) {
+                if (error.message.includes('Invalid login credentials')) {
+                    alert("Acesso negado: E-mail ou senha incorretos.");
+                } else {
+                    alert("Erro ao tentar entrar: " + error.message);
+                }
+                
+                // Restaura o botão
+                if (btn) {
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                }
+                return;
+            }
+
+            // 6. Sucesso
+            console.log("✅ Login aprovado! Redirecionando...");
+            
+            // Limpa os campos por segurança
+            emailInput.value = '';
+            passwordInput.value = '';
+
+            // 7. REDIRECIONAMENTO (Isso tira o usuário da tela de login)
+            // IMPORTANTE: Altere "painel.html" para o nome real da página do seu sistema
+            window.location.href = "painel.html"; 
+
+        } catch (err) {
+            console.error("Erro crítico:", err);
+            alert("Falha de conexão com o servidor.");
+            
+            // Restaura o botão
+            if (btn) {
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        }
     }
-}
 
-console.log("✅ Conexão com: model/login.js");        
+    console.log("✅ Conexão com: model/login.js estabelecida.");        
 </script>
-
-
 
 
 </body></html>
