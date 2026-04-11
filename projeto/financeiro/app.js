@@ -6,6 +6,10 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 let entidadesCache = [];
 let html5QrCode = null;
 
+// NOVAS VARIÁVEIS PARA O GRÁFICO E EXPORTAÇÃO
+let dadosAtuaisFiltrados = []; 
+let graficoInstancia = null; 
+
 // ====================================================================
 // CONTROLE DO MENU HAMBÚRGUER E ABAS
 // ====================================================================
@@ -95,6 +99,8 @@ async function sairDaConta() {
     document.getElementById('dash-receita').innerText = 'R$ 0,00';
     document.getElementById('dash-despesa').innerText = 'R$ 0,00';
     document.getElementById('dash-pendente').innerText = 'R$ 0,00';
+    if(graficoInstancia) graficoInstancia.destroy();
+    document.getElementById('secao-grafico').classList.add('hidden');
     fecharMenu();
     verificar_login();
 }
@@ -111,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function init() {
     loadEntidades();
     loadCategoriasUnicas();
-    loadDashboard();
+    // A função loadDashboard() foi removida, pois a soma agora ocorre dentro do loadParcelas() para garantir fidelidade ao filtro!
     loadParcelas();
 }
 
@@ -223,20 +229,6 @@ function pararCamera() {
     } else { document.getElementById('camera-container').classList.add('hidden'); }
 }
 
-async function loadDashboard() {
-    const { data: parcelas } = await _supabase.from('parcelas').select('*, financas(tipo)');
-    if(!parcelas) return;
-    let receita = 0, despesa = 0, pendente = 0;
-    parcelas.forEach(p => {
-        const valor = parseFloat(p.valor_parcela || 0);
-        if (p.status === 'pago') { p.financas.tipo === 'receita' ? receita += valor : despesa += valor; }
-        else { pendente += valor; }
-    });
-    document.getElementById('dash-receita').innerText = `R$ ${receita.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-    document.getElementById('dash-despesa').innerText = `R$ ${despesa.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-    document.getElementById('dash-pendente').innerText = `R$ ${pendente.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-}
-
 async function gerarLancamentoCompleto() {
     const btn = document.getElementById('btn-salvar');
     btn.disabled = true; btn.innerText = 'Salvando...';
@@ -342,7 +334,6 @@ async function gerarLancamentoCompleto() {
         
         cancelarEdicao();
         loadParcelas();
-        loadDashboard();
         alternarAba('listagem');
         btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Lançamento';
 
@@ -376,13 +367,28 @@ async function loadParcelas() {
     const { data, error } = await query;
     if (error) { console.error("Erro ao carregar parcelas:", error.message); return; }
     
+    // Atualiza a variável global para a exportação
+    dadosAtuaisFiltrados = data;
+    
     const tbody = document.getElementById('lista-parcelas');
     const hoje = new Date().toISOString().split('T')[0];
 
+    // Variáveis para calcular o Dashboard dos dados filtrados
+    let sumReceita = 0, sumDespesa = 0, sumPendente = 0;
+
     tbody.innerHTML = data.map(p => {
+        let valorNum = parseFloat(p.valor_parcela || 0);
+
         let statusClass = p.status === 'pago' ? 'status-pago' : 'status-pendente';
         let statusTxt = p.status.toUpperCase();
         if(p.status === 'pendente' && p.data_vencimento < hoje) { statusClass = 'status-atrasado'; statusTxt = 'ATRASADO'; }
+
+        // SOMA APENAS OS QUE FORAM FILTRADOS
+        if (p.status === 'pago') { 
+            p.financas.tipo === 'receita' ? sumReceita += valorNum : sumDespesa += valorNum; 
+        } else { 
+            sumPendente += valorNum; 
+        }
 
         const dtVenc = new Date(p.data_vencimento + 'T12:00:00').toLocaleDateString('pt-br');
         const dtPag = p.data_pagamento ? new Date(p.data_pagamento + 'T12:00:00').toLocaleDateString('pt-br') : '--/--/----';
@@ -407,7 +413,7 @@ async function loadParcelas() {
             </td>
             <td class="p-3 font-bold text-slate-600">${p.num_parcela} / ${p.financas.num_parcelas}</td>
             <td class="p-3 font-bold ${p.financas.tipo === 'receita' ? 'text-emerald-600' : 'text-red-600'}">
-                R$ ${parseFloat(p.valor_parcela).toFixed(2)}
+                R$ ${valorNum.toFixed(2)}
             </td>
             <td class="p-3 text-center"><span class="${statusClass}">${statusTxt}</span></td>
             <td class="p-3 text-center">
@@ -417,7 +423,91 @@ async function loadParcelas() {
             </td>
         </tr>`;
     }).join('');
+
+    // ATUALIZA O DASHBOARD COM OS DADOS FILTRADOS
+    document.getElementById('dash-receita').innerText = `R$ ${sumReceita.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+    document.getElementById('dash-despesa').innerText = `R$ ${sumDespesa.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+    document.getElementById('dash-pendente').innerText = `R$ ${sumPendente.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+
+    // GERA O GRÁFICO DINÂMICO
+    atualizarGrafico(sumReceita, sumDespesa, sumPendente);
 }
+
+// ====================================================================
+// FUNÇÕES DE EXPORTAÇÃO E GRÁFICOS (NOVO)
+// ====================================================================
+function exportarRelatorioCSV() {
+    if (dadosAtuaisFiltrados.length === 0) {
+        return alert("Não há nenhum dado listado no momento para exportar!");
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    // Cabeçalho da planilha
+    csvContent += "Vencimento;Pagamento;Descricao;Categoria;Tipo;Status;Parcela;Valor R$\n";
+
+    dadosAtuaisFiltrados.forEach(p => {
+        let venc = p.data_vencimento;
+        let pag = p.data_pagamento || "N/A";
+        let desc = p.financas.descricao.replace(/;/g, " "); // Remover ponto-e-vírgula para não quebrar a coluna
+        let cat = p.financas.categoria || "Geral";
+        let tipo = p.financas.tipo === 'receita' ? "Entrada" : "Saída";
+        let status = p.status;
+        let parcela = `${p.num_parcela}/${p.financas.num_parcelas}`;
+        let valor = parseFloat(p.valor_parcela).toFixed(2).replace('.', ','); // Troca ponto por vírgula no formato BR
+
+        let row = `${venc};${pag};${desc};${cat};${tipo};${status};${parcela};${valor}`;
+        csvContent += row + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Relatorio_ERP_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function atualizarGrafico(receita, despesa, pendente) {
+    const secaoGrafico = document.getElementById('secao-grafico');
+    
+    // Se estiver tudo zerado, esconde a seção do gráfico
+    if(receita === 0 && despesa === 0 && pendente === 0) {
+        secaoGrafico.classList.add('hidden');
+        return;
+    }
+    
+    secaoGrafico.classList.remove('hidden');
+    const ctx = document.getElementById('graficoFinanceiro').getContext('2d');
+    
+    if(graficoInstancia) {
+        graficoInstancia.destroy();
+    }
+
+    graficoInstancia = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Receitas Recebidas', 'Despesas Pagas', 'Pendentes (A Pagar/Receber)'],
+            datasets: [{
+                data: [receita, despesa, pendente],
+                backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                hoverOffset: 4,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { family: 'Inter' } } }
+            }
+        }
+    });
+}
+
+// ====================================================================
+// EDIÇÃO E EXCLUSÃO
+// ====================================================================
 
 async function prepararEdicao(id) {
     const { data: p } = await _supabase.from('parcelas').select('*, financas(*)').eq('id', id).single();
@@ -487,7 +577,6 @@ async function excluirSelecionados() {
         if (!error) {
             alert('Excluído com sucesso!');
             loadParcelas();
-            loadDashboard();
         } else {
             alert('Erro ao excluir: ' + error.message);
         }
@@ -541,4 +630,35 @@ btnInstalar.addEventListener('click', async () => {
 window.addEventListener('appinstalled', () => {
     eventoInstalacao = null;
     alert("Pronto! ERP ABP foi instalado com sucesso na sua tela inicial!");
+});
+
+// 3. Captura do Arquivo via Menu "Compartilhar" do Celular
+window.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('shared') === 'true') {
+        try {
+            alternarAba('formulario');
+            const cache = await caches.open('share-target-cache');
+            const response = await cache.match('/shared-file');
+            
+            if (response) {
+                const blob = await response.blob();
+                const file = new File([blob], "comprovante_compartilhado.jpg", { type: blob.type });
+                
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                
+                const inputComprovante = document.getElementById('f-comprovante');
+                inputComprovante.files = dataTransfer.files;
+                
+                mostrarNomeArquivo(inputComprovante, 'nome-comprovante');
+                
+                await cache.delete('/shared-file');
+                window.history.replaceState({}, document.title, "/index.html");
+            }
+        } catch (err) {
+            console.error('Erro ao processar arquivo compartilhado:', err);
+        }
+    }
 });
