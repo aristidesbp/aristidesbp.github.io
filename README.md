@@ -1074,6 +1074,15 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
     </body>
 </html>
 ```
+
+
+
+
+
+
+
+
+
 # financeiro (completo funcionando)
 ```
 <!DOCTYPE html>
@@ -1948,7 +1957,7 @@ CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authent
       
     
 
-    -- ============================================================================
+-- ============================================================================
 -- ATUALIZAÇÃO DA TABELA 'financas'
 -- ============================================================================
 
