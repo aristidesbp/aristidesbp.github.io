@@ -54,10 +54,6 @@
             </div>
             
             <div class="flex items-center gap-4">
-                <button id="btn-instalar" class="hidden bg-emerald-100 text-emerald-700 border border-emerald-300 px-3 py-1.5 rounded-full font-bold text-xs hover:bg-emerald-200 transition shadow-sm flex items-center gap-2">
-                    <i class="fas fa-mobile-alt"></i> Instalar App
-                </button>
-                
                 <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
                     <span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
                 </button>
@@ -72,8 +68,16 @@
             <ul class="p-4 space-y-2 font-medium">
                 <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
                 <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
+                
                 <li><hr class="border-slate-700 my-4"></li>
-                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
+                
+                <li>
+                    <button id="btn-instalar" class="w-full text-left p-3 text-emerald-400 rounded hover:bg-slate-700 transition flex items-center gap-2">
+                        <i class="fas fa-mobile-alt w-6 text-center"></i> Instalar App
+                    </button>
+                </li>
+                
+                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6 text-center"></i> Sair do Sistema</a></li>
             </ul>
         </div>
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
