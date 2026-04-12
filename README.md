@@ -1,11 +1,14 @@
-# PERSONA: Aristides B Pontes 
+# Aristides B Pontes 
 
 Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
+
+---
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
 * 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
 
+---
 ## PROJETO
 * 🌐 **Meu_site:** [ENTRAR](https://aristidesbp.github.io)
 * 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/projeto/entidades/)
@@ -15,6 +18,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **erp_Clinica:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/erp_clinica.html)
 * 🌐 **erp_Clinica2:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/clinica2/erp_clinica.html)
 
+---
 ## 📚 LINKS PARA ESTUDOS
 * 🌐 **HTML:** [w3schools.com](https://w3schools.com)
 * 🎨 **CSS:** [codecademy.com](https://codecademy.com)
