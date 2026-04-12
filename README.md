@@ -452,7 +452,16 @@ SELECT nome, role
 FROM public.clinica_perfis
 WHERE role = 'paciente';
 ```
+## DELETAR 
+```
+-- DELETE (Excluir / Apagar)
+-- Apagar um usuário específico do sistema pelo seu ID
+DELETE FROM public.clinica_perfis
+WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 
+-- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
+-- ou ele apagará TODOS os usuários da tabela inteira!
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PERSONA [aristidesbp]
