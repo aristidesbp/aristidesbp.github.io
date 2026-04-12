@@ -1046,14 +1046,7 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
 </html>
 ```
 
-
-
-
-
-
-
-
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # financeiro (completo funcionando)
 ```
 <!DOCTYPE html>
@@ -1957,7 +1950,7 @@ WHERE status_lancamento IS NULL;
     -->
 </html>
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TAREFAS
 ```
 <!DOCTYPE html>
