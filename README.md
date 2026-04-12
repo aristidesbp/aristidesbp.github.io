@@ -15,6 +15,23 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **erp_Clinica:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/erp_clinica.html)
 * 🌐 **erp_Clinica2:** [ENTRAR](https://aristidesbp.github.io/projeto/erp_clinica/clinica2/erp_clinica.html)
 
+## 📚 LINKS PARA ESTUDOS
+* 🌐 **HTML:** [w3schools.com](https://w3schools.com)
+* 🎨 **CSS:** [codecademy.com](https://codecademy.com)
+* ⚡ **JavaScript:** [freecodecamp.org](https://freecodecamp.org)
+* ⚛️ **React:** [react.dev](https://react.dev)
+* 🐍 **Python:** [learnpython.org](https://learnpython.org)
+* ☕ **Java:** [sololearn.com](https://sololearn.com)
+* 🐘 **PHP:** [php.net](https://php.net)
+* 🛡️ **Cybersecurity:** [tryhackme.com](https://tryhackme.com)
+* ⚙️ **C:** [learn-c.org](https://learn-c.org)
+* 🛠️ **C++:** [learncpp.com](https://learncpp.com)
+* ☁️ **AWS:** [skillbuilder.aws](https://skillbuilder.aws)
+* 🤖 **IA/ML:** [coursera.org](https://coursera.org)
+* 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
+* 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
+
+  
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX
@@ -155,6 +172,7 @@ ls -a
 tree
 ```
 
+
 ---
 # 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 ```
@@ -201,6 +219,7 @@ git commit -m "DESCRIÇÃO_DA_ALTERACAO"
 git push origin main
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
 ```
+
 
 ---
 # 🟥 SERVIDOR PYTHON 
