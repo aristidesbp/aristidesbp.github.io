@@ -125,4 +125,74 @@
         verificarSessao();
     </script>
 </body>
+    <!--
+   -- 1. Criação das Tabelas Principais
+CREATE TABLE public.edjacy_perfis (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    nome TEXT NOT NULL,
+    role TEXT CHECK (role IN ('master', 'paciente')) DEFAULT 'paciente',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.edjacy_pacientes (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    perfil_id UUID REFERENCES public.edjacy_perfis(id) ON DELETE CASCADE,
+    nome_responsavel TEXT,
+    data_nascimento DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Tabela baseada no PLANO 6M do documento
+CREATE TABLE public.edjacy_plano6m (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    paciente_id UUID REFERENCES public.edjacy_pacientes(id) ON DELETE CASCADE,
+    data_inicio DATE DEFAULT CURRENT_DATE,
+    habilidade TEXT NOT NULL, -- Ex: 'Leitura fluente em bastão'
+    criterio_alta TEXT NOT NULL, -- Ex: 'Leitura contínua, sem silabação...'
+    status TEXT DEFAULT 'Pendente', -- 'Pendente' ou 'Concluído'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.edjacy_exercicios (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    plano_id UUID REFERENCES public.edjacy_plano6m(id) ON DELETE CASCADE,
+    paciente_id UUID REFERENCES public.edjacy_pacientes(id) ON DELETE CASCADE,
+    titulo TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    status TEXT DEFAULT 'pendente',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- (As tabelas edjacy_prontuario e edjacy_devolutiva seguem a mesma lógica relacional vinculada ao paciente_id)
+
+-- 2. Segurança (Row Level Security - RLS)
+ALTER TABLE public.edjacy_perfis ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.edjacy_pacientes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.edjacy_plano6m ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.edjacy_exercicios ENABLE ROW LEVEL SECURITY;
+
+-- Políticas: O Perfil 'master' vê tudo; O 'paciente' vê apenas os seus próprios dados.
+CREATE POLICY "Acesso Master total" ON public.edjacy_perfis FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.edjacy_perfis WHERE id = auth.uid() AND role = 'master')
+);
+
+CREATE POLICY "Paciente vê o próprio perfil" ON public.edjacy_perfis FOR SELECT USING (
+    id = auth.uid()
+);
+
+-- Automatizar a criação do perfil após o registo no Supabase Auth
+CREATE OR REPLACE FUNCTION public.handle_new_user() 
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.edjacy_perfis (id, nome, role)
+  VALUES (new.id, new.raw_user_meta_data->>'nome', COALESCE(new.raw_user_meta_data->>'role', 'paciente'));
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+    
+    -->
 </html>
