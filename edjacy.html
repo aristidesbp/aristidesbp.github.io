@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Edjacy - Psicopedagogia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <section id="loginContainer" class="flex min-h-screen items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <h2 class="text-2xl font-bold text-center mb-6 text-blue-600">Edjacy Login</h2>
+            <form id="formLogin" class="space-y-4">
+                <input type="email" id="email" placeholder="Email" class="w-full border p-2 rounded" required>
+                <input type="password" id="senha" placeholder="Palavra-passe" class="w-full border p-2 rounded" required>
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Entrar</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="painelPedagogo" class="hidden min-h-screen">
+        <nav class="bg-blue-800 text-white p-4 flex justify-between">
+            <h1 class="font-bold text-xl">Painel da Psicopedagoga</h1>
+            <button onclick="fazerLogout()" class="text-sm bg-red-500 px-3 py-1 rounded">Sair</button>
+        </nav>
+        <div class="p-6">
+            <h2 class="text-2xl mb-4">Gestão de Pacientes e Planos 6M</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded shadow border-l-4 border-blue-500">
+                    <h3 class="font-bold">Gerir Pacientes</h3>
+                    <button class="mt-2 text-blue-600 underline">Novo Paciente</button>
+                </div>
+                <div class="bg-white p-4 rounded shadow border-l-4 border-green-500">
+                    <h3 class="font-bold">Planos de Intervenção (6M)</h3>
+                    <button class="mt-2 text-green-600 underline">Configurar Metas</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="painelPaciente" class="hidden min-h-screen">
+        <nav class="bg-green-600 text-white p-4 flex justify-between">
+            <h1 class="font-bold text-xl">O Meu Espaço - Plano 6M</h1>
+            <button onclick="fazerLogout()" class="text-sm bg-red-500 px-3 py-1 rounded">Sair</button>
+        </nav>
+        <div class="p-6">
+            <div class="mb-6 bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-bold mb-2">Evolução e Conquistas 🏆</h2>
+                <p class="text-gray-600">Gráficos de evolução serão carregados aqui.</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-bold mb-2">Os Meus Exercícios (Plano 6M)</h2>
+                <ul id="listaExerciciosPaciente" class="space-y-2">
+                    </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Configuração do Supabase (Substitui pelas tuas chaves)
+        const supabaseUrl = 'TU_URL';
+        const supabaseKey = 'TU_KEY';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Referências do DOM
+        const loginContainer = document.getElementById('loginContainer');
+        const painelPedagogo = document.getElementById('painelPedagogo');
+        const painelPaciente = document.getElementById('painelPaciente');
+
+        // Função de Controlo de Ecrãs baseada na Sessão e Role
+        async function verificarSessao() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                // Sem sessão: Mostra login, esconde painéis
+                loginContainer.classList.remove('hidden');
+                painelPedagogo.classList.add('hidden');
+                painelPaciente.classList.add('hidden');
+                return;
+            }
+
+            // Se tem sessão, vamos buscar o Role à tabela edjacy_perfis
+            const { data: perfil } = await supabase
+                .from('edjacy_perfis')
+                .select('role')
+                .eq('id', session.user.id)
+                .single();
+
+            loginContainer.classList.add('hidden');
+
+            if (perfil && perfil.role === 'master') {
+                painelPedagogo.classList.remove('hidden');
+                painelPaciente.classList.add('hidden');
+            } else {
+                painelPaciente.classList.remove('hidden');
+                painelPedagogo.classList.add('hidden');
+            }
+        }
+
+        // Lógica de Login
+        document.getElementById('formLogin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            
+            const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert('Erro: ' + error.message);
+            else verificarSessao();
+        });
+
+        // Lógica de Logout
+        async function fazerLogout() {
+            await supabase.auth.signOut();
+            verificarSessao();
+        }
+
+        // Inicializa a verificação ao carregar a página
+        verificarSessao();
+    </script>
+</body>
+</html>
