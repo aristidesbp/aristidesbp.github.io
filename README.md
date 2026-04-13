@@ -497,7 +497,7 @@ Entregue a resposta com uma breve saudação e logo em seguida o bloco de códig
 ABAIXO VOU TE MANDAR UM EXEMPLO DE COMO É UM CODIGO JA IMPLEMENTADO POR [aristidebp].
 
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # EXEMPLO DE CODIGO (SPA-entidades.html)
 ```
@@ -1351,7 +1351,8 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
         let html5QrCode = null;
 
         
-
+```
+```
 
 //====================================================================
         // CONTROLE DO MENU HAMBÚRGUER E ABAS
