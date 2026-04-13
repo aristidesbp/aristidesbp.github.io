@@ -1712,6 +1712,8 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
             loadParcelas();
         }
 
+```
+```
         async function loadParcelas() {
             const busca = document.getElementById('filtro-busca').value;
             const categoria = document.getElementById('filtro-categoria').value;
@@ -1845,6 +1847,8 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
         }
     </script>
 </body>
+```
+```
   <!--
      -- ============================================================================
 -- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
