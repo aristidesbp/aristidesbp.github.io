@@ -49,7 +49,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/entidades.html)
 * 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/financeiro.html)
 * 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/tarefas.html)
-* 🌐 **Edjacy:** [ENTRAR](https://aristidesbp.github.io/projeto/rc/edjacy.html)
+* 🌐 **Edjacy:** [ENTRAR](https://aristidesbp.github.io/edjacy.html)
 
 
 ---
