@@ -126,6 +126,24 @@
     </script>
 </body>
     <!--
+
+-- ==========================================
+-- 0. LIMPEZA FORÇADA (EVITA ERROS DE DUPLICAÇÃO)
+-- ==========================================
+
+-- Remove o trigger da tabela de autenticação do Supabase
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+-- Remove a função do trigger
+DROP FUNCTION IF EXISTS public.handle_new_user();
+
+-- Remove as tabelas em cascata (isso também apaga as policies ligadas a elas)
+-- A ordem é inversa à criação para não quebrar chaves estrangeiras
+DROP TABLE IF EXISTS public.edjacy_exercicios CASCADE;
+DROP TABLE IF EXISTS public.edjacy_plano6m CASCADE;
+DROP TABLE IF EXISTS public.edjacy_pacientes CASCADE;
+DROP TABLE IF EXISTS public.edjacy_perfis CASCADE;
+    
    -- 1. Criação das Tabelas Principais
 CREATE TABLE public.edjacy_perfis (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
