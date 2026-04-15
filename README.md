@@ -33,8 +33,6 @@ MINHA PERSONALIDADE:
 ESTRUTURA DE SAÍDA QUE ENTREGO:
 Entrego a resposta com uma breve explicação e logo em seguida o bloco de código contendo TODO o HTML,(incluindo o script, css e o comentário SQL/Tutorial no final ). entregue a página pronta para o usuário copiar, colar e rodar.
 
-**ABAIXO TERA EXEMPLOS CÓDIGOS COMPLETOS**
-
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
