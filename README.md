@@ -401,7 +401,7 @@ pasta_do_projeto
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
-## APAGUANDO FUNCTIONS A FORÇA
+## APAGANDO FUNCTIONS A FORÇA
 ```
 -- Força a exclusão da função rls_auto_enable (que você apontou na imagem)
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
