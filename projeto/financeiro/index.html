@@ -1,296 +1,140 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro Completo - ERP ABP</title>
+    <title>Sistema Financeiro - AristidesBP</title>
     
-    <link rel="manifest" href="manifest.json">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bibliotecas Externas -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
+    <!-- Seu CSS Separado -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
-        <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
-            <div class="text-center mb-8">
-                <i class="fas fa-wallet text-5xl text-emerald-500 mb-3"></i>
-                <h2 class="text-2xl font-bold text-slate-800">ERP Financeiro</h2>
-                <p class="text-slate-500 text-sm mt-1">Faça login para acessar suas contas</p>
+    <!-- Barra de Navegação -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <strong>FINANCEIRO</strong>
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav-back">Voltar</a>
+            <button class="btn-logout-nav" onclick="sairDaConta()">Sair</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Formulário de Cadastro -->
+        <div class="card">
+            <h2 id="form-title" class="section-title">Novo Lançamento</h2>
+            <form id="financeiro-form" onsubmit="event.preventDefault(); handleSave();">
+                <input type="hidden" id="edit-id">
+                <div class="form-grid">
+                    <div>
+                        <label>Entidade / Cliente</label>
+                        <select id="entidade_id" required>
+                            <option value="">Carregando entidades...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Descrição</label>
+                        <input type="text" id="descricao" required>
+                    </div>
+                    <div>
+                        <label>Valor (R$)</label>
+                        <input type="number" step="0.01" id="valor" required>
+                    </div>
+                    <div>
+                        <label>Data de Vencimento</label>
+                        <input type="date" id="data_vencimento" required>
+                    </div>
+                    <div>
+                        <label>Parcelas</label>
+                        <input type="number" id="parcelas" value="1" min="1">
+                    </div>
+                    <div>
+                        <label>Tipo</label>
+                        <select id="tipo">
+                            <option value="pagar">Contas a Pagar</option>
+                            <option value="receber">Contas a Receber</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="pendente">Pendente</option>
+                            <option value="pago">Pago / Recebido</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" id="btn-save" class="btn-add">Salvar Lançamento(s)</button>
+                <button type="button" id="btn-cancel" class="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </form>
+        </div>
+
+        <!-- Filtros e Busca -->
+        <div class="card">
+            <div class="form-grid">
+                <div>
+                    <label>Busca Geral</label>
+                    <input type="text" id="inputBusca" placeholder="Pesquisar..." onkeyup="filtrarTabela()">
+                </div>
+                <div>
+                    <label>Data Início</label>
+                    <input type="date" id="dataInicio" onchange="filtrarTabela()">
+                </div>
+                <div>
+                    <label>Data Fim</label>
+                    <input type="date" id="dataFim" onchange="filtrarTabela()">
+                </div>
             </div>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="text-sm font-bold text-slate-700">E-mail</label>
-                    <input type="email" id="login-email" placeholder="seu@email.com" onkeyup="if(event.key === 'Enter') document.getElementById('login-senha').focus()">
-                </div>
-                <div>
-                    <label class="text-sm font-bold text-slate-700">Senha</label>
-                    <input type="password" id="login-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') fazerLogin()">
-                </div>
-                <button id="btn-login" onclick="fazerLogin()" class="w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg mt-2">
-                    Entrar no Sistema
+        </div>
+
+        <!-- Ações em Massa -->
+        <div id="bulk-area" class="card" style="display: none; background: #fff5f5; border-left: 5px solid #ef4444;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="selected-count" style="font-weight: bold; color: #ef4444;">0 selecionados</span>
+                <button class="btn-logout-nav" onclick="deleteSelected()" style="background: #ef4444;">
+                    <i class="fas fa-trash"></i> Excluir Selecionados
                 </button>
             </div>
+        </div>
+
+        <!-- Tabela de Dados -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
+                        <th>Vencimento</th>
+                        <th>Entidade</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="financeiro-list">
+                    <!-- Conteúdo preenchido pelo financeiro.js -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Exportação -->
+        <div class="export-area">
+            <button class="btn-export btn-export-full" onclick="exportarPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar Relatório em PDF
+            </button>
         </div>
     </div>
 
-    <div id="tela-sistema" class="hidden">
-        
-        <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
-            <div class="flex items-center gap-4">
-                <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-wallet text-emerald-500"></i> Financeiro ERP ABP</h1>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
-                    <span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </nav>
+    <!-- Scripts de Lógica (Ordem Importante!) -->
+    <script src="js/supabase_config.js"></script> <!-- Configura o window.supabaseClient -->
+    <script src="js/financeiro.js"></script>      <!-- Contém handleSave, loadFinanceiro, etc -->
 
-        <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
-            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
-                <h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
-                <button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
-            </div>
-            <ul class="p-4 space-y-2 font-medium">
-                <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
-                <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
-                
-                <li><hr class="border-slate-700 my-4"></li>
-                
-                <li>
-                    <button id="btn-instalar" class="w-full text-left p-3 text-emerald-400 rounded hover:bg-slate-700 transition flex items-center gap-2">
-                        <i class="fas fa-mobile-alt w-6 text-center"></i> Instalar App
-                    </button>
-                </li>
-                
-                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6 text-center"></i> Sair do Sistema</a></li>
-            </ul>
-        </div>
-        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
-
-        <div class="container mx-auto px-4 pb-10 pt-24">
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div class="card border-l-4 border-emerald-500">
-                    <p class="text-gray-500 text-sm">Receitas (Pagas no Filtro)</p>
-                    <h2 id="dash-receita" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
-                </div>
-                <div class="card border-l-4 border-red-500">
-                    <p class="text-gray-500 text-sm">Despesas (Pagas no Filtro)</p>
-                    <h2 id="dash-despesa" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
-                </div>
-                <div class="card border-l-4 border-amber-500">
-                    <p class="text-gray-500 text-sm">Previsão (Pendentes no Filtro)</p>
-                    <h2 id="dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
-                </div>
-            </div>
-
-            <div class="flex gap-4 mb-6">
-                <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-list"></i> Ver Lançamentos
-                </button>
-                <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-plus-circle"></i> Novo Lançamento
-                </button>
-            </div>
-
-            <div class="card mb-8 hidden" id="aba-formulario">
-                <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
-                
-                <input type="hidden" id="f-editando-id">
-                <input type="hidden" id="f-editando-financa-id">
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                    <div class="md:col-span-2"><label>Descrição da Conta *</label><input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
-                    
-                    <div>
-                        <label>Tipo de Valor</label>
-                        <select id="f-tipo-calculo" onchange="ajustarLabelsValor()">
-                            <option value="total">Valor Total</option>
-                            <option value="parcela">Valor da Parcela</option>
-                        </select>
-                    </div>
-                    
-                    <div><label id="label-valor">Valor Total (R$) *</label><input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
-                    
-                    <div><label>Tipo de Operação</label>
-                        <select id="f-tipo">
-                            <option value="despesa">Despesa (Saída)</option>
-                            <option value="receita">Receita (Entrada)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label>Categoria</label>
-                        <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
-                        <datalist id="lista-categorias"></datalist>
-                    </div>
-
-                    <div><label>Status do Lançamento</label>
-                        <select id="f-status">
-                            <option value="aberto">Aberto</option>
-                            <option value="finalizado">Finalizado</option>
-                            <option value="cancelado">Cancelado</option>
-                        </select>
-                    </div>
-
-                    <div class="relative md:col-span-1">
-                        <label>Entidade / Cliente</label>
-                        <input type="text" id="f-entidade-busca" placeholder="Buscar..." autocomplete="off">
-                        <input type="hidden" id="f-entidade-id">
-                        <ul id="lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden custom-scroll"></ul>
-                    </div>
-                    
-                    <div>
-                        <label>Frequência / Recorrência</label>
-                        <select id="f-recorrencia">
-                            <option value="1">Mensal</option>
-                            <option value="3">Trimestral</option>
-                            <option value="6">Semestral</option>
-                            <option value="12">Anual</option>
-                            <option value="diario">Diário</option> 
-                        </select>
-                    </div>
-
-                    <div class="p-2 rounded highlight-parcelas">
-                        <label class="highlight-label"><i class="fas fa-layer-group"></i> N° de Parcelas *</label>
-                        <input type="number" id="f-parcelas" value="1" min="1" class="border-blue-300 font-bold text-blue-700">
-                    </div>
-
-                    <div><label>Data Vencimento *</label><input type="date" id="f-vencimento"></div>
-                    
-                    <div><label>Data de Pagamento</label><input type="date" id="f-data-pagamento"></div>
-
-                    <div class="md:col-span-4">
-                        <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
-                            <button onclick="iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
-                                <i class="fas fa-camera"></i> Ler Código
-                            </button>
-                        </div>
-                        
-                        <div id="camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
-                            <div id="camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
-                            <button onclick="pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
-                        <div class="drop-zone" id="drop-boleto" onclick="document.getElementById('f-boleto').click()">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-                            <input type="file" id="f-boleto" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-boleto')">
-                            <p id="nome-boleto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
-                        <div class="drop-zone" id="drop-comprovante" onclick="document.getElementById('f-comprovante').click()">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-                            <input type="file" id="f-comprovante" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-comprovante')">
-                            <p id="nome-comprovante" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flex gap-4 mt-6">
-                    <button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
-                        <i class="fas fa-save"></i> Gravar Lançamento
-                    </button>
-                    <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-
-            <div class="card" id="aba-listagem">
-                <div class="flex justify-between items-center mb-4 border-b pb-2">
-                    <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
-                    <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm shadow">
-                        <i class="fas fa-trash"></i> Excluir Selecionados
-                    </button>
-                </div>
-
-                <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="text-xs">Pesquisar Descrição</label>
-                        <input type="text" id="filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key === 'Enter') loadParcelas()">
-                    </div>
-                    <div>
-                        <label class="text-xs">Filtrar Categoria</label>
-                        <select id="filtro-categoria" onchange="loadParcelas()">
-                            <option value="">Todas</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs">Data Início</label>
-                        <input type="date" id="filtro-inicio" onchange="loadParcelas()">
-                    </div>
-                    <div>
-                        <label class="text-xs">Data Fim</label>
-                        <input type="date" id="filtro-fim" onchange="loadParcelas()">
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition" title="Filtrar">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        <button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition" title="Limpar Filtros">
-                            <i class="fas fa-eraser"></i>
-                        </button>
-                        <button onclick="exportarRelatorioCSV()" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 shadow transition flex items-center gap-2" title="Exportar para Excel/CSV">
-                            <i class="fas fa-file-csv"></i> Exportar
-                        </button>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto mb-6">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
-                                <th class="p-3 w-10 text-center"><input type="checkbox" id="check-all" onclick="toggleTodosChecks(this)"></th>
-                                <th class="p-3">Datas (Venc. / Pag.)</th>
-                                <th class="p-3">Descrição / Anexos</th>
-                                <th class="p-3">Nº Parcela</th>
-                                <th class="p-3">Valor (R$)</th>
-                                <th class="p-3 text-center">Status</th>
-                                <th class="p-3 text-center">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-parcelas" class="text-sm"></tbody>
-                    </table>
-                </div>
-
-                <div class="mt-8 bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm hidden" id="secao-grafico">
-                    <h4 class="font-bold text-slate-700 mb-6 text-center text-lg"><i class="fas fa-chart-pie text-blue-500"></i> Resumo Financeiro do Filtro Atual</h4>
-                    <div class="relative w-full max-w-md mx-auto h-64">
-                        <canvas id="graficoFinanceiro"></canvas>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div> 
 </body>
 </html>
