@@ -49,7 +49,7 @@ async function handleLogin() {
     if (error) throw error;
 
     if (data.user) {
-      window.location.href = 'index.html';
+      window.location.href = 'redirecionar.html';
     }
   } catch (error) {
     alert('Erro ao entrar: ' + error.message);
@@ -61,7 +61,7 @@ async function handleSocialLogin(provider) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: window.location.origin + '/index.html'
+        redirectTo: window.location.origin + '/redirecionar.html'
       }
     });
     if (error) throw error;
