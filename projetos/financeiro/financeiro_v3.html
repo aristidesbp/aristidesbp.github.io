@@ -101,7 +101,8 @@
     </div>
 
     <div id="tela-sistema" class="hidden">
-        
+
+      <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->  
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
             <div class="flex items-center gap-4">
                 <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
@@ -114,6 +115,8 @@
             </button>
         </nav>
 
+      <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥--> 
+        
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
             <div class="p-6 border-b border-slate-700 flex justify-between items-center">
                 <h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
@@ -122,6 +125,8 @@
             <ul class="p-4 space-y-2 font-medium">
                 <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
                 <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
+                <li><a href="#" onclick="alternarAba('entidades'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> entidades</a></li>
+               
                 <li><hr class="border-slate-700 my-4"></li>
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
             </ul>
