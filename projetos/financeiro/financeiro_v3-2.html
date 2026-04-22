@@ -635,7 +635,31 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                 }
             }
         }
-        // --- FIM FUNÇÕES DE ÁUDIO ---
+        /*
+        
+        // --- FUNÇÕES DE ÁUDIO ---
+        async function toggleGravação() {
+            const btn = document.getElementById('btn-audio');
+            const preview = document.getElementById('audio-preview');
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
+            } else {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    preview.src = URL.createObjectURL(recordedAudioBlob);
+                    preview.style.display = 'block';
+                };
+                mediaRecorder.start();
+                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
+            }
+        }
+        
+        */ 
 
         
     // ====================================================================
