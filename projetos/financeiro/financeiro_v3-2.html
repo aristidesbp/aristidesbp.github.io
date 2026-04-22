@@ -22,9 +22,13 @@ marque todos:
 Enable Data API && 
 Automatically expose new tables and functions
 Enable automatic RLS
-
+    
+🟥 Em (Authentication/URL Configuration) coloque 0 seu dominio  em :Site URL
+    
 🟥 No script abaixo substitua a url e a chave pelas do seu porjeto.
   supabaseUrl: Settings/Data API/API URL
+  supabaseKey : Settings/API Keys/Legacy anon, service_role API keys
+
 -->
 <script>
 // SUPABASE_CONFIG
@@ -1176,5 +1180,15 @@ WHERE categoria IS NULL;
 UPDATE public.financas 
 SET status_lancamento = 'aberto' 
 WHERE status_lancamento IS NULL;
+
+    -- Na tabela financas
+ALTER TABLE public.financas
+ADD COLUMN IF NOT EXISTS telefone TEXT,
+ADD COLUMN IF NOT EXISTS email TEXT;
+
+-- Na tabela parcelas (opcional, para histórico de áudio)
+ALTER TABLE public.parcelas
+ADD COLUMN IF NOT EXISTS audio_obs_url TEXT;
+    
     -->
 </html>
