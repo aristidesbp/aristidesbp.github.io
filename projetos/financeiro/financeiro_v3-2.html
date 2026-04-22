@@ -16,11 +16,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 
-<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<!-- BLOCO 02: BIBLIOTECAS DE FUNCIONALIDADES -->     
-<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    
+
 
     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
@@ -220,23 +216,28 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
 
 <!-- TIPO (receita ou despesa) #####################################-->  
-                    <div><label>Tipo de Operação</label>
-                        <select id="f-tipo">
-                            <option value="despesa">Despesa (Saída)</option>
-                            <option value="receita">Receita (Entrada)</option>
-                        </select>
-                    </div>
+ <div><label>Tipo de Operação</label>
+ <select id="f-tipo">
+ <option value="despesa">Despesa (Saída)</option>
+ <option value="receita">Receita (Entrada)</option>
+ </select>
+ </div>
 
+<!-- CATEGORIAS #####################################-->
                     <div>
                         <label>Categoria</label>
                         <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
                         <datalist id="lista-categorias"></datalist>
                     </div>
 
+
+<!-- TELEFONE #####################################-->
                     <div><label>Telefone para Contato</label><input type="tel" id="f-telefone" placeholder="(11) 98765-4321"></div>
-                    
+
+<!-- EMAIL #####################################-->
                     <div><label>E-mail para Contato</label><input type="email" id="f-email" placeholder="contato@empresa.com"></div>
 
+<!-- STATUS #####################################-->
                     <div><label>Status do Lançamento</label>
                         <select id="f-status">
                             <option value="aberto">Aberto</option>
@@ -245,25 +246,30 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                         </select>
                     </div>
 
-                    <div class="relative md:col-span-1">
-                        <label>Entidade / Cliente</label>
-                        <input type="text" id="f-entidade-busca" placeholder="Buscar..." autocomplete="off">
-                        <input type="hidden" id="f-entidade-id">
-                        <ul id="lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden custom-scroll"></ul>
-                    </div>
-                    
-                    <div>
-                        <label>Frequência / Recorrência</label>
-                        <select id="f-recorrencia">
-                            <option value="1">Mensal</option>
-                            <option value="3">Trimestral</option>
-                            <option value="6">Semestral</option>
-                            <option value="12">Anual</option>
-                            <option value="diario">Diário</option> 
-                        </select>
-                    </div>
+    
+<!-- ENTIDADES #####################################-->
+<div class="relative md:col-span-1">
+<label>Entidade / Cliente</label>
+<input type="text" id="f-entidade-busca" placeholder="Buscar..." autocomplete="off">
+<input type="hidden" id="f-entidade-id">
+<ul id="lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden custom-scroll"></ul>
+</div>
 
-                    <div class="p-2 rounded highlight-parcelas">
+
+<!-- FREQUÊNCIA #####################################-->
+<div>
+<label>Frequência / Recorrência</label>
+<select id="f-recorrencia">
+    <option value="1">Mensal</option>
+    <option value="3">Trimestral</option>
+    <option value="6">Semestral</option>
+    <option value="12">Anual</option>
+    <option value="diario">Diário</option> 
+</select>
+</div>
+
+   <!-- NÚMERO DE PARCELAS #####################################-->
+    <div class="p-2 rounded highlight-parcelas">
                         <label class="highlight-label"><i class="fas fa-layer-group"></i> N° de Parcelas *</label>
                         <input type="number" id="f-parcelas" value="1" min="1" class="border-blue-300 font-bold text-blue-700">
                     </div>
@@ -272,64 +278,64 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                     
                     <div><label>Data de Pagamento</label><input type="date" id="f-data-pagamento"></div>
 
-                    
-<!--🍐🍐🍐🍐🍐🍐🍐🍐🍐🍐🍐-->                     
-   <div class="md:col-span-4">
-                        <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
-                            <button onclick="iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
-                                <i class="fas fa-camera"></i> Ler Código
-                            </button>
-                        </div>
+    
+
+<!--🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨-->
+<!-- CÓDIGO DE BARRAS -->
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+                                   
+<div class="md:col-span-4">
+<label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
+<div class="flex gap-2">
+<input type="text" id="f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
+<button onclick="iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
+<i class="fas fa-camera"></i> Ler Código
+</button>
+</div>
                         
-                        <div id="camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
-                            <div id="camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
-                            <button onclick="pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-   </div>                 
-<!--🍐🍐🍐🍐🍐🍐🍐🍐🍐🍐🍐-->                    
+<div id="camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+<div id="camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+<button onclick="pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+<i class="fas fa-times"></i>
+</button>
+</div>
+</div>                 
+                 
                     
-                    
-                    
-                    
-      
+<!--🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨-->                  
+<!-- UPLOAD DE BOLETOS -->                  
+<div class="md:col-span-2">
+<label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
+<div class="drop-zone" id="drop-boleto" onclick="document.getElementById('f-boleto').click()">
+<i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+<p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+<input type="file" id="f-boleto" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-boleto')">
+<p id="nome-boleto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+</div>
+</div>
 
-
-
-
-<!--#####################################-->
-                    
-                    <div class="md:col-span-2">
-                        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
-                        <div class="drop-zone" id="drop-boleto" onclick="document.getElementById('f-boleto').click()">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-                            <input type="file" id="f-boleto" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-boleto')">
-                            <p id="nome-boleto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
-                        </div>
-                    </div>
-<!--#####################################-->
-                    <div class="md:col-span-2">
-                        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
-                        <div class="drop-zone" id="drop-comprovante" onclick="document.getElementById('f-comprovante').click()">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-                            <input type="file" id="f-comprovante" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-comprovante')">
-                            <p id="nome-comprovante" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
-                        </div>
-                    </div>
-
-    <!--#####################################-->
-                    <div class="md:col-span-4">
-                        <label><i class="fas fa-microphone"></i> Gravar Observação em Áudio</label>
-                        <button type="button" class="w-full border-2 border-dashed border-slate-300 p-3 rounded bg-slate-50 text-slate-500 font-bold hover:bg-slate-100 transition" id="btn-audio-obs" onclick="toggleGravacaoAudio()">
-                            <i class="fas fa-microphone"></i> Gravar Áudio
-                        </button>
-                        <audio id="audio-preview-obs" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
-                    </div>
+<!--🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨-->
+<!-- UPLOAD DE COMPROVANTES -->
+<div class="md:col-span-2">
+<label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
+<div class="drop-zone" id="drop-comprovante" onclick="document.getElementById('f-comprovante').click()">
+<i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+<p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+<input type="file" id="f-comprovante" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-comprovante')">
+<p id="nome-comprovante" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+</div>
+</div>
+    
+<!--🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨-->
+<!-- GRAVAR ÁUDIO -->
+<div class="md:col-span-4">
+<label><i class="fas fa-microphone"></i> Gravar Observação em Áudio</label>
+<button type="button" class="w-full border-2 border-dashed border-slate-300 p-3 rounded bg-slate-50 text-slate-500 font-bold hover:bg-slate-100 transition" id="btn-audio-obs" onclick="toggleGravacaoAudio()">
+<i class="fas fa-microphone"></i> Gravar Áudio
+</button>
+<audio id="audio-preview-obs" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
+</div>
                 
 
 
