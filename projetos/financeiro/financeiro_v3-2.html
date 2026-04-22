@@ -8,18 +8,24 @@
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!-- BLOCO 01: SUPABASE CONFIG -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <!--
 CRIAR UMA CONTA E UM PROJETO NO SUPABASE, É GRÁTIS:
 https://supabase.com
     
-Crie uma conta
-Clique em New Project
-Escolha:
+🟥 Clique em New Project, Escolha:
 Nome do projeto: nome_do_seu_projeto
 Senha do banco: ***********
 Região: brasil   
+Region: Brasil 
+marque todos:
+Enable Data API && 
+Automatically expose new tables and functions
+Enable automatic RLS
+
+🟥 No script abaixo substitua a url e a chave pelas do seu porjeto.
+  supabaseUrl: Settings/Data API/API URL
 -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 // SUPABASE_CONFIG
 const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
