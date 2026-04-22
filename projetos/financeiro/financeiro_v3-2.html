@@ -6,8 +6,8 @@
 <title>Financeiro Completo - ERP ABP</title>
     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BLOCO 01: SUPABASE CONFIG -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
-<!-- SUPABASE -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 // SUPABASE_CONFIG
@@ -17,16 +17,16 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BLOCO 02: BIBLIOTECAS DE FUNCIONALIDADES -->     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
-<!-- BIBLIOTECA DE FUNCIONALIDADES -->   
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
 
     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BLOCO 03: CSS  -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
     
-<!-- CSS  -->  
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -118,6 +118,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <body>
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BLOCO 04: TELA DE LOGIN -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
     
     <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
@@ -145,10 +146,12 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
     </div>
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BLOCO 05 : TELA DO SISTEMA -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <div id="tela-sistema" class="hidden">
     
 <!--#####################################-->
+<!-- BLOCO 06: NAVBAR -->  
 <!--#####################################-->
     
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
@@ -163,7 +166,8 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             </button>
         </nav>
 
-<!--#####################################-->    
+<!--#####################################--> 
+<!-- BLOCO 07 : MENU LATERAL -->  
 <!--#####################################-->     
        
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
@@ -179,15 +183,17 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             </ul>
         </div>
 
+    
 <!--#####################################-->    
+<!-- BLOCO 08 -->  
 <!--#####################################-->   
-
-        
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
         <div class="container mx-auto px-4 pb-10 pt-24">
-            
-            
 
+            
+<!--#####################################-->    
+<!-- BLOCO 09 : FORMULÁRIO -->  
+<!--#####################################-->   
             
             <div class="card mb-8 hidden" id="aba-formulario">
                 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
@@ -314,8 +320,13 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                         Cancelar
                     </button>
                 </div>
-            </div>
+            </div><!--fim do formulario-->
 
+
+<!--#####################################-->    
+<!-- BLOCO 10 -->  
+<!--#####################################-->   
+            
             <div class="card" id="aba-listagem">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
@@ -391,8 +402,11 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
                 </div><!-- fim print-area -->
             </div><!-- fim card aba-listagem -->
-        </div>
-    </div> <!-- tela do sistema-->
+
+<!--#####################################-->    
+<!--#####################################-->               
+    </div><!-- fim do container -->
+    </div> <!-- fim da tela do sistema-->
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
