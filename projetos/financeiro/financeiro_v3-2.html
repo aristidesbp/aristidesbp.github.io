@@ -165,15 +165,8 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mb-6">
-                <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-list"></i> Ver Lançamentos
-                </button>
-                <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-plus-circle"></i> Novo Lançamento
-                </button>
-            </div>
 
+            
             <div class="card mb-8 hidden" id="aba-formulario">
                 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
                 
@@ -205,6 +198,10 @@
                         <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
                         <datalist id="lista-categorias"></datalist>
                     </div>
+
+                    <div><label>Telefone para Contato</label><input type="tel" id="f-telefone" placeholder="(11) 98765-4321"></div>
+                    
+                    <div><label>E-mail para Contato</label><input type="email" id="f-email" placeholder="contato@empresa.com"></div>
 
                     <div><label>Status do Lançamento</label>
                         <select id="f-status">
@@ -276,6 +273,14 @@
                             <input type="file" id="f-comprovante" accept="image/*,.pdf" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-comprovante')">
                             <p id="nome-comprovante" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
                         </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label><i class="fas fa-microphone"></i> Gravar Observação em Áudio</label>
+                        <button type="button" class="w-full border-2 border-dashed border-slate-300 p-3 rounded bg-slate-50 text-slate-500 font-bold hover:bg-slate-100 transition" id="btn-audio-obs" onclick="toggleGravacaoAudio()">
+                            <i class="fas fa-microphone"></i> Gravar Áudio
+                        </button>
+                        <audio id="audio-preview-obs" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
                     </div>
                 </div>
                 
@@ -375,6 +380,12 @@
 
         let entidadesCache = [];
         let html5QrCode = null;
+        
+        // --- Variáveis para gravação de áudio ---
+        let recordedAudioBlob = null;
+        let mediaRecorder;
+        let audioChunks = [];
+        // --- Fim variáveis áudio ---
 
         
 
@@ -394,26 +405,17 @@
         function alternarAba(abaAtiva) {
             const form = document.getElementById('aba-formulario');
             const lista = document.getElementById('aba-listagem');
-            const btnForm = document.getElementById('btn-aba-formulario');
-            const btnLista = document.getElementById('btn-aba-listagem');
-
-            const classesVerde = ['bg-emerald-500', 'text-white', 'hover:bg-emerald-600'];
-            const classesCinza = ['bg-slate-200', 'text-slate-700', 'hover:bg-slate-300'];
-
-            btnForm.classList.remove(...classesVerde, ...classesCinza);
-            btnLista.classList.remove(...classesVerde, ...classesCinza);
 
             if (abaAtiva === 'formulario') {
                 form.classList.remove('hidden');
                 lista.classList.add('hidden');
-                btnForm.classList.add(...classesVerde);
-                btnLista.classList.add(...classesCinza);
             } else {
                 form.classList.add('hidden');
                 lista.classList.remove('hidden');
-                btnLista.classList.add(...classesVerde);
-                btnForm.classList.add(...classesCinza);
+                loadParcelas();
             }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ====================================================================
@@ -485,7 +487,6 @@
         async function init() {
             loadEntidades();
             loadCategoriasUnicas();
-            loadDashboard();
             loadParcelas();
         }
 
@@ -522,6 +523,34 @@
                 campoTexto.innerHTML = '';
             }
         }
+
+        // --- FUNÇÕES DE GRAVAÇÃO DE ÁUDIO ---
+        async function toggleGravacaoAudio() {
+            const btn = document.getElementById('btn-audio-obs');
+            const preview = document.getElementById('audio-preview-obs');
+            
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
+            } else {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        preview.src = URL.createObjectURL(recordedAudioBlob);
+                        preview.style.display = 'block';
+                    };
+                    mediaRecorder.start();
+                    btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
+                } catch (err) {
+                    alert("Erro ao acessar o microfone: " + err.message);
+                }
+            }
+        }
+        // --- FIM FUNÇÕES DE ÁUDIO ---
 
         
     // ====================================================================
@@ -598,19 +627,6 @@
             } else { document.getElementById('camera-container').classList.add('hidden'); }
         }
 
-        async function loadDashboard() {
-            const { data: parcelas } = await _supabase.from('parcelas').select('*, financas(tipo)');
-            if(!parcelas) return;
-            let receita = 0, despesa = 0, pendente = 0;
-            parcelas.forEach(p => {
-                const valor = parseFloat(p.valor_parcela || 0);
-                if (p.status === 'pago') { p.financas.tipo === 'receita' ? receita += valor : despesa += valor; }
-                else { pendente += valor; }
-            });
-            document.getElementById('dash-receita').innerText = `R$ ${receita.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-            document.getElementById('dash-despesa').innerText = `R$ ${despesa.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-            document.getElementById('dash-pendente').innerText = `R$ ${pendente.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
-        }
 
         async function gerarLancamentoCompleto() {
             const btn = document.getElementById('btn-salvar');
@@ -629,6 +645,8 @@
                 const dataPagamentoForm = document.getElementById('f-data-pagamento').value;
                 const entidade = document.getElementById('f-entidade-id').value || null;
                 const barras = document.getElementById('f-barras').value;
+                const telefone = document.getElementById('f-telefone').value || null;
+                const email = document.getElementById('f-email').value || null;
                 
                 const fileBoleto = document.getElementById('f-boleto').files[0];
                 const fileComprovante = document.getElementById('f-comprovante').files[0];
@@ -662,9 +680,16 @@
                     if(!error) comprovanteUrl = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
                 }
 
+                let audioUrl = null;
+                if (recordedAudioBlob) {
+                    const audioName = `obs_audio_${Date.now()}.webm`;
+                    const { error } = await _supabase.storage.from('comprovantes').upload(`public/${audioName}`, recordedAudioBlob);
+                    if(!error) audioUrl = _supabase.storage.from('comprovantes').getPublicUrl(`public/${audioName}`).data.publicUrl;
+                }
+
                 if (editandoId) {
                     await _supabase.from('financas').update({
-                        descricao: desc, tipo: tipo, categoria: categoria, status_lancamento: statusLancamento, entidade_id: entidade
+                        descricao: desc, tipo: tipo, categoria: categoria, status_lancamento: statusLancamento, entidade_id: entidade, telefone: telefone, email: email
                     }).eq('id', financaId);
 
                     const payloadUpdate = {
@@ -676,6 +701,7 @@
                     };
                     if (boletoUrl) payloadUpdate.boleto_url = boletoUrl;
                     if (comprovanteUrl) payloadUpdate.comprovante_url = comprovanteUrl;
+                    if (audioUrl) payloadUpdate.audio_obs_url = audioUrl;
 
                     const { error: errUpdate } = await _supabase.from('parcelas').update(payloadUpdate).eq('id', editandoId);
                     if (errUpdate) throw errUpdate;
@@ -683,7 +709,7 @@
                     alert("Parcela atualizada com sucesso!");
                 } else {
                     const { data: financa, error: errF } = await _supabase.from('financas').insert([{
-                        descricao: desc, valor_total: valorTotal, tipo, categoria, status_lancamento: statusLancamento, num_parcelas: qtd, entidade_id: entidade
+                        descricao: desc, valor_total: valorTotal, tipo, categoria, status_lancamento: statusLancamento, num_parcelas: qtd, entidade_id: entidade, telefone: telefone, email: email
                     }]).select().single();
                     if(errF) throw errF;
 
@@ -705,7 +731,8 @@
                             data_pagamento: dataPagamentoForm || null,
                             codigo_barra: barras,
                             boleto_url: boletoUrl,
-                            comprovante_url: comprovanteUrl
+                            comprovante_url: comprovanteUrl,
+                            audio_obs_url: audioUrl
                         });
                     }
 
@@ -718,7 +745,6 @@
                 // Em vez de recarregar a página, podemos simplesmente voltar para a lista
                 cancelarEdicao();
                 loadParcelas();
-                loadDashboard();
                 alternarAba('listagem');
                 btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Lançamento';
 
@@ -742,7 +768,7 @@
             const dataInicio = document.getElementById('filtro-inicio').value;
             const dataFim = document.getElementById('filtro-fim').value;
 
-            let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, entidade_id), entidades(nome_completo, telefone, email)').order('data_vencimento', { ascending: true });
+            let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, telefone, email)').order('data_vencimento', { ascending: true });
 
             if (busca) query = query.ilike('financas.descricao', `%${busca}%`);
             if (categoria) query = query.eq('financas.categoria', categoria);
@@ -783,17 +809,16 @@
                 const iconeComp = p.comprovante_url ? `<a href="${p.comprovante_url}" target="_blank" class="text-emerald-500 hover:text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs inline-block"><i class="fas fa-receipt"></i> Recibo</a>` : '';
                 const txtBarras = p.codigo_barra ? `<div class="text-gray-400 font-mono text-[10px] mt-2 break-all bg-slate-50 p-1 rounded"><i class="fas fa-barcode"></i> ${p.codigo_barra}</div>` : '';
                 
-                // Dados da entidade/contato
-                const nomeEntidade = p.entidades?.nome_completo || 'Sem Entidade';
-                const telefoneEntidade = p.entidades?.telefone || '';
-                const emailEntidade = p.entidades?.email || '';
+                // Dados de contato da financeira (agora vindo direto de financas)
+                const telefoneFinanca = p.financas?.telefone || '';
+                const emailFinanca = p.financas?.email || '';
                 
                 const botoesContato = `
-                    <div class="flex gap-2 mt-2 border-t pt-2">
-                        ${telefoneEntidade ? `<a href="https://wa.me/${telefoneEntidade.replace(/\\D/g, '')}" target="_blank" class="flex-1 bg-green-100 text-green-600 px-2 py-1.5 rounded hover:bg-green-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
+                    <div class="flex gap-2">
+                        ${telefoneFinanca ? `<a href="https://wa.me/${telefoneFinanca.replace(/\D/g, '')}" target="_blank" class="flex-1 bg-green-100 text-green-600 px-2 py-1.5 rounded hover:bg-green-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
                             <i class="fas fa-whatsapp"></i> WhatsApp
                         </a>` : ''}
-                        ${emailEntidade ? `<a href="mailto:${emailEntidade}" class="flex-1 bg-blue-100 text-blue-600 px-2 py-1.5 rounded hover:bg-blue-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
+                        ${emailFinanca ? `<a href="mailto:${emailFinanca}" class="flex-1 bg-blue-100 text-blue-600 px-2 py-1.5 rounded hover:bg-blue-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
                             <i class="fas fa-envelope"></i> E-mail
                         </a>` : ''}
                     </div>
@@ -829,11 +854,11 @@
                         </p>
                     </div>
                     
-                    ${nomeEntidade !== 'Sem Entidade' ? `
+                    ${telefoneFinanca || emailFinanca ? `
                         <div class="bg-blue-50 rounded p-2 mb-3 text-xs border border-blue-100">
-                            <p class="font-bold text-blue-900 mb-1"><i class="fas fa-user-circle text-blue-500 mr-1"></i>${nomeEntidade}</p>
-                            ${telefoneEntidade ? `<p class="text-blue-700"><i class="fas fa-phone text-blue-500 mr-1"></i>${telefoneEntidade}</p>` : ''}
-                            ${emailEntidade ? `<p class="text-blue-700 break-all"><i class="fas fa-envelope text-blue-500 mr-1"></i>${emailEntidade}</p>` : ''}
+                            <p class="font-bold text-blue-900 mb-1"><i class="fas fa-phone-alt text-blue-500 mr-1"></i>Contato</p>
+                            ${telefoneFinanca ? `<p class="text-blue-700"><i class="fas fa-phone text-blue-500 mr-1"></i>${telefoneFinanca}</p>` : ''}
+                            ${emailFinanca ? `<p class="text-blue-700 break-all"><i class="fas fa-envelope text-blue-500 mr-1"></i>${emailFinanca}</p>` : ''}
                         </div>
                     ` : ''}
                     
@@ -868,6 +893,8 @@
                 document.getElementById('f-tipo').value = p.financas.tipo;
                 document.getElementById('f-categoria').value = p.financas.categoria || 'Geral';
                 document.getElementById('f-status').value = p.financas.status_lancamento || 'aberto';
+                document.getElementById('f-telefone').value = p.financas.telefone || '';
+                document.getElementById('f-email').value = p.financas.email || '';
                 
                 document.getElementById('f-tipo-calculo').value = 'parcela';
                 ajustarLabelsValor();
@@ -900,6 +927,8 @@
             document.getElementById('f-desc').value = '';
             document.getElementById('f-valor').value = '';
             document.getElementById('f-categoria').value = 'Geral';
+            document.getElementById('f-telefone').value = '';
+            document.getElementById('f-email').value = '';
             document.getElementById('f-vencimento').value = '';
             document.getElementById('f-data-pagamento').value = '';
             document.getElementById('f-barras').value = '';
@@ -908,6 +937,13 @@
             document.getElementById('nome-comprovante').innerHTML = '';
             document.getElementById('f-boleto').value = '';
             document.getElementById('f-comprovante').value = '';
+            
+            // Limpar áudio
+            recordedAudioBlob = null;
+            document.getElementById('audio-preview-obs').style.display = 'none';
+            document.getElementById('btn-audio-obs').innerHTML = '<i class="fas fa-microphone"></i> Gravar Áudio';
+            
+            alternarAba('listagem');
         }
 
         function imprimirRelatorio() {
@@ -946,7 +982,6 @@
                 if (!error) {
                     alert('Excluído com sucesso!');
                     loadParcelas();
-                    loadDashboard();
                 } else {
                     alert('Erro ao excluir: ' + error.message);
                 }
@@ -1044,17 +1079,8 @@ ALTER TABLE public.financas
 ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' 
 CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
 
--- ============================================================================
--- ATUALIZAÇÃO DA TABELA 'entidades' - ADICIONAR CAMPOS DE CONTATO
--- ============================================================================
-
--- Adiciona campo de telefone
-ALTER TABLE public.entidades
-ADD COLUMN IF NOT EXISTS telefone TEXT;
-
--- Adiciona campo de email
-ALTER TABLE public.entidades
-ADD COLUMN IF NOT EXISTS email TEXT;
+-- 3. Os campos 'telefone' e 'email' já existem na tabela financas!
+-- Nenhuma alteração necessária para esses campos.
 
 -- ============================================================================
 -- (OPCIONAL) ATUALIZAR REGISTROS ANTIGOS

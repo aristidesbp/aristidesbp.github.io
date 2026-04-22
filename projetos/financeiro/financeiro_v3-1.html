@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro Completo - ERP ABP</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financeiro Completo - ERP ABP</title>
+<script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -742,7 +742,7 @@
             const dataInicio = document.getElementById('filtro-inicio').value;
             const dataFim = document.getElementById('filtro-fim').value;
 
-            let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, entidade_id), entidades(nome_completo, telefone, email)').order('data_vencimento', { ascending: true });
+            let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, telefone, email)').order('data_vencimento', { ascending: true });
 
             if (busca) query = query.ilike('financas.descricao', `%${busca}%`);
             if (categoria) query = query.eq('financas.categoria', categoria);
@@ -783,17 +783,16 @@
                 const iconeComp = p.comprovante_url ? `<a href="${p.comprovante_url}" target="_blank" class="text-emerald-500 hover:text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs inline-block"><i class="fas fa-receipt"></i> Recibo</a>` : '';
                 const txtBarras = p.codigo_barra ? `<div class="text-gray-400 font-mono text-[10px] mt-2 break-all bg-slate-50 p-1 rounded"><i class="fas fa-barcode"></i> ${p.codigo_barra}</div>` : '';
                 
-                // Dados da entidade/contato
-                const nomeEntidade = p.entidades?.nome_completo || 'Sem Entidade';
-                const telefoneEntidade = p.entidades?.telefone || '';
-                const emailEntidade = p.entidades?.email || '';
+                // Dados de contato da financeira (agora vindo direto de financas)
+                const telefoneFinanca = p.financas?.telefone || '';
+                const emailFinanca = p.financas?.email || '';
                 
                 const botoesContato = `
                     <div class="flex gap-2 mt-2 border-t pt-2">
-                        ${telefoneEntidade ? `<a href="https://wa.me/${telefoneEntidade.replace(/\\D/g, '')}" target="_blank" class="flex-1 bg-green-100 text-green-600 px-2 py-1.5 rounded hover:bg-green-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
+                        ${telefoneFinanca ? `<a href="https://wa.me/${telefoneFinanca.replace(/\\D/g, '')}" target="_blank" class="flex-1 bg-green-100 text-green-600 px-2 py-1.5 rounded hover:bg-green-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
                             <i class="fas fa-whatsapp"></i> WhatsApp
                         </a>` : ''}
-                        ${emailEntidade ? `<a href="mailto:${emailEntidade}" class="flex-1 bg-blue-100 text-blue-600 px-2 py-1.5 rounded hover:bg-blue-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
+                        ${emailFinanca ? `<a href="mailto:${emailFinanca}" class="flex-1 bg-blue-100 text-blue-600 px-2 py-1.5 rounded hover:bg-blue-500 hover:text-white transition text-xs text-center flex items-center justify-center gap-1">
                             <i class="fas fa-envelope"></i> E-mail
                         </a>` : ''}
                     </div>
@@ -829,11 +828,11 @@
                         </p>
                     </div>
                     
-                    ${nomeEntidade !== 'Sem Entidade' ? `
+                    ${telefoneFinanca || emailFinanca ? `
                         <div class="bg-blue-50 rounded p-2 mb-3 text-xs border border-blue-100">
-                            <p class="font-bold text-blue-900 mb-1"><i class="fas fa-user-circle text-blue-500 mr-1"></i>${nomeEntidade}</p>
-                            ${telefoneEntidade ? `<p class="text-blue-700"><i class="fas fa-phone text-blue-500 mr-1"></i>${telefoneEntidade}</p>` : ''}
-                            ${emailEntidade ? `<p class="text-blue-700 break-all"><i class="fas fa-envelope text-blue-500 mr-1"></i>${emailEntidade}</p>` : ''}
+                            <p class="font-bold text-blue-900 mb-1"><i class="fas fa-phone-alt text-blue-500 mr-1"></i>Contato</p>
+                            ${telefoneFinanca ? `<p class="text-blue-700"><i class="fas fa-phone text-blue-500 mr-1"></i>${telefoneFinanca}</p>` : ''}
+                            ${emailFinanca ? `<p class="text-blue-700 break-all"><i class="fas fa-envelope text-blue-500 mr-1"></i>${emailFinanca}</p>` : ''}
                         </div>
                     ` : ''}
                     
@@ -1044,17 +1043,8 @@ ALTER TABLE public.financas
 ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' 
 CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
 
--- ============================================================================
--- ATUALIZAÇÃO DA TABELA 'entidades' - ADICIONAR CAMPOS DE CONTATO
--- ============================================================================
-
--- Adiciona campo de telefone
-ALTER TABLE public.entidades
-ADD COLUMN IF NOT EXISTS telefone TEXT;
-
--- Adiciona campo de email
-ALTER TABLE public.entidades
-ADD COLUMN IF NOT EXISTS email TEXT;
+-- 3. Os campos 'telefone' e 'email' já existem na tabela financas!
+-- Nenhuma alteração necessária para esses campos.
 
 -- ============================================================================
 -- (OPCIONAL) ATUALIZAR REGISTROS ANTIGOS
