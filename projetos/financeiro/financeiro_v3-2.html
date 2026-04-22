@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Financeiro Completo - ERP ABP</title>
     
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <!-- SUPABASE -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
@@ -15,14 +16,16 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 
-    
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <!-- BIBLIOTECA DE FUNCIONALIDADES -->   
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
 
     
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+    
 <!-- CSS  -->  
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -114,6 +117,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </head>
 <body>
 
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+    
     <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
         <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
             <div class="text-center mb-8">
@@ -138,8 +144,14 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
         </div>
     </div>
 
-    <div id="tela-sistema" class="hidden">
-        
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<div id="tela-sistema" class="hidden">
+    
+<!--#####################################-->
+<!-- HTML NAVBAR -->
+<!--#####################################-->
+    
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
             <div class="flex items-center gap-4">
                 <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
@@ -152,6 +164,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             </button>
         </nav>
 
+<!--#####################################-->    
+<!--#####################################-->     
+       
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
             <div class="p-6 border-b border-slate-700 flex justify-between items-center">
                 <h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
@@ -164,6 +179,11 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
             </ul>
         </div>
+
+<!--#####################################-->    
+<!--#####################################-->   
+
+        
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
 
         <div class="container mx-auto px-4 pb-10 pt-24">
@@ -388,8 +408,11 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                 </div><!-- fim print-area -->
             </div><!-- fim card aba-listagem -->
         </div>
-    </div> 
-    
+    </div> <!-- tela do sistema-->
+
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+  
     <script>
         // Configuração do Supabase
         let entidadesCache = [];
