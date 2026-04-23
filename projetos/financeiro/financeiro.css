@@ -1,0 +1,82 @@
+
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        /* Grid responsivo para cards */
+        @media (max-width: 640px) {
+            #lista-parcelas {
+                grid-template-columns: 1fr !important;
+            }
+            .card { padding: 16px; }
+        }
+        
+        @media (min-width: 641px) and (max-width: 1024px) {
+            #lista-parcelas {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            #lista-parcelas {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+        
+        .status-pago { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-pendente { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-atrasado { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; animation: pulse 2s infinite; }
+        
+        .highlight-parcelas { border: 2px solid #3b82f6 !important; background-color: #eff6ff !important; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        .highlight-label { color: #1d4ed8; font-weight: 900; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* Estilo para a zona de Drop */
+        .drop-zone { border: 2px dashed #cbd5e1; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; background-color: #f8fafc; }
+        .drop-zone:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+        .drop-zone.dragover { border-color: #3ecf8e; background-color: #ecfdf5; }
+
+        /* ============================================================
+           ESTILOS DE IMPRESSÃO
+        ============================================================ */
+        #print-cabecalho { display: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: fixed; top: 0; left: 0; width: 100%; padding: 20px; }
+
+            #print-cabecalho { display: block !important; }
+
+            /* Remove coluna de checkbox e coluna de ações */
+            th:first-child, td:first-child,
+            th:last-child,  td:last-child { display: none !important; }
+
+            /* Remove badges de anexo e código de barras */
+            a[href], .text-blue-500, .text-emerald-500,
+            div[class*="font-mono"] { display: none !important; }
+
+            table { border-collapse: collapse; width: 100%; font-size: 11px; }
+            th, td { border: 1px solid #cbd5e1 !important; padding: 6px 8px !important; }
+            thead tr { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            .status-pago, .status-pendente, .status-atrasado {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                animation: none !important;
+            }
+
+            /* Totais na impressão */
+            #totais-filtro { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+            #totais-filtro > div { border: 1px solid #cbd5e1 !important; padding: 8px; border-radius: 6px; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
