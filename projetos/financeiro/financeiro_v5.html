@@ -241,19 +241,31 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩--> 
 <!-- BLOCO_4.2: MENU LATERAL -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->     
-       
-        <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
-            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
-                <h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
-                <button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
-            </div>
-            <ul class="p-4 space-y-2 font-medium">
-                <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
-                <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
-                <li><hr class="border-slate-700 my-4"></li>
-                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
-            </ul>
-        </div>
+
+<!--####################################-->
+<!--  BLOCO_4.2.1: ABRIR CONTAINER -->   
+<!--####################################-->
+<div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
+
+<!--#############################-->
+<!--  BLOCO_4.2.2: FECHAR O MENU -->   
+<!--#############################-->
+<div class="p-6 border-b border-slate-700 flex justify-between items-center">             
+<h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
+<button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none">
+<i class="fas fa-times text-2xl"></i></button>
+</div>
+
+<!--#############################-->
+<!--  BLOCO_4.2.3: LINKS DO MENU -->   
+<!--#############################-->
+<ul class="p-4 space-y-2 font-medium">
+  <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
+  <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
+  <li><hr class="border-slate-700 my-4"></li>
+  <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
+</ul>
+</div>
 
     
     
