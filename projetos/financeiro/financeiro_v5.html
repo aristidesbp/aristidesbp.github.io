@@ -8,7 +8,14 @@
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!-- BLOCO_1: SUPABASE CONFIG -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<!--################################################-->
+<!--  BLOCO_1.1: IMPORTANDO BIBLIOTECAS DO SUPABASE -->   
+<!--################################################-->   
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<!--########################################-->
+<!--  BLOCO_1.2: COMO CRIAR CONTA E PROJETO -->   
+<!--########################################-->
 <!--
 CRIAR UMA CONTA E UM PROJETO NO SUPABASE, É GRÁTIS:
 https://supabase.com
@@ -28,9 +35,11 @@ Enable automatic RLS
 ⚠️ No script abaixo substitua a url e a chave pelas do seu porjeto.
   supabaseUrl: Settings/Data API/API URL
   supabaseKey : Settings/API Keys/Legacy anon, service_role API keys
-
 -->
-    
+
+<!--####################################-->
+<!--  BLOCO_1.3: SCRIPT SUPABASE_CONFIG -->   
+<!--####################################-->
 <script>
 // SUPABASE_CONFIG
 const supabaseUrl =
@@ -48,11 +57,16 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!-- BLOCO_2: CSS  -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-    
+<!--####################################-->
+<!--  BLOCO_2.1: IMPORTANDO BIBLIOTECAS -->   
+<!--####################################-->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<!--##################################-->
+<!--  BLOCO_2.2: CÓDIGO CSS NA PÁGINA -->   
+<!--##################################-->
     <style>
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); }
