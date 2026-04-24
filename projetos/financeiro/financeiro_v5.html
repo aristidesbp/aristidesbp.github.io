@@ -214,7 +214,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
             
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->    
-<!-- BLOCO_4.3 : FORMULÁRIO -->  
+<!-- BLOCO_4.3: FORMULÁRIO -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->   
     
 <!--###########################################-->  
@@ -427,10 +427,9 @@ Cancelar
 
 
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-<!-- PDF -->   
+<!-- BLOCO_4.4: GERAR PDF -->   
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-    
-            <div class="card" id="aba-listagem">
+ <div class="card" id="aba-listagem">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
                     <div class="flex gap-2">
@@ -439,50 +438,80 @@ Cancelar
                         </button>
                         
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-<!-- excluir múltiplos -->
+<!--  BLOCO_4.5: EXCLUIR MÚLTIPLOS  -->
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->                    
-    
-                        <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
+    <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
                             <i class="fas fa-trash"></i> Excluir Selecionados
                         </button>
                     </div>
                 </div>
 
+     
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-<!-- campo de busca/ filtro -->
+<!-- BLOCO_4.5: FILTRO -->
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-            
-                <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="text-xs">Pesquisar Descrição</label>
-                        <input type="text" id="filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key === 'Enter') loadParcelas()">
-                    </div>
-                    <div>
-                        <label class="text-xs">Filtrar Categoria</label>
-                        <select id="filtro-categoria" onchange="loadParcelas()">
-                            <option value="">Todas</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs">Data Início</label>
-                        <input type="date" id="filtro-inicio" onchange="loadParcelas()">
-                    </div>
-                    <div>
-                        <label class="text-xs">Data Fim</label>
-                        <input type="date" id="filtro-fim" onchange="loadParcelas()">
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
-                            <i class="fas fa-search"></i> Filtrar
-                        </button>
-                        <button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">
-                            Limpar
-                        </button>
-                    </div>
-                </div>
+<!--##############################-->
+<!--  BLOCO_4.5.1: CRIANDO CONTAINER DO FILTRO -->   
+<!--##############################-->
+<div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
+
+<!--##############################-->
+<!--  BLOCO_4.5.2: CAMPO DE BUSCA -->   
+<!--##############################-->
+<div class="flex-1 min-w-[200px]">
+<label class="text-xs">Pesquisar Descrição</label>
+<input type="text" id="filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key === 'Enter') loadParcelas()">
+</div>
+
+<!--##############################-->
+<!--  BLOCO_4.5.3: CAMPO DE BUSCA -->   
+<!--##############################-->
+<div>
+<label class="text-xs">Filtrar Categoria</label>
+<select id="filtro-categoria" onchange="loadParcelas()">
+<option value="">Todas</option>
+</select>
+</div>
+
+<!--##############################-->
+<!--  BLOCO_4.5.4: CAMPO DE BUSCA -->   
+<!--##############################-->
+<div>
+<label class="text-xs">Data Início</label>
+<input type="date" id="filtro-inicio" onchange="loadParcelas()">
+</div>
+<div>
+    
+<!--##############################-->
+<!--  BLOCO_4.5.5: CAMPO DE BUSCA -->   
+<!--##############################-->
+<label class="text-xs">Data Fim</label>
+<input type="date" id="filtro-fim" onchange="loadParcelas()">
+</div>
+
+<!--##############################-->
+<!--  BLOCO_4.5.6: BOTÃO FILTRAR -->   
+<!--##############################-->
+<div class="flex gap-2">
+<button onclick="loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
+<i class="fas fa-search"></i> Filtrar
+</button>
+
+<!--###################################-->
+<!--  BLOCO_4.5.7: BOTÃO LIMPAR FILTRO -->   
+<!--###################################-->
+<button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">
+    Limpar
+</button>
+</div>
+                
+<!--###########################################-->
+<!--  BLOCO_4.5.8: FECHANDO CONTAINER DO FILTRO-->   
+<!--###########################################-->
+</div>
 
     <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-    <!-- listagem -->
+    <!-- BLOCO_4.6: LISTAGEM -->
     <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
 
                 <!-- Área de impressão -->
@@ -1167,6 +1196,11 @@ Cancelar
         }
     </script>
 </body>
+    
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- CÓDIGOS SQL / BANCO DE DADOS SUPABASE -->  
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+  
   <!--
      -- ============================================================================
 -- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
