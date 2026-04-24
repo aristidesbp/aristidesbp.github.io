@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Financeiro Completo - ERP ABP</title>
+<title>ERP ABP</title>
     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<!-- BLOCO 01: SUPABASE CONFIG -->
+<!-- BLOCO_1: SUPABASE CONFIG -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <!--
 CRIAR UMA CONTA E UM PROJETO NO SUPABASE, É GRÁTIS:
 https://supabase.com
     
-🟥 Clique em New Project, Escolha:
+🗂️ Clique em New Project, Escolha:
 Nome do projeto: nome_do_seu_projeto
 Senha do banco: ***********
 Região: brasil   
@@ -23,18 +23,21 @@ Enable Data API &&
 Automatically expose new tables and functions
 Enable automatic RLS
     
-🟥 Em (Authentication/URL Configuration) coloque 0 seu dominio  em :Site URL
+⚙️ Em (Authentication/URL Configuration) coloque 0 seu dominio  em :Site URL
     
-🟥 No script abaixo substitua a url e a chave pelas do seu porjeto.
+⚠️ No script abaixo substitua a url e a chave pelas do seu porjeto.
   supabaseUrl: Settings/Data API/API URL
   supabaseKey : Settings/API Keys/Legacy anon, service_role API keys
 
 -->
+    
 <script>
 // SUPABASE_CONFIG
-const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+const supabaseUrl =
+    'https://wyusolfkxrnwijwjusnv.supabase.co';
 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
+const supabaseKey = 
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
 
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
@@ -43,7 +46,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
     
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<!-- BLOCO 02: CSS  -->  
+<!-- BLOCO_2: CSS  -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
     
 <script src="https://cdn.tailwindcss.com"></script>
@@ -137,7 +140,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <body>
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<!-- BLOCO 03: TELA DE LOGIN -->
+<!-- BLOCO_3: TELA DE LOGIN -->
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
     
     <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
@@ -165,13 +168,13 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
     </div>
 
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<!-- BLOCO 04 : TELA DO SISTEMA -->  
+<!-- BLOCO_4 : TELA DO SISTEMA -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <div id="tela-sistema" class="hidden">
     
 
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
-<!-- BLOCO 04.1: NAVBAR -->  
+<!-- BLOCO_4.1: NAVBAR -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
     
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
@@ -187,7 +190,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
         </nav>
 
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩--> 
-<!-- BLOCO 04.2: MENU LATERAL -->  
+<!-- BLOCO_4.2: MENU LATERAL -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->     
        
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
@@ -211,7 +214,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
             
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->    
-<!-- BLOCO 04.3 : FORMULÁRIO -->  
+<!-- BLOCO_4.3 : FORMULÁRIO -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->          
 <div class="card mb-8 hidden" id="aba-formulario">
 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
@@ -221,11 +224,15 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 
-<!-- DESCRIÇÃO #####################################-->
+<!--#####################################-->  
+<!-- BLOCO_4.3.1: DESCRIÇÃO -->
+<!--#####################################-->
 <div class="md:col-span-2"><label>Descrição da Conta *</label>
 <input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
 
-<!-- TIPO VALOR (TOTAL/PARCELA) #####################################-->
+<!--#####################################-->
+<!-- BLOCO_4.3.2: TIPO VALOR (TOTAL/PARCELA) -->
+<!--#####################################-->
 <div>
 <label>Tipo de Valor</label>
 <select id="f-tipo-calculo" onchange="ajustarLabelsValor()">
@@ -233,12 +240,16 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <option value="parcela">Valor da Parcela</option>
 </select>
 </div>
-                    
-<!--  VALOR  #####################################-->                   
+
+<!--#####################################-->
+<!--  BLOCO_4.3.3: VALOR -->   
+<!--#####################################-->
 <div><label id="label-valor">Valor Total (R$) *</label>
 <input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
 
-<!-- TIPO (receita ou despesa) #####################################-->  
+<!--#####################################-->
+<!--  BLOCO_4.3.4: TIPO -->   
+<!--#####################################-->   
  <div><label>Tipo de Operação</label>
  <select id="f-tipo">
  <option value="despesa">Despesa (Saída)</option>
@@ -246,12 +257,14 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
  </select>
  </div>
 
-<!-- CATEGORIAS #####################################-->
-                    <div>
-                        <label>Categoria</label>
-                        <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
-                        <datalist id="lista-categorias"></datalist>
-                    </div>
+<!--#####################################-->
+<!--  BLOCO_4.3.5: CATEGORIAS -->   
+<!--#####################################-->
+<div>
+    <label>Categoria</label>
+    <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
+    <datalist id="lista-categorias"></datalist>
+</div>
 
 
 <!-- TELEFONE #####################################-->
