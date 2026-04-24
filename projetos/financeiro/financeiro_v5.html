@@ -64,14 +64,18 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!--##################################-->
-<!--  BLOCO_2.2: CÓDIGO CSS NA PÁGINA -->   
-<!--##################################-->
-    <style>
+
+<style>
+        /*####################################*/
+        /* BLOCO_2.2.1: VARIÁVEIS E BASE     */   
+        /*####################################*/
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); }
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         
+        /*####################################*/
+        /* BLOCO_2.2.2: GRID RESPONSIVO      */   
+        /*####################################*/
         /* Grid responsivo para cards */
         @media (max-width: 640px) {
             #lista-parcelas {
@@ -92,6 +96,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             }
         }
         
+        /*####################################*/
+        /* BLOCO_2.2.3: STATUS E DESTAQUES   */   
+        /*####################################*/
         .status-pago { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
         .status-pendente { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
         .status-atrasado { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; animation: pulse 2s infinite; }
@@ -101,18 +108,30 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         
+        /*####################################*/
+        /* BLOCO_2.2.4: FORMULÁRIOS E INPUTS */   
+        /*####################################*/
         label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
         input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
         input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
         
+        /*####################################*/
+        /* BLOCO_2.2.5: CUSTOM SCROLL        */   
+        /*####################################*/
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
+        /*####################################*/
+        /* BLOCO_2.2.6: ZONA DE DROP         */   
+        /*####################################*/
         /* Estilo para a zona de Drop */
         .drop-zone { border: 2px dashed #cbd5e1; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; background-color: #f8fafc; }
         .drop-zone:hover { background-color: #f1f5f9; border-color: #94a3b8; }
         .drop-zone.dragover { border-color: #3ecf8e; background-color: #ecfdf5; }
 
+        /*####################################*/
+        /* BLOCO_2.2.7: ESTILOS DE IMPRESSÃO */   
+        /*####################################*/
         /* ============================================================
            ESTILOS DE IMPRESSÃO
         ============================================================ */
@@ -148,7 +167,8 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             #totais-filtro { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
             #totais-filtro > div { border: 1px solid #cbd5e1 !important; padding: 8px; border-radius: 6px; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
-    </style>
+</style>
+    
     
 </head>
 <body>
