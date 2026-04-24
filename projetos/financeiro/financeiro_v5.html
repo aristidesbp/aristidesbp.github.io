@@ -210,18 +210,33 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
 <!-- BLOCO_4.1: NAVBAR -->  
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+<!--####################################-->
+<!-- BLOCO_4.1.1: CRIANDO CONTAINER-->   
+<!--####################################--> 
+<nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
+<div class="flex items-center gap-4">
+
+<!--####################################-->
+<!--  BLOCO_4.1.2: BOTÕES -->   
+<!--####################################-->
+<!--ABRIR MENU -->
+<button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
+<i class="fas fa-bars"></i>
+</button>   
+<h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-wallet text-emerald-500"></i> Financeiro ERP ABP</h1>
+</div>
     
-        <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
-            <div class="flex items-center gap-4">
-                <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-wallet text-emerald-500"></i> Financeiro ERP ABP</h1>
-            </div>
-            <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
-                <span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
-            </button>
-        </nav>
+<!--####################################-->
+<!--  BLOCO_4.1.3: SAIR DA CONTA -->   
+<!--####################################-->  
+<button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
+<span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
+</button>
+
+<!--####################################-->
+<!--  BLOCO_4.1.4: FECHAR CONTAINER -->   
+<!--####################################-->   
+</nav>
 
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩--> 
 <!-- BLOCO_4.2: MENU LATERAL -->  
