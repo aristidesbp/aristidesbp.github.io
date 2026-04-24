@@ -215,7 +215,11 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->    
 <!-- BLOCO_4.3 : FORMULÁRIO -->  
-<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->          
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->   
+    
+<!--###########################################-->  
+<!-- BLOCO_4.3.2: CRIANDO CONTAINER FORMULÁRIO -->
+<!--###########################################-->
 <div class="card mb-8 hidden" id="aba-formulario">
 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>              
 
@@ -225,13 +229,13 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 
 <!--#####################################-->  
-<!-- BLOCO_4.3.1: DESCRIÇÃO -->
+<!-- BLOCO_4.3.2: DESCRIÇÃO -->
 <!--#####################################-->
 <div class="md:col-span-2"><label>Descrição da Conta *</label>
 <input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
 
 <!--#####################################-->
-<!-- BLOCO_4.3.2: TIPO VALOR (TOTAL/PARCELA) -->
+<!-- BLOCO_4.3.3: TIPO VALOR (TOTAL/PARCELA) -->
 <!--#####################################-->
 <div>
 <label>Tipo de Valor</label>
@@ -242,13 +246,13 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.3: VALOR -->   
+<!--  BLOCO_4.3.4: VALOR -->   
 <!--#####################################-->
 <div><label id="label-valor">Valor Total (R$) *</label>
 <input type="number" id="f-valor" step="0.01" placeholder="0.00"></div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.4: TIPO -->   
+<!--  BLOCO_4.3.5: TIPO -->   
 <!--#####################################-->   
  <div><label>Tipo de Operação</label>
  <select id="f-tipo">
@@ -258,7 +262,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
  </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.5: CATEGORIAS -->   
+<!--  BLOCO_4.3.6: CATEGORIAS -->   
 <!--#####################################-->
 <div>
     <label>Categoria</label>
@@ -267,19 +271,19 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.6: TELEFONE -->   
+<!--  BLOCO_4.3.7: TELEFONE -->   
 <!--#####################################-->  
 <div><label>Telefone para Contato</label>
 <input type="tel" id="f-telefone" placeholder="(91) 98888-8888"></div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.7: EMAIL -->   
+<!--  BLOCO_4.3.8: EMAIL -->   
 <!--#####################################-->
 <div><label>E-mail para Contato</label>
 <input type="email" id="f-email" placeholder="contato@empresa.com"></div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.8: STATUS -->   
+<!--  BLOCO_4.3.9: STATUS -->   
 <!--#####################################-->
 <div><label>Status do Lançamento</label>
 <select id="f-status">
@@ -290,7 +294,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.9: ENTIDADE -->   
+<!--  BLOCO_4.3.10: ENTIDADE -->   
 <!--#####################################-->   
 <div class="relative md:col-span-1">
 <label>Entidade / Cliente</label>
@@ -300,7 +304,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.10: FREQUÊNCIA -->   
+<!--  BLOCO_4.3.11: FREQUÊNCIA -->   
 <!--#####################################-->
 <div>
 <label>Frequência / Recorrência</label>
@@ -314,7 +318,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.11: NÚMERO DE PARCELAS -->   
+<!--  BLOCO_4.3.12: NÚMERO DE PARCELAS -->   
 <!--#####################################-->
 <div class="p-2 rounded highlight-parcelas">
 <label class="highlight-label"><i class="fas fa-layer-group"></i> N° de Parcelas *</label>
@@ -322,7 +326,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.12: DATA DE VENCIMENTO -->   
+<!--  BLOCO_4.3.13: DATA DE VENCIMENTO -->   
 <!--#####################################-->
 <div>
     <label>Data Vencimento *</label>
@@ -330,7 +334,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 
 <!--#####################################-->
-<!--  BLOCO_4.3.13: DATA DE PAGAMENTO -->   
+<!--  BLOCO_4.3.14: DATA DE PAGAMENTO -->   
 <!--#####################################--> 
 <div>
     <label>Data de Pagamento</label>
@@ -339,7 +343,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
     
 <!--#####################################-->
-<!--  BLOCO_4.3.14: CÓDIGO DE BARRAS -->   
+<!--  BLOCO_4.3.15: CÓDIGO DE BARRAS -->   
 <!--#####################################-->
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
                                    
@@ -362,7 +366,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                  
                     
 <!--#####################################-->
-<!--  BLOCO_4.3.15: UPLOAD DE BOLETOS -->   
+<!--  BLOCO_4.3.16: UPLOAD DE BOLETOS -->   
 <!--#####################################-->                           
 <div class="md:col-span-2">
 <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
@@ -374,8 +378,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 </div>
 
-
-<!-- UPLOAD DE COMPROVANTES ###################-->
+<!--#####################################-->
+<!--  BLOCO_4.3.17: UPLOAD DE COMPROVANTES -->   
+<!--#####################################-->
 <div class="md:col-span-2">
 <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
 <div class="drop-zone" id="drop-comprovante" onclick="document.getElementById('f-comprovante').click()">
@@ -386,8 +391,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </div>
 </div>
     
-
-<!-- GRAVAR ÁUDIO ########################## -->
+<!--#####################################-->
+<!--  BLOCO_4.3.18: GRAVAÇÃO DE ÁUDIO -->   
+<!--#####################################-->
 <div class="md:col-span-4">
 <label><i class="fas fa-microphone"></i> Gravar Observação em Áudio</label>
 <button type="button" class="w-full border-2 border-dashed border-slate-300 p-3 rounded bg-slate-50 text-slate-500 font-bold hover:bg-slate-100 transition" id="btn-audio-obs" onclick="toggleGravacaoAudio()">
@@ -398,17 +404,25 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                 
 </div>
          
+<!--#######################################-->
+<!--  BLOCO_4.3.19: BOTÃO SALVAR / CANCELAR-->   
+<!--#######################################-->
+<!-- BOTÃO SALVAR -->    
+<div class="flex gap-4 mt-6">
+<button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+<i class="fas fa-save"></i> SALVAR
+</button>               
 
-<!-- BOTÕES DO FORMULÁRIO ########### -->
-                <div class="flex gap-4 mt-6">
-                    <button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
-                        <i class="fas fa-save"></i> Gravar Lançamento
-                    </button>
-                    <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
-                        Cancelar
-                    </button>
-                </div>
-            </div><!--fim do formulario-->
+<!-- BOTÃO CANCELAR -->    
+<button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+Cancelar
+</button>
+</div>
+
+<!--################################################-->
+<!--  BLOCO_4.3.20: FECHANDO O CONTAINER FORMULÁRIO -->   
+<!--################################################-->
+</div><!--fim do formulario-->
 
 
 
