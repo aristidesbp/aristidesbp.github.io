@@ -172,7 +172,7 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
 <!-- BLOCO 04.1: NAVBAR -->  
-<!--#####################################-->
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
     
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
             <div class="flex items-center gap-4">
@@ -186,9 +186,9 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             </button>
         </nav>
 
-<!--#####################################--> 
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩--> 
 <!-- BLOCO 04.2: MENU LATERAL -->  
-<!--#####################################-->     
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->     
        
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
             <div class="p-6 border-b border-slate-700 flex justify-between items-center">
@@ -204,15 +204,15 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
         </div>
 
     
-<!--#####################################-->    
+    
  
 <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
 <div class="container mx-auto px-4 pb-10 pt-24">
 
             
-<!--#####################################-->    
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->    
 <!-- BLOCO 04.3 : FORMULÁRIO -->  
-<!--#####################################-->          
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->          
 <div class="card mb-8 hidden" id="aba-formulario">
 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
                 
@@ -376,9 +376,10 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 
 
-
-<!-- PDF #####################################-->   
-            
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+<!-- PDF -->   
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+    
             <div class="card" id="aba-listagem">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
@@ -386,12 +387,21 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                         <button onclick="imprimirRelatorio()" class="bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition text-sm">
                             <i class="fas fa-print"></i> Imprimir PDF
                         </button>
+                        
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+<!-- excluir múltiplos -->
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->                    
+    
                         <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
                             <i class="fas fa-trash"></i> Excluir Selecionados
                         </button>
                     </div>
                 </div>
 
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+<!-- campo de busca/ filtro -->
+<!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+            
                 <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
                     <div class="flex-1 min-w-[200px]">
                         <label class="text-xs">Pesquisar Descrição</label>
@@ -420,6 +430,10 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
                         </button>
                     </div>
                 </div>
+
+    <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
+    <!-- listagem -->
+    <!--🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩-->
 
                 <!-- Área de impressão -->
                 <div id="print-area">
