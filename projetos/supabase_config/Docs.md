@@ -27,13 +27,15 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 ### 3. Proteção no GitHub (Passo Obrigatório)
 Para garantir que ninguém veja suas chaves:
- 1. **Crie um arquivo .gitignore** na raiz do projeto e adicione a linha:
+
+ #### 1. **Crie um arquivo .gitignore** na raiz do projeto e adicione a linha:
    ```text
    .env
    
    ```
    *Isso garante que o Git ignore o arquivo com suas senhas reais.*
- 2. **No GitHub**, vá em Settings > Secrets and variables > Actions > New repository secret.
+
+ #### 2. **No GitHub**, vá em Settings > Secrets and variables > Actions > New repository secret.
    * Adicione VITE_SUPABASE_URL com seu valor.
    * Adicione VITE_SUPABASE_ANON_KEY com seu valor.
    * *Isso permite que você use os valores em deploys automáticos (CI/CD) sem expô-los no código.*
