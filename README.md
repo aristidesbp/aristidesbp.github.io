@@ -304,17 +304,21 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 # PROJETOS COM O SUPABASE E GITHUB PAGES
 ## ESTRUTURA MVC PARA DECORAR COMANDOS
 ````
-pasta_do_projeto
+pasta_do_projeto/
 !_ index.html 
-!_ link_rel_stylesheet_href
+!_ assets/
+!    !_ docs/
+!    !_ img/
+!
+!_ link_rel_stylesheet_href/
 !    !_ style.css
 !
-!_ script_src
-    !_ model
+!_ script_src/
+    !_ model/
     !   !_ supabase_config.js
-    !_ view
+    !_ view/
     !   !_ login.html
-    !_ controller 
+    !_ controller/ 
         !_ verificar_login.js
 
 ````
