@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Redirecionando...</title>
+<meta http-equiv="refresh" content="2; url=.script_src/view/index.html">
+    
+<script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
+    
+    <script>
+        // 2. Redirecionamento principal via JavaScript
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = 'script_src/view/index.html';
+            }, 1500); // Aguarda 1.5 segundos para mostrar a animação
+        };
+    </script>
+
+
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center font-sans">
+
+    <div class="flex flex-col items-center bg-white p-10 rounded-2xl shadow-[0px_12px_32px_rgba(25,28,30,0.06)] border border-slate-100 max-w-sm text-center">
+        
+        <div class="relative w-16 h-16 mb-6">
+            <div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+        </div>
+        
+        <h2 class="text-2xl font-bold text-slate-800 mb-2" style="font-family: 'Manrope', sans-serif;">Carregando a Página!</h2>
+        <p class="text-sm text-slate-500 font-medium" style="font-family: 'Inter', sans-serif;">
+            Acessando o seu painel seguro...
+        </p>
+
+    </div>
+
+</body>
+</html>
