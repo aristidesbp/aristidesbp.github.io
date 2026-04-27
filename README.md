@@ -298,8 +298,34 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SUPABASE
+
+# PROJETOS COM O SUPABASE E GITHUB PAGES
+## ESTRUTURA MVC PARA DECORAR COMANDOS
+````
+pasta_do_projeto
+!_ index.html 
+!_ link_rel_stylesheet_href
+!    !_ style.css
+!
+!_ script_src
+    !_ model
+    !   !_ supabase_config.js
+    !_ view
+    !   !_ login.html
+    !_ controller 
+        !_ verificar_login.js
+
+````
+## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
+```
+<link rel="stylesheet href="../../link_rel_stylesheet/style.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+```
+
+
 ## Criar conta e projeto
 * Acesse: https://supabase.com
 * Crie uma conta
@@ -342,28 +368,7 @@ async function sairDaConta() {
 console.log("✅ Conexão Supabase configurada com sucesso.");
 ```
 
-## ESTRUTURA MVC PARA DECORAR COMANDOS
-````
-pasta_do_projeto
-!_ index.html 
-!_ link_rel_stylesheet_href
-!    !_ style.css
-!
-!_ script_src
-    !_ model
-    !   !_ supabase_config.js
-    !_ view
-    !   !_ login.html
-    !_ controller 
-        !_ verificar_login.js
 
-````
-## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
-```
-<link rel="stylesheet href="../../link_rel_stylesheet/style.css">
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../model/supabase_config.js"></script>
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
