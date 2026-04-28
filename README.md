@@ -311,7 +311,6 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMANDOS SQL
 
-![Img da tabela usuarios](projetos/img/tabela_usuarios.jpg)
 
 ## APAGANDO FUNCTIONS A FORÇA
 ```
