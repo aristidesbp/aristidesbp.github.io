@@ -38,6 +38,8 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
   
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+![Img termux](projetos/img/termux.jpeg)
+
 # TERMUX
 * Download do aplicativo direto no github:
 Acesse o link oficial (não uso da Play Store)
