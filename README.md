@@ -38,6 +38,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
   
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ![Img termux](projetos/img/termux.jpeg)
 
 # TERMUX
