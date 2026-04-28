@@ -10,8 +10,8 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 ---
 ## PROJETOS COM SUPABASE
-* 🌐 **Login:** [ENTRAR](https://aristidesbp.github.io/projetos/login)
-* 🌐 **Menu com nivel de acesso:** [ENTRAR](https://aristidesbp.github.io/projetos/menu_nivel_acesso)
+* 🌐 **Login:** [ENTRAR](https://aristidesbp.github.io/projetos/login.html)
+* 🌐 **Menu com nivel de acesso:** [ENTRAR](https://aristidesbp.github.io/projetos/menu_nivel_acesso/acesso.html)
 * 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/entidades.html)
 * 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/projetos/financeiro/financeiro.html)
 * 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/tarefas.html)
