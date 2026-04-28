@@ -306,9 +306,9 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# DB SUPABASE
+# COMANDOS SQL
 
-![Texto alternativo](caminho-da-imagem)
+![Img da tabela usuarios](projetos/img/tabela_usuarios.jpg)
 
 ## APAGANDO FUNCTIONS A FORÇA
 ```
