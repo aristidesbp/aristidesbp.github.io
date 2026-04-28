@@ -390,29 +390,17 @@ create trigger on_auth_user_created
 
 ## APAGANDO FUNCTIONS A FORÇA
 ```
--- Força a exclusão da função rls_auto_enable (que você apontou na imagem)
-DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
+-- Força a exclusão da função on_auth_user_created 
+DROP FUNCTION IF EXISTS public.on_auth_user_created() CASCADE;
 
 -- Se quiser aproveitar e forçar a limpeza da handle_new_user também, rode esta:
 DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
 ```
 
-## CRIAR apolicies
+
+## INSERINDO DADOS EM USUARIOS
 ```
--- POLÍTICAS PARA usuarios
-ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "usuarios visíveis por todos autenticados" 
-ON public.usuarios FOR SELECT TO authenticated USING (true);
-
-CREATE POLICY "Usuário atualiza próprio perfil" 
-ON public.usuarios FOR UPDATE TO authenticated USING (auth.uid() = id);
-```
-
-
-## INSERINDO DADOS
-```
-INSERT INTO public.clinica_perfis (id, nome, role)
+INSERT INTO public.usuarios (id, nome, role)
 VALUES (
   'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
   'Nome do Usuário',              -- Nome que aparecerá no sistema
