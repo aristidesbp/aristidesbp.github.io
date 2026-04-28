@@ -180,20 +180,22 @@ tree
 ---
 # 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 ```
-git clone git@github.com:aristidesbp/aristidesbp.github.io
 ## Clona o repositório com chave SSH
+git clone git@github.com:aristidesbp/aristidesbp.github.io
 ```
 ```
-cd aristidesbp.github.io
 # entre na pasta do repositório clonado
+cd aristidesbp.github.io
 ```
 ```
-git init
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+
 ```
-``` 
-git pull origin main
+```
 # BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
 ```
 ---
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
@@ -208,20 +210,24 @@ git reset --hard origin/main
 ---
 # 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
-git status
 # VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
 ```
-``` 
-git add .
+```
 # ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
 ```
-``` 
-git commit -m "DESCRIÇÃO_DA_ALTERACAO"
+```
 # SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_DA_ALTERACAO"
+
 ```
-``` 
-git push origin main
+```
 # MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
 ```
 
 
@@ -313,6 +319,9 @@ pasta_do_projeto/
 !_ link_rel_stylesheet_href/
 !    !_ style.css
 !
+!_ service/
+!    !_ mercado_pago/
+!
 !_ script_src/
     !_ model/
     !   !_ supabase_config.js
@@ -322,6 +331,7 @@ pasta_do_projeto/
         !_ verificar_login.js
 
 ````
+
 ## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
 ```
 <link rel="stylesheet href="../../link_rel_stylesheet/style.css">
@@ -339,6 +349,9 @@ pasta_do_projeto/
 * Senha do banco: ***********
 * Região: brasil
 
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## src/model/supabase_config.js
 ```
 // ==========================================
@@ -354,7 +367,7 @@ const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
 // Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
 window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// 3. Função Global de Logout (Segurança Nível Bancário)
+// 3. Função Global de Logout 
 async function sairDaConta() {
     try {
         // Destrói a sessão no servidor do Supabase
