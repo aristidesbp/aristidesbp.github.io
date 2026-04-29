@@ -155,7 +155,67 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
             </div>
         </div>
     </div>
+<script>
+  // ====================================================================
+        // AUTENTICAÇÃO E CONTROLE DE TELAS
+        // ====================================================================
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
 
+            if (!session) {
+                telaLogin.classList.remove('hidden');
+                telaLogin.classList.add('flex');
+                telaSistema.classList.add('hidden');
+            } else {
+                telaLogin.classList.add('hidden');
+                telaLogin.classList.remove('flex');
+                telaSistema.classList.remove('hidden');
+                init(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+
+            btn.innerText = 'Autenticando...';
+            btn.disabled = true;
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            
+            if (error) {
+                alert("Erro ao fazer login: Verifique seu e-mail e senha.");
+                btn.innerText = 'Entrar no Sistema';
+                btn.disabled = false;
+            } else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                btn.innerText = 'Entrar no Sistema';
+                btn.disabled = false;
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            document.getElementById('lista-parcelas').innerHTML = '';
+            document.getElementById('dash-receita').innerText = 'R$ 0,00';
+            document.getElementById('dash-despesa').innerText = 'R$ 0,00';
+            document.getElementById('dash-pendente').innerText = 'R$ 0,00';
+            fecharMenu();
+            verificar_login();
+        }
+
+</script>      
+
+
+
+        
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!-- BLOCO_4 : TELA DO SISTEMA -->  
 <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
@@ -618,61 +678,7 @@ Cancelar
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ====================================================================
-        // AUTENTICAÇÃO E CONTROLE DE TELAS
-        // ====================================================================
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            const telaLogin = document.getElementById('tela-login');
-            const telaSistema = document.getElementById('tela-sistema');
-
-            if (!session) {
-                telaLogin.classList.remove('hidden');
-                telaLogin.classList.add('flex');
-                telaSistema.classList.add('hidden');
-            } else {
-                telaLogin.classList.add('hidden');
-                telaLogin.classList.remove('flex');
-                telaSistema.classList.remove('hidden');
-                init(); 
-            }
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            const btn = document.getElementById('btn-login');
-            
-            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
-
-            btn.innerText = 'Autenticando...';
-            btn.disabled = true;
-
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            
-            if (error) {
-                alert("Erro ao fazer login: Verifique seu e-mail e senha.");
-                btn.innerText = 'Entrar no Sistema';
-                btn.disabled = false;
-            } else {
-                document.getElementById('login-email').value = '';
-                document.getElementById('login-senha').value = '';
-                btn.innerText = 'Entrar no Sistema';
-                btn.disabled = false;
-                verificar_login(); 
-            }
-        }
-
-        async function sairDaConta() {
-            await _supabase.auth.signOut();
-            document.getElementById('lista-parcelas').innerHTML = '';
-            document.getElementById('dash-receita').innerText = 'R$ 0,00';
-            document.getElementById('dash-despesa').innerText = 'R$ 0,00';
-            document.getElementById('dash-pendente').innerText = 'R$ 0,00';
-            fecharMenu();
-            verificar_login();
-        }
-
+      
         
 // ========================================================
 // INICIALIZAÇÃO E ARRASTAR/SOLTAR
