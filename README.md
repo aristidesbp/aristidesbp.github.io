@@ -317,7 +317,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 ## ESTRUTURA UTILIZADA
 ````
 # Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
-# Vamos nao vamos uzar um sistema mvc , vamos usar um sistema de pastas separando por paginas e funcionalidades, dividindo o projeto em varias partes.
+# vamos usar um sistema de pastas separando paginas e funcionalidades, dividindo o projeto em varias partes menores.
 
 erp_abp/
 !_ supabase/
@@ -342,8 +342,8 @@ erp_abp/
 !_ financeiro/
 !   !_ financeiro.html
 !   !_ financeiro_model.js
-!   !_ financeiro.css
-!   !_ financeiro.css  
+!   !_ financeiro_controller.css
+!   !_ financeiro.sql  
 
 ````
 
