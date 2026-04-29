@@ -330,7 +330,10 @@ pasta_do_projeto/
     !_ view/
     !   !_ login.html
     !_ controller/ 
-        !_ verificar_login.js
+    !   !_ verificar_login.js
+    !_ SQL/ 
+        !_ susarios.md
+        !_ financeiro.md
 
 ````
 
