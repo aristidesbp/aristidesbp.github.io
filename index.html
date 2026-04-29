@@ -836,7 +836,7 @@ Cancelar
         }
 
         async function loadCategoriasUnicas() {
-            const { data } = await _supabase.from('financas').select('categoria');
+            const { data } = await _supabase.from('financeiro').select('categoria');
             if (!data) return;
             
             const categorias = [...new Set(data.map(item => item.categoria).filter(c => c))];
@@ -957,7 +957,7 @@ Cancelar
                 }
 
                 if (editandoId) {
-                    await _supabase.from('financas').update({
+                    await _supabase.from('financeiro').update({
                         descricao: desc, tipo: tipo, categoria: categoria, status_lancamento: statusLancamento, entidade_id: entidade, telefone: telefone, email: email
                     }).eq('id', financaId);
 
@@ -977,7 +977,7 @@ Cancelar
 
                     alert("Parcela atualizada com sucesso!");
                 } else {
-                    const { data: financa, error: errF } = await _supabase.from('financas').insert([{
+                    const { data: financa, error: errF } = await _supabase.from('financeiro').insert([{
                         descricao: desc, valor_total: valorTotal, tipo, categoria, status_lancamento: statusLancamento, num_parcelas: qtd, entidade_id: entidade, telefone: telefone, email: email
                     }]).select().single();
                     if(errF) throw errF;
@@ -1037,10 +1037,10 @@ Cancelar
             const dataInicio = document.getElementById('filtro-inicio').value;
             const dataFim = document.getElementById('filtro-fim').value;
 
-            let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, telefone, email)').order('data_vencimento', { ascending: true });
+            let query = _supabase.from('parcelas').select('*, financeiro!inner(descricao, tipo, categoria, num_parcelas, telefone, email)').order('data_vencimento', { ascending: true });
 
-            if (busca) query = query.ilike('financas.descricao', `%${busca}%`);
-            if (categoria) query = query.eq('financas.categoria', categoria);
+            if (busca) query = query.ilike('financeiro.descricao', `%${busca}%`);
+            if (categoria) query = query.eq('financeiro.categoria', categoria);
             if (dataInicio) query = query.gte('data_vencimento', dataInicio);
             if (dataFim) query = query.lte('data_vencimento', dataFim);
 
@@ -1055,7 +1055,7 @@ Cancelar
             data.forEach(p => {
                 const valor = parseFloat(p.valor_parcela || 0);
                 if (p.status === 'pago') {
-                    if (p.financas.tipo === 'receita') totalReceita += valor;
+                    if (p.financeiro.tipo === 'receita') totalReceita += valor;
                     else totalDespesa += valor;
                 } else {
                     totalPendente += valor;
@@ -1078,9 +1078,9 @@ Cancelar
                 const iconeComp = p.comprovante_url ? `<a href="${p.comprovante_url}" target="_blank" class="text-emerald-500 hover:text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs inline-block"><i class="fas fa-receipt"></i> Recibo</a>` : '';
                 const txtBarras = p.codigo_barra ? `<div class="text-gray-400 font-mono text-[10px] mt-2 break-all bg-slate-50 p-1 rounded"><i class="fas fa-barcode"></i> ${p.codigo_barra}</div>` : '';
                 
-                // Dados de contato da financeira (agora vindo direto de financas)
-                const telefoneFinanca = p.financas?.telefone || '';
-                const emailFinanca = p.financas?.email || '';
+                // Dados de contato da financeira (agora vindo direto de financeiro)
+                const telefoneFinanca = p.financeiro?.telefone || '';
+                const emailFinanca = p.financeiro?.email || '';
                 
                 const botoesContato = `
                     <div class="flex gap-2">
@@ -1094,11 +1094,11 @@ Cancelar
                 `;
 
                 return `
-                <div class="card border-l-4 ${p.financas.tipo === 'receita' ? 'border-emerald-500' : 'border-red-500'} hover:shadow-lg transition">
+                <div class="card border-l-4 ${p.financeiro.tipo === 'receita' ? 'border-emerald-500' : 'border-red-500'} hover:shadow-lg transition">
                     <div class="flex justify-between items-start mb-2">
                         <div>
-                            <h4 class="font-bold text-slate-800 text-sm">${p.financas.descricao}</h4>
-                            <p class="text-[11px] bg-gray-200 text-gray-600 px-2 rounded inline-block mt-1">${p.financas.categoria || 'Geral'}</p>
+                            <h4 class="font-bold text-slate-800 text-sm">${p.financeiro.descricao}</h4>
+                            <p class="text-[11px] bg-gray-200 text-gray-600 px-2 rounded inline-block mt-1">${p.financeiro.categoria || 'Geral'}</p>
                         </div>
                         <div class="text-right">
                             <span class="${statusClass}">${statusTxt}</span>
@@ -1117,8 +1117,8 @@ Cancelar
                     </div>
                     
                     <div class="mb-2 text-xs">
-                        <p class="text-slate-600"><strong>Parcela:</strong> ${p.num_parcela} / ${p.financas.num_parcelas}</p>
-                        <p class="text-lg font-bold ${p.financas.tipo === 'receita' ? 'text-emerald-600' : 'text-red-600'} mt-1">
+                        <p class="text-slate-600"><strong>Parcela:</strong> ${p.num_parcela} / ${p.financeiro.num_parcelas}</p>
+                        <p class="text-lg font-bold ${p.financeiro.tipo === 'receita' ? 'text-emerald-600' : 'text-red-600'} mt-1">
                             R$ ${parseFloat(p.valor_parcela).toFixed(2)}
                         </p>
                     </div>
@@ -1153,17 +1153,17 @@ Cancelar
         }
 
         async function prepararEdicao(id) {
-            const { data: p } = await _supabase.from('parcelas').select('*, financas(*)').eq('id', id).single();
+            const { data: p } = await _supabase.from('parcelas').select('*, financeiro(*)').eq('id', id).single();
             if (p) {
                 document.getElementById('f-editando-id').value = p.id;
-                document.getElementById('f-editando-financa-id').value = p.financas.id;
+                document.getElementById('f-editando-financa-id').value = p.financeiro.id;
                 
-                document.getElementById('f-desc').value = p.financas.descricao;
-                document.getElementById('f-tipo').value = p.financas.tipo;
-                document.getElementById('f-categoria').value = p.financas.categoria || 'Geral';
-                document.getElementById('f-status').value = p.financas.status_lancamento || 'aberto';
-                document.getElementById('f-telefone').value = p.financas.telefone || '';
-                document.getElementById('f-email').value = p.financas.email || '';
+                document.getElementById('f-desc').value = p.financeiro.descricao;
+                document.getElementById('f-tipo').value = p.financeiro.tipo;
+                document.getElementById('f-categoria').value = p.financeiro.categoria || 'Geral';
+                document.getElementById('f-status').value = p.financeiro.status_lancamento || 'aberto';
+                document.getElementById('f-telefone').value = p.financeiro.telefone || '';
+                document.getElementById('f-email').value = p.financeiro.email || '';
                 
                 document.getElementById('f-tipo-calculo').value = 'parcela';
                 ajustarLabelsValor();
@@ -1269,7 +1269,7 @@ Cancelar
 -- ============================================================================
 
 -- Tabela Pai: Lançamento Financeiro Geral (O "Cabeçalho" da conta)
-CREATE TABLE public.financas (
+CREATE TABLE public.financeiro (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     -- O default auth.uid() preenche automaticamente com o ID de quem está logado
     user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -1284,7 +1284,7 @@ CREATE TABLE public.financas (
 -- Tabela Filha: Parcelas Individuais (As "Linhas" de pagamento)
 CREATE TABLE public.parcelas (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    financa_id UUID REFERENCES public.financas(id) ON DELETE CASCADE, -- Se apagar o "cabeçalho", apaga as parcelas junto
+    financa_id UUID REFERENCES public.financeiro(id) ON DELETE CASCADE, -- Se apagar o "cabeçalho", apaga as parcelas junto
     num_parcela INTEGER NOT NULL,
     valor_parcela DECIMAL(10,2) NOT NULL,
     data_vencimento DATE NOT NULL,
@@ -1300,27 +1300,27 @@ CREATE TABLE public.parcelas (
 -- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
 -- ============================================================================
 
-ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
 
 -- Regras para Finanças (Usuário só acessa as contas que ele mesmo criou)
-CREATE POLICY "Pessoa ve as proprias financas" ON public.financas FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa insere as proprias financas" ON public.financas FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "Pessoa atualiza as proprias financas" ON public.financas FOR UPDATE USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa apaga as proprias financas" ON public.financas FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa ve as proprias financeiro" ON public.financeiro FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa insere as proprias financeiro" ON public.financeiro FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Pessoa atualiza as proprias financeiro" ON public.financeiro FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa apaga as proprias financeiro" ON public.financeiro FOR DELETE USING (auth.uid() = user_id);
 
 -- Regras para Parcelas (Usuário só acessa parcelas amarradas às suas finanças)
 CREATE POLICY "Pessoa ve as proprias parcelas" ON public.parcelas FOR SELECT USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+    EXISTS (SELECT 1 FROM public.financeiro WHERE financeiro.id = parcelas.financa_id AND financeiro.user_id = auth.uid())
 );
 CREATE POLICY "Pessoa insere as proprias parcelas" ON public.parcelas FOR INSERT WITH CHECK (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+    EXISTS (SELECT 1 FROM public.financeiro WHERE financeiro.id = parcelas.financa_id AND financeiro.user_id = auth.uid())
 );
 CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+    EXISTS (SELECT 1 FROM public.financeiro WHERE financeiro.id = parcelas.financa_id AND financeiro.user_id = auth.uid())
 );
 CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
+    EXISTS (SELECT 1 FROM public.financeiro WHERE financeiro.id = parcelas.financa_id AND financeiro.user_id = auth.uid())
 );
 
 -- ============================================================================
@@ -1341,19 +1341,19 @@ CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authent
     
 
 -- ============================================================================
--- ATUALIZAÇÃO DA TABELA 'financas'
+-- ATUALIZAÇÃO DA TABELA 'financeiro'
 -- ============================================================================
 
 -- 1. Adiciona o campo 'categoria' com um valor padrão para não quebrar registros antigos
-ALTER TABLE public.financas 
+ALTER TABLE public.financeiro 
 ADD COLUMN IF NOT EXISTS categoria TEXT DEFAULT 'Geral';
 
 -- 2. Adiciona o campo 'status_lancamento' com validação (CHECK) para aceitar apenas os 3 status definidos
-ALTER TABLE public.financas 
+ALTER TABLE public.financeiro 
 ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' 
 CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
 
--- 3. Os campos 'telefone' e 'email' já existem na tabela financas!
+-- 3. Os campos 'telefone' e 'email' já existem na tabela financeiro!
 -- Nenhuma alteração necessária para esses campos.
 
 -- ============================================================================
@@ -1362,16 +1362,16 @@ CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
 -- categoria 'Geral' e o status 'aberto' preenchidos (caso o default não aplique nos antigos)
 -- ============================================================================
 
-UPDATE public.financas 
+UPDATE public.financeiro 
 SET categoria = 'Geral' 
 WHERE categoria IS NULL;
 
-UPDATE public.financas 
+UPDATE public.financeiro 
 SET status_lancamento = 'aberto' 
 WHERE status_lancamento IS NULL;
 
-    -- Na tabela financas
-ALTER TABLE public.financas
+    -- Na tabela financeiro
+ALTER TABLE public.financeiro
 ADD COLUMN IF NOT EXISTS telefone TEXT,
 ADD COLUMN IF NOT EXISTS email TEXT;
 
