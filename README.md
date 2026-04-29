@@ -312,6 +312,8 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # PROJETOS COM O SUPABASE E GITHUB_PAGES
 ## ESTRUTURA UTILIZADA
@@ -324,7 +326,6 @@ erp_abp/
 !    !_ supabase_config.js
 !    !_ .env
 !    !_ .gitignore
-!    !_ .docs.md
 !
 !_ usuarios/
 !    !_ usuarios.html
@@ -347,13 +348,14 @@ erp_abp/
 
 ````
 
-## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
+## EXEMPLO DE CHAMADAS NA PASTA DENTRO DA PASTA FINANCERIO
 ```
-<link rel="stylesheet href="../../link_rel_stylesheet_href/style.css">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../model/supabase_config.js"></script>
+<link rel="stylesheet href="financeiro.css">
+<script src="../supabase/supabase_config.js"></script>
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
@@ -367,37 +369,40 @@ erp_abp/
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## src/model/supabase_config.js
+# supabase/
+## supabase_config.js
 ```
-// ==========================================
-// ARQUIVO: config/supabase_config.js
-// OBJETIVO: Conexão global e utilitários
-// ==========================================
+!_ supabase/
+!    !_ supabase_config.js
+!    !_ .env
+!    !_ .gitignore
+```
+```
+import { createClient } from '@supabase/supabase-js';
 
-// 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'SUA_URL_AQUI';
-const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
+// As chaves são lidas do ambiente. 
+// No Vite/Webpack, use import.meta.env ou process.env
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// 2. Inicializa o Supabase globalmente
-// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
-window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// 3. Função Global de Logout 
-async function sairDaConta() {
-    try {
-        // Destrói a sessão no servidor do Supabase
-        await window.supabase.auth.signOut();
-    } catch (erro) {
-        console.error("Erro ao deslogar no servidor:", erro);
-    } finally {
-        // Limpa o navegador e expulsa o usuário para a tela inicial
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.replace("../../index.html"); 
-    }
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error("Erro de configuração: Variáveis de ambiente do Supabase não encontradas.");
 }
 
-console.log("✅ Conexão Supabase configurada com sucesso.");
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+console.log("✅ Conexão supabase_config.");
+```
+
+## .env
+```
+VITE_SUPABASE_URL=https://sua-chave-exata-aqui.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## .gitignore
+```
+.env
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
