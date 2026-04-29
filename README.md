@@ -439,7 +439,7 @@ create table public.usuarios (
 # COM BASE NO SCHEMA ACIMA FAÇA UM SQL COMPLETO COM:
 1- Criação da tabela
 2- [função de integração com Auth,trigger]: A cada novo usuário que for criado no schema auth, deve ser criado o mesmo usuário no schema public na tabela acima.
-2- criar aplolicies (Política básica de RLS)
+3- criar aplolicies (Política básica de RLS)
 
 
 
