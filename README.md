@@ -341,9 +341,9 @@ erp_abp/
 !
 !_ financeiro/
 !   !_ financeiro.html
-!   !_ financeiro.js
+!   !_ financeiro_model.js
 !   !_ financeiro.css
-  
+!   !_ financeiro.css  
 
 ````
 
