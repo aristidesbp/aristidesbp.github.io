@@ -109,6 +109,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+![Img termux](projetos/img/github.jpeg)
 # GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
 
 ```
