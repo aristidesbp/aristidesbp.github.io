@@ -370,39 +370,48 @@ erp_abp/
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # supabase/
-## supabase_config.js
 ```
 !_ supabase/
 !    !_ supabase_config.js
-!    !_ .env
 !    !_ .gitignore
 ```
+## supabase_config.js
 ```
-import { createClient } from '@supabase/supabase-js';
+// ==========================================
+// ARQUIVO: config/supabase_config.js
+// OBJETIVO: Conexão global e utilitários
+// ==========================================
 
-// As chaves são lidas do ambiente. 
-// No Vite/Webpack, use import.meta.env ou process.env
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// 1. Chaves de Acesso (Substitua pelas suas)
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error("Erro de configuração: Variáveis de ambiente do Supabase não encontradas.");
+// 2. Inicializa o Supabase globalmente
+// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
+window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// 3. Função Global de Logout 
+async function sairDaConta() {
+    try {
+        // Destrói a sessão no servidor do Supabase
+        await window.supabase.auth.signOut();
+    } catch (erro) {
+        console.error("Erro ao deslogar no servidor:", erro);
+    } finally {
+        // Limpa o navegador e expulsa o usuário para a tela inicial
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.replace("../../index.html"); 
+    }
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-console.log("✅ Conexão supabase_config.");
+console.log("✅ Conexão Supabase configurada com sucesso.");
 ```
-
-## .env
-```
-VITE_SUPABASE_URL=https://sua-chave-exata-aqui.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ## .gitignore
 ```
-.env
+supabase_config.js
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
