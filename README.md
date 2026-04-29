@@ -307,9 +307,88 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# PROJETOS COM O SUPABASE E GITHUB_PAGES
+## ESTRUTURA MVC PARA DECORAR COMANDOS
+````
+pasta_do_projeto/
+!_ index.html 
+!_ assets/
+!    !_ docs/
+!    !_ img/
+!
+!_ link_rel_stylesheet_href/
+!    !_ style.css
+!
+!_ service/
+!    !_ mercado_pago/
+!
+!_ script_src/
+    !_ model/
+    !   !_ supabase_config.js
+    !_ view/
+    !   !_ login.html
+    !_ controller/ 
+        !_ verificar_login.js
+
+````
+
+## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
+```
+<link rel="stylesheet href="../../link_rel_stylesheet_href/style.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+```
+
+
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMANDOS SQL
+## src/model/supabase_config.js
+```
+// ==========================================
+// ARQUIVO: config/supabase_config.js
+// OBJETIVO: Conexão global e utilitários
+// ==========================================
+
+// 1. Chaves de Acesso (Substitua pelas suas)
+const SUPABASE_URL = 'SUA_URL_AQUI';
+const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
+
+// 2. Inicializa o Supabase globalmente
+// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
+window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// 3. Função Global de Logout 
+async function sairDaConta() {
+    try {
+        // Destrói a sessão no servidor do Supabase
+        await window.supabase.auth.signOut();
+    } catch (erro) {
+        console.error("Erro ao deslogar no servidor:", erro);
+    } finally {
+        // Limpa o navegador e expulsa o usuário para a tela inicial
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.replace("../../index.html"); 
+    }
+}
+
+console.log("✅ Conexão Supabase configurada com sucesso.");
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO DB COM COMANDOS SQL
 
 # Apagar tabela e dependencias:
 ```
@@ -464,86 +543,6 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# PROJETOS COM O SUPABASE E GITHUB PAGES
-## ESTRUTURA MVC PARA DECORAR COMANDOS
-````
-pasta_do_projeto/
-!_ index.html 
-!_ assets/
-!    !_ docs/
-!    !_ img/
-!
-!_ link_rel_stylesheet_href/
-!    !_ style.css
-!
-!_ service/
-!    !_ mercado_pago/
-!
-!_ script_src/
-    !_ model/
-    !   !_ supabase_config.js
-    !_ view/
-    !   !_ login.html
-    !_ controller/ 
-        !_ verificar_login.js
-
-````
-
-## EXEMPLO DE CHAMADAS NO HTML DENTRO DA PASTA VIEW
-```
-<link rel="stylesheet href="../../link_rel_stylesheet/style.css">
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../model/supabase_config.js"></script>
-```
-
-
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## src/model/supabase_config.js
-```
-// ==========================================
-// ARQUIVO: config/supabase_config.js
-// OBJETIVO: Conexão global e utilitários
-// ==========================================
-
-// 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'SUA_URL_AQUI';
-const SUPABASE_ANON_KEY = 'SUA_CHAVE_AQUI';
-
-// 2. Inicializa o Supabase globalmente
-// Usamos window para garantir que outros arquivos JS consigam enxergar essa variável
-window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// 3. Função Global de Logout 
-async function sairDaConta() {
-    try {
-        // Destrói a sessão no servidor do Supabase
-        await window.supabase.auth.signOut();
-    } catch (erro) {
-        console.error("Erro ao deslogar no servidor:", erro);
-    } finally {
-        // Limpa o navegador e expulsa o usuário para a tela inicial
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.replace("../../index.html"); 
-    }
-}
-
-console.log("✅ Conexão Supabase configurada com sucesso.");
-```
 
 
 
