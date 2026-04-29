@@ -411,7 +411,7 @@ async function sairDaConta() {
 
 console.log("✅ Conexão Supabase configurada com sucesso.");
 ```
-```
+
 
 ## .gitignore
 ```
