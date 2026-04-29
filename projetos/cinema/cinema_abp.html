@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Movie Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #020617; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; }
+        .playlist-scroll { max-height: calc(100vh - 200px); overflow-y: auto; }
+        .video-container { aspect-ratio: 16 / 9; background: black; }
+        .movie-card { transition: 0.3s; cursor: pointer; border-left: 4px solid transparent; }
+        .movie-card:hover { background: #1e293b; }
+        .movie-card.active { border-left-color: var(--primary); background: #1e293b; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen">
+        <nav class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-emerald-500"><i class="fas fa-film"></i> ABP Video Hub</h1>
+            <div id="user-info" class="text-sm text-slate-400"></div>
+        </nav>
+
+        <div class="flex flex-1 flex-col lg:flex-row overflow-hidden">
+            <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+                <div class="video-container rounded-xl overflow-hidden shadow-2xl border border-slate-800">
+                    <video id="main-player" controls class="w-full h-full" poster="">
+                        <source id="video-src" src="" type="video/mp4">
+                        Seu navegador não suporta vídeos.
+                    </video>
+                </div>
+                
+                <div class="mt-6">
+                    <h2 id="playing-title" class="text-3xl font-bold">Selecione um filme</h2>
+                    <p id="playing-sinopse" class="text-slate-400 mt-2">Escolha na lista ao lado para começar a reprodução.</p>
+                </div>
+            </main>
+
+            <aside class="w-full lg:w-96 bg-slate-900 border-l border-slate-800 p-4">
+                <h3 class="text-lg font-bold mb-4 flex justify-between">
+                    Minha Lista
+                    <button onclick="loadFilmes()" class="text-emerald-500 text-sm"><i class="fas fa-sync"></i></button>
+                </h3>
+                <div id="movie-list" class="playlist-scroll space-y-2">
+                    </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://tjrijlyayfkolhnxuijv.supabase.co/rest/v1/';
+
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcmlqbHlheWZrb2xobnh1aWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzU1NjUsImV4cCI6MjA5MzA1MTU2NX0.AYWwkzJdYiRkBytXmhvA-VP59iK5qzB7LxYhPCfYkI4'; 
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function loadFilmes() {
+            const { data, error } = await _supabase.from('filmes').select('*').order('titulo');
+            if (error) return console.error(error);
+
+            const container = document.getElementById('movie-list');
+            container.innerHTML = data.map(filme => `
+                <div class="movie-card p-3 rounded-lg flex gap-4" onclick="playMovie('${filme.video_url}', '${filme.titulo}', '${filme.sinopse}', this)">
+                    <img src="${filme.capa_url || 'https://via.placeholder.com/150x220'}" class="w-16 h-20 object-cover rounded shadow">
+                    <div>
+                        <h4 class="font-bold text-sm text-slate-200">${filme.titulo}</h4>
+                        <span class="text-[10px] uppercase bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded">${filme.categoria}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function playMovie(url, titulo, sinopse, element) {
+            const video = document.getElementById('main-player');
+            const source = document.getElementById('video-src');
+            
+            // Atualiza UI
+            document.querySelectorAll('.movie-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.getElementById('playing-title').innerText = titulo;
+            document.getElementById('playing-sinopse').innerText = sinopse;
+
+            // Troca o vídeo
+            source.src = url;
+            video.load();
+            video.play();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFilmes);
+    </script>
+
+<!--
+-- Tabela de Filmes
+CREATE TABLE public.filmes (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    titulo TEXT NOT NULL,
+    categoria TEXT,
+    capa_url TEXT, -- URL da imagem da capa
+    video_url TEXT NOT NULL, -- URL do vídeo no Storage
+    sinopse TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Habilitar RLS
+ALTER TABLE public.filmes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Acesso público aos filmes" ON public.filmes FOR SELECT USING (true);
+
+-- Criar Bucket para os vídeos
+INSERT INTO storage.buckets (id, name, public) VALUES ('filmes', 'filmes', true) ON CONFLICT (id) DO NOTHING;
+
+-->
+</body>
+</html>
