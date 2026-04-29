@@ -4,9 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP ABP</title>
+
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- BIBLIOTECAS E SERVIÇOS -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->        
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- SUPABASE_CONFIG -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->   
 <script>
 // SUPABASE_CONFIG
 const supabaseUrl = 'https://tjrijlyayfkolhnxuijv.supabase.co/rest/v1/';
@@ -15,11 +25,10 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ARQUIVO CSS -->
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <style>
         /*###########################*/
         /* BLOCO: VARIÁVEIS E BASE   */   
@@ -156,7 +165,8 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
         </div>
     </div>
 <script>
-  // ====================================================================
+ 
+        // ====================================================================
         // AUTENTICAÇÃO E CONTROLE DE TELAS
         // ====================================================================
         async function verificar_login() {
