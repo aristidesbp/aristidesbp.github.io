@@ -109,7 +109,9 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-![Img termux](projetos/img/github.jpeg)
+
+![Img github](projetos/img/github.jpeg)
+
 # GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
 
 ```
@@ -312,36 +314,36 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # PROJETOS COM O SUPABASE E GITHUB_PAGES
-## ESTRUTURA MVC UTILIZADA
+## ESTRUTURA UTILIZADA
 ````
 # Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
-# Vamos utilizar um sistema mvc personalizado para ajudar a decorar sertos comando, exemplo:
+# Vamos nao vamos uzar um sistema mvc , vamos usar um sistema de pastas separando por paginas e funcionalidades, dividindo o projeto em varias partes.
 
 erp_abp/
-!_ index.html 
-!_ assets/
-!    !_ docs/
-!    !_ img/
+!_ supabase/
+!    !_ supabase_config.js
+!    !_ .env
+!    !_ .gitignore
+!    !_ .docs.md
 !
-!_ link_rel_stylesheet_href/
-!    !_ style.css
+!_ usuarios/
+!    !_ usuarios.html
+!    !_ usuarios.css
+!    !_ usuarios_model.js
+!    !_ usuarios_controller.js
+!    !_ usuarios.sql
 !
-!_ service/
-!    !_ mercado_pago/
+!_ login/
+!    !_ login.html
+!    !_ login.css
+!    !_ login_model.js
+!    !_ login_controller.js
 !
-!_ script_src/
-    !_ model/
-    !   !_ supabase_config.js
-    !
-    !_ view/
-    !   !_ login.html
-    !
-    !_ controller/ 
-    !   !_ verificar_login.js
-    !
-    !_ SQL/ 
-        !_ susarios.md
-        !_ financeiro.md
+!_ financeiro/
+!   !_ financeiro.html
+!   !_ financeiro.js
+!   !_ financeiro.css
+  
 
 ````
 
