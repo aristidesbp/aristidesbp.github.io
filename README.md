@@ -37,11 +37,12 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TUTORIAL DE COMO CRIAR UM SISTEMA ERP UTILIZANDO APENAS UM CELULAR
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ![Img termux](projetos/img/termux.jpeg)
 
-# TERMUX
+# TERMUX (TERMINAL LINUX PARA ANDROID)
 * Download do aplicativo direto no github:
 Acesse o link oficial (não uso da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
@@ -108,7 +109,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GITHUB 
+# GITHUB (EDITOR DE CODIGO, VER)
 
 ```
 # Lista todas as configurações ativas: 
@@ -312,7 +313,10 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 # PROJETOS COM O SUPABASE E GITHUB_PAGES
 ## ESTRUTURA MVC PARA DECORAR COMANDOS
 ````
-pasta_do_projeto/
+# Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
+# Vamos utilizar um sistema mvc personalizado para ajudar a decorar sertos comando, exemplo:
+
+erp_abp/
 !_ index.html 
 !_ assets/
 !    !_ docs/
@@ -327,10 +331,13 @@ pasta_do_projeto/
 !_ script_src/
     !_ model/
     !   !_ supabase_config.js
+    !
     !_ view/
     !   !_ login.html
+    !
     !_ controller/ 
     !   !_ verificar_login.js
+    !
     !_ SQL/ 
         !_ susarios.md
         !_ financeiro.md
