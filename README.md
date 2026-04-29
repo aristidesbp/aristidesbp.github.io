@@ -313,6 +313,25 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 
 # Apagar tabela e dependencias:
 ```
+-- ============================================================================
+-- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
+-- ============================================================================
+-- Remove os gatilhos e funções antigas
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP FUNCTION IF EXISTS public.handle_new_user();
+
+-- CORREÇÃO AQUI: Procuramos na pasta public, não na auth
+DROP FUNCTION IF EXISTS public.get_user_role(); 
+
+-- Remove as políticas do Storage antigas (se existirem)
+DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
+DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
+
+-- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
+DROP TABLE IF EXISTS public.entidades CASCADE;
+
 -- Remove a tabela existente (isso apaga os dados!)
 drop table if exists public.usuarios cascade;
 
