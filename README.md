@@ -109,7 +109,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GITHUB (EDITOR DE CODIGO, VER)
+# GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
 
 ```
 # Lista todas as configurações ativas: 
@@ -311,7 +311,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # PROJETOS COM O SUPABASE E GITHUB_PAGES
-## ESTRUTURA MVC PARA DECORAR COMANDOS
+## ESTRUTURA MVC UTILIZADA
 ````
 # Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
 # Vamos utilizar um sistema mvc personalizado para ajudar a decorar sertos comando, exemplo:
