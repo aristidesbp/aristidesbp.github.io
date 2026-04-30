@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento Pedagógico - ERP ABP</title>
+    <title>TAREFAS</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -40,12 +40,8 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-
-        // 1. Chaves de Acesso (Substitua pelas suas)
-       
-        const supabaseUrl = 'https://bpdjbffsfxvrdxxwxzsz.supabase.co/rest/v1/';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZGpiZmZzZnh2cmR4eHd4enN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NTMzNTYsImV4cCI6MjA5MzEyOTM1Nn0.Q5HNWQBSJk8Bpd4dq7cx5HHJtVHkxza9pbQV3qX_rsM';
- 
+        const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let recordedAudioBlob = null;
@@ -61,7 +57,7 @@
             } else {
                 document.getElementById('tela-login').style.display = 'none';
                 document.getElementById('tela-sistema').style.display = 'block';
-                loadExercicios(); 
+                loadtarefas(); 
             }
         }
 
@@ -220,8 +216,8 @@
         }
 
         // --- CRUD ---
-        async function loadExercicios() {
-            const { data } = await _supabase.from('exercicios').select('*').order('created_at', { ascending: false });
+        async function loadtarefas() {
+            const { data } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
             const tbody = document.getElementById('exercises-list');
             tbody.innerHTML = data.map(e => {
                 let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
@@ -274,15 +270,15 @@
                     payload.audio_url = _supabase.storage.from('audios').getPublicUrl(`public/${audioName}`).data.publicUrl;
                 }
 
-                const { error } = id ? await _supabase.from('exercicios').update(payload).eq('id', id) : await _supabase.from('exercicios').insert([payload]);
+                const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
                 if (error) throw error;
-                resetForm(); loadExercicios();
+                resetForm(); loadtarefas();
             } catch (e) { alert(e.message); }
             finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
         }
 
         async function editFull(id) {
-            const { data } = await _supabase.from('exercicios').select('*').eq('id', id).single();
+            const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
             document.getElementById('edit-id').value = data.id;
             document.getElementById('titulo').value = data.titulo;
             document.getElementById('descricao').value = data.descricao;
@@ -298,7 +294,7 @@
         }
 
         async function deleteExercicio(id) {
-            if (confirm("Excluir?")) { await _supabase.from('exercicios').delete().eq('id', id); loadExercicios(); }
+            if (confirm("Excluir?")) { await _supabase.from('tarefas').delete().eq('id', id); loadtarefas(); }
         }
 
         function resetForm() {
@@ -325,10 +321,10 @@
 -- ============================================================================
 
 -- 1. Limpa a tabela e as regras antigas
-DROP TABLE IF EXISTS public.exercicios CASCADE;
+DROP TABLE IF EXISTS public.tarefas CASCADE;
 
 -- 2. Cria a tabela com todos os campos novos
-CREATE TABLE public.exercicios (
+CREATE TABLE public.tarefas (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     titulo TEXT NOT NULL,
@@ -344,9 +340,9 @@ CREATE TABLE public.exercicios (
 );
 
 -- 3. Segurança (RLS - Row Level Security)
-ALTER TABLE public.exercicios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Exercícios: Acesso total ao próprio usuário" ON public.exercicios
+CREATE POLICY "Exercícios: Acesso total ao próprio usuário" ON public.tarefas
     FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- 4. Buckets de Storage (Para fotos e áudios)
