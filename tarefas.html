@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAREFAS</title>
+    <title>TAREFAS - ERP ABP</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -24,11 +24,9 @@
         .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
         .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
         
-        /* Estilo para o campo de código de barras com botão */
         .barcode-group { display: flex; gap: 5px; }
         .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Container do Scanner */
         #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
 
         .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
@@ -38,11 +36,15 @@
         .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
     </style>
 
+    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
+    <script src="supabase_config.js"></script>
+
     <script>
-        const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // Inicializa o cliente usando as constantes do supabase_config.js
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let recordedAudioBlob = null;
         let mediaRecorder;
@@ -86,7 +88,7 @@
     <div id="tela-sistema" style="display: none;">
         <div class="navbar">
             <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
-            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut(); verificar_login();">Sair</button>
+            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
         </div>
 
         <div class="container">
@@ -97,9 +99,7 @@
                 <div class="section-title">Informações Básicas</div>
                 <div class="form-grid">
                     <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
-                    
                     <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
-                    
                     <div>
                         <label>Código de Barras</label>
                         <div class="barcode-group">
@@ -109,7 +109,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
                     <div>
                         <label>Status</label>
@@ -167,21 +166,18 @@
     </div>
 
     <script>
-        // --- FUNÇÕES DO SCANNER DE CÓDIGO DE BARRAS ---
+        // --- FUNÇÕES DO SCANNER ---
         function startScanner() {
             const readerDiv = document.getElementById('reader');
             const stopBtn = document.getElementById('btn-stop-scanner');
             readerDiv.style.display = 'block';
             stopBtn.style.display = 'block';
-
             html5QrCode = new Html5Qrcode("reader");
             const config = { fps: 10, qrbox: { width: 250, height: 150 } };
-
             html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
                 document.getElementById('codigo_de_barras').value = decodedText;
                 stopScanner();
-                alert("Código lido: " + decodedText);
-            }).catch(err => console.error("Erro ao iniciar câmera: ", err));
+            }).catch(err => console.error(err));
         }
 
         function stopScanner() {
@@ -193,7 +189,7 @@
             }
         }
 
-        // --- FUNÇÕES DE ÁUDIO ---
+        // --- ÁUDIO ---
         async function toggleGravação() {
             const btn = document.getElementById('btn-audio');
             const preview = document.getElementById('audio-preview');
@@ -217,7 +213,8 @@
 
         // --- CRUD ---
         async function loadtarefas() {
-            const { data } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
+            const { data, error } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
+            if (error) { console.error(error); return; }
             const tbody = document.getElementById('exercises-list');
             tbody.innerHTML = data.map(e => {
                 let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
@@ -234,18 +231,15 @@
                         <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
                         <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
                     </td>
-                </tr>
-            `}).join('');
+                </tr>`}).join('');
         }
 
         async function handleSave() {
             const btn = document.getElementById('btn-save');
             btn.disabled = true; btn.innerText = "Salvando...";
-            
             try {
                 const id = document.getElementById('edit-id').value;
-                const { data: userData } = await _supabase.auth.getUser();
-
+                const { data: { user } } = await _supabase.auth.getUser();
                 const payload = {
                     titulo: document.getElementById('titulo').value,
                     descricao: document.getElementById('descricao').value,
@@ -254,20 +248,15 @@
                     data_prazo: document.getElementById('data_prazo').value || null,
                     status_exercicio: document.getElementById('status_exercicio').value,
                     observacoes: document.getElementById('observacoes').value,
-                    user_id: userData.user.id
+                    user_id: user.id
                 };
-
+                
+                // Storage handling (simplificado)
                 const inputFoto = document.getElementById('foto_resolucao');
                 if (inputFoto.files[0]) {
                     const fileName = `res_${Date.now()}.jpg`;
                     await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
                     payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-                }
-
-                if (recordedAudioBlob) {
-                    const audioName = `audio_${Date.now()}.webm`;
-                    await _supabase.storage.from('audios').upload(`public/${audioName}`, recordedAudioBlob);
-                    payload.audio_url = _supabase.storage.from('audios').getPublicUrl(`public/${audioName}`).data.publicUrl;
                 }
 
                 const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
@@ -279,18 +268,19 @@
 
         async function editFull(id) {
             const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
-            document.getElementById('edit-id').value = data.id;
-            document.getElementById('titulo').value = data.titulo;
-            document.getElementById('descricao').value = data.descricao;
-            document.getElementById('categoria').value = data.categoria || '';
-            document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
-            document.getElementById('data_prazo').value = data.data_prazo || '';
-            document.getElementById('status_exercicio').value = data.status_exercicio;
-            document.getElementById('observacoes').value = data.observacoes || '';
-            
-            document.getElementById('form-title').innerText = "Editando Atividade";
-            document.getElementById('btn-cancel').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (data) {
+                document.getElementById('edit-id').value = data.id;
+                document.getElementById('titulo').value = data.titulo;
+                document.getElementById('descricao').value = data.descricao;
+                document.getElementById('categoria').value = data.categoria || '';
+                document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
+                document.getElementById('data_prazo').value = data.data_prazo || '';
+                document.getElementById('status_exercicio').value = data.status_exercicio;
+                document.getElementById('observacoes').value = data.observacoes || '';
+                document.getElementById('form-title').innerText = "Editando Atividade";
+                document.getElementById('btn-cancel').style.display = "block";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         async function deleteExercicio(id) {
@@ -314,49 +304,5 @@
             });
         }
     </script>
-
-<!--
--- ============================================================================
--- SCRIPT EXCLUSIVO: MÓDULO EXERCÍCIOS (COMPLETO E ATUALIZADO)
--- ============================================================================
-
--- 1. Limpa a tabela e as regras antigas
-DROP TABLE IF EXISTS public.tarefas CASCADE;
-
--- 2. Cria a tabela com todos os campos novos
-CREATE TABLE public.tarefas (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    titulo TEXT NOT NULL,
-    descricao TEXT NOT NULL,
-    categoria TEXT,
-    codigo_de_barras TEXT,
-    data_prazo DATE,
-    observacoes TEXT,
-    foto_url TEXT,
-    audio_url TEXT,
-    status_exercicio TEXT DEFAULT 'pendente',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 3. Segurança (RLS - Row Level Security)
-ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Exercícios: Acesso total ao próprio usuário" ON public.tarefas
-    FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-
--- 4. Buckets de Storage (Para fotos e áudios)
-INSERT INTO storage.buckets (id, name, public) VALUES ('resolucoes', 'resolucoes', true) ON CONFLICT (id) DO NOTHING;
-INSERT INTO storage.buckets (id, name, public) VALUES ('audios', 'audios', true) ON CONFLICT (id) DO NOTHING;
-
--- 5. Políticas de Storage
-DROP POLICY IF EXISTS "Acesso público select" ON storage.objects;
-DROP POLICY IF EXISTS "Acesso total autenticado" ON storage.objects;
-
-CREATE POLICY "Acesso público select" ON storage.objects FOR SELECT USING (bucket_id IN ('resolucoes', 'audios'));
-CREATE POLICY "Acesso total autenticado" ON storage.objects FOR ALL 
-USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
-
--->
 </body>
 </html>
