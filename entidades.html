@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    
+    <style>
+        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
+        
+        /* --- ESTILOS DO SISTEMA CRUD --- */
+        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        /* Ajuste para o botão de senha */
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper i { position: absolute; right: 10px; cursor: pointer; color: #64748b; }
+        
+        /* Botões */
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-add:hover { opacity: 0.9; }
+        .btn-add:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        
+        /* Tabela */
+        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
+        td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; }
+        
+        /* Elementos Visuais */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-nav { padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-logout { background: #ef4444; color: white; border: none; cursor: pointer; }
+        .tag { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #eee; }
+
+        /* --- ESTILOS DA TELA DE LOGIN --- */
+        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--dark); }
+        .login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
+        .login-box h2 { margin-bottom: 20px; color: var(--dark); font-size: 24px; }
+        .login-box input { margin-bottom: 15px; }
+        .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        .btn-login:hover { opacity: 0.9; }
+    </style>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuração do Supabase (Atenção: substitui a chave abaixo pela tua verdadeira)
+        const SUPABASE_URL = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqbXNrc3JoZGVkd3JsYW5wbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNDE5ODQsImV4cCI6MjA5MDYxNzk4NH0.X2S4UZ3WGLoxx9LsNNbJ6-kyM0DAQoTr8wY57O6m4ZA'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
+
+        // --- FUNÇÕES DE AUTENTICAÇÃO E CONTROLE DE TELA ---
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
+
+            if (!session) {
+                telaLogin.style.display = 'flex';
+                telaSistema.style.display = 'none';
+            } else {
+                telaLogin.style.display = 'none';
+                telaSistema.style.display = 'block';
+                loadEntities(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro ao fazer login: " + error.message);
+            else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body>
+
+    <div id="tela-login" class="login-wrapper" style="display: none;">
+        <div class="login-box">
+            <h2><i class="fas fa-user-circle" style="color: var(--primary);"></i> Acesso ao Sistema</h2>
+            <input type="email" id="login-email" placeholder="Digite seu e-mail">
+            <input type="password" id="login-senha" placeholder="Digite sua senha">
+            <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        
+        <div class="navbar">
+            <a href="menu.html" style="font-weight: bold; color: #0f172a; font-size: 1.2rem; text-decoration: none; cursor: pointer;">
+                <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+            </a>
+            <div class="flex gap-4">
+                <button class="btn-nav btn-logout" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair do Sistema</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Novo Cadastro de Entidade</h3>
+                <input type="hidden" id="edit-id">
+
+                <div class="section-title">Informações e Acesso</div>
+                <div class="form-grid">
+                    <div><label>Foto de Perfil</label><input type="file" id="foto" accept="image/*"></div>
+                    <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
+                    <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
+                    <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
+                    <div><label>E-mail</label><input type="email" id="email"></div>
+                    <div><label>Telefone *</label><input type="text" id="telefone"></div>
+                    <div>
+                        <label>Senha Interna (Auth)</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="senha_acesso" placeholder="(Será gerido pelo Supabase Auth futuramente)">
+                            <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Tipo de Acesso</label>
+                        <select id="tipo_acesso">
+                            <option value="cliente">Cliente</option>
+                            <option value="funcionario">Funcionário</option>
+                            <option value="master">Master</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Relacionamento</label>
+                        <select id="tipo_entidade">
+                            <option value="cliente">Cliente</option>
+                            <option value="fornecedor">Fornecedor</option>
+                            <option value="funcionario">Funcionário</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status_entidade">
+                            <option value="ativo">Ativo</option>
+                            <option value="desativado">Desativado</option>
+                        </select>
+                    </div>
+                    <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
+                </div>
+
+                <div class="section-title">Endereço</div>
+                <div class="form-grid">
+                    <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
+                    <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
+                    <div><label>Número</label><input type="text" id="numero"></div>
+                    <div><label>Bairro</label><input type="text" id="bairro"></div>
+                    <div><label>Cidade</label><input type="text" id="cidade"></div>
+                    <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
+                </div>
+
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </div>
+
+            <div class="card">
+                <input type="text" id="inputBusca" placeholder="Filtrar por nome..." onkeyup="filtrarTabela()" class="mb-4">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome / Tipo</th>
+                                <th>Contato</th>
+                                <th>Acesso / Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entities-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <script>
+        // Carregar dados na tabela
+        async function loadEntities() {
+            const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
+            if (error) return console.error(error);
+            renderTable(data);
+        }
+
+        // Renderizar Tabela
+        function renderTable(data) {
+            const tbody = document.getElementById('entities-list');
+            tbody.innerHTML = data.map(e => {
+                const avatar = e.foto_url ? e.foto_url : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+                
+                return `
+                <tr>
+                    <td><img src="${avatar}" class="avatar-img" alt="Foto"></td>
+                    <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
+                    <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
+                    <td><span class="tag">${e.tipo_acesso}</span> | ${e.status_entidade}</td>
+                    <td>
+                        <button class="text-blue-500 mr-2" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="text-red-500 mr-2" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="text-green-500" onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Salvar (Inserir ou Atualizar) com Upload de Foto
+        async function handleSave() {
+            const btnSave = document.getElementById('btn-save');
+            btnSave.disabled = true;
+            btnSave.innerText = "Salvando aguarde...";
+
+            try {
+                const id = document.getElementById('edit-id').value;
+                let fotoUrl = null;
+                const inputFoto = document.getElementById('foto');
+
+                // 1. Upload de Foto
+                if (inputFoto.files && inputFoto.files.length > 0) {
+                    const file = inputFoto.files[0];
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}_${Math.random()}.${fileExt}`;
+                    
+                    const { data: uploadData, error: uploadError } = await _supabase.storage
+                        .from('avatares')
+                        .upload(`public/${fileName}`, file);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('avatares')
+                        .getPublicUrl(`public/${fileName}`);
+
+                    fotoUrl = publicUrlData.publicUrl;
+                }
+
+                // 2. Coletar campos
+                const campos = [
+                    'nome_completo', 'cpf', 'data_nascimento', 'email', 'telefone',
+                    'cep', 'logradouro', 'numero', 'bairro', 'cidade',
+                    'estado', 'avaliacao', 'tipo_acesso', 'tipo_entidade', 'status_entidade'
+                ];
+
+                const payload = {};
+                campos.forEach(c => {
+                    const el = document.getElementById(c);
+                    if (el) payload[c] = el.value === "" && el.type === "date" ? null : el.value;
+                });
+                
+                if (fotoUrl) payload.foto_url = fotoUrl;
+                
+                const { data: userData } = await _supabase.auth.getUser();
+                if(userData && userData.user) {
+                    payload.user_id = userData.user.id;
+                }
+
+                // 3. Salvar no Banco
+                const { error } = id 
+                    ? await _supabase.from('entidades').update(payload).eq('id', id)
+                    : await _supabase.from('entidades').insert([payload]);
+
+                if (error) throw error;
+                
+                alert("Sucesso!");
+                resetForm();
+                loadEntities();
+
+            } catch (error) {
+                alert("Erro: " + error.message);
+                console.error(error);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerText = "Salvar Entidade";
+            }
+        }
+
+        // Editar
+        async function editFull(id) {
+            const { data } = await _supabase.from('entidades').select('*').eq('id', id).single();
+            if (!data) return;
+
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el && key !== 'foto') el.value = data[key] || '';
+            });
+
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
+            document.getElementById('btn-save').innerText = "Atualizar";
+            document.getElementById('btn-cancel').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Excluir
+        async function deleteEntity(id) {
+            if (!confirm("Excluir permanentemente?")) return;
+            await _supabase.from('entidades').delete().eq('id', id);
+            loadEntities();
+        }
+
+        // Reset
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
+            document.getElementById('btn-save').innerText = "Salvar Entidade";
+            document.getElementById('btn-cancel').style.display = "none";
+            document.querySelectorAll('input, select, textarea').forEach(el => el.value = el.id === 'avaliacao' ? '5' : '');
+            document.getElementById('foto').value = ''; 
+        }
+
+        // Busca CEP
+        async function buscaCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await res.json();
+                if (!data.erro) {
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                }
+            }
+        }
+
+        // Filtro Tabela
+        function filtrarTabela() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('#entities-list tr').forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+
+        // Visibilidade Senha
+        function togglePasswordVisibility() {
+            const input = document.getElementById('senha_acesso');
+            const icon = document.getElementById('togglePassword');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+    </script>
+
+  <!-- 
+-- ============================================================================
+-- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
+-- ============================================================================
+-- Remove os gatilhos e funções antigas
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP FUNCTION IF EXISTS public.handle_new_user();
+-- CORREÇÃO AQUI: Procuramos na pasta public, não na auth
+DROP FUNCTION IF EXISTS public.get_user_role(); 
+
+-- Remove as políticas do Storage antigas (se existirem)
+DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
+DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
+
+-- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
+DROP TABLE IF EXISTS public.entidades CASCADE;
+
+
+-- ============================================================================
+-- 1. CRIAÇÃO DA TABELA PRINCIPAL ATUALIZADA
+-- ============================================================================
+CREATE TABLE public.entidades (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE, -- Vínculo de segurança com o Auth
+    nome_completo TEXT NOT NULL,
+    cpf TEXT,
+    data_nascimento DATE,
+    email TEXT,
+    telefone TEXT,
+    tipo_acesso TEXT DEFAULT 'cliente',
+    tipo_entidade TEXT DEFAULT 'cliente',
+    status_entidade TEXT DEFAULT 'ativo',
+    avaliacao INTEGER DEFAULT 5,
+    cep TEXT,
+    logradouro TEXT,
+    numero TEXT,
+    bairro TEXT,
+    cidade TEXT,
+    estado VARCHAR(2),
+    foto_url TEXT, -- Campo para armazenar o link da foto
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+
+-- ============================================================================
+-- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY - RLS)
+-- ============================================================================
+-- Ativamos a segurança a nível de linha (ninguém acede sem permissão)
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- CORREÇÃO AQUI: Função segura criada na pasta 'public'
+CREATE OR REPLACE FUNCTION public.get_user_role() 
+RETURNS TEXT AS $$
+  SELECT tipo_acesso FROM public.entidades WHERE user_id = auth.uid() LIMIT 1;
+$$ LANGUAGE sql SECURITY DEFINER;
+
+-- APLICAÇÃO DAS REGRAS POR CARGO:
+
+-- REGRA MASTER: Tem poder absoluto
+CREATE POLICY "Master faz tudo" ON public.entidades 
+FOR ALL TO authenticated 
+USING (public.get_user_role() = 'master');
+
+-- REGRA FUNCIONÁRIO: Pode ler, inserir e editar (Não pode apagar)
+CREATE POLICY "Funcionario le" ON public.entidades 
+FOR SELECT TO authenticated 
+USING (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario insere" ON public.entidades 
+FOR INSERT TO authenticated 
+WITH CHECK (public.get_user_role() = 'funcionario');
+
+CREATE POLICY "Funcionario atualiza" ON public.entidades 
+FOR UPDATE TO authenticated 
+USING (public.get_user_role() = 'funcionario');
+
+-- REGRA CLIENTE/FORNECEDOR: O utilizador só vê e altera A SUA PRÓPRIA LINHA
+CREATE POLICY "Pessoa ve e edita os proprios dados" ON public.entidades 
+FOR ALL TO authenticated 
+USING (user_id = auth.uid())
+WITH CHECK (user_id = auth.uid());
+
+
+-- ============================================================================
+-- 3. AUTOMATIZAÇÃO SEGURA (TRIGGER DE REGISTO NOVO UTILIZADOR)
+-- ============================================================================
+-- Função que insere na tabela 'entidades' quando alguém se regista no Auth
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.entidades (user_id, email, nome_completo, status_entidade, tipo_acesso, tipo_entidade)
+  VALUES (
+    new.id, 
+    new.email, 
+    COALESCE(new.raw_user_meta_data->>'full_name', 'Utilizador Novo'),
+    'ativo',
+    'cliente',
+    'cliente'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Cria o gatilho associando a função acima ao evento de novo usuário
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+
+-- ============================================================================
+-- 4. SEGURANÇA DO STORAGE (IMPEDIR UPLOADS MALICIOSOS NO BUCKET 'avatares')
+-- ============================================================================
+-- Nota: Lembra-te que o bucket 'avatares' deve ser criado manualmente no painel Storage!
+
+-- Permite que qualquer pessoa veja as fotos
+CREATE POLICY "Imagens publicas para visualizacao"
+ON storage.objects FOR SELECT TO public
+USING ( bucket_id = 'avatares' );
+
+-- Permite que APENAS utilizadores logados façam upload
+CREATE POLICY "Upload apenas para logados"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK ( bucket_id = 'avatares' );
+
+-- Permite que o utilizador edite ou apague apenas a sua própria foto
+CREATE POLICY "Usuario edita a propria foto"
+ON storage.objects FOR UPDATE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+
+CREATE POLICY "Usuario apaga a propria foto"
+ON storage.objects FOR DELETE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+    
+
+    -- ============================================================================
+-- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
+-- ============================================================================
+
+-- A. LIMPEZA PREVENTIVA (Isto é o que evita o teu erro!)
+DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
+DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
+DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
+
+
+-- B. CRIA O BUCKET AUTOMATICAMENTE (Se ele ainda não existir)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatares', 'avatares', true)
+ON CONFLICT (id) DO NOTHING;
+
+
+-- C. APLICA AS REGRAS DE SEGURANÇA
+CREATE POLICY "Imagens publicas para visualizacao"
+ON storage.objects FOR SELECT TO public
+USING ( bucket_id = 'avatares' );
+
+CREATE POLICY "Upload apenas para logados"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK ( bucket_id = 'avatares' );
+
+CREATE POLICY "Usuario edita a propria foto"
+ON storage.objects FOR UPDATE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+
+CREATE POLICY "Usuario apaga a propria foto"
+ON storage.objects FOR DELETE TO authenticated
+USING ( bucket_id = 'avatares' AND auth.uid() = owner );
+-->
+    </body>
+</html>
