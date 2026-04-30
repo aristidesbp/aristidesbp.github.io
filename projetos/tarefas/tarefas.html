@@ -45,42 +45,14 @@
 
 <!--logim -->
     <script>
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        let recordedAudioBlob = null;
-        let mediaRecorder;
-        let audioChunks = [];
-        let html5QrCode;
+       <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script type="module">
+    import { iniciarLoginSistema } from './login.js';
 
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) {
-                document.getElementById('tela-login').style.display = 'flex';
-                document.getElementById('tela-sistema').style.display = 'none';
-            } else {
-                document.getElementById('tela-login').style.display = 'none';
-                document.getElementById('tela-sistema').style.display = 'block';
-                loadtarefas(); 
-            }
-        }
+    iniciarLoginSistema();
+</script>
+    
 
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) alert("Erro: " + error.message);
-            else verificar_login();
-        }
-
-        document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
-        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
-            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
-            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
-            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
-        </div>
-    </div>
 
 
 
