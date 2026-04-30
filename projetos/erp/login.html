@@ -6,19 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP ABP</title>
 
+    
+    <!-- CONEXÃO SUPABASE -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../supabase/supabase_config.js"></script>
+
+    
     <!-- STYLE -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <!-- FIM DO STYLE -->
 
-    <!-- CONEXÃO SUPABASE -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+
+    
     <script>
-        // SUPABASE_CONFIG.JS
-        const supabaseUrl = 'https://uugmutvhsnssfmlqwlpo.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Z211dHZoc25zc2ZtbHF3bHBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MTM5MTAsImV4cCI6MjA5MDI4OTkxMH0.LTeRj7Or4_swJ-gAwurvahOZi8wd3ZLUrwvZw5no_r4';
-        // Inicializa o cliente Supabase
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+     //iciciando a conexao
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         // Exporta para ser usado em outros scripts
         window.supabaseClient = _supabase;
     </script>
@@ -84,6 +89,7 @@
     <!-- FIM DO FORMULÁRIO -->
 
     <script>
+        
         /**
      * Nome do arquivo: alternar_senha.js
      * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
