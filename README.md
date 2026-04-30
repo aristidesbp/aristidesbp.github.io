@@ -767,7 +767,8 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
             </div>
         </div>
     </div>
-
+```
+```
     <script>
         // Carregar dados na tabela
         async function loadEntities() {
@@ -934,7 +935,8 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
             icon.classList.toggle('fa-eye-slash');
         }
     </script>
-
+```
+```
 <!-- 
 -- ============================================================================
 -- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
