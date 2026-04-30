@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAREFAS - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <link rel="stylesheet" href="tarefas.css">
+    
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts do Sistema -->
+    <script src="supabase_config.js"></script>
+    <script>const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
+    <script src="tarefas_model.js"></script>
+    <script src="tarefas_controller.js"></script>
+</head>
+<body>
+    <!-- O conteúdo da Body permanece igual ao enviado anteriormente, 
+         mas os eventos onclick devem chamar 'TarefasController.nomeDaFuncao()' -->
+    
+    <!-- Exemplo: <button onclick="TarefasController.save()">Salvar</button> -->
+    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
+        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
+            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
+            <input type="email" id="login-email" placeholder="E-mail" class="mb-4 shadow-sm border p-2 w-full rounded">
+            <input type="password" id="login-senha" placeholder="Senha" class="mb-6 shadow-sm border p-2 w-full rounded">
+            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="TarefasController.init()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        <div class="navbar">
+            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
+            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(()=>TarefasController.init())">Sair</button>
+        </div>
+
+        <div class="container">
+            <!-- ... Restante do HTML do formulário e tabela ... -->
+            <!-- Importante: Ajuste todos os botões para chamarem TarefasController -->
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
+                <input type="hidden" id="edit-id">
+                <div class="section-title">Informações Básicas</div>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;"><label>Título *</label><input type="text" id="titulo"></div>
+                    <div><label>Categoria</label><input type="text" id="categoria"></div>
+                    <div><label>Prazo</label><input type="date" id="data_prazo"></div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status_exercicio"><option value="pendente">Pendente</option><option value="realizada">Realizada</option></select>
+                    </div>
+                </div>
+                <button class="btn-add" id="btn-save" onclick="TarefasController.save()">Salvar Registro</button>
+            </div>
+
+            <div class="card">
+                <tbody id="exercises-list"></tbody>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
