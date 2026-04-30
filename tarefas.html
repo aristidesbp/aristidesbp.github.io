@@ -40,8 +40,12 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
+
+        // 1. Chaves de Acesso (Substitua pelas suas)
+       
+        const supabaseUrl = 'https://bpdjbffsfxvrdxxwxzsz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZGpiZmZzZnh2cmR4eHd4enN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NTMzNTYsImV4cCI6MjA5MzEyOTM1Nn0.Q5HNWQBSJk8Bpd4dq7cx5HHJtVHkxza9pbQV3qX_rsM';
+ 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let recordedAudioBlob = null;
