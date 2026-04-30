@@ -369,8 +369,10 @@ erp_abp/
 --- 
 
 ## Configurar
-* Authentication/Users: voçẽ pode criar um novo usuario.
+
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
+* Authentication/Users: voçẽ pode criar um novo usuario.
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # supabase/
