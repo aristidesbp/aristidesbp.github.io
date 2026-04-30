@@ -517,12 +517,13 @@ erp_abp/
 ```
 
 
-## supabase_config.js
+## supabase/supabase_config.js
 ```
 // 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'SUA_URL_AQUI';
-const SUPABASE_KEY = 'SUA_CHAVE_AQUI';
-console.log("✅ Conexão Supabase configurada com sucesso.");
+const SUPABASE_URL = 'SUA_URL';
+const SUPABASE_KEY = 'SUA_CHAVE_ANOM';
+
+console.log("✅ conectado com o arquivo supabase/supabase_config.js");
 ```
 
 
