@@ -164,8 +164,12 @@ ls -a ~/.ssh
 ```
 ```
 # criar uma chave SSH
-# Aperte **Enter** (deixe em branco) para salvar no local padrão sugerido.
+# Aperte [Enter] (deixe tudo em branco).
 ssh-keygen -t ed25519 -C "email_cadastrado"
+```
+```
+# exibir o código que você deve copiar e colar no GitHub:
+cat ~/.ssh/id_ed25519.pub
 ```
 ```
 # Troque a URL remota para usar SSH
