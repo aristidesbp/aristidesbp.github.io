@@ -87,10 +87,9 @@ mv teste.txt ./repositorios_git
 # limpar atela
 clear
 ```
-Digite o seguinte endereço na barra de URL:
-
 ```
-http://localhost:8080/admin.html
+# como apagar pasta/arquivos/projetos
+rm -rf nome_da_pasta
 ```
 
 ---
