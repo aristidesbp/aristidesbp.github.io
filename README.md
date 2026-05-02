@@ -37,8 +37,10 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   
 
-# TUTORIAL DE COMO CRIAR UM SISTEMA ERP UTILIZANDO APENAS UM CELULAR
+# TUTORIAIS
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+
 
 ![Img termux](projetos/img/termux.jpeg)
 
@@ -171,6 +173,26 @@ ssh-keygen -t ed25519 -C "email_cadastrado"
 # exibir o código que você deve copiar e colar no GitHub:
 cat ~/.ssh/id_ed25519.pub
 ```
+
+* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
+Após salvar no site, use este comando:
+```
+# testar a conexão:
+ssh -T git@github.com
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```
 # Troque a URL remota para usar SSH
 git remote set-url origin git@github.com:usuario/repositorio.git
