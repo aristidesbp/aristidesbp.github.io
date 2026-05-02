@@ -164,8 +164,8 @@ ls -a ~/.ssh
 ```
 ```
 # criar uma chave SSH
-ssh-keygen -t ed25519 -C "aristidesbp@gmail.com"
-
+# Aperte **Enter** (deixe em branco) para salvar no local padrão sugerido.
+ssh-keygen -t ed25519 -C "email_cadastrado"
 ```
 ```
 # Troque a URL remota para usar SSH
