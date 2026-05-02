@@ -75,6 +75,26 @@ pkg install curl -y
 pkg install tree -y
 ```
 ```
+# ver as pastas ocultas (-a) do diretorio
+ls -a
+```
+```
+# ver pastas e arquivos
+tree
+```
+```
+# ir para o diretorio
+cd nome_do_diretorio
+```
+```
+# voltar para pasta anterior
+cd ..
+```
+```
+# voltar para pasta raiz
+cd
+```
+```
 # comando para criar pasta
 mkdir novo_projeto
 ```
