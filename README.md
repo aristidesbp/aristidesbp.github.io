@@ -139,7 +139,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 # GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
 ```
-# verificar se o vídeo está instalado 
+# verificar se o git está instalado 
 git --version
 ```
 ```
@@ -157,6 +157,15 @@ git config --global user.name "nome_do_usuario"
 ```
 # Configurar email do GitHub
 git config --global user.email "seu@email.com"
+```
+```
+# verificar se tem chave SSH
+ls -a ~/.ssh
+```
+```
+# criar uma chave SSH
+ssh-keygen -t ed25519 -C "aristidesbp@gmail.com"
+
 ```
 ```
 # Troque a URL remota para usar SSH
