@@ -193,6 +193,10 @@ ssh -T git@github.com
 # iniciar o agente de chaves e registrar nova chave:
 eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 ```
+
+---
+# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+
 ```
 # clonar um repositório
 # exemplo:
@@ -210,25 +214,9 @@ git config --global --add safe.directory "$(pwd)"
 # testar
 git status 
 ```
-
-
-
-
-
----
-# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
-```
-## Clona o repositório com chave SSH
-git clone git@github.com:aristidesbp/aristidesbp.github.io
-```
-```
-# entre na pasta do repositório clonado
-cd aristidesbp.github.io
-```
 ```
 # Inicializa o repositório Git local (caso não tenha vindo com o clone)
 git init
-
 ```
 ```
 # BAIXAR ATUALIZAÇÃO DO SITE:
