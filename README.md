@@ -118,7 +118,10 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ![Img github](projetos/img/github.jpeg)
 
 # GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
-
+```
+# verificar se o vídeo está instalado 
+git --version
+```
 ```
 # Lista todas as configurações ativas: 
 git config --list
