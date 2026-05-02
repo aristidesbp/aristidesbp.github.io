@@ -43,16 +43,17 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ![Img termux](projetos/img/termux.jpeg)
 
 # TERMUX (TERMINAL LINUX PARA ANDROID)
-* por que baixar o termux?
+## por que baixar o termux?
 - reorganizar pastas.
 - fazer testes
 - utilizar o git
 - ter um terminal portátil
   
-* Download do aplicativo direto no git
+## Download do aplicativo direto no git
 Acesse o link oficial (não uso da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
 * em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+
 ```
 # Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
 # Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
