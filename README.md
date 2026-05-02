@@ -145,6 +145,10 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 git --version
 ```
 ```
+# vá para pasta onde ficará o repositório
+cd storage/downloads
+```
+```
 # Lista todas as configurações ativas: 
 git config --list
 ```
@@ -175,76 +179,40 @@ cat ~/.ssh/id_ed25519.pub
 ```
 
 * Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
-Após salvar no site, use este comando:
+* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
+* após salvar tem que confirmar por email.
+ssh criado use este comando no termux:
 ```
 # testar a conexão:
+# Digite a palavra "yes" e aperte Enter.
+# DEVE APARECER:
+# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
 ssh -T git@github.com
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```
-# Troque a URL remota para usar SSH
-git remote set-url origin git@github.com:usuario/repositorio.git
-```
-
-```
-# Iniciar o agente ssh
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 ```
 ```
-# Gerar nova chave SSH (caso ainda não tenha,apertar enter ate finalizar)
-ssh-keygen -t ed25519 -C "seu@email.com"
+# clonar um repositório
+# exemplo:
+git clone git@github.com:usuário/nome_do_repositorio.git
 ```
 ```
-# Mostrar a chave pública para adicionar no GitHub
-cat ~/.ssh/id_ed25519.pub
+# entrar na pasta
+cd aristidesbp.github.io
 ```
 ```
-#🧪 Teste de conexão com GitHub via SSH 
-# Se tudo estiver certo, você verá:
-# Hi SEU_USUARIO! You've successfully authenticated..
-ssh -T git@github.com
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
 ```
 
-## ⚠️ OBS: VERIFIQUE CONFIG GITHUB !
-----------------------------------------------------
-1. Acesse: https://github.com
-2. Faça login na sua conta
-3. No canto superior direito, clique na sua foto de perfil → **Settings**
-4. Vá até **SSH and GPG keys** (ou "Chaves SSH e GPG")
-5. Clique em **New SSH key**
-6. Em **Title**, coloque um nome (ex: “Meu notebook”)
-7. Em **Key**, cole a chave pública copiada (noterminal digite)
-8. 🧪 Teste de conexão com GitHub via SSH novamente
-----------------------------------------------------
-```
-# vá para pasta do projeto (abaixo terá um exemplo)
-cd storage/downloads
-```
-```
-# veja o que tem na pasta
-ls
-```
-```
-# para mostrar conteudo o culto da pasta
-ls -a
-```
-```
-# mostrar todas as pastas e subpastas
-tree
-```
+
+
 
 
 ---
