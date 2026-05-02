@@ -132,7 +132,7 @@ git config --global --add safe.directory "$(pwd)"
 ```
 ```
 # Configurar nome de usuário
-git config --global user.name "Seu Nome"
+git config --global user.name "nome_do_usuario"
 ```
 ```
 # Configurar email do GitHub
