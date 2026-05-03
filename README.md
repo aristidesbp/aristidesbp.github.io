@@ -1083,7 +1083,8 @@ END $$;
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-    
+    ```
+```
     <style>
         /* --- VARIÁVEIS E ESTILOS GERAIS --- */
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
@@ -1128,7 +1129,8 @@ END $$;
         .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
         .btn-login:hover { opacity: 0.9; }
     </style>
-
+```
+```
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Configuração do Supabase (Atenção: substitui a chave abaixo pela tua verdadeira)
@@ -1174,6 +1176,8 @@ END $$;
 
         document.addEventListener('DOMContentLoaded', verificar_login);
     </script>
+    ```
+    ```
 </head>
 <body>
 
@@ -1465,7 +1469,8 @@ DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
 -- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
 DROP TABLE IF EXISTS public.entidades CASCADE;
 
-
+```
+```
 -- ============================================================================
 -- 1. CRIAÇÃO DA TABELA PRINCIPAL ATUALIZADA
 -- ============================================================================
@@ -1491,7 +1496,8 @@ CREATE TABLE public.entidades (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-
+```
+```
 -- ============================================================================
 -- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY - RLS)
 -- ============================================================================
@@ -1530,7 +1536,8 @@ FOR ALL TO authenticated
 USING (user_id = auth.uid())
 WITH CHECK (user_id = auth.uid());
 
-
+```
+```
 -- ============================================================================
 -- 3. AUTOMATIZAÇÃO SEGURA (TRIGGER DE REGISTO NOVO UTILIZADOR)
 -- ============================================================================
@@ -1556,7 +1563,8 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-
+```
+```
 -- ============================================================================
 -- 4. SEGURANÇA DO STORAGE (IMPEDIR UPLOADS MALICIOSOS NO BUCKET 'avatares')
 -- ============================================================================
@@ -1581,7 +1589,8 @@ CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
     
-
+```
+```
     -- ============================================================================
 -- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
 -- ============================================================================
@@ -1616,6 +1625,7 @@ CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
 -->
+```
     </body>
 </html>
 ```
