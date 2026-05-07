@@ -531,6 +531,30 @@ erp_abp/
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# supabase/
+```
+!_ supabase/
+!    !_ supabase_config.js
+!    !_ .gitignore
+```
+
+
+## supabase/supabase_config.js
+```
+// 1. Chaves de Acesso (Substitua pelas suas)
+const SUPABASE_URL = 'SUA_URL';
+const SUPABASE_KEY = 'SUA_CHAVE_ANOM';
+
+console.log("✅ conectado com o arquivo supabase/supabase_config.js");
+```
+
+
+## .gitignore
+```
+supabase_config.js
+```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## supabase/teste_de_conexao.html
@@ -666,29 +690,7 @@ erp_abp/
 </body>
 </html>
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase/
-```
-!_ supabase/
-!    !_ supabase_config.js
-!    !_ .gitignore
-```
 
-
-## supabase/supabase_config.js
-```
-// 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'SUA_URL';
-const SUPABASE_KEY = 'SUA_CHAVE_ANOM';
-
-console.log("✅ conectado com o arquivo supabase/supabase_config.js");
-```
-
-
-## .gitignore
-```
-supabase_config.js
-```
 
 
 
