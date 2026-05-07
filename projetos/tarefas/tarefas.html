@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAREFAS - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+
+    <!--biblioteca para codigo de barras-->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <link rel="stylesheet" href="tarefas.css"> 
+
+    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        // Inicializa o cliente usando as constantes do supabase_config.js
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let recordedAudioBlob = null;
+        let mediaRecorder;
+        let audioChunks = [];
+        let html5QrCode;
+
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                document.getElementById('tela-login').style.display = 'flex';
+                document.getElementById('tela-sistema').style.display = 'none';
+            } else {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('tela-sistema').style.display = 'block';
+                loadtarefas(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro: " + error.message);
+            else verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body>
+
+    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
+        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
+            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
+            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
+            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
+            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        <div class="navbar">
+            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
+            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
+                <input type="hidden" id="edit-id">
+
+                <div class="section-title">Informações Básicas</div>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
+                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
+                    <div>
+                        <label>Código de Barras</label>
+                        <div class="barcode-group">
+                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
+                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
+                                <i class="fas fa-barcode"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status_exercicio">
+                            <option value="pendente">Pendente</option>
+                            <option value="realizada">Realizada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="reader"></div>
+                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
+
+                <div class="section-title">Conteúdo do Exercício</div>
+                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
+
+                <div class="section-title">Mídias e Notas</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Foto da Resolução</label>
+                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
+                    </div>
+                    <div>
+                        <label>Gravar Áudio</label>
+                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
+                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>Observações do Responsável</label>
+                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </div>
+
+            <div class="card">
+                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
+                                <th class="p-4">Atividade / Categoria</th>
+                                <th class="p-4">Código</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercises-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tarefas.js"></script>
+</body>
+  
+</html>
