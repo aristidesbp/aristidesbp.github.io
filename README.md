@@ -480,29 +480,24 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 # vamos usar um sistema de pastas separando paginas e funcionalidades, dividindo o projeto em varias partes menores.
 
 erp_abp/
-!_ supabase/
+!_index.html
+!_ .gitignore
+!
+!
+!_ link_rel_styleshet_href
+!    !_ style.css
+!
+!_ script_src/
+!    !_ vew/
+!    !    !_ login.html
+!    !    !_ dashboard.html
+!    !    !_ usuarios.html
+!    !    !_ financeiro.html
+!    !
+!    !_ model/
 !    !_ supabase_config.js
-!    !_ .env
-!    !_ .gitignore
-!
-!_ usuarios/
-!    !_ usuarios.html
-!    !_ usuarios.css
-!    !_ usuarios_model.js
-!    !_ usuarios_controller.js
-!    !_ usuarios.sql
-!
-!_ login/
-!    !_ login.html
-!    !_ login.css
 !    !_ login_model.js
-!    !_ login_controller.js
-!
-!_ financeiro/
-!   !_ financeiro.html
-!   !_ financeiro_model.js
-!   !_ financeiro_controller.css
-!   !_ financeiro.sql  
+        
 
 ````
 
