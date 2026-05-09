@@ -537,14 +537,16 @@ erp_abp/
 
 ## supabase/supabase_config.js
 ```
-// 1. Chaves de Acesso (Substitua pelas suas)
-const SUPABASE_URL = 'SUA_URL';
-const SUPABASE_KEY = 'SUA_CHAVE_ANOM';
+// supabase_config.js
+
+export const SUPABASE_ANON_KEY = 'api_key';
+
+export const SUPABASE_URL = 'api_url';
 
 console.log("✅ conectado com o arquivo supabase/supabase_config.js");
 ```
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## .gitignore
 ```
 supabase_config.js
@@ -602,88 +604,103 @@ supabase_config.js
     <!-- Importando Supabase via CDN (ES Modules) -->
    <!-- ############################################ -->
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        const btnTest = document.getElementById('btn-test');
-        const inputUrl = document.getElementById('sb-url');
-        const inputKey = document.getElementById('sb-key');
-        const logContainer = document.getElementById('log-container');
+    // IMPORTA O ARQUIVO DE CONFIGURAÇÃO
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase_config.js';
 
-        function log(message, type = 'info') {
-            const colors = {
-                info: 'text-blue-400',
-                success: 'text-green-400',
-                error: 'text-red-400',
-                warn: 'text-yellow-400',
-                default: 'text-gray-300'
-            };
-            const colorClass = colors[type] || colors.default;
-            const time = new Date().toLocaleTimeString();
-            
-            const logEntry = document.createElement('div');
-            logEntry.className = `mb-1 ${colorClass}`;
-            logEntry.textContent = `[${time}] ${message}`;
-            
-            // Remove a mensagem de "Aguardando" na primeira inserção
-            if (logContainer.children.length === 1 && logContainer.children[0].textContent.includes('Aguardando')) {
-                logContainer.innerHTML = '';
-            }
-            
-            logContainer.appendChild(logEntry);
-            logContainer.scrollTop = logContainer.scrollHeight;
+    const btnTest = document.getElementById('btn-test');
+    const inputUrl = document.getElementById('sb-url');
+    const inputKey = document.getElementById('sb-key');
+    const logContainer = document.getElementById('log-container');
+
+    // PREENCHE AUTOMATICAMENTE OS CAMPOS
+    inputUrl.value = SUPABASE_URL;
+    inputKey.value = SUPABASE_ANON_KEY;
+
+    function log(message, type = 'info') {
+        const colors = {
+            info: 'text-blue-400',
+            success: 'text-green-400',
+            error: 'text-red-400',
+            warn: 'text-yellow-400',
+            default: 'text-gray-300'
+        };
+
+        const colorClass = colors[type] || colors.default;
+        const time = new Date().toLocaleTimeString();
+
+        const logEntry = document.createElement('div');
+        logEntry.className = `mb-1 ${colorClass}`;
+        logEntry.textContent = `[${time}] ${message}`;
+
+        if (
+            logContainer.children.length === 1 &&
+            logContainer.children[0].textContent.includes('Aguardando')
+        ) {
+            logContainer.innerHTML = '';
         }
 
-        btnTest.addEventListener('click', async () => {
-            const url = inputUrl.value.trim();
-            const key = inputKey.value.trim();
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
 
-            logContainer.innerHTML = ''; // Limpa logs anteriores
+    btnTest.addEventListener('click', async () => {
 
-            if (!url || !key) {
-                log('Erro: URL e Key são obrigatórias.', 'error');
-                return;
+        const url = SUPABASE_URL;
+        const key = SUPABASE_ANON_KEY;
+
+        logContainer.innerHTML = '';
+
+        log('Inicializando cliente Supabase...', 'info');
+
+        btnTest.disabled = true;
+        btnTest.classList.add('opacity-50', 'cursor-not-allowed');
+
+        try {
+
+            const supabase = createClient(url, key);
+
+            log('Enviando requisição de teste...', 'info');
+
+            const startTime = performance.now();
+
+            const { error, status } = await supabase
+                .from('_non_existent_table_test_')
+                .select('*')
+                .limit(1);
+
+            const latency = Math.round(performance.now() - startTime);
+
+            if (status) {
+
+                log(`Resposta recebida em ${latency}ms`, 'success');
+                log(`Status HTTP: ${status}`, 'success');
+                log('Conexão funcionando corretamente!', 'success');
+
+            } else if (error) {
+
+                throw error;
+
             }
 
-            if (url.endsWith('/rest/v1/')) {
-                log('Aviso: A URL não deve terminar com /rest/v1/. O SDK adiciona isso automaticamente. Remova e tente novamente.', 'warn');
-                return;
-            }
+        } catch (err) {
 
-            log('Inicializando cliente Supabase...', 'info');
-            btnTest.disabled = true;
-            btnTest.classList.add('opacity-50', 'cursor-not-allowed');
+            log(`Erro: ${err.message}`, 'error');
 
-            try {
-                const supabase = createClient(url, key);
-                
-                log('Enviando requisição de teste de conexão...', 'info');
-                
-                // Fazendo uma requisição genérica para verificar se a API responde
-                const startTime = performance.now();
-                const { data, error, status } = await supabase.from('_non_existent_table_test_').select('*').limit(1);
-                const latency = Math.round(performance.now() - startTime);
+        } finally {
 
-                // Como a tabela não existe, esperamos um erro específico do PostgREST (PGRST116 ou 404).
-                // Se a API responder com status HTTP, significa que a conexão física e as credenciais funcionam.
-                if (status) {
-                    log(`Resposta do servidor recebida em ${latency}ms. Status HTTP: ${status}`, 'success');
-                    log('Conexão com o projeto Supabase estabelecida com sucesso!', 'success');
-                } else if (error) {
-                    throw error;
-                }
+            btnTest.disabled = false;
+            btnTest.classList.remove('opacity-50', 'cursor-not-allowed');
 
-            } catch (err) {
-                log(`Falha na conexão. Erro: ${err.message || 'Desconhecido'}`, 'error');
-                log('Verifique se a URL e a Anon Key estão corretas e se o projeto não está pausado.', 'warn');
-            } finally {
-                btnTest.disabled = false;
-                btnTest.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        });
-    </script>
+        }
+
+    });
+</script>
   
 </body>
 </html>
+
 ```
 
 
