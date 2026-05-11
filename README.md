@@ -539,9 +539,17 @@ erp_abp/
 ```
 // supabase_config.js
 
-export const SUPABASE_ANON_KEY = 'api_key';
+const SUPABASE_ANON_KEY = 'api_key';
+const SUPABASE_URL = 'data_api';
 
-export const SUPABASE_URL = 'api_url';
+export const supabase_anon_key= SUPABASE_ANON_KEY;
+export const supabase_url = SUPABASE_URL;
+
+// Inicializa o cliente globalmente para as páginas do sistema
+// Verifica se a biblioteca Supabase já foi carregada antes de criar o cliente
+if (typeof supabase !== 'undefined') {
+    var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
 
 console.log("✅ conectado com o arquivo supabase/supabase_config.js");
 ```
