@@ -510,52 +510,6 @@ erp_abp/
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-
---- 
-
-## Configurar
-
-* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
-* Authentication/Users: voçẽ pode criar um novo usuario.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase/
-```
-!_ supabase/
-!    !_ supabase_config.js
-!    !_ .gitignore
-```
-
-
-## supabase/supabase_config.js
-```
-// supabase_config.js
-
-const SUPABASE_ANON_KEY = 'api_key';
-const SUPABASE_URL = 'data_api';
-
-export const supabase_anon_key= SUPABASE_ANON_KEY;
-export const supabase_url = SUPABASE_URL;
-
-// Inicializa o cliente globalmente para as páginas do sistema
-// Verifica se a biblioteca Supabase já foi carregada antes de criar o cliente
-if (typeof supabase !== 'undefined') {
-    var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
-
-console.log("✅ conectado com o arquivo supabase/supabase_config.js");
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
 # index.html
 ```
 <!DOCTYPE html>
@@ -733,6 +687,53 @@ console.log("✅ conectado com o arquivo supabase/supabase_config.js");
 </html>
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+
+--- 
+
+## Configurar
+
+* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
+* Authentication/Users: voçẽ pode criar um novo usuario.
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# supabase/
+```
+!_ supabase/
+!    !_ supabase_config.js
+!    !_ .gitignore
+```
+
+
+## supabase/supabase_config.js
+```
+// supabase_config.js
+
+const SUPABASE_ANON_KEY = 'api_key';
+const SUPABASE_URL = 'data_api';
+
+export const supabase_anon_key= SUPABASE_ANON_KEY;
+export const supabase_url = SUPABASE_URL;
+
+// Inicializa o cliente globalmente para as páginas do sistema
+// Verifica se a biblioteca Supabase já foi carregada antes de criar o cliente
+if (typeof supabase !== 'undefined') {
+    var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+console.log("✅ conectado com o arquivo supabase/supabase_config.js");
+```
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## .gitignore
 ```
