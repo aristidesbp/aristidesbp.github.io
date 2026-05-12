@@ -891,9 +891,6 @@ supabase_config.js
 
 ```
 
-
-
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # tarefas.html (funcionando)
 ```
