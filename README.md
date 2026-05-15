@@ -183,9 +183,13 @@ ollama run phi3
 # baixar modelo de linguagem para programação
 ollama run deepsek-code:1.36
 ```
+# help (/?)
 ```
+/exite # sair
+/set
+/set parameter 0.1 
 
-
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
