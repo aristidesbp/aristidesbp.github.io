@@ -183,12 +183,12 @@ pkg install proot-distro
 proot-distro list
 ```
 ```
-# instalar Ubuntu
+# instalar ubuntu
 proot-distro ubuntu
 ```
 ```
 # entrar no Ubuntu
-proot-distro login unbuntu
+proot-distro login ubuntu
 ```
 ```
 # atualizar 
@@ -211,7 +211,7 @@ ollama serve
 ## em uma nova Session
 ```
 # entrar no Ubuntu
-proot-distro login unbuntu
+proot-distro login ubuntu
 ```
 ```
 # baixar modelo de linguagem básico
