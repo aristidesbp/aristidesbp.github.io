@@ -134,6 +134,58 @@ python3 -m pip install --upgrade yt-dlp
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Termux + Linux + Ollama (sistema local depende do celular)
+```
+# instalador do Linux
+pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# instalar Ubuntu
+proot-distro ubuntu
+```
+```
+# entrar no Ubuntu
+proot-distro login unbuntu
+```
+```
+# atualizar 
+apt update && apt upgrade -y
+``` 
+```
+# instalando o buscador
+apt install curl -y
+```
+```
+# instalando Ollama 
+curl a-fsSl http://ollama.com/install
+```
+```
+# ess código vai ficar rodando em segundo plano,
+# arraste para direita e abra uma "NEW SESSION"
+ollama serve
+```
+
+## em uma nova Session
+```
+# entrar no Ubuntu
+proot-distro login unbuntu
+```
+```
+# baixar modelo de linguagem básico
+ollama run phi3
+```
+```
+# baixar modelo de linguagem para programação
+ollama run deepsek-code:1.36
+```
+```
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
