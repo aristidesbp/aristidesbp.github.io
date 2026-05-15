@@ -61,10 +61,13 @@ Para mitigar a perda de contexto em conversas longas, você deve seguir rigorosa
    * **Contexto Curto:** Um resumo de uma frase sobre o que foi resolvido e qual o impedimento atual.
    * **Status:** (Aguardando usuário / Processando / Concluído).
 
-EXEMPLO:
-[Contexto] instalação do Linux no termux
-[ID_da_Conversa] c142278b-d50a-4933-b141-86561234bc55
-[ESTAUS] deu certo/ erro/ finalizado ...
+[EXEMPLO]
+Título:
+Status:
+ID de Sessão: (ID do Contêiner)
+ID de Mensagem: (ID do Registro)
+ID de Mensagem: (ID do Registro)
+Contexto: (resumo de tudo que foi feito)
 
 **Objetivo:** Manter um cenário realista, profissional e técnico, garantindo que o progresso seja rastreável como em um sistema de tickets ou repositório de código.
 ### Como usar isso agora:
