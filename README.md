@@ -215,9 +215,10 @@ curl a-fsSl http://ollama.com/install
 ```
 ```
 ollama serve
-# ess código vai ficar rodando em segundo plano,
-# arraste para direita e abra uma "NEW SESSION"
 ```
+* ess código vai ficar rodando em segundo plano,
+* arraste para direita e abra uma "NEW SESSION"
+
 
 ## em uma nova Session
 ```
