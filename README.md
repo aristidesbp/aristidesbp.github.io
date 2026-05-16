@@ -214,6 +214,22 @@ apt install curl -y
 curl a-fsSl http://ollama.com/install
 ```
 ```
+# abrir lista
+ollama list
+```
+```
+# baixar modelo
+ollama run qwen2.5-coder:7b
+```
+```
+# baixar modelo de linguagem básico
+ollama run phi3
+```
+```
+# baixar modelo de linguagem para programação
+ollama run deepsek-code:1.36
+```
+```
 ollama serve
 ```
 * ess código vai ficar rodando em segundo plano,
@@ -225,21 +241,8 @@ ollama serve
 # entrar no Ubuntu
 proot-distro login ubuntu
 ```
-```
-# baixar modelo de linguagem básico
-ollama run phi3
-```
-```
-# baixar modelo de linguagem para programação
-ollama run deepsek-code:1.36
-```
-# help (/?)
-```
-/exite # sair
-/set
-/set parameter 0.1 
 
-```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
