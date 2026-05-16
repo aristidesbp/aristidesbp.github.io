@@ -183,6 +183,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Termux + Linux + Ollama (sistema local depende do celular)
+## instalar linux
 ```
 # instalador do Linux
 pkg install proot-distro
@@ -202,7 +203,8 @@ proot-distro login ubuntu
 ```
 # atualizar 
 apt update && apt upgrade -y
-``` 
+```
+## instalar buscador
 ```
 # instalando o buscador
 apt install curl -y
