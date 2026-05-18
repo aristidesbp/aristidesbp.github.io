@@ -39,7 +39,10 @@
     </style>
 </head>
 <body>
-
+<!--################################################################################-->
+<!--################################################################################-->
+<!--################################################################################-->
+    
     <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
         <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
             <div class="text-center mb-8">
@@ -63,9 +66,15 @@
             </div>
         </div>
     </div>
+    
+<!--################################################################################-->
+<!--################################################################################-->
+<!--################################################################################-->
+ <div id="tela-sistema" class="hidden">
 
-    <div id="tela-sistema" class="hidden">
-        
+<!--################################################################################-->
+<!--################################################################################-->
+<!--################################################################################-->
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
             <div class="flex items-center gap-4">
                 <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
@@ -78,6 +87,10 @@
             </button>
         </nav>
 
+<!--################################################################################-->
+<!--################################################################################-->
+<!--################################################################################-->
+        
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
             <div class="p-6 border-b border-slate-700 flex justify-between items-center">
                 <h2 class="text-xl font-bold"><i class="fas fa-wallet text-emerald-500"></i> Menu</h2>
@@ -92,25 +105,35 @@
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
             </ul>
         </div>
+
+<!--################################################################################-->
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
 
+     
+<!--################################################################################-->
+<!--################################################################################-->
         <div class="container mx-auto px-4 pb-10 pt-24">
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div class="card border-l-4 border-emerald-500">
-                    <p class="text-gray-500 text-sm">Receitas (Pagas)</p>
-                    <h2 id="dash-receita" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
-                </div>
-                <div class="card border-l-4 border-red-500">
-                    <p class="text-gray-500 text-sm">Despesas (Pagas)</p>
-                    <h2 id="dash-despesa" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
-                </div>
-                <div class="card border-l-4 border-amber-500">
-                    <p class="text-gray-500 text-sm">Previsão (Pendentes)</p>
-                    <h2 id="dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
-                </div>
-            </div>
 
+            
+<!--################################################################################-->            
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="card border-l-4 border-emerald-500">
+<p class="text-gray-500 text-sm">Receitas (Pagas)</p>
+<h2 id="dash-receita" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+</div>
+    
+<div class="card border-l-4 border-red-500">
+<p class="text-gray-500 text-sm">Despesas (Pagas)</p>
+<h2 id="dash-despesa" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+</div>
+
+<div class="card border-l-4 border-amber-500">
+<p class="text-gray-500 text-sm">Previsão (Pendentes)</p>
+<h2 id="dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
+</div>
+</div><!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">-->
+            
+<!--################################################################################-->
             <div class="flex gap-4 mb-6">
                 <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
                     <i class="fas fa-list"></i> Ver Lançamentos
@@ -118,13 +141,18 @@
                 <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
                     <i class="fas fa-plus-circle"></i> Novo Lançamento
                 </button>
-            </div>
+            </div><!--<div class="flex gap-4 mb-6">-->
 
-            <div class="card mb-8 hidden" id="aba-formulario">
-                <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
-                
-                <input type="hidden" id="f-editando-id">
-                <input type="hidden" id="f-editando-financa-id">
+            
+            
+<!--################################################################################-->
+<!--FORMULARIO <div class="card mb-8 hidden" id="aba-formulario">-->
+<!--################################################################################-->
+<div class="card mb-8 hidden" id="aba-formulario">
+<h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+    
+<input type="hidden" id="f-editando-id">
+<input type="hidden" id="f-editando-financa-id">
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <div class="md:col-span-2"><label>Descrição da Conta *</label><input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
@@ -233,9 +261,13 @@
                         Cancelar
                     </button>
                 </div>
-            </div>
+            </div>  <!-- FIM DO  <div class="card mb-8 hidden" id="aba-formulario">-->  
 
-            <div class="card" id="aba-listagem">
+            
+        <!--#######################################################################--> 
+        <!-- LISTAGEM <div class="card" id="aba-listagem">-->    
+        <!--#######################################################################-->    
+        <div class="card" id="aba-listagem">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
                     <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
@@ -288,9 +320,17 @@
                         <tbody id="lista-parcelas" class="text-sm"></tbody>
                     </table>
                 </div>
-            </div>
-        </div>
+            </div>    <!--FIM DA LISTAGEM <div class="card" id="aba-listagem">-->  
+
+<!--################################################################################-->
+<!--################################################################################-->
+        </div><!--<div class="container mx-auto px-4 pb-10 pt-24">-->
     </div> 
+
+    
+<!--################################################################################-->
+<!--################################################################################-->
+<!--################################################################################-->  
     
     <script>
         // Configuração do Supabase
