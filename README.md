@@ -594,20 +594,27 @@ erp_abp/
 !_index.html
 !_ .gitignore
 !
-!
 !_ link_rel_styleshet_href
 !    !_ style.css
 !
 !_ script_src/
-!    !_ vew/
-!    !    !_ login.html
-!    !    !_ dashboard.html
-!    !    !_ usuarios.html
-!    !    !_ financeiro.html
-!    !
 !    !_ model/
 !    !_ supabase_config.js
 !    !_ login_model.js
+!
+!    !_ vew/
+!    !    !_ teste_conexao.html
+!    !    !_ login.html
+!    !    !_ dashboard_adm.html
+!    !    !_ dashboard_cliente.html
+!    !    !_ entidades.html
+!    !    !_ financeiro.html
+!    !    !_ tarefas.html
+!    !    !_ pdv.html
+!    !    !_ palno_6m.html
+
+
+
         
 
 ````
