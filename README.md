@@ -664,7 +664,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 console.log("✅ conexao_supqabase.js");
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## pagina_de_testes.html
+## testes.html
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
