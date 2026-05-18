@@ -358,7 +358,7 @@ git add .
 ```
 ```
 # SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_DA_ALTERACAO"
+git commit -m "DESCRIÇÃO_chekPointe"
 
 ```
 ```
