@@ -599,19 +599,16 @@ erp_abp/
 !
 !_ script_src/
 !    !_ model/
-!    !_ supabase_config.js
-!    !_ login_model.js
-!
+!    !    !_ supabase_config.js
+!    !    !_ listar_nome_das_tabelas.js
+!    !    !_ listar_campos_da_tabela.js
+!    !  
+!    !  
+!    !_ controller/
+!    !    !_ variaveis_e_constantes.js
+!    ! 
 !    !_ vew/
 !    !    !_ teste_conexao.html
-!    !    !_ login.html
-!    !    !_ dashboard_adm.html
-!    !    !_ dashboard_cliente.html
-!    !    !_ entidades.html
-!    !    !_ financeiro.html
-!    !    !_ tarefas.html
-!    !    !_ pdv.html
-!    !    !_ palno_6m.html
 
 
 
