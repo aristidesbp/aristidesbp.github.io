@@ -99,7 +99,7 @@
             <ul class="p-4 space-y-2 font-medium">
                 <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
                 <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
-               <li><a href="#" onclick="alternarAba('listar_entidades'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-users w-6"></i> Lista de Entidades</a></li>
+               <li><a href="#" onclick="alternarAba('listagem_entidades'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-users w-6"></i> Lista de Entidades</a></li>
                <li><a href="#" onclick="alternarAba('formulario_entidades'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-user-plus w-6"></i> Nova Entidade</a></li>
                 <li><hr class="border-slate-700 my-4"></li>
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
@@ -132,17 +132,36 @@
 <h2 id="dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
 </div>
 </div><!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">-->
+
+
             
-<!--#################################### BOTAO DE ALTERNAR
-            <div class="flex gap-4 mb-6">
-                <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-list"></i> Ver Lançamentos
-                </button>
-                <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
-                    <i class="fas fa-plus-circle"></i> Novo Lançamento
-                </button>
-            </div>
-############################################-->
+<!--################################################################################--> 
+<!--BOTAO DE ALTERNAR <div class="flex gap-4 mb-6"> --> 
+<!--################################################################################--> 
+<div class="flex gap-4 mb-6">
+
+<!-- Ver Lançamentos-->
+<button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+<i class="fas fa-list"></i> Ver Lançamentos
+</button>
+
+<!--Novo Lançamento-->
+<button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+<i class="fas fa-plus-circle"></i> Novo Lançamento
+</button>
+
+<!-- Ver entidades-->
+<button onclick="alternarAba('listagem_entidades')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+<i class="fas fa-list"></i> Ver entidades
+</button>
+
+<!--Novo entidades -->
+<button onclick="alternarAba('formulario_entidades')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+<i class="fas fa-plus-circle"></i> Novo entidades
+</button>
+    
+</div><!--<div class="flex gap-4 mb-6">-->
+
             
             
 <!--################################################################################-->
@@ -263,6 +282,15 @@
                 </div>
             </div>  <!-- FIM DO  <div class="card mb-8 hidden" id="aba-formulario">-->  
 
+<!--################################################################################-->
+<!--FORMULARIO_ENTIDADES <div class="card mb-8 hidden" id="aba-formulario_entidades">-->
+<!--################################################################################-->
+<div class="card mb-8 hidden" id="aba-formulario_entidades">
+<h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> ENTIDADES</h3>
+<p> JHASDGKFGJHG</p>   
+</div>  <!-- FIM DO  <div class="card mb-8 hidden" id="aba-formulario_entidades">-->  
+
+  
             
         <!--#######################################################################--> 
         <!-- LISTAGEM <div class="card" id="aba-listagem">-->    
