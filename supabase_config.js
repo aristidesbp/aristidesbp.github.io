@@ -2,6 +2,5 @@
 
 const SUPABASE_ANON_KEY = 'api_key';
 const SUPABASE_URL = 'data_api';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
 
-
+console.log("✅ supabase_config.js");
