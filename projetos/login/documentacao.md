@@ -1,12 +1,12 @@
 # Documentação do Sistema de Login - Fontes Comportamentais
 
 ## 📋 Visão Geral
-Este projeto consiste em uma interface de autenticação moderna e segura, desenvolvida com foco em experiência do usuário (UX) e arquitetura modular. A aplicação utiliza o Supabase como Backend-as-a-Service (BaaS) para gerenciamento de usuários.
+Este Pagina consiste em uma interface de autenticação moderna e segura, desenvolvida com foco em experiência do usuário (UX) e arquitetura modular. A aplicação utiliza o Supabase como Backend-as-a-Service (BaaS) para gerenciamento de usuários.
 
 ## 🏗️ Arquitetura de Arquivos
 O projeto foi refatorado para seguir o princípio de **Separação de Preocupações (SoC)**, dividindo responsabilidades entre diferentes arquivos:
 
-1.  **`code.html`**: Contém apenas a estrutura (HTML) e a estilização (Tailwind CSS).
+1.  **`index.html`**: Contém apenas a estrutura (HTML) e a estilização (Tailwind CSS).
 2.  **`supabase_config.js`**: Centraliza as credenciais e a inicialização da conexão com o banco de dados.
 3.  **`login.js`**: Gerencia a lógica de interface (exibir senha, captcha visual) e as chamadas de API de autenticação.
 4.  **`DESIGN.md`**: Documenta as escolhas visuais, paleta de cores e tipografia.
