@@ -660,7 +660,7 @@ console.log("✅ supabase_config.js");
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # conexao_supabase.js
 ```
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 console.log("✅ conexao_supqabase.js");
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
