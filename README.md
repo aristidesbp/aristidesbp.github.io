@@ -620,6 +620,49 @@ erp_abp/
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## .gitignore
+```
+supabase_config.js
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+
+--- 
+
+## Configurar
+
+* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
+* Authentication/Users: voçẽ pode criar um novo usuario.
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# supabase/
+```
+!_ model/
+!    !_ supabase_config.js
+```
+
+
+## supabase/supabase_config.js
+```
+// supabase_config.js
+
+const SUPABASE_ANON_KEY = 'api_key';
+const SUPABASE_URL = 'data_api';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
+
+console.log("✅ conectado com o arquivo supabase/supabase_config.js");
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # index.html
 ```
@@ -798,51 +841,6 @@ erp_abp/
 </html>
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-
---- 
-
-## Configurar
-
-* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
-* Authentication/Users: voçẽ pode criar um novo usuario.
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase/
-```
-!_ supabase/
-!    !_ supabase_config.js
-!    !_ .gitignore
-```
-
-
-## supabase/supabase_config.js
-```
-// supabase_config.js
-
-const SUPABASE_ANON_KEY = 'api_key';
-const SUPABASE_URL = 'data_api';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
-
-console.log("✅ conectado com o arquivo supabase/supabase_config.js");
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## .gitignore
-```
-supabase_config.js
-```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## supabase/teste_de_conexao.html
