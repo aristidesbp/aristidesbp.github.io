@@ -647,26 +647,24 @@ supabase_config.js
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase/
-```
-!_ model/
-!    !_ supabase_config.js
-```
-
-
-## supabase/supabase_config.js
+## supabase_config.js
 ```
 // supabase_config.js
 
 const SUPABASE_ANON_KEY = 'api_key';
 const SUPABASE_URL = 'data_api';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
 
-console.log("✅ conectado com o arquivo supabase/supabase_config.js");
+console.log("✅ supabase_config.js");
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## supabase/teste_de_conexao.html
+# conexao_supabase.js
+```
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
+console.log("✅ conexao_supqabase.js");
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## pagina_de_testes.html
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -674,145 +672,20 @@ console.log("✅ conectado com o arquivo supabase/supabase_config.js");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste Supabase - ERP ABP</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-  
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <script src="supabase_config.js"></script>
+    <script src="conexao_supabase.js"></script>
+ 
+</head> 
+<body>
 
-    <div class="max-w-lg w-full bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-6">
-        <h1 class="text-2xl font-bold mb-6 text-center text-emerald-400">Teste de Conexão Supabase</h1>
-        
-        <div class="space-y-4">
-            <div>
-                <label for="sb-url" class="block text-sm font-medium mb-1 text-gray-400">URL do Projeto</label>
-                <input type="text" id="sb-url" 
-                    value="https://bpdjbffsfxvrdxxwxzsz.supabase.co" 
-                    class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-gray-200 focus:outline-none focus:border-emerald-500 font-mono text-sm">
-            </div>
+<h1>TESTES</h1>
+<div id="teste_de_conexao"> ... relatorio do teste de conexao </div>
+<script src="teste_de_conexao.js"></script>
 
-            <div>
-                <label for="sb-key" class="block text-sm font-medium mb-1 text-gray-400">Anon / Public Key</label>
-                <input type="password" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
-                    class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-gray-200 focus:outline-none focus:border-emerald-500 font-mono text-sm">
-            </div>
-
-            <button id="btn-test"
-                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded transition-colors mt-4">
-                Testar Conexão
-            </button>
-        </div>
-
-        <div class="mt-6">
-            <h2 class="text-sm font-medium mb-2 text-gray-400">Console:</h2>
-            <div id="log-container" class="bg-black rounded border border-gray-700 p-3 h-48 overflow-y-auto font-mono text-xs">
-                <div class="text-gray-500">Aguardando início do teste...</div>
-            </div>
-        </div>
-    </div>
-
-
-  
-  <!-- ############################################ -->
-    <!-- Importando Supabase via CDN (ES Modules) -->
-   <!-- ############################################ -->
-    <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    // IMPORTA O ARQUIVO DE CONFIGURAÇÃO
-    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase_config.js';
-
-    const btnTest = document.getElementById('btn-test');
-    const inputUrl = document.getElementById('sb-url');
-    const inputKey = document.getElementById('sb-key');
-    const logContainer = document.getElementById('log-container');
-
-    // PREENCHE AUTOMATICAMENTE OS CAMPOS
-    inputUrl.value = SUPABASE_URL;
-    inputKey.value = SUPABASE_ANON_KEY;
-
-    function log(message, type = 'info') {
-        const colors = {
-            info: 'text-blue-400',
-            success: 'text-green-400',
-            error: 'text-red-400',
-            warn: 'text-yellow-400',
-            default: 'text-gray-300'
-        };
-
-        const colorClass = colors[type] || colors.default;
-        const time = new Date().toLocaleTimeString();
-
-        const logEntry = document.createElement('div');
-        logEntry.className = `mb-1 ${colorClass}`;
-        logEntry.textContent = `[${time}] ${message}`;
-
-        if (
-            logContainer.children.length === 1 &&
-            logContainer.children[0].textContent.includes('Aguardando')
-        ) {
-            logContainer.innerHTML = '';
-        }
-
-        logContainer.appendChild(logEntry);
-        logContainer.scrollTop = logContainer.scrollHeight;
-    }
-
-    btnTest.addEventListener('click', async () => {
-
-        const url = SUPABASE_URL;
-        const key = SUPABASE_ANON_KEY;
-
-        logContainer.innerHTML = '';
-
-        log('Inicializando cliente Supabase...', 'info');
-
-        btnTest.disabled = true;
-        btnTest.classList.add('opacity-50', 'cursor-not-allowed');
-
-        try {
-
-            const supabase = createClient(url, key);
-
-            log('Enviando requisição de teste...', 'info');
-
-            const startTime = performance.now();
-
-            const { error, status } = await supabase
-                .from('_non_existent_table_test_')
-                .select('*')
-                .limit(1);
-
-            const latency = Math.round(performance.now() - startTime);
-
-            if (status) {
-
-                log(`Resposta recebida em ${latency}ms`, 'success');
-                log(`Status HTTP: ${status}`, 'success');
-                log('Conexão funcionando corretamente!', 'success');
-
-            } else if (error) {
-
-                throw error;
-
-            }
-
-        } catch (err) {
-
-            log(`Erro: ${err.message}`, 'error');
-
-        } finally {
-
-            btnTest.disabled = false;
-            btnTest.classList.remove('opacity-50', 'cursor-not-allowed');
-
-        }
-
-    });
-</script>
-  
 </body>
 </html>
-
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
