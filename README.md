@@ -243,8 +243,212 @@ ollama serve
 # entrar no Ubuntu
 proot-distro login ubuntu
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# python3 organizar.py
+```
+
+import os
+import shutil
 
 
+def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
+    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
+
+    separando-os exclusivamente por suas extensões (tipos).
+    """
+    pasta_origem = os.path.abspath(pasta_origem)
+    pasta_destino = os.path.abspath(pasta_destino)
+
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
+
+    arquivos_copiados = 0
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        # Evita que o script leia a própria pasta de destino
+        if pasta_atual_abs.startswith(pasta_destino):
+            continue
+
+        for nome_arquivo in arquivos:
+            # Ignora o próprio script e arquivos ocultos do sistema
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
+            nome_puro, extensao = os.path.splitext(nome_arquivo)
+
+            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
+            if extensao:
+                nome_subpasta_tipo = extensao.replace(".", "").upper()
+            else:
+                nome_subpasta_tipo = "SEM_EXTENSAO"
+
+            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
+            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
+
+            if not os.path.exists(caminho_pasta_tipo):
+                os.makedirs(caminho_pasta_tipo)
+
+            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
+            caminho_destino_final = os.path.join(
+                caminho_pasta_tipo, nome_arquivo
+            )
+
+            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
+            contador = 1
+            while os.path.exists(caminho_destino_final):
+                novo_nome = f"{nome_puro}_{contador}{extensao}"
+                caminho_destino_final = os.path.join(
+                    caminho_pasta_tipo, novo_nome
+                )
+                contador += 1
+
+            try:
+                # Copia o arquivo mantendo o original intacto na pasta de origem
+                shutil.copy2(caminho_origem, caminho_destino_final)
+                arquivos_copiados += 1
+                nome_final_exibicao = os.path.basename(caminho_destino_final)
+                print(
+                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
+                )
+            except Exception as erro:
+                print(f"Erro ao copiar {nome_arquivo}: {erro}")
+
+    if arquivos_copiados == 0:
+        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+ORIGEM = "."
+DESTINO = "./organizado"
+
+if __name__ == "__main__":
+    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
+    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
+    print("Processo concluído!")
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# python limpar_duplicados.py
+```
+import hashlib
+import os
+
+
+def calcular_hash(caminho_arquivo):
+    """Calcula a 'impressão digital' (hash SHA-256) do arquivo para garantir
+
+    que o conteúdo é identico.
+    """
+    hasher = hashlib.sha256()
+    # Lê o arquivo em blocos para não travar a memória do celular se o arquivo for grande
+    with open(caminho_arquivo, "rb") as f:
+        while bloco := f.read(4096):
+            hasher.update(bloco)
+    return hasher.hexdigest()
+
+
+def buscar_e_limpar_duplicados(pasta_origem):
+    """Identifica arquivos idênticos pelo conteúdo e pergunta antes de apagar."""
+    pasta_origem = os.path.abspath(pasta_origem)
+
+    # Dicionário para guardar { hash_do_arquivo: [lista_de_caminhos_com_esse_hash] }
+    registro_hashes = {}
+
+    print(" Analisando arquivos em busca de conteúdo idêntico...")
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        for nome_arquivo in arquivos:
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_completo = os.path.join(pasta_atual, nome_arquivo)
+
+            try:
+                # Calcula a impressão digital do arquivo
+                hash_arquivo = calcular_hash(caminho_completo)
+
+                # Se o hash já existe, encontramos uma duplicata
+                if hash_arquivo in registro_hashes:
+                    registro_hashes[hash_arquivo].append(caminho_completo)
+                else:
+                    # Se for a primeira vez que vemos esse hash, registra como o 'original'
+                    registro_hashes[hash_arquivo] = [caminho_completo]
+            except Exception as e:
+                print(f"Não foi possível ler {nome_arquivo}: {e}")
+
+    # Filtrar apenas os hashes que possuem mais de 1 arquivo (ou seja, têm duplicatas)
+    duplicatas_detectadas = {
+        hash_f: caminhos
+        for hash_f, caminhos in registro_hashes.items()
+        if len(caminhos) > 1
+    }
+
+    if not duplicatas_detectadas:
+        print("\n Excelente! Nenhum arquivo idêntico foi encontrado.")
+        return
+
+    # Lista na tela as duplicatas encontradas
+    print(f"\n Foram encontrados {len(duplicatas_detectadas)} grupos de arquivos idênticos:\n")
+    
+    arquivos_para_deletar = []
+
+    for i, (hash_f, caminhos) in enumerate(duplicatas_detectadas.items(), 1):
+        original = caminhos[0]
+        copias = caminhos[1:]
+        
+        print(f"Grupo {i}:")
+        print(f"  [MANTER] -> {os.path.relpath(original)}")
+        for copia in copias:
+            print(f"  [APAGAR] -> {os.path.relpath(copia)}")
+            arquivos_para_deletar.append(copia)
+        print("-" * 40)
+
+    print(f"\nNo total, {len(arquivos_para_deletar)} cópias repetidas serão apagadas.")
+    
+    # INTERAÇÃO: Pergunta ao usuário no Termux se pode deletar
+    resposta = input("Deseja apagar essas duplicatas agora? (s/n): ").strip().lower()
+
+    if resposta == 's':
+        print("\nApagando arquivos duplicados...")
+        deletados = 0
+        for caminho in arquivos_para_deletar:
+            try:
+                os.remove(caminho)
+                print(f"Deletado com sucesso: {os.path.basename(caminho)}")
+                deletados += 1
+            except Exception as e:
+                print(f"Erro ao deletar {os.path.basename(caminho)}: {e}")
+        print(f"\nPronto! {deletados} arquivos inúteis foram removidos.")
+    else:
+        print("\nAção cancelada. Nenhum arquivo foi alterado.")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+# Varre a pasta atual onde o Termux está aberto
+ORIGEM = "."
+
+if __name__ == "__main__":
+    buscar_e_limpar_duplicados(ORIGEM)
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
@@ -441,99 +645,7 @@ NOME_DO_REPOSITORIO: aristidesbp.github.io
 (2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
 (3) Clique no botão “Add” ao lado do nome que aparecer.
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# python3 organizar.py
-```
 
-import os
-import shutil
-
-
-def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
-    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
-
-    separando-os exclusivamente por suas extensões (tipos).
-    """
-    pasta_origem = os.path.abspath(pasta_origem)
-    pasta_destino = os.path.abspath(pasta_destino)
-
-    if not os.path.exists(pasta_destino):
-        os.makedirs(pasta_destino)
-
-    arquivos_copiados = 0
-
-    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        # Evita que o script leia a própria pasta de destino
-        if pasta_atual_abs.startswith(pasta_destino):
-            continue
-
-        for nome_arquivo in arquivos:
-            # Ignora o próprio script e arquivos ocultos do sistema
-            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
-                continue
-
-            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
-            nome_puro, extensao = os.path.splitext(nome_arquivo)
-
-            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
-            if extensao:
-                nome_subpasta_tipo = extensao.replace(".", "").upper()
-            else:
-                nome_subpasta_tipo = "SEM_EXTENSAO"
-
-            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
-            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
-
-            if not os.path.exists(caminho_pasta_tipo):
-                os.makedirs(caminho_pasta_tipo)
-
-            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
-            caminho_destino_final = os.path.join(
-                caminho_pasta_tipo, nome_arquivo
-            )
-
-            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
-            contador = 1
-            while os.path.exists(caminho_destino_final):
-                novo_nome = f"{nome_puro}_{contador}{extensao}"
-                caminho_destino_final = os.path.join(
-                    caminho_pasta_tipo, novo_nome
-                )
-                contador += 1
-
-            try:
-                # Copia o arquivo mantendo o original intacto na pasta de origem
-                shutil.copy2(caminho_origem, caminho_destino_final)
-                arquivos_copiados += 1
-                nome_final_exibicao = os.path.basename(caminho_destino_final)
-                print(
-                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
-                )
-            except Exception as erro:
-                print(f"Erro ao copiar {nome_arquivo}: {erro}")
-
-    if arquivos_copiados == 0:
-        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-ORIGEM = "."
-DESTINO = "./organizado"
-
-if __name__ == "__main__":
-    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
-    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
-    print("Processo concluído!")
-
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
