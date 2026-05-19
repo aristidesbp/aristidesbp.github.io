@@ -107,7 +107,7 @@ def fluxo_github_completo():
     print("=" * 45)
     print(" SISTEMA DE GERENCIAMENTO GITHUB/TERMUX ".center(45, "="))
     print("=" * 45)
-    print("[1] Clonar um novo repositório (Com auto-recuperação)")
+    print("[1] Clonar um novo repositório (Com auto-conversão SSH)")
     print("[2] Usar a pasta atual onde estou")
     print("-" * 45)
     
@@ -119,10 +119,17 @@ def fluxo_github_completo():
             print("[ERRO] URL inválida.")
             return
 
+        # Descobre o nome da pasta limpando a extensão .git
         nome_pasta = url_repo.split("/")[-1]
         if nome_pasta.endswith(".git"):
             nome_pasta = nome_pasta[:-4]
         
+        # Converte dinamicamente links HTTPS para SSH caso o usuário cole errado
+        if url_repo.startswith("https://github.com/"):
+            partes_link = url_repo.replace("https://github.com/", "").replace(".git", "")
+            url_repo = f"git@github.com:{partes_link}.git"
+            print(f"-> Link HTTPS convertido automaticamente para SSH seguro: {url_repo}")
+
         if os.path.exists(nome_pasta) and os.path.exists(os.path.join(nome_pasta, ".git")):
             print(f"\n[AVISO] A pasta '{nome_pasta}' já existe localmente.")
             os.chdir(nome_pasta)
@@ -140,7 +147,7 @@ def fluxo_github_completo():
                 executar_comando(["git", "fetch", "--keep", "origin"])
                 executar_comando(["git", "checkout", "main"], checar=False)
             elif clone_resultado is None:
-                print("[ERRO] Não foi possível iniciar o clone. Verifique o link.")
+                print("[ERRO] Não foi possível iniciar o clone. Verifique suas chaves SSH.")
                 return
             else:
                 os.chdir(nome_pasta)
@@ -154,19 +161,27 @@ def fluxo_github_completo():
         print("[ERRO] Opção inválida.")
         return
 
+    # Garante que a pasta atual use SSH na Origem Remota para evitar erros futuros de senha
     pasta_atual = os.path.abspath(os.getcwd())
-    print(f"\n-> Operando na pasta: {os.path.basename(pasta_atual)}")
     executar_comando(["git", "config", "--global", "--add", "safe.directory", pasta_atual])
+    
+    # Corrige a URL remota atual caso o repositório tenha sido clonado por HTTPS no passado
+    url_atual_check = executar_comando(["git", "remote", "get-url", "origin"], capturar_saida=True)
+    if url_atual_check and "https://github.com/" in url_atual_check.stdout:
+        partes_remotas = url_atual_check.stdout.replace("https://github.com/", "").strip()
+        url_ssh_corrigida = f"git@github.com:{partes_remotas}"
+        executar_comando(["git", "remote", "set-url", "origin", url_ssh_corrigida])
+        print("-> Link do repositório reconfigurado internamente para autenticação via Chave SSH.")
 
+    print(f"\n-> Operando na pasta: {os.path.basename(pasta_atual)}")
     print("\n Sincronizando repositório local (Pull)...")
     executar_comando(["git", "pull", "origin", "main"], checar=False)
 
-    # NOVO PASSO: PERGUNTAR SE DESEJA ENTRAR NAS OPÇÕES DE ORGANIZAÇÃO DE ARQUIVOS
+    # PERGUNTA SE DESEJA ENTRAR NAS OPÇÕES DE ORGANIZAÇÃO DE ARQUIVOS
     print("\n" + "-"*45)
     deseja_entrar = input(f"Deseja gerenciar os arquivos internos de '{os.path.basename(pasta_atual)}'? (s/n): ").strip().lower()
     
     if deseja_entrar == 's':
-        # SUB-MENU INTERATIVO DE COMPLEMENTOS
         print("\n" + "="*40)
         print(" FERRAMENTAS DE ARQUIVOS ".center(40, "="))
         print("="*40)
@@ -179,7 +194,6 @@ def fluxo_github_completo():
         if opc_limpar == 's':
             buscar_e_limpar_duplicados(".")
 
-        # PAUSA PARA EDIÇÃO MANUAL
         print("\n" + "!" * 60)
         print(" AVISO: ALTERAÇÕES MANUAIS LIBERADAS ".center(60, "!"))
         print("!" * 60)
@@ -189,7 +203,7 @@ def fluxo_github_completo():
     else:
         print("\n-> Movimentação de arquivos ignorada. Seguindo para o fluxo de deploy.")
 
-    # NOVO MENU DE SAÍDA INTERATIVA NO ENTER
+    # MENU DE SAÍDA INTERATIVA NO ENTER
     print("\n" + "="*45)
     print(" [C] Continuar para o Git Push | [S] Sair e Matar Script ")
     print("="*45)
