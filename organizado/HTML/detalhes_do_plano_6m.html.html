@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<title>Plano Detalhe</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<a class="text-primary flex items-center justify-center size-10 rounded-full hover:bg-primary/10 transition-colors" href="plano_lista.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="text-lg font-bold text-slate-900 dark:text-white truncate px-2">Arthur Silva</h1>
+<button class="text-slate-600 dark:text-slate-400 size-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="max-w-md mx-auto p-4 space-y-6">
+<!-- Card Resumo -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden" id="card-resumo">
+<div class="h-32 bg-primary/10 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" data-alt="Abstract blue geometric background pattern"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wider">Em Andamento</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Pedagoga</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Período: Matutino</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">school</span>
+</div>
+<div class="mt-4 space-y-2">
+<div class="flex justify-between text-sm font-medium">
+<span>Progresso Geral</span>
+<span class="text-primary">65%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Seção Habilidades -->
+<section class="space-y-4" id="secao-habilidades">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Habilidades (11)</h3>
+<span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">Atualizado hoje</span>
+</div>
+<div class="space-y-3">
+<!-- Skill Item 1 -->
+<div class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input checked="" class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-semibold">Contato Visual</p>
+<p class="text-xs text-slate-500">Critério: 80% de acerto em 3 dias</p>
+</div>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">Concluído</span>
+</div>
+<!-- Skill Item 2 -->
+<div class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-semibold">Imitação Motora Grossa</p>
+<p class="text-xs text-slate-500">Critério: 100% de acerto sem ajuda</p>
+</div>
+<span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">Ativo</span>
+</div>
+<!-- Skill Item 3 -->
+<div class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 opacity-75">
+<input class="w-5 h-5 rounded border-slate-300 bg-slate-100" disabled="" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-semibold">Seguir Instruções Simples</p>
+<p class="text-xs text-slate-500">Critério: Resposta em até 5 segundos</p>
+</div>
+<span class="text-[10px] font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 px-2 py-0.5 rounded-full">Pendente</span>
+</div>
+</div>
+<button class="w-full py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg border border-dashed border-primary/40">
+                Ver todas as 11 habilidades
+            </button>
+</section>
+<!-- Seção Treino -->
+<section class="space-y-4" id="secao-treino">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Treino</h3>
+<a class="text-sm font-medium text-primary flex items-center gap-1" href="treino_configurar.html">
+<span class="material-symbols-outlined text-sm">settings</span>
+                    Configurar Treino
+                </a>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined filled-icon">fitness_center</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Último Treino</p>
+<p class="text-sm font-semibold">Sessão de Reforço Positivo</p>
+<p class="text-xs text-slate-400">14 Out, 2023 • 45 min</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Seção Observações -->
+<section class="space-y-3" id="secao-observacoes">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Observações</h3>
+<button class="text-primary">
+<span class="material-symbols-outlined text-xl">edit_note</span>
+</button>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 italic text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                "Paciente apresentou boa evolução na comunicação não-verbal hoje. Necessário reforçar o uso de pistas visuais na próxima sessão matutina."
+            </div>
+</section>
+</main>
+<!-- Navbar Azul -->
+<nav class="fixed bottom-0 left-0 right-0 bg-primary text-white border-t border-primary/20 px-6 py-2 flex items-center justify-between z-50">
+<a class="flex flex-col items-center gap-1 opacity-100" href="#">
+<span class="material-symbols-outlined filled-icon">home</span>
+<span class="text-[10px] font-medium">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 opacity-70" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px] font-medium">Planos</span>
+</a>
+<a class="flex flex-col items-center gap-1 opacity-70" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-medium">Relatórios</span>
+</a>
+<a class="flex flex-col items-center gap-1 opacity-70" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard do Paciente</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>   
+<script src="../controller/verificar_login.js"></script>
+<script src="../controller/analizar_nivel_de_acesso.js"></script>        
+        
+<script type="module">
+    import { accessControl } from '../model/access_control.js';    
+    // Só permite entrar se a role for 'paciente'
+    accessControl.checkAccess(['paciente']);
+</script>
+        
+        
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#20df60",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#101a14",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+
+<div id="navbar"></div>
+<script src="../controller/navbar.js"></script>  
+
+        
+        <!-- Header -->
+<header class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4">
+<div class="flex items-center justify-between max-w-lg mx-auto w-full">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border-2 border-primary" id="header-avatar">
+<img class="w-full h-full object-cover" data-alt="Foto de perfil do paciente sorrindo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtXqQm1962kAhEthNNsvE3P2AoSWeAI1F3L-j1kTrJtQhqxxuRzOHLzBBlGpWv5PvInxiJk6FTTLipllx_va0jRENyigaFJMtfzyXk_bOPoR6AL458Ra3jOV862fVPv_tAUadGnVIzR7xcPB6dS4uJfWMtWJqey5Bv8_JMUdUwtxxCLcoNWTL0tG62LU3wzLDZyQVvP7uHH-LDlGLHgV6EyC9vqZ8RqR8WKDSa1j4s7W7VBTEzS-xEStcmZ8pkvA3UIpU3HCErlduw"/>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium" id="header-saudacao">Bem-vindo de volta!</p>
+<h2 class="text-sm font-bold leading-tight" id="header-nome">Olá, <span class="text-primary">Lucas</span>!</h2>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" id="btn-notificacoes">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" id="btn-perfil-paciente">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-lg mx-auto px-4 py-6 space-y-6">
+<!-- Card Gamificado -->
+<section class="relative overflow-hidden rounded-xl bg-slate-900 dark:bg-slate-800 p-6 text-white shadow-xl">
+<div class="relative z-10">
+<h3 class="text-xl font-bold mb-1" id="card-motivacao-titulo">Vamos praticar hoje?</h3>
+<p class="text-primary font-semibold text-sm mb-4" id="card-nivel">Nível 5 — Explorador</p>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span>Progresso do Nível</span>
+<span>650 / 1000 XP</span>
+</div>
+<div class="h-3 w-full bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_15px_rgba(32,223,96,0.5)] transition-all duration-500" id="barra-xp" style="width: 65%;"></div>
+</div>
+<p class="text-[10px] text-slate-400">Faltam apenas 350 XP para o Nível 6!</p>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-4 -bottom-4 opacity-20">
+<span class="material-symbols-outlined text-[120px] text-primary">rocket_launch</span>
+</div>
+</section>
+<!-- Grade 2x2 Stats -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-2" id="stat-tarefas">
+<div class="size-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Minhas Tarefas</p>
+<p class="text-lg font-bold">12 Pendentes</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-2" id="stat-selos">
+<div class="size-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center">
+<span class="material-symbols-outlined">military_tech</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Meus Selos</p>
+<p class="text-lg font-bold">24 Conquistados</p>
+</div>
+</div>
+</div>
+<!-- Seção Treino de Hoje -->
+<section class="space-y-4">
+<div class="flex flex-col gap-2">
+<h3 class="text-lg font-bold" id="titulo-treino-hoje">Treino de Hoje</h3>
+<div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+<div class="flex justify-between items-center mb-2">
+<p class="text-xs font-medium text-slate-500">Sua meta semanal</p>
+<p class="text-xs font-bold text-primary">4/7 dias</p>
+</div>
+<div class="flex gap-1 h-2" id="barra-semana">
+<div class="flex-1 bg-primary rounded-full"></div>
+<div class="flex-1 bg-primary rounded-full"></div>
+<div class="flex-1 bg-primary rounded-full"></div>
+<div class="flex-1 bg-primary rounded-full"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Módulos Grid -->
+<div class="grid grid-cols-1 gap-3">
+<!-- Leitura -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700" id="modulo-card-leitura">
+<div class="size-14 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Leitura</h4>
+<p class="text-xs text-slate-500">10 minutos • +50 XP</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-slate-900 font-bold px-4 py-2 rounded-lg text-sm transition-transform active:scale-95">Fazer</button>
+</div>
+<!-- Escrita -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700" id="modulo-card-escrita">
+<div class="size-14 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined text-3xl">edit_note</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Escrita</h4>
+<p class="text-xs text-slate-500">8 minutos • +40 XP</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-slate-900 font-bold px-4 py-2 rounded-lg text-sm transition-transform active:scale-95">Fazer</button>
+</div>
+<!-- Matemática -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700" id="modulo-card-matematica">
+<div class="size-14 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-3xl">calculate</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Matemática</h4>
+<p class="text-xs text-slate-500">12 minutos • +60 XP</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-slate-900 font-bold px-4 py-2 rounded-lg text-sm transition-transform active:scale-95">Fazer</button>
+</div>
+<!-- Atenção -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700" id="modulo-card-atencao">
+<div class="size-14 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Atenção</h4>
+<p class="text-xs text-slate-500">5 minutos • +30 XP</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-slate-900 font-bold px-4 py-2 rounded-lg text-sm transition-transform active:scale-95">Fazer</button>
+</div>
+</div>
+</section>
+<!-- Últimas Conquistas Carousel -->
+<section class="space-y-3 pb-8">
+<h3 class="text-lg font-bold">Últimas Conquistas</h3>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<div class="flex-shrink-0 w-28 aspect-square bg-white dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 shadow-sm" id="selo-1">
+<div class="size-12 rounded-full bg-yellow-400 flex items-center justify-center text-white shadow-lg shadow-yellow-400/20">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<p class="text-[10px] font-bold text-center px-2">Primeiro Passo</p>
+</div>
+<div class="flex-shrink-0 w-28 aspect-square bg-white dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<p class="text-[10px] font-bold text-center px-2">Foco Total</p>
+</div>
+<div class="flex-shrink-0 w-28 aspect-square bg-white dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<p class="text-[10px] font-bold text-center px-2">Evolução</p>
+</div>
+<div class="flex-shrink-0 w-28 aspect-square bg-white dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 shadow-sm opacity-50 grayscale">
+<div class="size-12 rounded-full bg-slate-400 flex items-center justify-center text-white">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<p class="text-[10px] font-bold text-center px-2">Bloqueado</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Navbar fixa no rodapé -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 py-2 z-30">
+<div class="max-w-lg mx-auto flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#" id="nav-p-inicio">
+<span class="material-symbols-outlined text-[28px] fill-[1]">home</span>
+<span class="text-[10px] font-bold">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" id="nav-p-treino">
+<span class="material-symbols-outlined text-[28px]">exercise</span>
+<span class="text-[10px] font-medium">Treino</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" id="nav-p-progresso">
+<span class="material-symbols-outlined text-[28px]">leaderboard</span>
+<span class="text-[10px] font-medium">Progresso</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" id="nav-p-perfil">
+<span class="material-symbols-outlined text-[28px]">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</a>
+</div>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "primary-hover": "#0f69c5",
+                        slate: {
+                            50: "#f8fafc",
+                            100: "#f1f5f9",
+                            200: "#e2e8f0",
+                            800: "#1e293b",
+                            900: "#0f172a",
+                            950: "#020617",
+                        },
+                        "clinical-success": "#20df60"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-body text-slate-800">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm font-sans antialiased">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400">medical_services</span>
+<h1 class="text-xl font-bold text-blue-700 dark:text-blue-400">ClinicaPro</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center" id="btn-menu-prontuario">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">menu</span>
+</button>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-screen p-4 bg-slate-50 dark:bg-slate-950 h-full w-64 border-r border-slate-200 dark:border-slate-800 no-shadow z-40 pt-20">
+<div class="flex items-center gap-3 px-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<div>
+<p class="text-sm font-bold text-blue-700 dark:text-blue-400">Dr. Silva</p>
+<p class="text-xs text-slate-500">Clínico Geral</p>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer transition-all duration-200 text-sm font-medium font-sans">
+<span class="material-symbols-outlined">grid_view</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer transition-all duration-200 text-sm font-medium font-sans">
+<span class="material-symbols-outlined">calendar_today</span>
+<span>Agenda</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg cursor-pointer transition-all duration-200 text-sm font-medium font-sans">
+<span class="material-symbols-outlined">assignment</span>
+<span>Prontuários</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer transition-all duration-200 text-sm font-medium font-sans">
+<span class="material-symbols-outlined">group</span>
+<span>Pacientes</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer transition-all duration-200 text-sm font-medium font-sans">
+<span class="material-symbols-outlined">settings</span>
+<span>Configurações</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="pt-20 md:pl-64 min-h-screen pb-8">
+<div class="max-w-6xl mx-auto px-4 md:px-8">
+<!-- Patient Header Card -->
+<div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-slate-100">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-5">
+<div class="relative">
+<img class="w-20 h-20 rounded-2xl object-cover ring-4 ring-blue-50" data-alt="Foto do paciente sorrindo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhHCmgLe1RVAHHVmqMcvuF9OvAj6XU1EmlG2XjFDhMcFNcpI1uXlRfNV_ueX7R76JoI9s49KgOj3j7sac_cpF3egb336hU0yqbhbZW3ONYa-I0x4hUVY7WFVycrCFsVr9BL59tgs-flGvcf86XUoImhdAOlY-jNB9nf9fTsgxgOTwadCV7ZrfCGqroDGndb3XSGtipwCnLkF42Wile9PyD3d7UvQT0-JS-5fv4r5uN1KFXyo4WK2wdJrBQbL6kjgTWOVexmgrnUW5I"/>
+<span class="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 border-4 border-white rounded-full"></span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h2 class="text-2xl font-extrabold tracking-tight text-slate-900">Ricardo Oliveira</h2>
+<span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">ID: #PSC-2024-089</span>
+</div>
+<p class="text-slate-500 text-sm flex items-center gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">cake</span> 28 anos</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">female</span> Feminino</span>
+<span class="flex items-center gap-1 text-blue-600 font-semibold"><span class="material-symbols-outlined text-sm">check_circle</span> Ativo</span>
+</p>
+</div>
+</div>
+<div class="flex gap-2 flex-wrap">
+<button class="flex-1 md:flex-none px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-primary-hover transition-colors shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">add_chart</span>Selecionar Plano
+                    </button>
+</div>
+</div>
+</div>
+<!-- Weekly Summary Section (Replacement for Tab Navigation) -->
+<div class="mb-8 space-y-6">
+<!-- Acompanhamento Card -->
+<div class="flex items-stretch justify-between gap-4 rounded-2xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex flex-col justify-center gap-1 flex-[2_2_0px]">
+<p class="text-clinical-success text-xs font-bold uppercase tracking-wider">Acompanhamento</p>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Semana 04</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Livro: A Jornada do Herói</p>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl flex-shrink-0 shadow-sm" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzPMoDaMg6IdYA1hjmixXehLrVpWMPNhoIeMgprGJ2jrmtG_MfTKNikwaQKdtAKRZGaRM6VCapg8J2lOddQ52MowWGXm3eIbXpa7Pd13nyIGsnPA5oiO_CLg3giOm2RA_6EcdnS5yfsCe4pQqp7MD1F6h8yhwTCmVWVoTHA6NA5NfB0z6jefgHm-l3XBkud7iNRY_uLXoEG8EXqfcIKeLS63IKmQ9b3PbNRAJeh26G9MllTVu93NLVXp8oWi58IU45cMx6IeZDk62x");'></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<div class="lg:col-span-8 space-y-6">
+<!-- Frequência Semanal -->
+<section>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight pb-4">Frequência Semanal</h3>
+<div class="grid grid-cols-5 gap-3">
+<div class="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<span class="text-slate-400 text-xs font-bold uppercase">Seg</span>
+<span class="material-symbols-outlined text-clinical-success text-3xl" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<span class="text-slate-400 text-xs font-bold uppercase">Ter</span>
+<span class="material-symbols-outlined text-clinical-success text-3xl" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<span class="text-slate-400 text-xs font-bold uppercase">Qua</span>
+<span class="material-symbols-outlined text-red-500 text-3xl" style='font-variation-settings: "FILL" 1;'>cancel</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<span class="text-slate-400 text-xs font-bold uppercase">Qui</span>
+<span class="material-symbols-outlined text-clinical-success text-3xl" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<span class="text-slate-400 text-xs font-bold uppercase">Sex</span>
+<span class="material-symbols-outlined text-clinical-success text-3xl" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+</div>
+</div>
+</section>
+<!-- Desempenho por Módulo -->
+<section>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight pb-4">Desempenho por Módulo</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-bold">Leitura Crítica</span>
+<span class="text-slate-500 text-xs">Módulo 01</span>
+</div>
+<div class="flex items-center gap-1 bg-clinical-success/10 text-clinical-success px-4 py-1.5 rounded-full font-bold text-sm">
+<span>4/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-bold">Interpretação</span>
+<span class="text-slate-500 text-xs">Módulo 02</span>
+</div>
+<div class="flex items-center gap-1 bg-clinical-success/10 text-clinical-success px-4 py-1.5 rounded-full font-bold text-sm">
+<span>4/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-bold">Vocabulário</span>
+<span class="text-slate-500 text-xs">Módulo 03</span>
+</div>
+<div class="flex items-center gap-1 bg-clinical-success/10 text-clinical-success px-4 py-1.5 rounded-full font-bold text-sm">
+<span>3/5</span>
+<span class="text-[10px] uppercase">dias</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Como foi a semana? Sidebar -->
+<div class="lg:col-span-4">
+<section class="h-full">
+<div class="flex flex-col gap-3 h-full">
+<label class="text-slate-900 dark:text-slate-100 font-bold px-1" for="feedback-semanal">Como foi a semana?</label>
+<textarea class="w-full h-full min-h-[160px] rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary shadow-sm p-4 text-sm resize-none" id="feedback-semanal" placeholder="Descreva as percepções sobre o progresso e dificuldades...">Paciente demonstrou excelente engajamento na leitura crítica, porém relatou maior fadiga na quarta-feira, justificando a ausência. O vocabulário está em expansão gradual.</textarea>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- Content Grid: Asymmetric Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- History Section (Left/Center) -->
+<div class="lg:col-span-8 space-y-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-slate-900">Histórico de Sessões</h3>
+<div class="flex gap-2">
+<span class="bg-slate-100 text-slate-500 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-xs">filter_list</span> Filtrar
+                        </span>
+</div>
+</div>
+<!-- Session Card 1 -->
+<div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-1">Sessão #42 • Reabilitação Postural</span>
+<h4 class="text-xl font-bold text-slate-800">Melhora significativa na mobilidade torácica</h4>
+</div>
+<span class="text-sm font-medium text-slate-400">Ontem, 14:30</span>
+</div>
+<p class="text-slate-600 leading-relaxed mb-6">
+                        Paciente relatou redução da dor em escala analógica de 7 para 3. Durante os exercícios de mobilidade de cintura escapular, apresentou maior amplitude sem compensação lombar...
+                    </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-slate-50 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-lg border border-slate-100">RPG</span>
+<span class="bg-slate-50 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-lg border border-slate-100">FLEXIBILIDADE</span>
+<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-lg">FOTO ANEXADA</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-50">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-lg bg-slate-100 border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-slate-400">image</span>
+</div>
+<div class="w-8 h-8 rounded-lg bg-slate-100 border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-slate-400">description</span>
+</div>
+</div>
+<button class="text-blue-600 font-bold text-sm flex items-center gap-1 hover:underline">
+                            Ver detalhes <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Session Card 2 -->
+<div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-slate-300"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Sessão #41 • Fortalecimento Core</span>
+<h4 class="text-xl font-bold text-slate-800">Manutenção de estabilidade pélvica</h4>
+</div>
+<span class="text-sm font-medium text-slate-400">12 Mai, 2024</span>
+</div>
+<p class="text-slate-600 leading-relaxed mb-6">
+                        Trabalho focado em Transverso do abdome e assoalho pélvico. Paciente manteve bom padrão respiratório durante os exercícios de isometria...
+                    </p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-50">
+<span class="text-xs font-medium text-slate-400 italic">Nenhum anexo encontrado</span>
+<button class="text-blue-600 font-bold text-sm flex items-center gap-1 hover:underline">
+                            Ver detalhes <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sidebar Info (Right) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Progress Card -->
+<div class="bg-blue-700 rounded-3xl p-6 text-white shadow-xl shadow-blue-100 relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+<h4 class="text-lg font-bold mb-4">Status do Plano 6M</h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-bold mb-1 uppercase opacity-80">
+<span>Concluído</span>
+<span>65%</span>
+</div>
+<div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+<div class="h-full bg-white w-[65%] rounded-full"></div>
+</div>
+</div>
+<p class="text-sm opacity-90 leading-snug">
+                            Ricardo está seguindo o cronograma conforme o esperado. Faltam 12 sessões para finalizar o ciclo.
+                        </p>
+</div>
+<button class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 transition-colors rounded-xl font-bold text-sm border border-white/20">
+                        Ver Cronograma Detalhado
+                    </button>
+</div>
+<!-- Quick Metrics Bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+<span class="material-symbols-outlined text-blue-600 mb-2">trending_up</span>
+<p class="text-2xl font-black text-slate-800">24</p>
+<p class="text-[10px] font-bold text-slate-400 uppercase">Sessões Total</p>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+<span class="material-symbols-outlined text-green-500 mb-2">payments</span>
+<p class="text-2xl font-black text-slate-800">100%</p>
+<p class="text-[10px] font-bold text-slate-400 uppercase">Adimplência</p>
+</div>
+<div class="col-span-2 bg-slate-900 p-5 rounded-2xl shadow-sm text-white flex items-center justify-between">
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Próxima Consulta</p>
+<p class="font-bold">Amanhã às 09:00</p>
+</div>
+<span class="material-symbols-outlined text-blue-400">event</span>
+</div>
+</div>
+<!-- Medical Alerts -->
+<div class="bg-orange-50 rounded-2xl p-5 border border-orange-100">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-orange-600" style='font-variation-settings: "FILL" 1;'>warning</span>
+<h4 class="text-sm font-bold text-orange-800">Alertas Clínicos</h4>
+</div>
+<ul class="space-y-2 text-xs text-orange-700 font-medium">
+<li class="flex gap-2"><span>•</span> Sensibilidade em lombar L5-S1 pós treino.</li>
+<li class="flex gap-2"><span>•</span> Evitar exercícios de alto impacto.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+ <style>   
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
+
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
+
+
+</head>
+<body>
+
+
+<!-- navbar -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- fim navbar -->
+
+
+<div class="content">      
+<div class="grid">
+
+<<<<<<< HEAD
+<!-- cardes do menu-->
+=======
+        <section class="py-24 px-6 md:px-16" id="projetos">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center">Nossos Ecossistemas</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass p-8 border border-slate-border rounded-2xl flex flex-col hover:border-primary transition-all group">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="material-symbols-outlined text-primary text-5xl">desktop_windows</span>
+                            <span class="text-xs font-bold px-3 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-widest">Web Version</span>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-primary transition-colors">Sistema ERP Web</h3>
+                        <p class="text-slate-400 leading-relaxed mb-8 flex-grow">Gestão empresarial completa com módulos de financeiro, entidades, e controle de vendas.</p>
+                        <a href="src/view/login.html" class="inline-flex items-center justify-center gap-2 px-6 py-4 bg-white/5 hover:bg-primary text-white font-bold rounded-xl transition-all border border-slate-border hover:border-primary">
+                            Acessar Sistema <span class="material-symbols-outlined">open_in_new</span>
+                        </a>
+                    </div>
+>>>>>>> af6aec1e80785a8e19e0386edd7dbda9204c51d7
+
+    <a href="projetos/portifolio" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>portifolio</h3>
+    </a>
+
+    <a href="projetos/erp" class="card">
+    <i class="fas fa-shopping-basket"></i>
+    <h3>erp</h3>
+    </a>
+    
+    
+    <a href="projetos/clinica" class="card">
+    <i class="fas fa-users"></i>
+    <h3>clinica</h3>
+    </a>
+
+    
+
+    <a href="projetos/tapioca" class="card">
+    <i class="fas fa-box"></i>
+    <h3>tapioca</h3>
+    </a>
+    
+ 
+
+            
+           
+            
+             
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</body>
+</html>

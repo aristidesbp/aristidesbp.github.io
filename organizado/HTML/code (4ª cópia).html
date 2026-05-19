@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plano 6M - Gestão de Exercícios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#191c1d",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#fefcff",
+                        "tertiary": "#964400",
+                        "on-tertiary-fixed-variant": "#753400",
+                        "on-primary-fixed": "#001b3c",
+                        "background": "#f8f9fa",
+                        "tertiary-container": "#bc5700",
+                        "secondary-container": "#b2cdfd",
+                        "surface-container-low": "#f3f4f5",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-container": "#fffbff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#3c5780",
+                        "tertiary-fixed-dim": "#ffb68c",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3132",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "primary-fixed-dim": "#a8c8ff",
+                        "surface-variant": "#e1e3e4",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#414753",
+                        "on-secondary-fixed": "#001b3c",
+                        "tertiary-fixed": "#ffdbc9",
+                        "primary-container": "#0074db",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d5e3ff",
+                        "primary": "#137FEC",
+                        "secondary": "#455f89",
+                        "outline": "#717785",
+                        "surface-tint": "#137FEC",
+                        "secondary-fixed-dim": "#adc8f7",
+                        "inverse-primary": "#a8c8ff",
+                        "secondary-fixed": "#d5e3ff",
+                        "on-primary-fixed-variant": "#004689",
+                        "outline-variant": "#c1c6d5",
+                        "on-secondary-fixed-variant": "#2c4770",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-fixed": "#321200",
+                        "surface-bright": "#f8f9fa"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background selection:bg-secondary-container">
+<!-- TopAppBar -->
+<header class="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl fixed top-0 w-full z-50 shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<button aria-label="Voltar" class="flex items-center justify-center p-2 rounded-full text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors focus:outline-none">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100 antialiased tracking-tight" style="">Criar exercicio<br/></h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-6 mr-6">
+<span class="text-slate-500 dark:text-slate-400 text-sm font-medium" style="">Dashboard</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm font-medium" style="">Pacientes</span>
+<span class="text-blue-700 dark:text-blue-400 font-bold text-sm" style="">Exercícios</span>
+</div>
+<button aria-label="Menu de navegação" class="flex items-center justify-center w-8 h-8 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-colors focus:outline-none" style="">
+<span class="material-symbols-outlined" data-icon="menu" style="">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop Only) -->
+<aside class="fixed left-0 top-0 h-screen w-64 hidden lg:flex flex-col bg-slate-100 dark:bg-slate-950 rounded-r-3xl z-40 pt-20">
+<div class="px-6 mb-8 flex flex-col items-start">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Avatar do Profissional" class="w-10 h-10 rounded-full" data-alt="Foto de perfil de um psicopedagogo sorrindo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4aw_DwET7S_r1tcXXwZklizt7o1i2CRr4Sil8PrwOUneyC2JlwGl9D8nus2GnU5oAWmMeS4pudhtOHPQiFA_F06JFgUBpEgQp5S_DlS0zm6fgXfI8ImC56vGRXxxQ1dA6xdjngwpjTxyc9i4O4XMhvwtXN5hqTKKVyphffoF4b3I3987ffROc5MdJGmr-IEkbc4rvwSMcPej1R90FerrKhPj9vjFuMkfnM27vJmUpc47ph3ISH2A_2oFKil49obqbTihd7CN4ckuV" style=""/>
+<div>
+<p class="text-sm font-bold text-blue-800" style="">Dr. Alex Silva</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider" style="">Psicopedagogo Clínico</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:pl-2 transition-all duration-300 hover:bg-slate-200/50" href="#" style="">
+<span class="material-symbols-outlined" data-icon="dashboard" style="">dashboard</span>
+<span class="text-sm font-medium" style="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:pl-2 transition-all duration-300 hover:bg-slate-200/50" href="#" style="">
+<span class="material-symbols-outlined" data-icon="group" style="">group</span>
+<span class="text-sm font-medium" style="">Pacientes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-100 text-blue-800 border-l-4 border-blue-600 hover:pl-2 transition-all duration-300" href="#" style="">
+<span class="material-symbols-outlined" data-icon="exercise" style="">exercise</span>
+<span class="text-sm font-medium" style="">Exercícios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:pl-2 transition-all duration-300 hover:bg-slate-200/50" href="#" style="">
+<span class="material-symbols-outlined" data-icon="event_note" style="">event_note</span>
+<span class="text-sm font-medium" style="">Sessões</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:pl-2 transition-all duration-300 hover:bg-slate-200/50" href="#" style="">
+<span class="material-symbols-outlined" data-icon="description" style="">description</span>
+<span class="text-sm font-medium" style="">Relatórios</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-4 md:px-8 lg:ml-64 max-w-7xl mx-auto">
+<!-- Registration Form Section -->
+<section class="mb-12">
+<div class="bg-surface-container-lowest rounded-xl p-8 transition-shadow shadow-sm">
+<div class="mb-8 border-b-0">
+<h2 class="text-3xl font-bold text-on-surface tracking-tight flex items-center gap-3" style="">
+<span class="p-2 bg-primary-fixed text-primary rounded-xl material-symbols-outlined" data-icon="add_circle" style="">add_circle</span>
+                        Cadastrar Novo Exercício
+                    </h2>
+<p class="text-on-surface-variant mt-2 text-sm" style="">Adicione novas atividades terapêuticas à sua biblioteca clínica.</p>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Nome do Exercício -->
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.05rem] text-on-surface-variant" for="input_nome_exercicio" style="">Nome do Exercício</label>
+<input class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 focus:bg-surface-container-lowest transition-all p-3 rounded-t-lg" id="input_nome_exercicio" placeholder="Ex: Coordenação Motora Fina" type="text"/>
+</div>
+<!-- Categoria -->
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.05rem] text-on-surface-variant" for="input_categoria_exercicio" style="">Categoria</label>
+<input class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 focus:bg-surface-container-lowest transition-all p-3 rounded-t-lg" id="input_categoria_exercicio" placeholder="Ex: Cognitivo, Sensorial, Motor" type="text"/>
+</div>
+<!-- Instruções -->
+<div class="md:col-span-2 space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.05rem] text-on-surface-variant" for="input_instrucoes" style="">Instruções e Objetivos</label>
+<textarea class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 focus:bg-surface-container-lowest transition-all p-3 rounded-t-lg resize-none" id="input_instrucoes" placeholder="Descreva o passo a passo e o que este exercício visa desenvolver..." rows="4"></textarea>
+</div>
+<!-- Materiais e Anexos -->
+<div class="md:col-span-2 space-y-4">
+<label class="text-[10px] font-bold uppercase tracking-[0.05rem] text-on-surface-variant" style="">Materiais e Anexos</label>
+<div class="flex flex-col sm:flex-row items-start gap-4">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-primary font-semibold rounded-lg transition-colors" id="btn_anexar_arquivo" style="" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="upload_file" style="">upload_file</span>
+<span class="text-sm" style="">Anexar Arquivo</span>
+</button>
+<div class="flex-1 w-full">
+<ul class="space-y-2" id="lista_anexos_exercicio">
+<li class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30" style="">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="description" style="">description</span>
+<span class="text-sm font-medium text-on-surface" style="">folha_atividades.pdf</span>
+</div>
+<button class="text-outline hover:text-error transition-colors" id="btn_excluir_anexo_exemplo" style="" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="delete" style="">delete</span>
+</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Requisitos de Resposta -->
+<div class="md:col-span-2 space-y-4">
+<label class="text-[10px] font-bold uppercase tracking-[0.05rem] text-on-surface-variant" style="">Requisitos de Resposta</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="flex items-start gap-3 p-4 bg-surface-container-high rounded-xl cursor-pointer hover:bg-surface-container-highest transition-colors" style="">
+<input class="mt-1 w-5 h-5 text-primary border-outline rounded focus:ring-primary focus:ring-offset-0" id="checkbox_gravacao_audio" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface" style="">Gravação de Áudio</span>
+<span class="text-[11px] text-on-surface-variant" style="">Obrigatório para exercícios de fonética</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 bg-surface-container-high rounded-xl cursor-pointer hover:bg-surface-container-highest transition-colors" style="">
+<input class="mt-1 w-5 h-5 text-primary border-outline rounded focus:ring-primary focus:ring-offset-0" id="checkbox_foto_resposta" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface" style="">Foto da Resposta</span>
+<span class="text-[11px] text-on-surface-variant" style="">Necessário para análise de grafia</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Form Actions -->
+<div class="md:col-span-2 flex justify-end items-center gap-4 pt-6">
+<button class="px-6 py-2 text-primary font-medium hover:bg-primary-fixed transition-colors rounded-lg" id="btn_cancelar_cadastro" style="" type="button">
+                            Cancelar
+                        </button>
+<button class="px-8 py-3 bg-primary text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(19,127,236,0.15)] active:scale-95 transition-all" id="btn_salvar_exercicio" style="" type="submit">
+                            Salvar Exercício
+                        </button>
+</div>
+</form>
+</div>
+</section>
+<!-- Exercise Library Section -->
+<section>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<h2 class="text-2xl font-bold text-on-surface tracking-tight" style="">Biblioteca de Exercícios</h2>
+<p class="text-on-surface-variant text-sm mt-1" style="">Explore e gerencie seus recursos terapêuticos.</p>
+</div>
+<!-- Search and Filter Bar -->
+<div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" data-icon="search" style="">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-full w-full sm:w-64 focus:ring-2 focus:ring-primary/20 text-sm" id="input_busca_exercicios" placeholder="Buscar exercícios..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Category Filter Chips -->
+<div class="flex flex-wrap gap-2 mb-8">
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-full text-xs font-medium shadow-md" style="">Todos</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full text-xs font-medium" style="">Cognição</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full text-xs font-medium" style="">Linguagem</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full text-xs font-medium" style="">Matemática</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full text-xs font-medium" style="">Motor</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full text-xs font-medium" style="">Socioemocional</button>
+</div>
+<!-- Bento Grid of Exercises -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl group hover:shadow-lg transition-all border-l-4 border-transparent hover:border-primary">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-lg text-[10px] font-bold uppercase tracking-wider" style="">Linguagem</span>
+<div class="flex gap-1">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary-fixed rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="edit" style="">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error hover:bg-error-container rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="delete" style="">delete</span>
+</button>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-2" style="">Consciência Fonológica</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 leading-relaxed" style="">Atividade de identificação de rimas e aliterações com suporte visual de figuras coloridas.</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="calendar_today" style="">calendar_today</span>
+<span class="text-[11px] text-outline font-medium" style="">CRIADO EM 12 OUT 2023</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward" style="">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl group hover:shadow-lg transition-all border-l-4 border-transparent hover:border-primary">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-lg text-[10px] font-bold uppercase tracking-wider" style="">Motor</span>
+<div class="flex gap-1">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary-fixed rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="edit" style="">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error hover:bg-error-container rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="delete" style="">delete</span>
+</button>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-2" style="">Pinça e Precisão</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 leading-relaxed" style="">Uso de pregadores de roupa e sementes para fortalecimento da musculatura intrínseca da mão.</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="calendar_today" style="">calendar_today</span>
+<span class="text-[11px] text-outline font-medium" style="">CRIADO EM 15 OUT 2023</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward" style="">arrow_forward</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl group hover:shadow-lg transition-all border-l-4 border-transparent hover:border-primary">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-lg text-[10px] font-bold uppercase tracking-wider" style="">Cognição</span>
+<div class="flex gap-1">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary-fixed rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="edit" style="">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error hover:bg-error-container rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="delete" style="">delete</span>
+</button>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-2" style="">Memória de Trabalho: Sequências</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 leading-relaxed" style="">Repetição de sequências auditivas e visuais de cores e números em ordem direta e inversa.</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="calendar_today" style="">calendar_today</span>
+<span class="text-[11px] text-outline font-medium" style="">CRIADO EM 18 OUT 2023</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward" style="">arrow_forward</span>
+</div>
+</div>
+<!-- Card 4 (Attention Required Variant) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl group hover:shadow-lg transition-all border-l-4 border-transparent hover:border-tertiary">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-lg text-[10px] font-bold uppercase tracking-wider" style="">Especializado</span>
+<div class="flex gap-1">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary-fixed rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="edit" style="">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error hover:bg-error-container rounded-lg transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="delete" style="">delete</span>
+</button>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-2" style="">Regulação Emocional: Termômetro</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4 leading-relaxed" style="">Ferramenta visual para auxiliar o paciente a identificar e nomear o nível de intensidade de suas emoções.</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="calendar_today" style="">calendar_today</span>
+<span class="text-[11px] text-outline font-medium" style="">CRIADO EM 20 OUT 2023</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward" style="">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Success FAB (Save Indicator) -->
+</body></html>
