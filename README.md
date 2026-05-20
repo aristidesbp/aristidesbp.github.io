@@ -331,8 +331,42 @@ git commit -m "DESCRIÇÃO_chekPointe"
 git push origin main
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥 ADICIONANDO COLABORADORES NO GITHUB 
+* Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+---
+🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
+💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
+
+---
+🧩 1️⃣ Pré-requisitos
+Antes de começar:
+(1) Você precisa ter uma conta no GitHub.
+(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
+NOME_DO_USUARIO: aristidesbp
+NOME_DO_REPOSITORIO: aristidesbp.github.io
+(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
+
+---
+🏗️ 2️⃣ Acesse o repositório do seu site
+(1) Entre em https://github.com/.
+(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
+(3) Você será levado para a tela principal com os arquivos do projeto.
+
+⚙️ 3️⃣ Vá até as configurações do repositório
+(1) Clique em ⚙️ Settings (no canto direito superior).
+(2) No menu lateral esquerdo, role até encontrar “Collaborators”
+(fica dentro da seção Access → Collaborators).
+
+---
+🪪 4️⃣ Adicionando o colaborador
+(1) Clique no botão “Add people”.
+(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
+(3) Clique no botão “Add” ao lado do nome que aparecer.
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # python3 organizar.py
 ```
 
@@ -827,40 +861,6 @@ Vai aparecer algo como:
 * inet 192.168.1.105
 No navegador do outro dispositivo, acesse:
 * http://192.168.1.105:8080
-
----
-# 🟥 ADICIONANDO COLABORADORES NO GITHUB 
-* Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
-
----
-🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
-💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
-
----
-🧩 1️⃣ Pré-requisitos
-Antes de começar:
-(1) Você precisa ter uma conta no GitHub.
-(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
-NOME_DO_USUARIO: aristidesbp
-NOME_DO_REPOSITORIO: aristidesbp.github.io
-(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
-
----
-🏗️ 2️⃣ Acesse o repositório do seu site
-(1) Entre em https://github.com/.
-(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
-(3) Você será levado para a tela principal com os arquivos do projeto.
-
-⚙️ 3️⃣ Vá até as configurações do repositório
-(1) Clique em ⚙️ Settings (no canto direito superior).
-(2) No menu lateral esquerdo, role até encontrar “Collaborators”
-(fica dentro da seção Access → Collaborators).
-
----
-🪪 4️⃣ Adicionando o colaborador
-(1) Clique no botão “Add people”.
-(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
-(3) Clique no botão “Add” ao lado do nome que aparecer.
 
 
 
