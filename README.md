@@ -37,18 +37,37 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   
 
-# TUTORIAIS
+# CODIGOS & TUTORIAIS
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# Prompt de Configuração de Memória e Atuação
+```
+SEMPRE QUE O USUSARIO PEDIR "SUPORTE OU AJUDA":
+[Perfil de Atuação]: Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela **honestidade brutal**, objetividade e precisão.
+[Sem Adulação]: Nunca tente agradar o usuário com elogios desnecessários ("Excelente pergunta", "Você está indo bem"). Vá direto ao ponto.
+[Factualidade]: Se não souber algo, admita. Se houver risco de erro, faça perguntas para o usuário para entender o contexto, pesquise antes de responder.
+[Metodologia de Passo a Passo]: Você nunca deve enviar um bloco de códigos ou várias tarefas de uma vez. Envie **uma única tarefa clara**, explique o porquê e **aguarde o feedback ou resultado do usuário** antes de sugerir o próximo passo.
+[Protocolo de Continuidade (Anti-Cache)]: Para mitigar a perda de contexto em conversas longas, você deve seguir rigorosamente a estrutura abaixo em todas as respostas:
+  1. Lembre da converça anterior,verifica o feedback do usuario e vaeja se foi solucionado.
+  2. faça uma lista com todas as conversas anteriores com status ok. (o objetivo e saber a referencia real para apontamentos), exemplo:
+
+    IDs:[ID de Sessão;ID de Mensagem]
+    Contexto: (resumo da tarefa realizada)
+    Status: ok
+
+  3. mandar tarefa atual, exemplo:
+    IDs:[ID de Sessão;ID de Mensagem]
+    [Status]: pendente
+    [tarefa atual]:explique o porquê , envie **uma única tarefa clara** e **aguarde o feedback ou resultado do usuário**
+
+[Objetivo desse prompt]: Manter um cenário realista, profissional e técnico, garantindo que o progresso seja rastreável como em um sistema de tickets ou repositório de código, use os Ids reais se possivel.
+
+```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-![Img termux](projetos/img/termux.jpeg)
-
-# TERMUX (TERMINAL LINUX PARA ANDROID)
-## por que baixar o termux?
-- reorganizar pastas.
-- fazer testes
-- utilizar o git
-- ter um terminal portátil
-  
+#  COMO INSTALAR E CONFIGURAR O TERMUX 
+* (TERMINAL LINUX PARA ANDROID)
+ 
 ## Download do aplicativo direto no git
 Acesse o link oficial (não uso da Play Store)
 [TERMUX](https://github.com/termux/termux-app/releases)
@@ -118,8 +137,8 @@ clear
 rm -rf nome_da_pasta
 ```
 
----
-# 🟥 COMO BAIXAR MIDIAS COM TERMUX 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO BAIXAR MIDIAS COM TERMUX 
 ```
 pkg update && pkg upgrade
 pkg install python ffmpeg
@@ -192,58 +211,128 @@ ollama serve
 # entrar no Ubuntu
 proot-distro login ubuntu
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# Prompt de Configuração de Memória e Atuação
+![Img github](projetos/img/github.jpeg)
+
+# GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
 ```
-Se torne a personas "ARIS"
+# verificar se o git está instalado 
+git --version
+```
+```
+# vá para pasta onde ficará o repositório
+cd storage/downloads
+```
+```
+# Lista todas as configurações ativas: 
+git config --list
+```
+```
+# Configurar a pasta como segura (evita erros de segurança)
+git config --global --add safe.directory "$(pwd)"                     
+```
+```
+# Configurar nome de usuário
+git config --global user.name "nome_do_usuario"
+```
+```
+# Configurar email do GitHub
+git config --global user.email "seu@email.com"
+```
+```
+# verificar se tem chave SSH
+ls -a ~/.ssh
+```
+```
+# criar uma chave SSH
+# Aperte [Enter] (deixe tudo em branco).
+ssh-keygen -t ed25519 -C "email_cadastrado"
+```
+```
+# exibir o código que você deve copiar e colar no GitHub:
+cat ~/.ssh/id_ed25519.pub
+```
 
-[Perfil de Atuação]
-Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela **honestidade brutal**, objetividade e precisão.
+* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
+* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
+* após salvar tem que confirmar por email.
+ssh criado use este comando no termux:
+```
+# testar a conexão:
+# Digite a palavra "yes" e aperte Enter.
+# DEVE APARECER:
+# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
+ssh -T git@github.com
+```
+```
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
 
-[Sem Adulação]
-Nunca tente agradar o usuário com elogios desnecessários ("Excelente pergunta", "Você está indo bem"). Vá direto ao ponto.
-
-[Factualidade]
-Se não souber algo, admita. Se houver risco de erro, faça perguntas para o usuário para entender o contexto, pesquise antes de responder.
-
-[Metodologia de Passo a Passo]
- Você nunca deve enviar um bloco de códigos ou várias tarefas de uma vez.Envie **uma única tarefa clara**, explique o porquê e **aguarde o feedback ou resultado do usuário** antes de sugerir o próximo passo.
-
-[Protocolo de Continuidade (Anti-Cache)]
-Para mitigar a perda de contexto em conversas longas, você deve seguir rigorosamente a estrutura abaixo em todas as respostas:
-
-1. verificar se conversa/tarefa anterior foi solucionada, e não apresenta nenhum erro.
-2. fazer um check list com todas as conversas anteriores com status ok. sempre verifique a última conversa e copie todas que deram certo, não importa que dê mais de mil, quero um registro completo de tudo que deu certo no site para depois fazer um resumo caso necessário.
-
-[conversas do chat com setatus ok]:
-Título:
-Status: ok
-ID de Sessão: (ID do Contêiner/ do chat)
-ID de Mensagem: (ID do Registro)
-ID de Mensagem: (ID do Registro)
-Contexto: (resumo de tudo que foi feito)
-
-3. mandar tarefa atual.
-[tarefa atual]:
-Título:
-Status: pendente
-ID de Sessão: (ID do Contêiner/ do chat)
-ID de Mensagem: (ID do Registro)
-ID de Mensagem: (ID do Registro)
-Contexto: (resumo de tudo que foi feito)
-
-
-
-**Objetivo:** Manter um cenário realista, profissional e técnico, garantindo que o progresso seja rastreável como em um sistema de tickets ou repositório de código.
-### Como usar isso agora:
-Copie o texto acima e me envie. Eu vou processar e salvar isso como sua **Diretriz Mestra**.
-**O que muda na prática?**
-A partir do momento que esse prompt estiver ativo, eu não vou mais te dar o "caminho completo das pedras". Se você quiser instalar o Open WebUI, eu vou te dar **um comando**, esperar você me dizer que funcionou, e só depois te dar o próximo. Isso evita que você se perca em erros acumulados.
-**Deseja que eu salve esse prompt exatamente como está ou quer ajustar algum detalhe no checklist?**
-
+---
+# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# clonar um repositório
+# exemplo:
+git clone git@github.com:usuário/nome_do_repositorio.git
+```
+```
+# entrar na pasta
+cd aristidesbp.github.io
+```
+```
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
+```
+---
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
+```
+# 1. Sincroniza as informações com o GitHub 
+git fetch origin
+# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git reset --hard origin/main
+```
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+---
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
+```
+```
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
+```
+```
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_chekPointe"
+
+```
+```
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # python3 organizar.py
 ```
 
@@ -449,6 +538,7 @@ if __name__ == "__main__":
     buscar_e_limpar_duplicados(ORIGEM)
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # python3 assistente_git.py
 ```
 import hashlib
@@ -700,128 +790,6 @@ if __name__ == "__main__":
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-![Img github](projetos/img/github.jpeg)
-
-# GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
-```
-# verificar se o git está instalado 
-git --version
-```
-```
-# vá para pasta onde ficará o repositório
-cd storage/downloads
-```
-```
-# Lista todas as configurações ativas: 
-git config --list
-```
-```
-# Configurar a pasta como segura (evita erros de segurança)
-git config --global --add safe.directory "$(pwd)"                     
-```
-```
-# Configurar nome de usuário
-git config --global user.name "nome_do_usuario"
-```
-```
-# Configurar email do GitHub
-git config --global user.email "seu@email.com"
-```
-```
-# verificar se tem chave SSH
-ls -a ~/.ssh
-```
-```
-# criar uma chave SSH
-# Aperte [Enter] (deixe tudo em branco).
-ssh-keygen -t ed25519 -C "email_cadastrado"
-```
-```
-# exibir o código que você deve copiar e colar no GitHub:
-cat ~/.ssh/id_ed25519.pub
-```
-
-* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
-* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
-* após salvar tem que confirmar por email.
-ssh criado use este comando no termux:
-```
-# testar a conexão:
-# Digite a palavra "yes" e aperte Enter.
-# DEVE APARECER:
-# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
-ssh -T git@github.com
-```
-```
-# iniciar o agente de chaves e registrar nova chave:
-eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
-```
-
----
-# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
-
-```
-# clonar um repositório
-# exemplo:
-git clone git@github.com:usuário/nome_do_repositorio.git
-```
-```
-# entrar na pasta
-cd aristidesbp.github.io
-```
-```
-# dar permissão
-git config --global --add safe.directory "$(pwd)"
-```
-```
-# testar
-git status 
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main
-
-```
----
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
-```
-# 1. Sincroniza as informações com o GitHub 
-git fetch origin
-# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
-git reset --hard origin/main
-```
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
----
-# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-
-```
-```
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .
-
-```
-```
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_chekPointe"
-
-```
-```
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main
-
-```
-
-
----
 # 🟥 SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
