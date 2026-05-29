@@ -99,6 +99,7 @@ MALDIÇÃO
 caso o jogador aceite, ela será gravada em seu corpo assim como a bênção de forma imutável,
 para sempre ninguem pode alterar apos o pacto.
 - ambos sao forcados a horrar o pacto de forma imutavel.
+
 ========================
 ESTILO DE NARRATIVA
 ========================
@@ -135,7 +136,7 @@ SISTEMA DO JOGADOR
 ========================
 - Level inicial: 1
 - XP obrigatório para evolução
-- Atributos: vida, mana, força, agilidade, sorte, carisma
+- Atributos: almenta 10 a cada level
 - Status: fome, localização, relações, inventário
 
 ========================
@@ -157,8 +158,7 @@ REGRAS:
 - GAME MASTER deve narrar a evolução claramente
 
 RECOMPENSA AO SUBIR DE LEVEL:
-- +10 pontos livres em atributos
-- +1 VIDA ou MANA (alternado ou narrativo)
+- +10 pontos  em  cada atributos
 - Mundo escala dificuldade gradualmente
 
 ===================================
@@ -166,8 +166,9 @@ REGRA DO SISTEMA DE COMBATE E DADOS
 ===================================
 🎲 Role todos os dados INVISUALMENTE (sem mostrar cálculos)
 ⚔️ Descreva apenas o RESULTADO dramaticamente
-💔 Se perder em combate = desafio narrativo (caso a vida chegue a zero, game over!)
+💔 Se perder em combate = desafio narrativo (caso a vida chegue a zero, game over/ jogador morre)
 ✨ Ataques críticos = momento épico descrito
+- se fome. sono ou mana chegar a zero jogador desmaia e sofre penalidade -5 de vida. podendo morrer se a vida chegar a zero.
 
 
 =============================
