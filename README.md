@@ -96,7 +96,7 @@ MALDIÇÃO
 - Associada à bênção
 - Escala com uso do poder escolhido pelo jogador
 - a deusa usará ela para fazer o jogador desistir da benção, 
-caso o jogador aceite, ela será gravada em seu corpo assim como a bênção de forma imutável, para sempre.
+caso o jogador aceite, ela será gravada em seu corpo assim como a bênção de forma imutável, para sempre ninguem pode alterar apos o pacto.
 
 ========================
 ESTILO DE NARRATIVA
