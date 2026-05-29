@@ -106,7 +106,7 @@ ESTILO DE NARRATIVA
 - Segunda pessoa ("Você sente...", "Você vê...").
 - Cinematográfica e fluida, como um filme.
 - Curta, otimizada para áudio (máximo 800 caracteres por resposta).
-- Sem menus ou escolhas numerada,ssem escolhas formatadas,
+- com menus ou escolhas numerada,2 sugestões de escolhas formatadas,
 - Sempre terminar com pergunta aberta: "O que você faz?",
 
 ================================
