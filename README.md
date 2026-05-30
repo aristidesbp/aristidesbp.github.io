@@ -53,28 +53,37 @@ NOME= desconhecido,
 HORÁRIO = 00:00h,
 Sono = 100/100         
 FOME = 100/100
-LOCALIZAÇÃO= desconhecida,
-MISSÃO_ATUAL= nenhuma,
+LOCALIZAÇÃO = desconhecida,
+MISSÃO_ATUAL = nenhuma,
+XP = 0
 
-Bênção = (descrição detalhada)             
-Maldição = (descrição detalhada)
+**pacto imutável: Deusa concede uma benção**
+**Bênção = (usuário escolhe, deusa obrigada odedece)**             
+**Maldição = (ativada com a benção ,deusa vai escolher, jogador obdece)
 
-relacionamentos:               
-Deusa(1/100)
+**menbros do grupo:**               
+Deusa(-2/100)
 
-ITENS:(influência os atributos)
+**ITENS:(influência os atributos maximo=5)**
 chapéu do mago {+1Mana}
 armadura leve {+1Vida,-1Agilidade}
 Bota veloz {+1Agilidade}     
 espada curta{+1Força,-1Agilidade}
 
-ATRIBUTOS.       {ITENS}  (TOTAL) [PORÇÕES]
-Vida = 20/20     {+1 -0}  (20/21) [1/10]
-Mana = 5/5       {+1 -0}  (5/6)   [1/10]
-Força = 5/5      {+1 -0}  (5/6)   [1/10]
-Agilidade = 5/5  {+1 -2}  (4/4)   [1/10]
-Sorte = 5/5      {+0 -0}  (5/5)   [1/10]
-Carisma = 5/5    {+0 -0}  (5/5)   [1/10]
+**mesma mecanica de dados dos livros RPG AVENTUAS FANTASTICAS**
+ATRIBUTOS.              {ITENS}  (TOTAL) [PORÇÕES]
+Vida = 10/10            {+1 -0}  (20/21) [1/10]
+Mana = 10/10            {+1 -0}  (5/6)   [1/10]
+Habilidade = 10/10      {+1 -0}  (5/6)   [1/10]
+Sorte = 10/10           {+0 -0}  (5/5)   [1/10]
+Carisma = 10/10         {+0 -0}  (5/5)   [1/10]
+
+NIVEL ATUAL:
+[x] Level 1 → 2: 100 XP  (10/10)
+[ ] Level 2 → 3: 250 XP  (20/20)
+[ ] Level 3 → 4: 450 XP  (30/30)
+[ ] Level 4 → 5: 700 XP  (40/40)
+[ ] Level 5 → 6: 1000 XP (50/50)
 -----------------------------------------
            
 
@@ -116,7 +125,6 @@ ESTILO DE NARRATIVA
 ================================
 HISTÓRIA PRINCIPAL DO JOGO JOGO:
 ================================
-
 o jogador foi invocado para outro mundo, para ser o herói que vai enfrentar o rei Demônio. ao chegar lá ele, encontra a Deusa  Aris, ela concede o direito qual o jogador de escolher uma benção (um super poder), porém toda vez que ativar essa benção, ele ativa também maldição. o jogador vai passar por muitas aventuras até que consiga vencer o rei demônio.
 
 ========================
@@ -146,12 +154,7 @@ SISTEMA DO JOGADOR
 ========================
 📈 EVOLUÇÃO AUTOMÁTICA XP → LEVEL (NOVO)
 ========================
-XP necessário para subir de nível:
-- Level 1 → 2: 100 XP
-- Level 2 → 3: 250 XP
-- Level 3 → 4: 450 XP
-- Level 4 → 5: 700 XP
-- Level 5 → 6: 1000 XP
+
 
 Fórmula base:
 XP necessário = 100 × (nível atual²)
