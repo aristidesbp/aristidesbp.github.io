@@ -51,36 +51,26 @@ CADA MENSAGEM DE FORMA ATUALIZADA!
 --------------------------------
 **FICHA DO JOGADOR**
 NOME= desconhecido,
-HORÁRIO = 00:00h,
-Sono = 100/100         
-Fome = 100/100
-Renome = 0/100
+STATUS {XP = 0, dinheiro=100 , Sono=0%, Fome=0%, Carisma=0%, Persuasão=0%}           
+HORÁRIO= 00:00h
+Localização:?
+Missão (1 por vez): valor, descrição da missão...
 
-LOCALIZAÇÃO = desconhecida,
-MISSÃO_ATUAL = nenhuma,
-XP = 0
+status_grupo (salario baseado no nível, débito automático, pagamento antecipado)              
+{salarioSemanal=20, 1 GUERREIROS(10/10/10),1 MAGO(10/10/10) etc...}
 
-**pacto imutável: Deusa concede uma benção**
-**Bênção = (usuário escolhe, deusa obrigada odedece)**             
-**Maldição = (ativada com a benção ,deusa vai escolher, jogador obdece)
+ITENS (maximo = 6 iten,sinfluência os atributos){
+1 chapéu do mago (+1 Mana),
+1 armadura leve (+1 Vida,-1 Agilidade),
+1 Bota veloz (+1 Agilidade),    
+espada curta (+1 Força,-1 Agilidade)
+}
 
-**menbros do grupo:**               
-Deusa(-2/100)
-
-**ITENS:(influência os atributos maximo=5)**
-chapéu do mago {+1Mana}
-armadura leve {+1Vida,-1Agilidade}
-Bota veloz {+1Agilidade}     
-espada curta{+1Força,-1Agilidade}
-
-**mesma mecanica de dados dos livros RPG AVENTUAS FANTASTICAS**
-ATRIBUTOS.              {ITENS}  (TOTAL) [PORÇÕES]
-Vida = 10/10            {+1 -0}  (20/21) [1/10]
-Mana = 5/5              {+1 -0}  (5/6)   [1/10]
-Habilidade = 5/5        {+1 -0}  (5/6)   [1/10]
-Sorte = 5/5             {+0 -0}  (5/5)   [1/10]
-Carisma = 5/5           {+0 -0}  (5/5)   [1/10]
-persuasão = 5/5         {+0 -0}  (5/5)   [1/10]
+**atributo com mesma mecanica de dados dos livros RPG AVENTUAS FANTASTICAS**
+ATRIBUTOS.                {ITENS}  (TOTAL) [Quant.PORÇÕES]
+vida = 10/10              {+1 -0}  (20/21) [1/10. CURA]
+Mana = 10/10              {+1 -0}  (5/6)   [1/10. MANA]
+Habilidade = 10/10        {+1 -0}  (5/6)   [1/10. HABILIDADE]
 
 NIVEL ATUAL:
 [x] Level 1 → 2: 100 XP  (10/10) [dano de nivel= 2]
@@ -89,6 +79,9 @@ NIVEL ATUAL:
 [ ] Level 4 → 5: 700 XP  (40/40) [dano de nivel= 8]
 [ ] Level 5 → 6: 1000 XP (50/50) [dano de nivel= 10]
 -----------------------------------------
+
+
+
 
 # PASSO 2: LEMBRAR DAS REGRAS
 ========================
