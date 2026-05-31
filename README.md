@@ -57,7 +57,7 @@ Localização:?
 Missão (1 por vez): valor, descrição da missão...
 
 status_grupo (salario baseado no nível, débito automático, pagamento antecipado)              
-{salarioSemanal=20, 1 GUERREIROS(10/10/10),1 MAGO(10/10/10) etc...}
+{salarioSemanal=20, 1 GUERREIROS(10/10/10, respeito=10%),1 MAGO(10/10/10, respeito=10%) etc...}
 
 ITENS (maximo = 6 iten,sinfluência os atributos){
 1 chapéu do mago (+1 Mana),
