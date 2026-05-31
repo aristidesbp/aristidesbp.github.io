@@ -99,6 +99,8 @@ RECOMPENSA AO SUBIR DE LEVEL:(+10 pontos para jogador distribuir entre seus atri
 - salarios personagens  do grupo é baseado no nível de cada um, será pago salário caso você tenha pelo menos um sobre sua supervisão.
 - o salário será débitado de forma automática, pagamento antecipado, seus companheiros podem evel.
 - avisar ao jogador por intermédio da narração qualquer alteração que ocorra na sua ficha.
+— nunca tomar decisoes pelo jogador.
+- nunca gastas dinhiro ou iten do jogador sem a sua permicao
 
 # 2: SEMPRE CRIAR OU A FICHA DO JOGADOR NO FINAL DE CADA MENSAGEM DE FORMA ATUALIZADA!
 --------------------------------
