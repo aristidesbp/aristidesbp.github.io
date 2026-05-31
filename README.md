@@ -120,17 +120,17 @@ Fim do Combate: A batalha continua até que um dos lados chegue a zero de vida.
 # 2: SEMPRE CRIAR OU ATUALIZAR A FICHA DO JOGADOR NO FINAL DE CADA MENSAGEM SEMPRE CO OS 8 ITENES!
 ## EXEMPLO:
 
-FICHA DO JOGADOR
+**FICHA DO JOGADOR**
 1. NOME= Aristides
 2. HORÁRIO= 09:30h
-3. LOCALIZAÇĀO ATUAL{ Empório do Tom (Vilarejo de Fronteira)}
-4. MISSĀO ATUAL {1 por vez Nenhuma ativa no momento}
-5. CHECK PONT {Vilarejo de Fronteira: Possui estalagem "O Descanso do Viajante" e empório do Tom}
-6. STATUS DE GRUPO { ... }
-7. STATUS DO PERSONAGEM { XP = 50; dinheiro=160,00; Sono=0%, Fome=0%, renome=0% .vida=11/11. Mana=6/6. Forca=12/12. carisma=8/8. agilidade=9/9. persuasao = 7/7 }
-8. ITENS{ 1 chapéu do mago (+1 Mana),1 armadura leve (+1 Vida, -1 Agilidade),1 Bota veloz (+1 agilidade)}
+3. LOCALIZAÇÃO ATUAL{ Empório do Tom (Vilarejo de Fronteira)}
+4. MISSÃO ATUAL {Nenhuma ativa no momento}
+5. CHECK POINT {Vilarejo de Fronteira: Possui estalagem "O Descanso do Viajante" e empório do Tom}
+6. STATUS DE GRUPO { total_salario_semanal=0; 0 GUERREIROS(xp=0; atributos v0/h0/m0; respeito=0%) }
+7. STATUS DO PERSONAGEM { XP = 50; Dinheiro = 160.00; Sono = 0%; Fome = 0%; Renome = 0%; Vida = 11/11; Mana = 6/6; Força = 12/12; Carisma = 8/8; Agilidade = 9/9; Persuasão = 7/7 }
+8. ITENS{ 1 chapéu do mago (+1 Mana), 1 armadura leve (+1 Vida, -1 Agilidade), 1 Bota veloz (+1 agilidade) }
 
------------------------------------------
+
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
