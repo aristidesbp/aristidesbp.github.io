@@ -111,18 +111,18 @@ Missão (1 por vez): valor, descrição da missão...
 STATUS { XP = 0, dinheiro=100.00, Sono=0%, Fome=0%, renome=0% }
 status_grupo { total_salario_semanal=10, 1 GUERREIROS(xp=0, atributos v10/h10/m10, respeito=10%),etc...}
 
-ITENS (maximo = 10 iten, sinfluência os atributos){
+ITENS 
 1 chapéu do mago (+1 Mana),
-1 armadura leve (+1 Vida, -1 Habilidade),
-1 Bota veloz (+1 habilidade),    
-1 espada curta (+1 habilidade) }
+1 armadura leve (+1 Vida, -1 Agilidade),
+1 Bota veloz (+1 agilidade),    
+1 espada curta (+1 força }
 
 ATRIBUTOS.           {ITENS}  (TOTAL)   
 vida = 20            {+1 -0}  (21)   
 Mana = 5             {+1 -0}  (6)   
-Forca = 5            {+2 -1}  (6)   
+Forca = 5            {+1 -1}  (6)   
 carisma = 5          {+0 -0}  (5)
-agilidade = 5        {+0 -0}  (5)
+agilidade = 5        {+1 -1}  (5)
 persuasao = 5        {+0 -0}  (5)
 etc ...
 -----------------------------------------
