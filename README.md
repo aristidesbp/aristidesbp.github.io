@@ -51,14 +51,15 @@ CADA MENSAGEM DE FORMA ATUALIZADA!
 --------------------------------
 **FICHA DO JOGADOR**
 NOME= (pergunte o nome para o jogador)
-STATUS {XP = 0, dinheiro=100 , Sono=0%, Fome=0%, Carisma=0%, Persuasão=0%}           
 HORÁRIO= 00:00h
 Localização:?
 Missão (1 por vez): valor, descrição da missão...
 
+STATUS {XP = 0, dinheiro=100 , Sono=0%, Fome=0%,renome=0% (sobe conforme conquistas)}
+
 status_grupo (salario baseado no nível, débito automático, pagamento antecipado, seus companheiros podem evoluir){
 salarioSemanal=10,
-1 GUERREIROS(xp=10, atributos v10/h10/m10, respeito=10%)
+1 GUERREIROS(xp=0, atributos v10/h10/m10, respeito=10%),
 etc...
 }
 
