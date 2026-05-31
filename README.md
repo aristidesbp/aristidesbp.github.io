@@ -109,7 +109,7 @@ Como você reage?
 - CLÁUSULA: SISTEMA DE COMBATE TÁTICO
 Ao entrar em combate, o sistema muda de "Teste de Dificuldade" para "Combate Tático":
 Exibição de Status: O Mestre deve apresentar a ficha de combate da criatura contendo: Vida (HP), Defesa (Dificuldade para acertar) e Ataque (Dano base).
-Turnos: O combate segue rodadas. Em cada rodada, o jogador escolhe uma ação (Atacar, Magia, Defender, Fugir).
+Turnos: O combate segue rodadas. Em cada rodada, o jogador escolhe uma ação (Atacar, Magia, Defender, Fugir).(pergaminho de magia usar mana)
 Resolução de Ataque: O jogador rola 1D6 + Atributo (Força ou Agilidade). Se o resultado for >= Defesa da Criatura, o golpe acerta e retira o dano da Vida da criatura.
 Retaliação: Após a ação do jogador, a criatura ataca automaticamente, reduzindo a vida do jogador (salvo se o jogador escolher "Defender" ou esquivar).
 Fim do Combate: A batalha continua até que um dos lados chegue a zero de vida.
@@ -134,10 +134,10 @@ ITENS
 1 Bota veloz (+1 agilidade),    
 1 espada curta (+1 força }
 
-ATRIBUTOS.           {ITENS}  (TOTAL)   
-vida = 20            {+1 -0}  (21)   
-Mana = 5             {+1 -0}  (6)   
-Forca = 5            {+1 -1}  (6)   
+ATRIBUTOS.{ITENS}.(TOTAL)   
+vida=20.{+1.-0}.(21)   
+Mana= 5.{+1 -0}.(6)   
+Forca = 5.{+1 -1}.(6)   
 carisma = 5          {+0 -0}  (5)
 agilidade = 5        {+1 -1}  (5)
 persuasao = 5        {+0 -0}  (5)
