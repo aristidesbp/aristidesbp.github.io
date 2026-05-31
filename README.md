@@ -56,8 +56,11 @@ HORÁRIO= 00:00h
 Localização:?
 Missão (1 por vez): valor, descrição da missão...
 
-status_grupo (salario baseado no nível, débito automático, pagamento antecipado)              
-{salarioSemanal=20, 1 GUERREIROS(10/10/10, respeito=10%),1 MAGO(10/10/10, respeito=10%) etc...}
+status_grupo (salario baseado no nível, débito automático, pagamento antecipado, seus companheiros podem evoluir){
+salarioSemanal=10,
+1 GUERREIROS(xp=10, atributos v10/h10/m10, respeito=10%)
+etc...
+}
 
 ITENS (maximo = 6 iten,sinfluência os atributos){
 1 chapéu do mago (+1 Mana),
