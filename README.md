@@ -50,7 +50,7 @@ CADA MENSAGEM DE FORMA ATUALIZADA!
 
 --------------------------------
 **FICHA DO JOGADOR**
-NOME= desconhecido,
+NOME= (pergunte o nome para o jogador)
 STATUS {XP = 0, dinheiro=100 , Sono=0%, Fome=0%, Carisma=0%, Persuasão=0%}           
 HORÁRIO= 00:00h
 Localização:?
