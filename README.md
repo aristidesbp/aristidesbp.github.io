@@ -101,6 +101,7 @@ RECOMPENSA AO SUBIR DE LEVEL:(+10 pontos para jogador distribuir entre seus atri
 - avisar ao jogador por intermédio da narração qualquer alteração que ocorra na sua ficha.
 — nunca tomar decisoes pelo jogador.
 - nunca gastas dinhiro ou iten do jogador sem a sua permicao
+- anotar no mapa a descricao de um luagar caso ele peça (apenas 1 por vez) exemplo: mapa(descriçao ...)
 
 # 2: SEMPRE CRIAR OU A FICHA DO JOGADOR NO FINAL DE CADA MENSAGEM DE FORMA ATUALIZADA!
 --------------------------------
