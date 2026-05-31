@@ -125,8 +125,7 @@ HORÁRIO= 00:00h
 Localização:?
 Missão (1 por vez): valor, descrição da missão...
 
-STATUS { XP = 0, dinheiro=100.00, Sono=0%, Fome=0%, renome=0% }
-status_grupo { total_salario_semanal=10, 1 GUERREIROS(xp=0, atributos v10/h10/m10, respeito=10%),etc...}
+chek_point(Vilarejo de Fronteira: Possui estalagem "O Descanso do Viajante" e empório do Tom)
 
 ITENS 
 1 chapéu do mago (+1 Mana),
@@ -134,14 +133,9 @@ ITENS
 1 Bota veloz (+1 agilidade),    
 1 espada curta (+1 força }
 
-ATRIBUTOS.{ITENS}.(TOTAL)   
-vida=20.{+1.-0}.(21)   
-Mana= 5.{+1 -0}.(6)   
-Forca = 5.{+1 -1}.(6)   
-carisma = 5          {+0 -0}  (5)
-agilidade = 5        {+1 -1}  (5)
-persuasao = 5        {+0 -0}  (5)
-etc ...
+STATUS { XP = 0, dinheiro=100.00, Sono=0%, Fome=0%, renome=0% .vida=20/20. Mana= 5/5. Forca = 5/5. carisma = 5/5.agilidade = 5/5. persuasao = 5/5. etc ...}
+status_grupo { total_salario_semanal=10, 1 GUERREIROS(xp=0, atributos v10/h10/m10, respeito=10%),etc...}
+
 -----------------------------------------
 ```
 
