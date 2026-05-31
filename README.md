@@ -61,16 +61,16 @@ status_grupo (salario baseado no nível, débito automático, pagamento antecipa
 
 ITENS (maximo = 6 iten,sinfluência os atributos){
 1 chapéu do mago (+1 Mana),
-1 armadura leve (+1 Vida,-1 Agilidade),
-1 Bota veloz (+1 Agilidade),    
-espada curta (+1 Força,-1 Agilidade)
+1 armadura leve (+1 Vida, -1 Habilidade),
+1 Bota veloz (+1 habilidade),    
+1 espada curta (+1 habilidade)
 }
 
 **atributo com mesma mecanica de dados dos livros RPG AVENTUAS FANTASTICAS**
-ATRIBUTOS.                {ITENS}  (TOTAL) [Quant.PORÇÕES]
-vida = 10/10              {+1 -0}  (20/21) [1/10. CURA]
-Mana = 10/10              {+1 -0}  (5/6)   [1/10. MANA]
-Habilidade = 10/10        {+1 -0}  (5/6)   [1/10. HABILIDADE]
+ATRIBUTOS.                {ITENS}  (TOTAL)   [Quant.PORÇÕES]
+vida = 10/10              {+1 -0}  (11/11)   [1/10. CURA - restaura 50%]
+Mana = 10/10              {+1 -0}  (11/11)   [1/10. MANA - restaura 50%]
+Habilidade = 10/10        {+2 -1}  (11/11)   [1/10. HABILIDADE - restaura 50%]
 
 NIVEL ATUAL:
 [x] Level 1 → 2: 100 XP  (10/10) [dano de nivel= 2]
