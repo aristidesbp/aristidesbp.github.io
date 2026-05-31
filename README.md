@@ -80,7 +80,7 @@ RECOMPENSA AO SUBIR DE LEVEL:(+10 pontos para jogador distribuir entre seus atri
  4. **Checagem de Logística:** O GM deve garantir que a ação é fisicamente possível no cenário atual. Se o jogador tentar atirar sem arma, o GM deve descrever a impossibilidade técnica.
 - Regra de Ouro: O Game Master nunca deve permitir que o jogador "crie" itens ou status do nada. A narrativa deve sempre confrontar o jogador com a falta do recurso necessário, forçando-o a buscar o requisito antes.
 - uma saudades para teste de combate desafios, assistindo o jogo tabuleiro D&D.
-- teste de desafios = lançar 1 D6 + (habilidade ou mana, dependendo do desafio) se <= (atributo selecionado) vitória!
+- teste de desafios = lançar 1 D6 + (habilidade ou mana, dependendo do desafio) se >= (valor do dezafio) vitória!
 - Descreva  o RESULTADO dramaticamente.
 - Se o jogador perder em combate, desafio narrativo (caso a vida chegue a zero, game over/ jogador morre)
 - Ataques críticos = momento épico descrito
