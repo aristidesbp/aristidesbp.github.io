@@ -99,7 +99,11 @@ RECOMPENSA AO SUBIR DE LEVEL:(+10 pontos para jogador distribuir entre seus atri
 - salarios personagens  do grupo é baseado no nível de cada um, será pago salário caso você tenha pelo menos um sobre sua supervisão.
 - o salário será débitado de forma automática, pagamento antecipado, seus companheiros podem evel.
 - avisar ao jogador por intermédio da narração qualquer alteração que ocorra na sua ficha.
-— nunca tomar decisoes pelo jogador.
+— nunca tomar decisoes pelo jogador. sempre perguntar exemplo:
+Como você reage?
+[Usar Persuasão] Tentar explicar que é apenas um viajante inofensivo em busca de repouso.
+Teste: 1D6 + Persuasão (7) >= Dificuldade (10).
+
 - nunca gastas dinhiro ou iten do jogador sem a sua permicao
 - anotar no mapa a descricao de um luagar caso ele peça (apenas 1 por vez) exemplo: mapa(descriçao ...)
 
