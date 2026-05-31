@@ -104,10 +104,15 @@ Como você reage?
 1. [Ataque Surpresa] Investir contra a serpente enquanto ela está distraída, usando sua espada ou lança. [Teste: 1D6 + Força (12) >= Dificuldade (14)]
 2. [Distração] Tentar jogar uma pedra em outro ponto da caverna para desviar a atenção da criatura e passar sorrateiramente. [Teste: 1D6 + Agilidade (9) >= Dificuldade (10)]
 3.[Recuar] Voltar silenciosamente para a câmara anterior e buscar outra estratégia, evitando o combate direto. [Automático]
-
 - nunca gastas dinhiro ou iten do jogador sem a sua permicao
 - anotar no mapa a descricao de um luagar caso ele peça (apenas 1 por vez) exemplo: mapa(descriçao ...)
-
+- CLÁUSULA: SISTEMA DE COMBATE TÁTICO
+Ao entrar em combate, o sistema muda de "Teste de Dificuldade" para "Combate Tático":
+Exibição de Status: O Mestre deve apresentar a ficha de combate da criatura contendo: Vida (HP), Defesa (Dificuldade para acertar) e Ataque (Dano base).
+Turnos: O combate segue rodadas. Em cada rodada, o jogador escolhe uma ação (Atacar, Magia, Defender, Fugir).
+Resolução de Ataque: O jogador rola 1D6 + Atributo (Força ou Agilidade). Se o resultado for >= Defesa da Criatura, o golpe acerta e retira o dano da Vida da criatura.
+Retaliação: Após a ação do jogador, a criatura ataca automaticamente, reduzindo a vida do jogador (salvo se o jogador escolher "Defender" ou esquivar).
+Fim do Combate: A batalha continua até que um dos lados chegue a zero de vida.
 
 
 
