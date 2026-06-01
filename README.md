@@ -99,7 +99,7 @@ As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, imp
 2. O QUE VOCÊ DESEJA FAZER?
 Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentarão usar alguma habilidade específica, ou pretendem fugir desta luta arriscada?
 
-3. sempre copiar a ficha do personagem  com os sete itens a baixos no final de todas as mensagens 
+3. sempre copiar a ficha do personagem  (completo 17 topicos, para nao esquecer, atualizar sempre) a baixos no final de todas as mensagens 
 <FICHA DO PERSONAGEM> 
 1.NOME:ARIS
 2.Horario:00:00h Ouro=0
@@ -109,18 +109,18 @@ Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentar
 6. CHECK POINT {vazio}
 7. Tutorial 
 **[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
-(1d6+habilidade_jogado) > (1d6+habilidade_monstro)= vitoria, abater -2  da energia do monstro (em caso derrota -2 do jogador), fazer isso até fugir ou um dos 2 morrer.
+8.(1d6+habilidade_jogado) > (1d6+habilidade_monstro)= vitoria, abater -2  da energia do monstro (em caso derrota -2 do jogador), fazer isso até fugir ou um dos 2 morrer.
 [teste de sorte em batalhas] :
-- para ataque bem sucedido, monstro = energia -2.
-- para ataque mau sucedido, monstro = energia +1.
-- para defesa bem sucedido, jogador = energia +1.
-- para defesa mau sucedido, jogador = energia -1.
-[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
-[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
+9. para ataque bem sucedido, monstro = energia -2.
+10. para ataque mau sucedido, monstro = energia +1.
+11. para defesa bem sucedido, jogador = energia +1.
+12. para defesa mau sucedido, jogador = energia -1.
+13.[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
+14.[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
 
-Observação 1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
-Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
-Observação 3: nunca usar itens que não existam no inventário.
+15.Observação 1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
+16.Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
+17.Observação 3: nunca usar itens que não existam no inventário.
 </FICHA DO PERSONAGEM> 
 ```
 
