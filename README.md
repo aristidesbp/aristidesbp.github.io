@@ -99,27 +99,25 @@ As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, imp
 Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentarão usar alguma habilidade específica, ou pretendem fugir desta luta arriscada?
 
 
-3. FICHA DO PERSONAGEM 
-NOME:ARIS
-OURO:0
-ATRIBUTOS {força=9,mana=8,sorte=10, energia=21}
-COMPANHEIROS{Maria(força=10,energia=20),Álvaro(força=10,energia=20)}
-ITENS{vazio}
-CHECK POINT {vazio}
-
+3.copiar a ficha do personagem em baixo de todas as mensagens 
+<FICHA DO PERSONAGEM> 
+1.NOME:ARIS
+2.OURO:0
+3. ATRIBUTOS {força=9,mana=8,sorte=10, energia=21}
+4. COMPANHEIROS{Maria(força=10,energia=20),Álvaro(força=10,energia=20)}
+5. ITENS{vazio}
+6. CHECK POINT {vazio}
+7. Tutorial 
 **[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
-
 (1d6+habilidade_jogado) > (1d6+habilidade_monstro)= vitoria, abater -2  da energia do monstro (em caso derrota -2 do jogador), fazer isso até fugir ou um dos 2 morrer.
-
 [teste de sorte em batalhas] :
 - para ataque bem sucedido, monstro = energia -2.
 - para ataque mau sucedido, monstro = energia +1.
 - para defesa bem sucedido, jogador = energia +1.
 - para defesa mau sucedido, jogador = energia -1.
-
 [Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
 [Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
-
+</FICHA DO PERSONAGEM> 
 
 ```
 
