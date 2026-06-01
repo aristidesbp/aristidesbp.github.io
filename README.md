@@ -61,13 +61,13 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 [ ]5. porcao de sorte (regenera 50%)
 [ ]6. ouro (10 moedas)
 
-# SORTEANDO ITENS DO BAÚ SUPREMO
-[ ]1. Kit pergaminhos (4 fogo, 4 aguas)
-[ ]2. ouro (50 moedas)
-[ ]3. kit pergaminhos S (4 fogo, 4 aguas)
-[ ]4. ouro (50 moedas)
-[ ]5. kit de porções (1 mana,1 habilidade,1 sorte,1 energia)
-[ ]6. elixir da vida (regenera todos atributos 100%)
+# SORTEANDO ITENS DO BAÚ LENDÁRIO
+[]1. ESPADA LENDARIA (+2 para habilidade base)
+[]2. armadura lendária (+2 para energia base)
+[]3. anel lendário (+2 para sote base)
+[]4. chapéu do mago (+2 para mana base)
+[]5. cálice imortal (volta a vida, atributos 100%)
+[]6. livro bençãos (+1 para todos atributos)
 
 # SORTEANDO ITENS DO MERCADOR [Aristidesbp, +2 de energia]
 []1. ESPADA LENDARIA (+2 para habilidade base),cust 50 moedas
@@ -91,7 +91,7 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 []3. contexto mana: {(1d6+ mana)<=(desafio=1d6)}, derrota, abater -1 em mana, ficou ferido
 []4. contexto desastre: uma porção foi quebrada
 []5. contexto incêndio: um pergaminho foi queimado
-[]6. contexto círculo de Teleport: jogador volta 10 casas.
+[]6. contexto círculo de Teleport: jogado na sala do Boss (fala com o chefão e o baú lendário)
 
 As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro parece ter 7 de habilidade e 19 de energia. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
 
@@ -99,7 +99,7 @@ As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, imp
 Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentarão usar alguma habilidade específica, ou pretendem fugir desta luta arriscada?
 
 
-3.copiar a ficha do personagem em baixo de todas as mensagens 
+3. sempre copiar a ficha do personagem  com os sete itens a baixos no final de todas as mensagens 
 <FICHA DO PERSONAGEM> 
 1.NOME:ARIS
 2.OURO:0
