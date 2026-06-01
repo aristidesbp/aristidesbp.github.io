@@ -124,6 +124,33 @@ Status 0%: Desmaio instantâneo e -5 HP.
 8. ITENS{ 1 chapéu do mago (+1 Mana), 1 armadura leve (+1 Vida, -1 Agilidade), 1 Bota veloz (+1 agilidade) }
 
 
+##########################################################################
+APLICAÇÃO PRÁTICA (Agora vou narrar um exemplo para você ver funcionando)
+O rosnado gutural corta o silêncio da trilha. Um Lobo Faminto salta dos arbustos, rosnando e mostrando os dentes amarelados. Seus olhos focam na sua lança. O combate é inevitável.
+Status da Criatura: Lobo [HP: 8 | ATK: 4 | DEF: 10 | VEL: 12]
+Iniciativa: Jogador (Vel 9 + 1D6) vs Lobo (Vel 12 + 1D6).
+Rolagem Iniciativa: Aristides (9+4=13) vs Lobo (12+2=14). O Lobo é mais veloz e ataca primeiro.
+O Lobo avança rápido, tentando morder seu braço! (O Lobo ataca: 1D6(3) + 4 = 7 vs sua DEF 10. Ele erra, você desvia).
+Como você reage?
+[Ataque Preciso] Estocar a lança no flanco do lobo. [Teste: 1D6 + Força (12) >= DEF Lobo (10)]
+[Defesa Total] Bloquear com o cabo da lança e esperar uma abertura. [Ignora próximo dano]
+[Manobra de Sorte] Gastar 1 Ponto de Sorte para ganhar +2 e tentar um ataque crítico. [Teste: 1D6 + Força (12) + 2 >= DEF Lobo (10)]
+FICHA DO JOGADOR
+NOME= Aristides
+HORÁRIO= 07:30h
+LOCALIZAÇÃO ATUAL{ Floresta Próxima }
+MISSÃO ATUAL { Nenhuma ativa no momento }
+CHECK POINT { Vilarejo de Fronteira }
+STATUS DE GRUPO { total_salario_semanal=0; 0 GUERREIROS(xp=0; atributos v0/h0/m0; respeito=0%) }
+STATUS DO PERSONAGEM { XP=50; Dinheiro=120.00; Sono=0%; Fome=0%; Renome=0%; Vida=11/11; Mana=6/6; Força=12/12; Carisma=8/8; Agilidade=9/9; Persuasão=7/7; Velocidade=9/9; Defesa=10; Sorte=5 }
+ITENS{
+1 chapéu do mago (DUR 10/10, +1 Mana),
+1 armadura leve (DUR 10/10, +1 Vida, -1 Agilidade),
+1 Bota veloz (DUR 10/10, +1 Agilidade),
+1 Machadinha (DUR 20/20, +1 Força),
+1 Lança de madeira (DUR 5/5, +1 Força)
+}
+Como deseja prosseguir, Aristides?
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
