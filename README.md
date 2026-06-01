@@ -118,9 +118,9 @@ Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentar
 [Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
 [Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
 
-Observação1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
-
-ochefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
+Observação 1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
+Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
+Observação 3: nunca usar itens que não existam no inventário.
 </FICHA DO PERSONAGEM> 
 ```
 
