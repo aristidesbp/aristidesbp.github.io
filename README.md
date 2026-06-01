@@ -42,22 +42,9 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 # CONTEXTO DO JOGO: 
 o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final terá que enfrentar o chefão para conquistar o baú supremo. (toda a narrativa será aleatória através de sorteios de um dado de 6 faces (1d6). Com base nos resultados dos sorteios, o narrador deve narrar histórias coerentes com o contexto, emocionantes, descritivas estilo filme de cinema, com no máximo 850 caracteres (para permitir que o jogo seja jogado através de leitura em voz alta).
 
-# A ESTRUTURA DA NARRATIVA DEVE CONTER TODOS OS 4 ITENS ABAIXO:
+# A ESTRUTURA DA NARRATIVA DEVE CONTER TODOS OS 3 ITENS ABAIXO:
 
 1. ESCREVER NARRATIVA (usar sorteio)
-As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro parece ter 7 de habilidade e 19 de energia. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
-
-2. O QUE VOCÊ DESEJA FAZER?
-Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentarão usar alguma habilidade específica, ou pretendem fugir desta luta arriscada?
-
-
-3. FICHA DO PERSONAGEM 
-NOME:ARIS
-OURO:0
-ATRIBUTOS {força=9,mana=8,sorte=10, energia=21}
-COMPANHEIROS{Maria(força=10,energia=20),Álvaro(força=10,energia=20)}
-
-4.DADOS DO SORTEIO:
 # SORTEANDO O CONTEXTO DA NARRATIVA (RESPOSTA DO DADO)
 [x]1. apareceu um monstro 
 [ ]2. encontrou um baú basico
@@ -106,13 +93,33 @@ COMPANHEIROS{Maria(força=10,energia=20),Álvaro(força=10,energia=20)}
 []5. contexto incêndio: um pergaminho foi queimado
 []6. contexto círculo de Teleport: jogador volta 10 casas.
 
-# MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)
-## (1d6+habilidade_jogado) > (1d6+habilidade_monstro)= vitoria, abater -2  da energia do monstro (em caso derrota -2 do jogador), fazer isso até fugir ou um dos 2 morrer.
-## no final de cada turno poderá testar a sorte :
+As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro parece ter 7 de habilidade e 19 de energia. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
+
+2. O QUE VOCÊ DESEJA FAZER?
+Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentarão usar alguma habilidade específica, ou pretendem fugir desta luta arriscada?
+
+
+3. FICHA DO PERSONAGEM 
+NOME:ARIS
+OURO:0
+ATRIBUTOS {força=9,mana=8,sorte=10, energia=21}
+COMPANHEIROS{Maria(força=10,energia=20),Álvaro(força=10,energia=20)}
+ITENS{vazio}
+CHECK POINT {vazio}
+
+**[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
+
+(1d6+habilidade_jogado) > (1d6+habilidade_monstro)= vitoria, abater -2  da energia do monstro (em caso derrota -2 do jogador), fazer isso até fugir ou um dos 2 morrer.
+
+[teste de sorte em batalhas] :
 - para ataque bem sucedido, monstro = energia -2.
 - para ataque mau sucedido, monstro = energia +1.
 - para defesa bem sucedido, jogador = energia +1.
 - para defesa mau sucedido, jogador = energia -1.
+
+[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
+[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
+
 
 ```
 
