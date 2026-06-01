@@ -120,7 +120,7 @@ Como Aris e seus companheiros reagirão? Atacarão o Goblin frontalmente, tentar
 
 Observação1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
 
-
+ochefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
 </FICHA DO PERSONAGEM> 
 ```
 
