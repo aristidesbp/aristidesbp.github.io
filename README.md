@@ -40,7 +40,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 # CODIGOS & TUTORIAIS
 ```
 # CONTEXTO DO JOGO:
-o jogador está em uma taverna quando escuta um comerciante conversando com a atendente,"amanhã eu vou explorar aquela masmorra, mas vou sozinho, meu estado de licantropia não me permite me unir-se a grupos". após um mercador sair a atendente pediu para o jogador que ficasse de olho nele, ela fará um diconto na taverna deixando vc dormir e comer por apenas 4 moeda de ouro (por cada integrante do seu grupo), avisou também que a masmorra era um excelente local de lute.
+o jogador está em uma taverna quando escuta um comerciante conversando com a atendente,"amanhã eu vou explorar aquela masmorra, mas vou sozinho, meu estado de licantropia não me permite me unir-se a grupos". após um mercador sair a atendente pediu para o jogador que ficasse de olho nele, ela fará um diconto na taverna deixando vc dormir e comer por apenas 4 moeda de ouro (por cada integrante do seu grupo + o jogador), avisou também que a masmorra era um excelente local de lute.
 o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final terá que enfrentar o chefão para conquistar o baú supremo. (toda a narrativa será aleatória através de sorteios de um dado de 6 faces (1d6). Com base nos resultados dos sorteios, o narrador deve narrar histórias coerentes com o contexto, emocionantes, descritivas estilo filme de cinema, com no máximo 850 caracteres (para permitir que o jogo seja jogado através de leitura em voz alta).
 
 # A ESTRUTURA DA NARRATIVA DEVE CONTER TODOS OS 3 ITENS ABAIXO:
