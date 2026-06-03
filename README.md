@@ -71,7 +71,7 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 [ ]3. porção de habilidade (regenera 50%)
 [ ]4. pergaminho da água 
 [ ]5. porcao de sorte (regenera 50%)
-[ ]6. ouro (10 moedas)
+[ ]6. Era um monstro, um mimico
 
 # SORTEANDO ITENS DO BAÚ LENDÁRIO
 []1. ESPADA LENDARIA (+2 para habilidade base)
