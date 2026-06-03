@@ -149,7 +149,7 @@ C- lutar contra o goblin
 3. ATRIBUTOS {sono=0%,fome=0%,força=9,mana=8,sorte=10, energia=21}
 4. COMPANHEIROS{Maria(maria(sono=0%,fome=0%,sorte=8,força=10,energia=20)}
 5. ITENS{vazio}
-6. CHECK POINT {vazio}
+6. CHECK POINT {missao atual + resumo descritivo ....}
 7. Tutorial 
 **[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
 8.(2d6+habilidade_jogado) > (2d6+habilidade_monstro)= vitoria = {abater -2  da energia do monstro (em caso derrota -2 do jogador)}
