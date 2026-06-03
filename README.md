@@ -56,54 +56,83 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 
 # A ESTRUTURA DA NARRATIVA DEVE CONTER TODOS OS 3 ITENS ABAIXO:
 
-1. ESCREVER NARRATIVA (usar sorteio)
-# SORTEANDO O CONTEXTO DA NARRATIVA (RESPOSTA DO DADO)
-[x]1. apareceu um monstro 
-[ ]2. encontrou um baú basico
-[ ]3. encontrou o mercador Aristidesbp 
-[ ]4. o jogador parou para descansar +1 para todos atributos 
-[ ]5. caiu em uma armadilha 
-[ ]6. apareceu um monstro 
+1. SORTEANDO O CONTEXTO DA NARRATIVA (2d6)
+    2. Apareceu um monstro
+    3. Encontrou um baú básico
+    4. Encontrou o mercador Aristidesbp
+    5. Parou para descansar (+1 em todos os atributos)
+    6. Caiu em uma armadilha
+    7. Encontrou um beco sem saída (nada acontece)
+    8. Apareceu um monstro
+    9. Encontrou um baú básico
+    10. Encontrou bau feichado (precisa de chave)
+    11. Encontrou um aventureiro ferido (troca de informações)
+    12. Evento crítico: O chefe da masmorra se aproxima (sentem uma presença poderosa)
 
-# SORTEANDO ITENS DO BAÚ BASICO
-[ ]1. porção de energia (regenera 50%)
-[ ]2. pergaminho do fogo
-[ ]3. porção de habilidade (regenera 50%)
-[ ]4. pergaminho da água 
-[ ]5. porcao de sorte (regenera 50%)
-[ ]6. Era um monstro, um mimico
+2. SORTEANDO ITENS DO BAÚ BÁSICO (2d6)
+    2. Porção de energia (50%)
+    3. Pergaminho do fogo
+    4. Porção de habilidade (50%)
+    5. Pergaminho da água
+    6. Porção de sorte (50%)
+    7. 1d6 moedas de ouro
+    8. Porção de energia (50%)
+    9. Pergaminho do trovão (dano elétrico)
+    10. Poção de cura rápida (regenera 25% energia)
+    11. Chave antiga (pode abrir baús trancados)
+    12. Era um monstro: Mímico
 
-# SORTEANDO ITENS DO BAÚ LENDÁRIO
-[]1. ESPADA LENDARIA (+2 para habilidade base)
-[]2. armadura lendária (+2 para energia base)
-[]3. anel lendário (+2 para sote base)
-[]4. chapéu do mago (+2 para mana base)
-[]5. cálice imortal (volta a vida, atributos 100%)
-[]6. livro bençãos (+1 para todos atributos)
+3. SORTEANDO ITENS DO BAÚ LENDÁRIO (2d6)
+    2. Espada Lendária (+2 habilidade)
+    3. Armadura Lendária (+2 energia)
+    4. Anel Lendário (+2 sorte)
+    5. Chapéu do Mago (+2 mana)
+    6. Cálice Imortal (volta à vida, atributos 100%)
+    7. Livro de Bênçãos (+1 todos os atributos)
+    8. Manto de Invisibilidade (+2 sorte)
+    9. Botas da Velocidade (+2 habilidade)
+    10. Escudo do Guardião (+2 energia)
+    11. Cajado Ancestral (+2 mana)
+    12. Relíquia dos Deuses (regenera 100% de tudo instantaneamente)
 
-# SORTEANDO ITENS DO MERCADOR [Aristidesbp, +2 de energia,ele sempre]
-[ ]1. ESPADA LENDARIA (+2 para habilidade base),cust 50 moedas
-[ ]2. armadura lendária (+2 para energia base),custo 50 moedas
-[ ]3. anel lendário (+2 para sote base),custo 50 moedas
-[ ]4. chapéu do mago (+2 para mana base),custo 50 moedas
-[ ]5. cálice imortal (volta a vida, atributos 100%), custo 100
-[ ]6. livro bençãos (+1 para todos atributos),custo 100 moedas
+4. SORTEANDO ITENS DO MERCADOR (2d6)
+    2. Espada Lendária (50 moedas)
+    3. Armadura Lendária (50 moedas)
+    4. Anel Lendário (50 moedas)
+    5. Chapéu do Mago (50 moedas)
+    6. Cálice Imortal (100 moedas)
+    7. Livro de Bênçãos (100 moedas)
+    8. Poção de regeneração total (40 moedas)
+    9. Pergaminho de teleporte (30 moedas)
+    10. Bússola mágica (evita armadilhas, 40 moedas)
+    11. Ração de sobrevivência (zera a fome, 10 moedas)
+    12. Mapa da Masmorra (revela caminho do Boss, 150 moedas)
 
-# SORTEANDO MONSTROS (ao morrerdropa ouro = 1d6)
-[ ]1. golem fogo (1d6+6=habilidade,2d6+12=energia),água mata!
-[ ]2. golem água (1d6+6=habilidade,2d6+12=energia),fogo mata!
-[x]3. goblen (1d6+6=habilidade,2d6+12=energia),fogo/água -50%
-[ ]4. moto vivo (1d6+6=habilidade,2d6+12=energia) magias -50%
-[ ]5. mago ruim (1d6+6=habilidade,2d6+12=energia),anula magia
-[ ]6. Aristidesbp_Sombrio, jogador foge , -2 de energia.
+5. SORTEANDO MONSTROS (2d6)
+    2. Golem Fogo (1d6+6 hab, 2d6+12 en, agua mata)
+    3. Golem Água (1d6+6 hab, 2d6+12 en, fogo mata)
+    4. Goblin     (1d6+6 hab, 2d6+12 en, magias = dano direto (1d6))
+    5. Moto Vivo  (1d6+6 hab, 2d6+12 en,magias = dano direto (1d6))
+    6. Mago Ruim  (1d6+6 hab, 2d6+12 en, proteção contra magias)
+    7. Esqueleto Guerreiro (1d6+6 hab, 2d6+12 en, magias = dano direto (1d6))
+    8. Aranha Gigante (1d6+6 hab, 2d6+12 en, magias = dano direto (1d6))
+    9. Sombra (1d6+7 hab, 2d6+14 en, ignora armadura, magias = dano direto (1d6))
+    10. Orc Berserker (1d6+6 hab, 2d6+12 en, magias = dano direto (1d6))
+    11. Espectro (1d6+6 hab, 2d6+12 en, magias = dano direto (1d6))
+    12. Aristidesbp_Trensformado (2d6+6 hab, 4d6+12 en, proteção contra magias)
 
-# SORTEANDO ARMADILHAS 
-[ ]1. contexto sorte: {(1d6)<=(sorte atual)},vitoria, -1 sorte
-[ ]2. contexto habilidade: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
-[ ]3. contexto mana: {(1d6+ mana)<=(desafio=1d6)}, derrota, abater -1 em mana, ficou ferido
-[ ]4. contexto desastre: uma porção foi quebrada
-[ ]5. contexto incêndio: um pergaminho foi queimado
-[ ]6. contexto círculo de Teleport: jogado na sala do Boss (fala com o chefão e o baú lendário)
+6. SORTEANDO ARMADILHAS (2d6)
+    2. Sorte: {(1d6) <= sorte atual}
+    3. Habilidade: {(1d6+hab) <= desafio 1d6}
+    4. Mana: {(1d6+mana) <= desafio 1d6}
+    5. Desastre: Poção quebrada
+    6. Incêndio: Pergaminho queimado
+    7. Círculo de Teleporte (sala do Boss)
+    8. Piso falso: -1 energia
+    9. Dardo envenenado: -2 sorte
+    10. Névoa paralisante: -1 habilidade
+    11. Teto desabando: -2 energia
+    12. Maldição de sangramento: -1 energia por rodada até fim do combate
 
 As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro [7 habilidade/ 19  energia]. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
 
