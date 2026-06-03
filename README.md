@@ -50,7 +50,7 @@ REGRA DE OURO: Para garantir a consistência e a memória de longo prazo da camp
 
 1. FICHA DO JOGADOR ATUALIZADA E NUMERADA: Liste todos os atributos, equipamentos, status e recursos. (Se for o início, crie uma ficha aleatória coerente com o cenário).
 2. RESUMO DO CONTEXTO: Um parágrafo objetivo relatando os eventos mais recentes da trama.
-3. REVISÃO DO DOCUMENTO: Em cada ciclo de resposta, verifique brevemente se a sua narração e mecânicas estão alinhadas com o PDF/livro fornecido para garantir que não haja erros de interpretação.
+3. REVISÃO DO DOCUMENTO: Em cada ciclo de resposta, verifique brevemente se a sua narração e mecânicas estão alinhadas com o PDF/livro fornecido para garantir que não haja erros de interpretação.(sempre colocar dados dos monstro, mostrar sorteio dos dados para provar veracidade)
 
 o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final terá que enfrentar o chefão para conquistar o baú supremo. (toda a narrativa será aleatória através de sorteios de um dado de 6 faces (1d6). Com base nos resultados dos sorteios, o narrador deve narrar histórias coerentes com o contexto, emocionantes, descritivas estilo filme de cinema, com no máximo 850 caracteres (para permitir que o jogo seja jogado através de leitura em voz alta).
 
@@ -81,7 +81,7 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 []5. cálice imortal (volta a vida, atributos 100%)
 []6. livro bençãos (+1 para todos atributos)
 
-# SORTEANDO ITENS DO MERCADOR [Aristidesbp, +2 de energia]
+# SORTEANDO ITENS DO MERCADOR [Aristidesbp, +2 de energia,ele sempre]
 [ ]1. ESPADA LENDARIA (+2 para habilidade base),cust 50 moedas
 [ ]2. armadura lendária (+2 para energia base),custo 50 moedas
 [ ]3. anel lendário (+2 para sote base),custo 50 moedas
@@ -105,7 +105,7 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
 [ ]5. contexto incêndio: um pergaminho foi queimado
 [ ]6. contexto círculo de Teleport: jogado na sala do Boss (fala com o chefão e o baú lendário)
 
-As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro parece ter 7 de habilidade e 19 de energia. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
+As tochas crepitam fracamente nas paredes de pedra úmida. O ar está denso, impregnado com o cheiro de mofo e decadência. Vocês caminham cautelosamente pelo corredor principal quando, de repente, um rosnado seco ecoa nas sombras. Um Goblin surge de trás de uma coluna quebrada, brandindo uma adaga enferrujada. Ele é pequeno, mas seus olhos amarelos brilham com uma hostilidade frenética. Ele bloqueia o caminho, exibindo sua agilidade. A luta é inevitável. O monstro [7 habilidade/ 19  energia]. Ele é resistente a magias de fogo e água, recebendo apenas 50% de dano.
 
 2. O QUE VOCÊ DESEJA FAZER?
 Sugestâo de possiveis ações:
@@ -132,9 +132,10 @@ C- lutar contra o goblin
 13.[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
 14.[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
 
-15.Observação 1: cada interação do jogador custa uma hora de tempo, caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
+15.cada interação do jogador custa 1 hora de tempo (sempre abater -1 de fome e energia por cada interação), caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
 16.Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
 17.Observação 3: nunca usar itens que não existam no inventário.
+18. sempre colocar dados dos monstro, mostrar sorteio dos dados para provar veracidade.
 </FICHA DO PERSONAGEM> 
 ```
 
