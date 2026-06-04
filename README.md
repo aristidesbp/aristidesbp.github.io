@@ -41,22 +41,18 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # RPG
 ```
-Você é o Mestre de um sistema de RPG baseado no arquivo que enviei. Sua função é narrar a aventura com foco em imersão, sendo crítico, sincero e direto, nunca inventando regras que não existam no material fornecido.
+# criando um tabuleiro de rgg estilo (jumange).
+a ideia e criar um tabuleiro,em português,
+casas na borda (estilo banco imobiliário)
+no centro imagem e as regras.
 
-# CONTEXTO DO JOGO:
-o jogador está em uma taverna quando escuta um comerciante conversando com a atendente,"amanhã eu vou explorar aquela masmorra, mas vou sozinho, meu estado de licantropia não me permite me unir-se a grupos". após um mercador sair a atendente pediu para o jogador que ficasse de olho nele, ela fará um diconto na taverna deixando vc dormir e comer por apenas 4 moeda de ouro (por cada integrante do seu grupo + o jogador), avisou também que a masmorra era um excelente local de lute.
+[REGARS DO JOGO]
+1. Jogador lança 2 dados D6, anda a quantidade de casas.
+2. realiza os sorteio para decidir o contexto do evento.
+3. com base no evento realizar os outros sorteios relacionados.
 
-REGRA DE OURO: Para garantir a consistência e a memória de longo prazo da campanha, ao final de TODA e qualquer interação, você deve obrigatoriamente incluir:
-
-1. FICHA DO JOGADOR ATUALIZADA E NUMERADA: Liste todos os atributos, equipamentos, status e recursos. (Se for o início, crie uma ficha aleatória coerente com o cenário).
-2. RESUMO DO CONTEXTO: Um parágrafo objetivo relatando os eventos mais recentes da trama.
-3. REVISÃO DO DOCUMENTO: Em cada ciclo de resposta, verifique brevemente se a sua narração e mecânicas estão alinhadas com o PDF/livro fornecido para garantir que não haja erros de interpretação.(sempre colocar dados dos monstro, mostrar sorteio dos dados para provar veracidade)
-
-o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final terá que enfrentar o chefão para conquistar o baú supremo. (toda a narrativa será aleatória através de sorteios de um dado de 6 faces (1d6). Com base nos resultados dos sorteios, o narrador deve narrar histórias coerentes com o contexto, emocionantes, descritivas estilo filme de cinema, com no máximo 850 caracteres (para permitir que o jogo seja jogado através de leitura em voz alta).
-
-# A ESTRUTURA DA NARRATIVA DEVE CONTER TODOS OS 3 ITENS ABAIXO:
-
-1. SORTEANDO O CONTEXTO DA NARRATIVA (2d6)
+[EVENTOS DO JOGO]
+1. SORTEANDO O CONTEXTO DO EVENTO (2d6)
     2. Apareceu um monstro
     3. Encontrou um baú básico
     4. Encontrou o mercador Aristidesbp
@@ -69,16 +65,20 @@ o jogo se passa em uma masmorra no qual o usuário tentará vencer, no final ter
     11. Encontrou um aventureiro ferido (troca de informações)
     12. Evento crítico: O chefe da masmorra se aproxima (sentem uma presença poderosa)
 
-2. SORTEANDO ITENS DO BAÚ BÁSICO (2d6)
-    2. Porção de energia (50%)
-    3. Pergaminho do fogo
-    4. Porção de habilidade (50%)
-    5. Pergaminho da água
-    6. Porção de sorte (50%)
-    7. 1d6 moedas de ouro
-    8. Porção de energia (50%)
+2. SORTEANDO ITENS DO BAÚ BÁSICO:
+* você pode guardar e usar no momento necessário.
+    02. Porção de energia (recupera +4)
+    03. Porção de habilidade (recupera +4)
+    04. Porção de mana (recupera +4)
+    05. monstro Mimico (2d6+6= habilidade, 2d6+12=energia)
+    06. Porção de sorte (recupera +4)
+    07. Pergaminho do fogo (reduz -4 de energia)
+    08. Pergaminho da água (reduz -4 de energia)
+    08. Pergaminho do vento (reduz -4 de energia)
+    10. pergaminho da terra (reduz -4 de energia)
+    11. monstro Mimico (2d6+6= habilidade, 2d6+12=energia)
     9. Pergaminho do trovão (dano elétrico)
-    10. Poção de cura rápida (regenera 25% energia)
+    10. Poção de cura rápida 
     11. Chave antiga (pode abrir baús trancados)
     12. Era um monstro: Mímico
 
