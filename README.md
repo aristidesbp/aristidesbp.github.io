@@ -142,11 +142,12 @@ A- Verificar se tem pergaminho de magia
 B- Fugir (leva -2 de energia)
 C- lutar contra o goblin
 
-3. sempre copiar a ficha do personagem  (completo 17 topicos, para nao esquecer, atualizar sempre) a baixos no final de todas as mensagens 
+3. sempre copiar a ficha do personagem  (completo 17 topicos, para nao esquecer, atualizar sempre) a baixos no final de todas as mensagens
+
 <FICHA DO PERSONAGEM> 
 1.NOME:ARIS
 2.Horario:00:00h Ouro=0
-3. ATRIBUTOS {sono=0%,fome=0%,força=9,mana=8,sorte=10, energia=21}
+3. ATRIBUTOS {sono=0%,fome=0%,força=9,mana=8,sorte=10,vida=21, agilidade=17}
 4. COMPANHEIROS{Maria(maria(sono=0%,fome=0%,sorte=8,força=10,energia=20)}
 5. ITENS{vazio}
 6. CHECK POINT {missao atual + resumo descritivo ....}
