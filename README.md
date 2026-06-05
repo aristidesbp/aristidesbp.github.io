@@ -46,6 +46,31 @@ a ideia e criar um tabuleiro,em português,
 casas na borda (estilo banco imobiliário)
 no centro imagem e as regras.
 
+<FICHA DO PERSONAGEM> 
+1. NOME:Aristides
+2. Horario:00:00h Ouro=0
+3. ATRIBUTOS {sono=0%,fome=0%,força=9,mana=8,sorte=10,vida=21, agilidade=17}
+4. COMPANHEIROS{(Lobo(sono=0%,fome=0%,sorte=8,força=10,energia=20)}
+5. ITENS{armadura de couro,}
+6. CHECK POINT {missao atual + resumo descritivo ....}
+7. Tutorial 
+**[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
+8.(2d6+habilidade_jogado) > (2d6+habilidade_monstro)= vitoria = {abater -2  da energia do monstro (em caso derrota -2 do jogador)}
+[teste de sorte em batalhas] :
+9. para ataque bem sucedido, monstro = energia -2.
+10. para ataque mau sucedido, monstro = energia +1.
+11. para defesa bem sucedido, jogador = energia +1.
+12. para defesa mau sucedido, jogador = energia -1.
+13.[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
+14.[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
+
+15.cada interação do jogador custa 1 hora de tempo (sempre abater -1 de fome e sono por cada interação), caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
+16.Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
+17.Observação 3: nunca usar itens que não existam no inventário.
+18. sempre colocar dados dos monstro, mostrar sorteio dos dados para provar veracidade.
+</FICHA DO PERSONAGEM>
+
+
 [REGARS DO JOGO]
 1. Jogador lança 2 dados D6, anda a quantidade de casas.
 2. realiza os sorteio para decidir o contexto do evento.
@@ -144,29 +169,7 @@ C- lutar contra o goblin
 
 3. sempre copiar a ficha do personagem  (completo 17 topicos, para nao esquecer, atualizar sempre) a baixos no final de todas as mensagens
 
-<FICHA DO PERSONAGEM> 
-1.NOME:ARIS
-2.Horario:00:00h Ouro=0
-3. ATRIBUTOS {sono=0%,fome=0%,força=9,mana=8,sorte=10,vida=21, agilidade=17}
-4. COMPANHEIROS{Maria(maria(sono=0%,fome=0%,sorte=8,força=10,energia=20)}
-5. ITENS{vazio}
-6. CHECK POINT {missao atual + resumo descritivo ....}
-7. Tutorial 
-**[MODO DE BATALHA (modo do RPG: Aventuras Fantásticas)]**
-8.(2d6+habilidade_jogado) > (2d6+habilidade_monstro)= vitoria = {abater -2  da energia do monstro (em caso derrota -2 do jogador)}
-[teste de sorte em batalhas] :
-9. para ataque bem sucedido, monstro = energia -2.
-10. para ataque mau sucedido, monstro = energia +1.
-11. para defesa bem sucedido, jogador = energia +1.
-12. para defesa mau sucedido, jogador = energia -1.
-13.[Teste de sorte]: {(1d6)<=(sorte atual)},vitoria, -1 sorte
-14.[Teste de habilidade]: {(1d6+ habilidade) <=(desafio=1d6)}, derrota, abater -1 em Habilidade, ficou ferido
 
-15.cada interação do jogador custa 1 hora de tempo (sempre abater -1 de fome e sono por cada interação), caso fome ou sono chega a 100%, o jogador irá desmaiar e pagará a penalidade de -5 de energia. comer recupera um ponto para todos os atributos.(você pode comer e dormir na estalagem pagando o custo)
-16.Observação 2:o chefe final tem o poder de se transforma no integrante mais forte do seu grupo contando com você, ganhando os mesmos valores em atributos.
-17.Observação 3: nunca usar itens que não existam no inventário.
-18. sempre colocar dados dos monstro, mostrar sorteio dos dados para provar veracidade.
-</FICHA DO PERSONAGEM> 
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
