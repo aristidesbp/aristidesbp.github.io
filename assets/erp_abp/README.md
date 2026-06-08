@@ -60,12 +60,9 @@ PROJETO_ERP/
 * Senha do banco: ***********
 * Região: brasil
   
----
-# 🟥 sql (exemplo de como criar uma tabelas)
-```
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
 
+# 🟥 CRIAR TABELAS VIA SQL
+```
 CREATE TABLE public.entidades (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
@@ -93,6 +90,8 @@ CREATE TABLE public.entidades (
   CONSTRAINT entidades_pkey PRIMARY KEY (id),
   CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
+```
+```
 CREATE TABLE public.financeiro (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
@@ -110,6 +109,9 @@ CREATE TABLE public.financeiro (
   CONSTRAINT financeiro_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
   CONSTRAINT financeiro_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
 );
+
+```
+```
 CREATE TABLE public.notes (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
@@ -119,6 +121,9 @@ CREATE TABLE public.notes (
   CONSTRAINT notes_pkey PRIMARY KEY (id),
   CONSTRAINT notes_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
+
+```
+```
 CREATE TABLE public.pedidos (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   cliente_nome text,
@@ -128,6 +133,8 @@ CREATE TABLE public.pedidos (
   created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT pedidos_pkey PRIMARY KEY (id)
 );
+```
+```
 CREATE TABLE public.produtos (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
@@ -150,6 +157,9 @@ CREATE TABLE public.produtos (
   CONSTRAINT produtos_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
   CONSTRAINT produtos_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
 );
+```
+```
+
 CREATE TABLE public.tarefas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
@@ -163,6 +173,9 @@ CREATE TABLE public.tarefas (
   CONSTRAINT tarefas_pkey PRIMARY KEY (id),
   CONSTRAINT notes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
+```
+```
+
 CREATE TABLE public.venda_itens (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   venda_id uuid,
@@ -173,6 +186,9 @@ CREATE TABLE public.venda_itens (
   CONSTRAINT venda_itens_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id),
   CONSTRAINT venda_itens_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id)
 );
+
+```
+```
 CREATE TABLE public.vendas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
