@@ -1,9 +1,9 @@
 
 // NO SETINS DO PROJETO 
 //Data API:
-const supabaseUrl = 'https://vrsiiwuifapobeiguldf.supabase.co';
+const supabaseUrl = 'https://gdfjukkoykrvdbyqilkc.supabase.co';
 // Legacy anon, service_role API keys:
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2lpd3VpZmFwb2JlaWd1bGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NjM0MTgsImV4cCI6MjA4ODAzOTQxOH0.F5eLwudxDdlRrQJF2IEJ_P5YoaKL98_qSkgr8faots0';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkZmp1a2tveWtydmRieXFpbGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTkxNjcsImV4cCI6MjA5NTM3NTE2N30.ww96XC4kn3L0rjPRkL6U5I2WBMYlSp5SAafZtJfYncI';
 // Inicializa o cliente Supabase
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // Exporta para ser usado em outros scripts
