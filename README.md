@@ -322,7 +322,7 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 ```
 # clonar um repositório
 # exemplo:
-git clone git@github.com:usuário/nome_do_repositorio.git
+git clone https://github.com/aristidesbp/aristidesbp.github.io.git
 ```
 ```
 # entrar na pasta
