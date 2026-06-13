@@ -72,22 +72,22 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 # RPG
 ```
 <FICHA DO PERSONAGEM>
-1. NOME {nome do personagem,DINHEIRO=(0,00), XP=0}
+1. NOME {aristides ,DINHEIRO=(100 ouro), XP=0}
 2. HORARIO (cada vez que o jogador interage conta-se uma hora, um dia equivale a 24 horas)={00:00h, dia 1}
 
 3.MISSÃO ATUAL{
 3.1 RESUMO DA MIÇÃO:( Resumo dos fatos e objetivo atual para manter o contexto, sempre atualizados )
 3.2 LOCALIZAÇÃO ATUAL:(decrição do cenário atual e NPCs; presentes relevantes para salvar o estado do jogo) 
-3.2 CHECKPOINT {[Descrição detalhada do cenário e NPCs; presentes relevantes para salvar um local onde o jogador possa voutar sem alteração]}
+3.3 CHECKPOINT {[Descrição detalhada do cenário e NPCs; presentes relevantes para salvar um local onde o jogador possa voutar sem alteração]}
 
 4. ITENS{espada curta(+1H),armadura de couro(+1E)}
 
 5. ATRIBUTOS (PERSONAGEM, NPC E MONSTROS)
-5.1: HABILIDADE = X/Max+itens
-5.2: ENERGIA =X/Max+itens
-5.3: SORTE =X/Max+itens
-5.4: MANA =X/Max+itens
-5.5: SABEDORIA =X/Max+itens
+5.1: HABILIDADE = =X/(Max + valor adicionado por um item)
+5.2: ENERGIA =X/(Max + valor adicionado por um item)
+5.3: SORTE =X/(Max + valor adicionado por um item)
+5.4: MANA =X/(Max + valor adicionado por um item)
+5.5: SABEDORIA =X/(Max + valor adicionado por um item)
 5.6: FOME =0%;
 6.7: SONO =0%;
 
@@ -105,7 +105,7 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 4.8: SABEDORIA (Inicial de 1d6 + 6. Usada para interagir com NPCs, aprender novas habilidades, decifrar enigmas ou criar itens)=X/Max;
 4.9: FOME (aumentam +1 cada vez que o jogador interage, se atingir 100%, desmaia -5 de energia)=0%;
 4.10: SONO (aumentam +1 cada vez que o jogador interage, se atingirem 100%,desmaia -5 de energia)=0%;
-4.11: subtrair -1 do atributo utilizado na interação para demonstrar cansaço tanto do monstro quanto do jogador
+
 
 
 8.No final de ABSOLUTAMENTE TODAS as suas mensagens, você deve exibir obrigatoriamente <FICHA DO PERSONAGEM> (com os 8 itens) atualizado na Ficha do personagem. o objetivo é manter uma memória para aventuras novas não se perdendo nas regras o contexto. Nunca use mais de 1000 caracteres nas narrativas!
