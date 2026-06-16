@@ -66,6 +66,7 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 
 
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # RPG
@@ -95,6 +96,7 @@ PERSUASÃO 10/10, FOME 0/100, SONO 0/100;
 - MONSTROS E NPC: criar um ficha aleatoria igual a do personagem para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos
 - Combate Corpo a Corpo 1: testar os atributos conforme a logica coerente ao contexto, exemplo: (2d6+agilidade do jogador)>(2d6+agilidade do monstro)= vitoria do jogador
 - Combate Corpo a Corpo 2: em caso de dano (vida do perdedor- (força do vencedor - defesa do perdedor))
+- todos os itesn deve conter atributos e durabilidade (ataques com 2 armas tem chance de causar dano com cada arma),(nao da para usar defesa de escudo se nao estiver equipado)
 - Exemplo de Combate:
 O rato gigante avançam tentando flanquear você na penumbra do porão.
 FICHA DOS INIMIGOS (1 Ratos Gigantes restantes)VIDA(5/5),FORÇA(6),DEFESA(4),AGILIDADE (8);
