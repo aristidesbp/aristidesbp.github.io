@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalhes do Paciente - Supervisor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="supervisor_painel.html">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</a>
+<div>
+<h1 class="text-lg font-bold leading-tight">João Silva</h1>
+<p class="text-xs text-slate-500">ID: 123456</p>
+</div>
+</div>
+<div class="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full">
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider leading-none">Somente Leitura</span>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Patient Info Card -->
+<div class="p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="size-20 rounded-full bg-slate-200 dark:bg-slate-800 bg-cover bg-center" data-alt="Rosto sorridente de uma criança em fundo claro" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFnLSTQBQyqmhKLpUYsstt5pp4onaBtMzIjbhbGLRLlE9V0nKV0XNg0pMePW1_2TX0xp-kVUxbfk2-ZHp6xd2orXc-zPag8A-QCOHsC0P_3b954Hpy1WiurWx9wGrkQO68Ilgp8AMyKZ-XHZQrCkodB62KD3WF1AcMHbDJ9vP35-EFKIFJ_OfvNqy0wo0P2ucsuD4cHGnd3Fc9K6T__aSXEGTG_uqlmfaxG0S0mMpqBxCjiM2UcBx2FwCAn4mll60fa9c97IIFoYht')"></div>
+<div class="flex-1">
+<h2 class="text-xl font-bold">Plano de Intervenção 6M</h2>
+<p class="text-sm text-slate-500">Período: Jan - Jun 2024</p>
+</div>
+</div>
+</div>
+<!-- Progresso Plano 6M -->
+<section class="p-4">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-bold text-slate-800 dark:text-slate-200">Progresso do Plano</h3>
+<span class="text-primary font-bold">65%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-3 rounded-full mb-6 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[65%]"></div>
+</div>
+<h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Habilidades (11)</h4>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm">Coordenação Motora Fina</span>
+<span class="material-symbols-outlined text-green-500 filled-icon text-sm">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm">Linguagem Expressiva</span>
+<span class="material-symbols-outlined text-primary text-sm">pending</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm">Socialização e Turno</span>
+<span class="material-symbols-outlined text-slate-300 text-sm">circle</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-xs font-medium text-primary hover:bg-primary/5 rounded transition-colors">VER TODAS AS HABILIDADES</button>
+</div>
+</section>
+<!-- Adesão Semanal -->
+<section class="p-4">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                Adesão Semanal
+            </h3>
+<div class="space-y-4">
+<!-- Semana 4 -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-center mb-4">
+<span class="text-sm font-bold">Semana 12 (Atual)</span>
+<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded">85% ADESÃO</span>
+</div>
+<div class="grid grid-cols-5 gap-2 text-center text-[10px] font-bold text-slate-400 mb-2">
+<div></div><div>L</div><div>E</div><div>M</div><div>A</div>
+</div>
+<!-- Dias Grid -->
+<div class="space-y-2">
+<div class="grid grid-cols-5 gap-2 items-center">
+<span class="text-[10px] text-slate-500">SEG</span>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+<div class="size-6 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px] text-slate-400">close</span></div>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+</div>
+<div class="grid grid-cols-5 gap-2 items-center">
+<span class="text-[10px] text-slate-500">TER</span>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+<div class="size-6 rounded bg-primary text-white flex items-center justify-center mx-auto"><span class="material-symbols-outlined text-[14px]">check</span></div>
+</div>
+</div>
+</div>
+<!-- Semana 3 (Minimizada Exemplo) -->
+<div class="bg-white/60 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<span class="text-sm font-medium">Semana 11</span>
+<div class="flex items-center gap-3">
+<span class="text-xs text-slate-500">72% Adesão</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Mídias Enviadas -->
+<section class="p-4">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">perm_media</span>
+                Mídias Enviadas
+            </h3>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+<h4 class="text-xs font-semibold text-slate-400 uppercase mb-3">Vídeos e Fotos (Escrita)</h4>
+<div class="grid grid-cols-3 gap-2 mb-6">
+<div class="aspect-square bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden relative">
+<img alt="Atividade de escrita" class="w-full h-full object-cover" data-alt="Criança segurando um lápis e escrevendo em um papel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBrlRUDgXluv1acQfeksU-j-7uSgaO2JMpjecabeIdTZ-mjZOPkRyebktZUF0bY-YxlTus-K1OQhm9zDpM1DsXtouY8yL0GNHj--jaYkz4Rf6kd1ytGBUuUtSNwZKPLldTCa4tD2mo7ZeQx9Iv8ojoB4EiuL_1Am1a6PGMTjUrtaFC4X_fYON61Uot-_7qBwY9kQxcgwLFrXFrtdJomAtlQUpXR5TzhEM2s-42TFoPHivDIsc3Hr5UH9Gcd7q6ewbwYX-3bVMskAdM"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">play_circle</span>
+</div>
+</div>
+<div class="aspect-square bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden">
+<img alt="Atividade física" class="w-full h-full object-cover" data-alt="Desenho colorido feito por uma criança" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIgQgJ8aRCFN6Qei0msiJxCtrffW6dkvrO9Qb1yPgD1BAtr8ipZtSwvE4sDwwUw2fAT4csEIp4V9eOr5FTZQlGdOohQx9nYaCuz8NpCf74tgDTxdV1bSQv2bWu6L7BedOOXA8x19fhRuL-w6E7JQ6UsZnDyXNw7H5tyq2-pn6XIKGOyhIqRlupZbjEZ0TIzLttaahaEFKA9mcMm0w63KnsPwD50IAvMDixbl03l2aVsYzXmKoEkMQzYbFAhN6z0Rp-6pf5IvxM57bc"/>
+</div>
+<div class="aspect-square bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden">
+<img alt="Pintura" class="w-full h-full object-cover" data-alt="Blocos de construção coloridos empilhados" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS-gFAEjwTWVZS8Td3wyMprvSsjUF-dYWh3ixHQjVtHnncUgZJ4nuD5ktOFTNOMO8bpY-O95VzCAMgljFeWns7FKtrFXVlK6TuX8zVdPpPwf1XjrZbB6xOjpv7j3M24IS2f4uVnNXhh_pTxs6ZAazdlB3cXxUmU9LbmiuCzw1Lk0F2Jn2AJrAiQ_twnOecpwoxSri5xhMsQOdRVd76la9BLhwSNA0dnXdI21s2t2mBDSC4F6ejuk_zvJi8jFCCP5_ZXmzswIWYWUZ"/>
+</div>
+</div>
+<h4 class="text-xs font-semibold text-slate-400 uppercase mb-3">Áudios (Leitura)</h4>
+<div class="space-y-2">
+<div class="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+<span class="material-symbols-outlined text-primary filled-icon">play_arrow</span>
+<div class="flex-1 h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-primary"></div>
+</div>
+<span class="text-[10px] font-mono">0:12</span>
+</div>
+<div class="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg opacity-80">
+<span class="material-symbols-outlined text-slate-400">play_arrow</span>
+<div class="flex-1 h-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+<span class="text-[10px] font-mono">0:45</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Observações do Responsável -->
+<section class="p-4">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+                Observações do Responsável
+            </h3>
+<div class="bg-primary/5 dark:bg-primary/10 p-4 rounded-xl border border-primary/20">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-primary">Semana 12</span>
+<span class="text-[10px] text-slate-500">Ontem às 18:30</span>
+</div>
+<p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
+                    "O João demonstrou muita facilidade com as tarefas de hoje, especialmente na parte de coordenação. Percebi uma leve irritação quando tentamos o módulo de linguagem, mas conseguimos concluir."
+                </p>
+</div>
+</section>
+</main>
+<!-- Bottom Navbar Supervisor -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="supervisor_painel.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Painel</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">group</span>
+<span class="text-[10px] font-bold">Pacientes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-medium">Relatórios</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</a>
+</nav>
+</body></html>

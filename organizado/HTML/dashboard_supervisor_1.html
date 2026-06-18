@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Painel do Supervisor - ERP-PSC</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>   
+<script src="../controller/verificar_login.js"></script>
+<script src="../controller/analizar_nivel_de_acesso.js"></script>        
+        
+<script type="module">
+    import { accessControl } from '../model/access_control.js';    
+    // Só permite entrar se a role for 'paciente'
+    accessControl.checkAccess(['usuario']);
+</script>
+        
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+
+        
+    <div id="navbar"></div>
+<script src="../controller/navbar.js"></script>      
+        
+        
+        <!-- Main Container (Mobile Optimized) -->
+<div class="flex-1 w-full max-w-[430px] mx-auto bg-white dark:bg-slate-900 shadow-xl flex flex-col min-h-screen">
+<!-- Header Section -->
+<header class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary" id="header-supervisor-icon">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<h1 class="text-lg font-bold tracking-tight" id="titulo-supervisor">Painel do Supervisor</h1>
+</div>
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- Summary Cards Section -->
+<section class="p-4 grid grid-cols-2 gap-3">
+
+        
+<!-- Pacientes Ativos -->
+<div class="col-span-2 p-4 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/10 flex flex-col gap-1 relative" id="stat-total-pacientes">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Usuarios Ativos</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-bold text-primary">128</span>
+<a aria-label="Ver Pacientes" class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-sm active:scale-95 transition-transform" href="listar_usuarios.html">
+<span class="material-symbols-outlined text-xl">groups</span>
+</a>
+</div>
+</div>
+        
+</body></html>
