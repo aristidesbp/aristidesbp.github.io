@@ -1221,15 +1221,10 @@ supabase_config.js
 ## supabase_config.js (funcionado)
 ```
 // supabase_config.js
-// 2. Chaves de Acesso (Substitua pelas suas)
-
-const SUPABASE_ANON_KEY = 'trocar';
-const SUPABASE_URL = 'trocar';
-
-const SUPABASE_KEY = 'trocar';
-const SUPABASE_URL = 'trocar';
-
-console.log("✅ conexao_supqabase.js");
+// criar constantes com chave de acesso.
+const SUPABASE_KEY = 'Api_Keys/anon_key';
+const SUPABASE_URL = 'Data_api/url';
+console.log("✅ supabase_config.js");
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
