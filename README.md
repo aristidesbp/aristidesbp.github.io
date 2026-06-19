@@ -40,6 +40,8 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 # CODIGOS & TUTORIAIS
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+![imagem gamer master](assets/png/gamer_master.png)
+
 # JOGANDO RPG COM IA
 ```
 **FICHA DO PERSONAGEM**
