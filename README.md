@@ -459,7 +459,9 @@ def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
 
             # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
             if extensao:
-                nome_subpasta_tipo = extensao.replace(".", "").upper()
+
+            nome_subpasta_tipo = extensao.replace(".", "").lower()
+
             else:
                 nome_subpasta_tipo = "SEM_EXTENSAO"
 
