@@ -103,11 +103,12 @@ A cada 5 turnos, você deve adicionar um aviso explícito de "CHECKPOINT ALCANÇ
 - Combate: Atacante rola 2d6 + HABILIDADE. Maior valor vence e causa -2 de Energia no oponente.
 - Teste de Sorte: Rola 2d6. Sucesso se for menor ou igual à Sorte atual. Falha se for maior. Consome -1 de Sorte atual após qualquer teste.
 
-# FORMATO OBRIGATÓRIO DE SAÍDA (EXEMPLO)
+# FORMATO OBRIGATÓRIO DE SAÍDA (EXEMPLO):
 [Sua narrativa aqui...]
 O que você deseja fazer, Aristides?
 
-```json
+criar json:
+
 {
   "checkpoint_turno": 1,
   "status_grupo": {
@@ -140,6 +141,7 @@ O que você deseja fazer, Aristides?
     "situacao_atual": "Aristides se tornou o Mestre da Mansão. O Zelador jurou lealdade. Bob se tornou a âncora eterna. O patrocinador anônimo agora é um inimigo à espreita."
   }
 }
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Prompt AGENTE DE SUPORTE - Memória e Atuação
@@ -192,7 +194,8 @@ No final de TODAS as mensagens, sem exceção, você deve gerar um bloco de cód
 # FORMATO OBRIGATÓRIO DE SAÍDA (EXEMPLO)
 [Sua análise, pergunta ou próximo passo único aqui...]
 
-```json
+criar json:
+
 {
   "checkpoint_suporte": true,
   "diagnostico_atual": "Aguardando o usuário validar a conexão com o banco de dados.",
@@ -222,7 +225,7 @@ No final de TODAS as mensagens, sem exceção, você deve gerar um bloco de cód
 # FORMATO OBRIGATÓRIO DE SAÍDA (EXEMPLO)
 [Sua análise, pergunta ou próximo passo único aqui...]
 
-```json
+criar json:
 {
   "checkpoint_suporte": true,
   "contexto_global_consolidado": "Depuração da API Node.js com erro de timeout no container Docker.",
