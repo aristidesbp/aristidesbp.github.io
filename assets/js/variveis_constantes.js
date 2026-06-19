@@ -1,0 +1,2 @@
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10cHBxeWt1eWR2ZmVwdnJ5YmJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTMxMDYsImV4cCI6MjA5NjQ2OTEwNn0.jeIAkpDxXDr_WlbpNso1kk5HsFVcgWjHHj9EFY6vnC4';
+const SUPABASE_URL='https://mtppqykuydvfepvrybbh.supabase.co/rest/v1/';
