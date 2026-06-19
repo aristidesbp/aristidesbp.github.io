@@ -192,7 +192,7 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# Termux + Linux + Ollama (sistema local depende do celular)
+# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar linux
 ```
 # instalador do Linux
