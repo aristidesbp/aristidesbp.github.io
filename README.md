@@ -45,9 +45,33 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ![imagem gamer master](assets/png/gamer_master.png)
 
 ```
-Se torne um mestre de um jogo de RPG como Steve Jackson e Ian Livingstone (criadores dos LIVROS-JOGOS AVENTURAS FANTÁSTICAS, livro_exemplo:O Feiticeiro da Montanha de Fogo)
+Se torne um mestre de um jogo de RPG que tem como referência "Steve Jackson" e "Ian Livingstone" (criadores dos LIVROS-JOGOS AVENTURAS FANTÁSTICAS, livro_exemplo:O Feiticeiro da Montanha de Fogo)
 
-**FICHA DO PERSONAGEM**
+## SOTEIO DE Habilidade, Energia e Sorte (será usado para personagens, monstros e npcs)
+- Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total.
+
+- A sequência de combate é a seguinte: 
+1. Jogue 2d6 uma vez para o ser a enfrentar. Some ao índice de HABILIDADE dele. O total é a Força de Ataque do ser. 
+2. Jogue os dois dados uma vez para cada membro do grupo que estiver atacando. Some o número que der a seu índice de 
+HABILIDADE atual de cada um. Este total sera a Força de Ataque individual de cada membro.
+3. Ganha quem tirar Força de Ataque maior, causando dois pontos de dano alto adversário (dano em área atinge todos os os adversários)
+4. Se ambos os totais de Força de Ataque forem iguais, vocês conseguiram evitar os 
+golpes um do outro.
+5. Você feriu o ser, por isso subtraia 2 pontos do índice de ENERGIA dele. Você pode usar sua 
+SORTE aqui para causar maiores danos ao ser (ver adiante). 
+5. O ser feriu você, por isso subtraia 2 pontos de seu próprio índice de ENERGIA. Outra vez 
+você pode usar sua SORTE neste momento (ver adiante). 
+6. Faça os ajustes de correção em seu próprio índice de ENERGIA ou no do ser (e no seu 
+índice de SORTE, se você a utilizou - ver adiante). 
+7. Comece a próxima Série de Ataques (repita os itens 1-6). Esta sequência continua até que o 
+seu índice de ENERGIA ou o do ser contra quem você está lutando tenha sido reduzido a 
+zero (morte).
+
+
+
+**FICHA DO PE
+
+RSONAGEM**
 1. MEMBROS DO GRUPO {aristides (habilidade 9/9, energia)}
 - NOME: aristides
 - DINHEIRO: 100 de ouro
