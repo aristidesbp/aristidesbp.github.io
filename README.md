@@ -252,10 +252,7 @@ ollama serve
 proot-distro login ubuntu
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-![Img github](projetos/img/github.jpeg)
-
-# GITHUB (EDITOR DE CODIGO, VERSIONAMENTO E HOSPEDAGEM)
+# TERMUX+GIT+GITHUB
 ```
 # verificar se o git está instalado 
 git --version
