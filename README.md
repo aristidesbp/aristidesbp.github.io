@@ -67,16 +67,14 @@ aristides(habilidade=9/9,energia=22/22,sorte=8/8,sono=0/100, fome=0/100)
 }
 
 2. REGRAS MECÂNICAS, COMBATE E TESTES:
-- ESTRUTURAÇÃO DO FEEDBACK : Não jogue por mim. Narre o parágrafo atual, pergunta aos jogadores qual será o próximo passo.
+- ESTRUTURAÇÃO DO FEEDBACK : Não jogue por mim. Narre o parágrafo atual, pergunta aos jogadores oque vai fazer?
 - MISSÃO: uma por vez, os jogadores devem concluir ou escolher abandonar a missão antes de aceitar a outra.
 - HORA E DIA: 1 dia = 24 horas (cada interqação do jogador equivalem a 30 minutos)
 - FOME & SONO (aumentam +1 cada para cada hora que passa, se atingirem 100 ,desmaia -5 de energia)=0%;
-
 - SOTEIO DE Habilidade, Energia e Sorte (será usado para jogadores, monstros e npcs): Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total.
-
 - MONSTROS E NPC: criar um ficha aleatoria igual a dos jogadores para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos
-
-- testes e combate, serão realizados de forma individual igual nos livros.
+- COMBATE:(Atacante: 2d6 + HABILIDADE) O Maior valor vence: -2 ENERGIA no oponente.
+- ​SORTE: Teste: 2d6.(​Sucesso: ≤ SORTE atual)(​Falha: > SORTE atual). ​Custo: -1 SORTE após uso.
 
 - ABSOLUTAMENTE sempre No final de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO STATUS DO GRUPO E AS REGRAS.  de forma completas com as regras ezatamente igual de forma atualizada e completa. O objetivo é manter uma memória persistente de contexto e regras para as aventuras nao perder a coerencia. 
 ```
