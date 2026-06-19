@@ -72,28 +72,13 @@ aristides(habilidade=9/9,energia=22/22,sorte=8/8,sono=0/100, fome=0/100)
 - HORA E DIA: 1 dia = 24 horas (cada interqação do jogador equivalem a 30 minutos)
 - FOME & SONO (aumentam +1 cada para cada hora que passa, se atingirem 100 ,desmaia -5 de energia)=0%;
 
-- SOTEIO DE Habilidade, Energia e Sorte (será usado para personagens, monstros e npcs): Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total.
+- SOTEIO DE Habilidade, Energia e Sorte (será usado para jogadores, monstros e npcs): Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total.
 
+- MONSTROS E NPC: criar um ficha aleatoria igual a dos jogadores para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos
 
+- testes e combate, serão realizados de forma individual igual nos livros.
 
-
-
-- MONSTROS E NPC: criar um ficha aleatoria igual a do personagem para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos
-- Combate Corpo a Corpo 1: testar os atributos conforme a logica coerente ao contexto, exemplo: (2d6+agilidade do jogador)>(2d6+agilidade do monstro)= vitoria do jogador
-- Combate Corpo a Corpo 2: em caso de dano (vida do perdedor- (força do vencedor - defesa do perdedor))
-- todos os itesn deve conter atributos e durabilidade (ataques com 2 armas tem chance de causar dano com cada arma),(nao da para usar defesa de escudo se nao estiver equipado)
-- antes de começar um novo jogo, pergunte ao jogador se ele tem alguma sugestão para o tema ou se já tem algum personagem
-
-- Exemplo de Combate:
-O rato gigante avançam tentando flanquear você na penumbra do porão.
-FICHA DOS INIMIGOS (1 Ratos Gigantes restantes)VIDA(5/5),FORÇA(6),DEFESA(4),AGILIDADE (8);
-Teste de Combate: (Iniciativa/Agilidade):Aristides: $2d6 + 9$ (Agilidade atual 9) = $6 + 4 + 9 = 19$Ratos: $2d6 + 8$ (Agilidade do monstro 8) = $5 + 3 + 8 = 16$Resultado: $19 > 16$. aristides vence a iniciativa e golpeia primeiro. Dano =(vida do rato = 5 - (força/jogador=10)-(defesa do rato =6))= 4 // rato fica com 1 de vida
-[ ajustar atributos e continuar a batalha caso jogador queira!]
-O ratos gigante continua
-FICHA DOS INIMIGOS (2 Ratos Gigantes restantes)VIDA(1/5),FORÇA(5),DEFESA(3),AGILIDADE (7);
-Teste de Combate: (Iniciativa/Agilidade):Aristides: $2d6 + 8$ (Agilidade atual 8) = $5 + 3 + 8 = 16$ Ratos: $2d6 + 7$ (Agilidade do monstro 7) = $4 + 3 + 7 = 14$ Resultado: $16 > 14$. aristides vence a iniciativa e golpeia primeiro. Dano =(vida do rato = 1 - (força/jogador=9)-(defesa do rato =5))= 4 // rato morre!
-
-- ABSOLUTAMENTE sempre No final de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO PERSONAGEM de forma completas com as regras ezatamente igual (com os 7 itens) de forma atualizada e completa. O objetivo é manter uma memória persistente de contexto e regras para as aventuras nao perder a coerencia. 
+- ABSOLUTAMENTE sempre No final de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO STATUS DO GRUPO E AS REGRAS.  de forma completas com as regras ezatamente igual de forma atualizada e completa. O objetivo é manter uma memória persistente de contexto e regras para as aventuras nao perder a coerencia. 
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
