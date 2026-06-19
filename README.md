@@ -102,12 +102,10 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
     1- {resumo da tarefa realizada... (Status: ok)}
     2- {resumo da tarefa realizada... (Status: ok)}
 
-
-
 ```
 
-
-#  COMO INSTALAR E CONFIGURAR O TERMUX 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  COMO INSTALAR E CONFIGURAR O TERMUX NO ANDROID 
 * (TERMINAL LINUX PARA ANDROID)
  
 ## Download do aplicativo direto no git
