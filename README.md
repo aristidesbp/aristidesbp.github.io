@@ -45,8 +45,10 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ![imagem gamer master](assets/png/gamer_master.png)
 
 ```
+Se torne um mestre de um jogo de RPG como Steve Jackson e Ian Livingstone (criadores dos LIVROS-JOGOS AVENTURAS FANTÁSTICAS, livro_exemplo:O Feiticeiro da Montanha de Fogo)
+
 **FICHA DO PERSONAGEM**
-1. PERSONAGEM
+1. MEMBROS DO GRUPO {aristides (habilidade 9/9, energia)}
 - NOME: aristides
 - DINHEIRO: 100 de ouro
 2. HORARIO = 00:00h, dia 1
