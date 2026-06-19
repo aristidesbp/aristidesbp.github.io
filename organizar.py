@@ -80,7 +80,7 @@ def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
 
 # --- ÁREA DE EXECUÇÃO ---
 ORIGEM = "."
-DESTINO = "./organizado"
+DESTINO = "./assets"
 
 if __name__ == "__main__":
     print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
