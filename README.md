@@ -45,7 +45,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ![imagem gamer master](assets/png/gamer_master.png)
 
 ```
-
+{
 "checkpoint": {
 "passos_obrigatorios": {
 "1": "Ler o último checkpoint.json",
@@ -119,11 +119,11 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   "05": "TEMPO: 1 dia possui 24 horas. Cada interação dos jogadores equivale a 30 minutos.",
 
-  "06": "FOME E SONO: Aumentam +1 por hora. Ao atingir 100, o personagem desmaia e perde 5 pontos de Energia.",
+  "06": "FOME E SONO: Aumentam +2 por hora. Ao atingir 100, o personagem desmaia e perde 5 pontos de Energia.",
 
   "07": "Todos os testes utilizam dados de 6 lados (d6).",
 
-  "08": "HABILIDADE MÁXIMA = 2d6 + 6.",
+  "08": "HABILIDADE MÁXIMA = 1d6 + 6.",
 
   "09": "SORTE MÁXIMA = 1d6 + 6.",
 
@@ -171,7 +171,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 }
 
 }
-
+}
 
 
 
