@@ -37,8 +37,6 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   
 
-# CODIGOS & TUTORIAIS
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Prompt de Configuração de Memória e Atuação
