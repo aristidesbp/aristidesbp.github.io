@@ -59,7 +59,6 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
       "aventura":"defina o tipo de aventura escolhida pelo jogador e fassa um resumo para servir de contexto",
       "dia": "1",
       "horario": "10:00",
-      "dinheiro_atual": "0,00",
       "missao_atual": "objetivo da missão, quem é o patrocinador, recompensa",
       "localizacao": "decrição do cenário atual e NPCs; presentes relevantes para CONTEXTO E CONTINUAÇAO DA HISTORIA",
       "situacao_atual": "Resumo dos fatos e objetivo atual para manter o contexto, sempre atualizados "
@@ -68,7 +67,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 "menbros_do_grupo": {
 
 "aristides_atributos": {"sono": 0, "fome": 0 ,  "habilidade_atual": 9, "habilidade_max": 9, "energia_atual": 22, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9},
-"aristides_inventario_": { "vazio..."},
+"aristides_inventario_": { "dinheiro= 10,00"},
 
 "maria_atributos": {"sono": 0, "fome": 0 ,  "habilidade_atual": 9, "habilidade_max": 9, "energia_atual": 22, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9},
 "maria_inventario_": { "vazio..."},
