@@ -46,11 +46,11 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 ```
 {
-  "backup": [
+  "caixa_de_itens": [
     {
       "id": 1,
       "item": "como a ia deve ser comportar",
-      "resumo": "antes de interagir com o usuário deve ver o último arquivo de backup, e sempre copiar o backup no final de todas as conversas e interações, nunca adicionar nada no backup sem permissão do usuário"
+      "resumo": "antes de interagir com o usuário deve ver o último arquivo de backup, e sempre copiar a caixa_de_itens no final de todas as conversas e interações, nunca adicionar nada no backup sem permissão do usuário"
     },
     {
       "id": 2,
