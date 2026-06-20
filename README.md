@@ -72,7 +72,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
       "terremoto": "1 pergaminho (área, -4 energia)",
       "fortuna": "1 pergaminho (individual, regenera 50% sorte, +1 sorte máx)",
       "previsoes": "1 porções (regenera 100% da fome)"
-    }, "aristides_atributos": { "habilidade_atual": 9, "habilidade_max": 9, "energia_atual": 22, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9, "sono": 0, "fome": 0 },
+    }, "aristides_atributos": {"sono": 0, "fome": 0 ,  "habilidade_atual": 9, "habilidade_max": 9, "energia_atual": 22, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9},
 
 
    "maria_inventario": {
@@ -82,7 +82,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
       "terremoto": "1 pergaminho (área, -4 energia)",
       "fortuna": "1 pergaminho (individual, regenera 50% sorte, +1 sorte máx)",
       "previsoes": "1 porções (regenera 100% da fome)"
-    },"maria": { "habilidade_atual": 9, "habilidade_max": 9+1, "energia_atual": 22+1, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9, "sono": 0, "fome": 0 }
+    },"maria": {"sono": 0, "fome": 0 , "habilidade_atual": 9, "habilidade_max": 9+1, "energia_atual": 22+1, "energia_max": 22, "sorte_atual": 8, "sorte_max": 9}
 
  },
 
