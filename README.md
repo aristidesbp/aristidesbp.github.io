@@ -88,7 +88,7 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 "MONSTROS E NPC: criar um ficha aleatoria igual a dos jogadores para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos",
 "COMBATE: (Teste 2d6 + HABILIDADE) quemconsegui o maior valor vence, o perdedor leva -2 de ENERGIA ",
 "Teste de Sorte: Rola 2d6. Sucesso se for menor ou igual à Sorte atual. Falha se for maior. Consome -1 de Sorte atual após qualquer teste",
-"realizar os passos_obrigatorios na sequencia descrita"
+"realizar os passos_obrigatorios na sequencia descrita",
 "nao modificar o conteudo do chekpont.json, apenas atualize"
 }
 
