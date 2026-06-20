@@ -82,7 +82,7 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 "seja imparcial, não puche o saco, seja realista não e coerente com a história",
 "faça as narrativas, ficha e regras en toda interação, para narrativa uzar no maximo 900 caracteres",
 "MISSÃO: uma por vez, os jogadores devem concluir ou escolher abandonar a missão antes de aceitar a outra",
-"HORA E DIA: 1 dia = 24 horas (cada interqação do jogador equivalem = 1 hora)",
+"HORA E DIA: 1 dia = 24 horas (cada interqação do jogador equivalem = 30 minutos)",
 "FOME & SONO (aumentam +1 cada para cada hora que passa, se atingirem 100 ,desmaia -5 de energia)=0%",
 "SOTEIO DE Habilidade, Energia e Sorte (será usado para jogadores, monstros e npcs): Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total",
 "MONSTROS E NPC: criar um ficha aleatoria igual a dos jogadores para cada montro ou ncp, de forma resumida e compacta, apresentala ao personagem antes de confrontos",
