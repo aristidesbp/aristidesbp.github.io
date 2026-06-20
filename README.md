@@ -50,6 +50,13 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 
 "chekpont"{
 
+"passos_obrigatorios"{
+"Ler o ultimoa "chekpont.json",
+"criar ou atualizar o [chekpont.json] composto obrigatoriamente por [passos_obrigatorios, contexto_missao , menbros_do_grupo, inventario, regras_e_obrigacoes]",
+"escrever a narrativa do jogo",
+"perguntar aos jogadores o que eles farao?",
+}
+
  "contexto_missao": {
     "dia": 1,
     "horario": "10:00",
@@ -70,13 +77,6 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 "2 porções de previsões (comida regenera 100% da fome)"
 }
 
-"passos_obrigatorios"{
-"Ler o ultimoa "chekpont.json",
-"criar ou atualizar o "chekpont.json" completo com:( contexto_missao , menbros_do_grupo, inventario, regras_e_obrigacoes, passos_obrigatorios)
-"escrever a narrativa do jogo",
-"perguntar aos jogadores o que eles farao?",
-}
-
 "regras_e_obrigacoes"{
 "ESTRUTURAÇÃO DO FEEDBACK : Não jogue por mim. Narre o parágrafo atual, pergunta aos jogadores oque vai fazer?",
 "seja imparcial, não puche o saco, seja realista não e coerente com a história",
@@ -90,9 +90,8 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 "Teste de Sorte: Rola 2d6. Sucesso se for menor ou igual à Sorte atual. Falha se for maior. Consome -1 de Sorte atual após qualquer teste",
 "realizar os passos_obrigatorios na sequencia descrita"
 }
-}
 
-"ABSOLUTAMENTE sempre siga TODOS OS PASSOS OBRIGATORIOS NA SEQUENCIA antes das suas mensagens, você deve copiar obrigatoriamente o  CHEKPONT passado e atualizalo,  de forma completa , ezatamente igual de forma atualizada e completa. O objetivo é manter uma memória persistente de contexto e regras para as aventuras nao perder a coerencia."
+}
 
 
 ```
