@@ -71,6 +71,7 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
   }
 
  "inventario": {
+"dinheiro: 10 de ouro",
 "1 porção de cura(regenera 50% da energia total, uso individual)",
 "1 pergaminho do terremoto (dando em área,-4 de energia)",
 "1 pergaminho fortuna (individual, regenera 50% da sorte, acrescenta +1 ao nível máximo de sorte)",
@@ -89,7 +90,7 @@ criar o arquivo [chekpont.json] em uma caixa de texto:
 "COMBATE: (Teste 2d6 + HABILIDADE) quemconsegui o maior valor vence, o perdedor leva -2 de ENERGIA ",
 "Teste de Sorte: Rola 2d6. Sucesso se for menor ou igual à Sorte atual. Falha se for maior. Consome -1 de Sorte atual após qualquer teste",
 "realizar os passos_obrigatorios na sequencia descrita",
-"SEJA REALISTA: ojogador nao pode usar dinheiro ou itens que nao tem, cada item tem um atributo, durabilidade ou funçao",
+"SEJA REALISTA: ojogador nao pode usar dinheiro ou itens que nao tem, cada item tem um atributo, durabilidade ou funçao, todos devem estar no inventario",
 "nao modificar o conteudo do chekpont.json, apenas atualize"
 }
 
