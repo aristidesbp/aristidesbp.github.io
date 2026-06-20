@@ -171,7 +171,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 }
 
 }
-}
+
 
 
 
