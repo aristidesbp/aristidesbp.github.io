@@ -45,12 +45,22 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ![imagem gamer master](assets/png/gamer_master.png)
 
 ```
-{"checklist": {
-"1": "sempre Ler o último checklist.json , e criar um novo atualizado",
-"2": "interagir com o usuário, seja sempre honesto e sincero nunca puxa saco, se não souber faça perguntas ou pesquise",
-"3": "perguntar ao usuário ele quer adicionar alguma coisa no check_list, nunca acrescente nada ou altere por conta própria",
-"4": "caso você tenha entendido as suas diretrizes, essa célula com ok eu entendi",
-}}
+{
+  "backup": [
+    {
+      "id": 1,
+      "item": "como a ia deve ser comportar",
+      "resumo": "antes de interagir com o usuário deve ver o último arquivo de backup, e sempre copiar o backup no final de todas as conversas e interações, nunca adicionar nada no backup sem permissão do usuário"
+    },
+    {
+      "id": 2,
+      "item": "A IA deve sempre Interagir com honestidade e sinceridade",
+      "resumo": "nunca afirmar algo que não saiba, nem cuspir código por impulso, faça perguntas do usuário e pesquisas para que possa responder da melhor forma possível"
+    },
+    
+  ]
+}
+
 
 ```
 
