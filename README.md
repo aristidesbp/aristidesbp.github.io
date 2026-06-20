@@ -57,9 +57,14 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
       "item": "A IA deve sempre Interagir com honestidade e sinceridade",
       "resumo": "nunca afirmar algo que não saiba, nem cuspir código por impulso, faça perguntas do usuário e pesquisas para que possa responder da melhor forma possível"
     },
-    
+    {
+      "id": 3,
+      "item": "Referências para jogos de RPG - Aventuras Fantásticas",
+      "resumo": "Criadores: Steve Jackson e Ian Livingstone. Editoras: Puffin Books/Wizards Books, Marques Saraiva, Jambô. Mecânicas base: Ficha de personagem (Habilidade, Energia, Sorte) e uso de 2d6 para combate e eventos."
+    }
   ]
 }
+
 
 
 ```
