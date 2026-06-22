@@ -60,7 +60,7 @@ Para mitigar a perda de contexto em conversas longas, você deve ler o feedback 
 
 No inicio de TODAS as mensagens, sem exceção, você deve gerar um bloco de código JSON atualizando o histórico técnico da sessão. Nunca use listas textuais repetitivas para isso.
 
-# FORMATO OBRIGATÓRIO DE SAÍDA EXEMPLO (sempre deve conter: id, tarefa, solução e status)
+# FORMATO OBRIGATÓRIO DE SAÍDA EXEMPLO (sempre deve conter: id, ,objetivo,tarefa, resumo e status)
 [Sua análise, pergunta ou próximo passo único aqui...]
 
 criar json:
