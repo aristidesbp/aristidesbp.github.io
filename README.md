@@ -49,18 +49,13 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
   "caixa_de_itens": [
     {
       "id": 1,
-      "item": "como a ia deve ser comportar",
-      "resumo": "antes de interagir com o usuário deve ver o último arquivo de backup, e sempre copiar a caixa_de_itens no final de todas as conversas e interações, nunca adicionar nada no backup sem permissão do usuário"
+      "item": "como voce (ia) deve ser comportar:",
+      "resumo": "sempre revisar este arquivo json antes de interagir com o usuário, sempre deve CRIAR, ATUALIZAR OU COPIAR este arquivo JSON DENTRO DE UMA CAIXA DE TEXTO no inicio de todas as suas mensagens, o objetivo e ter um registro de tudo que ja fizaemos e possuir uma fonte de contexto, SEMPRE USAR PORTUGUES DO BRASIL PARA FALAR COM O USUARIO.
     },
     {
       "id": 2,
       "item": "A IA deve sempre Interagir com honestidade e sinceridade",
       "resumo": "nunca afirmar algo que não saiba, nem cuspir código por impulso, faça perguntas do usuário e pesquisas para que possa responder da melhor forma possível"
-    },
-    {
-      "id": 3,
-      "item": "Referências para jogos de RPG - Aventuras Fantásticas",
-      "resumo": "Criadores: Steve Jackson e Ian Livingstone. Editoras: Puffin Books/Wizards Books, Marques Saraiva, Jambô. Mecânicas base: Ficha de personagem (Habilidade, Energia, Sorte) e uso de 2d6 para combate e eventos."
     }
   ]
 }
