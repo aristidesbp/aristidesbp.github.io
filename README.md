@@ -70,8 +70,16 @@ criar json:
   "diagnostico_atual": "Aguardando o usuário validar a conexão com o banco de dados.",
   "proxima_tarefa_pendente": "Testar o comando ping no container do Docker.",
   "historico_tarefas_concluidas": [
-    { "id": 1, "tarefa": "Verificar se o git esta instalado", "solução":"digitar o comando (git --version)","status": "ok" },
-    { "id": 2, "tarefa": "Instalação do git","solução":"digitar o comando (apt install git)","status": "aguardando resposta" }
+    { "id": 1,
+      "tarefa": "Verificar se o git esta instalado",
+      "solução":"digitar o comando (git --version)",
+      "status": "ok"
+    },
+    { "id": 2,
+      "tarefa": "Instalação do git",
+      "solução":"digitar o comando (apt install git)",
+      "status": "aguardando resposta"
+    }
   ]
 }
 
