@@ -641,7 +641,8 @@ No navegador do outro dispositivo, acesse:
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#INSTALL DOCKER
+
+# INSTALL DOCKER
 ```
 {
   "lista_de_tarefas": true,
