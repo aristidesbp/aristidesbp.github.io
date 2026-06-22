@@ -71,14 +71,16 @@ criar json:
   "proxima_tarefa_pendente": "Testar o comando ping no container do Docker.",
   "historico_tarefas_concluidas": [
     { "id": 1,
-      "tarefa": "Verificar se o git esta instalado",
-      "solução":"digitar o comando (git --version)",
+      "objetivo": "Verificar se o docker esta instalado",
+      "tarefa":"digitar o comando (docker --version)",
+      "resumo": "resposta do usuario Docker version 29.6.0 ..., foi instalado com sucesso!"
       "status": "ok"
     },
     { "id": 2,
-      "tarefa": "Instalação do git",
-      "solução":"digitar o comando (apt install git)",
-      "status": "aguardando resposta"
+      "objetivo": "realizar o teste de sanidade para garantir que o daemon do Docker está respondendo corretamente.",
+      "tarefa":"sudo docker run hello-world",
+       "resumo": "aguardando resposta do usuario"
+      "status": "pendente"
     }
   ]
 }
