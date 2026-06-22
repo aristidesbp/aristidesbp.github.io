@@ -66,7 +66,7 @@ No inicio de TODAS as mensagens, sem exceção, você deve gerar um bloco de có
 criar json:
 
 {
-  "checkpoint_suporte": true,
+  "lista_de_tarefas": true,
   "diagnostico_atual": "Aguardando o usuário validar a conexão com o banco de dados.",
   "proxima_tarefa_pendente": "Testar o comando ping no container do Docker.",
   "historico_tarefas_concluidas": [
