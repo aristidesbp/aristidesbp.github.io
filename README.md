@@ -67,8 +67,8 @@ criar json:
 
 {
   "lista_de_tarefas": true,
-  "diagnostico_atual": "Ambiente preparado. Aguardando a execução do comando de build pelo usuário para proceder com a validação da imagem.",
-  "proxima_tarefa_pendente": "Executar o build da imagem android-dev.",
+  "diagnostico_atual": "Ambiente Android dentro do container validado com sucesso. Java instalado e operacional. Volume de dados mapeado e funcional.",
+  "proxima_tarefa_pendente": "Nenhuma. O ambiente de desenvolvimento está concluído e pronto para uso.",
   "historico_tarefas_concluidas": [
     { "id": 1, "objetivo": "Verificar docker", "tarefa": "docker --version", "status": "ok" },
     { "id": 2, "objetivo": "Instalar dependências", "tarefa": "sudo apt-get update && sudo apt-get install ca-certificates curl gnupg", "status": "ok" },
@@ -78,12 +78,11 @@ criar json:
     { "id": 6, "objetivo": "Teste", "tarefa": "sudo docker run hello-world", "status": "ok" },
     { "id": 7, "objetivo": "Permissões", "tarefa": "sudo groupadd docker; sudo usermod -aG docker $USER", "status": "ok" },
     { "id": 8, "objetivo": "Estrutura", "tarefa": "mkdir meu-projeto-android && cd meu-projeto-android && nano Dockerfile", "status": "ok" },
-    { "id": 9, "objetivo": "Build", "tarefa": "docker build -t android-dev .", "status": "pendente" },
-    { "id": 10, "objetivo": "Licenças", "tarefa": "docker run --rm -it android-dev sdkmanager --licenses", "status": "pendente" },
-    { "id": 11, "objetivo": "Execução com volume", "tarefa": "docker run -it -v $(pwd):/app android-dev bash", "status": "pendente" }
+    { "id": 9, "objetivo": "Build", "tarefa": "docker build -t android-dev .", "resumo": "Imagem compilada com sucesso.", "status": "ok" },
+    { "id": 10, "objetivo": "Licenças", "tarefa": "docker run --rm -it android-dev sdkmanager --licenses", "resumo": "Licenças aceitas via terminal.", "status": "ok" },
+    { "id": 11, "objetivo": "Execução com volume", "tarefa": "docker run -it -v $(pwd):/app android-dev bash", "resumo": "Ambiente validado e funcional.", "status": "ok" }
   ]
 }
-
 
 ```
 
