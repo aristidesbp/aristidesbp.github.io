@@ -67,24 +67,22 @@ criar json:
 
 {
   "lista_de_tarefas": true,
-  "diagnostico_atual": "Aguardando o usuário validar a conexão com o banco de dados.",
-  "proxima_tarefa_pendente": "Testar o comando ping no container do Docker.",
+  "diagnostico_atual": "Ambiente preparado. Aguardando a execução do comando de build pelo usuário para proceder com a validação da imagem.",
+  "proxima_tarefa_pendente": "Executar o build da imagem android-dev.",
   "historico_tarefas_concluidas": [
-    { "id": 1,
-      "objetivo": "Verificar se o docker esta instalado",
-      "tarefa":"digitar o comando (docker --version)",
-      "resumo": "resposta do usuario Docker version 29.6.0 ..., foi instalado com sucesso!"
-      "status": "ok"
-    },
-    { "id": 2,
-      "objetivo": "realizar o teste de sanidade para garantir que o daemon do Docker está respondendo corretamente.",
-      "tarefa":"sudo docker run hello-world",
-       "resumo": "aguardando resposta do usuario"
-      "status": "pendente"
-    }
+    { "id": 1, "objetivo": "Verificar docker", "tarefa": "docker --version", "status": "ok" },
+    { "id": 2, "objetivo": "Instalar dependências", "tarefa": "sudo apt-get update && sudo apt-get install ca-certificates curl gnupg", "status": "ok" },
+    { "id": 3, "objetivo": "Chave GPG", "tarefa": "sudo install -m 0755 -d /etc/apt/keyrings; sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc; sudo chmod a+r /etc/apt/keyrings/docker.asc", "status": "ok" },
+    { "id": 4, "objetivo": "Adicionar repositório", "tarefa": "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$UBUNTU_CODENAME\") stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null", "status": "ok" },
+    { "id": 5, "objetivo": "Instalar engine", "tarefa": "sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin", "status": "ok" },
+    { "id": 6, "objetivo": "Teste", "tarefa": "sudo docker run hello-world", "status": "ok" },
+    { "id": 7, "objetivo": "Permissões", "tarefa": "sudo groupadd docker; sudo usermod -aG docker $USER", "status": "ok" },
+    { "id": 8, "objetivo": "Estrutura", "tarefa": "mkdir meu-projeto-android && cd meu-projeto-android && nano Dockerfile", "status": "ok" },
+    { "id": 9, "objetivo": "Build", "tarefa": "docker build -t android-dev .", "status": "pendente" },
+    { "id": 10, "objetivo": "Licenças", "tarefa": "docker run --rm -it android-dev sdkmanager --licenses", "status": "pendente" },
+    { "id": 11, "objetivo": "Execução com volume", "tarefa": "docker run -it -v $(pwd):/app android-dev bash", "status": "pendente" }
   ]
 }
-
 
 
 ```
