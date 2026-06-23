@@ -34,7 +34,7 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🤖 **IA/ML:** [coursera.org](https://coursera.org)
 * 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
 * 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
-
+* 📊 **SUPABASE:** [YOUTUBE]([https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO))
   
 
 
