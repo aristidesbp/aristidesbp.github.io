@@ -1181,8 +1181,54 @@ CREATE TABLE public.avaliacoes (
 
 
 ```
+# RESPOSTA
+```
+-- =========================================================================
+-- CRIAÇÃO DA VIEW: ver_servicos_destacados
+-- =========================================================================
 
+CREATE OR REPLACE VIEW public.ver_servicos_destacados AS
+SELECT 
+    -- Dados primários do Serviço
+    s.id AS servico_id,
+    s.created_at AS servico_criado_em,
+    s.titulo AS servico_titulo,
+    s.descricao AS servico_descricao,
+    s.preco_estimado,
+    s.preco_detalhe,
+    s.foto_url AS servico_foto_url,
+    s.terceiro,
+    s.eu_mesmo,
+    s.whatsapp,
 
+    -- Dados relacionados da Categoria
+    c.id AS categoria_id,
+    c.tipo_de_categoria AS categoria_nome,
+
+    -- Dados relacionados do Autor (usuario_espelho)
+    u.id AS autor_id,
+    u.nome_completo AS autor_nome,
+    u.bio AS autor_bio,
+    u.avatar_url AS autor_avatar_url,
+
+    -- Métricas Agregadas de Avaliações
+    -- COALESCE substitui o valor nulo por 0 se não houver registros.
+    -- ROUND limita a média a duas casas decimais.
+    coalesce(round(avg(a.nota), 2), 0.00) AS avaliacao_media,
+    coalesce(count(a.id), 0) AS total_avaliacoes
+
+FROM public.servicos s
+LEFT JOIN public.categorias c ON s.categoria = c.id
+LEFT JOIN public.usuario_espelho u ON s.criado_por_usuario = u.id
+LEFT JOIN public.avaliacoes a ON s.id = a.servico_id
+
+-- Agrupamento obrigatório devido ao uso de AVG e COUNT.
+-- É necessário incluir todas as colunas não agregadas que estão no SELECT.
+GROUP BY 
+    s.id, 
+    c.id, 
+    u.id;
+```
 
 
 
