@@ -871,40 +871,41 @@ No navegador do outro dispositivo, acesse:
 
 ## ESTRUTURA UTILIZADA
 ````
-# Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
-# vamos usar um sistema de pastas separando paginas e funcionalidades, dividindo o projeto em varias partes menores.
+# Vou utilizar meu github para testes por isso vou separa por tipo de arquivo , pois uso a plataforma para testes e estudo.
+# tambem utilizo esta forma devido os codigos python criados a cima para altomatizar o processo , utiliso prefixos para separar os arquivos de cada projeto.
 
-erp_abp/
-!_index.html
-!_ .gitignore
-!
-!_ link_rel_styleshet_href
-!    !_ style.css
-!
-!_ script_src/
-!    !_ model/
-!    !    !_ supabase_config.js
-!    !    !_ listar_nome_das_tabelas.js
-!    !    !_ listar_campos_da_tabela.js
-!    !  
-!    !  
-!    !_ controller/
-!    !    !_ variaveis_e_constantes.js
-!    ! 
-!    !_ vew/
-!    !    !_ teste_conexao.html
-
-
-
-        
-
+aristidesbp.github.io
+├── assets
+│   ├── apk
+│   ├── css
+│   ├── docx
+│   ├── html
+│   ├── jpeg
+│   ├── jpg
+│   ├── json
+│   ├── md
+│   ├── pdf
+│   ├── png
+│   ├── py
+│   ├── rels
+│   ├── sql
+│   ├── toml
+│   ├── ts
+│   ├── txt
+│   ├── xml
+│   └── zip
+│ 
+├── index.html
+├── limpar_duplicado.py
+├── organizar.py
+└── README.md 
 ````
 
-## EXEMPLO DE CHAMADAS NA PASTA DENTRO DA PASTA FINANCERIO
+## EXEMPLO DE CHAMADAS ENTRE PASTAS 
 ```
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<link rel="stylesheet href="financeiro.css">
-<script src="../supabase/supabase_config.js"></script>
+<script src="../js/supabase_config.js"></script>
+<link rel="stylesheet href="../css/financeiro.css">
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -1435,6 +1436,7 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## supabase_config.js (funcionado)
