@@ -1031,6 +1031,98 @@ CREATE TRIGGER on_auth_user_created
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
 
+### Para popular essas tabelas de forma mockada e funcional, precisamos seguir a ordem lógica de dependência das chaves estrangeiras.
+
+Atenção ao ponto crítico: Como sua tabela usuario_espelho aponta obrigatoriamente para auth.users, o script abaixo inclui a inserção de dois usuários fictícios diretamente na tabela do sistema do Supabase (auth.users) para que os dados de teste não quebrem por restrição de chave estrangeira.
+
+**OBSERVAÇÃO: NAO ESTARAM NO Authentication/Users**
+
+Rode o script completo no seu SQL Editor:
+
+```
+-- =========================================================================
+-- SCRIPT DE POPULAÇÃO DE DADOS (SEED DATA)
+-- =========================================================================
+
+-- Certifique-se de que a extensão para gerar UUIDs está ativa (caso não esteja)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 1. POPULAR: auth.users (Tabela nativa do Supabase)
+-- IDs estáticos criados manualmente via UUID para amarrar os relacionamentos abaixo
+INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_user_meta_data)
+VALUES 
+    ('a1111111-1111-1111-1111-111111111111', 'jose.silva@email.com', 'password_hash_mock', now(), '{"full_name": "José Silva"}'),
+    ('b2222222-2222-2222-2222-222222222222', 'maria.souza@email.com', 'password_hash_mock', now(), '{"full_name": "Maria Souza"}')
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. POPULAR: public.categorias
+INSERT INTO public.categorias (tipo_de_categoria) 
+VALUES 
+    ('Assistência Técnica'),
+    ('Aulas Particulares'),
+    ('Reformas e Reparos'),
+    ('Beleza e Estética')
+ON CONFLICT DO NOTHING;
+
+-- 3. POPULAR: public.usuario_espelho
+-- Mapeando os IDs do auth.users criados no passo 1
+INSERT INTO public.usuario_espelho (auth_users_id, nome_completo, bio, avatar_url)
+VALUES 
+    ('a1111111-1111-1111-1111-111111111111', 'José Silva', 'Desenvolvedor freelancer e técnico de informática nas horas vagas.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jose'),
+    ('b2222222-2222-2222-2222-222222222222', 'Maria Souza', 'Professora de matemática focada em ensino fundamental e médio.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria')
+ON CONFLICT DO NOTHING;
+
+-- 4. POPULAR: public.servicos
+-- Vincula IDs gerados dinamicamente das categorias (1 e 2) e usuários (1 e 2)
+INSERT INTO public.servicos (
+    titulo, descricao, categoria, preco_estimado, preco_detalhe, foto_url, criado_por_usuario, terceiro, eu_mesmo, whatsapp
+)
+VALUES 
+    (
+        'Formatação de Computador e Notebook', 
+        'Instalação de Sistema Operacional, backup de dados e configuração de drivers.', 
+        1, -- Categoria: Assistência Técnica
+        150.00, 
+        'Preço fixo para computadores domésticos. Adicionais de softwares sob consulta.', 
+        'https://images.unsplash.com/photo-1588508065123-287b28e013da', 
+        1, -- Criado por: José Silva
+        false, 
+        true, 
+        '5511999999999'
+    ),
+    (
+        'Aula Particular de Álgebra e Cálculo', 
+        'Aulas focadas em preparação para o ENEM, vestibulares e reforço escolar universitário.', 
+        2, -- Categoria: Aulas Particulares
+        80.00, 
+        'Valor cobrado por hora/aula. Pacotes mensais têm desconto.', 
+        'https://images.unsplash.com/photo-1434030216411-0b793f4b4173', 
+        2, -- Criado por: Maria Souza
+        false, 
+        true, 
+        '5511988888888'
+    );
+
+-- 5. POPULAR: public.favoritos
+-- Simulação: O usuário 2 (Maria) favoritou o serviço do usuário 1 (José)
+INSERT INTO public.favoritos (usuario_id, servico_id)
+VALUES 
+    (2, 1);
+
+-- 6. POPULAR: public.avaliacoes
+-- Simulação: O usuário 2 (Maria) avaliou o serviço do usuário 1 (José)
+INSERT INTO public.avaliacoes (servico_id, author_id, nota, comentario)
+VALUES 
+    (1, 2, 5, 'Excelente profissional! Meu notebook ficou muito rápido e o atendimento foi excelente.');
+
+```
+
+
+
+
+
+
+
 
 
 
