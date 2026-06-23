@@ -383,10 +383,8 @@ rm -rf nome_da_pasta
 ```
 pkg update && pkg upgrade
 pkg install python ffmpeg
-
-```
-```
 python3 -m pip install --upgrade yt-dlp
+
 ```
 ```
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
