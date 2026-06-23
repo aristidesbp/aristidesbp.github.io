@@ -1019,6 +1019,23 @@ CREATE TRIGGER on_auth_user_created
     EXECUTE FUNCTION public.handle_new_user();
 
 ```
+# EXEMPLO DE COMO APAGAR UMA FUNÇÃO
+
+```
+-- =========================================================================
+-- SCRIPT PARA REMOÇÃO DE FUNÇÃO DE EVENT TRIGGER
+-- =========================================================================
+
+-- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
+-- também seja removido, evitando erros de objetos dependentes.
+DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
+```
+
+
+
+
+
+
 # Habilita RLS (Row Level Security)
 ```
 
