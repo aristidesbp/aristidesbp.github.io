@@ -893,8 +893,7 @@ CREATE TABLE public.usuario_espelho (
 
 -- 3. TABELA: servicos
 -- Depende de 'categorias' e 'usuario_espelho'.
--- CORREÇÕES: 'descriao' -> 'descricao', 'whatsap' -> 'whatsapp'.
--- ALTERAÇÃO: 'double precision' -> 'numeric(10,2)' para evitar erros de ponto flutuante em valores monetários.
+-- OBSERVAÇÃO: 'double precision' -> 'numeric(10,2)' para evitar erros de ponto flutuante em valores monetários.
 CREATE TABLE public.servicos (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -950,6 +949,9 @@ CREATE TABLE public.avaliacoes (
     CONSTRAINT avaliacoes_nota_check CHECK (nota >= 1 AND nota <= 5)
 );
 ```
+
+
+
 # Prompt para criar functions trigger
 
 ```
