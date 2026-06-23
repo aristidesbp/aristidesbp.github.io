@@ -62,8 +62,7 @@ Observação: A Última Linha NUNCA tem vírgula: Se não houver mais nada depoi
 * [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
 
 # Poque uso nos meus promptes?
-3. Por que a sua estratégia de usar JSON/MD funciona? (A Verdadeira Razão)
-Você achou a solução certa pelo motivo técnico errado. Usar blocos estruturados como JSON ou Markdown funciona muito bem por dois motivos reais:
+A traves de testes de jogos RPG interativos com IA, constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens fora do contesto, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
 
 Ancoragem de Atenção: Modelos de linguagem (LLMs) são excelentes em reconhecer padrões estruturados. Quando você força a IA a reescrever ou ler um JSON com chaves fixas ("historico_tarefas_concluidas", "localizacao_atual"), você está obrigando o mecanismo de atenção da IA a focar e atualizar esses pontos específicos.
 
