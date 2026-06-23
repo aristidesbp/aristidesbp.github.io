@@ -37,6 +37,34 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
   
 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# As 4 Regras de Ouro do JSON
+* Tudo começa e termina com Chaves { }: Elas representam o objeto principal.
+* Chaves sempre usam Aspas Duplas "": Nunca use aspas simples '' e nunca deixe a chave sem aspas.
+* Certo: "nome": "Aristides"   , Errado: 'nome': "Aristides" ou nome: "Aristides"
+* Separadores Obrigatórios:  Use dois pontos (:) para separar a chave do valor. Use vírgula (,) para separar um par de dados do próximo.
+
+Observação: A Última Linha NUNCA tem vírgula: Se não houver mais nada depois daquele dado, colocar uma vírgula quebra o código.
+
+# Os Tipos de Dados Permitidos
+## O JSON só aceita estes tipos de valores:
+* Texto (String): Sempre entre aspas duplas. "profissao": "Mestre de RPG"
+* Número (Number): Fora das aspas. "nivel": 1 ou "peso": 75.5
+* Booleano (Boolean): true ou false (letras minúsculas e sem aspas). "ativo": true
+* Nulo (Null): null (sem aspas). "modificador": null
+* Objeto (Object): Outro grupo de chaves {} lá dentro.
+* Lista (Array): Uma lista de coisas dentro de colchetes [].
+
+# A Diferença Crucial: Chaves {} vs Colchetes []
+## Este é o erro mais comum. Memorize isto:
+* { } CHAVES (Objeto): Guarda pares de "chave": "valor". Exige que você dê um nome para cada informação.
+* [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
+
+# Poque uso nos meus promptes?
+Toda ves que interagimos com uma IA geramos textos que ela ira revizar para intender o contexto, isso almenta o uso da memoria, ja os arquivos ela ira iguinorar, vai ler apenas o ultimo.
+OBS: as testadas por min tendem a esquecer por volta de 20.000 a 25.000 caracteres, mandadando respostas fora do contexto por isso uso estes arquivos para criar uma memoria percistente iguais como no .md
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ASSITENTE DE SUPORTE
 
