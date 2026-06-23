@@ -1229,8 +1229,35 @@ GROUP BY
     c.id, 
     u.id;
 ```
+# Criar políticas de segurança diretamente pelo SQL Editor é muito mais seguro e idempotente (pode ser executado várias vezes sem quebrar).
 
+O script abaixo garante que o RLS esteja explicitamente ativado na tabela, remove qualquer lixo ou tentativa anterior com o mesmo nome e cria a regra apontando para o campo correto (auth_users_id).
+```
+-- =========================================================================
+-- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: usuario_espelho
+-- =========================================================================
 
+-- 1. Garante que o Row Level Security está ativado na tabela
+ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
+
+-- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
+DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
+
+-- 3. Criação da política de acesso estrita
+CREATE POLICY "User Propietario" 
+ON public.usuario_espelho
+AS PERMISSIVE
+FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
+TO authenticated -- Aplica-se apenas a usuários logados no sistema
+USING (
+    -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
+    auth_users_id = auth.uid()
+) 
+WITH CHECK (
+    -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
+    auth_users_id = auth.uid()
+);
+```
 
 
 
