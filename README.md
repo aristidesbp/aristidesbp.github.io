@@ -869,6 +869,86 @@ No navegador do outro dispositivo, acesse:
 
 ![imagem supabase](assets/png/postgresql_e_supabase.png)
 
+## ESTRUTURA UTILIZADA
+````
+# Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
+# vamos usar um sistema de pastas separando paginas e funcionalidades, dividindo o projeto em varias partes menores.
+
+erp_abp/
+!_index.html
+!_ .gitignore
+!
+!_ link_rel_styleshet_href
+!    !_ style.css
+!
+!_ script_src/
+!    !_ model/
+!    !    !_ supabase_config.js
+!    !    !_ listar_nome_das_tabelas.js
+!    !    !_ listar_campos_da_tabela.js
+!    !  
+!    !  
+!    !_ controller/
+!    !    !_ variaveis_e_constantes.js
+!    ! 
+!    !_ vew/
+!    !    !_ teste_conexao.html
+
+
+
+        
+
+````
+
+## EXEMPLO DE CHAMADAS NA PASTA DENTRO DA PASTA FINANCERIO
+```
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<link rel="stylesheet href="financeiro.css">
+<script src="../supabase/supabase_config.js"></script>
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## .gitignore
+```
+supabase_config.js
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+## Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
+## Escolha:
+* Nome do projeto: nome_do_seu_projeto
+* Senha do banco: ***********
+* Região: brasil
+
+--- 
+
+## Configurar
+
+* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
+* Authentication/Users: voçẽ pode criar um novo usuario.
+
+## Ativar extençoes
+
+```
+-- =========================================================================
+-- COMO FAZER ATIVAÇÃO DAS EXTENSÕES VIA SQL
+-- =========================================================================
+
+-- 1. Ativa o suporte para ignorar acentos (ex: "oração" vira "oracao" na busca)
+CREATE EXTENSION IF NOT EXISTS "unaccent";
+
+-- 2. Ativa a busca inteligente por aproximação (corrige pequenos erros de digitação)
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- 3. Ativa o gerador de códigos de segurança para o login dos irmãos
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+```
+
+
 # EXEMPLO DE SQL PARA CRIAR TABELAS 
 ```
 -- =========================================================================
@@ -1356,68 +1436,6 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
 
-
-## ESTRUTURA UTILIZADA
-````
-# Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
-# vamos usar um sistema de pastas separando paginas e funcionalidades, dividindo o projeto em varias partes menores.
-
-erp_abp/
-!_index.html
-!_ .gitignore
-!
-!_ link_rel_styleshet_href
-!    !_ style.css
-!
-!_ script_src/
-!    !_ model/
-!    !    !_ supabase_config.js
-!    !    !_ listar_nome_das_tabelas.js
-!    !    !_ listar_campos_da_tabela.js
-!    !  
-!    !  
-!    !_ controller/
-!    !    !_ variaveis_e_constantes.js
-!    ! 
-!    !_ vew/
-!    !    !_ teste_conexao.html
-
-
-
-        
-
-````
-
-## EXEMPLO DE CHAMADAS NA PASTA DENTRO DA PASTA FINANCERIO
-```
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<link rel="stylesheet href="financeiro.css">
-<script src="../supabase/supabase_config.js"></script>
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## .gitignore
-```
-supabase_config.js
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-## Criar conta e projeto
-* Acesse: https://supabase.com
-* Crie uma conta
-* Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
-
---- 
-
-## Configurar
-
-* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
-* Authentication/Users: voçẽ pode criar um novo usuario.
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## supabase_config.js (funcionado)
 ```
@@ -1428,6 +1446,7 @@ const SUPABASE_URL = 'Data_api/url';
 console.log("✅ supabase_config.js");
 
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## login.html (funcionando)
 ```
