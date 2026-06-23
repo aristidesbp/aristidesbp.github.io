@@ -1187,7 +1187,7 @@ CREATE TABLE public.avaliacoes (
 -- CRIAÇÃO DA VIEW: ver_servicos_destacados
 -- =========================================================================
 
-CREATE OR REPLACE VIEW public.ver_servicos_destacados AS
+CREATE OR REPLACE VIEW public.ver_servicos_destacados with (security_invoker) AS
 SELECT 
     -- Dados primários do Serviço
     s.id AS servico_id,
