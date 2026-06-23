@@ -871,8 +871,10 @@ No navegador do outro dispositivo, acesse:
 
 ## ESTRUTURA UTILIZADA
 ````
-# Vou utilizar meu github para testes por isso vou separa por tipo de arquivo , pois uso a plataforma para testes e estudo.
-# tambem utilizo esta forma devido os codigos python criados a cima para altomatizar o processo , utiliso prefixos para separar os arquivos de cada projeto.
+# usarei SUPABASE E GITHUB_PAGES para esse projeto.
+# Utilizo meu github para testes e estudos, por isso vou separa por tipo de arquivo .
+# tambem utilizo desta forma devido automação em python que utilizo para organizar arquivos.
+# utiliso prefixos para separar e identificar os arquivos de cada projeto dentro das pastas.
 
 aristidesbp.github.io
 ├── assets
