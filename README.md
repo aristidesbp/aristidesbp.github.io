@@ -64,7 +64,21 @@ Observação: A Última Linha NUNCA tem vírgula: Se não houver mais nada depoi
 # Poque uso nos meus promptes?
 Toda ves que interagimos com uma IA geramos textos que ela ira revizar para intender o contexto, isso almenta o uso da memoria, ja os arquivos ela ira iguinorar, vai ler apenas o ultimo.
 OBS: as testadas por min tendem a esquecer por volta de 20.000 a 25.000 caracteres, mandadando respostas fora do contexto por isso uso estes arquivos para criar uma memoria percistente iguais como no .md
-
+## exemplo
+```
+{
+  "nome_do_jogo": "RPG de Mesa",
+  "atributos_do_jogador": {    
+    "forca": 10,
+    "agilidade": 12
+  },
+  "itens_na_mochila": [
+    "Espada",
+    "Escudo",
+    "Pocao de Cura"
+  ]
+}
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ASSITENTE DE SUPORTE
 
