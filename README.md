@@ -858,6 +858,7 @@ No navegador do outro dispositivo, acesse:
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL
+![imagem supabase](assets/png/postgresql_e_supabase.png)
 
 # Prompt para criar functions trigger
 
