@@ -81,6 +81,7 @@ aristides(habilidade=9/9,energia=22/22,sorte=8/8,sono=0/100, fome=0/100)
 - ABSOLUTAMENTE sempre No final de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO STATUS DO GRUPO E AS REGRAS.  de forma completas com as regras ezatamente igual de forma atualizada e completa. O objetivo é manter uma memória persistente de contexto e regras para as aventuras nao perder a coerencia. 
 ```
 
+![imagem agente de suporte](assets/png/suporte.png)
 ```
 
 # PERFIL E DIRETRIZES GERAIS
