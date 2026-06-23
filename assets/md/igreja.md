@@ -41,7 +41,7 @@ Abra o seu SQL Editor, cole o script abaixo e clique em Run:
 
 ```
 -- =========================================================================
--- TAREFA 7: CRIAÇÃO DA TABELA DE MENSAGENS (CHAT) E CONFIGURAÇÃO REALTIME
+-- TAREFA 7 (CORRIGIDA): CRIAÇÃO DA TABELA DE MENSAGENS E REALTIME SAFE
 -- =========================================================================
 
 -- 1. Criação da Tabela seguindo a arquitetura de IDs int8
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS public.mensagens (
 -- 2. Ativação do Row Level Security (RLS) para proteção de dados privados
 ALTER TABLE public.mensagens ENABLE ROW LEVEL SECURITY;
 
--- Remove políticas antigas se existirem (evita erros em execuções repetidas)
+-- Limpeza preventiva de políticas antigas
 DROP POLICY IF EXISTS "Usuários podem ler suas próprias conversas" ON public.mensagens;
 DROP POLICY IF EXISTS "Usuários podem enviar mensagens" ON public.mensagens;
 
@@ -85,9 +85,18 @@ WITH CHECK (
     remetente_id IN (SELECT id FROM public.usuario_espelho WHERE auth_users_id = auth.uid())
 );
 
--- 5. Habilitar o Realtime do Supabase nesta tabela via banco de dados
--- Remove a tabela da publicação caso ela já estivesse lá para evitar duplicidade
-ALTER PUBLICATION supabase_realtime DROP TABLE IF EXISTS public.mensagens;
--- Insere a tabela de mensagens na lista oficial de escuta em tempo real
-ALTER PUBLICATION supabase_realtime ADD TABLE public.mensagens;
+-- 5. Habilitar o Realtime de forma segura (Idempotente)
+-- Verifica dinamicamente nos metadados se a tabela já pertence à publicação antes de tentar inseri-la
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+          AND schemaname = 'public' 
+          AND tablename = 'mensagens'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.mensagens;
+    END IF;
+END $$;
 ```
