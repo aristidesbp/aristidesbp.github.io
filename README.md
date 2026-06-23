@@ -856,8 +856,16 @@ No navegador do outro dispositivo, acesse:
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SQL
+
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PROJETOS COM O SUPABASE E GITHUB_PAGES
+
 ![imagem supabase](assets/png/postgresql_e_supabase.png)
 
 # EXEMPLO DE SQL PARA CRIAR TABELAS 
@@ -1348,12 +1356,6 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 ```
 
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# PROJETOS COM O SUPABASE E GITHUB_PAGES
 ## ESTRUTURA UTILIZADA
 ````
 # Vamos criar um sistema ERP completo, no qual iremos hospedar no github_pages, e integrar o db com Supabase.
