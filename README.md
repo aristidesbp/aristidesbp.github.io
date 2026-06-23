@@ -858,6 +858,46 @@ No navegador do outro dispositivo, acesse:
 
 # INSTALL DOCKER E COMPILADOR PARA ANDROID
 ```
+{
+  "lista_de_tarefas": true,
+  "diagnostico_atual": "O arquivo APK 'ControleFinanceiro-debug.apk' foi gerado e localizado com sucesso. O fluxo de desenvolvimento e compilação ponta a ponta via CLI foi totalmente concluído.",
+  "proxima_tarefa_pendente": "Opcional: Extrair o APK do container para a máquina hospedeira para instalação ou encerramento do laboratório.",
+  "historico_tarefas_concluidas": [
+    { "id": 1, "objetivo": "Verificar docker", "tarefa": "docker --version", "status": "ok" },
+    { "id": 2, "objetivo": "Instalar dependências", "tarefa": "sudo apt-get update && sudo apt-get install ca-certificates curl gnupg", "status": "ok" },
+    { "id": 3, "objetivo": "Chave GPG", "tarefa": "sudo install -m 0755 -d /etc/apt/keyrings; sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc; sudo chmod a+r /etc/apt/keyrings/docker.asc", "status": "ok" },
+    { "id": 4, "objetivo": "Adicionar repositório", "tarefa": "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$UBUNTU_CODENAME\") stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null", "status": "ok" },
+    { "id": 5, "objetivo": "Instalar engine", "tarefa": "sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin", "status": "ok" },
+    { "id": 6, "objetivo": "Teste", "tarefa": "sudo docker run hello-world", "status": "ok" },
+    { "id": 7, "objetivo": "Permissões", "tarefa": "sudo groupadd docker; sudo usermod -aG docker $USER", "status": "ok" },
+    { "id": 8, "objetivo": "Estrutura", "tarefa": "mkdir meu-projeto-android && cd meu-projeto-android && nano Dockerfile", "status": "ok" },
+    { "id": 9, "objetivo": "Build", "tarefa": "docker build -t android-dev .", "resumo": "Imagem compilada com sucesso.", "status": "ok" },
+    { "id": 10, "objetivo": "Licenças", "tarefa": "docker run --rm -it android-dev sdkmanager --licenses", "resumo": "Licenças aceitas via terminal.", "status": "ok" },
+    { "id": 11, "objetivo": "Execução com volume", "tarefa": "docker run -it -v $(pwd):/app android-dev bash", "resumo": "Ambiente validado e funcional.", "status": "ok" }
+    { "id": 12, "status": "ok", "objetivo": "Planejamento", "tarefa": "Definição de escopo para App de Finanças" },
+    { "id": 13, "status": "ok", "objetivo": "Arquitetura de Dados", "tarefa": "Definir SQLite/Room" },
+    { "id": 17, "status": "ok", "objetivo": "Instalar utilitários", "tarefa": "apt-get install nano -y" },
+    { "id": 14, "status": "ok", "objetivo": "Criar Entidade", "tarefa": "Transacao.kt (Modelo de dados)" },
+    { "id": 15, "status": "ok", "objetivo": "Criar DAO", "tarefa": "TransacaoDao.kt (Acesso a dados)" },
+    { "id": 16, "status": "ok", "objetivo": "Criar Banco de Dados", "tarefa": "AppDatabase.kt (Motor Room)" },
+    { "id": 18, "status": "ok", "objetivo": "Criar Repositório", "tarefa": "TransacaoRepository.kt (Mediação de dados)" },
+    { "id": 19, "status": "ok", "objetivo": "Criar ViewModel", "tarefa": "TransacaoViewModel.kt (Estado da UI)" },
+    { "id": 20, "status": "ok", "objetivo": "Criar Interface de Usuário", "tarefa": "MainActivity.kt (Interface Jetpack Compose)" },
+    { "id": 21, "status": "ok", "objetivo": "Organizar Diretórios", "tarefa": "Mover arquivos para a estrutura de pacotes src/main/java/..." },
+    { "id": 22, "status": "ok", "objetivo": "Configurar Dependências", "tarefa": "Ajustar build.gradle.kts com as versões dos plugins" },
+    { "id": 23, "status": "ok", "objetivo": "Configurar Manifesto", "tarefa": "Criar AndroidManifest.xml para mapear a abertura do app" },
+    { "id": 24, "status": "ok", "objetivo": "Configurar Repositórios", "tarefa": "Criar settings.gradle.kts" },
+    { "id": 25, "status": "ok", "objetivo": "Instalar Compilador", "tarefa": "Baixar e estruturar o Gradle 8.4 no container" },
+    { "id": 27, "status": "ok", "objetivo": "Licenças do Android SDK", "tarefa": "Aceitar termos via sdkmanager" },
+    { "id": 28, "status": "ok", "objetivo": "Mapeamento AndroidX", "tarefa": "Configurar arquivo gradle.properties" },
+    { "id": 29, "status": "ok", "objetivo": "Ajuste de Paridade", "tarefa": "Compatibilizar Compose Compiler (1.5.3) com Kotlin (1.9.10)" },
+    { "id": 30, "status": "ok", "objetivo": "Artefato Final", "tarefa": "Gerar e verificar o executável ControleFinanceiro-debug.apk" }
+  ]
+}
+
+```
+# YAML
+```
 lista_de_tarefas: true
 diagnostico_atual: "O arquivo APK 'ControleFinanceiro-debug.apk' foi gerado e localizado com sucesso. O fluxo de desenvolvimento e compilação ponta a ponta via CLI foi totalmente concluído."
 proxima_tarefa_pendente: "Opcional: Extrair o APK do container para a máquina hospedeira para instalação ou encerramento do laboratório."
