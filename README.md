@@ -1258,55 +1258,44 @@ WITH CHECK (
     auth_users_id = auth.uid()
 );
 ```
+### OBSERVAÇÃO:
+No PostgreSQL, as políticas RLS funcionam em modo OR (OU) por padrão. Se a política Ver Ususario permite que qualquer autenticado dê SELECT, a política User Propietario também tentar gerenciar o SELECT vai causar redundância ou brechas. O correto para um app de indicações é separar os privilégios de forma granular (Leitura para todos, Escrita apenas para o dono).
 
+Vamos corrigir isso agora e deixar o ambiente profissional. Rode o script abaixo no SQL Editor. Ele vai apagar a política genérica de escrita/leitura misturada e configurar as regras divididas por comando.
 
-
-
-
-
-
-# Habilita RLS (Row Level Security)
 ```
+-- =========================================================================
+-- REESTRUTURAÇÃO GRANULAR DE RLS - TABELA: usuario_espelho
+-- =========================================================================
 
--- 4. Habilita RLS (Row Level Security) - Boa prática para segurança
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+-- 1. Garante que o RLS está ativo
+ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
 
--- 5. Recria a função de integração com Auth
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger
-LANGUAGE plpgsql
-SECURITY DEFINER 
-SET search_path = public
-AS $$
-BEGIN
-  INSERT INTO public.entides (user_id_auth, nome_completo, role)
-  VALUES (
-    new.id, 
-    new.raw_user_meta_data->>'full_name', 
-    'cliente'
-  );
-  RETURN new;
-END;
-$$;
+-- 2. Limpa as políticas antigas para evitar sobreposição de regras
+DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "Ver Ususario" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "Permitir Leitura Geral" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "Modificacao Apenas Proprietario" ON public.usuario_espelho;
 
--- 6. Recria o trigger
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+-- -------------------------------------------------------------------------
+-- REGRA 1: LEITURA (Qualquer usuário autenticado pode ver o perfil dos outros)
+-- -------------------------------------------------------------------------
+CREATE POLICY "Permitir Leitura Geral"
+ON public.usuario_espelho
+FOR SELECT -- Aplica-se EXCLUSIVAMENTE ao comando SELECT
+TO authenticated -- Qualquer usuário logado no sistema
+USING ( true ); -- Retornar 'true' significa acesso liberado para leitura de qualquer linha
 
--- 7. Política básica de RLS (Opcional, mas recomendada)
-CREATE POLICY "Usuários podem ver o próprio perfil" ON public.entidades
-FOR SELECT USING (auth.uid() = user_id_auth);
-```
+-- -------------------------------------------------------------------------
+-- REGRA 2: ESCRITA E MODIFICAÇÃO (Inserir, Alterar e Deletar APENAS o próprio perfil)
+-- -------------------------------------------------------------------------
+CREATE POLICY "Modificacao Apenas Proprietario"
+ON public.usuario_espelho
+FOR ALL -- Neste novo contexto, cobrirá INSERT, UPDATE e DELETE (já que o SELECT está isolado acima)
+TO authenticated
+USING ( auth_users_id = auth.uid() )
+WITH CHECK ( auth_users_id = auth.uid() );
 
-
-# APAGANDO FUNCTIONS A FORÇA
-```
--- Força a exclusão da função on_auth_user_created 
-DROP FUNCTION IF EXISTS public.on_auth_user_created() CASCADE;
-
--- Se quiser aproveitar e forçar a limpeza da handle_new_user também, rode esta:
-DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
 ```
 
 
@@ -1346,6 +1335,7 @@ SELECT nome, role
 FROM public.entidades
 WHERE role = 'paciente';
 ```
+
 ## DELETAR 
 ```
 -- DELETE (Excluir / Apagar)
