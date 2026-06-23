@@ -39,27 +39,13 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# As 4 Regras de Ouro do JSON
-* Tudo começa e termina com Chaves { }: Elas representam o objeto principal.
-* Chaves sempre usam Aspas Duplas "": Nunca use aspas simples '' e nunca deixe a chave sem aspas.
-* Certo: "nome": "Aristides"   , Errado: 'nome': "Aristides" ou nome: "Aristides"
-* Separadores Obrigatórios:  Use dois pontos (:) para separar a chave do valor. Use vírgula (,) para separar um par de dados do próximo.
+### Comparação de Formatos de Dados para Engenharia de Prompt que utlizo para memoria persistente
 
-Observação: A Última Linha NUNCA tem vírgula: Se não houver mais nada depois daquele dado, colocar uma vírgula quebra o código.
-
-# Os Tipos de Dados Permitidos
-## O JSON só aceita estes tipos de valores:
-* Texto (String): Sempre entre aspas duplas. "profissao": "Mestre de RPG"
-* Número (Number): Fora das aspas. "nivel": 1 ou "peso": 75.5
-* Booleano (Boolean): true ou false (letras minúsculas e sem aspas). "ativo": true
-* Nulo (Null): null (sem aspas). "modificador": null
-* Objeto (Object): Outro grupo de chaves {} lá dentro.
-* Lista (Array): Uma lista de coisas dentro de colchetes [].
-
-# A Diferença Crucial: Chaves {} vs Colchetes []
-## Este é o erro mais comum. Memorize isto:
-* { } CHAVES (Objeto): Guarda pares de "chave": "valor". Exige que você dê um nome para cada informação.
-* [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
+| Formato | Foco Principal | Vantagens | Desvantagens | Consumo de Tokens |
+| :--- | :--- | :--- | :--- | :--- |
+| **JSON** | Intercâmbio de dados entre sistemas (APIs). | * Rigidez absoluta.<br>* Padrão universal na web.<br>* Suporte nativo em qualquer linguagem. | * Sintaxe verbosa (muitas aspas, chaves e vírgulas).<br>* Fácil de quebrar por erro humano.<br>* Difícil de ler/escrever manualmente em chats. | **Alto** (Sintaxe consome espaço precioso). |
+| **YAML** | Arquivos de configuração e dados legíveis. | * Extremamente limpo (sem chaves ou vírgulas).<br>* Economiza espaço (tokens).<br>* Altamente legível por humanos e IAs. | * Depende estritamente de espaços (identação).<br>* Um espaço errado pode mudar a hierarquia do dado.<br>* Menos tolerante a tabs acidentais. | **Baixo/Médio** (Focado apenas no conteúdo essencial). |
+| **Markdown** | Formatação de documentos e textos ricos. | * Imune a erros de sintaxe (não quebra o chat).<br>* Perfeito para instruções, regras e descrições textuais.<br>* Visualmente agradável para o usuário. | * Ruim para armazenar dados matemáticos estruturados.<br>* A IA pode variar a formatação ao longo do tempo.<br>* Não serve como "banco de dados" rígido. | **Baixo** (Usa poucos caracteres especiais). |
 
 # Poque uso nos meus promptes?
 A traves de testes de jogos RPG interativos com IA, constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens fora do contesto, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
@@ -67,6 +53,28 @@ A traves de testes de jogos RPG interativos com IA, constatei que  ao atigir med
 Ancoragem de Atenção: Modelos de linguagem (LLMs) são excelentes em reconhecer padrões estruturados. Quando você força a IA a reescrever ou ler um JSON com chaves fixas ("historico_tarefas_concluidas", "localizacao_atual"), você está obrigando o mecanismo de atenção da IA a focar e atualizar esses pontos específicos.
 
 Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa confusa para saber onde o personagem está, ela lê apenas as poucas linhas do último JSON resumido. É um "Save State" de videogame.
+
+# As 4 Regras de Ouro do JSON
+* Tudo começa e termina com Chaves { }: Elas representam o objeto principal.
+* Chaves sempre usam Aspas Duplas "": Nunca use aspas simples '' e nunca deixe a chave sem aspas.
+* Certo: "nome": "Aristides"   , Errado: 'nome': "Aristides" ou nome: "Aristides"
+* Separadores Obrigatórios:  Use dois pontos (:) para separar a chave do valor. Use vírgula (,) para separar um par de dados do próximo.
+
+**Observação:** A Última Linha NUNCA tem vírgula: Se não houver mais nada depois daquele dado, colocar uma vírgula quebra o código.
+
+## Tipos de Dados Permitidos o JSON só aceita estes tipos de valores:
+* Texto (String): Sempre entre aspas duplas. "profissao": "Mestre de RPG"
+* Número (Number): Fora das aspas. "nivel": 1 ou "peso": 75.5
+* Booleano (Boolean): true ou false (letras minúsculas e sem aspas). "ativo": true
+* Nulo (Null): null (sem aspas). "modificador": null
+* Objeto (Object): Outro grupo de chaves {} lá dentro.
+* Lista (Array): Uma lista de coisas dentro de colchetes [].
+
+## A Diferença Crucial: Chaves {} vs Colchetes []
+## Este é o erro mais comum. Memorize isto:
+* { } CHAVES (Objeto): Guarda pares de "chave": "valor". Exige que você dê um nome para cada informação.
+* [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
+
 
 ## exemplo
 ```
@@ -84,15 +92,15 @@ Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa 
 }
 ```
 
-# Criar um arquivo YAML é muito simples porque você não precisa gerenciar chaves {} ou vírgulas. Você só precisa dominar a identação (os espaços no início da linha).
-## Aqui estão as 3 regras fundamentais para criar qualquer arquivo YAML:
+# ARQUIVO YAML (regras fundamentais)
+ *Criar um arquivo YAML é muito simples porque você não precisa gerenciar chaves {} ou vírgulas. Você só precisa dominar a identação (os espaços no início da linha).
 
-## 1. As Regras de Espaçamento (Identação)
+## As Regras de Espaçamento (Identação)
 * No YAML, a hierarquia é definida por espaços. Se um dado está "dentro" de outro, ele deve ter 2 espaços de recuo.
 * PROIBIDO usar a tecla TAB: O YAML aceita apenas espaços puros (aperte a barra de espaço duas vezes). O TAB quebra o arquivo.
 * Use dois pontos : seguido de obrigatoriamente um espaço para separar a chave do valor.
 
-## 2. Os 3 Elementos Básicos do YAML
+##  Os Elementos Básicos do YAML
 
 ### A) Variável Simples (Texto ou Número)
 Apenas a chave, dois pontos, um espaço e o valor. Não precisa de aspas (a menos que o texto tenha caracteres muito estranhos).
@@ -119,16 +127,6 @@ itens_aristides:
   - 1 pergaminho do terremoto
   - 2 porções de previsões
 ```
-## 3. O Seu Arquivo de RPG convertido para YAML
-Para salvar no seu computador, basta abrir o Bloco de Notas ou o VS Code, colar o código abaixo e salvar o arquivo com o nome status_rpg.yaml ou status_rpg.yml.
-
-### Comparação de Formatos de Dados para Engenharia de Prompt
-
-| Formato | Foco Principal | Vantagens | Desvantagens | Consumo de Tokens |
-| :--- | :--- | :--- | :--- | :--- |
-| **JSON** | Intercâmbio de dados entre sistemas (APIs). | * Rigidez absoluta.<br>* Padrão universal na web.<br>* Suporte nativo em qualquer linguagem. | * Sintaxe verbosa (muitas aspas, chaves e vírgulas).<br>* Fácil de quebrar por erro humano.<br>* Difícil de ler/escrever manualmente em chats. | **Alto** (Sintaxe consome espaço precioso). |
-| **YAML** | Arquivos de configuração e dados legíveis. | * Extremamente limpo (sem chaves ou vírgulas).<br>* Economiza espaço (tokens).<br>* Altamente legível por humanos e IAs. | * Depende estritamente de espaços (identação).<br>* Um espaço errado pode mudar a hierarquia do dado.<br>* Menos tolerante a tabs acidentais. | **Baixo/Médio** (Focado apenas no conteúdo essencial). |
-| **Markdown** | Formatação de documentos e textos ricos. | * Imune a erros de sintaxe (não quebra o chat).<br>* Perfeito para instruções, regras e descrições textuais.<br>* Visualmente agradável para o usuário. | * Ruim para armazenar dados matemáticos estruturados.<br>* A IA pode variar a formatação ao longo do tempo.<br>* Não serve como "banco de dados" rígido. | **Baixo** (Usa poucos caracteres especiais). |
 
 
 
