@@ -136,7 +136,7 @@ itens_aristides:
 # JOGANDO COM IA
 
 ![imagem gamer master](assets/png/gamer_master.png)
-* Sugiro usar o json para caso queria escutar, não ler
+* Sugiro usar o json para caso queria escutar as aventuras, dominar o json ajuda a trabalhar com dados, voçê podera usar futuramente json para exporta dados para o supabase, esta contido neste material. 
   
 ```
 {
