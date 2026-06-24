@@ -750,10 +750,11 @@ proot-distro login ubuntu
 ```
 Prompt 
 
-criar uma  arquitetura full-stack (frontend e backend) para a plataforma
-"Vizinho Indica", um marketplace de serviços comunitário. O design deve
+criar uma  arquitetura full-stack (frontend com github-pages, backend com supabase) para a plataforma
+"Indicar Irmão", um marketplace de serviços comunitário da minha Igreja. O design deve
 ser Light Mode, moderno e acolhedor, utilizando a biblioteca Shadcn/UI e
-Tailwind CSS. O backend já está configurado no Supabase.
+Tailwind CSS. O backend será configurado no Supabase.(vou passar estrutura de pastas e o schema do banco no final da mensagem).
+
 Paleta de Cores e Estilo Visual:
 Fundo Principal (Light Mode): #F8FAFC (Slate 50 - cinza muito suave para
 conforto visual).
@@ -767,6 +768,7 @@ Texto Secundário/Corpo: #64748B (Slate 500).
 Card Background: #FFFFFF (Branco puro com sombras suaves shadow-sm).
 Gradiente: Use o gradiente linear-gradient(135deg, #059669, #34D399) para
 o Hero Section ou botões de destaque máximo.
+
 Estrutura de Páginas (Layouts): Gere o layout e o scaffolding conectando
 os componentes às tabelas do Supabase já existentes.
 A. Home (Vitrine de Serviços - Pública/Híbrida):
