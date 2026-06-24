@@ -9,9 +9,13 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
 
 ---
-## PROJETO COM SUPABASE
-* 🌐 **erp_abp_login** [ENTRAR](https://aristidesbp.github.io/assets/html/erp_abp_login.html)
+## 🚀 PROJETO EM DESTAQUE
 
+> [!TIP]
+> ### ERP ABP Login
+> Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
+> 
+> 🌐 **[CLIQUE AQUI PARA ENTRAR](https://aristidesbp.github.io/assets/html/erp_abp_login.html)**
 
 
 ---
