@@ -3,22 +3,18 @@
 Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
 
 ---
----
----
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
 * 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
 
----
----
+
 ---
 ### ERP ABP Login
 Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 🌐 **[CLIQUE AQUI PARA ENTRAR](https://aristidesbp.github.io/assets/html/erp_abp_login.html)**
 
----
----
+
 ---
 ## 📚 LINKS PARA ESTUDOS
 * 🌐 **HTML:** [w3schools.com](https://w3schools.com)
