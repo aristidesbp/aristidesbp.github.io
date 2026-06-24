@@ -295,80 +295,8 @@ clear
 rm -rf nome_da_pasta
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO BAIXAR MIDIAS COM TERMUX 
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
 
-```
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
-## instalar linux
-```
-# instalador do Linux
-pkg install proot-distro
-```
-```
-# verificar iso disponível
-proot-distro list
-```
-```
-# instalar ubuntu
-proot-distro ubuntu
-```
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
-```
-# atualizar 
-apt update && apt upgrade -y
-```
-## instalar buscador
-```
-# instalando o buscador
-apt install curl -y
-```
-```
-# instalando Ollama 
-curl a-fsSl http://ollama.com/install
-```
-```
-# abrir lista
-ollama list
-```
-```
-# baixar modelo
-ollama run qwen2.5-coder:7b
-```
-```
-# baixar modelo de linguagem básico
-ollama run phi3
-```
-```
-# baixar modelo de linguagem para programação
-ollama run deepsek-code:1.36
-```
-```
-ollama serve
-```
-* ess código vai ficar rodando em segundo plano,
-* arraste para direita e abra uma "NEW SESSION"
-
-
-## em uma nova Session
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX+GIT+GITHUB
+# 🟥 TERMUX+ GIT+ GITHUB
 ```
 # verificar se o git está instalado 
 git --version
@@ -484,44 +412,21 @@ git commit -m "DESCRIÇÃO_chekPointe"
 git push origin main
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🟥 ADICIONANDO COLABORADORES NO GITHUB 
-* Vamos criar um tutorial completo, atualizado e seguro ensinando como adicionar colaboradores (programadores) ao repositório do seu GitHub Pages, permitindo que outras pessoas desenvolvam ou editem o site diretamente no GitHub — com permissões controladas.
 
----
-🧭 TUTORIAL: COMO ADICIONAR COLABORADORES AO SEU SITE NO GITHUB PAGES
-💡 Objetivo: Dar acesso a outros programadores para que possam editar, atualizar e enviar códigos (HTML, CSS, JS, etc.) no seu repositório do GitHub Pages, mantendo o controle total sobre o projeto.
+# COMO BAIXAR MIDIAS COM TERMUX 
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
 
----
-🧩 1️⃣ Pré-requisitos
-Antes de começar:
-(1) Você precisa ter uma conta no GitHub.
-(2) Ter um repositório [PUBLICO] criado [COM O MESMO NOME DO USUARIO] exemplo:
-NOME_DO_USUARIO: aristidesbp
-NOME_DO_REPOSITORIO: aristidesbp.github.io
-(3) Saber o usuário GitHub de quem você quer adicionar (ex: aristidesbp).
+```
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
----
-🏗️ 2️⃣ Acesse o repositório do seu site
-(1) Entre em https://github.com/.
-(2) Clique no seu repositório do site (ex: aristidesbp/loja-virtual).
-(3) Você será levado para a tela principal com os arquivos do projeto.
-
-⚙️ 3️⃣ Vá até as configurações do repositório
-(1) Clique em ⚙️ Settings (no canto direito superior).
-(2) No menu lateral esquerdo, role até encontrar “Collaborators”
-(fica dentro da seção Access → Collaborators).
-
----
-🪪 4️⃣ Adicionando o colaborador
-(1) Clique no botão “Add people”.
-(2) Na janela que aparece, digite o nome de usuário ou e-mail do GitHub da pessoa que você quer adicionar.
-(3) Clique no botão “Add” ao lado do nome que aparecer.
-
-
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# python3 organizar.py
+# 🟥 python3 organizar.py
 ```
 
 import os
@@ -616,8 +521,8 @@ if __name__ == "__main__":
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# python limpar_duplicados.py
+
+# 🟥 python limpar_duplicados.py
 ```
 import hashlib
 import os
@@ -728,7 +633,7 @@ if __name__ == "__main__":
     buscar_e_limpar_duplicados(ORIGEM)
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # 🟥 SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
@@ -767,10 +672,68 @@ Vai aparecer algo como:
 No navegador do outro dispositivo, acesse:
 * http://192.168.1.105:8080
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
+## instalar linux (terminal basico)
+```
+# instalador do Linux
+pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# instalar ubuntu
+proot-distro ubuntu
+```
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
+```
+# atualizar 
+apt update && apt upgrade -y
+```
+
+# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
+## instalar buscador
+```
+# instalando o buscador
+apt install curl -y
+```
+```
+# instalando Ollama 
+curl a-fsSl http://ollama.com/install
+```
+```
+# abrir lista
+ollama list
+```
+```
+# baixar modelo
+ollama run qwen2.5-coder:7b
+```
+```
+# baixar modelo de linguagem básico
+ollama run phi3
+```
+```
+# baixar modelo de linguagem para programação
+ollama run deepsek-code:1.36
+```
+```
+ollama serve
+```
+* ess código vai ficar rodando em segundo plano,
+* arraste para direita e abra uma "NEW SESSION"
 
 
-
-
+## em uma nova Session
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
 
 
 
