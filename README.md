@@ -6,8 +6,6 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
-* 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
-
 
 
 ---
@@ -217,7 +215,521 @@ No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de có
 
 2- [Sua análise, pergunta ou próximo passo único aqui...]
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
+#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
+ 
+## Download do aplicativo direto no git
+* Acesse o link oficial no Github não use da Play Store!
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
+
+```
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
+```
+```
+# comando para atualizar o termux:
+pkg update && pkg upgrade -y
+```
+```
+# comando para autorizar o uso de pastas do celular
+termux-setup-storage
+```
+```
+## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
+pkg install git -y
+pkg install nano -y
+pkg install openssh -y
+pkg install curl -y
+pkg install tree -y
+```
+```
+# ver as pastas ocultas (-a) do diretorio
+ls -a
+```
+```
+# ver pastas e arquivos
+tree
+```
+```
+# ir para o diretorio
+cd nome_do_diretorio
+```
+```
+# voltar para pasta anterior
+cd ..
+```
+```
+# voltar para pasta raiz
+cd
+```
+```
+# comando para criar pasta
+mkdir novo_projeto
+```
+``` 
+nano teste.txt 
+# abre o arquivo teste.txt 
+# obs: ele cria caso não exista
+# Ctrl+S  para salvar
+# Crtl+X  para sair
+```
+```
+mv teste.txt ./repositorios_git 
+# mover pasta ou arquivo (./pasta_destino)
+```
+```
+# limpar atela
+clear
+```
+```
+# como apagar pasta/arquivos/projetos
+rm -rf nome_da_pasta
+```
+
+
+# 🟥 TERMUX+ GIT+ GITHUB
+```
+# verificar se o git está instalado 
+git --version
+```
+```
+# vá para pasta onde ficará o repositório
+cd storage/downloads
+```
+```
+# Lista todas as configurações ativas: 
+git config --list
+```
+```
+# Configurar a pasta como segura (evita erros de segurança)
+git config --global --add safe.directory "$(pwd)"                     
+```
+```
+# Configurar nome de usuário
+git config --global user.name "nome_do_usuario"
+```
+```
+# Configurar email do GitHub
+git config --global user.email "seu@email.com"
+```
+```
+# verificar se tem chave SSH
+ls -a ~/.ssh
+```
+```
+# criar uma chave SSH
+# Aperte [Enter] (deixe tudo em branco).
+ssh-keygen -t ed25519 -C "email_cadastrado"
+```
+```
+# exibir o código que você deve copiar e colar no GitHub:
+cat ~/.ssh/id_ed25519.pub
+```
+
+* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
+* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
+* após salvar tem que confirmar por email.
+ssh criado use este comando no termux:
+```
+# testar a conexão:
+# Digite a palavra "yes" e aperte Enter.
+# DEVE APARECER:
+# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
+ssh -T git@github.com
+```
+```
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
+
+---
+# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+
+```
+# clonar um repositório
+# exemplo:
+git clone https://github.com/aristidesbp/aristidesbp.github.io.git
+```
+```
+# entrar na pasta
+cd aristidesbp.github.io
+```
+```
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
+```
+---
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
+```
+# 1. Sincroniza as informações com o GitHub 
+git fetch origin
+# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git reset --hard origin/main
+```
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+---
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
+```
+```
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
+```
+```
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_chekPointe"
+
+```
+```
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
+```
+
+# COMO BAIXAR MIDIAS COM TERMUX 
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+
+```
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥 python3 organizar.py
+```
+
+import os
+import shutil
+
+
+def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
+    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
+
+    separando-os exclusivamente por suas extensões (tipos).
+    """
+    pasta_origem = os.path.abspath(pasta_origem)
+    pasta_destino = os.path.abspath(pasta_destino)
+
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
+
+    arquivos_copiados = 0
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        # Evita que o script leia a própria pasta de destino
+        if pasta_atual_abs.startswith(pasta_destino):
+            continue
+
+        for nome_arquivo in arquivos:
+            # Ignora o próprio script e arquivos ocultos do sistema
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
+            nome_puro, extensao = os.path.splitext(nome_arquivo)
+
+            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
+            if extensao:
+
+            nome_subpasta_tipo = extensao.replace(".", "").lower()
+
+            else:
+                nome_subpasta_tipo = "SEM_EXTENSAO"
+
+            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
+            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
+
+            if not os.path.exists(caminho_pasta_tipo):
+                os.makedirs(caminho_pasta_tipo)
+
+            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
+            caminho_destino_final = os.path.join(
+                caminho_pasta_tipo, nome_arquivo
+            )
+
+            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
+            contador = 1
+            while os.path.exists(caminho_destino_final):
+                novo_nome = f"{nome_puro}_{contador}{extensao}"
+                caminho_destino_final = os.path.join(
+                    caminho_pasta_tipo, novo_nome
+                )
+                contador += 1
+
+            try:
+                # Copia o arquivo mantendo o original intacto na pasta de origem
+                shutil.copy2(caminho_origem, caminho_destino_final)
+                arquivos_copiados += 1
+                nome_final_exibicao = os.path.basename(caminho_destino_final)
+                print(
+                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
+                )
+            except Exception as erro:
+                print(f"Erro ao copiar {nome_arquivo}: {erro}")
+
+    if arquivos_copiados == 0:
+        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+ORIGEM = "."
+DESTINO = "./organizado"
+
+if __name__ == "__main__":
+    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
+    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
+    print("Processo concluído!")
+
+```
+
+
+# 🟥 python limpar_duplicados.py
+```
+import hashlib
+import os
+
+
+def calcular_hash(caminho_arquivo):
+    """Calcula a 'impressão digital' (hash SHA-256) do arquivo para garantir
+
+    que o conteúdo é identico.
+    """
+    hasher = hashlib.sha256()
+    # Lê o arquivo em blocos para não travar a memória do celular se o arquivo for grande
+    with open(caminho_arquivo, "rb") as f:
+        while bloco := f.read(4096):
+            hasher.update(bloco)
+    return hasher.hexdigest()
+
+
+def buscar_e_limpar_duplicados(pasta_origem):
+    """Identifica arquivos idênticos pelo conteúdo e pergunta antes de apagar."""
+    pasta_origem = os.path.abspath(pasta_origem)
+
+    # Dicionário para guardar { hash_do_arquivo: [lista_de_caminhos_com_esse_hash] }
+    registro_hashes = {}
+
+    print(" Analisando arquivos em busca de conteúdo idêntico...")
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        for nome_arquivo in arquivos:
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_completo = os.path.join(pasta_atual, nome_arquivo)
+
+            try:
+                # Calcula a impressão digital do arquivo
+                hash_arquivo = calcular_hash(caminho_completo)
+
+                # Se o hash já existe, encontramos uma duplicata
+                if hash_arquivo in registro_hashes:
+                    registro_hashes[hash_arquivo].append(caminho_completo)
+                else:
+                    # Se for a primeira vez que vemos esse hash, registra como o 'original'
+                    registro_hashes[hash_arquivo] = [caminho_completo]
+            except Exception as e:
+                print(f"Não foi possível ler {nome_arquivo}: {e}")
+
+    # Filtrar apenas os hashes que possuem mais de 1 arquivo (ou seja, têm duplicatas)
+    duplicatas_detectadas = {
+        hash_f: caminhos
+        for hash_f, caminhos in registro_hashes.items()
+        if len(caminhos) > 1
+    }
+
+    if not duplicatas_detectadas:
+        print("\n Excelente! Nenhum arquivo idêntico foi encontrado.")
+        return
+
+    # Lista na tela as duplicatas encontradas
+    print(f"\n Foram encontrados {len(duplicatas_detectadas)} grupos de arquivos idênticos:\n")
+    
+    arquivos_para_deletar = []
+
+    for i, (hash_f, caminhos) in enumerate(duplicatas_detectadas.items(), 1):
+        original = caminhos[0]
+        copias = caminhos[1:]
+        
+        print(f"Grupo {i}:")
+        print(f"  [MANTER] -> {os.path.relpath(original)}")
+        for copia in copias:
+            print(f"  [APAGAR] -> {os.path.relpath(copia)}")
+            arquivos_para_deletar.append(copia)
+        print("-" * 40)
+
+    print(f"\nNo total, {len(arquivos_para_deletar)} cópias repetidas serão apagadas.")
+    
+    # INTERAÇÃO: Pergunta ao usuário no Termux se pode deletar
+    resposta = input("Deseja apagar essas duplicatas agora? (s/n): ").strip().lower()
+
+    if resposta == 's':
+        print("\nApagando arquivos duplicados...")
+        deletados = 0
+        for caminho in arquivos_para_deletar:
+            try:
+                os.remove(caminho)
+                print(f"Deletado com sucesso: {os.path.basename(caminho)}")
+                deletados += 1
+            except Exception as e:
+                print(f"Erro ao deletar {os.path.basename(caminho)}: {e}")
+        print(f"\nPronto! {deletados} arquivos inúteis foram removidos.")
+    else:
+        print("\nAção cancelada. Nenhum arquivo foi alterado.")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+# Varre a pasta atual onde o Termux está aberto
+ORIGEM = "."
+
+if __name__ == "__main__":
+    buscar_e_limpar_duplicados(ORIGEM)
+
+```
+
+# 🟥 SERVIDOR PYTHON 
+# Passo 1: Instalar o Python3
+ * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+ * Navegue até a pasta onde seus arquivos estão 
+```
+python3 -m http.server 8080
+```
+* Ele inicia um servidor web simples na porta 8080:
+* caso queira encerrar o processo basta apertar Ctr+C;
+
+**Como Acessar o Site no Navegador**
+Abra o navegador do seu celular (Chrome, Firefox, etc.).
+
+## [localhost CLIQUE AQUI](http://localhost:8080)
+```
+http://localhost:8080
+```
+
+## ⚠️ Observações importantes
+O servidor só funciona enquanto o Termux estiver aberto
+A porta 8080 pode ser trocada por outra, ex:
+Copiar código
+```
+python -m http.server 3000
+```
+Aí o endereço vira:
+* http://localhost:3000
+
+## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
+```
+# Descubra o IP do celular no Termux:
+ip addr show wlan0
+```
+Vai aparecer algo como:
+* inet 192.168.1.105
+No navegador do outro dispositivo, acesse:
+* http://192.168.1.105:8080
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
+## instalar linux (terminal basico)
+```
+# instalador do Linux
+pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# instalar ubuntu
+proot-distro ubuntu
+```
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
+```
+# atualizar 
+apt update && apt upgrade -y
+```
+
+# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
+## instalar buscador
+```
+# instalando o buscador
+apt install curl -y
+```
+```
+# instalando Ollama 
+curl a-fsSl http://ollama.com/install
+```
+```
+# abrir lista
+ollama list
+```
+```
+# baixar modelo
+ollama run qwen2.5-coder:7b
+```
+```
+# baixar modelo de linguagem básico
+ollama run phi3
+```
+```
+# baixar modelo de linguagem para programação
+ollama run deepsek-code:1.36
+```
+```
+ollama serve
+```
+* ess código vai ficar rodando em segundo plano,
+* arraste para direita e abra uma "NEW SESSION"
+
+
+## em uma nova Session
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -3563,522 +4075,7 @@ USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated')
 </html>
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
- 
-## Download do aplicativo direto no git
-* Acesse o link oficial no Github não use da Play Store!
-* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
-[TERMUX](https://github.com/termux/termux-app/releases)
-
-
-```
-# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
-# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
-```
-```
-# comando para atualizar o termux:
-pkg update && pkg upgrade -y
-```
-```
-# comando para autorizar o uso de pastas do celular
-termux-setup-storage
-```
-```
-## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
-pkg install git -y
-pkg install nano -y
-pkg install openssh -y
-pkg install curl -y
-pkg install tree -y
-```
-```
-# ver as pastas ocultas (-a) do diretorio
-ls -a
-```
-```
-# ver pastas e arquivos
-tree
-```
-```
-# ir para o diretorio
-cd nome_do_diretorio
-```
-```
-# voltar para pasta anterior
-cd ..
-```
-```
-# voltar para pasta raiz
-cd
-```
-```
-# comando para criar pasta
-mkdir novo_projeto
-```
-``` 
-nano teste.txt 
-# abre o arquivo teste.txt 
-# obs: ele cria caso não exista
-# Ctrl+S  para salvar
-# Crtl+X  para sair
-```
-```
-mv teste.txt ./repositorios_git 
-# mover pasta ou arquivo (./pasta_destino)
-```
-```
-# limpar atela
-clear
-```
-```
-# como apagar pasta/arquivos/projetos
-rm -rf nome_da_pasta
-```
-
-
-# 🟥 TERMUX+ GIT+ GITHUB
-```
-# verificar se o git está instalado 
-git --version
-```
-```
-# vá para pasta onde ficará o repositório
-cd storage/downloads
-```
-```
-# Lista todas as configurações ativas: 
-git config --list
-```
-```
-# Configurar a pasta como segura (evita erros de segurança)
-git config --global --add safe.directory "$(pwd)"                     
-```
-```
-# Configurar nome de usuário
-git config --global user.name "nome_do_usuario"
-```
-```
-# Configurar email do GitHub
-git config --global user.email "seu@email.com"
-```
-```
-# verificar se tem chave SSH
-ls -a ~/.ssh
-```
-```
-# criar uma chave SSH
-# Aperte [Enter] (deixe tudo em branco).
-ssh-keygen -t ed25519 -C "email_cadastrado"
-```
-```
-# exibir o código que você deve copiar e colar no GitHub:
-cat ~/.ssh/id_ed25519.pub
-```
-
-* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
-* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
-* após salvar tem que confirmar por email.
-ssh criado use este comando no termux:
-```
-# testar a conexão:
-# Digite a palavra "yes" e aperte Enter.
-# DEVE APARECER:
-# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
-ssh -T git@github.com
-```
-```
-# iniciar o agente de chaves e registrar nova chave:
-eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
-```
-
----
-# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
-
-```
-# clonar um repositório
-# exemplo:
-git clone https://github.com/aristidesbp/aristidesbp.github.io.git
-```
-```
-# entrar na pasta
-cd aristidesbp.github.io
-```
-```
-# dar permissão
-git config --global --add safe.directory "$(pwd)"
-```
-```
-# testar
-git status 
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main
-
-```
----
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
-```
-# 1. Sincroniza as informações com o GitHub 
-git fetch origin
-# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
-git reset --hard origin/main
-```
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
----
-# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-
-```
-```
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .
-
-```
-```
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_chekPointe"
-
-```
-```
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main
-
-```
-
-# COMO BAIXAR MIDIAS COM TERMUX 
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-
-```
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🟥 python3 organizar.py
-```
-
-import os
-import shutil
-
-
-def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
-    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
-
-    separando-os exclusivamente por suas extensões (tipos).
-    """
-    pasta_origem = os.path.abspath(pasta_origem)
-    pasta_destino = os.path.abspath(pasta_destino)
-
-    if not os.path.exists(pasta_destino):
-        os.makedirs(pasta_destino)
-
-    arquivos_copiados = 0
-
-    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        # Evita que o script leia a própria pasta de destino
-        if pasta_atual_abs.startswith(pasta_destino):
-            continue
-
-        for nome_arquivo in arquivos:
-            # Ignora o próprio script e arquivos ocultos do sistema
-            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
-                continue
-
-            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
-            nome_puro, extensao = os.path.splitext(nome_arquivo)
-
-            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
-            if extensao:
-
-            nome_subpasta_tipo = extensao.replace(".", "").lower()
-
-            else:
-                nome_subpasta_tipo = "SEM_EXTENSAO"
-
-            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
-            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
-
-            if not os.path.exists(caminho_pasta_tipo):
-                os.makedirs(caminho_pasta_tipo)
-
-            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
-            caminho_destino_final = os.path.join(
-                caminho_pasta_tipo, nome_arquivo
-            )
-
-            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
-            contador = 1
-            while os.path.exists(caminho_destino_final):
-                novo_nome = f"{nome_puro}_{contador}{extensao}"
-                caminho_destino_final = os.path.join(
-                    caminho_pasta_tipo, novo_nome
-                )
-                contador += 1
-
-            try:
-                # Copia o arquivo mantendo o original intacto na pasta de origem
-                shutil.copy2(caminho_origem, caminho_destino_final)
-                arquivos_copiados += 1
-                nome_final_exibicao = os.path.basename(caminho_destino_final)
-                print(
-                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
-                )
-            except Exception as erro:
-                print(f"Erro ao copiar {nome_arquivo}: {erro}")
-
-    if arquivos_copiados == 0:
-        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-ORIGEM = "."
-DESTINO = "./organizado"
-
-if __name__ == "__main__":
-    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
-    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
-    print("Processo concluído!")
-
-```
-
-
-# 🟥 python limpar_duplicados.py
-```
-import hashlib
-import os
-
-
-def calcular_hash(caminho_arquivo):
-    """Calcula a 'impressão digital' (hash SHA-256) do arquivo para garantir
-
-    que o conteúdo é identico.
-    """
-    hasher = hashlib.sha256()
-    # Lê o arquivo em blocos para não travar a memória do celular se o arquivo for grande
-    with open(caminho_arquivo, "rb") as f:
-        while bloco := f.read(4096):
-            hasher.update(bloco)
-    return hasher.hexdigest()
-
-
-def buscar_e_limpar_duplicados(pasta_origem):
-    """Identifica arquivos idênticos pelo conteúdo e pergunta antes de apagar."""
-    pasta_origem = os.path.abspath(pasta_origem)
-
-    # Dicionário para guardar { hash_do_arquivo: [lista_de_caminhos_com_esse_hash] }
-    registro_hashes = {}
-
-    print(" Analisando arquivos em busca de conteúdo idêntico...")
-
-    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas e lixeiras
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        for nome_arquivo in arquivos:
-            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
-                continue
-
-            caminho_completo = os.path.join(pasta_atual, nome_arquivo)
-
-            try:
-                # Calcula a impressão digital do arquivo
-                hash_arquivo = calcular_hash(caminho_completo)
-
-                # Se o hash já existe, encontramos uma duplicata
-                if hash_arquivo in registro_hashes:
-                    registro_hashes[hash_arquivo].append(caminho_completo)
-                else:
-                    # Se for a primeira vez que vemos esse hash, registra como o 'original'
-                    registro_hashes[hash_arquivo] = [caminho_completo]
-            except Exception as e:
-                print(f"Não foi possível ler {nome_arquivo}: {e}")
-
-    # Filtrar apenas os hashes que possuem mais de 1 arquivo (ou seja, têm duplicatas)
-    duplicatas_detectadas = {
-        hash_f: caminhos
-        for hash_f, caminhos in registro_hashes.items()
-        if len(caminhos) > 1
-    }
-
-    if not duplicatas_detectadas:
-        print("\n Excelente! Nenhum arquivo idêntico foi encontrado.")
-        return
-
-    # Lista na tela as duplicatas encontradas
-    print(f"\n Foram encontrados {len(duplicatas_detectadas)} grupos de arquivos idênticos:\n")
-    
-    arquivos_para_deletar = []
-
-    for i, (hash_f, caminhos) in enumerate(duplicatas_detectadas.items(), 1):
-        original = caminhos[0]
-        copias = caminhos[1:]
-        
-        print(f"Grupo {i}:")
-        print(f"  [MANTER] -> {os.path.relpath(original)}")
-        for copia in copias:
-            print(f"  [APAGAR] -> {os.path.relpath(copia)}")
-            arquivos_para_deletar.append(copia)
-        print("-" * 40)
-
-    print(f"\nNo total, {len(arquivos_para_deletar)} cópias repetidas serão apagadas.")
-    
-    # INTERAÇÃO: Pergunta ao usuário no Termux se pode deletar
-    resposta = input("Deseja apagar essas duplicatas agora? (s/n): ").strip().lower()
-
-    if resposta == 's':
-        print("\nApagando arquivos duplicados...")
-        deletados = 0
-        for caminho in arquivos_para_deletar:
-            try:
-                os.remove(caminho)
-                print(f"Deletado com sucesso: {os.path.basename(caminho)}")
-                deletados += 1
-            except Exception as e:
-                print(f"Erro ao deletar {os.path.basename(caminho)}: {e}")
-        print(f"\nPronto! {deletados} arquivos inúteis foram removidos.")
-    else:
-        print("\nAção cancelada. Nenhum arquivo foi alterado.")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-# Varre a pasta atual onde o Termux está aberto
-ORIGEM = "."
-
-if __name__ == "__main__":
-    buscar_e_limpar_duplicados(ORIGEM)
-
-```
-
-# 🟥 SERVIDOR PYTHON 
-# Passo 1: Instalar o Python3
- * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
- * Navegue até a pasta onde seus arquivos estão 
-```
-python3 -m http.server 8080
-```
-* Ele inicia um servidor web simples na porta 8080:
-* caso queira encerrar o processo basta apertar Ctr+C;
-
-**Como Acessar o Site no Navegador**
-Abra o navegador do seu celular (Chrome, Firefox, etc.).
-
-## [localhost CLIQUE AQUI](http://localhost:8080)
-```
-http://localhost:8080
-```
-
-## ⚠️ Observações importantes
-O servidor só funciona enquanto o Termux estiver aberto
-A porta 8080 pode ser trocada por outra, ex:
-Copiar código
-```
-python -m http.server 3000
-```
-Aí o endereço vira:
-* http://localhost:3000
-
-## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
-```
-# Descubra o IP do celular no Termux:
-ip addr show wlan0
-```
-Vai aparecer algo como:
-* inet 192.168.1.105
-No navegador do outro dispositivo, acesse:
-* http://192.168.1.105:8080
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
-## instalar linux (terminal basico)
-```
-# instalador do Linux
-pkg install proot-distro
-```
-```
-# verificar iso disponível
-proot-distro list
-```
-```
-# instalar ubuntu
-proot-distro ubuntu
-```
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
-```
-# atualizar 
-apt update && apt upgrade -y
-```
-
-# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
-## instalar buscador
-```
-# instalando o buscador
-apt install curl -y
-```
-```
-# instalando Ollama 
-curl a-fsSl http://ollama.com/install
-```
-```
-# abrir lista
-ollama list
-```
-```
-# baixar modelo
-ollama run qwen2.5-coder:7b
-```
-```
-# baixar modelo de linguagem básico
-ollama run phi3
-```
-```
-# baixar modelo de linguagem para programação
-ollama run deepsek-code:1.36
-```
-```
-ollama serve
-```
-* ess código vai ficar rodando em segundo plano,
-* arraste para direita e abra uma "NEW SESSION"
-
-
-## em uma nova Session
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
 
 
 
