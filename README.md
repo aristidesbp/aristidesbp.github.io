@@ -862,7 +862,7 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## supabase_config.js (funcionado)
 ```
-// supabase_config.js
+// assets/js/supabase_config.js
 // criar constantes com chave de acesso.
 const SUPABASE_KEY = 'Api_Keys/anon_key';
 const SUPABASE_URL = 'Data_api/url';
@@ -884,7 +884,7 @@ console.log("✅ supabase_config.js");
     
     <!-- CONEXÃO SUPABASE -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
+    <script src="assets/js/supabase_config.js"></script>
 
     
     <!-- STYLE -->
@@ -990,7 +990,7 @@ console.log("✅ supabase_config.js");
                 provider: 'google',
                 options: {
                     // Redireciona para o painel do ERP dentro do repositório
-                    redirectTo: window.location.origin + '/assets/erp/index.html'
+                    redirectTo: window.location.origin + 'erp_abp_index.html'
                 }
             });
 
@@ -1071,7 +1071,7 @@ console.log("✅ supabase_config.js");
                 } else {
                     console.log("Bem-vindo de volta!", data.user.email);
                     // Redireciona para o painel principal após o sucesso
-                    window.location.href = 'index.html';
+                    window.location.href = 'erp_abp_index.html';
                 }
             } catch (err) {
                 console.error("Ocorreu um erro inesperado no sistema:", err);
@@ -1108,7 +1108,7 @@ console.log("✅ supabase_config.js");
                 alert("Erro ao atualizar: " + error.message);
             } else {
                 alert("Senha atualizada com sucesso!");
-                window.location.href = 'index.html';
+                window.location.href = 'erp_abp_index.html';
             }
         }
     </script>
