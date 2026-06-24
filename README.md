@@ -78,7 +78,7 @@ Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa 
 
 
 ## exemplo
-```
+```json
 {
   "nome_do_jogo": "RPG de Mesa",
   "atributos_do_jogador": {    
