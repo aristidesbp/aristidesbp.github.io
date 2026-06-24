@@ -239,7 +239,7 @@ Tenho codigos para você analizar espere ate eu te dar o sinal, o objetivo agora
 criar uma  arquitetura full-stack (frontend com github-pages, backend com supabase) para a plataforma
 "Indicar Irmão", um marketplace de serviços comunitário da minha Igreja. O design deve
 ser Light Mode, moderno e acolhedor, utilizando a biblioteca Shadcn/UI e
-Tailwind CSS. O backend será configurado no Supabase.(vou passar estrutura de pastas ,schema do banco e codigos criados, aguarde para ter uma visao completa).
+Tailwind CSS. O backend sera configurado no Supabase. (passarei o snhema logo abaixo)
 
 Paleta de Cores e Estilo Visual:
 Fundo Principal (Light Mode): #F8FAFC (Slate 50 - cinza muito suave para
