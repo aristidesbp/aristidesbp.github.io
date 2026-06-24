@@ -136,7 +136,8 @@ itens_aristides:
 # JOGANDO COM IA
 
 ![imagem gamer master](assets/png/gamer_master.png)
-
+* Sugiro usar ojson para cso queria escutar não ler
+  
 ```
 {
   "diretrizes": true,
@@ -175,7 +176,8 @@ itens_aristides:
     { "TESTES_E_COMBATES": "(ambos rolam: 2d6 + valor_do_atributo_testado) quem tirar o maior valor vence. Em caso de combate subtrair -2 ENERGIA no oponente que perdeu" },
     { "habilidade": "testar para todo esforço físico, subtrair -1 do valor atual (fadiga)" },
     { "inteligencia": "testar sempre que o personagem usar para persuadir, criar algo, descobrir..., subtrair -1 do valor atual (fadiga)" },
-    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL o nome dos jogadores E O TIPO DE AVENTURA ELE QUER JOGAR" }
+    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL o nome dos jogadores E O TIPO DE AVENTURA ELE QUER JOGAR" },
+    { "combates": "sempre mostrar as fichas de todos os envolvidos e rolagem dos dados, pois assim os jogadores poderam analizar se deve fugir ou continuar" }
   ]
 }
 
