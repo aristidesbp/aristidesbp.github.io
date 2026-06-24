@@ -175,7 +175,7 @@ itens_aristides:
     { "TESTES_E_COMBATES": "(ambos rolam: 2d6 + valor_do_atributo_testado) quem tirar o maior valor vence. Em caso de combate subtrair -2 ENERGIA no oponente que perdeu" },
     { "habilidade": "testar para todo esforço físico, subtrair -1 do valor atual (fadiga)" },
     { "inteligencia": "testar sempre que o personagem usar para persuadir, criar algo, descobrir..., subtrair -1 do valor atual (fadiga)" },
-    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL E O TIPO DE AVENTURA ELE QUER JOGAR" }
+    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL o nome dos jogadores E O TIPO DE AVENTURA ELE QUER JOGAR" }
   ]
 }
 
@@ -221,7 +221,7 @@ REGRAS:
   - testes_e_combates: (ambos rolam: 2d6 + valor_do_atributo_testado) quem tirar o maior valor vence. Em caso de combate subtrair -2 ENERGIA no oponente que perdeu
   - habilidade: testar para todo esforço físico, subtrair -1 do valor atual (fadiga)
   - inteligencia: testar sempre que o personagem usar para persuadir, criar algo, descobrir..., subtrair -1 do valor atual (fadiga)
-  - iniciando_jogo: PERGUNTE PARA O USUARIO QUAL E O TIPO DE AVENTURA ELE QUER JOGAR
+  - iniciando_jogo: PERGUNTE PARA O USUARIO o nome dos jogadores, QUAL E O TIPO DE AVENTURA ELE QUER JOGAR
 
 
 
