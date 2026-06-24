@@ -35,8 +35,11 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+![imagem gamer master](assets/png/yaml_json.png)
+
 # Poque uso JSON & YAML nos meus prompt de comando?
-A traves de testes de jogos RPG interativos com IA, constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens fora do contesto, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
+A traves de testes de jogos RPG interativos com IA (gratuitas), constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens equivocadas, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
 
 Ancoragem de Atenção: Modelos de linguagem (LLMs) são excelentes em reconhecer padrões estruturados. Quando você força a IA a reescrever ou ler um JSON com chaves fixas ("historico_tarefas_concluidas", "localizacao_atual"), você está obrigando o mecanismo de atenção da IA a focar e atualizar esses pontos específicos.
 
