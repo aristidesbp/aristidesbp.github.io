@@ -36,6 +36,8 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ![imagem gamer master](assets/png/yaml_json.png)
 
@@ -131,7 +133,7 @@ itens_aristides:
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # JOGANDO COM IA (exemplo de prompt usado no teste)
 
 ![imagem gamer master](assets/png/gamer_master.png)
@@ -183,7 +185,6 @@ itens_aristides:
 ```
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ASSITENTE DE SUPORTE
 
 ![imagem agente de suporte](assets/png/suporte.png)
@@ -229,6 +230,8 @@ No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de có
 # PROJETOS COM O SUPABASE E GITHUB_PAGES
 
 ![imagem supabase](assets/png/postgresql_e_supabase.png)
+
+# Plano
 ```
 Prompt de planejamento
 Tenho codigos para você analizar espere ate eu te dar o sinal, o objetivo agora e entender e analizar o que ja foi feito  , quando eu terminar te darei um sinal!
@@ -293,48 +296,11 @@ Crie um componente StarRating reutilizável para exibir as notas.
 Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
 ```
 
-## ESTRUTURA UTILIZADA
-````
-# usarei SUPABASE E GITHUB_PAGES para esse projeto.
-# Utilizo meu github para testes e estudos, por isso vou separa por tipo de arquivo .
-# tambem utilizo desta forma devido automação em python que utilizo para organizar arquivos.
-# utiliso prefixos para separar e identificar os arquivos de cada projeto dentro das pastas.
 
-aristidesbp.github.io
-├── assets
-│   ├── apk
-│   ├── css
-│   ├── docx
-│   ├── html
-│   ├── jpeg
-│   ├── jpg
-│   ├── json
-│   ├── md
-│   ├── pdf
-│   ├── png
-│   ├── py
-│   ├── rels
-│   ├── sql
-│   ├── toml
-│   ├── ts
-│   ├── txt
-│   ├── xml
-│   └── zip
-│ 
-├── index.html
-├── limpar_duplicado.py
-├── organizar.py
-└── README.md 
-````
-
-## EXEMPLO DE CHAMADAS ENTRE PASTAS 
-```
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../js/supabase_config.js"></script>
-<link rel="stylesheet href="../css/financeiro.css">
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BANCO DE DADOS (SUPABASE)
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
@@ -926,15 +892,6 @@ Painel do Supabase: Como desenvolvedor, você tem acesso ao Dashboard do Supabas
 
 Se precisar de moderação no Front: Se você quiser que o pastor ou liderança da igreja modere sem acessar o banco, aí sim você cria um campo is_admin boolean na tabela usuario_espelho e ajusta as políticas RLS para permitir que esse usuário específico tenha permissão de DELETE em qualquer linha.
 
-```
-
-```
-
-
-
-
-
-
 
 
 
@@ -986,9 +943,52 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## HOSPEDAGEM GITHUB-PAGES
 
+## ESTRUTURA UTILIZADA
+````
+# usarei SUPABASE E GITHUB_PAGES para esse projeto.
+# Utilizo meu github para testes e estudos, por isso vou separa por tipo de arquivo .
+# tambem utilizo desta forma devido automação em python que utilizo para organizar arquivos.
+# utiliso prefixos para separar e identificar os arquivos de cada projeto dentro das pastas.
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+aristidesbp.github.io
+├── assets
+│   ├── apk
+│   ├── css
+│   ├── docx
+│   ├── html
+│   ├── jpeg
+│   ├── jpg
+│   ├── json
+│   ├── md
+│   ├── pdf
+│   ├── png
+│   ├── py
+│   ├── rels
+│   ├── sql
+│   ├── toml
+│   ├── ts
+│   ├── txt
+│   ├── xml
+│   └── zip
+│ 
+├── index.html
+├── limpar_duplicado.py
+├── organizar.py
+└── README.md 
+````
+
+## EXEMPLO DE CHAMADAS ENTRE PASTAS 
+```
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../js/supabase_config.js"></script>
+<link rel="stylesheet href="../css/financeiro.css">
+```
+
 ## supabase_config.js (funcionado)
 ```
 // assets/js/supabase_config.js
