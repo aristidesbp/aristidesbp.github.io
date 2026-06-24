@@ -4,35 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Serviços - IEB Nova Belém</title>
+    <!-- Tailwind CSS para deixar o visual bonito e profissional -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Conector oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
+    <!-- CABEÇALHO INSTITUCIONAL (Cores da Igreja Batista Nova Belém) -->
     <header class="bg-blue-950 text-white shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="text-center sm:text-left">
                 <h1 class="text-2xl font-bold tracking-wide">IGREJA BATISTA NOVA BELÉM</h1>
                 <p class="text-xs text-amber-400 font-medium tracking-widest uppercase">Comunhão & Apoio Mútuo</p>
             </div>
+            <!-- Área de Login / Identificação do Usuário -->
             <div id="area-usuario" class="bg-blue-900/50 px-4 py-2 rounded-lg border border-blue-800 text-sm">
                 <span class="text-gray-300">Carregando acesso...</span>
             </div>
         </div>
     </header>
 
+    <!-- ÁREA PRINCIPAL -->
     <main class="max-w-6xl mx-auto px-4 py-8">
         
+        <!-- Bloco de Boas-Vindas -->
         <div class="mb-8 text-center sm:text-left">
             <h2 class="text-xl font-bold text-blue-950">Guia de Profissionais e Serviços</h2>
             <p class="text-sm text-gray-600">Contrate e apoie os irmãos da nossa comunidade pastoral.</p>
         </div>
 
+        <!-- GRID DE CARDS (Onde os anúncios vão aparecer) -->
         <div id="grid-servicos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Os cards serão injetados aqui pelo script automaticamente -->
             <p class="text-gray-500 animate-pulse col-span-full text-center py-12">Buscando anúncios no painel da igreja...</p>
         </div>
     </main>
 
+    <!-- JANELA/MODAL DE LOGIN SIMPLES -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
             <h3 class="text-lg font-bold text-blue-950 mb-2">Acesso ao Painel</h3>
@@ -54,14 +63,16 @@
         </div>
     </div>
 
+    <!-- PROGRAMAÇÃO DO BANCO DE DADOS (JAVASCRIPT) -->
     <script>
         // ====================================================================
         // CONFIGURAÇÃO: COLE AS CREDENCIAIS DO SEU SUPABASE AQUI EMBAIXO
         // ====================================================================
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZGFldGNqZWVzcWRzY3B2cG9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMDYzMTAsImV4cCI6MjA5Nzc4MjMxMH0.Zc7kWdCBZzvVQFyY_Qoiw2h70PWFQ57T55vmDs13Tek"; 
-        const SUPABASE_URL = "https://iidaetcjeesqdscpvpoa.supabase.co/rest/v1/";
+        const SUPABASE_URL = "SUA_URL_DO_SUPABASE_AQUI"; 
+        const SUPABASE_ANON_KEY = "SUA_CHAVE_ANON_AQUI";
         
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // CORREÇÃO AQUI: Nome modificado para não quebrar o motor JavaScript
+        const banco_da_igreja = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let usuarioLogado = null;
         let isAdmin = false;
@@ -74,14 +85,14 @@
 
         // Verificar se há alguém logado e se é Admin
         async function checarUsuario() {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await banco_da_igreja.auth.getSession();
             const areaUsuario = document.getElementById('area-usuario');
             
             if (session) {
                 usuarioLogado = session.user;
                 
                 // Busca no espelho se este irmão possui privilégios de Admin
-                const { data: perfil } = await supabase
+                const { data: perfil } = await banco_da_igreja
                     .from('usuario_espelho')
                     .select('is_admin, nome_completo')
                     .eq('auth_users_id', usuarioLogado.id)
@@ -112,12 +123,12 @@
         async function carregarServicos() {
             const grid = document.getElementById('grid-servicos');
             
-            const { data: servicos, error } = await supabase
+            const { data: servicos, error } = await banco_da_igreja
                 .from('v_servicos_destaque')
                 .select('*');
 
             if (error || !servicos || servicos.length === 0) {
-                grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-12">Nenhum anúncio ativo ou aprovado no momento.</p>`;
+                grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-12">Nenhum anúncio ativo ou cadastrado no momento.</p>`;
                 return;
             }
 
@@ -133,6 +144,7 @@
                 card.className = "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow";
                 card.innerHTML = `
                     <div>
+                        <!-- Cabeçalho do irmão -->
                         <div class="p-4 flex items-center gap-3 bg-gray-50/50 border-b border-gray-100">
                             <div class="w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-xs uppercase">
                                 ${servico.prestador_nome.substring(0,2)}
@@ -143,12 +155,14 @@
                             </div>
                         </div>
                         
+                        <!-- Foto ou Banner do Serviço -->
                         ${servico.servico_foto_url ? `
                             <div class="h-40 w-full overflow-hidden">
                                 <img src="${servico.servico_foto_url}" class="w-full h-full object-cover" alt="Foto do serviço">
                             </div>
                         ` : ''}
 
+                        <!-- Detalhes do anúncio -->
                         <div class="p-4 space-y-2">
                             <div class="flex justify-between items-start gap-2">
                                 <h3 class="font-bold text-base text-gray-900 line-clamp-1">${servico.titulo}</h3>
@@ -161,11 +175,13 @@
                         </div>
                     </div>
 
+                    <!-- Rodapé com Ações -->
                     <div class="p-4 bg-gray-50 border-t border-gray-100 space-y-2">
                         <a href="https://wa.me/${servico.whatsapp ? servico.whatsapp.replace(/\D/g,'') : ''}" target="_blank" class="w-full bg-blue-900 hover:bg-blue-950 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
                             💬 Contatar via WhatsApp
                         </a>
 
+                        <!-- BOTÃO EXCLUSIVO DE MODERAÇÃO PASTORAL (Aparece apenas para você/Admin) -->
                         ${isAdmin ? `
                             <button onclick="removerAnuncio(${servico.servico_id})" class="w-full bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-[11px] font-bold py-1.5 rounded-lg flex items-center justify-center gap-1 transition-colors">
                                 🗑️ Moderação: Remover por Infração
@@ -180,7 +196,7 @@
         // Função de Moderação (Deletar Anúncio Inadequado)
         async function removerAnuncio(id) {
             if (confirm("Irmão Aristides, confirma a exclusão deste serviço por estar em desacordo com a conduta cristã da Nova Belém?")) {
-                const { error } = await supabase
+                const { error } = await banco_da_igreja
                     .from('servicos')
                     .delete()
                     .eq('id', id);
@@ -203,7 +219,7 @@
             const email = document.getElementById('login-email').value;
             const senha = document.getElementById('login-senha').value;
 
-            const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+            const { error } = await banco_da_igreja.auth.signInWithPassword({ email, password: senha });
             if (error) {
                 alert("Falha no login: " + error.message);
             } else {
@@ -213,7 +229,7 @@
         });
 
         async function deslogar() {
-            await supabase.auth.signOut();
+            await banco_da_igreja.auth.signOut();
             await iniciarApp();
         }
 
