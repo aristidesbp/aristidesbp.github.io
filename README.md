@@ -103,17 +103,16 @@ Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa 
 * Use dois pontos : seguido de obrigatoriamente um espaço para separar a chave do valor.
 
 ##  Os Elementos Básicos do YAML
-
 ### A) Variável Simples (Texto ou Número)
 Apenas a chave, dois pontos, um espaço e o valor. Não precisa de aspas (a menos que o texto tenha caracteres muito estranhos).
-
 ```
-nome_do_mestre: aristidesbp
-nivel_dificuldade: 5
-jogo_ativo: true
+EXEMPLO DE VARIAVERIAVEIS (Texto ou Número):
+  nome_do_mestre: aristidesbp
+  nivel_dificuldade: 5
+  jogo_ativo: true
 ```
 ### B) Objetos (Dados aninhados)
-Para colocar dados dentro de um grupo, quebre a linha e dê 2 espaços de recuo.
+Para colocar dados dentro de um grupo (Dados aninhados), quebre a linha e dê 2 espaços de recuo.
 ```
 jogador_aristides:
   nivel: 1
@@ -225,13 +224,13 @@ No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de có
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  COMO INSTALAR E CONFIGURAR O TERMUX NO ANDROID 
-* (TERMINAL LINUX PARA ANDROID)
+#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
  
 ## Download do aplicativo direto no git
-Acesse o link oficial (não uso da Play Store)
-[TERMUX](https://github.com/termux/termux-app/releases)
+* Acesse o link oficial no Github não use da Play Store!
 * em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
 
 ```
 # Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
