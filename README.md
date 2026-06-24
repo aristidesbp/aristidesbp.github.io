@@ -9,13 +9,9 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
 
 ---
-## PROJETOS COM SUPABASE
-* 🌐 **Login:** [ENTRAR](https://aristidesbp.github.io/projetos/login/redirecionar.html)
-* 🌐 **cinema:** [ENTRAR](https://aristidesbp.github.io/projetos/cinema/meu_cinema.html)
-* 🌐 **Entidades:** [ENTRAR](https://aristidesbp.github.io/entidades.html)
-* 🌐 **Financeiro:** [ENTRAR](https://aristidesbp.github.io/projetos/financeiro/financeiro.html)
-* 🌐 **Tarefas:** [ENTRAR](https://aristidesbp.github.io/tarefas.html)
-* 🌐 **Edjacy:** [ENTRAR](https://aristidesbp.github.io/edjacy.html)
+## PROJETO COM SUPABASE
+* 🌐 **erp_abp_login** [ENTRAR](https://aristidesbp.github.io/assets/html/erp_abp_login.html)
+
 
 
 ---
