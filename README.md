@@ -808,6 +808,135 @@ USING ( auth_users_id = auth.uid() )
 WITH CHECK ( auth_users_id = auth.uid() );
 
 ```
+```
+-- 1. Habilitar RLS
+ALTER TABLE public.categorias ENABLE ROW LEVEL SECURITY;
+
+-- 2. Permitir leitura para todos (inclusive não logados, dependendo da necessidade do seu app)
+-- Se quiser restringir apenas a logados, altere 'PUBLIC' para 'authenticated'
+DROP POLICY IF EXISTS "Leitura de categorias" ON public.categorias;
+CREATE POLICY "Leitura de categorias" 
+ON public.categorias 
+FOR SELECT 
+TO PUBLIC 
+USING (true);
+
+-- 3. Restringir escrita (apenas se você tiver um nível de admin, 
+-- aqui deixo bloqueado para todos no Front-end/RLS)
+DROP POLICY IF EXISTS "Escrita de categorias bloqueada" ON public.categorias;
+CREATE POLICY "Escrita de categorias bloqueada" 
+ON public.categorias 
+FOR ALL 
+TO authenticated 
+USING (false) 
+WITH CHECK (false);
+```
+```
+-- 1. Habilitar RLS
+ALTER TABLE public.servicos ENABLE ROW LEVEL SECURITY;
+
+-- 2. Leitura pública para autenticados
+DROP POLICY IF EXISTS "Leitura de serviços" ON public.servicos;
+CREATE POLICY "Leitura de serviços" 
+ON public.servicos 
+FOR SELECT 
+TO authenticated 
+USING (true);
+
+-- 3. Inserção: Permitir que o usuário crie um serviço se o criado_por_usuario for o seu perfil
+DROP POLICY IF EXISTS "Inserir serviço próprio" ON public.servicos;
+CREATE POLICY "Inserir serviço próprio" 
+ON public.servicos 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (
+    EXISTS (
+        SELECT 1 FROM public.usuario_espelho 
+        WHERE id = criado_por_usuario AND auth_users_id = auth.uid()
+    )
+);
+
+-- 4. Modificação/Exclusão: Apenas o dono do registro pode alterar
+DROP POLICY IF EXISTS "Modificar serviço próprio" ON public.servicos;
+CREATE POLICY "Modificar serviço próprio" 
+ON public.servicos 
+FOR UPDATE 
+TO authenticated 
+USING (
+    EXISTS (
+        SELECT 1 FROM public.usuario_espelho 
+        WHERE id = criado_por_usuario AND auth_users_id = auth.uid()
+    )
+);
+
+DROP POLICY IF EXISTS "Excluir serviço próprio" ON public.servicos;
+CREATE POLICY "Excluir serviço próprio" 
+ON public.servicos 
+FOR DELETE 
+TO authenticated 
+USING (
+    EXISTS (
+        SELECT 1 FROM public.usuario_espelho 
+        WHERE id = criado_por_usuario AND auth_users_id = auth.uid()
+    )
+);
+
+```
+```
+-- 1. Habilitar RLS
+ALTER TABLE public.favoritos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.avaliacoes ENABLE ROW LEVEL SECURITY;
+
+-- 2. Favoritos: Leitura e escrita restrita ao dono
+DROP POLICY IF EXISTS "Leitura de favoritos" ON public.favoritos;
+CREATE POLICY "Leitura de favoritos" ON public.favoritos FOR SELECT TO authenticated USING (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = usuario_id AND auth_users_id = auth.uid())
+);
+
+DROP POLICY IF EXISTS "Gerenciar favoritos" ON public.favoritos;
+CREATE POLICY "Gerenciar favoritos" ON public.favoritos FOR ALL TO authenticated USING (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = usuario_id AND auth_users_id = auth.uid())
+) WITH CHECK (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = usuario_id AND auth_users_id = auth.uid())
+);
+
+-- 3. Avaliações: Leitura livre (autenticados), escrita apenas pelo autor
+DROP POLICY IF EXISTS "Leitura de avaliações" ON public.avaliacoes;
+CREATE POLICY "Leitura de avaliações" ON public.avaliacoes FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Inserir avaliações" ON public.avaliacoes;
+CREATE POLICY "Inserir avaliações" ON public.avaliacoes FOR INSERT TO authenticated WITH CHECK (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = author_id AND auth_users_id = auth.uid())
+);
+
+DROP POLICY IF EXISTS "Modificar/Deletar avaliações" ON public.avaliacoes;
+CREATE POLICY "Modificar/Deletar avaliações" ON public.avaliacoes FOR UPDATE TO authenticated USING (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = author_id AND auth_users_id = auth.uid())
+) WITH CHECK (
+    EXISTS (SELECT 1 FROM public.usuario_espelho WHERE id = author_id AND auth_users_id = auth.uid())
+);
+
+```
+# Sobre o Usuário Master
+* Não é estritamente necessário criar uma tabela de "usuário master" se você já tem acesso ao painel do Supabase.
+* Sim, você consegue apagar tudo direto pelo Supabase. O banco de dados é a fonte da verdade.(Vantagem: É rápido e não exige código.)
+* Cuidado: Se você excluir um servico, as avaliacoes e favoritos vinculados a ele serão deletados automaticamente se você configurou o ON DELETE CASCADE (que está no seu schema original).
+
+Painel do Supabase: Como desenvolvedor, você tem acesso ao Dashboard do Supabase. Lá, você tem privilégios de postgres (superusuário). Você pode abrir a tabela servicos ou avaliacoes e deletar qualquer linha manualmente pelo navegador, sem precisar de uma interface de "admin" codificada no seu front-end agora.
+
+Se precisar de moderação no Front: Se você quiser que o pastor ou liderança da igreja modere sem acessar o banco, aí sim você cria um campo is_admin boolean na tabela usuario_espelho e ajusta as políticas RLS para permitir que esse usuário específico tenha permissão de DELETE em qualquer linha.
+
+```
+
+```
+
+
+
+
+
+
+
+
 
 
 # INSERINDO DADOS EM USUARIOS
