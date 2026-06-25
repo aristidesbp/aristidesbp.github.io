@@ -70,7 +70,7 @@ O Supabase também oferece métodos para login com Google, GitHub ou "Magic Link
         } else {
             console.log("Bem-vindo de volta!", data.user.email);
             // Redireciona para o painel principal após o sucesso
-            window.location.href = 'https://aristidesbp.github.io/assets/erp/index.html';
+            window.location.href = 'index.html';
         }
     } catch (err) {
         console.error("Ocorreu um erro inesperado no sistema:", err);
