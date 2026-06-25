@@ -1,6 +1,9 @@
 # ARISTIDESBP
 
-Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
+Profissional focado em desenvolvimento de soluções web modernas, com atenção à organização, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  
+* Analista de Sistemas
+* Desenvolvedor Web Full stack
+* Trafego Pago 
 
 ---
 ## 📌 CONTATOS
