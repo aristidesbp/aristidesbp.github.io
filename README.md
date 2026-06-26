@@ -64,27 +64,7 @@ EXEMPLO: aristidesbp.github.io
 * exemplo: https://aristidesbp.github.io
 
 
-# 6- ATIVE AS EXTENÇÕES NESCESSARIAS 
-* Em Database (painel esquerdo) ou via SQL_EDITOR, exemplo:
-
-```
--- =========================================================================
--- COMO FAZER ATIVAÇÃO DAS EXTENSÕES VIA SQL
--- =========================================================================
-
--- 1. Ativa o suporte para ignorar acentos (ex: "oração" vira "oracao" na busca)
-CREATE EXTENSION IF NOT EXISTS "unaccent";
-
--- 2. Ativa a busca inteligente por aproximação (corrige pequenos erros de digitação)
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
-
--- 3. Ativa o gerador de códigos de segurança para o login dos irmãos
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-```
-
-
-# 7- CRIAR A TABELA ESPELHO PARA USUARIOS
+# 6- CRIAR A TABELA ESPELHO PARA USUARIOS
 ```
 -- =========================================================================
 -- SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS
@@ -120,7 +100,7 @@ REFERENCES auth.users(id) ON DELETE CASCADE
 
 
 
-# 8- PROMPT PARA CRIAR UMA FUNCTION E UMA TRIGGER
+# 7- PROMPT PARA CRIAR UMA FUNCTION E UMA TRIGGER
 
 ```
 [TAREFA]: Crie uma função e uma Trigger para ser implementada no supabase com o seguinte objetivo:
@@ -176,7 +156,7 @@ after insert on auth.users
 for each row execute procedure public.handle_new_user();
 -- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
 ```
-## TRADUÇÃO DO CODIGO PADRAO NA CRIAÇÃO DO PROJETO
+## TRADUÇÃO DO CODIGO DA FUNÇÃO PADRAO NA CRIAÇÃO DO PROJETO
 ```
 -- =========================================================================
 -- FUNCTION PADRAO: "rls_auto_enable" 
@@ -235,6 +215,25 @@ END;
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 -- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
 -- também seja removido, evitando erros de objetos dependentes.
+```
+
+# 8- ATIVE AS EXTENÇÕES NESCESSARIAS 
+* Em Database (painel esquerdo) ou via SQL_EDITOR, exemplo:
+
+```
+-- =========================================================================
+-- COMO FAZER ATIVAÇÃO DAS EXTENSÕES VIA SQL
+-- =========================================================================
+
+-- 1. Ativa o suporte para ignorar acentos (ex: "oração" vira "oracao" na busca)
+CREATE EXTENSION IF NOT EXISTS "unaccent";
+
+-- 2. Ativa a busca inteligente por aproximação (corrige pequenos erros de digitação)
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- 3. Ativa o gerador de códigos de segurança para o login dos irmãos
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 ```
 
 # 9- CRIAR UM USUARIO PARA TESTAR A FUNCTION TRIGGER
