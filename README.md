@@ -176,6 +176,56 @@ after insert on auth.users
 for each row execute procedure public.handle_new_user();
 -- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
 ```
+## TRADUÇÃO DO CODIGO PADRAO NA CRIAÇÃO DO PROJETO
+```
+-- =========================================================================
+-- FUNCTION PADRAO: "rls_auto_enable" 
+-- =========================================================================
+cmd record;
+-- Declara uma variável chamada 'cmd' do tipo record para armazenar as linhas retornadas pela consulta.
+BEGIN
+-- Inicia o bloco de execução principal da lógica.
+FOR cmd IN
+-- Inicia um loop que percorrerá cada item retornado pelo comando SELECT abaixo.
+SELECT *
+FROM pg_event_trigger_ddl_commands()
+-- Consulta a função interna do PostgreSQL que lista comandos DDL (criação de objetos) executados recentemente.
+WHERE command_tag IN ('CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO')
+-- Filtra apenas os comandos de criação de novas tabelas.
+AND object_type IN ('table','partitioned table')
+-- Filtra para garantir que apenas objetos do tipo tabela ou tabela particionada sejam processados.
+LOOP
+-- Inicia o ciclo de repetição para cada comando encontrado.
+IF cmd.schema_name IS NOT NULL AND cmd.schema_name IN ('public') AND cmd.schema_name NOT IN ('pg_catalog','information_schema') AND cmd.schema_name NOT LIKE 'pg_toast%' AND cmd.schema_name NOT LIKE 'pg_temp%' THEN
+-- Verifica se o esquema da nova tabela é o 'public' e exclui esquemas de sistema do processamento.
+BEGIN
+-- Inicia um sub-bloco para isolar possíveis erros durante a execução do comando.
+EXECUTE format('alter table if exists %s enable row level security', cmd.object_identity);
+-- Executa dinamicamente o comando SQL para habilitar a Segurança em Nível de Linha (RLS) na tabela criada.
+RAISE LOG 'rls_auto_enable: enabled RLS on %', cmd.object_identity;
+-- Registra uma mensagem nos logs do servidor confirmando a ativação bem-sucedida do RLS na tabela.
+EXCEPTION
+-- Inicia o tratamento de erro caso o comando de habilitação do RLS falhe.
+WHEN OTHERS THEN
+RAISE LOG 'rls_auto_enable: failed to enable RLS on %', cmd.object_identity;
+-- Registra uma mensagem nos logs informando que ocorreu uma falha ao tentar habilitar o RLS na tabela.
+END;
+-- Finaliza o sub-bloco de tratamento de erros.
+ELSE
+-- Define o que fazer caso a tabela não pertença ao esquema 'public' ou seja de sistema.
+RAISE LOG 'rls_auto_enable: skip % (either system schema or not in enforced list: %.)', cmd.object_identity, cmd.schema_name;
+-- Registra no log que a tabela foi ignorada pelo gatilho, informando o motivo.
+END IF;
+-- Finaliza a estrutura condicional IF.
+END LOOP;
+-- Finaliza o loop que processa todos os comandos DDL capturados.
+END;
+-- Finaliza o bloco de execução do script.
+```
+
+**Minha recomendação:**
+* Não apague. Esse script é uma "boa prática" do Supabase. Ele evita que você esqueça de habilitar o RLS em uma nova tabela e deixe seus dados expostos sem querer. Ele não interfere em nada na lógica de sincronização que construímos para o seu usuário.
+* Se você apagar, a única consequência é que, se você criar uma tabela nova no futuro, terá que lembrar manualmente de habilitar o RLS nela via ALTER TABLE nome_tabela ENABLE ROW LEVEL SECURITY;.
 
 ## EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 ```
