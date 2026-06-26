@@ -32,40 +32,40 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 
----
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETOS COM O SUPABASE E GITHUB_PAGES
-# 1- CRIAR UMA CONTA NO GITHUB
+# PROJETO TUTORIAL COM O SUPABASE E GITHUB_PAGES
+## 1- CRIAR UMA CONTA NO GITHUB
 * 🌐 **github.com:** [github.com](https://github.com)
   
   
-# 2- CRIAR UM GITHUB-PAGES
+## 2- CRIAR UM GITHUB-PAGES
 * 🌐 **GITHUB-PAGES:** [docs.github.com/pt/pages](https://docs.github.com/pt/pages)
 * Criar um repositorio com o nome do seu  usuario + "github.io"
 EXEMPLO: aristidesbp.github.io 
 
 
-# 3- CRIAR UMA CONTA NO SUPABASE
+## 3- CRIAR UMA CONTA NO SUPABASE
 * 🌐 **supabase:** [supabase.com](https://supabase.com)
 * Vocẽ pode entrarcom a conta do guithub
 
-# 4- CRIAR UM PROJETO NO SUPABASE
+## 4- CRIAR UM PROJETO NO SUPABASE
 ## Escolha:
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
 
 
-# 5- CONFIGURAR AS URL (URL Configuration & Redirect URLs:)
+## 5- CONFIGURAR AS URL (URL Configuration & Redirect URLs:)
 * Em Authentication (lateral esquerda/ cadeado)
 * Coloque a url do github-pages
 * exemplo: https://aristidesbp.github.io
 
 
-# 6- ATIVE AS EXTENÇÕES NESCESSARIAS 
-* Em Database (painel esquerdo) ou via editor SQL, exemplo:
+## 6- ATIVE AS EXTENÇÕES NESCESSARIAS 
+* Em Database (painel esquerdo) ou via SQL_EDITOR, exemplo:
 
 ```
 -- =========================================================================
@@ -84,7 +84,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 ```
 
 
-# 7- CRIAR A TABELA ESPELHO PARA USUARIOS
+## 7- CRIAR A TABELA ESPELHO PARA USUARIOS
 ```
 -- =========================================================================
 -- SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS 
@@ -117,78 +117,66 @@ CREATE TABLE public.usuario_espelho (
 Crie uma função Trigger para ser implementada no supabase com o seguinte objetivo:
 * A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
 
-CREATE TABLE public.usuario_espelho (
-    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    auth_users_id uuid NOT NULL, 
-    nome_completo text,
-    bio text,
-    avatar_url text,
-    telefone text,
-    endereco text,
-    email text,
-    
-    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
-    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
-        REFERENCES auth.users(id) ON DELETE CASCADE
-);
+[definition da tabela selecionada abaixo:]
+create table public.usuario_espelho (
+  id bigint generated always as identity not null,
+  created_at timestamp with time zone not null default now(),
+  auth_users_id uuid not null,
+  nome_completo text null,
+  bio text null,
+  avatar_url text null,
+  telefone text null,
+  endereco text null,
+  email text null,
+  constraint usuario_espelho_pkey primary key (id),
+  constraint usuario_espelho_auth_users_id_fkey foreign KEY (auth_users_id) references auth.users (id) on delete CASCADE
+) TABLESPACE pg_default;
 
 ```
 # Resposta:
 
 ```
 -- =========================================================================
--- FUNÇÃO TRIGGER PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
+-- CRIAR A FUNÇÃO PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
 -- =========================================================================
+create or replace function public.handle_new_user()
+-- Cria ou atualiza uma função chamada handle_new_user no esquema public do seu banco de dados:
+returns trigger as $$
+-- Define que a função retornará um objeto especial de gatilho para ser utilizado em operações de banco de dados.
+begin
+-- Inicia o bloco de código que contém as instruções lógicas a serem executadas pela função.
+  insert into public.usuario_espelho (auth_users_id, email)
+-- Adiciona uma nova linha na tabela usuario_espelho preenchendo apenas as colunas auth_users_id e email.
+  values (new.id, new.email);
+-- Define os valores a serem inseridos, capturando o ID e o e-mail do registro recém-criado na tabela de autenticação.
+  return new;
+-- Retorna o registro original recém-criado, permitindo que a operação de inserção prossiga normalmente no banco de dados.
+end;
+-- Finaliza o bloco de comandos que iniciou no begin, encerrando a lógica da função.
+$$ language plpgsql security definer;
+-- Define que a função utiliza a linguagem PL/pgSQL e roda com os privilégios do criador, permitindo acesso total ao banco.
 
--- 1. Criação ou atualização da função que será executada pelo gatilho
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger 
-LANGUAGE plpgsql
--- SECURITY DEFINER garante que a função execute com privilégios de superusuário,
--- contornando restrições de permissão do usuário anônimo durante o cadastro.
-SECURITY DEFINER
--- Boa prática de segurança: define explicitamente o search_path para evitar ataques de injeção
-SET search_path = public
-AS $$
-BEGIN
-    -- Insere o novo usuário na tabela espelho
-    -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
-    INSERT INTO public.usuario_espelho (
-        auth_users_id, 
-        nome_completo, 
-        avatar_url, 
-        bio
-    )
-    VALUES (
-        new.id,
-        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), -- Tenta ler 'full_name' ou 'name'
-        new.raw_user_meta_data->>'avatar_url',
-        NULL -- Bio inicia nula para o usuário preencher posteriormente na plataforma
-    );
 
-    -- O retorno 'new' é obrigatório em triggers do tipo AFTER INSERT
-    RETURN new;
-END;
-$$;
-
--- 2. Criação do gatilho (Trigger) associado à tabela auth.users
--- Garante que nenhum gatilho duplicado com o mesmo nome seja criado
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW 
-    EXECUTE FUNCTION public.handle_new_user();
-
+-- =========================================================================
+-- CRIAR O TRIGGER GATILHO DE EXECUÇÃO
+-- =========================================================================
+create trigger on_auth_user_created
+-- Cria um gatilho (trigger) chamado on_auth_user_created que será disparado pelo banco de dados.
+after insert on auth.users
+-- Define que este gatilho será executado logo após uma inserção de dados na tabela auth.users.
+for each row execute procedure public.handle_new_user();
+-- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
 ```
+
+
+
+
 # EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 
 ```
 -- =========================================================================
 -- SCRIPT PARA REMOÇÃO DE FUNÇÃO DE EVENT TRIGGER
 -- =========================================================================
-
 -- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
 -- também seja removido, evitando erros de objetos dependentes.
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
@@ -4064,13 +4052,47 @@ No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de có
   "diagnostico_atual": "Ambiente Android dentro do container validado com sucesso. Java instalado e operacional. Volume de dados mapeado e funcional.",
   "proxima_tarefa_pendente": "Nenhuma. O ambiente de desenvolvimento está concluído e pronto para uso.",
   "historico_tarefas_concluidas": [
-    { "id": 1, "status": "ok" , "objetivo": "Verificar docker", "tarefa": "docker --version"},
-    { "id": 2, "status": "pendente" , "objetivo": "Instalar dependências", "tarefa": "sudo apt-get update && sudo apt-get install ca-certificates curl gnupg" },
+    { "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar e no fianl adicionar mais um iten"},
+    { "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, Não envie códigos por impulso ou contextos desnecessários" },
+    { "item": 3, "status": "pemdente" , "objetivo": "traduzir o codigo que o usuario vai enviar", "tarefa": "explicar cada linha do codigo atraves de um comentario em baixo dela de forma objetiva e direta" },
    
   ]
 }
+ [interaco com usuario...]
 
-2- [Sua análise, pergunta ou próximo passo único aqui...]
+
+ # EXEMPLO DE CODIGO TRADUZIDO:
+ -- =========================================================================
+-- CRIAR A FUNÇÃO PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
+-- =========================================================================
+create or replace function public.handle_new_user()
+-- Cria ou atualiza uma função chamada handle_new_user no esquema public do seu banco de dados:
+returns trigger as $$
+-- Define que a função retornará um objeto especial de gatilho para ser utilizado em operações de banco de dados.
+begin
+-- Inicia o bloco de código que contém as instruções lógicas a serem executadas pela função.
+  insert into public.usuario_espelho (auth_users_id, email)
+-- Adiciona uma nova linha na tabela usuario_espelho preenchendo apenas as colunas auth_users_id e email.
+  values (new.id, new.email);
+-- Define os valores a serem inseridos, capturando o ID e o e-mail do registro recém-criado na tabela de autenticação.
+  return new;
+-- Retorna o registro original recém-criado, permitindo que a operação de inserção prossiga normalmente no banco de dados.
+end;
+-- Finaliza o bloco de comandos que iniciou no begin, encerrando a lógica da função.
+$$ language plpgsql security definer;
+-- Define que a função utiliza a linguagem PL/pgSQL e roda com os privilégios do criador, permitindo acesso total ao banco.
+
+
+-- =========================================================================
+-- CRIAR O TRIGGER GATILHO DE EXECUÇÃO
+-- =========================================================================
+create trigger on_auth_user_created
+-- Cria um gatilho (trigger) chamado on_auth_user_created que será disparado pelo banco de dados.
+after insert on auth.users
+-- Define que este gatilho será executado logo após uma inserção de dados na tabela auth.users.
+for each row execute procedure public.handle_new_user();
+-- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
+
 ```
 
 
