@@ -34,37 +34,37 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROJETO TUTORIAL COM O SUPABASE E GITHUB_PAGES
-## 1- CRIAR UMA CONTA NO GITHUB
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# 1- CRIAR UMA CONTA NO GITHUB
 * 🌐 **github.com:** [github.com](https://github.com)
   
   
-## 2- CRIAR UM GITHUB-PAGES
+# 2- CRIAR UM GITHUB-PAGES
 * 🌐 **GITHUB-PAGES:** [docs.github.com/pt/pages](https://docs.github.com/pt/pages)
 * Criar um repositorio com o nome do seu  usuario + "github.io"
 EXEMPLO: aristidesbp.github.io 
 
 
-## 3- CRIAR UMA CONTA NO SUPABASE
+# 3- CRIAR UMA CONTA NO SUPABASE
 * 🌐 **supabase:** [supabase.com](https://supabase.com)
 * Vocẽ pode entrarcom a conta do guithub
 
-## 4- CRIAR UM PROJETO NO SUPABASE
+# 4- CRIAR UM PROJETO NO SUPABASE
 ## Escolha:
 * Nome do projeto: nome_do_seu_projeto
 * Senha do banco: ***********
 * Região: brasil
 
 
-## 5- CONFIGURAR AS URL (URL Configuration & Redirect URLs:)
+# 5- CONFIGURAR AS URL (URL Configuration & Redirect URLs:)
 * Em Authentication (lateral esquerda/ cadeado)
 * Coloque a url do github-pages
 * exemplo: https://aristidesbp.github.io
 
 
-## 6- ATIVE AS EXTENÇÕES NESCESSARIAS 
+# 6- ATIVE AS EXTENÇÕES NESCESSARIAS 
 * Em Database (painel esquerdo) ou via SQL_EDITOR, exemplo:
 
 ```
@@ -84,40 +84,50 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 ```
 
 
-## 7- CRIAR A TABELA ESPELHO PARA USUARIOS
+# 7- CRIAR A TABELA ESPELHO PARA USUARIOS
 ```
 -- =========================================================================
--- SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS 
+-- SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS
 -- =========================================================================
--- 2. TABELA: usuario_espelho
--- Depende apenas do esquema 'auth.users' nativo do Supabase.
--- -------------------------------------------------------------------------
 CREATE TABLE public.usuario_espelho (
-    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    auth_users_id uuid NOT NULL, 
-    nome_completo text,
-    bio text,
-    avatar_url text,
-    telefone text,
-    endereco text,
-    email text,
-    
-    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
-    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
-        REFERENCES auth.users(id) ON DELETE CASCADE
+-- Inicia a criação de uma nova tabela chamada usuario_espelho dentro do esquema público do banco.
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+-- Define a coluna id como um número grande (bigint), gerado automaticamente pelo banco, que não pode ser nulo.
+created_at timestamp with time zone NOT NULL DEFAULT now(),
+-- Cria a coluna created_at para registrar a data e hora, definindo o momento atual como valor padrão.
+auth_users_id uuid NOT NULL,
+-- Define a coluna auth_users_id para armazenar o identificador único (UUID) do usuário, sem permitir valores nulos.
+nome_completo text,
+-- Cria uma coluna de texto chamada nome_completo para armazenar o nome do usuário.
+bio text,
+-- Cria uma coluna de texto chamada bio para armazenar a biografia ou descrição do usuário.
+avatar_url text,
+-- Cria uma coluna de texto chamada avatar_url para armazenar o link da imagem de perfil do usuário.
+telefone text,
+-- Cria uma coluna de texto chamada telefone para armazenar o número de contato do usuário.
+endereco text,
+-- Cria uma coluna de texto chamada endereco para armazenar as informações de localização do usuário.
+email text,
+-- Cria uma coluna de texto chamada email para armazenar o endereço de e-mail do usuário.
+CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
+-- Estabelece que a coluna id será a chave primária, garantindo a unicidade de cada registro.
+CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id)
+-- Define uma restrição de chave estrangeira na coluna auth_users_id para manter a integridade referencial.
+REFERENCES auth.users(id) ON DELETE CASCADE
+-- Vincula a chave estrangeira à tabela de autenticação, garantindo que o registro seja excluído automaticamente se o usuário for deletado.
 );
 ```
 
 
 
-# Prompt para criar functions trigger
+# 8- PROMPT PARA CRIAR UMA FUNCTION E UMA TRIGGER
 
 ```
-Crie uma função Trigger para ser implementada no supabase com o seguinte objetivo:
-* A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+[TAREFA]: Crie uma função e uma Trigger para ser implementada no supabase com o seguinte objetivo:
+[OBEJETIVO]: A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
 
-[definition da tabela selecionada abaixo:]
+[definition da tabela selecionada abaixo]:
+
 create table public.usuario_espelho (
   id bigint generated always as identity not null,
   created_at timestamp with time zone not null default now(),
@@ -133,7 +143,7 @@ create table public.usuario_espelho (
 ) TABLESPACE pg_default;
 
 ```
-# Resposta:
+## Resposta:
 
 ```
 -- =========================================================================
@@ -156,7 +166,6 @@ end;
 $$ language plpgsql security definer;
 -- Define que a função utiliza a linguagem PL/pgSQL e roda com os privilégios do criador, permitindo acesso total ao banco.
 
-
 -- =========================================================================
 -- CRIAR O TRIGGER GATILHO DE EXECUÇÃO
 -- =========================================================================
@@ -168,106 +177,21 @@ for each row execute procedure public.handle_new_user();
 -- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
 ```
 
-
-
-
-# EXEMPLO DE COMO APAGAR UMA FUNÇÃO
-
+## EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 ```
 -- =========================================================================
 -- SCRIPT PARA REMOÇÃO DE FUNÇÃO DE EVENT TRIGGER
 -- =========================================================================
+DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 -- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
 -- também seja removido, evitando erros de objetos dependentes.
-DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
 
-### Para popular essas tabelas de forma mockada e funcional, precisamos seguir a ordem lógica de dependência das chaves estrangeiras.
+# 9- CRIAR UM USUARIO PARA TESTAR A FUNCTION TRIGGER
+* Em Authentication, adicione  um novo usuario e verifica se consta na tabela espelho criada
 
-Atenção ao ponto crítico: Como sua tabela usuario_espelho aponta obrigatoriamente para auth.users, o script abaixo inclui a inserção de dois usuários fictícios diretamente na tabela do sistema do Supabase (auth.users) para que os dados de teste não quebrem por restrição de chave estrangeira.
 
-**OBSERVAÇÃO: NAO ESTARAM NO Authentication/Users**
-
-Rode o script completo no seu SQL Editor:
-
-```
--- =========================================================================
--- SCRIPT DE POPULAÇÃO DE DADOS (SEED DATA)
--- =========================================================================
-
--- Certifique-se de que a extensão para gerar UUIDs está ativa (caso não esteja)
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- 1. POPULAR: auth.users (Tabela nativa do Supabase)
--- IDs estáticos criados manualmente via UUID para amarrar os relacionamentos abaixo
-INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_user_meta_data)
-VALUES 
-    ('a1111111-1111-1111-1111-111111111111', 'jose.silva@email.com', 'password_hash_mock', now(), '{"full_name": "José Silva"}'),
-    ('b2222222-2222-2222-2222-222222222222', 'maria.souza@email.com', 'password_hash_mock', now(), '{"full_name": "Maria Souza"}')
-ON CONFLICT (id) DO NOTHING;
-
--- 2. POPULAR: public.categorias
-INSERT INTO public.categorias (tipo_de_categoria) 
-VALUES 
-    ('Assistência Técnica'),
-    ('Aulas Particulares'),
-    ('Reformas e Reparos'),
-    ('Beleza e Estética')
-ON CONFLICT DO NOTHING;
-
--- 3. POPULAR: public.usuario_espelho
--- Mapeando os IDs do auth.users criados no passo 1
-INSERT INTO public.usuario_espelho (auth_users_id, nome_completo, bio, avatar_url)
-VALUES 
-    ('a1111111-1111-1111-1111-111111111111', 'José Silva', 'Desenvolvedor freelancer e técnico de informática nas horas vagas.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jose'),
-    ('b2222222-2222-2222-2222-222222222222', 'Maria Souza', 'Professora de matemática focada em ensino fundamental e médio.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria')
-ON CONFLICT DO NOTHING;
-
--- 4. POPULAR: public.servicos
--- Vincula IDs gerados dinamicamente das categorias (1 e 2) e usuários (1 e 2)
-INSERT INTO public.servicos (
-    titulo, descricao, categoria, preco_estimado, preco_detalhe, foto_url, criado_por_usuario, terceiro, eu_mesmo, whatsapp
-)
-VALUES 
-    (
-        'Formatação de Computador e Notebook', 
-        'Instalação de Sistema Operacional, backup de dados e configuração de drivers.', 
-        1, -- Categoria: Assistência Técnica
-        150.00, 
-        'Preço fixo para computadores domésticos. Adicionais de softwares sob consulta.', 
-        'https://images.unsplash.com/photo-1588508065123-287b28e013da', 
-        1, -- Criado por: José Silva
-        false, 
-        true, 
-        '5511999999999'
-    ),
-    (
-        'Aula Particular de Álgebra e Cálculo', 
-        'Aulas focadas em preparação para o ENEM, vestibulares e reforço escolar universitário.', 
-        2, -- Categoria: Aulas Particulares
-        80.00, 
-        'Valor cobrado por hora/aula. Pacotes mensais têm desconto.', 
-        'https://images.unsplash.com/photo-1434030216411-0b793f4b4173', 
-        2, -- Criado por: Maria Souza
-        false, 
-        true, 
-        '5511988888888'
-    );
-
--- 5. POPULAR: public.favoritos
--- Simulação: O usuário 2 (Maria) favoritou o serviço do usuário 1 (José)
-INSERT INTO public.favoritos (usuario_id, servico_id)
-VALUES 
-    (2, 1);
-
--- 6. POPULAR: public.avaliacoes
--- Simulação: O usuário 2 (Maria) avaliou o serviço do usuário 1 (José)
-INSERT INTO public.avaliacoes (servico_id, author_id, nota, comentario)
-VALUES 
-    (1, 2, 5, 'Excelente profissional! Meu notebook ficou muito rápido e o atendimento foi excelente.');
-
-```
-# EXEMPLO DE PROMPT PARA CRIAR VIEWS
+# 10- EXEMPLO DE PROMPT PARA CRIAR VIEWS
 ```
 Crie uma view chamada ver_servicos_destacados, ela deve listar os serviçõs com o nome da categoria e os detalhes do autor que esta na tabela de  "usuarios_espelho". Alem disso, deve calcular a media das notas (use 0 se nao houver) eo total de avaliações recebidas por cada serviço.
 
