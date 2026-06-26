@@ -68,35 +68,211 @@ Atue como um Agente de Suporte Técnico de Alto Nível e Programador Sênior. Su
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # PROJETO TUTORIAL COM O SUPABASE E GITHUB_PAGES
----
-# 1- CRIAR UMA CONTA NO GITHUB
-* 🌐 **github.com:** [github.com](https://github.com)
-  
-  
-# 2- CRIAR UM GITHUB-PAGES
-* 🌐 **GITHUB-PAGES:** [docs.github.com/pt/pages](https://docs.github.com/pt/pages)
-* Criar um repositorio com o nome do seu  usuario + "github.io"
-EXEMPLO: aristidesbp.github.io 
+# "missao_atual": "Criar conta no GitHub.",
+```json
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "pendente" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"}
+],
+"missao_atual": "Criar conta no GitHub.",
+"resumo_da_missao": "Usuário solicitou guia para criar conta no GitHub. Próximo passo é fornecer o passo a passo direto."
+}
 
 
-# 3- CRIAR UMA CONTA NO SUPABASE
-* 🌐 **supabase:** [supabase.com](https://supabase.com)
-* Vocẽ pode entrarcom a conta do guithub
 
-# 4- CRIAR UM PROJETO NO SUPABASE
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
-* Senha do banco: ***********
-* Região: brasil
+Para criar uma conta no GitHub, siga estes passos objetivos:
+
+1. **Acesse o site**: Vá para [github.com](https://github.com/).
+2. **Inicie o cadastro**: Clique no botão **"Sign up"** (no canto superior direito).
+3. **Insira os dados**: Digite seu e-mail, crie uma senha forte e escolha um nome de usuário (evite caracteres especiais).
+4. **Verificação**: Resolva o desafio de segurança (captcha) para provar que você não é um robô.
+5. **Código de ativação**: O GitHub enviará um código para o e-mail cadastrado. Insira esse código na tela para verificar sua conta.
+6. **Configuração inicial**: Responda às perguntas rápidas sobre seu perfil (ou clique em "Skip personalization") para concluir o processo e acessar seu *dashboard*.
+
+tarefa comcluida!
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual": "Configurar GitHub Pages.",
+  ```json
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "ok" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"},
+{ "iten": 7, "status": "pendente" , "objetivo": "explicar criação de GitHub Pages", "tarefa": "fornecer passos objetivos para configurar GitHub Pages"}
+],
+"missao_atual": "Configurar GitHub Pages.",
+"resumo_da_missao": "Usuário solicitou o procedimento para publicar um site via GitHub Pages. Segue o método direto."
+}
 
 
-# 5- CONFIGURAR AS URL (URL Configuration & Redirect URLs:)
-* Em Authentication (lateral esquerda/ cadeado)
-* Coloque a url do github-pages
-* exemplo: https://aristidesbp.github.io
+O GitHub Pages serve para hospedar sites estáticos diretamente de um repositório. O processo é simples. Siga estas instruções:
+
+1. **Crie o Repositório**: Crie um novo repositório no seu GitHub.
+2. **Envie os arquivos**: Suba seus arquivos (o arquivo principal deve ser obrigatoriamente chamado `index.html` na raiz do repositório).
+3. **Acesse as Configurações**: No seu repositório, clique na aba **"Settings"**.
+4. **Ative o Pages**: No menu lateral esquerdo, clique em **"Pages"**.
+5. **Defina a Origem**: Em "Build and deployment", na seção "Source", selecione **"Deploy from a branch"**.
+6. **Selecione a Branch**: Em "Branch", selecione `main` (ou `master`) e a pasta `/(root)`. Clique em **"Save"**.
+
+O GitHub levará alguns minutos para processar. O link do seu site aparecerá no topo da página de configurações ("Your site is live at...").
+
+tarefa concluida!
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual": "Criar conta no Supabase.",
+```json
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "ok" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"},
+{ "iten": 7, "status": "ok" , "objetivo": "explicar criação de GitHub Pages", "tarefa": "fornecer passos objetivos para configurar GitHub Pages"},
+{ "iten": 8, "status": "pendente" , "objetivo": "explicar criação de conta no Supabase", "tarefa": "fornecer passos objetivos para cadastro no Supabase"}
+],
+"missao_atual": "Criar conta no Supabase.",
+"resumo_da_missao": "Usuário solicitou o procedimento de cadastro no Supabase. Segue o procedimento técnico."
+}
+
+O Supabase é uma alternativa open-source ao Firebase, baseada em PostgreSQL. O processo de criação de conta é direto:
+
+1. **Acesse o site**: Vá para [supabase.com](https://supabase.com/).
+2. **Inicie o cadastro**: Clique em **"Start your project"** ou **"Sign up"**.
+3. **Integração OAuth**: O Supabase utiliza o GitHub como autenticação primária. Clique em **"Continue with GitHub"**.
+4. **Autorização**: Autorize a aplicação `Supabase` a acessar sua conta do GitHub. Se você não estiver logado no GitHub, o sistema solicitará suas credenciais.
+5. **Dashboard**: Após a autorização, você será redirecionado para o painel principal (*Dashboard*).
+6. **Criação de Projeto**: Para começar, clique em **"New Project"**, selecione sua organização e configure o banco de dados (defina nome, senha do banco e região).
+
+**Nota técnica:** Mantenha a senha do seu banco de dados em um local seguro; você precisará dela para gerenciar conexões externas via string de conexão.
+
+tarefa realizada!
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual": "Criar um projeto no Supabase.",
+```json
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "ok" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"},
+{ "iten": 7, "status": "ok" , "objetivo": "explicar criação de GitHub Pages", "tarefa": "fornecer passos objetivos para configurar GitHub Pages"},
+{ "iten": 8, "status": "ok" , "objetivo": "explicar criação de conta no Supabase", "tarefa": "fornecer passos objetivos para cadastro no Supabase"},
+{ "iten": 9, "status": "pendente" , "objetivo": "explicar criação de projeto no Supabase", "tarefa": "fornecer passos objetivos para criar um novo projeto no dashboard"}
+],
+"missao_atual": "Criar um projeto no Supabase.",
+"resumo_da_missao": "O usuário agora precisa criar o projeto dentro da conta recém-criada. Procedimento técnico direto a seguir."
+}
+
+Com a conta criada, a criação do projeto é a parte onde o seu banco de dados PostgreSQL é provisionado. Siga os passos:
+
+1. **Dashboard**: Após fazer login, você estará na tela inicial (seu *Dashboard*).
+2. **Novo Projeto**: Clique no botão **"New project"**.
+3. **Seleção de Organização**: Se você tiver mais de uma organização (conta), selecione a correta no menu *dropdown*.
+4. **Configurações do Projeto**:
+* **Name**: Dê um nome ao seu projeto.
+* **Database Password**: Defina uma senha forte. **Não a esqueça**, você precisará dela para acessar o banco externamente.
+* **Region**: Selecione a região do servidor mais próxima dos seus usuários (ex: *South America - São Paulo* para o Brasil).
+* **Pricing Plan**: O plano *Free* é suficiente para prototipagem e pequenos projetos.
 
 
-# 6- CRIAR A TABELA ESPELHO PARA USUARIOS
+5. **Finalização**: Clique em **"Create new project"**.
+
+O provisionamento leva de 1 a 3 minutos. Durante este tempo, o Supabase configura a API, o banco de dados e o serviço de autenticação automaticamente.
+
+Assim que estiver pronto, você terá acesso às chaves da API (Project URL e API Key) na aba **Project Settings > API**. Sem essas chaves, sua aplicação não conversa com o banco.
+
+
+tarefa ok
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual": "Configurar Redirect URLs no Supabase.",
+```JSON
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "ok" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"},
+{ "iten": 7, "status": "ok" , "objetivo": "explicar criação de GitHub Pages", "tarefa": "fornecer passos objetivos para configurar GitHub Pages"},
+{ "iten": 8, "status": "ok" , "objetivo": "explicar criação de conta no Supabase", "tarefa": "fornecer passos objetivos para cadastro no Supabase"},
+{ "iten": 9, "status": "ok" , "objetivo": "explicar criação de projeto no Supabase", "tarefa": "fornecer passos objetivos para criar um novo projeto no dashboard"},
+{ "iten": 10, "status": "pendente" , "objetivo": "configurar Redirect URLs no Supabase", "tarefa": "explicar a configuração de URls para autenticação"}
+],
+"missao_atual": "Configurar Redirect URLs no Supabase.",
+"resumo_da_missao": "O usuário precisa configurar as URLs de redirecionamento para o sistema de autenticação (Auth) funcionar corretamente após o login do usuário."
+}
+
+
+Configurar as Redirect URLs é obrigatório para que o Supabase saiba para onde enviar o usuário após uma autenticação bem-sucedida (ex: via Google, GitHub ou Email). Se você não fizer isso, o usuário ficará preso no fluxo de autenticação.
+
+Passos para configuração:
+Acesse o Dashboard: No seu projeto, vá até a barra lateral esquerda e clique no ícone de engrenagem "Project Settings".
+
+Auth: Clique em "Authentication".
+
+URL Configuration: Procure pelo campo "Site URL".
+
+Aqui, coloque a URL principal do seu site (onde ele está hospedado, ex: https://meusite.github.io).
+
+Redirect URLs: Logo abaixo, existe o campo "Additional Redirect URLs".
+
+Adicione aqui todas as URLs para as quais o Supabase tem permissão de redirecionar o usuário após o login.
+
+Exemplo: Se após o login você quer que ele vá para https://meusite.github.io/dashboard, adicione essa URL aqui.
+
+Regras críticas:
+Segurança: Só adicione URLs que você controla. Adicionar endereços genéricos abre brechas de segurança.
+
+Wildcards: Você pode usar * como curinga (ex: https://meusite.github.io/*). Isso permite que qualquer página dentro do seu site seja um destino válido para redirecionamento.
+
+Ambiente Local: Se você estiver desenvolvendo no seu computador, adicione http://localhost:3000/* (ou a porta que você usa) para conseguir testar o login localmente.
+
+tarefa ok
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual": "SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS",
+```
+{
+"cheklist_json": true,
+"historico_tarefas_concluidas": [
+{ "iten": 1, "status": "ok" , "objetivo": "copiar o ultimo json", "tarefa": "ler e copiar o ultimo arquivo json gerado, copiar todos os itens dele e no final adicionar mais um iten, ele sempre deve conter os campos: iten,status,objetivo e tarefa"},
+{ "item": 2, "status": "ok" , "objetivo": "onestidade brutal", "tarefa": "nao puxar saco do usuario, seja onesto, se nao souber pergunte para o usuario, enteda o problema e pesquise na internet, nunca envie códigos por impulso ou contextos desnecessários" },
+{ "item": 3, "status": "ok" , "objetivo": "aprender estrutura de tradução para os codigos", "tarefa": "explicar cada linha do codigo enviado atraves de um comentario em baixo dalinha que esta traduzindo de forma objetiva e direta" },
+{ "iten": 4, "status": "ok" , "objetivo": "copiar este json", "tarefa": "na proxima interação deve copiar este arquivo json com os 3 itens acima!"},
+{ "iten": 5, "status": "ok" , "objetivo": "iniciar suporte técnico", "tarefa": "aguardar a definição da missão pelo usuário para atuar como sênior"},
+{ "iten": 6, "status": "ok" , "objetivo": "explicar criação de conta no GitHub", "tarefa": "fornecer passos objetivos para cadastro no GitHub"},
+{ "iten": 7, "status": "ok" , "objetivo": "explicar criação de GitHub Pages", "tarefa": "fornecer passos objetivos para configurar GitHub Pages"},
+{ "iten": 8, "status": "ok" , "objetivo": "explicar criação de conta no Supabase", "tarefa": "fornecer passos objetivos para cadastro no Supabase"},
+{ "iten": 9, "status": "ok" , "objetivo": "explicar criação de projeto no Supabase", "tarefa": "fornecer passos objetivos para criar um novo projeto no dashboard"},
+{ "iten": 10, "status": "ok" , "objetivo": "configurar Redirect URLs no Supabase", "tarefa": "explicar a configuração de URls para autenticação"},
+{ "iten": 11, "status": "pendente" , "objetivo": "analisar script SQL de usuario_espelho", "tarefa": "avaliar a estrutura do banco e sugerir melhorias se necessário"}
+],
+"missao_atual": "Análise crítica do script SQL fornecido.",
+"resumo_da_missao": "O usuário enviou um script SQL para a tabela `usuario_espelho`. Avaliei o código quanto à sintaxe, integridade e boas práticas."
+}
+```
 ```
 -- =========================================================================
 -- SCRIPT DE CRIAÇÃO DA TABELA USUARIO_ESPELHO E SEUS RELACIONAMENTOS
@@ -127,19 +303,20 @@ CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id)
 -- Define uma restrição de chave estrangeira na coluna auth_users_id para manter a integridade referencial.
 REFERENCES auth.users(id) ON DELETE CASCADE
 -- Vincula a chave estrangeira à tabela de autenticação, garantindo que o registro seja excluído automaticamente se o usuário for deletado.
+-- --------------------------------------------------------------------------------------------------------
+-- sugestao de melhoria da IA:
+CREATE INDEX idx_usuario_espelho_auth_users_id ON public.usuario_espelho(auth_users_id);
+-- Cria um índice na coluna auth_users_id para acelerar consultas de busca por usuário específico.
 );
 ```
-
-
-
-# 7- PROMPT PARA CRIAR UMA FUNCTION E UMA TRIGGER
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# "missao_atual":  PROMPT PARA CRIAR UMA FUNCTION E UMA TRIGGER
 
 ```
 [TAREFA]: Crie uma função e uma Trigger para ser implementada no supabase com o seguinte objetivo:
 [OBEJETIVO]: A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
 
 [definition da tabela selecionada abaixo]:
-
 create table public.usuario_espelho (
   id bigint generated always as identity not null,
   created_at timestamp with time zone not null default now(),
@@ -154,40 +331,14 @@ create table public.usuario_espelho (
   constraint usuario_espelho_auth_users_id_fkey foreign KEY (auth_users_id) references auth.users (id) on delete CASCADE
 ) TABLESPACE pg_default;
 
-```
-## Resposta:
+create index IF not exists idx_usuario_espelho_auth_users_id on public.usuario_espelho using btree (auth_users_id) TABLESPACE pg_default;
 
 ```
--- =========================================================================
--- CRIAR A FUNÇÃO PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
--- =========================================================================
-create or replace function public.handle_new_user()
--- Cria ou atualiza uma função chamada handle_new_user no esquema public do seu banco de dados:
-returns trigger as $$
--- Define que a função retornará um objeto especial de gatilho para ser utilizado em operações de banco de dados.
-begin
--- Inicia o bloco de código que contém as instruções lógicas a serem executadas pela função.
-  insert into public.usuario_espelho (auth_users_id, email)
--- Adiciona uma nova linha na tabela usuario_espelho preenchendo apenas as colunas auth_users_id e email.
-  values (new.id, new.email);
--- Define os valores a serem inseridos, capturando o ID e o e-mail do registro recém-criado na tabela de autenticação.
-  return new;
--- Retorna o registro original recém-criado, permitindo que a operação de inserção prossiga normalmente no banco de dados.
-end;
--- Finaliza o bloco de comandos que iniciou no begin, encerrando a lógica da função.
-$$ language plpgsql security definer;
--- Define que a função utiliza a linguagem PL/pgSQL e roda com os privilégios do criador, permitindo acesso total ao banco.
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
--- =========================================================================
--- CRIAR O TRIGGER GATILHO DE EXECUÇÃO
--- =========================================================================
-create trigger on_auth_user_created
--- Cria um gatilho (trigger) chamado on_auth_user_created que será disparado pelo banco de dados.
-after insert on auth.users
--- Define que este gatilho será executado logo após uma inserção de dados na tabela auth.users.
-for each row execute procedure public.handle_new_user();
--- Especifica que para cada nova linha inserida, a função public.handle_new_user será executada automaticamente.
-```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## TRADUÇÃO DO CODIGO DA FUNÇÃO PADRAO NA CRIAÇÃO DO PROJETO
 ```
 -- =========================================================================
