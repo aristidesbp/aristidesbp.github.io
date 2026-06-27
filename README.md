@@ -868,7 +868,79 @@ No seu navegador, vá até o seu repositório no GitHub.
 4. Adicione o nome VITE_SUPABASE_URL e cole o valor. Repita para o VITE_SUPABASE_ANON_KEY.
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```json
+{
+  "lista_de_tarefas": true,
+  "diagnostico_atual": "O usuário está pronto para implementar a automação via GitHub Actions no Termux. Preciso fornecer os comandos exatos de terminal para criar a hierarquia de pastas e o arquivo de configuração.",
+  "proxima_tarefa_pendente": "Execução da criação da estrutura de pastas e do arquivo YAML no Termux.",
+  "historico_tarefas_concluidas": [
+    { "id": 1, "status": "ok", "objetivo": "Schema do Banco", "tarefa": "DDL das tabelas" },
+    { "id": 2, "status": "ok", "objetivo": "Trigger de Auth", "tarefa": "Sincronização de usuário" },
+    { "id": 3, "status": "ok", "objetivo": "View de Consulta", "tarefa": "Implementação da view" },
+    { "id": 4, "status": "ok", "objetivo": "Segurança RLS", "tarefa": "Refinamento das políticas" },
+    { "id": 5, "status": "ok", "objetivo": "Configuração do .env", "tarefa": "Criação de variáveis e gitignore" },
+    { "id": 6, "status": "ok", "objetivo": "Sincronização Git", "tarefa": "Resolução de conflitos de merge" },
+    { "id": 7, "status": "ok", "objetivo": "Scaffolding do Frontend", "tarefa": "Estrutura de pastas" },
+    { "id": 8, "status": "ok", "objetivo": "Verificação de Segurança", "tarefa": "Configuração de Secrets no GitHub" },
+    { "id": 9, "status": "ok", "objetivo": "Automação", "tarefa": "Criação de GitHub Action para gerar config" }
+  ]
+}
 
+```
+Para implementar a automação no seu terminal Termux, siga estes comandos sequenciais. Eles criarão a estrutura necessária e o arquivo de configuração automaticamente.
+### Comandos para o Termux
+ 1. **Criar a estrutura de pastas:**
+   ```bash
+   mkdir -p .github/workflows
+   
+   ```
+   *(O comando mkdir -p cria a pasta .github e a subpasta workflows de uma só vez).*
+ 2. **Criar e editar o arquivo generate-config.yml:**
+   ```bash
+   nano .github/workflows/generate-config.yml
+   
+   ```
+ 3. **Colar o conteúdo:**
+   Assim que o editor nano abrir, cole o código abaixo:
+```yaml
+name: Generate Supabase Config
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create supabase_config.js
+        run: |
+          mkdir -p assets/js
+          echo "const SUPABASE_URL = '${{ secrets.VITE_SUPABASE_URL }}';" > assets/js/supabase_config.js
+          echo "const SUPABASE_KEY = '${{ secrets.VITE_SUPABASE_ANON_KEY }}';" >> assets/js/supabase_config.js
+          echo "console.log('✅ supabase_config.js carregado');" >> assets/js/supabase_config.js
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Auto-gerando supabase_config.js"
+          file_pattern: 'assets/js/supabase_config.js'
+
+```
+ 4. **Salvar e sair:**
+   * Pressione Ctrl + O, depois Enter para salvar.
+   * Pressione Ctrl + X para sair do editor.
+### Próximo passo após criar o arquivo:
+Agora que o arquivo foi criado localmente, envie-o para o seu repositório no GitHub para que a automação seja ativada:
+```bash
+git add .
+git commit -m "Adicionando automação de config via GitHub Actions"
+git push origin main
+
+```
+**Dica educativa:** O git add . adiciona todos os arquivos novos ao controle de versão. Como criamos a pasta .github, o Git agora passará a rastrear essa pasta e o arquivo de configuração.
+Assim que rodar esses comandos, vá até a aba **Actions** no seu repositório no GitHub. Você verá o processo rodando e, em instantes, o arquivo assets/js/supabase_config.js aparecerá no seu repositório! Conseguiu enviar com sucesso?
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
