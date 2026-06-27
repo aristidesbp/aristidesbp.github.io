@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizinho Indica - Busca Dinâmica</title>
-    <link rel="stylesheet" href="assets/css/financeiro.css">
+    <title>Vizinho Indica - Consulta Visual</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
+        input { padding: 8px; width: 60%; }
+        button { padding: 8px 15px; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1>Vizinho Indica - Busca</h1>
-    </header>
-
-    <main>
-        <div id="status-conexao">Conectando...</div>
-        
-        <br>
-        <input type="text" id="tabelaInput" placeholder="Digite o nome da tabela">
-        <button onclick="realizarBusca()">Buscar</button>
-        
-        <hr>
-        <h3>Resultados:</h3>
-        <pre id="resultado"></pre>
-    </main>
+    <h1>Consulta de Dados</h1>
+    <input type="text" id="tabelaInput" placeholder="Ex: categorias">
+    <button onclick="realizarBusca()">Consultar</button>
+    
+    <div id="resultado" style="margin-top: 20px;"></div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase_config.js"></script>
@@ -30,24 +25,31 @@
 
     <script>
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        document.getElementById('status-conexao').innerText = "Supabase Conectado!";
 
         async function realizarBusca() {
-            // Pega o valor digitado no input
             const nomeTabela = document.getElementById('tabelaInput').value;
+            const container = document.getElementById('resultado');
             
-            if (!nomeTabela) {
-                alert("Por favor, digite o nome da tabela!");
+            if (!nomeTabela) return alert("Digite o nome da tabela!");
+
+            container.innerHTML = "Carregando...";
+            const dados = await buscarDados(nomeTabela);
+            
+            container.innerHTML = ""; // Limpa a tela
+
+            if (!dados || dados.length === 0) {
+                container.innerHTML = "<p>Nenhum dado encontrado ou tabela vazia.</p>";
                 return;
             }
 
-            document.getElementById('resultado').innerText = "Buscando...";
-            
-            // Chama a função que criamos no arquivo supabase_crud.js
-            const dados = await buscarDados(nomeTabela);
-            
-            // Exibe o resultado na tela
-            document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
+            // Cria um card visual para cada item encontrado
+            dados.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                // Transforma o objeto em texto legível
+                card.innerHTML = `<pre>${JSON.stringify(item, null, 2)}</pre>`;
+                container.appendChild(card);
+            });
         }
     </script>
 </body>
