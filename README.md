@@ -799,4 +799,114 @@ for each row execute procedure public.handle_new_user();
 
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tabelas vizinho indica
+```
 
+-- =========================================================================
+-- SCRIPT DE CRIAÇÃO DE TABELAS E RELACIONAMENTOS (SUPABASE / POSTGRESQL)
+-- =========================================================================
+
+-- 1. TABELA: categorias
+-- Criada primeiro por não possuir chaves estrangeiras pendentes.
+CREATE TABLE public.categorias (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    tipo_de_categoria text NOT NULL,
+    
+    CONSTRAINT categorias_pkey PRIMARY KEY (id)
+);
+
+-- 2. TABELA: usuario_espelho
+-- Depende apenas do esquema 'auth.users' nativo do Supabase.
+CREATE TABLE public.usuario_espelho (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    auth_users_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
+    nome_completo text,
+    bio text,
+    avatar_url text,
+    
+    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
+    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
+        REFERENCES auth.users(id) ON DELETE CASCADE
+);
+
+-- 3. TABELA: servicos
+-- Depende de 'categorias' e 'usuario_espelho'.
+-- OBSERVAÇÃO: 'double precision' -> 'numeric(10,2)' para evitar erros de ponto flutuante em valores monetários.
+CREATE TABLE public.servicos (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    titulo text NOT NULL,
+    descricao text, 
+    categoria bigint,
+    preco_estimado numeric(10, 2), 
+    preco_detalhe text,
+    foto_url text,
+    criado_por_usuario bigint,
+    terceiro boolean DEFAULT false,
+    eu_mesmo boolean DEFAULT true,
+    whatsapp text, 
+    
+    CONSTRAINT servicos_pkey PRIMARY KEY (id),
+    CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) 
+        REFERENCES public.categorias(id) ON DELETE SET NULL,
+    CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) 
+        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE
+);
+
+-- 4. TABELA: favoritos
+-- Depende de 'usuario_espelho' e 'servicos'.
+CREATE TABLE public.favoritos (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    usuario_id bigint NOT NULL,
+    servico_id bigint NOT NULL,
+    
+    CONSTRAINT favoritos_pkey PRIMARY KEY (id),
+    CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) 
+        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE,
+    CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) 
+        REFERENCES public.servicos(id) ON DELETE CASCADE
+);
+
+-- 5. TABELA: avaliacoes
+-- Depende de 'servicos' e 'usuario_espelho'.
+-- ADIÇÃO: Constraint CHECK para garantir que a nota fique em um intervalo padrão (1 a 5).
+CREATE TABLE public.avaliacoes (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    servico_id bigint NOT NULL,
+    author_id bigint NOT NULL, -- Mantido padrão de nomenclatura, corrigido de autor_id para manter consistência caso necessário
+    nota smallint NOT NULL,
+    comentario text,
+    
+    CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
+    CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) 
+        REFERENCES public.servicos(id) ON DELETE CASCADE,
+    CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) 
+        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE,
+    CONSTRAINT avaliacoes_nota_check CHECK (nota >= 1 AND nota <= 5)
+);
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# prompt function trigger
+```
+Crie uma função Trigger para ser implementada no supabase com o seguinte objetivo:
+  - A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+
+create table public.usuario_espelho (
+  id bigint generated always as identity not null,
+  created_at timestamp with time zone not null default now(),
+  auth_users_id uuid not null,
+  nome_completo text null,
+  bio text null,
+  avatar_url text null,
+  constraint usuario_espelho_pkey primary key (id),
+  constraint usuario_espelho_auth_users_id_fkey foreign KEY (auth_users_id) references auth.users (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+```
+
+🟥🟥🟥🟥
