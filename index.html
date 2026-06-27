@@ -2,65 +2,45 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Debug Vizinho Indica</title>
+    <title>Teste de Conexão Direto</title>
     <style>
         body { font-family: sans-serif; padding: 20px; }
-        .log { background: #333; color: #0f0; padding: 10px; border-radius: 5px; font-family: monospace; overflow-x: auto; }
-        .card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+        #log { background: #000; color: #0f0; padding: 15px; border-radius: 5px; height: 300px; overflow-y: scroll; }
     </style>
 </head>
 <body>
-    <h1>Painel de Debug</h1>
-    <div id="status">Testando conexão...</div>
-    <div class="log" id="console-log"></div>
-
-    <h3>Tabelas disponíveis:</h3>
-    <div id="botoes-tabelas"></div>
-
-    <div id="resultado"></div>
+    <h1>Verificador de Conexão</h1>
+    <div id="log">Iniciando teste...</div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase_config.js"></script>
-
     <script>
-        const log = (msg) => document.getElementById('console-log').innerHTML += `> ${msg}<br>`;
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const logDiv = document.getElementById('log');
+        const print = (msg) => logDiv.innerHTML += `<br>> ${msg}`;
 
-        // Teste de conexão
-        async function testarConexao() {
+        // COLOQUE SEUS DADOS AQUI
+ const SUPABASE_URL = 'https://zxkaxteprwxijriycvdx.supabase.co/rest/v1/';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
+
+        async function testarTudo() {
             try {
-                const { data, error } = await supabase.from('categorias').select('count(*)', { count: 'exact', head: true });
-                if (error) throw error;
-                document.getElementById('status').innerHTML = "✅ Conectado ao Supabase!";
-                log("Conexão bem sucedida!");
-                mostrarBotoes();
+                print("Iniciando cliente Supabase...");
+                const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                
+                print("Tentando buscar na tabela 'teste_conexao'...");
+                const { data, error } = await supabase.from('teste_conexao').select('*');
+                
+                if (error) {
+                    print("ERRO DO SUPABASE: " + error.message);
+                } else {
+                    print("SUCESSO! Dados encontrados:");
+                    print(JSON.stringify(data));
+                }
             } catch (err) {
-                document.getElementById('status').innerHTML = "❌ Erro na Conexão";
-                log("ERRO: " + err.message);
+                print("ERRO NO JAVASCRIPT: " + err.message);
             }
         }
 
-        function mostrarBotoes() {
-            const tabelas = ['categorias', 'servicos', 'avaliacoes', 'favoritos', 'usuario_espelho'];
-            tabelas.forEach(t => {
-                const b = document.createElement('button');
-                b.innerText = t;
-                b.onclick = () => listar(t);
-                document.getElementById('botoes-tabelas').appendChild(b);
-            });
-        }
-
-        async function listar(tabela) {
-            log(`Buscando ${tabela}...`);
-            const { data, error } = await supabase.from(tabela).select('*');
-            if (error) {
-                log(`ERRO em ${tabela}: ${error.message}`);
-            } else {
-                document.getElementById('resultado').innerHTML = `<h3>${tabela}</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
-            }
-        }
-
-        testarConexao();
+        testarTudo();
     </script>
 </body>
 </html>
