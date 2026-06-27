@@ -28,22 +28,3 @@ jobs:
           
 
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Create supabase_config.js
-        run: |
-          mkdir -p assets/js
-          echo "const SUPABASE_URL = '${{ secrets.VITE_SUPABASE_URL }}';" > assets/js/supabase_config.js
-          echo "const SUPABASE_KEY = '${{ secrets.VITE_SUPABASE_ANON_KEY }}';" >> assets/js/supabase_config.js
-          echo "console.log('✅ supabase_config.js carregado');" >> assets/js/supabase_config.js
-
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Auto-gerando supabase_config.js"
-          file_pattern: 'assets/js/supabase_config.js'
