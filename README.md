@@ -844,7 +844,8 @@ aristidesbp.github.io
 │   ├── txt
 │   ├── xml
 │   └── zip
-│ 
+│
+├── .env (na pasta de desenvolvimento local)
 ├── index.html
 ├── limpar_duplicado.py
 ├── organizar.py
