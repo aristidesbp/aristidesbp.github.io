@@ -3,35 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizinho Indica - AristidesBP</title>
+    <title>Vizinho Indica - Busca Dinâmica</title>
     <link rel="stylesheet" href="assets/css/financeiro.css">
 </head>
 <body>
 
     <header>
-        <h1>Bem-vindo ao Vizinho Indica</h1>
+        <h1>Vizinho Indica - Busca</h1>
     </header>
 
     <main>
-        <div id="status-conexao">Carregando configuração...</div>
-        <button onclick="testarConsulta()">Testar Busca de Dados</button>
-        <div id="resultado"></div>
+        <div id="status-conexao">Conectando...</div>
+        
+        <br>
+        <input type="text" id="tabelaInput" placeholder="Digite o nome da tabela">
+        <button onclick="realizarBusca()">Buscar</button>
+        
+        <hr>
+        <h3>Resultados:</h3>
+        <pre id="resultado"></pre>
     </main>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
     <script src="assets/js/supabase_config.js"></script>
-    
     <script src="assets/js/supabase_crud.js"></script>
 
     <script>
-        // Inicializa o cliente com as constantes que vêm do supabase_config.js
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         document.getElementById('status-conexao').innerText = "Supabase Conectado!";
 
-        async function testarConsulta() {
-            // Substitua 'nome_da_sua_tabela' pela tabela real no banco
-            const dados = await buscarDados('nome_da_sua_tabela');
+        async function realizarBusca() {
+            // Pega o valor digitado no input
+            const nomeTabela = document.getElementById('tabelaInput').value;
+            
+            if (!nomeTabela) {
+                alert("Por favor, digite o nome da tabela!");
+                return;
+            }
+
+            document.getElementById('resultado').innerText = "Buscando...";
+            
+            // Chama a função que criamos no arquivo supabase_crud.js
+            const dados = await buscarDados(nomeTabela);
+            
+            // Exibe o resultado na tela
             document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
         }
     </script>
