@@ -423,6 +423,28 @@ python3 -m pip install --upgrade yt-dlp
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO CRIAR ARQUIVO (.env)
+```
+# abrir editor de texto
+nano .env
+```
+* cole o código abaixo dentro do arquivo +(crt+s)+(crt+x)
+```
+# Configurações de Conexão com o Supabase
+# Obtidas no painel de controle em: Project Settings > API
+
+# URL do seu projeto no Supabase
+VITE_SUPABASE_URL=sua_url_aqui
+
+# Chave anon (pública) para permitir que o app acesse o banco via RLS
+VITE_SUPABASE_ANON_KEY=sua_chave_anonima_aqui
+
+# Lembre-se: Nunca compartilhe este arquivo com ninguém!
+
+```
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 🟥 python3 organizar.py
