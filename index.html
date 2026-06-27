@@ -2,62 +2,67 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizinho Indica - Consulta Visual</title>
+    <title>Vizinho Indica - Gerenciador</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
-        input { padding: 8px; width: 60%; }
-        button { padding: 8px 15px; }
+        body { font-family: sans-serif; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px; }
+        .btn-tabela { margin: 5px; padding: 10px; cursor: pointer; background: #007bff; color: white; border: none; }
     </style>
 </head>
 <body>
 
-    <h1>Consulta de Dados</h1>
-    <input type="text" id="tabelaInput" placeholder="Ex: categorias">
-    <button onclick="realizarBusca()">Consultar</button>
-    
-    <div id="resultado" style="margin-top: 20px;"></div>
+    <h1>Tabelas do Banco</h1>
+    <div id="lista-tabelas">Carregando tabelas...</div>
+    <hr>
+    <div id="resultado"></div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase_config.js"></script>
-    <script src="assets/js/supabase_crud.js"></script>
 
     <script>
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-       /* async function realizarBusca() {
-            const nomeTabela = document.getElementById('tabelaInput').value;
-            const container = document.getElementById('resultado');*/
-            
-    async function realizarBusca() {
-    alert("Botão clicado!"); // Adicione isso para testar!
-    const nomeTabela = document.getElementById('tabelaInput').value;
-    const container = document.getElementById('resultado');
-            
+        // 1. Buscar tabelas automaticamente
+        async function carregarTabelas() {
+            const { data, error } = await supabase
+                .from('information_schema.tables')
+                .select('table_name')
+                .eq('table_schema', 'public');
 
-            
-            if (!nomeTabela) return alert("Digite o nome da tabela!");
+            if (error) return console.error(error);
 
-            container.innerHTML = "Carregando...";
-            const dados = await buscarDados(nomeTabela);
+            const divLista = document.getElementById('lista-tabelas');
+            divLista.innerHTML = "";
             
-            container.innerHTML = ""; // Limpa a tela
+            data.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-tabela';
+                btn.innerText = t.table_name;
+                btn.onclick = () => listarConteudo(t.table_name);
+                divLista.appendChild(btn);
+            });
+        }
 
-            if (!dados || dados.length === 0) {
-                container.innerHTML = "<p>Nenhum dado encontrado ou tabela vazia.</p>";
+        // 2. Listar conteúdo ao clicar
+        async function listarConteudo(tabela) {
+            const { data, error } = await supabase.from(tabela).select('*');
+            const resDiv = document.getElementById('resultado');
+            
+            if (error) {
+                resDiv.innerHTML = `<p style="color:red">Erro: ${error.message}</p>`;
                 return;
             }
 
-            // Cria um card visual para cada item encontrado
-            dados.forEach(item => {
+            resDiv.innerHTML = `<h3>Conteúdo de: ${tabela}</h3>`;
+            data.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // Transforma o objeto em texto legível
-                card.innerHTML = `<pre>${JSON.stringify(item, null, 2)}</pre>`;
-                container.appendChild(card);
+                card.innerText = JSON.stringify(item);
+                resDiv.appendChild(card);
             });
         }
+
+        carregarTabelas();
     </script>
 </body>
 </html>
