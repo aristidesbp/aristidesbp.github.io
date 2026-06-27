@@ -2,7 +2,7 @@ name: Generate Supabase Config
 on: [push]
 
 permissions:
-  contents: write # ISSO É O QUE FALTA!
+  contents: write
 
 jobs:
   build:
@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          persist-credentials: true # Garante que as credenciais sejam mantidas
+          persist-credentials: true
 
       - name: Create supabase_config.js
         run: |
@@ -25,6 +25,3 @@ jobs:
         with:
           commit_message: "Auto-gerando supabase_config.js"
           file_pattern: 'assets/js/supabase_config.js'
-          
-
-
