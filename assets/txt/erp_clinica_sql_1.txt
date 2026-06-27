@@ -1,0 +1,78 @@
+-- RESET TOTAL (CUIDADO: APAGA DADOS ANTERIORES DO PREFIXO CLINICA_)
+DROP TABLE IF EXISTS public.clinica_compartilhamento CASCADE;
+DROP TABLE IF EXISTS public.clinica_atribuicoes CASCADE;
+DROP TABLE IF EXISTS public.clinica_exercicios CASCADE;
+DROP TABLE IF EXISTS public.clinica_perfis CASCADE;
+
+-- 1. PERFIS COM SEGURANÇA POR ROLE
+CREATE TABLE public.clinica_perfis (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    role TEXT CHECK (role IN ('master', 'psicopedagoga', 'paciente')) DEFAULT 'paciente',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 2. EXERCÍCIOS (BASEADO NOS SEUS DOCS DE TREINO DOMICILIAR)
+CREATE TABLE public.clinica_exercicios (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    tipo TEXT CHECK (tipo IN ('leitura', 'escrita', 'matematica', 'cognitivo')),
+    video_url TEXT,
+    criado_por UUID REFERENCES auth.users(id),
+    conteudo_json JSONB, -- Para formulários dinâmicos estilo Google Forms
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 3. ATRIBUIÇÕES (CONTROLE DE EXECUÇÃO)
+CREATE TABLE public.clinica_atribuicoes (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    paciente_id UUID REFERENCES auth.users(id),
+    exercicio_id UUID REFERENCES public.clinica_exercicios(id) ON DELETE CASCADE,
+    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'em_andamento', 'concluido')),
+    feedback_paciente TEXT,
+    data_conclusao TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 4. COMPARTILHAMENTO UNIVERSAL (JSON, PDF, RELATÓRIOS)
+CREATE TABLE public.clinica_compartilhamento (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    remetente_id UUID REFERENCES auth.users(id),
+    destinatario_email TEXT NOT NULL, -- Busca o destinatário por e-mail para integração total
+    titulo TEXT NOT NULL,
+    url_arquivo TEXT,
+    tipo_arquivo TEXT, -- 'pdf', 'json', 'imagem'
+    mensagem TEXT,
+    lido BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 5. POLÍTICAS DE SEGURANÇA (RLS)
+ALTER TABLE public.clinica_perfis ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_exercicios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_atribuicoes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_compartilhamento ENABLE ROW LEVEL SECURITY;
+
+-- Exemplo de política de segurança nível bancário:
+CREATE POLICY "Acesso Master: Tudo" ON public.clinica_atribuicoes FOR ALL 
+USING (EXISTS (SELECT 1 FROM clinica_perfis WHERE id = auth.uid() AND role = 'master'));
+
+CREATE POLICY "Paciente: Vê apenas o seu e-mail de destino" 
+ON public.clinica_compartilhamento FOR SELECT 
+USING (destinatario_email = (SELECT email FROM clinica_perfis WHERE id = auth.uid()));
+
+-- TRIGGER PARA CRIAR PERFIL AUTOMÁTICO
+CREATE OR REPLACE FUNCTION public.handle_new_erp_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.clinica_perfis (id, nome, email, role)
+  VALUES (new.id, COALESCE(new.raw_user_meta_data->>'full_name', 'Novo Usuário'), new.email, 'paciente');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql security definer;
+
+CREATE TRIGGER on_auth_user_created_erp
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_erp_user();

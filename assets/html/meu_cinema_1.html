@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Movie Player - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #020617; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .playlist-scroll { max-height: calc(100vh - 250px); overflow-y: auto; }
+        .video-container { aspect-ratio: 16 / 9; background: black; }
+        .movie-card { transition: 0.3s; cursor: pointer; border-left: 4px solid transparent; position: relative; }
+        .movie-card:hover { background: #1e293b; }
+        .movie-card.active { border-left-color: var(--primary); background: #1e293b; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen">
+        <nav class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center z-10">
+            <h1 class="text-xl font-bold text-emerald-500"><i class="fas fa-film"></i> ABP Video Hub</h1>
+            <button onclick="toggleUploadModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                <i class="fas fa-plus mr-2"></i> Novo Filme
+            </button>
+        </nav>
+
+        <div class="flex flex-1 flex-col lg:flex-row overflow-hidden">
+            <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+                <div class="video-container rounded-xl overflow-hidden shadow-2xl border border-slate-800">
+                    <video id="main-player" controls class="w-full h-full">
+                        <source id="video-src" src="" type="video/mp4">
+                    </video>
+                </div>
+                <div class="mt-6">
+                    <h2 id="playing-title" class="text-3xl font-bold text-slate-100">Selecione um filme</h2>
+                    <p id="playing-sinopse" class="text-slate-400 mt-2 max-w-3xl">Escolha na lista ao lado para começar a reprodução.</p>
+                </div>
+            </main>
+
+            <aside class="w-full lg:w-96 bg-slate-900 border-l border-slate-800 p-4 flex flex-col">
+                <h3 class="text-lg font-bold mb-4 flex justify-between items-center text-slate-300">
+                    Minha Lista
+                    <button onclick="loadFilmes()" class="text-emerald-500 hover:rotate-180 transition-transform duration-500"><i class="fas fa-sync"></i></button>
+                </h3>
+                <div id="movie-list" class="playlist-scroll space-y-2 pr-2"></div>
+            </aside>
+        </div>
+    </div>
+
+    <div id="upload-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4 text-emerald-500">Adicionar Filme</h3>
+            <div class="space-y-4">
+                <input type="text" id="up-titulo" placeholder="Título do Filme" class="w-full bg-slate-800 border-slate-700 p-3 rounded text-sm outline-none focus:border-emerald-500">
+                <input type="text" id="up-categoria" placeholder="Categoria (ex: Ação, Sci-Fi)" class="w-full bg-slate-800 border-slate-700 p-3 rounded text-sm outline-none">
+                <textarea id="up-sinopse" placeholder="Sinopse" class="w-full bg-slate-800 border-slate-700 p-3 rounded text-sm h-24 outline-none"></textarea>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Capa (JPG/PNG)</label>
+                        <input type="file" id="up-capa" accept="image/*" class="text-xs text-slate-400">
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Vídeo (MP4)</label>
+                        <input type="file" id="up-video" accept="video/mp4" class="text-xs text-slate-400">
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-4">
+                    <button id="btn-save" onclick="handleUpload()" class="flex-1 bg-emerald-600 p-3 rounded font-bold hover:bg-emerald-700 transition">Salvar Filme</button>
+                    <button onclick="toggleUploadModal()" class="bg-slate-700 px-4 rounded font-bold">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Correção da URL: Remova o /rest/v1/ para evitar erros de inicialização do cliente
+        const supabaseUrl = 'https://tjrijlyayfkolhnxuijv.supabase.co'; 
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcmlqbHlheWZrb2xobnh1aWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzU1NjUsImV4cCI6MjA5MzA1MTU2NX0.AYWwkzJdYiRkBytXmhvA-VP59iK5qzB7LxYhPCfYkI4'; 
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        function toggleUploadModal() {
+            const modal = document.getElementById('upload-modal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        async function handleUpload() {
+            const btn = document.getElementById('btn-save');
+            const titulo = document.getElementById('up-titulo').value;
+            const videoFile = document.getElementById('up-video').files[0];
+            const capaFile = document.getElementById('up-capa').files[0];
+
+            if (!titulo || !videoFile) return alert("Título e Vídeo são obrigatórios!");
+
+            btn.disabled = true;
+            btn.innerText = "Enviando arquivos...";
+
+            try {
+                let videoUrl = "";
+                let capaUrl = "";
+
+                // Upload Vídeo
+                const videoName = `video_${Date.now()}.mp4`;
+                const { data: vData, error: vErr } = await _supabase.storage.from('filmes').upload(`public/${videoName}`, videoFile);
+                if (vErr) throw vErr;
+                videoUrl = _supabase.storage.from('filmes').getPublicUrl(`public/${videoName}`).data.publicUrl;
+
+                // Upload Capa (opcional)
+                if (capaFile) {
+                    const capaName = `capa_${Date.now()}.jpg`;
+                    const { error: cErr } = await _supabase.storage.from('filmes').upload(`public/${capaName}`, capaFile);
+                    if (cErr) throw cErr;
+                    capaUrl = _supabase.storage.from('filmes').getPublicUrl(`public/${capaName}`).data.publicUrl;
+                }
+
+                // Inserir no Banco
+                const { error: dbErr } = await _supabase.from('filmes').insert([{
+                    titulo,
+                    categoria: document.getElementById('up-categoria').value,
+                    sinopse: document.getElementById('up-sinopse').value,
+                    video_url: videoUrl,
+                    capa_url: capaUrl
+                }]);
+
+                if (dbErr) throw dbErr;
+
+                alert("Filme adicionado com sucesso!");
+                toggleUploadModal();
+                loadFilmes();
+            } catch (e) {
+                alert("Erro: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Salvar Filme";
+            }
+        }
+
+        async function loadFilmes() {
+            const { data, error } = await _supabase.from('filmes').select('*').order('created_at', { ascending: false });
+            if (error) return console.error(error);
+
+            const container = document.getElementById('movie-list');
+            container.innerHTML = data.map(filme => `
+                <div class="movie-card group p-3 rounded-lg flex gap-4 pr-10" onclick="playMovie('${filme.video_url}', '${filme.titulo}', '${filme.sinopse}', this)">
+                    <img src="${filme.capa_url || 'https://via.placeholder.com/150x220?text=Sem+Capa'}" class="w-14 h-16 object-cover rounded shadow">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-sm text-slate-200 truncate">${filme.titulo}</h4>
+                        <span class="text-[9px] uppercase bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded font-bold">${filme.categoria || 'Geral'}</span>
+                    </div>
+                    <button onclick="event.stopPropagation(); deleteFilme('${filme.id}')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function deleteFilme(id) {
+            if (confirm("Deseja realmente remover este filme da sua biblioteca?")) {
+                const { error } = await _supabase.from('filmes').delete().eq('id', id);
+                if (error) alert("Erro ao deletar: " + error.message);
+                else loadFilmes();
+            }
+        }
+
+        function playMovie(url, titulo, sinopse, element) {
+            const video = document.getElementById('main-player');
+            const source = document.getElementById('video-src');
+            
+            document.querySelectorAll('.movie-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.getElementById('playing-title').innerText = titulo;
+            document.getElementById('playing-sinopse').innerText = sinopse || "Sem sinopse disponível.";
+
+            source.src = url;
+            video.load();
+            video.play();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFilmes);
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard do Paciente ERP-PSC</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#20df60",
+                        "secondary": "#38bdf8",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#112116",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header / Top Bar -->
+<header class="flex items-center bg-white dark:bg-background-dark/50 p-4 sticky top-0 z-10 border-b border-primary/10">
+<div class="flex size-10 shrink-0 items-center overflow-hidden rounded-full bg-primary/20">
+<img alt="Avatar do Paciente" class="w-full h-full object-cover" data-alt="Avatar de uma criança sorridente e amigável" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFv-lrPfo3BqB2L-ouZKbftJGt5Me9h3L_cS907WFbi76SkEAbySwvknlFrme72ip14DTuk0nRJ6eJ9X8-TBkmvToBjU6f-h2hsOGUkPqN1WO1MDDlvclKvjhyh7pwY4FUMprsFfRUD8zFMTnefOO5bzbw2vV1DqOHBy4b6RD20V--nQCyR4BBFfJ96jPMVksYvaEvy2_B7Y8yOxMkHAj7YpGzLw9ev5Quc-geztnw2ycPzROd4TXpyGnBdyG73Lf8RnDGpZ-jWyHc"/>
+</div>
+<div class="flex-1 px-3">
+<h1 class="text-sm font-medium text-slate-500 dark:text-slate-400">Bem-vindo de volta!</h1>
+<h2 class="text-lg font-bold leading-tight tracking-tight text-slate-900 dark:text-slate-100">Olá, Pedro!</h2>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-background-light dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Hero Welcome -->
+<div class="p-4">
+<div class="bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl p-6 border border-primary/10">
+<p class="text-primary font-bold text-lg mb-1">Vamos praticar hoje?</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Você está no <span class="text-secondary font-bold">Nível 5 - Explorador</span>. Continue assim!</p>
+<div class="mt-4 w-full bg-white/50 dark:bg-slate-800/50 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Highlight Cards -->
+<div class="grid grid-cols-2 gap-4 px-4 py-2">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-primary/5 flex flex-col items-center text-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary text-3xl filled-icon">task_alt</span>
+</div>
+<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Minhas Tarefas</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-slate-100">3 Hoje</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-secondary/5 flex flex-col items-center text-center">
+<div class="size-12 rounded-full bg-secondary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-secondary text-3xl filled-icon">workspace_premium</span>
+</div>
+<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Meus Resultados</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-slate-100">12 Selos</p>
+</div>
+</div>
+<!-- Pending Tasks Section -->
+<div class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold">Tarefas Pendentes</h3>
+<a class="text-primary text-sm font-semibold" href="#">Ver todas</a>
+</div>
+<div class="space-y-3">
+<!-- Task Item 1 -->
+<div class="flex items-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="size-12 shrink-0 rounded-lg bg-yellow-100 flex items-center justify-center text-yellow-600">
+<span class="material-symbols-outlined text-3xl">draw</span>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-tight">Desenhar o Sentimento</h4>
+<p class="text-xs text-slate-500">Coordenação e Emoção</p>
+</div>
+<button class="bg-primary text-white font-bold py-2 px-4 rounded-lg text-sm">Fazer</button>
+</div>
+<!-- Task Item 2 -->
+<div class="flex items-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="size-12 shrink-0 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-3xl">extension</span>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-tight">Quebra-cabeça de Cores</h4>
+<p class="text-xs text-slate-500">Lógica Visual</p>
+</div>
+<button class="bg-primary text-white font-bold py-2 px-4 rounded-lg text-sm">Fazer</button>
+</div>
+<!-- Task Item 3 -->
+<div class="flex items-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="size-12 shrink-0 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-3xl">auto_stories</span>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-tight">Leitura do Dia</h4>
+<p class="text-xs text-slate-500">Linguagem e Alfabetização</p>
+</div>
+<button class="bg-primary text-white font-bold py-2 px-4 rounded-lg text-sm">Fazer</button>
+</div>
+</div>
+</div>
+<!-- Achievements Section -->
+<div class="px-4 py-2">
+<h3 class="text-lg font-bold mb-4">Últimas Conquistas</h3>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<!-- Badge 1 -->
+<div class="flex flex-col items-center shrink-0 w-24">
+<div class="size-16 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg mb-2">
+<span class="material-symbols-outlined text-white text-3xl filled-icon">military_tech</span>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-600 dark:text-slate-400">Fera da Lógica</span>
+</div>
+<!-- Badge 2 -->
+<div class="flex flex-col items-center shrink-0 w-24">
+<div class="size-16 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500 flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg mb-2">
+<span class="material-symbols-outlined text-white text-3xl filled-icon">temp_preferences_custom</span>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-600 dark:text-slate-400">Super Focado</span>
+</div>
+<!-- Badge 3 -->
+<div class="flex flex-col items-center shrink-0 w-24">
+<div class="size-16 rounded-full bg-gradient-to-tr from-green-400 to-emerald-600 flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg mb-2">
+<span class="material-symbols-outlined text-white text-3xl filled-icon">sentiment_very_satisfied</span>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-600 dark:text-slate-400">Bom Humor</span>
+</div>
+<!-- Badge 4 -->
+<div class="flex flex-col items-center shrink-0 w-24 opacity-50">
+<div class="size-16 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-lg mb-2">
+<span class="material-symbols-outlined text-slate-400 text-3xl">lock</span>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400">Em breve</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-slate-100 dark:border-slate-800 px-6 py-2 pb-6 flex justify-between items-center z-20">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">home</span>
+<span class="text-[10px] font-bold">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">checklist</span>
+<span class="text-[10px] font-bold">Tarefas</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">star</span>
+<span class="text-[10px] font-bold">Avaliações</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold">Perfil</span>
+</a>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

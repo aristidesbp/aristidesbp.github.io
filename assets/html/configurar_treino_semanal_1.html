@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Configurar Treino</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-sm overflow-x-hidden">
+<header class="flex items-center bg-white dark:bg-background-dark p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+<a class="text-primary flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors" href="plano_detalhe.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 ml-2">Configurar Treino</h1>
+</header>
+<main class="flex-1 overflow-y-auto">
+<section class="p-4 pt-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Identificação do Plano</h2>
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-4 space-y-3">
+<div class="flex justify-between items-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Semana</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Semana 08</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Livro</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Matemática Básica Vol. 1</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Tempo total</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">45 minutos</p>
+</div>
+</div>
+</section>
+<section class="px-4 pb-24">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] py-4">Atividades do Treino</h3>
+<div class="flex flex-col gap-3">
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+<details class="group" open="">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-primary"></div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Leitura</p>
+</div>
+<div class="flex items-center gap-4">
+<label class="relative inline-flex items-center cursor-pointer" onclick="event.stopPropagation()">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+<span class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+</div>
+</summary>
+<div class="px-4 pb-4 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Dias de Prática</p>
+<div class="flex justify-between gap-1">
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">SEG</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">TER</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">QUA</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">QUI</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">SEX</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">SAB</span>
+</label>
+</div>
+</div>
+<div class="bg-background-light dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Instruções</p>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">Leia o capítulo 2 em voz alta, focando na pontuação e entonação. Mínimo 15 minutos.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+<details class="group">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-primary"></div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Escrita</p>
+</div>
+<div class="flex items-center gap-4">
+<label class="relative inline-flex items-center cursor-pointer" onclick="event.stopPropagation()">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+<span class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+</div>
+</summary>
+<div class="px-4 pb-4 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Dias de Prática</p>
+<div class="flex justify-between gap-1">
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">SEG</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">QUA</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">SEX</span>
+</label>
+</div>
+</div>
+<div class="bg-background-light dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Instruções</p>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">Resumo de 10 linhas sobre o capítulo lido, utilizando pelo menos 3 palavras novas.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+<details class="group">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-primary"></div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Matemática</p>
+</div>
+<div class="flex items-center gap-4">
+<label class="relative inline-flex items-center cursor-pointer" onclick="event.stopPropagation()">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+<span class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+</div>
+</summary>
+<div class="px-4 pb-4 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Dias de Prática</p>
+<div class="flex justify-between gap-1">
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">TER</span>
+</label>
+<label class="flex flex-col items-center gap-1 flex-1">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary size-5" type="checkbox"/>
+<span class="text-[10px] text-slate-500 font-medium">QUI</span>
+</label>
+</div>
+</div>
+<div class="bg-background-light dark:bg-slate-800/50 p-3 rounded-lg">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Instruções</p>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">Exercícios de 1 a 10 da página 45. Conferir resultados no gabarito ao final.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+<details class="group">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-slate-300"></div>
+<p class="text-slate-400 dark:text-slate-500 text-sm font-bold">Atenção</p>
+</div>
+<div class="flex items-center gap-4">
+<label class="relative inline-flex items-center cursor-pointer" onclick="event.stopPropagation()">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+<span class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+</div>
+</summary>
+<div class="px-4 pb-4 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm italic">Atividade desativada para este plano.</p>
+</div>
+</details>
+</div>
+</div>
+</section>
+</main>
+<footer class="p-4 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 fixed bottom-0 w-full max-w-md">
+<a class="flex w-full items-center justify-center rounded-xl bg-primary px-4 h-12 text-white text-base font-bold tracking-[0.015em] hover:bg-primary/90 transition-all shadow-md active:scale-95" href="plano_detalhe.html">
+                Publicar Treino
+            </a>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Fontes Comportamentais - Login</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        title: ['Manrope', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: "#0062a0", // Ajuste para a cor exata do seu botão
+                        "primary-container": "#cfe4ff",
+                        "on-primary": "#ffffff",
+                        background: "#f7f9fb",
+                        "on-background": "#191c1e",
+                        surface: "#ffffff",
+                        outline: "#73777f"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 font-sans antialiased">
+
+    <main class="bg-surface w-full max-w-md rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8">
+        
+        <div class="text-center mb-8">
+            <h1 class="font-title text-3xl font-bold text-gray-900 mb-2">Bem-vindo(a)</h1>
+            <p class="text-gray-500 text-sm">Faça login para acessar o sistema clínico</p>
+        </div>
+
+        <form id="form-login" onsubmit="return false;" class="space-y-5">
+            
+            <div>
+                <label for="email-input" class="block text-sm font-medium text-gray-700 mb-1 ml-1">E-mail</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <span class="material-symbols-outlined text-xl">mail</span>
+                    </span>
+                    <input 
+                        id="email-input" 
+                        type="email" 
+                        placeholder="exemplo@clinica.com" 
+                        class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label for="input-password" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Senha</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <span class="material-symbols-outlined text-xl">lock</span>
+                    </span>
+                    <input 
+                        id="input-password" 
+                        type="password" 
+                        placeholder="••••••••" 
+                        class="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        required
+                    />
+                    <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600">
+                        <span class="material-symbols-outlined text-xl">visibility</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="captcha-checkbox-container" class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors select-none">
+                <div class="w-6 h-6 border-2 border-gray-400 rounded bg-white flex items-center justify-center shrink-0 transition-colors">
+                    <span id="captcha-check" class="material-symbols-outlined text-primary text-sm font-bold hidden">check</span>
+                </div>
+                <span class="text-sm font-medium text-gray-600 flex-1">Não sou um robô</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/RecaptchaLogo.svg/1200px-RecaptchaLogo.svg.png" alt="reCAPTCHA" class="h-6 opacity-80" onerror="this.style.display='none'">
+            </div>
+
+            <button 
+                id="btn-entrar"
+                onclick="fazer_login(event)" 
+                class="w-full py-4 mt-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-lg hover:shadow-xl hover:bg-blue-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <span>Entrar no Sistema</span>
+                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </button>
+            
+        </form>
+    </main>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+        // 2. Configuração do Supabase
+        const SUPABASE_URL = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
+        
+        window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 3. Interações de UI (Olho da Senha e Captcha)
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Toggle Senha
+            const btnTogglePassword = document.getElementById('password-toggle');
+            const inputPassword = document.getElementById('input-password');
+            
+            btnTogglePassword.addEventListener('click', function() {
+                const icon = this.querySelector('span');
+                if (inputPassword.type === 'password') {
+                    inputPassword.type = 'text';
+                    icon.textContent = 'visibility_off';
+                } else {
+                    inputPassword.type = 'password';
+                    icon.textContent = 'visibility';
+                }
+            });
+
+            // Toggle Captcha
+            const captchaContainer = document.getElementById('captcha-checkbox-container');
+            const captchaCheck = document.getElementById('captcha-check');
+
+            captchaContainer.addEventListener('click', function() {
+                captchaCheck.classList.toggle('hidden');
+            });
+        });
+
+        // 4. Lógica Principal de Login
+        async function fazer_login(event) {
+            // Evita envio de formulário padrão
+            event.preventDefault();
+
+            const emailInput = document.getElementById('email-input');
+            const passwordInput = document.getElementById('input-password');
+            const btn = document.getElementById('btn-entrar');
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validação básica
+            if (!email || !password) {
+                alert("Por favor, preencha o e-mail e a senha.");
+                return;
+            }
+
+            // Animação de Carregamento no Botão
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl">sync</span> <span>Autenticando...</span>';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            try {
+                // Requisição ao Supabase
+                const { data, error } = await window.supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    // Restaura botão
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+                    if (error.message.includes('Invalid login credentials')) {
+                        alert("Acesso negado: E-mail ou senha incorretos.");
+                    } else {
+                        alert("Erro: " + error.message);
+                    }
+                    return;
+                }
+
+                // SUCESSO: Redirecionar
+                console.log("Login aprovado! Redirecionando...");
+                
+                // Redirecionamento - Altere "painel.html" para a página correta do seu projeto
+                window.location.replace("painel.html"); 
+
+            } catch (err) {
+                console.error("Erro crítico de conexão:", err);
+                alert("Falha de conexão com o servidor. Verifique sua internet.");
+                
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        }
+    </script>
+</body>
+</html>
