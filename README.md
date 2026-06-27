@@ -903,9 +903,13 @@ Para implementar a automação no seu terminal Termux, siga estes comandos seque
    ```
  3. **Colar o conteúdo:**
    Assim que o editor nano abrir, cole o código abaixo:
-```yaml
+```
+
 name: Generate Supabase Config
 on: [push]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -913,6 +917,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true
 
       - name: Create supabase_config.js
         run: |
@@ -926,6 +932,7 @@ jobs:
         with:
           commit_message: "Auto-gerando supabase_config.js"
           file_pattern: 'assets/js/supabase_config.js'
+
 
 ```
  4. **Salvar e sair:**
