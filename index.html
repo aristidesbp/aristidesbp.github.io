@@ -26,9 +26,16 @@
     <script>
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function realizarBusca() {
+       /* async function realizarBusca() {
             const nomeTabela = document.getElementById('tabelaInput').value;
-            const container = document.getElementById('resultado');
+            const container = document.getElementById('resultado');*/
+            
+    async function realizarBusca() {
+    alert("Botão clicado!"); // Adicione isso para testar!
+    const nomeTabela = document.getElementById('tabelaInput').value;
+    const container = document.getElementById('resultado');
+            
+
             
             if (!nomeTabela) return alert("Digite o nome da tabela!");
 
