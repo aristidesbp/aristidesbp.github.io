@@ -1,29 +1,38 @@
 <!DOCTYPE html>
+<!-- cria um arquivo html-->
 <html class="dark" lang="pt-BR">
+<!-- define a classe a a lingua portugues do brasil-->    
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP ABP</title>
-
-   <!-- Estilos -->
-   <script src="https://cdn.tailwindcss.com"></script>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
- 
-<!-- ############################################################################# --> 
-  <!-- CSS locais -->
-  <link rel="stylesheet" href="../../assets/style/login.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<!-- ############################################################################# --> 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>    
+<!-- abre o cabeçario -->  
+<meta charset="utf-8">
+<!-- configura o usu de caractres -->      
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ativa a responsividade-->    
+<title>Login - ERP ABP</title>
+<!-- define o titulo da pagina que fica la na aba -->      
+<script src="https://cdn.tailwindcss.com"></script>  
+<!-- O Tailwind é uma framework de CSS baseada em "utilitários". Ao incluir esta linha, ganhas acesso 
+    imediato a milhares de classes prontas (como bg-blue-500 para fundo azul, text-center para alinhar texto,
+    p-4 para espaçamento, etc.)-->    
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    Por padrão, os navegadores usam fontes padrão do sistema (como Times New Roman ou Arial). Esta linha
+    faz o teu site descarregar a fonte "Inter" da Google. O trecho wght@400;700 indica que estás a carregar 
+    a versão normal (400) e a versão em negrito/bold (700) dessa fonte para usares nos teus textos.
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+ <!--Dá-te acesso instantâneo a milhares de ícones prontos (como corações, redes sociais, setas, carrinhos 
+    de compras, etc.).-->   
+<link rel="stylesheet" href="../css/login.css">
+<!-- carrega o conteudo do arquivo  ../css/login.css -->      
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<!-- carrega a biblioteca do supabase -->    
 <script src="../js/constantes.js"></script> 
-<script src="../controller/login.js"></script>
-  
+<!-- carrega conteudo do arquivo ../js/constantes.js-->    
+<script src="../js/login.js"></script>
+<!-- carrega conteudo do arquivo ../js/login.js-->      
 </head>
-
+<!--feicha o cabeçario da pagina-->
 <body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-
-
+<!--abre a parte visivel da pagina, oque o usuario vai ler-->
 
   <!-- FORMULÁRIO -->
  <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
