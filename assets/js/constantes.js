@@ -1,3 +1,3 @@
-const SUPABASE_URL = '';
-const SUPABASE_KEY = '';
-console.log('✅ supabase_config.js carregado');
+const SUPABASE_URL = 'https://zxkaxteprwxijriycvdx.supabase.co/rest/v1/';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
+console.log('✅ constantes.js carregadas');
