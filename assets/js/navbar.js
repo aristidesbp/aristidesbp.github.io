@@ -1,4 +1,15 @@
 /*############################################################################################*/
+/*codigo:0*/
+/*############################################################################################*/
+     // CONFIGURAÇÃO DO CLIENTE SUPABASE
+        // Substitua com as credenciais reais do seu painel Supabase
+        const SUPABASE_URL = "https://SEU_PROJETO.supabase.co";
+        const SUPABASE_ANON_KEY = "SUA_CHAVE_ANON_AQUI";
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+/*############################################################################################*/
 /*codigo:1*/
 /*############################################################################################*/
 (async function validateAccess() {
