@@ -1908,270 +1908,66 @@ END $$;
     </script>
 </body>
 ```
+## sql
 ```
 <!--
--- ============================================================================
--- LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
--- ============================================================================
--- Remove os gatilhos e funções antigas
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-DROP FUNCTION IF EXISTS public.handle_new_user();
--- CORREÇÃO AQUI: Procuramos na pasta public, não na auth
-DROP FUNCTION IF EXISTS public.get_user_role(); 
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
 
--- Remove as políticas do Storage antigas (se existirem)
-DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
-DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
-
--- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
-DROP TABLE IF EXISTS public.entidades CASCADE;
-
-
--- ============================================================================
---  CRIAÇÃO DA TABELA public.entidades
--- ============================================================================
 CREATE TABLE public.entidades (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE, -- Vínculo de segurança com o Auth
-    nome_completo TEXT NOT NULL,
-    cpf TEXT,
-    data_nascimento DATE,
-    email TEXT,
-    telefone TEXT,
-    tipo_acesso TEXT DEFAULT 'cliente',
-    tipo_entidade TEXT DEFAULT 'cliente',
-    status_entidade TEXT DEFAULT 'ativo',
-    avaliacao INTEGER DEFAULT 5,
-    cep TEXT,
-    logradouro TEXT,
-    numero TEXT,
-    bairro TEXT,
-    cidade TEXT,
-    estado VARCHAR(2),
-    foto_url TEXT, -- Campo para armazenar o link da foto
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  user_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+  foto_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
-
--- ============================================================================
--- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY - RLS) entidades
--- ============================================================================
--- Ativamos a segurança a nível de linha (ninguém acede sem permissão)
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
-
--- CORREÇÃO AQUI: Função segura criada na pasta 'public'
-CREATE OR REPLACE FUNCTION public.get_user_role() 
-RETURNS TEXT AS $$
-  SELECT tipo_acesso FROM public.entidades WHERE user_id = auth.uid() LIMIT 1;
-$$ LANGUAGE sql SECURITY DEFINER;
-
--- APLICAÇÃO DAS REGRAS POR CARGO:
-
--- REGRA MASTER: Tem poder absoluto
-CREATE POLICY "Master faz tudo" ON public.entidades 
-FOR ALL TO authenticated 
-USING (public.get_user_role() = 'master');
-
--- REGRA FUNCIONÁRIO: Pode ler, inserir e editar (Não pode apagar)
-CREATE POLICY "Funcionario le" ON public.entidades 
-FOR SELECT TO authenticated 
-USING (public.get_user_role() = 'funcionario');
-
-CREATE POLICY "Funcionario insere" ON public.entidades 
-FOR INSERT TO authenticated 
-WITH CHECK (public.get_user_role() = 'funcionario');
-
-CREATE POLICY "Funcionario atualiza" ON public.entidades 
-FOR UPDATE TO authenticated 
-USING (public.get_user_role() = 'funcionario');
-
--- REGRA CLIENTE/FORNECEDOR: O utilizador só vê e altera A SUA PRÓPRIA LINHA
-CREATE POLICY "Pessoa ve e edita os proprios dados" ON public.entidades 
-FOR ALL TO authenticated 
-USING (user_id = auth.uid())
-WITH CHECK (user_id = auth.uid());
-
--- ============================================================================
--- 3. AUTOMATIZAÇÃO SEGURA (TRIGGER DE REGISTO NOVO UTILIZADOR)
--- ============================================================================
--- Função que insere na tabela 'entidades' quando alguém se regista no Auth
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.entidades (user_id, email, nome_completo, status_entidade, tipo_acesso, tipo_entidade)
-  VALUES (
-    new.id, 
-    new.email, 
-    COALESCE(new.raw_user_meta_data->>'full_name', 'Utilizador Novo'),
-    'ativo',
-    'cliente',
-    'cliente'
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Cria o gatilho associando a função acima ao evento de novo usuário
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
-
--- ============================================================================
--- 4. SEGURANÇA DO STORAGE (IMPEDIR UPLOADS MALICIOSOS NO BUCKET 'avatares')
--- ============================================================================
--- Nota: Lembra-te que o bucket 'avatares' deve ser criado manualmente no painel Storage!
-
--- Permite que qualquer pessoa veja as fotos
-CREATE POLICY "Imagens publicas para visualizacao"
-ON storage.objects FOR SELECT TO public
-USING ( bucket_id = 'avatares' );
-
--- Permite que APENAS utilizadores logados façam upload
-CREATE POLICY "Upload apenas para logados"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK ( bucket_id = 'avatares' );
-
--- Permite que o utilizador edite ou apague apenas a sua própria foto
-CREATE POLICY "Usuario edita a propria foto"
-ON storage.objects FOR UPDATE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-CREATE POLICY "Usuario apaga a propria foto"
-ON storage.objects FOR DELETE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-    -- ============================================================================
--- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
--- ============================================================================
-
-
-
--- B. CRIA O BUCKET AUTOMATICAMENTE (Se ele ainda não existir)
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('avatares', 'avatares', true)
-ON CONFLICT (id) DO NOTHING;
-
-
--- C. APLICA AS REGRAS DE SEGURANÇA
-CREATE POLICY "Imagens publicas para visualizacao"
-ON storage.objects FOR SELECT TO public
-USING ( bucket_id = 'avatares' );
-
-CREATE POLICY "Upload apenas para logados"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK ( bucket_id = 'avatares' );
-
-CREATE POLICY "Usuario edita a propria foto"
-ON storage.objects FOR UPDATE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-CREATE POLICY "Usuario apaga a propria foto"
-ON storage.objects FOR DELETE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
--- ============================================================================
--- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
--- ============================================================================
-
--- Tabela Pai: Lançamento Financeiro Geral (O "Cabeçalho" da conta)
 CREATE TABLE public.financas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    -- O default auth.uid() preenche automaticamente com o ID de quem está logado
-    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL, -- Se apagar o cliente, a conta financeira não some
-    descricao TEXT NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL,
-    tipo TEXT CHECK (tipo IN ('receita', 'despesa')),
-    num_parcelas INTEGER DEFAULT 1,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  entidade_id uuid,
+  descricao text NOT NULL,
+  valor_total numeric NOT NULL,
+  tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  num_parcelas integer DEFAULT 1,
+  categoria text DEFAULT 'Geral'::text,
+  status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financas_pkey PRIMARY KEY (id),
+  CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
 );
-
--- Tabela Filha: Parcelas Individuais (As "Linhas" de pagamento)
 CREATE TABLE public.parcelas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    financa_id UUID REFERENCES public.financas(id) ON DELETE CASCADE, -- Se apagar o "cabeçalho", apaga as parcelas junto
-    num_parcela INTEGER NOT NULL,
-    valor_parcela DECIMAL(10,2) NOT NULL,
-    data_vencimento DATE NOT NULL,
-    data_pagamento DATE,
-    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago', 'atrasado')),
-    codigo_barra TEXT,       -- Campo para o leitor de barras
-    boleto_url TEXT,         -- Link do boleto salvo no storage
-    comprovante_url TEXT,    -- Link do comprovante salvo no storage
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  financa_id uuid,
+  num_parcela integer NOT NULL,
+  valor_parcela numeric NOT NULL,
+  data_vencimento date NOT NULL,
+  data_pagamento date,
+  codigo_barra text,
+  boleto_url text,
+  comprovante_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  status text DEFAULT 'pendente'::text CHECK (status = ANY (ARRAY['pendente'::text, 'pago'::text, 'atrasado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT parcelas_pkey PRIMARY KEY (id),
+  CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
 );
 
--- ============================================================================
--- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
--- ============================================================================
-
-ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
-
--- Regras para Finanças (Usuário só acessa as contas que ele mesmo criou)
-CREATE POLICY "Pessoa ve as proprias financas" ON public.financas FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa insere as proprias financas" ON public.financas FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "Pessoa atualiza as proprias financas" ON public.financas FOR UPDATE USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa apaga as proprias financas" ON public.financas FOR DELETE USING (auth.uid() = user_id);
-
--- Regras para Parcelas (Usuário só acessa parcelas amarradas às suas finanças)
-CREATE POLICY "Pessoa ve as proprias parcelas" ON public.parcelas FOR SELECT USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa insere as proprias parcelas" ON public.parcelas FOR INSERT WITH CHECK (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-
--- ============================================================================
--- 3. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'comprovantes')
--- ============================================================================
-
--- Cria o bucket 'comprovantes' automaticamente se ele ainda não existir
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('comprovantes', 'comprovantes', true)
-ON CONFLICT (id) DO NOTHING;
-
--- Aplica as Regras de quem pode mexer nos arquivos
-CREATE POLICY "Comprovantes publicos" ON storage.objects FOR SELECT TO public USING ( bucket_id = 'comprovantes' );
-CREATE POLICY "Upload de comprovantes" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id = 'comprovantes' );
-CREATE POLICY "Edicao de comprovantes" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner );
-CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner ); 
-      
-
--- ============================================================================
--- ATUALIZAÇÃO DA TABELA 'financas'
--- ============================================================================
-
--- 1. Adiciona o campo 'categoria' com um valor padrão para não quebrar registros antigos
-ALTER TABLE public.financas 
-ADD COLUMN IF NOT EXISTS categoria TEXT DEFAULT 'Geral';
-
--- 2. Adiciona o campo 'status_lancamento' com validação (CHECK) para aceitar apenas os 3 status definidos
-ALTER TABLE public.financas 
-ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' 
-CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
-
--- ============================================================================
--- (OPCIONAL) ATUALIZAR REGISTROS ANTIGOS
--- Caso você já tenha dados cadastrados e queira garantir que todos tenham a
--- categoria 'Geral' e o status 'aberto' preenchidos (caso o default não aplique nos antigos)
--- ============================================================================
-
-UPDATE public.financas 
-SET categoria = 'Geral' 
-WHERE categoria IS NULL;
-
-UPDATE public.financas 
-SET status_lancamento = 'aberto' 
-WHERE status_lancamento IS NULL;
-    -->
+-->
 </html>
 ```
