@@ -10,6 +10,7 @@
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="constantes.js"></script>
     
     <style>
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
@@ -260,9 +261,7 @@
     </div>
 
     <script>
-        // Configuração do Supabase (Mesma dos arquivos anteriores)
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';   
-        const supabaseUrl = 'https://zxkaxteprwxijriycvdx.supabase.co';    
+        // Configuração do Supabase (Mesma dos arquivos anteriores) 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let html5QrCode = null;
