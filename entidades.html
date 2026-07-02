@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="constates.js"></script>
     
     <style>
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
@@ -263,8 +264,6 @@
     <!-- SCRIPT LOGIC -->
     <script>
         // Configurações do Supabase obtidas do arquivo original
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';   
-        const supabaseUrl = 'https://zxkaxteprwxijriycvdx.supabase.co';    
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // CONTROLE DO MENU E ABAS
