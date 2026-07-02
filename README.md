@@ -1414,8 +1414,8 @@ END $$;
         let html5QrCode = null;
 
 //====================================================================
-        // CONTROLE DO MENU HAMBÚRGUER E ABAS
-        // ====================================================================
+// CONTROLE DO MENU HAMBÚRGUER E ABAS
+
         function abrirMenu() {
             document.getElementById('sidebar-menu').classList.remove('-translate-x-full');
             document.getElementById('menu-overlay').classList.remove('hidden');
@@ -1453,7 +1453,7 @@ END $$;
 
         // ====================================================================
         // AUTENTICAÇÃO E CONTROLE DE TELAS
-        // ====================================================================
+
         async function verificar_login() {
             const { data: { session } } = await _supabase.auth.getSession();
             const telaLogin = document.getElementById('tela-login');
@@ -1509,7 +1509,6 @@ END $$;
         
 // ========================================================
 // INICIALIZAÇÃO E ARRASTAR/SOLTAR
-// ========================================================
         
    document.addEventListener('DOMContentLoaded', () => {
             verificar_login();
@@ -1561,7 +1560,7 @@ END $$;
         
     // ====================================================================
         // FUNÇÕES DO SISTEMA E CRUD
-        // ====================================================================
+
         function ajustarLabelsValor() {
             const tipo = document.getElementById('f-tipo-calculo').value;
             document.getElementById('label-valor').innerText = tipo === 'total' ? 'Valor Total (R$)' : 'Valor da Parcela (R$)';
@@ -1771,9 +1770,7 @@ END $$;
             loadParcelas();
         }
 
-```
-### javascript2
-```
+
         async function loadParcelas() {
             const busca = document.getElementById('filtro-busca').value;
             const categoria = document.getElementById('filtro-categoria').value;
