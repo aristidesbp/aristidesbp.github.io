@@ -1,8 +1,6 @@
-/**
- * MIDDLEWARE DE PROTEÇÃO - ERP-PSC
- * Finalidade: Bloquear a renderização do HTML antes da validação do JWT.
- */
-
+/*############################################################################################*/
+/*codigo:1*/
+/*############################################################################################*/
 (async function validateAccess() {
     // 1. Bloqueio imediato da interface (Prevenção de FOUC - Flicker of Unauthenticated Content)
     document.documentElement.style.display = 'none';
@@ -46,6 +44,7 @@
 
 
 /*############################################################################################*/
+/*codigo:2*/
 /*############################################################################################*/
 /* Estrutura do verificar_login.js. O comando básico do Supabase é: supabase.auth.getSession()*/
 async function checarAutenticacao() {
@@ -70,6 +69,7 @@ checarAutenticacao();
 
 
 /*############################################################################################*/
+/*codigo:3*/
 /*############################################################################################*/ 
 async function sairDaConta() {
 /* Cria uma função assíncrona responsável por realizar o processo de logoff do usuário */    
@@ -96,6 +96,7 @@ window.location.href = 'login.html';
 
 
 /*############################################################################################*/
+/*codigo:4*/
 /*############################################################################################*/
 (function () {
 /*Cria uma Função Imediatamente Invocada (IIFE) para isolar o escopo e evitar conflitos de variáveis globais: */
@@ -130,7 +131,8 @@ container.innerHTML = `
 
     
 
-/*############################################################################################*
+/*############################################################################################*/
+/*codigo:5*/
 /*############################################################################################*/
 if (document.readyState === 'loading') {
 /* Verifica se o navegador ainda está carregando e parseando o documento HTML inicial */
