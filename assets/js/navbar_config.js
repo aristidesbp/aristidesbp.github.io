@@ -12,8 +12,9 @@ no boyde:
 /* CÓDIGO_O: INICIALIZAÇÃO DO CLIENTE SUPABASE */
 /*############################################################################################*/
 // Configuração global do Supabase para que todas as funções tenham acesso à mesma instância
-const SUPABASE_URL = "https://SEU_PROJETO.supabase.co";
-const SUPABASE_ANON_KEY = "SUA_CHAVE_ANON_AQUI";
+const SUPABASE_URL = 'https://zxkaxteprwxijriycvdx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
+
 
 // Criação da instância global. Certifica-se de que a biblioteca do Supabase foi carregada antes via CDN ou Script tag
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
