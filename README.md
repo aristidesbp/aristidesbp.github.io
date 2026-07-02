@@ -1965,6 +1965,137 @@ CREATE TABLE public.parcelas (
   CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
 );
 
+
+-- ============================================================================
+-- 1. CRIAÇÃO DO MÓDULO DE PRODUTOS E ESTOQUE
+-- ============================================================================
+
+CREATE TABLE public.produtos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    codigo_barras TEXT UNIQUE,
+    preco_custo DECIMAL(10,2) DEFAULT 0.00,
+    preco_venda DECIMAL(10,2) NOT NULL,
+    quantidade_estoque INTEGER DEFAULT 0,
+    estoque_minimo INTEGER DEFAULT 5,
+    categoria TEXT DEFAULT 'Geral',
+    foto_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabela para guardar o histórico de tudo o que entra e sai do estoque
+CREATE TABLE public.movimentacoes_estoque (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    produto_id UUID REFERENCES public.produtos(id) ON DELETE CASCADE,
+    tipo TEXT CHECK (tipo IN ('entrada', 'saida')),
+    quantidade INTEGER NOT NULL,
+    motivo TEXT DEFAULT 'venda', -- ex: venda, compra, ajuste_manual
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 2. CRIAÇÃO DO MÓDULO PDV (PONTO DE VENDA)
+-- ============================================================================
+
+-- Cabeçalho da Venda (O Recibo)
+CREATE TABLE public.vendas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL, -- Cliente que comprou
+    valor_total DECIMAL(10,2) NOT NULL,
+    desconto DECIMAL(10,2) DEFAULT 0.00,
+    forma_pagamento TEXT, -- ex: dinheiro, pix, cartao
+    status TEXT DEFAULT 'concluida' CHECK (status IN ('pendente', 'concluida', 'cancelada')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Itens da Venda (Os produtos que estão dentro do recibo)
+CREATE TABLE public.itens_venda (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    venda_id UUID REFERENCES public.vendas(id) ON DELETE CASCADE,
+    produto_id UUID REFERENCES public.produtos(id) ON DELETE RESTRICT, -- Impede apagar um produto se ele já foi vendido
+    quantidade INTEGER NOT NULL,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
+-- 3. MÁGICA: AUTOMATIZAÇÕES (TRIGGERS) DE ESTOQUE E FINANÇAS
+-- ============================================================================
+
+-- A. Automatização: Quando um item é vendido, desconta no estoque!
+CREATE OR REPLACE FUNCTION public.atualizar_estoque_venda()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- 1. Reduz a quantidade do produto no estoque
+    UPDATE public.produtos
+    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
+    WHERE id = NEW.produto_id;
+
+    -- 2. Salva a movimentação no histórico
+    INSERT INTO public.movimentacoes_estoque (produto_id, tipo, quantidade, motivo)
+    VALUES (NEW.produto_id, 'saida', NEW.quantidade, 'venda');
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_item_venda_inserted
+    AFTER INSERT ON public.itens_venda
+    FOR EACH ROW EXECUTE FUNCTION public.atualizar_estoque_venda();
+
+
+-- B. Automatização: Quando a venda for 'concluida', cria uma receita no Financeiro!
+CREATE OR REPLACE FUNCTION public.integrar_venda_financeiro()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Se o status da venda for concluído, insere lá na nossa tabela de finanças
+    IF NEW.status = 'concluida' THEN
+        INSERT INTO public.financas (user_id, entidade_id, descricao, valor_total, tipo, categoria, status_lancamento)
+        VALUES (
+            NEW.user_id, 
+            NEW.entidade_id, 
+            'Venda PDV #' || substr(NEW.id::text, 1, 8), -- Cria um nome descritivo com o ID da venda
+            NEW.valor_total, 
+            'receita', 
+            'Vendas', 
+            'finalizado'
+        );
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_venda_concluida
+    AFTER INSERT OR UPDATE ON public.vendas
+    FOR EACH ROW EXECUTE FUNCTION public.integrar_venda_financeiro();
+
+
+-- ============================================================================
+-- 4. SEGURANÇA (RLS - Ninguém mexe nos dados dos outros)
+-- ============================================================================
+
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.movimentacoes_estoque ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.vendas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.itens_venda ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Pessoa controla proprios produtos" ON public.produtos FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa controla proprios movimentos" ON public.movimentacoes_estoque FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Pessoa controla proprias vendas" ON public.vendas FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Pessoa controla proprios itens venda" ON public.itens_venda FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.vendas WHERE vendas.id = itens_venda.venda_id AND vendas.user_id = auth.uid())
+);
+
+-- Recarrega o cache do Supabase para evitar erros na interface
+NOTIFY pgrst, 'reload schema';
+
+
 -->
 </html>
 ```
