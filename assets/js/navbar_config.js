@@ -1,34 +1,35 @@
-/*
-no header:
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/navbar_config.js"></script>
-no boyde:
-<div id="navbar"></div>
-*/
+/*############################################################################################*/
+/* CÓDIGO_O: INICIALIZAÇÃO BLINDADA DO CLIENTE SUPABASE */
+/*############################################################################################*/
+(function () {
+    // Se o cliente já tiver sido criado por outro script, não fazemos nada para evitar erros
+    if (window.supabaseClient) return;
 
+    // Usamos nomes genéricos e isolados dentro desta função para evitar erros de duplicado (SyntaxError)
+    const _url = 'https://zxkaxteprwxijriycvdx.supabase.co';
+    const _key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
 
+    // Inicializa o cliente na janela global usando a biblioteca oficial trazida pela CDN
+    window.supabaseClient = supabase.createClient(_url, _key);
+})();
 
 /*############################################################################################*/
-/* CÓDIGO_O: INICIALIZAÇÃO DO CLIENTE SUPABASE */
-/*############################################################################################*/
-// Configuração global do Supabase para que todas as funções tenham acesso à mesma instância
-const SUPABASE_URL = 'https://zxkaxteprwxijriycvdx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
-
-
-// Criação da instância global. Certifica-se de que a biblioteca do Supabase foi carregada antes via CDN ou Script tag
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/*############################################################################################*/
-/* CÓDIGO 1: VALIDAÇÃO DE ACESSO BLINDADA (FORMA PROFISSIONAL) */
+/* CÓDIGO 1: VALIDAÇÃO DE ACESSO COM PROTEÇÃO DE TELA (FOUC) */
 /*############################################################################################*/
 (async function validateAccess() {
-    // Bloqueio imediato da interface para evitar que dados privados pisquem no ecrã (Prevenção de FOUC)
+    // Bloqueia visualmente a página imediatamente para proteger dados confidenciais
     document.documentElement.style.display = 'none';
 
     try {
-        // Verifica se existe um token JWT localmente
-        const { data: { session }, error } = await supabase.auth.getSession();
+        // Verifica se o cliente global existe
+        if (!window.supabaseClient) {
+            console.error("Erro: O cliente Supabase não foi carregado corretamente.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 1. Procura por uma sessão ativa salva no navegador
+        const { data: { session }, error } = await window.supabaseClient.auth.getSession();
 
         if (error || !session) {
             console.warn("Acesso não autorizado ou sessão expirada. Redirecionando...");
@@ -36,51 +37,54 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             return;
         }
 
-        // Validação profunda: Confirma com o servidor se o token continua ativo e íntegro
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        // 2. Validação de segurança direta no servidor para garantir integridade do Token
+        const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
 
         if (userError || !user) {
-            console.warn("Utilizador inválido no backend. Redirecionando...");
+            console.warn("Token inválido ou utilizador revogado. Redirecionando...");
             window.location.href = 'login.html';
             return;
         }
 
-        // Sucesso técnico: Regista no console e liberta a interface para o utilizador
-        console.log("Acesso autorizado para:", session.user.email);
+        // Se passar nos testes, exibe no terminal de desenvolvimento e liberta a tela
+        console.log("Acesso autorizado com sucesso para:", session.user.email);
         document.documentElement.style.display = 'block';
 
     } catch (err) {
-        console.error("Erro crítico na validação de segurança:", err);
-        // Em caso de falha catastrófica de rede ou código, bloqueia por padrão
+        console.error("Erro crítico no sistema de guarda de acessos:", err);
+        // Em caso de falha de rede ou técnica, o sistema bloqueia por padrão (Segurança Máxima)
         window.location.href = 'login.html';
     }
 })();
 
 /*############################################################################################*/
-/* CÓDIGO 3: FUNÇÃO DE LOGOUT (SAIR DA CONTA) */
+/* CÓDIGO 3: FUNÇÃO DE LOGOUT SÍNCRONA E SEGURA */
 /*############################################################################################*/
 async function sairDaConta() {
     if (confirm("Deseja realmente sair do sistema?")) {
         try {
-            // Executa o logoff destruindo a sessão no servidor do Supabase
-            await supabase.auth.signOut();
+            if (window.supabaseClient) {
+                // Remove a sessão diretamente no servidor do Supabase
+                await window.supabaseClient.auth.signOut();
+            }
             window.location.href = 'login.html';
         } catch (error) {
-            console.error("Erro ao efetuar logoff técnico:", error);
-            // Garante o redirecionamento mesmo se a rede falhar
+            console.error("Erro ao efetuar encerramento de conta:", error);
+            // Garante a saída do utilizador mesmo que a ligação à internet falhe
             window.location.href = 'login.html';
         }
     }
 }
 
 /*############################################################################################*/
-/* CÓDIGO 4 & 5: RENDERIZAÇÃO AUTOMÁTICA DA NAVBAR */
+/* CÓDIGO 4 & 5: INICIALIZAÇÃO DA NAVBAR DINÂMICA */
 /*############################################################################################*/
 (function () {
     function initNavbar() {
         const container = document.getElementById('navbar');
-        if (!container) return; // Interrompe se a página atual não tiver uma div#navbar
-        if (container.dataset.loaded === 'true') return; // Evita duplicações
+        
+        if (!container) return; // Se a página não tiver a div da navbar, ignora silenciosamente
+        if (container.dataset.loaded === 'true') return; // Evita renderizar o menu duas vezes
         
         container.dataset.loaded = 'true';
         container.innerHTML = `
@@ -96,30 +100,10 @@ async function sairDaConta() {
         `;
     }
 
-    // Gatilho inteligente baseado no estado de carregamento do navegador
+    // Monitor do ciclo de vida da página para desenhar a barra assim que o HTML estiver pronto
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initNavbar);
     } else {
         initNavbar();
     }
 })();
-
-/*############################################################################################*/
-/* CÓDIGO_6: TELA DE LOGIN (ESTRUTURA) / CÓDIGO_7: FUNÇÕES DA TELA DE LOGIN */
-/*############################################################################################*/
-// NOTA: As funções abaixo de login só devem ser executadas se o utilizador ESTIVER na página login.html
-async function loginUtilizador(email, password) {
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
-        });
-
-        if (error) throw error;
-
-        // Se o login for bem-sucedido, redireciona para o painel principal
-        window.location.href = 'dashboard.html'; // Altere para a sua página principal
-    } catch (error) {
-        alert("Erro ao entrar: " + error.message);
-    }
-}
