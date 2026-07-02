@@ -1402,7 +1402,10 @@ END $$;
             </div>
         </div>
     </div> 
-    
+
+```
+### javascript
+``` 
     <script>
         // Configuração do Supabase
         const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
@@ -1411,10 +1414,6 @@ END $$;
 
         let entidadesCache = [];
         let html5QrCode = null;
-
-        
-```
-```
 
 //====================================================================
         // CONTROLE DO MENU HAMBÚRGUER E ABAS
@@ -1933,7 +1932,7 @@ DROP TABLE IF EXISTS public.entidades CASCADE;
 ```
 ```
 -- ============================================================================
--- 1. CRIAÇÃO DA TABELA PRINCIPAL ATUALIZADA
+--  CRIAÇÃO DA TABELA PRINCIPAL ATUALIZADA
 -- ============================================================================
 CREATE TABLE public.entidades (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -1958,7 +1957,6 @@ CREATE TABLE public.entidades (
 );
 ```
 ```
-
 -- ============================================================================
 -- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY - RLS)
 -- ============================================================================
@@ -1997,7 +1995,8 @@ FOR ALL TO authenticated
 USING (user_id = auth.uid())
 WITH CHECK (user_id = auth.uid());
 
-
+```
+```
 -- ============================================================================
 -- 3. AUTOMATIZAÇÃO SEGURA (TRIGGER DE REGISTO NOVO UTILIZADOR)
 -- ============================================================================
@@ -2023,7 +2022,8 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-
+```
+```
 -- ============================================================================
 -- 4. SEGURANÇA DO STORAGE (IMPEDIR UPLOADS MALICIOSOS NO BUCKET 'avatares')
 -- ============================================================================
@@ -2048,7 +2048,8 @@ CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
     
-
+```
+```
     -- ============================================================================
 -- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
 -- ============================================================================
@@ -2082,7 +2083,8 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
 CREATE POLICY "Usuario apaga a propria foto"
 ON storage.objects FOR DELETE TO authenticated
 USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
+```
+```
 -- ============================================================================
 -- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
 -- ============================================================================
@@ -2114,7 +2116,8 @@ CREATE TABLE public.parcelas (
     comprovante_url TEXT,    -- Link do comprovante salvo no storage
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
-
+```
+```
 -- ============================================================================
 -- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
 -- ============================================================================
@@ -2141,7 +2144,8 @@ CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDA
 CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
     EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
 );
-
+```
+```
 -- ============================================================================
 -- 3. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'comprovantes')
 -- ============================================================================
@@ -2158,7 +2162,8 @@ CREATE POLICY "Edicao de comprovantes" ON storage.objects FOR UPDATE TO authenti
 CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner ); 
       
     
-
+```
+```
 -- ============================================================================
 -- ATUALIZAÇÃO DA TABELA 'financas'
 -- ============================================================================
