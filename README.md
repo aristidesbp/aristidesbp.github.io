@@ -1928,8 +1928,6 @@ DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
 -- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
 DROP TABLE IF EXISTS public.entidades CASCADE;
 
-```
-```
 
 -- ============================================================================
 --  CRIAÇÃO DA TABELA public.entidades
