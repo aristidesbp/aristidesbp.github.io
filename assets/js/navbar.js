@@ -1,3 +1,100 @@
+/**
+ * MIDDLEWARE DE PROTEÇÃO - ERP-PSC
+ * Finalidade: Bloquear a renderização do HTML antes da validação do JWT.
+ */
+
+(async function validateAccess() {
+    // 1. Bloqueio imediato da interface (Prevenção de FOUC - Flicker of Unauthenticated Content)
+    document.documentElement.style.display = 'none';
+
+    // Importação dinâmica da configuração do Supabase (ajustar caminho se necessário)
+    // Nota: O projeto utiliza supabase_config.js para chaves de acesso [5, 6]
+    try {
+        const { supabase } = await import('../model/supabase_config.js');
+
+        // 2. Verificação da Sessão e do Token JWT
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        // 3. Lógica de Redirecionamento Blindado
+        if (error || !session) {
+            console.warn("Acesso não autorizado ou sessão expirada. Redirecionando...");
+            window.location.href = 'login.html'; 
+            return;
+        }
+
+        // 4. Verificação de Integridade (Opcional: validar se o token ainda é aceito pelo backend)
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 5. Liberação da Interface
+        // Se o usuário estiver autenticado com um JWT válido, o sistema permite o carregamento
+        document.documentElement.style.display = 'block';
+
+    } catch (err) {
+        console.error("Erro crítico na validação de segurança:", err);
+        // Em caso de falha técnica no script de segurança, o sistema bloqueia o acesso por padrão
+        window.location.href = 'login.html';
+    }
+})();
+
+
+
+
+
+/*############################################################################################*/
+/*############################################################################################*/
+/* Estrutura do verificar_login.js. O comando básico do Supabase é: supabase.auth.getSession()*/
+async function checarAutenticacao() {
+/*cria a função para garantir que apenas usuários logados acessem a página atual*/    
+const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+/*Buscamos a sessão atual do cliente configurado no supabase_config.js*/
+if (error || !session) {
+/* Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado*/   
+console.log("Acesso negado: Usuário não autenticado.");
+/*apresenta mensagem de erro*/
+window.location.href = "login.html";
+/* Redireciona para o login.html na raiz, conforme nossa estrutura*/   
+} else {
+/*Se a sessão existir, permitimos que ele continue na página*/
+console.log("Acesso autorizado para:", session.user.email);
+/*apresenta mensagem de confirmação e inicia a cessao*/    
+}/*feichamento do else*/
+}/*feichamento da função*/
+checarAutenticacao();
+/* Executamos a verificação imediatamente ao carregar/chamar/executar a function checarAutenticacao();*/
+
+
+
+/*############################################################################################*/
+/*############################################################################################*/ 
+async function sairDaConta() {
+/* Cria uma função assíncrona responsável por realizar o processo de logoff do usuário */    
+if(confirm("Deseja realmente sair do sistema?")) {
+/* Exibe uma caixa de diálogo nativa do navegador pedindo a confirmação do usuário (Retorna true se clicar em OK) */
+try {
+/* Inicia um bloco de tratamento de erros para executar o processo de saída com segurança */
+if (typeof _supabase !== 'undefined') {
+/* Verifica se a instância global do Supabase está definida e disponível no escopo antes de tentar usá-la */    
+await _supabase.auth.signOut(); }
+/* Executa e aguarda a finalização do encerramento de sessão (logout) na API do Supabase */          
+window.location.href = 'login.html';
+/* Redireciona o navegador do usuário imediatamente para a página de login após o logout bem-sucedido */       
+} catch (error) {
+/* Captura qualquer erro ou falha que ocorra durante a execução das instruções contidas dentro do bloco try */       
+console.error("Erro ao sair:", error);
+/* Registra a mensagem detalhada do erro no console do navegador para fins de depuração técnica */   
+window.location.href = 'login.html';
+/* Garante o redirecionamento para a página de login por segurança, mesmo se a comunicação com o Supabase falhar */       
+}/* Fechamento do bloco catch (error) */   
+}/* Fechamento da condicional if de confirmação */
+}/* Fechamento da função assíncrona sairDaConta */
+
+
+
 /*############################################################################################*/
 /*############################################################################################*/
 (function () {
@@ -47,52 +144,3 @@ initNavbar();
 })();/* Fecha e executa imediatamente a função anônima que envolve todo o código (IIFE) */
 
 
-
-/*############################################################################################*/
-/*############################################################################################*/
-/* Estrutura do verificar_login.js. O comando básico do Supabase é: supabase.auth.getSession()*/
-async function checarAutenticacao() {
-/*cria a função para garantir que apenas usuários logados acessem a página atual*/    
-const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-/*Buscamos a sessão atual do cliente configurado no supabase_config.js*/
-if (error || !session) {
-/* Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado*/   
-console.log("Acesso negado: Usuário não autenticado.");
-/*apresenta mensagem de erro*/
-window.location.href = "login.html";
-/* Redireciona para o login.html na raiz, conforme nossa estrutura*/   
-} else {
-/*Se a sessão existir, permitimos que ele continue na página*/
-console.log("Acesso autorizado para:", session.user.email);
-/*apresenta mensagem de confirmação e inicia a cessao*/    
-}/*feichamento do else*/
-}/*feichamento da função*/
-checarAutenticacao();
-/* Executamos a verificação imediatamente ao carregar/chamar/executar a function checarAutenticacao();*/
-
-
-
-
-/*############################################################################################*/
-/*############################################################################################*/ 
-async function sairDaConta() {
-/* Cria uma função assíncrona responsável por realizar o processo de logoff do usuário */    
-if(confirm("Deseja realmente sair do sistema?")) {
-/* Exibe uma caixa de diálogo nativa do navegador pedindo a confirmação do usuário (Retorna true se clicar em OK) */
-try {
-/* Inicia um bloco de tratamento de erros para executar o processo de saída com segurança */
-if (typeof _supabase !== 'undefined') {
-/* Verifica se a instância global do Supabase está definida e disponível no escopo antes de tentar usá-la */    
-await _supabase.auth.signOut(); }
-/* Executa e aguarda a finalização do encerramento de sessão (logout) na API do Supabase */          
-window.location.href = 'login.html';
-/* Redireciona o navegador do usuário imediatamente para a página de login após o logout bem-sucedido */       
-} catch (error) {
-/* Captura qualquer erro ou falha que ocorra durante a execução das instruções contidas dentro do bloco try */       
-console.error("Erro ao sair:", error);
-/* Registra a mensagem detalhada do erro no console do navegador para fins de depuração técnica */   
-window.location.href = 'login.html';
-/* Garante o redirecionamento para a página de login por segurança, mesmo se a comunicação com o Supabase falhar */       
-}/* Fechamento do bloco catch (error) */   
-}/* Fechamento da condicional if de confirmação */
-}/* Fechamento da função assíncrona sairDaConta */
