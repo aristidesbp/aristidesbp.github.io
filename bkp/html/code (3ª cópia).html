@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Entidades - Diretório Clínico</title>
+<!-- Google Fonts: Inter & Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "error": "#ba1a1a",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed-variant": "#753400",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed": "#001b3c",
+              "error-container": "#ffdad6",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#191c1d",
+              "on-tertiary": "#ffffff",
+              "primary": "#005baf",
+              "outline-variant": "#c1c6d5",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#d5e3ff",
+              "surface-container-high": "#e7e8e9",
+              "on-tertiary-container": "#fffbff",
+              "secondary-container": "#b2cdfd",
+              "tertiary-fixed": "#ffdbc9",
+              "primary-fixed-dim": "#a8c8ff",
+              "outline": "#717785",
+              "on-surface-variant": "#414753",
+              "primary-fixed": "#d5e3ff",
+              "on-secondary-fixed-variant": "#2c4770",
+              "secondary-fixed-dim": "#adc8f7",
+              "primary-container": "#0074db",
+              "on-primary-fixed": "#001b3c",
+              "surface-variant": "#e1e3e4",
+              "surface-container-low": "#f3f4f5",
+              "inverse-surface": "#2e3132",
+              "tertiary-fixed-dim": "#ffb68c",
+              "surface-bright": "#f8f9fa",
+              "tertiary-container": "#bc5700",
+              "on-secondary-container": "#3c5780",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-on-surface": "#f0f1f2",
+              "on-tertiary-fixed": "#321200",
+              "on-background": "#191c1d",
+              "surface-container": "#edeeef",
+              "surface-tint": "#005eb4",
+              "surface": "#f8f9fa",
+              "on-primary-fixed-variant": "#004689",
+              "inverse-primary": "#a8c8ff",
+              "background": "#f8f9fa",
+              "secondary": "#455f89",
+              "tertiary": "#964400",
+              "surface-dim": "#d9dadb",
+              "on-primary-container": "#fefcff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .tonal-layering-card {
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .dark .tonal-layering-card {
+            background-color: #1e2123;
+        }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-900/80 glass-header flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-blue-700 dark:text-blue-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200 p-2 rounded-full" id="btn-voltar">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] font-semibold text-lg tracking-tight text-blue-800 dark:text-blue-300" id="titulo-entidades">
+                Gestão de Entidades
+            </h1>
+</div>
+<button class="flex items-center gap-2 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200 p-1 rounded-full" id="btn-menu">
+<img alt="Dr. Alex Silva" class="w-8 h-8 rounded-full object-cover border border-primary/20" data-alt="Professional headshot of a smiling male clinical psychologist in a white coat, bright clinical background, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiLKxFsgTaLWOmjRTRhGLMjPdfqFlUum8jgOEOKVV_ryO1askmnEDI_7hHhG4ZityCLQlDSogknCfUoBjm1GJG0E6FUB5Ml25O0892f4W9n4VJ1zt92EVOxcL1oIXrRLV_kLsLUvUbw0VzhkXx-5oLZMw8yfLHooD4YJduD3VGdQ4BeWjTLPMmC0cDYUl2nfKhD60_ksUshi90pwzgA9msc6tkeShVCFjYcGjC-TH1yHXWuj1udrICchkgH93BE-augspk-aJdVcj6"/>
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="menu">menu</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-4xl mx-auto">
+<!-- Filters & Search Section -->
+<section class="space-y-6 mb-8">
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-highest border-none rounded-xl focus:ring-2 focus:ring-primary/20 transition-all text-on-surface-variant placeholder:text-outline/60" id="input-busca" placeholder="Buscar por nome, CPF ou registro..." type="text"/>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide" id="tab-filtros">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-lg shadow-primary/20">Todos</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Pacientes</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Colaboradores</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Responsáveis</button>
+</div>
+</section>
+<!-- Entity List -->
+<div class="grid gap-6" id="lista-entidades">
+<!-- Card 1: Paciente - Ativo -->
+<div class="tonal-layering-card p-5 rounded-2xl shadow-[0_12px_32px_rgba(0,91,175,0.04)] hover:shadow-[0_12px_32px_rgba(0,91,175,0.08)] transition-all">
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-4">
+<img class="w-14 h-14 rounded-full object-cover ring-2 ring-primary/10" data-alt="Portrait of a young woman with a gentle expression, soft bokeh background, natural daylight, professional medical setting vibe" id="avatar-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVm4V3IyZQKb0vWxUS6A-RNXbKQsPVRAJSIFjxoocZ_K8JvLxHaAQKvpb7mr0bxJLNRVH2eCma5fMbk6CorNY1CcTUD0FU0aEwfbywTmzz_0JRVaOnohBhAv-_mvLy9WHxWrqjdTvviXGaH1t9MYwBuKcCEg-rIESc-fi3G1VMhVmAf3WUfe79pE_jcpU6coaCp7pbomqhzN8qgm2JeEFY2YOzQOM6Wpvq5qNvrNRqPnUxFWEAWcH0iWtCa4ggoRhrWW8xAVlU9wnL"/>
+<div>
+<h3 class="font-semibold text-on-surface text-base" id="nome-1">Ana Beatriz Oliveira</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="call">call</span>
+<span class="text-on-surface-variant text-sm" id="telefone-1">(11) 98765-4321</span>
+</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">Ativo</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[11px] text-outline font-bold uppercase tracking-widest">
+<span>Desenvolvimento Cognitivo</span>
+<span>85%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" id="progresso-1" style="width: 85%"></div>
+</div>
+</div>
+<div class="flex justify-end gap-3 mt-5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-red-500 text-white shadow-lg shadow-red-500/20 active:scale-90 transition-transform" id="email-1">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-[#22c55e] text-white shadow-lg shadow-green-500/20 active:scale-90 transition-transform" id="whatsapp-1">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Colaborador - Atrasado -->
+<div class="tonal-layering-card p-5 rounded-2xl shadow-[0_12px_32_rgba(0,91,175,0.04)] hover:shadow-[0_12px_32_rgba(0,91,175,0.08)] transition-all">
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-4">
+<img class="w-14 h-14 rounded-full object-cover ring-2 ring-primary/10" data-alt="Portrait of a male professional, short dark hair, friendly smile, neutral clinic background, soft artificial lighting" id="avatar-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFIwmW_6bw9DXYhlJ8RkMqgMkPe9Q73h7dY2VMN0DRNsKZ-VFZ37tSEWjoxu5bagn4uHfXaGdmE-Dj1lkdGtLwfS8S6SSkp-FJ90QSym40nMoG5b9YZnsEfeOUWGqzoNCC8fqONotvFno2VDJpX3_xYYlhiBv7M-JyBZyaylPxoN_teYXkjliiK_MlyFCgZk99ZyuMCkHyrYBCskN1zY8GXiC6N7CY6bSYVbOkFxaiKik7JRORgM9ztqH83E3R3sNorK4c6Cf3A7NM"/>
+<div>
+<h3 class="font-semibold text-on-surface text-base" id="nome-2">Dr. Marcos Vinícius</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="call">call</span>
+<span class="text-on-surface-variant text-sm" id="telefone-2">(11) 91234-5678</span>
+</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-bold uppercase tracking-wider">Atrasado</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[11px] text-outline font-bold uppercase tracking-widest">
+<span>Relatórios Pendentes</span>
+<span>40%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" id="progresso-2" style="width: 40%"></div>
+</div>
+</div>
+<div class="flex justify-end gap-3 mt-5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-red-500 text-white shadow-lg shadow-red-500/20 active:scale-90 transition-transform" id="email-2">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-[#22c55e] text-white shadow-lg shadow-green-500/20 active:scale-90 transition-transform" id="whatsapp-2">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Responsável - Concluído -->
+<div class="tonal-layering-card p-5 rounded-2xl shadow-[0_12px_32px_rgba(0,91,175,0.04)] hover:shadow-[0_12px_32px_rgba(0,91,175,0.08)] transition-all">
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-4">
+<img class="w-14 h-14 rounded-full object-cover ring-2 ring-primary/10" data-alt="Close up of a middle-aged woman with glasses, professional attire, warm office interior, sharp focus on facial features" id="avatar-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKodZC_rQUL8IbAoNn9y48NbXRN4uPbSdCR1KPKgB6jZneiWShCObTm8sJXwpyFguMTpWRiAFtpKgCQ6e379Ym803KZ48o_WuPtJ8HbxyTs-sfMPw3oBmNX8mJLIdq_CV6uTXQpnf0ItJHnnYLFq5rt-xEjo7wIObQ1J79mwo5cnorX7wP0zoT4jZ9uNLI8FMyVopd4049KpbbTxS_ZkARfb0A9Ae7_H9B-V00iiCG5FNe5U3mSA528fPgVmgvimlyOa7qhHSexYZ3"/>
+<div>
+<h3 class="font-semibold text-on-surface text-base" id="nome-3">Cláudia Regina</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="call">call</span>
+<span class="text-on-surface-variant text-sm" id="telefone-3">(11) 99887-7665</span>
+</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider">Concluído</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[11px] text-outline font-bold uppercase tracking-widest">
+<span>Documentação</span>
+<span>100%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 rounded-full" id="progresso-3" style="width: 100%"></div>
+</div>
+</div>
+<div class="flex justify-end gap-3 mt-5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-red-500 text-white shadow-lg shadow-red-500/20 active:scale-90 transition-transform" id="email-3">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-[#22c55e] text-white shadow-lg shadow-green-500/20 active:scale-90 transition-transform" id="whatsapp-3">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Paciente - Ativo -->
+<div class="tonal-layering-card p-5 rounded-2xl shadow-[0_12px_32px_rgba(0,91,175,0.04)] hover:shadow-[0_12px_32px_rgba(0,91,175,0.08)] transition-all">
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-4">
+<img class="w-14 h-14 rounded-full object-cover ring-2 ring-primary/10" data-alt="Young boy smiling at the camera, playful expression, indoor clinic environment, soft colorful toys in background, warm natural light" id="avatar-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdQZpQN-hPKwWgxdZS3YGEo2wQOrOLcyaRbujau3Fmteh9oKhvc4iUqF8601sFhTWqJlS0ePSrsjQg9sIU2zv6o0H6oiFd44I41EBiAUA3voDmE3MMtWXyqZEXMF1pmHWD3ktD_4kebxagr5XWZfKqF2BoLA4hYCKvpVbTrtiFuLe2iu9RG-f-UxfFrS3Yve3vZOjNb58AOxDsu0zcGGWb5cBblnqGucg1bL-rzlKzlGrl7GKfKUBRkaWnvzj2O5DJhV-CM9_Rxz-C"/>
+<div>
+<h3 class="font-semibold text-on-surface text-base" id="nome-4">Lucas Gabriel Silveira</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="call">call</span>
+<span class="text-on-surface-variant text-sm" id="telefone-4">(11) 94433-2211</span>
+</div>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">Ativo</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[11px] text-outline font-bold uppercase tracking-widest">
+<span>Habilidades Sociais</span>
+<span>62%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" id="progresso-4" style="width: 62%"></div>
+</div>
+</div>
+<div class="flex justify-end gap-3 mt-5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-red-500 text-white shadow-lg shadow-red-500/20 active:scale-90 transition-transform" id="email-4">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-[#22c55e] text-white shadow-lg shadow-green-500/20 active:scale-90 transition-transform" id="whatsapp-4">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<a class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all z-[100]" href="cadastrar_entidades.html" id="btn-adicionar">
+<span class="material-symbols-outlined text-3xl" data-icon="add" style="font-variation-settings: 'FILL' 0, 'wght' 400;">add</span>
+</a>
+<!-- Overlay Navigation Drawer (Mockup behavior) -->
+<div class="hidden fixed inset-0 z-[100] bg-black/20 backdrop-blur-sm" id="drawer">
+<div class="fixed inset-y-0 left-0 z-[60] flex flex-col bg-slate-50 dark:bg-slate-900 h-full w-72 rounded-r-3xl shadow-2xl shadow-blue-900/10 transition-all duration-300 ease-in-out">
+<div class="p-8">
+<div class="flex flex-col gap-4 mb-8">
+<img alt="Foto do Psicopedagogo" class="w-16 h-16 rounded-2xl object-cover shadow-lg" data-alt="Doctor profile picture, professional medical photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9DWU9ZWv_LHHRNgltN8X7kZjVmuaozlDLWmCHVGbHlNi38SBNFWFQkkU03gfEhKNDFvD1k6u4sxtEiYtLQW0t3Lyy62-XlkJ3rrEjXjov94YsMDtBLcM8ecX5ekzo3x7OoUum2z1FKSNhuODCo2YgOMUGXlTB3R-1D4eNwrGT_3Olnl8IFIC6cGQ-RgpXy2PrAKSE1O-gKD3Q2Fp5jmJjw_-2byaKS6-G5OCKilCiKayJKmJytt4bMS2eT6s7iPstDv6mLxUdqiDq"/>
+<div>
+<h2 class="text-xl font-bold text-blue-900 dark:text-blue-100">Dr. Alex Silva</h2>
+<p class="text-xs text-slate-500 uppercase tracking-tighter">CRP 06/12345</p>
+<p class="text-sm font-medium text-blue-700 dark:text-blue-400">Psicopedagogo Clínico</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-['Inter'] text-sm font-medium">Agenda</span>
+</a>
+<a class="flex items-center gap-3 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-xl px-4 py-3 mx-2" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Inter'] text-sm font-medium">Pacientes</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-['Inter'] text-sm font-medium">Relatórios</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-sm font-medium">Configurações</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</body></html>

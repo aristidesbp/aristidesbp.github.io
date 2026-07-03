@@ -1,0 +1,124 @@
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Profissional - ERP ABP</title>
+    <!-- estilo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+     <!-- icones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+   <link rel="stylesheet" href="css/navbar.css">
+
+    
+</head>
+<body class="bg-gray-100 font-sans">
+<!-- NAVBAR -->
+
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+     <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> index</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+   
+<!-- FIM DA NAVBAR -->
+ 
+
+    <header class="bg-slate-800 text-white p-4 shadow-md flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-cash-register text-2xl"></i>
+            <h1 class="text-xl font-bold uppercase tracking-wider">ERP ABP - Frente de Caixa</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <span id="user-display" class="text-sm opacity-80"><i class="fas fa-user"></i> Aristides B Pontes</span>
+            <button onclick="novoPedido()" class="bg-green-600 hover:bg-green-700 px-4 py-1 rounded text-sm font-bold">
+                <i class="fas fa-plus"></i> NOVO PEDIDO
+            </button>
+        </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
+        
+        <div class="lg:col-span-8 space-y-4">
+            <div class="bg-white p-4 rounded-lg shadow-sm flex gap-2">
+                <div class="relative flex-grow">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" id="busca-produto" onkeyup="filtrarProdutos()" placeholder="Buscar por nome ou código de barras..." 
+                        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-barcode"></i>
+                </button>
+            </div>
+
+            <div id="grid-produtos" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+        </div>
+
+        <div class="lg:col-span-4">
+            <div class="bg-white rounded-lg shadow-lg flex flex-col sticky top-4">
+                <div class="p-4 border-b bg-gray-50 rounded-t-lg font-bold flex justify-between">
+                    <span>CARRINHO</span>
+                    <i class="fas fa-shopping-cart text-blue-600"></i>
+                </div>
+
+                <div id="carrinho-itens" class="cart-container p-4 space-y-3 min-h-[300px]">
+                    <div class="text-center text-gray-400 mt-10">Carrinho vazio</div>
+                </div>
+
+                <div class="p-4 border-t bg-gray-50 space-y-3">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-500">CLIENTE (ENTIDADE)</label>
+                        <select id="select-cliente" class="w-full p-2 border rounded text-sm">
+                            <option value="">Consumidor Final</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-500">FORMA DE PAGAMENTO</label>
+                        <select id="metodo-pagamento" class="w-full p-2 border rounded text-sm font-bold bg-white">
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="PIX">PIX</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4 border-t">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xl font-bold">TOTAL:</span>
+                            <span id="total-venda" class="text-3xl font-black text-green-600">R$ 0,00</span>
+                        </div>
+                        <button onclick="finalizarVenda()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-xl shadow-lg transition-transform active:scale-95">
+                            <i class="fas fa-check-circle mr-2"></i> FINALIZAR (F2)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+ <!-- ############################################################################# --> 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase_config.js"></script>
+    <script src="js/validar_acesso.js"></script>
+     <script src="js/navbar.js"></script>
+    <script src="js/pdv_trez.js"></script> 
+  <!-- ############################################################################# -->   
+</body>
+</html>
+```

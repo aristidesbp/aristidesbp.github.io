@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Planos 6M - Gestão Pedagógica</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-primary/10 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<a class="flex items-center justify-center size-10 rounded-full hover:bg-primary/10 text-slate-700 dark:text-slate-200 transition-colors" href="pedagogo_dashboard.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="text-xl font-bold tracking-tight">Planos 6M</h1>
+</div>
+<a class="flex items-center justify-center size-10 rounded-full bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all" href="plano_criar.html">
+<span class="material-symbols-outlined">add</span>
+</a>
+</header>
+<!-- Tabs Navigation -->
+<nav class="bg-white dark:bg-slate-900 border-b border-primary/10 px-4">
+<div class="flex gap-6 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary py-3 px-1" href="#">
+<span class="text-sm font-bold whitespace-nowrap">Todos</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 py-3 px-1 hover:text-primary transition-colors" href="#">
+<span class="text-sm font-medium whitespace-nowrap">Em andamento</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 py-3 px-1 hover:text-primary transition-colors" href="#">
+<span class="text-sm font-medium whitespace-nowrap">Concluídos</span>
+</a>
+</div>
+</nav>
+<!-- Main Content: Plan List -->
+<main class="flex-1 p-4 flex flex-col gap-4 pb-24">
+<!-- Plan Card 1: Em Andamento -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary/20" data-alt="Avatar de um menino sorrindo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8USGP4WvxXTMtmEUf7vkbk1TAGQ8R4A7bfsuOYbhj4RIgskVone3Ay9SJYyeS2HjmdEKdN4dfKqEtkiMYL3woRvR99dWKl_jA7SQ2QDGlqhJENC-98lxeBO3si4u7UdU0jc_Ud2Pd1NXo16o7aQPuIAf1Xvop8IH5xMFgFIUjspT3VeAXOrTog3Fpu6_YKRvib6Dv8U2dhCCvxuDTL_MXmJ56RN5Z2fKX2EdA60tnC_CIvgs97pdkWrRh2oZrab0NHlxqsQB3u6el')"></div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">Lucas Silva</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Início: 01/10/2023 • Fim: 01/04/2024</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Em andamento</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-600 dark:text-slate-300 italic">4 de 11 habilidades</span>
+<span class="text-primary font-bold">36%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 36%;"></div>
+</div>
+</div>
+</div>
+<!-- Plan Card 2: Atrasado -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary/20" data-alt="Avatar de uma menina com cabelo castanho" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxJol5m5_wB-Nckc_aq414xuOXit0unpU8lGFvSYKZrchgsuFSW5BY2F_OvaWzxrYrPj8onSxAAYk6kZdbhnCNNhpedXv_YhKxvdCCFTlv1EI8qr4tKhTUrP4gH94PkDyYcU5N88RqMKh91F9YP360gBESi4lWNb2JbCqS1vwwDp-34S9HmvSyjsLThWGnOH7fTJvOM1JiaaLCJ0Ao06uK0TvDYaFSHtzswlW0d8Ww7pfr3uzYFUS_LoDN29bGfKjUl6te3TY3Fl49')"></div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">Mariana Costa</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Início: 15/08/2023 • Fim: 15/02/2024</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Atrasado</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-600 dark:text-slate-300 italic">8 de 12 habilidades</span>
+<span class="text-red-500 font-bold">66%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+<div class="bg-red-500 h-full rounded-full" style="width: 66%;"></div>
+</div>
+</div>
+</div>
+<!-- Plan Card 3: Concluído -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary/20" data-alt="Avatar de um menino loiro" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOLsgMb9eY-ztwPoa5BmKJWEo0Why89CuYtqORCjM1YMLvSznWmhe-beLswCn0DUDUrx05XpOz4p9IfoMrku9dA_l_bAqyeEhDEOpyKmfRqBjdoKrTEEF4F_imqiMxcj2wD2lTQLMVBqDTBOzxU2By-lwZ4Fryug0rbpPPLkdsN0BbQgZFeIbS7jFIMJgxeGrZuZ_gBOLfYe7i9zKFc1xOIDfp_OVHtKTnaL_Dcw4Xbu7fDDk_ecdN4CONNCi49stWlriKtqjuQKTh')"></div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">Pedro Oliveira</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Início: 01/03/2023 • Fim: 01/09/2023</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400">Concluído</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-600 dark:text-slate-300 italic">10 de 10 habilidades</span>
+<span class="text-primary font-bold">100%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full bg-white dark:bg-slate-900 border-t border-primary/10 px-4 pb-6 pt-2 flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 transition-colors hover:text-primary" href="pedagogo_dashboard.html">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-[10px] font-medium">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 transition-colors hover:text-primary" href="pacientes_lista.html">
+<span class="material-symbols-outlined text-2xl">group</span>
+<span class="text-[10px] font-medium">Pacientes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">assignment</span>
+<span class="text-[10px] font-bold">Plano 6M</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 transition-colors hover:text-primary" href="configuracoes.html">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-medium">Config</span>
+</a>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

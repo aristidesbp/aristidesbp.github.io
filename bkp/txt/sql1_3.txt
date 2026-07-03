@@ -1,0 +1,94 @@
+-- ========================================================
+-- ERP-PSC: PLATAFORMA CLÍNICA SEGURA - ESTRUTURA E RLS
+-- ========================================================
+
+-- 1. PERFIS E ACESSOS
+CREATE TABLE IF NOT EXISTS public.clinica_perfis (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    role TEXT CHECK (role IN ('master', 'psicopedagoga', 'paciente')) DEFAULT 'paciente',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 2. ENTIDADES (Pacientes, Responsáveis e Profissionais)
+CREATE TABLE IF NOT EXISTS public.clinica_entidades (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.clinica_perfis(id),
+    nome_completo TEXT NOT NULL,
+    cpf_hash TEXT,
+    telefone TEXT,
+    tipo TEXT DEFAULT 'paciente',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 3. PLANOS DE INTERVENÇÃO (Baseado no doc "PLANO 6M")
+CREATE TABLE IF NOT EXISTS public.clinica_planos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    paciente_id UUID REFERENCES public.clinica_perfis(id) ON DELETE CASCADE,
+    profissional_id UUID REFERENCES public.clinica_perfis(id),
+    habilidade_foco TEXT, -- Ex: Leitura Fluente, Escrita Bastão
+    criterio_alta TEXT,
+    status TEXT DEFAULT 'em_andamento',
+    data_inicio DATE DEFAULT CURRENT_DATE,
+    previsao_fim DATE
+);
+
+-- 4. FINANCEIRO CLINICA
+CREATE TABLE IF NOT EXISTS public.clinica_financeiro (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    paciente_id UUID REFERENCES public.clinica_perfis(id),
+    descricao TEXT NOT NULL,
+    valor NUMERIC NOT NULL,
+    status TEXT CHECK (status IN ('pendente', 'pago', 'atrasado')) DEFAULT 'pendente',
+    data_vencimento DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- 5. COMPARTILHAMENTO UNIVERSAL (A "Mágica" da Integração)
+CREATE TABLE IF NOT EXISTS public.clinica_compartilhamento (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    remetente_id UUID REFERENCES public.clinica_perfis(id),
+    email_destino TEXT NOT NULL, -- E-mail do paciente/responsável
+    tipo_conteudo TEXT CHECK (tipo_conteudo IN ('json_form', 'pdf_relatorio', 'link_externo')),
+    titulo TEXT NOT NULL,
+    payload JSONB, -- Guarda formulários estruturados, notas, etc.
+    url_arquivo TEXT,
+    visto_em TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- ========================================================
+-- SEGURANÇA BANCÁRIA (ROW LEVEL SECURITY - RLS)
+-- ========================================================
+ALTER TABLE public.clinica_perfis ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_entidades ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_planos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_financeiro ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clinica_compartilhamento ENABLE ROW LEVEL SECURITY;
+
+-- Políticas Perfis
+CREATE POLICY "Ver perfis" ON public.clinica_perfis FOR SELECT TO authenticated USING (true);
+
+-- Políticas Compartilhamento
+CREATE POLICY "Profissionais gerenciam envios" ON public.clinica_compartilhamento 
+FOR ALL TO authenticated USING (
+    EXISTS (SELECT 1 FROM clinica_perfis WHERE id = auth.uid() AND role IN ('master', 'psicopedagoga'))
+);
+
+CREATE POLICY "Pacientes veem o que foi enviado pro seu email" ON public.clinica_compartilhamento 
+FOR SELECT TO authenticated USING (
+    email_destino = (SELECT email FROM auth.users WHERE id = auth.uid())
+);
+
+-- Automação de Perfil Seguro
+CREATE OR REPLACE FUNCTION public.handle_new_clinica_user() RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.clinica_perfis (id, nome, email, role)
+  VALUES (new.id, COALESCE(new.raw_user_meta_data->>'full_name', 'Sem Nome'), new.email, 'paciente');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql security definer;
+
+DROP TRIGGER IF EXISTS on_auth_user_created_clinica ON auth.users;
+CREATE TRIGGER on_auth_user_created_clinica AFTER INSERT ON auth.users FOR EACH ROW EXECUTE PROCEDURE public.handle_new_clinica_user();

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ERP ABP - Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#002109",
+                        "tertiary": "#00415b",
+                        "on-tertiary-container": "#80d1ff",
+                        "surface-container-high": "#efe7df",
+                        "primary-fixed-dim": "#8cd4c7",
+                        "primary": "#00453d",
+                        "secondary-container": "#5dfd8a",
+                        "inverse-surface": "#34302b",
+                        "on-background": "#1e1b16",
+                        "on-secondary-container": "#007232",
+                        "on-surface": "#1e1b16",
+                        "on-tertiary-fixed": "#001e2c",
+                        "surface-container-highest": "#e9e1d9",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#3de273",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e9e1d9",
+                        "on-primary-fixed": "#00201c",
+                        "inverse-on-surface": "#f8efe7",
+                        "surface-container": "#f5ece4",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#005a7b",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "surface-tint": "#1c695f",
+                        "on-primary-container": "#8dd5c8",
+                        "secondary": "#006d2f",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#fbf2ea",
+                        "secondary-fixed": "#66ff8e",
+                        "inverse-primary": "#8cd4c7",
+                        "outline": "#6f7976",
+                        "primary-container": "#075e54",
+                        "surface-bright": "#fff8f3",
+                        "background": "#fff8f3",
+                        "on-primary-fixed-variant": "#005047",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#a8f0e3",
+                        "tertiary-fixed-dim": "#7cd0ff",
+                        "surface-dim": "#e1d9d1",
+                        "on-surface-variant": "#3f4946",
+                        "outline-variant": "#bec9c5",
+                        "surface": "#fff8f3",
+                        "tertiary-fixed": "#c4e7ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005322"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "message-gap": "4px",
+                        "bubble-padding-y": "8px",
+                        "bubble-padding-x": "12px",
+                        "edge-margin": "16px",
+                        "footer-min-height": "56px",
+                        "header-height": "64px",
+                        "cluster-gap": "12px"
+                    },
+                    "fontFamily": {
+                        "header-title": ["Inter"],
+                        "header-subtitle": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "timestamp": ["Inter"],
+                        "message-text": ["Inter"],
+                        "input-text": ["Inter"],
+                        "body-main": ["Inter"]
+                    },
+                    "fontSize": {
+                        "header-title": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "header-subtitle": ["13px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "timestamp": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "message-text": ["15px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "input-text": ["16px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-main": ["16px", {"lineHeight": "22px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #e5ddd5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chat-canvas {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            scroll-behavior: smooth;
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            background-repeat: repeat;
+        }
+        .bubble {
+            max-width: 85%;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .bubble-left {
+            align-self: flex-start;
+            background-color: #ffffff;
+            border-radius: 0 8px 8px 8px;
+        }
+        .bubble-right {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            border-radius: 8px 0 8px 8px;
+        }
+        .timestamp {
+            font-size: 11px;
+            color: #999;
+            float: right;
+            margin-top: 4px;
+            margin-left: 8px;
+        }
+        .actions-btn-group {
+            opacity: 0;
+            transition: opacity 0.2s;
+            position: absolute;
+            top: 4px;
+            display: flex;
+            gap: 4px;
+        }
+        .bubble:hover .actions-btn-group {
+            opacity: 1;
+        }
+        .bubble-right .actions-btn-group {
+            left: -56px;
+        }
+        .bubble-left .actions-btn-group {
+            right: -56px;
+        }
+        .action-btn {
+            cursor: pointer;
+            background: transparent;
+            border-radius: 50%;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .recording-pulse {
+            animation: pulse-red 1s infinite ease-in-out;
+            color: #ef4444;
+        }
+        audio::-webkit-media-controls-enclosure {
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-body-main">
+<!-- Header -->
+<header class="bg-primary text-on-primary fixed top-0 w-full h-[64px] shadow-sm flex items-center justify-between px-edge-margin z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined cursor-pointer">arrow_back</span>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1vS_lVmq-9_xoiYfHlbwtvXx1XleigG919EfqA-VAdWl1XJzKR9bgF962NSd0uxZMNnTe4aBvxbXiQEddiiFW15FbRlNGQnDk-0OIbdH8dg0GQpCK8iydN2jfTirXkeIJs-bqU3MFZgHUqW5yasZ4tH_diKwS0GC30tYVvZKhd8zQYZpDml__Sn95OBuhd9KzIAKdzKqNn-iFBBWhbHMl3ydMoJkWRJgrgh0aXZbwlh_HzDDxDMgek5heF8p4V6cQYy1pO2ETrrd4"/>
+</div>
+<div class="flex flex-col">
+<h1 class="font-header-title text-header-title font-semibold">ERP ABP</h1>
+<span class="font-header-subtitle text-header-subtitle text-primary-fixed-dim">Online agora</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer">videocam</span>
+<span class="material-symbols-outlined cursor-pointer">call</span>
+<span class="material-symbols-outlined cursor-pointer">more_vert</span>
+</div>
+</header>
+<!-- Chat Area -->
+<main class="mt-[64px] mb-[72px]" id="chat-canvas">
+<div class="flex justify-center my-4">
+<span class="bg-surface-container-low/80 px-3 py-1 rounded-lg text-on-surface-variant font-label-caps text-label-caps uppercase shadow-sm">Hoje</span>
+</div>
+</main>
+<!-- Footer Input Area -->
+<footer class="fixed bottom-0 w-full bg-surface-container-low p-2 z-50 flex items-center gap-2 min-h-[56px]" id="chat-footer">
+<div class="flex items-center bg-white rounded-full flex-1 px-3 py-1 shadow-sm relative overflow-hidden" id="input-container">
+<!-- Recording UI Overlay -->
+<div class="hidden absolute inset-0 bg-white z-10 flex items-center px-4 gap-3" id="recording-overlay">
+<span class="material-symbols-outlined recording-pulse">fiber_manual_record</span>
+<span class="text-error font-mono font-semibold" id="recording-timer">00:00</span>
+<span class="text-on-surface-variant text-sm ml-auto animate-pulse">Gravando...</span>
+</div>
+<!-- Confirmation UI Overlay (Post-Recording Preview) -->
+<div class="hidden absolute inset-0 bg-white z-20 flex items-center px-2 gap-2" id="confirmation-overlay">
+<button class="p-2 text-error hover:bg-error-container/20 rounded-full transition-colors" id="delete-recording-btn">
+<span class="material-symbols-outlined">delete</span>
+</button>
+<div class="flex-1 px-1">
+<audio class="h-10 w-full bg-transparent" controls="" id="audio-preview" style="filter: sepia(20%) hue-rotate(110deg) saturate(150%);">
+<source src="" type="audio/webm"/>
+</audio>
+</div>
+</div>
+<button class="p-1 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-colors" id="emoji-btn">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+<input autocomplete="off" class="flex-1 border-none focus:ring-0 text-input-text font-input-text bg-transparent py-2 px-2" id="message-input" placeholder="Mensagem" type="text"/>
+<button class="p-1 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-colors" id="attach-btn">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input accept="image/*" class="hidden" id="file-input" type="file"/>
+<button class="p-1 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-colors ml-1">
+<span class="material-symbols-outlined">photo_camera</span>
+</button>
+</div>
+<button class="w-12 h-12 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform" id="send-btn">
+<span class="material-symbols-outlined" id="send-icon">mic</span>
+</button>
+</footer>
+<script>
+    // IndexedDB Logic
+    const DB_NAME = 'ERP_ChatDB';
+    const DB_VERSION = 1;
+    let db;
+
+    const initDB = () => {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onerror = (event) => reject('Database error: ' + event.target.errorCode);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('messages')) {
+                    db.createObjectStore('messages', { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = (event) => {
+                db = event.target.result;
+                resolve(db);
+            };
+        });
+    };
+
+    const saveMessage = (msg) => {
+        return new Promise((resolve) => {
+            const transaction = db.transaction(['messages'], 'readwrite');
+            const store = transaction.objectStore('messages');
+            const request = store.add(msg);
+            request.onsuccess = (e) => {
+                msg.id = e.target.result;
+                resolve(msg);
+            };
+        });
+    };
+
+    const updateMessageInDB = (msg) => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['messages'], 'readwrite');
+            const store = transaction.objectStore('messages');
+            const request = store.put(msg);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject('Error updating message');
+        });
+    };
+
+    const deleteMessageFromDB = (id) => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['messages'], 'readwrite');
+            const store = transaction.objectStore('messages');
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject('Error deleting message');
+        });
+    };
+
+    const getMessageById = (id) => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['messages'], 'readonly');
+            const store = transaction.objectStore('messages');
+            const request = store.get(id);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject('Error fetching message');
+        });
+    };
+
+    const getAllMessages = () => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['messages'], 'readonly');
+            const store = transaction.objectStore('messages');
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject('Error fetching messages');
+        });
+    };
+
+    // UI & Audio Logic
+    const chatCanvas = document.getElementById('chat-canvas');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const sendIcon = document.getElementById('send-icon');
+    const fileInput = document.getElementById('file-input');
+    const attachBtn = document.getElementById('attach-btn');
+    const recordingOverlay = document.getElementById('recording-overlay');
+    const recordingTimer = document.getElementById('recording-timer');
+    const confirmationOverlay = document.getElementById('confirmation-overlay');
+    const deleteRecordingBtn = document.getElementById('delete-recording-btn');
+    const audioPreview = document.getElementById('audio-preview');
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let isRecording = false;
+    let isConfirming = false;
+    let timerInterval;
+    let seconds = 0;
+    let pendingAudioBase64 = null;
+
+    const renderMessage = (msg) => {
+        const isUser = msg.sender === 'user';
+        let bubble = document.getElementById(`msg-${msg.id}`);
+        const isUpdate = !!bubble;
+        
+        if (!bubble) {
+            bubble = document.createElement('div');
+            bubble.id = `msg-${msg.id}`;
+        }
+        
+        bubble.className = `bubble group ${isUser ? 'bubble-right' : 'bubble-left'} font-message-text text-message-text`;
+        
+        let content = '';
+        if (msg.type === 'image') {
+            content = `<img src="${msg.data}" class="max-w-full rounded-md mb-2 shadow-sm" style="max-height: 300px;">`;
+        } else if (msg.type === 'audio') {
+            content = `
+                <div class="flex items-center gap-2 min-w-[200px]">
+                    <audio controls class="h-8 w-full">
+                        <source src="${msg.data}" type="audio/webm">
+                        Seu navegador não suporta áudio.
+                    </audio>
+                </div>
+            `;
+        }
+        
+        if (msg.text) {
+            content += `<div class="message-body">${msg.text}</div>`;
+        }
+
+        const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const editedLabel = msg.edited ? '<span class="italic opacity-60 text-[10px] mr-1">editada</span>' : '';
+        
+        // Actions buttons
+        const showEdit = msg.type === 'text' && isUser;
+        const actionsHtml = `
+            <div class="actions-btn-group">
+                <button onclick="handleDeleteMessage(${msg.id})" class="action-btn text-on-surface-variant/40 hover:text-error transition-colors">
+                    <span class="material-symbols-outlined !text-[18px]">delete</span>
+                </button>
+                ${showEdit ? `
+                <button onclick="handleEditMessage(${msg.id})" class="action-btn text-on-surface-variant/40 hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined !text-[18px]">edit</span>
+                </button>
+                ` : ''}
+            </div>
+        `;
+
+        bubble.innerHTML = `
+            ${actionsHtml}
+            <div class="content-wrapper">${content}</div>
+            <span class="timestamp font-timestamp text-timestamp">${editedLabel}${time} ${isUser ? '<span class="material-symbols-outlined text-[14px] leading-none" style="font-variation-settings: \'FILL\' 1;">done_all</span>' : ''}</span>
+        `;
+        
+        if (!isUpdate) {
+            chatCanvas.appendChild(bubble);
+        }
+        chatCanvas.scrollTop = chatCanvas.scrollHeight;
+    };
+
+    window.handleDeleteMessage = async (id) => {
+        try {
+            await deleteMessageFromDB(id);
+            const el = document.getElementById(`msg-${id}`);
+            if (el) {
+                el.classList.add('opacity-0', 'scale-95');
+                el.style.transition = 'all 0.3s ease';
+                setTimeout(() => el.remove(), 300);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    window.handleEditMessage = async (id) => {
+        const msg = await getMessageById(id);
+        if (!msg || msg.type !== 'text') return;
+
+        const bubble = document.getElementById(`msg-${id}`);
+        const contentWrapper = bubble.querySelector('.content-wrapper');
+        const oldContent = contentWrapper.innerHTML;
+
+        const inputHtml = `
+            <div class="flex flex-col gap-2 w-full min-w-[200px]">
+                <textarea class="w-full text-sm p-2 rounded border border-outline focus:ring-1 focus:ring-primary outline-none bg-surface" rows="3">${msg.text}</textarea>
+                <div class="flex justify-end gap-2">
+                    <button class="px-2 py-1 text-xs font-semibold text-on-surface-variant hover:bg-surface-variant rounded transition-colors" onclick="cancelEdit(${id}, '${btoa(oldContent)}')">Cancelar</button>
+                    <button class="px-2 py-1 text-xs font-semibold bg-primary text-on-primary rounded hover:opacity-90 transition-opacity" onclick="saveEditedMessage(${id})">Salvar</button>
+                </div>
+            </div>
+        `;
+        contentWrapper.innerHTML = inputHtml;
+        contentWrapper.querySelector('textarea').focus();
+    };
+
+    window.cancelEdit = (id, oldContentBase64) => {
+        const bubble = document.getElementById(`msg-${id}`);
+        const contentWrapper = bubble.querySelector('.content-wrapper');
+        contentWrapper.innerHTML = atob(oldContentBase64);
+    };
+
+    window.saveEditedMessage = async (id) => {
+        const bubble = document.getElementById(`msg-${id}`);
+        const newText = bubble.querySelector('textarea').value.trim();
+        if (!newText) return;
+
+        const msg = await getMessageById(id);
+        msg.text = newText;
+        msg.edited = true;
+        
+        await updateMessageInDB(msg);
+        renderMessage(msg);
+    };
+
+    const handleBotResponse = async (userText) => {
+        const lowerText = userText.toLowerCase();
+        let response = "Desculpe, não entendi. Tente as opções:\n1. ENTIDADES\n2. FINANCEIRO";
+        
+        if (lowerText.includes('1') || lowerText.includes('entidades')) {
+            response = "Módulo de ENTIDADES selecionado. O que deseja consultar?\n- Clientes\n- Fornecedores\n- Parceiros";
+        } else if (lowerText.includes('2') || lowerText.includes('financeiro')) {
+            response = "Módulo FINANCEIRO acessado. Opções disponíveis:\n- Fluxo de Caixa\n- Contas a Pagar\n- Contas a Receber";
+        } else if (userText === "[ÁUDIO]") {
+            response = "Recebi seu áudio! Estou processando as informações solicitadas.";
+        }
+
+        const botMsg = {
+            sender: 'bot',
+            text: response,
+            type: 'text',
+            timestamp: Date.now()
+        };
+
+        setTimeout(async () => {
+            const savedBotMsg = await saveMessage(botMsg);
+            renderMessage(savedBotMsg);
+        }, 800);
+    };
+
+    const sendMessage = async () => {
+        const text = messageInput.value.trim();
+        if (!text) return;
+
+        const msg = {
+            sender: 'user',
+            text: text,
+            type: 'text',
+            timestamp: Date.now()
+        };
+
+        const savedMsg = await saveMessage(msg);
+        renderMessage(savedMsg);
+        messageInput.value = '';
+        updateSendIcon();
+        handleBotResponse(text);
+    };
+
+    const confirmAndSendAudio = async () => {
+        if (!pendingAudioBase64) return;
+
+        const msg = {
+            sender: 'user',
+            type: 'audio',
+            data: pendingAudioBase64,
+            timestamp: Date.now()
+        };
+        const savedMsg = await saveMessage(msg);
+        renderMessage(savedMsg);
+        handleBotResponse("[ÁUDIO]");
+        resetConfirmationUI();
+    };
+
+    const resetConfirmationUI = () => {
+        pendingAudioBase64 = null;
+        isConfirming = false;
+        confirmationOverlay.classList.add('hidden');
+        audioPreview.src = "";
+        updateSendIcon();
+    };
+
+    const updateSendIcon = () => {
+        if (isConfirming) {
+            sendIcon.innerText = 'send';
+            sendBtn.classList.replace('bg-primary-container', 'bg-secondary');
+            sendBtn.classList.remove('bg-error');
+        } else if (messageInput.value.trim().length > 0) {
+            sendIcon.innerText = 'send';
+            sendBtn.classList.replace('bg-primary-container', 'bg-secondary');
+            sendBtn.classList.remove('bg-error');
+        } else {
+            sendIcon.innerText = 'mic';
+            sendBtn.classList.replace('bg-secondary', 'bg-primary-container');
+            sendBtn.classList.remove('bg-error');
+        }
+    };
+
+    // Recording functions
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    pendingAudioBase64 = reader.result;
+                    audioPreview.src = pendingAudioBase64;
+                    isConfirming = true;
+                    confirmationOverlay.classList.remove('hidden');
+                    updateSendIcon();
+                };
+                reader.readAsDataURL(audioBlob);
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            recordingOverlay.classList.remove('hidden');
+            startTimer();
+            sendIcon.innerText = 'stop';
+            sendBtn.classList.replace('bg-primary-container', 'bg-error');
+        } catch (err) {
+            console.error("Microfone não autorizado", err);
+            alert("Erro ao acessar o microfone.");
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorder && isRecording) {
+            mediaRecorder.stop();
+            isRecording = false;
+            recordingOverlay.classList.add('hidden');
+            stopTimer();
+        }
+    };
+
+    const startTimer = () => {
+        seconds = 0;
+        recordingTimer.innerText = "00:00";
+        timerInterval = setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            recordingTimer.innerText = `${mins}:${secs}`;
+        }, 1000);
+    };
+
+    const stopTimer = () => {
+        clearInterval(timerInterval);
+    };
+
+    // Event Listeners
+    messageInput.addEventListener('input', updateSendIcon);
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    sendBtn.addEventListener('click', () => {
+        if (isConfirming) {
+            confirmAndSendAudio();
+        } else if (sendIcon.innerText === 'send') {
+            sendMessage();
+        } else if (sendIcon.innerText === 'mic') {
+            startRecording();
+        } else if (sendIcon.innerText === 'stop') {
+            stopRecording();
+        }
+    });
+
+    deleteRecordingBtn.addEventListener('click', resetConfirmationUI);
+
+    attachBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const base64 = event.target.result;
+            const msg = {
+                sender: 'user',
+                type: 'image',
+                data: base64,
+                timestamp: Date.now()
+            };
+            const savedMsg = await saveMessage(msg);
+            renderMessage(savedMsg);
+            handleBotResponse("Recebi seu anexo.");
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', async () => {
+        await initDB();
+        const history = await getAllMessages();
+        
+        if (history.length === 0) {
+            const welcome = {
+                sender: 'bot',
+                text: "Bem-vindo ao canal oficial do ERP ABP. Como posso ajudar?\n1. ENTIDADES\n2. FINANCEIRO",
+                type: 'text',
+                timestamp: Date.now()
+            };
+            const savedWelcome = await saveMessage(welcome);
+            renderMessage(savedWelcome);
+        } else {
+            history.forEach(renderMessage);
+        }
+    });
+</script>
+</body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Supabase v2</title>
+    <style>
+        body { font-family: sans-serif; padding: 15px; }
+        input { display: block; width: 90%; margin: 10px 0; padding: 8px; }
+        .btn-group { display: flex; gap: 10px; }
+        button { padding: 10px 15px; border: none; cursor: pointer; color: white; border-radius: 4px; }
+        .btn-test { background: #28a745; }
+        .btn-load { background: #007bff; }
+        #log { background: #1e1e1e; color: #00ff00; padding: 15px; margin-top: 20px; border-radius: 5px; height: 350px; overflow-y: scroll; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Debug: Conexão e Tabelas</h1>
+    <input type="text" id="urlInput" placeholder="URL do Supabase">
+    <input type="text" id="keyInput" placeholder="Chave ANON">
+    
+    <div class="btn-group">
+        <button class="btn-load" onclick="carregarPadrao()">Usar Padrão</button>
+        <button class="btn-test" onclick="testarTudo()">Testar Conexão</button>
+    </div>
+
+    <div id="log">Aguardando...</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const logDiv = document.getElementById('log');
+        const print = (msg) => logDiv.innerHTML += `<br>> ${msg}`;
+
+        // Dados padrão extraídos do seu arquivo funcional
+        const PADRAO_URL = 'https://zxkaxteprwxijriycvdx.supabase.co';
+        const PADRAO_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4a2F4dGVwcnd4aWpyaXljdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODIxMTEsImV4cCI6MjA5ODA1ODExMX0.ffOiXvjJujp4eL2scf1NiMT9A0CtwIAHilbX3T_AMrc';
+
+        function carregarPadrao() {
+            document.getElementById('urlInput').value = PADRAO_URL;
+            document.getElementById('keyInput').value = PADRAO_KEY;
+            print("Credenciais padrão carregadas!");
+        }
+
+        async function testarTudo() {
+            logDiv.innerHTML = "Iniciando...";
+            const url = document.getElementById('urlInput').value.trim();
+            const key = document.getElementById('keyInput').value.trim();
+
+            if (!url || !key) {
+                print("ERRO: Preencha URL e Chave!");
+                return;
+            }
+
+            try {
+                const sb = supabase.createClient(url, key);
+                print("Testando acesso às tabelas...");
+                
+                // Tenta listar tabelas (requer GRANT no SQL Editor)
+                const { data, error } = await sb.from('information_schema.tables').select('table_name').eq('table_schema', 'public');
+                
+                if (error) {
+                    print("⚠️ Acesso restrito ao esquema: " + error.message);
+                } else {
+                    print("📋 Tabelas encontradas:");
+                    data.forEach(t => print("- " + t.table_name));
+                }
+            } catch (err) {
+                print("ERRO: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

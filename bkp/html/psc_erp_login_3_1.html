@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - ERP-PSC Plataforma Clínica Segura</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c3cf6",
+                        "background-light": "#f5f5f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+        /* Custom styles for the mock recaptcha appearance */
+        #recaptcha-box.invalid {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+<!-- Header/Logo Area -->
+<div class="pt-10 pb-6 px-8 flex flex-col items-center">
+<div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">health_and_safety</span>
+</div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">ERP-PSC</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Plataforma Clínica Segura</p>
+</div>
+<!-- Form Area -->
+<form class="px-8 pb-10 space-y-4" id="loginForm">
+<!-- Error Message Container -->
+<div class="hidden p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm font-medium" id="errorMessage"></div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">E-mail</label>
+<div class="relative flex items-center">
+<input class="w-full h-12 pl-4 pr-11 bg-background-light dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent transition-all placeholder:text-slate-400" id="email" placeholder="Digite seu e-mail" required="" type="email"/>
+<div class="absolute right-3 text-slate-400 flex items-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Senha</label>
+<a class="text-xs font-semibold text-primary hover:underline" href="#">Esqueci minha senha</a>
+</div>
+<div class="relative flex items-center">
+<input class="w-full h-12 pl-4 pr-11 bg-background-light dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent transition-all placeholder:text-slate-400" id="password" placeholder="Digite sua senha" required="" type="password"/>
+<button class="absolute right-3 text-slate-400 hover:text-primary transition-colors flex items-center" id="togglePassword" type="button">
+<span class="material-symbols-outlined" id="eyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 my-4">
+<div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+<span class="text-xs text-slate-400 font-medium uppercase tracking-wider">ou</span>
+<div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<button class="w-full h-12 flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all shadow-sm" id="googleLoginBtn" type="button">
+<svg height="18" viewbox="0 0 18 18" width="18" xmlns="http://www.google.com/2000/svg">
+<path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"></path>
+<path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"></path>
+<path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"></path>
+<path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"></path>
+</svg>
+<span>Entrar com Google</span>
+</button>
+<div class="flex items-center">
+<input class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" id="remember" type="checkbox"/>
+<label class="ml-2 text-sm text-slate-600 dark:text-slate-400 cursor-pointer" for="remember">Lembrar de mim</label>
+</div>
+<div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm transition-colors" id="recaptcha-box">
+<div class="flex items-center gap-3">
+<input class="w-6 h-6 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" id="recaptcha" type="checkbox"/>
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer" for="recaptcha">Não sou um robô</label>
+</div>
+<div class="flex flex-col items-center justify-center text-[10px] text-slate-400 opacity-80">
+<img alt="reCAPTCHA" class="w-6 h-6 mb-0.5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwBViAIKDiJFccF3AgViTf-5JJuClFraf5O_gcQqFL4kkDr_oERNIkk8KQ93SM2JmuQXTPIrvrcNOUbKT4uY5SMGU5Nj4BYYdq5VTPfd9Jgv-PqID4YCSV2LcvLUu80tHy5yS7sgeoOCJ3eYDEm8D7A20hmCO3iVpngCkIsnUwKA_2_IMrQXGreJGxTbQlYtZb_ZH1LBL80uKD31jWt9-tsv3mNMNhEqO9hL0UsbrT1fndORf5gnmW918VnU2Nlg8fQ8yp9Wq2yKQ_"/>
+<span>reCAPTCHA</span>
+<div class="flex gap-1">
+<a class="hover:underline" href="#">Privacidade</a>
+<a class="hover:underline" href="#">Termos</a>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-4 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2" id="submitBtn" type="submit">
+<span id="btnText">Entrar</span>
+<span class="material-symbols-outlined text-xl" id="btnIcon">login</span>
+</button>
+</form>
+<!-- Footer Area -->
+<div class="px-8 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 text-center">
+<p class="text-sm text-slate-500 dark:text-slate-400">Ainda não tem acesso? <a class="text-primary font-semibold hover:underline" href="#">Cadastre-se</a> ou <a class="text-primary font-semibold hover:underline" href="#">Contate o administrador</a></p>
+</div>
+</div>
+<!-- Background Decoration -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 opacity-30 pointer-events-none">
+<div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px]"></div>
+</div>
+<script>
+    // Supabase Configuration Initialization (From TEXT_8)
+    const supabaseUrl = 'https://jnvfdnyzharfiwptmmcs.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpudmZkbnl6aGFyZml3cHRtbWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODUyMjYsImV4cCI6MjA4OTE2MTIyNn0.kK4d5lyNSZtvP-rOwRNZ2p0fYD3auXQh-zvgzKNWxh0';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const recaptchaCheckbox = document.getElementById('recaptcha');
+    const recaptchaBox = document.getElementById('recaptcha-box');
+    const errorMessageDiv = document.getElementById('errorMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+
+    // 1. Password Visibility Toggle
+    togglePasswordBtn.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        eyeIcon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    });
+
+    // 3. Google Login Mock
+    googleLoginBtn.addEventListener('click', () => {
+        alert("O login via Google requer configuração adicional de OAuth na plataforma Supabase. Por favor, utilize e-mail e senha para prosseguir.");
+        console.log("Mock: Google Login clicked.");
+    });
+
+    // 2. & 4. Functional Login Logic
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Reset state
+        errorMessageDiv.classList.add('hidden');
+        errorMessageDiv.textContent = '';
+        recaptchaBox.classList.remove('invalid');
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        // Validation
+        if (!email || !password) {
+            showError("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+
+        if (!recaptchaCheckbox.checked) {
+            recaptchaBox.classList.add('invalid');
+            showError("Por favor, confirme que você não é um robô.");
+            return;
+        }
+
+        // UI Loading State
+        setLoading(true);
+
+        try {
+            // Supabase Sign In
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                showError(translateError(error.message));
+                setLoading(false);
+            } else {
+                // Success - Redirect to loading screen (index.html per requirements)
+                console.log("Login successful:", data);
+                window.location.href = 'index.html';
+            }
+        } catch (err) {
+            console.error(err);
+            showError("Ocorreu um erro inesperado. Tente novamente mais tarde.");
+            setLoading(false);
+        }
+    });
+
+    function showError(message) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.classList.remove('hidden');
+    }
+
+    function setLoading(isLoading) {
+        if (isLoading) {
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = 'Autenticando...';
+            btnIcon.textContent = 'sync';
+            btnIcon.classList.add('animate-spin');
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = 'Entrar';
+            btnIcon.textContent = 'login';
+            btnIcon.classList.remove('animate-spin');
+        }
+    }
+
+    function translateError(message) {
+        if (message.includes('Invalid login credentials')) return 'E-mail ou senha incorretos.';
+        if (message.includes('Email not confirmed')) return 'Por favor, confirme seu e-mail antes de entrar.';
+        return message;
+    }
+</script>
+</body></html>

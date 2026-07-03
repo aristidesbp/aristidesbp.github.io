@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#20df60",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#112116",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Meu Progresso</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-lg mx-auto">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors" id="btn-back">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold flex-1 text-center pr-10">Meu Progresso</h2>
+</div>
+</header>
+<main class="max-w-lg mx-auto p-4 space-y-6">
+<!-- Card Plano 6 Meses -->
+<section class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-primary/10" id="card-plano-6m">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-14 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">calendar_month</span>
+</div>
+<div>
+<h3 class="text-lg font-bold" id="plano-nome">Plano 6 Meses</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm" id="plano-periodo">Janeiro - Junho</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm font-medium">
+<span class="text-slate-600 dark:text-slate-300">Progresso Geral</span>
+<span class="text-primary">5 de 11 habilidades</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3">
+<div class="bg-primary h-3 rounded-full" style="width: 45%;"></div>
+</div>
+</div>
+<button class="w-full mt-4 py-2.5 bg-primary text-slate-900 font-bold rounded-lg hover:opacity-90 transition-opacity">
+                Ver Detalhes do Plano
+            </button>
+</section>
+<!-- Seção Habilidades -->
+<section id="secao-habilidades">
+<h3 class="text-lg font-bold mb-3 px-1">Habilidades em Foco</h3>
+<div class="space-y-3">
+<!-- Habilidade Concluída -->
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-lg border border-primary/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary fill-[1]">check_circle</span>
+<span class="font-medium">Respiração Diafragmática</span>
+</div>
+<span class="text-xs font-bold text-primary uppercase">Concluído</span>
+</div>
+<!-- Habilidade Em Progresso -->
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-lg border border-primary/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-500">pending</span>
+<span class="font-medium">Higiene do Sono</span>
+</div>
+<span class="text-xs font-bold text-amber-500 uppercase">Em curso</span>
+</div>
+<!-- Habilidade Bloqueada -->
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-lg border border-primary/5 opacity-60">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">lock</span>
+<span class="font-medium">Gestão de Conflitos</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase">Bloqueado</span>
+</div>
+</div>
+</section>
+<!-- Minha Jornada (Stats) -->
+<section class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-primary/10" id="minha-jornada">
+<h3 class="text-lg font-bold mb-4">Minha Jornada</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2 text-3xl">event_available</span>
+<span class="text-2xl font-bold" id="stats-total-dias">124</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dias Total</span>
+</div>
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-orange-500 mb-2 text-3xl">local_fire_department</span>
+<span class="text-2xl font-bold" id="stats-streak">12</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Streak Atual</span>
+</div>
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-amber-400 mb-2 text-3xl">military_tech</span>
+<span class="text-2xl font-bold" id="stats-melhor-streak">28</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Melhor Streak</span>
+</div>
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-blue-500 mb-2 text-3xl">workspace_premium</span>
+<span class="text-2xl font-bold" id="stats-total-selos">15</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Selos</span>
+</div>
+</div>
+</section>
+<!-- Conquistas -->
+<section id="conquistas">
+<div class="flex justify-between items-center mb-3 px-1">
+<h3 class="text-lg font-bold">Conquistas</h3>
+<button class="text-primary text-sm font-semibold">Ver todas</button>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<!-- Selo 1 -->
+<div class="bg-white dark:bg-slate-900 aspect-square rounded-xl flex flex-col items-center justify-center p-2 border border-primary/5 text-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">Iniciante</span>
+</div>
+<!-- Selo 2 -->
+<div class="bg-white dark:bg-slate-900 aspect-square rounded-xl flex flex-col items-center justify-center p-2 border border-primary/5 text-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-primary">bolt</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">7 Dias Seguidos</span>
+</div>
+<!-- Selo 3 -->
+<div class="bg-white dark:bg-slate-900 aspect-square rounded-xl flex flex-col items-center justify-center p-2 border border-primary/5 text-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-primary">self_improvement</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">Mestre Zen</span>
+</div>
+<!-- Selo 4 -->
+<div class="bg-white dark:bg-slate-900 aspect-square rounded-xl flex flex-col items-center justify-center p-2 border border-primary/5 text-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-primary">volunteer_activism</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">Empatia</span>
+</div>
+<!-- Selo 5 (Bloqueado) -->
+<div class="bg-slate-200 dark:bg-slate-800 aspect-square rounded-xl flex flex-col items-center justify-center p-2 text-center opacity-50">
+<div class="size-12 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-slate-500">lock</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">100 Dias</span>
+</div>
+<!-- Selo 6 (Bloqueado) -->
+<div class="bg-slate-200 dark:bg-slate-800 aspect-square rounded-xl flex flex-col items-center justify-center p-2 text-center opacity-50">
+<div class="size-12 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-slate-500">lock</span>
+</div>
+<span class="text-[10px] font-medium leading-tight">Mentor</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 px-6 py-3">
+<div class="max-w-lg mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-[10px] font-medium">Exercícios</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-[1]">leaderboard</span>
+<span class="text-[10px] font-bold">Progresso</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</a>
+</div>
+</nav>
+</body></html>

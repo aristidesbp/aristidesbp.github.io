@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Entidades</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>   
+<script src="../controller/verificar_login.js"></script>
+<script src="../controller/analizar_nivel_de_acesso.js"></script>        
+        
+<script type="module">
+    import { accessControl } from '../model/access_control.js';    
+    // Só permite entrar se a role for 'paciente'
+    accessControl.checkAccess(['paciente']);
+</script>
+
+
+        
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" id="btn-menu-entidades">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-lg font-bold flex-1 px-3" id="titulo-entidades">Gestão de Entidades</h1>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" id="btn-busca">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Tabs -->
+<div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-[61px] z-10">
+<div class="flex px-2 overflow-x-auto no-scrollbar">
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-bold border-b-2 border-primary text-primary" id="tab-pacientes">
+                Pacientes
+            </button>
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 border-b-2 border-transparent" id="tab-colaboradores">
+                Colaboradores
+            </button>
+<button class="flex-1 min-w-fit px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 border-b-2 border-transparent" id="tab-responsaveis">
+                Responsáveis
+            </button>
+</div>
+</div>
+<!-- Main Content / List -->
+<main class="flex-1 p-4 space-y-3 pb-24">
+        
+<!-- Cards -->
+  <div class="overflow-x-auto">
+    <table class="w-full">
+        <thead>
+            <tr class="text-left bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                <th class="p-4 text-xs font-bold uppercase text-slate-500 tracking-widest">Nome / Perfil</th>
+                <th class="p-4 text-xs font-bold uppercase text-slate-500 tracking-widest">Contato</th>
+                <th class="p-4 text-xs font-bold uppercase text-slate-500 tracking-widest">Status</th>
+                <th class="p-4 text-xs font-bold uppercase text-slate-500 tracking-widest text-right">Ações</th>
+            </tr>
+        </thead>
+        <tbody id="lista-usuarios-body">
+            </tbody>
+    </table>
+</div>      
+</main>
+
+
+</body></html>

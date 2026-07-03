@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+<title>Cadastrar Entidade</title>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header Section -->
+<header class="flex items-center bg-white dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-800 justify-between sticky top-0 z-50">
+<a class="text-primary flex size-10 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors" href="listar_entidades.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Novo Cadastro</h2>
+<div class="relative" id="menu_wrapper">
+<button class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" id="btn_menu">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded shadow-xl z-50 overflow-hidden" id="dropdown_menu">
+<button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-100 dark:border-slate-800" id="menu_link_form">
+<span class="material-symbols-outlined mr-3 text-primary text-[20px]">edit_note</span>
+            Formulário
+        </button>
+<button class="flex w-full items-center px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" id="menu_link_list">
+<span class="material-symbols-outlined mr-3 text-primary text-[20px]">list_alt</span>
+            Listar Entidades
+        </button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto w-full pb-12" id="form_section">
+<!-- Avatar Section -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center group cursor-pointer" id="avatar_container">
+<div class="flex items-center justify-center bg-primary/10 dark:bg-primary/20 aspect-square rounded-full min-h-32 w-32 border-2 border-dashed border-primary/40 group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-primary text-5xl">person</span>
+</div>
+<p class="text-primary text-sm font-bold leading-tight tracking-[-0.015em] text-center">Adicionar Foto</p>
+<input accept="image/*" class="hidden" id="input_foto" type="file"/></div>
+</div>
+</div>
+<!-- Segmented Toggle -->
+<div class="flex px-4 py-3">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Paciente</span>
+<input checked="" class="hidden" id="tipo_paciente" name="tipo_entidade" type="radio" value="Paciente"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Responsável</span>
+<input class="hidden" id="tipo_responsavel" name="tipo_entidade" type="radio" value="Responsável"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-slate-600 dark:text-slate-400 text-sm font-bold leading-normal transition-all">
+<span class="truncate">Colaborador</span>
+<input class="hidden" id="tipo_colaborador" name="tipo_entidade" type="radio" value="Colaborador"/>
+</label>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 px-4 py-3">
+<!-- Nome -->
+<div class="flex flex-col flex-1 py-2 md:col-span-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Nome Completo</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all" id="input_nome" placeholder="Digite o nome completo"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">badge</span>
+</div>
+</div>
+</div>
+<!-- CPF -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">CPF</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cpf" placeholder="000.000.000-00"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">fingerprint</span>
+</div>
+</div>
+</div>
+<!-- Nascimento -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Nascimento</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_nascimento" type="date"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- E-mail -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">E-mail</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_email" placeholder="email@exemplo.com" type="email"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">mail</span>
+</div>
+</div>
+</div>
+<!-- Telefone -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Telefone</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_telefone" placeholder="(00) 00000-0000"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">call</span>
+</div>
+</div>
+</div>
+<!-- CEP -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">CEP</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cep" placeholder="00000-000"/>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">map</span>
+</div>
+</div>
+</div>
+<!-- Logradouro -->
+<div class="flex flex-col flex-1 py-2 md:col-span-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Logradouro</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_logradouro" placeholder="Rua, Avenida, etc."/>
+</div>
+<!-- Número & Bairro -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Número</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_numero" placeholder="Ex: 123"/>
+</div>
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Bairro</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_bairro" placeholder="Seu bairro"/>
+</div>
+<!-- Cidade & UF -->
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">Cidade</p>
+<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_cidade" placeholder="Sua cidade"/>
+</div>
+<div class="flex flex-col flex-1 py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">UF</p>
+<select class="form-select flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base" id="input_uf">
+<option value="">Selecione</option>
+<option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+</select>
+</div>
+</div>
+<!-- Permissões de Acesso Section -->
+<div class="px-4 py-3">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-4">Permissões de Acesso</h3>
+<div class="flex flex-wrap gap-4 py-2 mb-4">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_ler" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Ler</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_editar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Editar</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_cadastrar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Cadastrar</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-white dark:bg-slate-900 transition-all" id="check_permissao_deletar" type="checkbox"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Deletar</span>
+</label>
+</div>
+<div class="flex flex-col py-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold pb-2">URLs Permitidas</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<textarea class="form-textarea flex w-full min-w-0 flex-1 rounded-lg rounded-r-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary min-h-[100px] px-4 py-3 text-base transition-all resize-none" id="textarea_urls_acesso" placeholder="Digite as URLs separadas por vírgula ou uma por linha"></textarea>
+<div class="flex border border-l-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 items-start pt-3 justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">link</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 px-4 py-8">
+<button class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-white text-base font-bold tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20" id="btn_salvar">
+                Salvar Registro
+            </button>
+<button class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-base font-bold tracking-wide hover:bg-slate-300 dark:hover:bg-slate-700 transition-all" id="btn_cancelar">
+                Cancelar
+            </button>
+</div>
+<!-- Recent Entities Section -->
+<section class="mt-8 px-4 space-y-6 pb-12 border-t border-slate-200 dark:border-slate-800 pt-8" id="list_section">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                    Cadastros Recentes
+                </h2>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Filter Bar -->
+<div class="inline-flex p-1 bg-slate-200 dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700">
+<button class="flex-1 px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 text-primary dark:text-white rounded shadow-sm">Todos</button>
+<button class="flex-1 px-4 py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">Pacientes</button>
+<button class="flex-1 px-4 py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">Colaboradores</button>
+</div>
+<!-- Search Input -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-full placeholder:text-slate-400" placeholder="Buscar entidade..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Entity List -->
+<div class="space-y-3">
+<!-- Card 1 -->
+<div class="group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_CFRlEemwmwG2osBw4bQB4jmGPFaqhPq3YqWriqZ0vyf0Qqo-C1ifU2gsFK19N7neaMxUD0GSt-HLJTJZuD4rWL-gHKABOKTIGk2EHMpnbiUBYgwT2_tHW5i1HEXkLHFU7OxGY1y3hUaeiepSog06iOzEryQoPhKI_RtWH5K-q6RmMj9CsFAF2E7hG6V5iE804Y2Yfio2Bc_YKwiR2j3SHQ6-0QPdBaeERqjV0VxOrJrh57eVDKy9gcVmin7uFd6TMVlftjs_ohWt"/>
+</div>
+<div class="flex-grow min-w-0">
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Ana Beatriz Oliveira</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold rounded-full uppercase">Ativo</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400">Paciente</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<a class="text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 p-2 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+<a class="text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-2 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</a>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfWFULAQV-jrmKypcYTpZ-3uz-1El4-zxxjVdgqKPnHtEZP7ZKseuBZ5oLe5fk_dk0-9av01hfzEKbZQDgdPkDavme29x8ecI5c4LQsByKOZMK-K1Fmqk0SJ6XvmwSvbH3tJojlD4vFHeFYpTfg5Yfr882FAAcTuMKYpSODh0JTZEskE9DICUlu4m2uroj2HIljxkvwwnBLNdIBR9k6gzFHZxsBLTN8EfPVJnUuRU-_lCJjYgyetWxAcXqfyvGHxVoptKP1QQAA1Hm"/>
+</div>
+<div class="flex-grow min-w-0">
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Marcos Vinícius Santos</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] font-bold rounded-full uppercase">Em Andamento</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400">Colaborador</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<a class="text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 p-2 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+<a class="text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-2 rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</a>
+</div>
+</div>
+</div>
+<div class="flex justify-center mt-6">
+<a class="text-sm font-semibold text-primary hover:underline transition-all flex items-center gap-1" href="listar_entidades.html">
+                Ver todas as entidades
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</section>
+</main>
+</div>
+<script>
+        document.getElementById('btn_salvar').addEventListener('click', async () => {
+            const nome = document.getElementById('input_nome').value;
+            const cpf = document.getElementById('input_cpf').value;
+            const nascimento = document.getElementById('input_nascimento').value;
+            const email = document.getElementById('input_email').value;
+            const telefone = document.getElementById('input_telefone').value;
+            const cep = document.getElementById('input_cep').value;
+            const logradouro = document.getElementById('input_logradouro').value;
+            const numero = document.getElementById('input_numero').value;
+            const bairro = document.getElementById('input_bairro').value;
+            const cidade = document.getElementById('input_cidade').value;
+            const uf = document.getElementById('input_uf').value;
+            
+            const tipo_entidade = document.querySelector('input[name="tipo_entidade"]:checked').value;
+            
+            const permissoes = {
+                ler: document.getElementById('check_permissao_ler').checked,
+                editar: document.getElementById('check_permissao_editar').checked,
+                cadastrar: document.getElementById('check_permissao_cadastrar').checked,
+                deletar: document.getElementById('check_permissao_deletar').checked
+            };
+            
+            const urls_permitidas = document.getElementById('textarea_urls_acesso').value.split(/[\n,]+/).map(u => u.trim()).filter(u => u !== '');
+
+            const payload = {
+                p_nome: nome,
+                p_cpf: cpf,
+                p_nascimento: nascimento,
+                p_email: email,
+                p_telefone: telefone,
+                p_cep: cep,
+                p_logradouro: logradouro,
+                p_numero: numero,
+                p_bairro: bairro,
+                p_cidade: cidade,
+                p_uf: uf,
+                p_tipo: tipo_entidade,
+                p_permissoes: permissoes,
+                p_urls: urls_permitidas
+            };
+
+            try {
+                const { data, error } = await window.supabaseClient.rpc('cadastrar_entidade', payload);
+
+                if (error) {
+                    console.error('Erro ao cadastrar:', error);
+                    alert('Erro ao realizar o cadastro: ' + error.message);
+                } else {
+                    alert('Cadastro realizado com sucesso!');
+                    window.location.href = 'listar_entidades.html';
+                }
+            } catch (err) {
+                console.error('Erro inesperado:', err);
+                alert('Ocorreu um erro inesperado.');
+            }
+        });
+
+        document.getElementById('btn_cancelar').addEventListener('click', () => {
+            window.location.href = 'listar_entidades.html';
+        });
+
+        document.getElementById('avatar_container').addEventListener('click', () => {
+            document.getElementById('input_foto').click();
+        });
+    </script><script>
+    const btnMenu = document.getElementById('btn_menu');
+    const dropdownMenu = document.getElementById('dropdown_menu');
+    const linkForm = document.getElementById('menu_link_form');
+    const linkList = document.getElementById('menu_link_list');
+
+    btnMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdownMenu.contains(e.target) && !btnMenu.contains(e.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
+    linkForm.addEventListener('click', () => {
+        document.getElementById('form_section').scrollIntoView({ behavior: 'smooth' });
+        dropdownMenu.classList.add('hidden');
+    });
+
+    linkList.addEventListener('click', () => {
+        document.getElementById('list_section').scrollIntoView({ behavior: 'smooth' });
+        dropdownMenu.classList.add('hidden');
+    });
+</script></body></html>
