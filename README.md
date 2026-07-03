@@ -738,6 +738,7 @@ uma mesma comunidade possam indicar produtos e serviços, pois assim teremos
 
 * Hospedagem: github-pages
 * Banco de dados com o Supabase
+* BONUS: Cada usuario tera um abiente ERP para controle de seu negocio.
 
  O design deve ser Light Mode, moderno e acolhedor, utilizando a biblioteca Shadcn/UI e
 Tailwind CSS. O backend já está configurado no Supabase.
@@ -858,8 +859,9 @@ No seu navegador, vá até o seu repositório no GitHub.
 * Acesse: https://supabase.com
 * Crie uma conta
 * Clique em New Project
-## Escolha:
-* Nome do projeto: nome_do_seu_projeto
+* 
+## Escolha:(exemplo)
+* Nome do projeto: erp_abp
 * Senha do banco: ***********
 * Região: brasil
 
@@ -871,27 +873,46 @@ No seu navegador, vá até o seu repositório no GitHub.
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
 
-# USUARIO ESPELHO (COMPLETO)
+# USUARIO ESPELHO (entidades COMPLETO)
 ``` 
 
 -- =========================================================================
 -- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
 -- =========================================================================
 
--- CRIAR TABELA: usuario_espelho
+-- CRIAR TABELA: entidades
 -- Depende apenas do esquema 'auth.users' nativo do Supabase.
-CREATE TABLE public.usuario_espelho (
+
+CREATE TABLE public.entidades (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
-    auth_users_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
+    user_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
     nome_completo text,
-    bio text,
     avatar_url text,
+    bio text,
+
+
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+
     
-    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
-    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
+    CONSTRAINT entidades_pkey PRIMARY KEY (id),
+    CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) 
         REFERENCES auth.users(id) ON DELETE CASCADE
 );
+
 
 
 -- =========================================================================
@@ -911,11 +932,25 @@ AS $$
 BEGIN
     -- Insere o novo usuário na tabela espelho
     -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
-    INSERT INTO public.usuario_espelho (
-        auth_users_id, 
+    INSERT INTO public.entidades (
+        user_id, 
         nome_completo, 
         avatar_url, 
-        bio
+        bio,
+        cpf text,
+        data_nascimento date,
+        email text,
+        telefone text,
+        tipo_acesso text DEFAULT 'cliente'::text,
+        tipo_entidade text DEFAULT 'cliente'::text,
+        status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
     )
     VALUES (
         new.id,
@@ -940,28 +975,28 @@ CREATE TRIGGER on_auth_user_created
 
 
 -- =========================================================================
--- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: usuario_espelho
+-- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: entidades
 -- =========================================================================
 
 -- 1. Garante que o Row Level Security está ativado na tabela
-ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
 
 -- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
-DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
 
 -- 3. Criação da política de acesso estrita
 CREATE POLICY "User Propietario" 
-ON public.usuario_espelho
+ON public.entidades
 AS PERMISSIVE
 FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
 TO authenticated -- Aplica-se apenas a usuários logados no sistema
 USING (
     -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
-    auth_users_id = auth.uid()
+    user_id = auth.uid()
 ) 
 WITH CHECK (
     -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
-    auth_users_id = auth.uid()
+    user_id = auth.uid()
 );
 
 ``` 
@@ -973,7 +1008,7 @@ WITH CHECK (
 -- SCRIPT DE CRIAÇÃO DE TABELAS E RELACIONAMENTOS (SUPABASE / POSTGRESQL)
 -- =========================================================================
 
--- 1. TABELA: categorias
+--  TABELA: categorias
 -- Criada primeiro por não possuir chaves estrangeiras pendentes.
 CREATE TABLE public.categorias (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -983,12 +1018,12 @@ CREATE TABLE public.categorias (
     CONSTRAINT categorias_pkey PRIMARY KEY (id)
 );
 
--- 2. TABELA: usuario_espelho (FEITA ANTERIORMENTE)
+-- TABELA: entidades (FEITA ANTERIORMENTE)
 -- Depende apenas do esquema 'auth.users' nativo do Supabase.
 
 
--- 3. TABELA: servicos
--- Depende de 'categorias' e 'usuario_espelho'.
+-- TABELA: servicos
+-- Depende de 'categorias' e 'entidades'.
 -- OBSERVAÇÃO: 'double precision' -> 'numeric(10,2)' para evitar erros de ponto flutuante em valores monetários.
 CREATE TABLE public.servicos (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -1008,11 +1043,11 @@ CREATE TABLE public.servicos (
     CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) 
         REFERENCES public.categorias(id) ON DELETE SET NULL,
     CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) 
-        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE
+        REFERENCES public.entidades(id) ON DELETE CASCADE
 );
 
 -- 4. TABELA: favoritos
--- Depende de 'usuario_espelho' e 'servicos'.
+-- Depende de 'entidades' e 'servicos'.
 CREATE TABLE public.favoritos (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -1021,13 +1056,13 @@ CREATE TABLE public.favoritos (
     
     CONSTRAINT favoritos_pkey PRIMARY KEY (id),
     CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) 
-        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE,
+        REFERENCES public.entidades(id) ON DELETE CASCADE,
     CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) 
         REFERENCES public.servicos(id) ON DELETE CASCADE
 );
 
 -- 5. TABELA: avaliacoes
--- Depende de 'servicos' e 'usuario_espelho'.
+-- Depende de 'servicos' e 'entidades'.
 -- ADIÇÃO: Constraint CHECK para garantir que a nota fique em um intervalo padrão (1 a 5).
 CREATE TABLE public.avaliacoes (
     id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -1041,8 +1076,97 @@ CREATE TABLE public.avaliacoes (
     CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) 
         REFERENCES public.servicos(id) ON DELETE CASCADE,
     CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) 
-        REFERENCES public.usuario_espelho(id) ON DELETE CASCADE,
+        REFERENCES public.entidades(id) ON DELETE CASCADE,
     CONSTRAINT avaliacoes_nota_check CHECK (nota >= 1 AND nota <= 5)
+);
+
+CREATE TABLE public.financas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id uuid,
+  descricao text NOT NULL,
+  valor_total numeric NOT NULL,
+  tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
+  num_parcelas integer DEFAULT 1,
+  categoria text DEFAULT 'Geral'::text,
+  status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financas_pkey PRIMARY KEY (id),
+  CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+
+CREATE TABLE public.parcelas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  financa_id uuid,
+  num_parcela integer NOT NULL,
+  valor_parcela numeric NOT NULL,
+  data_vencimento date NOT NULL,
+  data_pagamento date,
+  status text DEFAULT 'pendente'::text CHECK (status = ANY (ARRAY['pendente'::text, 'pago'::text, 'atrasado'::text])),
+  codigo_barra text,
+  boleto_url text,
+  comprovante_url text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT parcelas_pkey PRIMARY KEY (id),
+  CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
+);
+
+CREATE TABLE public.produtos (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  nome text NOT NULL,
+  descricao text,
+  codigo_barras text UNIQUE,
+  preco_custo numeric DEFAULT 0.00,
+  preco_venda numeric NOT NULL,
+  quantidade_estoque integer DEFAULT 0,
+  estoque_minimo integer DEFAULT 5,
+  categoria text DEFAULT 'Geral'::text,
+  foto_url text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT produtos_pkey PRIMARY KEY (id),
+  CONSTRAINT produtos_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+
+CREATE TABLE public.movimentacoes_estoque (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  produto_id uuid,
+  tipo text CHECK (tipo = ANY (ARRAY['entrada'::text, 'saida'::text])),
+  quantidade integer NOT NULL,
+  motivo text DEFAULT 'venda'::text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT movimentacoes_estoque_pkey PRIMARY KEY (id),
+  CONSTRAINT movimentacoes_estoque_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT movimentacoes_estoque_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
+);
+
+CREATE TABLE public.vendas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id uuid,
+  valor_total numeric NOT NULL,
+  desconto numeric DEFAULT 0.00,
+  forma_pagamento text,
+  status text DEFAULT 'concluida'::text CHECK (status = ANY (ARRAY['pendente'::text, 'concluida'::text, 'cancelada'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT vendas_pkey PRIMARY KEY (id),
+  CONSTRAINT vendas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT vendas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+
+CREATE TABLE public.itens_venda (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  venda_id uuid,
+  produto_id uuid,
+  quantidade integer NOT NULL,
+  preco_unitario numeric NOT NULL,
+  subtotal numeric NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT itens_venda_pkey PRIMARY KEY (id),
+  CONSTRAINT itens_venda_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id),
+  CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
 );
 ```
 
@@ -1075,15 +1199,15 @@ CREATE TABLE public.categorias (
   tipo_de_categoria text NOT NULL,
   CONSTRAINT categorias_pkey PRIMARY KEY (id)
 );
-CREATE TABLE public.usuario_espelho (
+CREATE TABLE public.entidades (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
-  auth_users_id uuid NOT NULL,
+  user_id uuid NOT NULL,
   nome_completo text,
   bio text,
   avatar_url text,
-  CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
-  CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) REFERENCES auth.users(id)
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
 CREATE TABLE public.servicos (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -1100,7 +1224,7 @@ CREATE TABLE public.servicos (
   whatsapp text,
   CONSTRAINT servicos_pkey PRIMARY KEY (id),
   CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) REFERENCES public.categorias(id),
-  CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) REFERENCES public.usuario_espelho(id)
+  CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) REFERENCES public.entidades(id)
 );
 CREATE TABLE public.favoritos (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -1108,7 +1232,7 @@ CREATE TABLE public.favoritos (
   usuario_id bigint NOT NULL,
   servico_id bigint NOT NULL,
   CONSTRAINT favoritos_pkey PRIMARY KEY (id),
-  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuario_espelho(id),
+  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.entidades(id),
   CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id)
 );
 CREATE TABLE public.avaliacoes (
@@ -1120,7 +1244,7 @@ CREATE TABLE public.avaliacoes (
   comentario text,
   CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
   CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id),
-  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) REFERENCES public.usuario_espelho(id)
+  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) REFERENCES public.entidades(id)
 );
 
 
@@ -1149,7 +1273,7 @@ SELECT
     c.id AS categoria_id,
     c.tipo_de_categoria AS categoria_nome,
 
-    -- Dados relacionados do Autor (usuario_espelho)
+    -- Dados relacionados do Autor (entidades)
     u.id AS autor_id,
     u.nome_completo AS autor_nome,
     u.bio AS autor_bio,
@@ -1163,7 +1287,7 @@ SELECT
 
 FROM public.servicos s
 LEFT JOIN public.categorias c ON s.categoria = c.id
-LEFT JOIN public.usuario_espelho u ON s.criado_por_usuario = u.id
+LEFT JOIN public.entidades u ON s.criado_por_usuario = u.id
 LEFT JOIN public.avaliacoes a ON s.id = a.servico_id
 
 -- Agrupamento obrigatório devido ao uso de AVG e COUNT.
@@ -1175,31 +1299,31 @@ GROUP BY
 ```
 
 # Criar políticas de segurança diretamente pelo SQL Editor é muito mais seguro e idempotente (pode ser executado várias vezes sem quebrar).
-O script abaixo garante que o RLS esteja explicitamente ativado na tabela, remove qualquer lixo ou tentativa anterior com o mesmo nome e cria a regra apontando para o campo correto (auth_users_id).
+O script abaixo garante que o RLS esteja explicitamente ativado na tabela, remove qualquer lixo ou tentativa anterior com o mesmo nome e cria a regra apontando para o campo correto (user_id).
 ```
 -- =========================================================================
--- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: usuario_espelho
+-- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: entidades
 -- =========================================================================
 
 -- 1. Garante que o Row Level Security está ativado na tabela
-ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
 
 -- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
-DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
 
 -- 3. Criação da política de acesso estrita
 CREATE POLICY "User Propietario" 
-ON public.usuario_espelho
+ON public.entidades
 AS PERMISSIVE
 FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
 TO authenticated -- Aplica-se apenas a usuários logados no sistema
 USING (
     -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
-    auth_users_id = auth.uid()
+    user_id = auth.uid()
 ) 
 WITH CHECK (
     -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
-    auth_users_id = auth.uid()
+    user_id = auth.uid()
 );
 ```
 ### OBSERVAÇÃO:
@@ -1209,23 +1333,23 @@ Vamos corrigir isso agora e deixar o ambiente profissional. Rode o script abaixo
 
 ```
 -- =========================================================================
--- REESTRUTURAÇÃO GRANULAR DE RLS - TABELA: usuario_espelho
+-- REESTRUTURAÇÃO GRANULAR DE RLS - TABELA: entidades
 -- =========================================================================
 
 -- 1. Garante que o RLS está ativo
-ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
 
 -- 2. Limpa as políticas antigas para evitar sobreposição de regras
-DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
-DROP POLICY IF EXISTS "Ver Ususario" ON public.usuario_espelho;
-DROP POLICY IF EXISTS "Permitir Leitura Geral" ON public.usuario_espelho;
-DROP POLICY IF EXISTS "Modificacao Apenas Proprietario" ON public.usuario_espelho;
+DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
+DROP POLICY IF EXISTS "Ver Ususario" ON public.entidades;
+DROP POLICY IF EXISTS "Permitir Leitura Geral" ON public.entidades;
+DROP POLICY IF EXISTS "Modificacao Apenas Proprietario" ON public.entidades;
 
 -- -------------------------------------------------------------------------
 -- REGRA 1: LEITURA (Qualquer usuário autenticado pode ver o perfil dos outros)
 -- -------------------------------------------------------------------------
 CREATE POLICY "Permitir Leitura Geral"
-ON public.usuario_espelho
+ON public.entidades
 FOR SELECT -- Aplica-se EXCLUSIVAMENTE ao comando SELECT
 TO authenticated -- Qualquer usuário logado no sistema
 USING ( true ); -- Retornar 'true' significa acesso liberado para leitura de qualquer linha
@@ -1234,11 +1358,11 @@ USING ( true ); -- Retornar 'true' significa acesso liberado para leitura de qua
 -- REGRA 2: ESCRITA E MODIFICAÇÃO (Inserir, Alterar e Deletar APENAS o próprio perfil)
 -- -------------------------------------------------------------------------
 CREATE POLICY "Modificacao Apenas Proprietario"
-ON public.usuario_espelho
+ON public.entidades
 FOR ALL -- Neste novo contexto, cobrirá INSERT, UPDATE e DELETE (já que o SELECT está isolado acima)
 TO authenticated
-USING ( auth_users_id = auth.uid() )
-WITH CHECK ( auth_users_id = auth.uid() );
+USING ( user_id = auth.uid() )
+WITH CHECK ( user_id = auth.uid() );
 
 ```
 
