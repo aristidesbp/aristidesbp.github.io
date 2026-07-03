@@ -1423,72 +1423,110 @@ GROUP BY
     u.id;
 ```
 
-# Criar políticas de segurança diretamente pelo SQL Editor é muito mais seguro e idempotente (pode ser executado várias vezes sem quebrar).
-O script abaixo garante que o RLS esteja explicitamente ativado na tabela, remove qualquer lixo ou tentativa anterior com o mesmo nome e cria a regra apontando para o campo correto (user_id).
+# srl apolicies
 ```
 -- =========================================================================
--- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: entidades
+-- 1. POLÍTICAS: CATEGORIAS (Leitura geral, escrita bloqueada via API)
 -- =========================================================================
+ALTER TABLE public.categorias ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Leitura Geral Categorias" ON public.categorias;
 
--- 1. Garante que o Row Level Security está ativado na tabela
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Leitura Geral Categorias" ON public.categorias
+FOR SELECT TO authenticated USING ( true );
 
--- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
-DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
 
--- 3. Criação da política de acesso estrita
-CREATE POLICY "User Propietario" 
-ON public.entidades
-AS PERMISSIVE
-FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
-TO authenticated -- Aplica-se apenas a usuários logados no sistema
-USING (
-    -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
-    user_id = auth.uid()
-) 
-WITH CHECK (
-    -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
-    user_id = auth.uid()
-);
-```
-### OBSERVAÇÃO:
-No PostgreSQL, as políticas RLS funcionam em modo OR (OU) por padrão. Se a política Ver Ususario permite que qualquer autenticado dê SELECT, a política User Propietario também tentar gerenciar o SELECT vai causar redundância ou brechas. O correto para um app de indicações é separar os privilégios de forma granular (Leitura para todos, Escrita apenas para o dono).
-
-Vamos corrigir isso agora e deixar o ambiente profissional. Rode o script abaixo no SQL Editor. Ele vai apagar a política genérica de escrita/leitura misturada e configurar as regras divididas por comando.
-
-```
 -- =========================================================================
--- REESTRUTURAÇÃO GRANULAR DE RLS - TABELA: entidades
+-- 2. POLÍTICAS: SERVIÇOS (Leitura geral, modificação apenas do criador)
 -- =========================================================================
+ALTER TABLE public.servicos ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Leitura Geral Servicos" ON public.servicos;
+DROP POLICY IF EXISTS "Modificacao Criador Servicos" ON public.servicos;
 
--- 1. Garante que o RLS está ativo
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Leitura Geral Servicos" ON public.servicos
+FOR SELECT TO authenticated USING ( true );
 
--- 2. Limpa as políticas antigas para evitar sobreposição de regras
-DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
-DROP POLICY IF EXISTS "Ver Ususario" ON public.entidades;
-DROP POLICY IF EXISTS "Permitir Leitura Geral" ON public.entidades;
-DROP POLICY IF EXISTS "Modificacao Apenas Proprietario" ON public.entidades;
+-- Nota: Como 'criado_por_usuario' aponta para public.entidades(id) [bigint], 
+-- precisamos validar através do user_id correspondente daquela entidade.
+CREATE POLICY "Modificacao Criador Servicos" ON public.servicos
+FOR ALL TO authenticated
+USING ( criado_por_usuario IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) )
+WITH CHECK ( criado_por_usuario IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) );
 
--- -------------------------------------------------------------------------
--- REGRA 1: LEITURA (Qualquer usuário autenticado pode ver o perfil dos outros)
--- -------------------------------------------------------------------------
-CREATE POLICY "Permitir Leitura Geral"
-ON public.entidades
-FOR SELECT -- Aplica-se EXCLUSIVAMENTE ao comando SELECT
-TO authenticated -- Qualquer usuário logado no sistema
-USING ( true ); -- Retornar 'true' significa acesso liberado para leitura de qualquer linha
 
--- -------------------------------------------------------------------------
--- REGRA 2: ESCRITA E MODIFICAÇÃO (Inserir, Alterar e Deletar APENAS o próprio perfil)
--- -------------------------------------------------------------------------
-CREATE POLICY "Modificacao Apenas Proprietario"
-ON public.entidades
-FOR ALL -- Neste novo contexto, cobrirá INSERT, UPDATE e DELETE (já que o SELECT está isolado acima)
-TO authenticated
-USING ( user_id = auth.uid() )
-WITH CHECK ( user_id = auth.uid() );
+-- =========================================================================
+-- 3. POLÍTICAS: FAVORITOS (Isolamento total por usuário)
+-- =========================================================================
+ALTER TABLE public.favoritos ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Gerenciamento Favoritos Proprietario" ON public.favoritos;
 
+CREATE POLICY "Gerenciamento Favoritos Proprietario" ON public.favoritos
+FOR ALL TO authenticated
+USING ( usuario_id IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) )
+WITH CHECK ( usuario_id IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) );
+
+
+-- =========================================================================
+-- 4. POLÍTICAS: AVALIAÇÕES (Leitura geral, escrita apenas do autor)
+-- =========================================================================
+ALTER TABLE public.avaliacoes ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Leitura Geral Avaliacoes" ON public.avaliacoes;
+DROP POLICY IF EXISTS "Escrita Autor Avaliacoes" ON public.avaliacoes;
+
+CREATE POLICY "Leitura Geral Avaliacoes" ON public.avaliacoes
+FOR SELECT TO authenticated USING ( true );
+
+CREATE POLICY "Escrita Autor Avaliacoes" ON public.avaliacoes
+FOR ALL TO authenticated
+USING ( author_id IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) )
+WITH CHECK ( author_id IN (SELECT id FROM public.entidades WHERE user_id = auth.uid()) );
+
+
+-- =========================================================================
+-- 5. POLÍTICAS: FINANÇAS E PARCELAS (Isolamento estrito por user_id)
+-- =========================================================================
+ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Financas Privadas" ON public.financas;
+CREATE POLICY "Financas Privadas" ON public.financas
+FOR ALL TO authenticated USING ( user_id = auth.uid() ) WITH CHECK ( user_id = auth.uid() );
+
+ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Parcelas Privadas" ON public.parcelas;
+-- As parcelas herdam a segurança da tabela de finanças através de um sub-select
+CREATE POLICY "Parcelas Privadas" ON public.parcelas
+FOR ALL TO authenticated 
+USING ( financa_id IN (SELECT id FROM public.financas WHERE user_id = auth.uid()) )
+WITH CHECK ( financa_id IN (SELECT id FROM public.financas WHERE user_id = auth.uid()) );
+
+
+-- =========================================================================
+-- 6. POLÍTICAS: PRODUTOS E MOVIMENTAÇÕES DE ESTOQUE (Isolamento por user_id)
+-- =========================================================================
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Produtos Privados" ON public.produtos;
+CREATE POLICY "Produtos Privados" ON public.produtos
+FOR ALL TO authenticated USING ( user_id = auth.uid() ) WITH CHECK ( user_id = auth.uid() );
+
+ALTER TABLE public.movimentacoes_estoque ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Estoque Privado" ON public.movimentacoes_estoque;
+CREATE POLICY "Estoque Privado" ON public.movimentacoes_estoque
+FOR ALL TO authenticated USING ( user_id = auth.uid() ) WITH CHECK ( user_id = auth.uid() );
+
+
+-- =========================================================================
+-- 7. POLÍTICAS: VENDAS E ITENS DE VENDA (Isolamento por user_id)
+-- =========================================================================
+ALTER TABLE public.vendas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Vendas Privadas" ON public.vendas;
+CREATE POLICY "Vendas Privadas" ON public.vendas
+FOR ALL TO authenticated USING ( user_id = auth.uid() ) WITH CHECK ( user_id = auth.uid() );
+
+ALTER TABLE public.itens_venda ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Itens Venda Privados" ON public.itens_venda;
+-- Os itens de venda validam se a venda-mãe pertence ao usuário logado
+CREATE POLICY "Itens Venda Privados" ON public.itens_venda
+FOR ALL TO authenticated 
+USING ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) )
+WITH CHECK ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) );
 ```
 
 
