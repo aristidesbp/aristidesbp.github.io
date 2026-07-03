@@ -1154,7 +1154,147 @@ CREATE TABLE public.itens_venda (
   CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
 );
 ```
+# EXEMPLO DE COMO CRIAR AS FUNÇÕES
+```
+-- =========================================================================
+-- 1. TRIGGER: CRIAÇÃO AUTOMÁTICA DE ENTIDADE (AUTH -> PUBLIC.ENTIDADES)
+-- =========================================================================
 
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger 
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    INSERT INTO public.entidades (user_id, nome_completo, avatar_url, bio)
+    VALUES (
+        new.id,
+        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'),
+        new.raw_user_meta_data->>'avatar_url',
+        NULL
+    );
+    RETURN new;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW 
+    EXECUTE FUNCTION public.handle_new_user();
+
+
+-- =========================================================================
+-- 2. TRIGGER: BAIXA DE ESTOQUE E HISTÓRICO (ITENS_VENDA -> PRODUTOS/MOVIMENTAÇÕES)
+-- =========================================================================
+
+CREATE OR REPLACE FUNCTION public.handle_item_venda_inserido()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_user_id uuid;
+BEGIN
+    -- 1. Reduz a quantidade do produto no estoque
+    UPDATE public.produtos
+    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
+    WHERE id = NEW.produto_id;
+
+    -- Extrai o user_id da venda correspondente para gravar no histórico de estoque
+    SELECT user_id INTO v_user_id FROM public.vendas WHERE id = NEW.venda_id;
+
+    -- 2. Salva a movimentação no histórico
+    INSERT INTO public.movimentacoes_estoque (user_id, produto_id, tipo, quantidade, motivo)
+    VALUES (coalesce(v_user_id, auth.uid()), NEW.produto_id, 'saida', NEW.quantidade, 'venda');
+
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_item_venda_inserted ON public.itens_venda;
+CREATE TRIGGER on_item_venda_inserted
+    AFTER INSERT ON public.itens_venda
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_item_venda_inserido();
+
+
+-- =========================================================================
+-- 3. TRIGGER: LANÇAMENTO FINANCEIRO AUTOMÁTICO (VENDAS -> FINANCAS)
+-- =========================================================================
+
+CREATE OR REPLACE FUNCTION public.handle_venda_concluida()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    -- Se o status da venda for concluído, insere na tabela de finanças
+    IF NEW.status = 'concluida' THEN
+        INSERT INTO public.financas (user_id, entidade_id, descricao, valor_total, tipo, categoria, status_lancamento)
+        VALUES (
+            NEW.user_id, 
+            NEW.entidade_id, 
+            'Venda PDV #' || substr(NEW.id::text, 1, 8), -- Nome descritivo com os 8 primeiros caracteres do UUID
+            NEW.valor_total, 
+            'receita', 
+            'Vendas', 
+            'finalizado'
+        );
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_venda_concluida ON public.vendas;
+CREATE TRIGGER on_venda_concluida
+    AFTER INSERT OR UPDATE ON public.vendas
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_venda_concluida();
+
+
+-- =========================================================================
+-- 4. EVENT TRIGGER: ATIVAÇÃO AUTOMÁTICA DE RLS PARA NOVAS TABELAS
+-- =========================================================================
+
+CREATE OR REPLACE FUNCTION public.rls_auto_enable_procedure()
+RETURNS event_trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  cmd record;
+BEGIN
+  FOR cmd IN
+    SELECT *
+    FROM pg_event_trigger_ddl_commands()
+    WHERE command_tag IN ('CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO')
+      AND object_type IN ('table','partitioned table')
+  LOOP
+     IF cmd.schema_name IS NOT NULL AND cmd.schema_name IN ('public') THEN
+      BEGIN
+        EXECUTE format('alter table if exists %s enable row level security', cmd.object_identity);
+        RAISE LOG 'rls_auto_enable: enabled RLS on %', cmd.object_identity;
+      EXCEPTION
+        WHEN OTHERS THEN
+          RAISE LOG 'rls_auto_enable: failed to enable RLS on %', cmd.object_identity;
+      END;
+     END IF;
+  END LOOP;
+END;
+$$;
+
+-- Nota: Event Triggers globais requerem remoção prévia se existirem
+DROP EVENT TRIGGER IF EXISTS rls_auto_enable;
+
+CREATE EVENT TRIGGER rls_auto_enable
+  ON ddl_command_end
+  WHEN TAG IN ('CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO')
+  EXECUTE FUNCTION public.rls_auto_enable_procedure();
+
+```
 
 # EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 
