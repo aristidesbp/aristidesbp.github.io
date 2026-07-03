@@ -1067,7 +1067,7 @@ CREATE TABLE public.avaliacoes (
 CREATE TABLE public.financas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
-  entidade_id uuid,
+  entidade_id bigint, -- ALTERADO DE uuid PARA bigint PARA COMBINAR COM public.entidades(id)
   descricao text NOT NULL,
   valor_total numeric NOT NULL,
   tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
@@ -1075,6 +1075,7 @@ CREATE TABLE public.financas (
   categoria text DEFAULT 'Geral'::text,
   status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
   created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  
   CONSTRAINT financas_pkey PRIMARY KEY (id),
   CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
   CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
@@ -1129,7 +1130,7 @@ CREATE TABLE public.movimentacoes_estoque (
 CREATE TABLE public.vendas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id uuid DEFAULT auth.uid(),
-  entidade_id uuid,
+  entidade_id bigint, -- ALTERADO DE uuid PARA bigint PARA COMBINAR COM public.entidades(id)
   valor_total numeric NOT NULL,
   desconto numeric DEFAULT 0.00,
   forma_pagamento text,
