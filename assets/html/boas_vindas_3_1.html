@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ERP-PSC - verifica acessos</title>
+
+
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../model/supabase_config.js"></script>
+
+<script src="../model/analizar_nivel_acesso.js"></script>
+<script src="../controller/login_clinica_controller.js"></script>
+        
+<script src="../controller/verificar_login.js"></script>
+
+        
+
+
+
+
+
+        
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<header class="flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50 p-4 justify-between border-b border-primary/10">
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-12 @container">
+<div class="mb-8 p-6 bg-primary/10 dark:bg-primary/20 rounded-3xl text-primary animate-pulse-slow" id="welcome-logo">
+<span class="material-symbols-outlined !text-6xl">neurology</span>
+</div>
+<div class="max-w-3xl w-full text-center space-y-4 mb-12">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-4xl md:text-5xl font-extrabold leading-tight" id="welcome-title">
+                    ERP-PSC
+                </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-normal leading-relaxed max-w-xl mx-auto" id="welcome-subtitle">
+                    Sua plataforma de gestão clínica psicopedagógica. 
+                    Organização e cuidado em um só lugar.
+                </p>
+</div>
+<div class="w-full max-w-[900px] @[480px]:px-4 @[480px]:py-3 mb-12">
+<div class="relative w-full aspect-video md:aspect-[21/9] bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-slate-200 dark:bg-slate-800 rounded-2xl shadow-xl border border-primary/10" data-alt="Profissional psicopedagoga em um ambiente clínico moderno e acolhedor" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA5vOfetZ5XRdXOoJXcJqkCHkRhmVGi7-UU6dASpiOM1At4OIio_Pggru_E2uUhNImOtDZI9dLOxaUBTU-MEGq2O7KDR8y82fsrmNS5FzLtjBAzguwZqTx_YjQ4OCYEECHK6Xb3OyoU2zaOvrPlTRjPQg8xl8NN2NQQx9AB1x6NRL5WpnGEbPS4yyoS5lBtMMcN_BL2HDCESsEjyvMC5SKKMBk-QjGJo-_gbbabkDvipwZ6yo9j0kJfClxzjA7l21rjMpdTtcwq2Heq");'>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="relative p-6 text-white">
+<span class="bg-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Novo Layout</span>
+<p class="mt-2 text-sm font-medium opacity-90">Ambiente otimizado para o seu dia a dia.</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md px-4">
+<a class="flex-1 flex min-w-[160px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-14 px-6 bg-primary text-white text-lg font-bold leading-normal tracking-wide hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95" href="src/view/login.html" id="btn-start">
+<button onclick="login_clinica_controller()" id="btn-entrar">
+    Entrar
+</button>
+        <span>Começar</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+</main>
+<footer class="w-full py-8 px-4 mt-auto border-t border-primary/5">
+<div class="max-w-screen-xl mx-auto flex flex-col items-center gap-4">
+<p class="text-slate-500 dark:text-slate-500 text-sm font-medium">
+                    Organização e cuidado em um só lugar.
+                </p>
+<div class="flex gap-6 text-slate-400 dark:text-slate-600">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">share</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">help_outline</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">verified_user</span>
+</div>
+<div class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
+                    © 2024 ERP-PSC
+                </div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP-PSC | Plataforma Clínica Segura</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <link rel="stylesheet" href="erp_clinica.css">
+</head>
+<body>
+
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center bg-slate-100 fade-in">
+        <div class="glass-card max-w-md w-full border-t-4 border-indigo-600">
+            <div class="text-center mb-8">
+                <i class="fas fa-shield-alt text-4xl text-indigo-600 mb-2"></i>
+                <h1 class="text-2xl font-bold text-slate-800">Acesso Restrito</h1>
+                <p class="text-sm text-slate-500">Autenticação Clínica Segura</p>
+            </div>
+            <input type="email" id="login-email" class="input-field" placeholder="E-mail">
+            <input type="password" id="login-senha" class="input-field" placeholder="Senha">
+            <button onclick="realizarLogin()" class="btn-primary">Entrar no Sistema</button>
+        </div>
+    </div>
+
+    <div id="app-screen" class="hidden">
+        
+        <nav class="navbar">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-brain text-indigo-600 text-2xl"></i>
+                <span class="font-bold text-xl tracking-tight text-slate-800">ERP-PSC</span>
+            </div>
+            
+            <div class="nav-links" id="menu-staff">
+                <div class="nav-item active" onclick="navegar('dash')">Início</div>
+                <div class="nav-item" onclick="navegar('planos')">Planos 6M</div>
+                <div class="nav-item" onclick="navegar('compartilhamento')">Universal Share</div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span id="user-display" class="text-sm font-semibold text-slate-600"></span>
+                <button onclick="realizarLogout()" class="text-red-500 hover:text-red-700 transition"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            
+            <section id="mod-dash" class="fade-in">
+                <h2 class="text-2xl font-bold mb-6">Visão Geral da Clínica</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card border-l-4 border-blue-500">
+                        <h3 class="text-slate-500 text-sm font-bold uppercase">Pacientes Ativos</h3>
+                        <p class="text-3xl font-bold mt-2">12</p>
+                    </div>
+                    <div class="glass-card border-l-4 border-green-500">
+                        <h3 class="text-slate-500 text-sm font-bold uppercase">Tarefas Concluídas</h3>
+                        <p class="text-3xl font-bold mt-2">84</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mod-planos" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Acompanhamento e Metas (6 Meses)</h2>
+                    <button class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded font-bold"><i class="fas fa-plus"></i> Novo Plano</button>
+                </div>
+                <div class="glass-card">
+                    <p class="text-slate-500 mb-4">Módulo de registro para Leitura, Escrita Cursiva, Matemática e Treino Cognitivo.</p>
+                    <div class="p-4 bg-yellow-50 text-yellow-800 rounded border border-yellow-200">
+                        <i class="fas fa-info-circle"></i> Integração com formulários de Treino Domiciliar ativa.
+                    </div>
+                </div>
+            </section>
+
+            <section id="mod-compartilhamento" class="hidden fade-in">
+                <h2 class="text-2xl font-bold mb-6">Central de Integração e Envio</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card">
+                        <h3 class="font-bold text-lg mb-4 border-b pb-2"><i class="fas fa-paper-plane text-indigo-500"></i> Novo Compartilhamento</h3>
+                        
+                        <label class="text-sm font-semibold">E-mail do Paciente/Destino</label>
+                        <input type="email" id="share-email" class="input-field" placeholder="exemplo@gmail.com">
+                        
+                        <label class="text-sm font-semibold">Tipo de Arquivo/Formulário</label>
+                        <select id="share-tipo" class="input-field">
+                            <option value="json_form">Formulário Estruturado (Google Forms Style)</option>
+                            <option value="pdf_relatorio">Relatório Clínico (PDF)</option>
+                            <option value="link_externo">Link Externo / Pasta</option>
+                        </select>
+                        
+                        <label class="text-sm font-semibold">Título</label>
+                        <input type="text" id="share-titulo" class="input-field" placeholder="Ex: Avaliação Inicial">
+                        
+                        <label class="text-sm font-semibold">Conteúdo (JSON, Texto ou Link)</label>
+                        <textarea id="share-payload" class="input-field h-32" placeholder='Para formulários, cole o JSON. Ex: {"pergunta1": "Como foi seu dia?"}'></textarea>
+                        
+                        <button onclick="enviarCompartilhamento()" class="btn-primary"><i class="fas fa-cloud-upload-alt"></i> Compartilhar com Paciente</button>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3 class="font-bold text-lg mb-4 border-b pb-2"><i class="fas fa-history text-indigo-500"></i> Histórico de Envios</h3>
+                        <div id="lista-compartilhamentos" class="space-y-3">
+                            <p class="text-sm text-slate-500">Carregando dados...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="erp_clinica.js"></script>
+</body>
+</html>

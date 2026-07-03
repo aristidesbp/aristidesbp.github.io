@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine & PDV - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+ 
+<!-- CONEXÃO SUPABASE -->   
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+// SUPABASE_CONFIG.JS
+const supabaseUrl = 'https://eisruaetsqrratemqswv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc3J1YWV0c3FycmF0ZW1xc3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MDI4OTAsImV4cCI6MjA4NTM3ODg5MH0.Rb-nu9zBL7TNWoGNYHvETWMfbqO1NF7UID4TdSYyKS4';
+// Inicializa o cliente Supabase
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Exporta para ser usado em outros scripts
+window.supabaseClient = _supabase;
+</script>
+<script>
+    /** * Estrutura do verificar_login.js
+ * Para começar, vamos focar na função de Verificação de Sessão. 
+ * O comando básico do Supabase é: supabase.auth.getSession()
+ */
+
+// Esta função garante que apenas usuários logados acessem a página atual
+async function checarAutenticacao() {
+    // 1. Buscamos a sessão atual do cliente configurado no supabase_config.js
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+
+    // 2. Se houver erro ou se a sessão estiver vazia (null), o usuário não está logado
+    if (error || !session) {
+        console.log("Acesso negado: Usuário não autenticado.");
+        // 3. Redireciona para o login.html na raiz, conforme nossa estrutura
+        window.location.href = "login.html";
+    } else {
+        // Se a sessão existir, permitimos que ele continue na página
+        console.log("Acesso autorizado para:", session.user.email);
+    }
+}
+
+// Executamos a verificação imediatamente ao carregar o script
+checarAutenticacao();
+</script>
+<!-- FIM DO CONEXÃO SUPABASE -->
+    
+</head>
+<body>
+
+<header class="header-pdv">
+    <div class="flex gap-2">
+        <input type="text" id="busca" class="w-full p-3 border rounded-lg" placeholder="Buscar produto ou ler código..." onkeyup="filtrar()">
+        <button onclick="toggleScanner()" class="bg-indigo-500 text-white p-3 rounded-lg"><i class="fas fa-barcode"></i></button>
+    </div>
+    <div id="reader"></div>
+    <select id="filtro-categoria" class="w-full mt-2 p-2 border rounded-lg" onchange="filtrar()">
+        <option value="">Todas as Categorias</option>
+    </select>
+</header>
+
+<div id="lista-produtos" class="grid-produtos">
+    </div>
+
+<footer class="footer-checkout">
+    <div>
+        <span class="block text-sm text-gray-500" id="total-itens">0 itens</span>
+        <b class="text-xl" id="valor-total">R$ 0,00</b>
+    </div>
+    <button onclick="finalizarVenda()" class="bg-green-500 text-white px-6 py-3 rounded-xl font-bold">Finalizar Venda</button>
+</footer>
+
+
+</body>
+</html>

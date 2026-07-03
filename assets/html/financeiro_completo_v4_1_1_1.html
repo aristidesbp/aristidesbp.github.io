@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financeiro Completo - ERP ABP</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    
+    .status-pago { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+    .status-pendente { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+    .status-atrasado { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; animation: pulse 2s infinite; }
+    
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    
+    label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
+    input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+    input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
+    
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+    .drop-zone { border: 2px dashed #cbd5e1; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; background-color: #f8fafc; }
+    .drop-zone:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+    .drop-zone.dragover { border-color: #3ecf8e; background-color: #ecfdf5; }
+
+    /* ESTILOS DE TABELA */
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f1f5f9; padding: 12px; text-align: left; font-weight: bold; border-bottom: 2px solid #cbd5e1; font-size: 12px; color: #475569; }
+    td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    tr:hover { background: #f8fafc; }
+
+    /* ESTILOS DE IMPRESSÃO */
+    @media print {
+        body * { visibility: hidden; }
+        #print-area, #print-area * { visibility: visible; }
+        #print-area { position: fixed; top: 0; left: 0; width: 100%; padding: 20px; background: white; }
+        
+        .no-print, .no-print * { display: none !important; }
+        
+        table { border-collapse: collapse; width: 100%; font-size: 11px; }
+        th, td { border: 1px solid #cbd5e1 !important; padding: 8px !important; }
+        thead tr { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        .status-pago, .status-pendente, .status-atrasado {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            animation: none !important;
+        }
+        
+        #totais-impressao { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        #totais-impressao > div { border: 1px solid #cbd5e1; padding: 10px; text-align: center; }
+    }
+
+    /* PAGINAÇÃO */
+    .pagination { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
+    .pagination button { padding: 8px 12px; border: 1px solid #cbd5e1; background: white; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .pagination button:hover:not(:disabled) { background: #f1f5f9; border-color: #3ecf8e; }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination .active { background: #3ecf8e; color: white; border-color: #3ecf8e; }
+    .pagination-info { text-align: center; font-size: 12px; color: #475569; margin-top: 12px; }
+</style>
+
+</head>
+<body>
+
+<!-- TELA DE LOGIN -->
+<div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
+        <div class="text-center mb-8">
+            <i class="fas fa-wallet text-5xl text-emerald-500 mb-3"></i>
+            <h2 class="text-2xl font-bold text-slate-800">ERP Financeiro</h2>
+            <p class="text-slate-500 text-sm mt-1">Faça login para acessar suas contas</p>
+        </div>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="text-sm font-bold text-slate-700">E-mail</label>
+                <input type="email" id="login-email" placeholder="seu@email.com" onkeyup="if(event.key === 'Enter') document.getElementById('login-senha').focus()">
+            </div>
+            <div>
+                <label class="text-sm font-bold text-slate-700">Senha</label>
+                <input type="password" id="login-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') fazerLogin()">
+            </div>
+            <button id="btn-login" onclick="fazerLogin()" class="w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg mt-2">
+                Entrar no Sistema
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- TELA DO SISTEMA -->
+<div id="tela-sistema" class="hidden">
+    
+    <!-- NAVBAR -->
+    <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
+        <div class="flex items-center gap-4">
+            <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-wallet text-emerald-500"></i> Financeiro ERP ABP</h1>
+        </div>
+        <button onclick="fazerLogout()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded hover:bg-slate-300 transition text-sm font-bold">
+            <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="pt-20 pb-20 px-4 max-w-7xl mx-auto">
+
+        <!-- ABA FORMULÁRIO -->
+        <div class="card hidden" id="aba-formulario">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="font-bold text-2xl text-slate-800"><i class="fas fa-plus-circle text-emerald-500"></i> Novo Lançamento</h2>
+                <button onclick="cancelarEdicao()" class="text-slate-500 hover:text-slate-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
+                    <label>Descrição da Conta *</label>
+                    <input type="text" id="f-desc" placeholder="Ex: Aluguel, Internet, Venda">
+                </div>
+
+                <div>
+                    <label>Tipo de Valor</label>
+                    <select id="f-tipo-calculo" onchange="ajustarLabelsValor()">
+                        <option value="total">Valor Total</option>
+                        <option value="parcela">Valor da Parcela</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label id="label-valor">Valor Total (R$) *</label>
+                    <input type="number" id="f-valor" step="0.01" placeholder="0.00">
+                </div>
+
+                <div>
+                    <label>Tipo de Operação</label>
+                    <select id="f-tipo">
+                        <option value="despesa">Despesa (Saída)</option>
+                        <option value="receita">Receita (Entrada)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Categoria</label>
+                    <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
+                    <datalist id="lista-categorias"></datalist>
+                </div>
+
+                <div>
+                    <label>Status do Lançamento</label>
+                    <select id="f-status">
+                        <option value="aberto">Aberto</option>
+                        <option value="finalizado">Finalizado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Frequência / Recorrência</label>
+                    <select id="f-recorrencia">
+                        <option value="1">Mensal</option>
+                        <option value="3">Trimestral</option>
+                        <option value="6">Semestral</option>
+                        <option value="12">Anual</option>
+                        <option value="diario">Diário</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>N° de Parcelas *</label>
+                    <input type="number" id="f-parcelas" value="1" min="1">
+                </div>
+
+                <div>
+                    <label>Data Vencimento *</label>
+                    <input type="date" id="f-vencimento">
+                </div>
+
+                <div>
+                    <label>Data de Pagamento</label>
+                    <input type="date" id="f-data-pagamento">
+                </div>
+
+                <div>
+                    <label>Telefone para Contato</label>
+                    <input type="tel" id="f-telefone" placeholder="(11) 98765-4321">
+                </div>
+
+                <div>
+                    <label>E-mail para Contato</label>
+                    <input type="email" id="f-email" placeholder="contato@empresa.com">
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button onclick="gerarLancamentoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+                    <i class="fas fa-save"></i> Gravar Lançamento
+                </button>
+                <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+                    Cancelar
+                </button>
+            </div>
+
+            <input type="hidden" id="f-editando-id">
+            <input type="hidden" id="f-editando-financa-id">
+        </div>
+
+        <!-- ABA LISTAGEM -->
+        <div class="card" id="aba-listagem">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Controle de Parcelas</h3>
+                <div class="flex gap-2 no-print">
+                    <button onclick="abrirFormulario()" class="bg-emerald-500 text-white px-3 py-1.5 rounded hover:bg-emerald-600 transition text-sm">
+                        <i class="fas fa-plus"></i> Novo Lançamento
+                    </button>
+                    <button onclick="gerarRelatorioImpressao()" class="bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition text-sm">
+                        <i class="fas fa-print"></i> Imprimir PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200 no-print">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="text-xs">Pesquisar Descrição</label>
+                    <input type="text" id="filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key === 'Enter') loadParcelas()">
+                </div>
+                <div>
+                    <label class="text-xs">Filtrar Categoria</label>
+                    <select id="filtro-categoria" onchange="loadParcelas()">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs">Data Início</label>
+                    <input type="date" id="filtro-inicio" onchange="loadParcelas()">
+                </div>
+                <div>
+                    <label class="text-xs">Data Fim</label>
+                    <input type="date" id="filtro-fim" onchange="loadParcelas()">
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
+                    <button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">
+                        Limpar
+                    </button>
+                </div>
+            </div>
+
+            <!-- ÁREA DE IMPRESSÃO -->
+            <div id="print-area">
+                <!-- Cabeçalho visível apenas na impressão -->
+                <div id="print-cabecalho" style="margin-bottom:20px; border-bottom:2px solid #0f172a; padding-bottom:12px; display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <h1 style="font-size:18px; font-weight:900; color:#0f172a; margin:0;">Relatório Financeiro — ERP ABP</h1>
+                            <p id="print-filtros-info" style="font-size:11px; color:#475569; margin-top:4px;"></p>
+                        </div>
+                        <p id="print-data-geracao" style="font-size:11px; color:#475569; text-align:right;"></p>
+                    </div>
+                </div>
+
+                <!-- TOTAIS PARA IMPRESSÃO -->
+                <div id="totais-impressao" style="display:none;">
+                    <div>
+                        <p style="font-size:11px; font-weight:bold; color:#065f46; margin:0;">RECEITAS (PAGAS)</p>
+                        <p id="print-total-receita" style="font-size:14px; font-weight:bold; color:#059669; margin-top:4px;">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <p style="font-size:11px; font-weight:bold; color:#991b1b; margin:0;">DESPESAS (PAGAS)</p>
+                        <p id="print-total-despesa" style="font-size:14px; font-weight:bold; color:#dc2626; margin-top:4px;">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <p style="font-size:11px; font-weight:bold; color:#92400e; margin:0;">PENDENTES</p>
+                        <p id="print-total-pendente" style="font-size:14px; font-weight:bold; color:#d97706; margin-top:4px;">R$ 0,00</p>
+                    </div>
+                </div>
+
+                <!-- TABELA PARA IMPRESSÃO -->
+                <div id="print-tabela-container" style="display:none; margin-top:20px;">
+                    <table id="print-tabela">
+                        <thead>
+                            <tr>
+                                <th>DATAS (VENC. / PAG.)</th>
+                                <th>DESCRIÇÃO / ANEXOS</th>
+                                <th>Nº PARCELA</th>
+                                <th>VALOR (R$)</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="print-tabela-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABELA PARA VISUALIZAÇÃO NA TELA -->
+                <div class="overflow-x-auto no-print">
+                    <!-- TOTAIS VISUAIS -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-center">
+                            <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide">Receitas (Pagas)</p>
+                            <p id="filtro-total-receita" class="text-lg font-bold text-emerald-600 mt-1">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+                            <p class="text-xs font-bold text-red-700 uppercase tracking-wide">Despesas (Pagas)</p>
+                            <p id="filtro-total-despesa" class="text-lg font-bold text-red-600 mt-1">R$ 0,00</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-center">
+                            <p class="text-xs font-bold text-amber-700 uppercase tracking-wide">Pendentes</p>
+                            <p id="filtro-total-pendente" class="text-lg font-bold text-amber-600 mt-1">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:5%"><input type="checkbox" onchange="toggleTodosChecks(this)"></th>
+                                <th style="width:18%">Datas (Venc. / Pag.)</th>
+                                <th style="width:30%">Descrição</th>
+                                <th style="width:12%">Categoria</th>
+                                <th style="width:12%">Parcela</th>
+                                <th style="width:15%">Valor (R$)</th>
+                                <th style="width:8%">Status</th>
+                                <th style="width:8%">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-parcelas-tela">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINAÇÃO -->
+                <div class="pagination no-print" id="controle-paginacao">
+                    <button onclick="paginaAnterior()" id="btn-anterior">← Anterior</button>
+                    <div class="flex gap-1" id="botoes-paginas"></div>
+                    <button onclick="proximaPagina()" id="btn-proximo">Próximo →</button>
+                </div>
+                <div class="pagination-info no-print" id="info-paginacao"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// ============================================================
+// VARIÁVEIS GLOBAIS E ESTADO
+// ============================================================
+let entidadesCache = [];
+let todasAsParcelas = [];
+let paginaAtual = 1;
+const itensPorPagina = 10;
+let filtrosAtivos = {};
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    verificar_login();
+    loadCategoriasUnicas();
+});
+
+// ============================================================
+// AUTENTICAÇÃO
+// ============================================================
+async function fazerLogin() {
+    const email = document.getElementById('login-email').value;
+    const senha = document.getElementById('login-senha').value;
+
+    if (!email || !senha) return alert("Preencha e-mail e senha!");
+
+    try {
+        const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+        if (error) throw error;
+        verificar_login();
+    } catch (error) {
+        alert("Erro ao fazer login: " + error.message);
+    }
+}
+
+async function fazerLogout() {
+    await _supabase.auth.signOut();
+    verificar_login();
+}
+
+async function verificar_login() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    const telaLogin = document.getElementById('tela-login');
+    const telaSistema = document.getElementById('tela-sistema');
+
+    if (!session) {
+        telaLogin.classList.remove('hidden');
+        telaLogin.classList.add('flex');
+        telaSistema.classList.add('hidden');
+    } else {
+        telaLogin.classList.add('hidden');
+        telaLogin.classList.remove('flex');
+        telaSistema.classList.remove('hidden');
+        loadCategoriasUnicas();
+        loadParcelas();
+    }
+}
+
+// ============================================================
+// GERENCIAMENTO DE FORMULÁRIO
+// ============================================================
+function abrirFormulario() {
+    document.getElementById('aba-formulario').classList.remove('hidden');
+    document.getElementById('aba-listagem').classList.add('hidden');
+    cancelarEdicao();
+}
+
+function ajustarLabelsValor() {
+    const tipo = document.getElementById('f-tipo-calculo').value;
+    document.getElementById('label-valor').innerText = tipo === 'total' ? 'Valor Total (R$)' : 'Valor da Parcela (R$)';
+}
+
+async function loadCategoriasUnicas() {
+    const { data } = await _supabase.from('financas').select('categoria');
+    if (!data) return;
+    
+    const categorias = [...new Set(data.map(item => item.categoria).filter(c => c))];
+    
+    const datalist = document.getElementById('lista-categorias');
+    const selectFiltro = document.getElementById('filtro-categoria');
+    
+    datalist.innerHTML = '';
+    selectFiltro.innerHTML = '<option value="">Todas</option>';
+    
+    categorias.forEach(cat => {
+        datalist.innerHTML += `<option value="${cat}">`;
+        selectFiltro.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+}
+
+async function gerarLancamentoCompleto() {
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true;
+    btn.innerText = 'Salvando...';
+
+    try {
+        const desc = document.getElementById('f-desc').value;
+        const tipoCalculo = document.getElementById('f-tipo-calculo').value;
+        const valorInput = parseFloat(document.getElementById('f-valor').value);
+        const tipo = document.getElementById('f-tipo').value;
+        const categoria = document.getElementById('f-categoria').value || 'Geral';
+        const statusLancamento = document.getElementById('f-status').value;
+        const qtd = parseInt(document.getElementById('f-parcelas').value);
+        const recorrenciaVal = document.getElementById('f-recorrencia').value;
+        const dataVenc = document.getElementById('f-vencimento').value;
+        const dataPagamentoForm = document.getElementById('f-data-pagamento').value;
+        const telefone = document.getElementById('f-telefone').value || null;
+        const email = document.getElementById('f-email').value || null;
+        
+        const editandoId = document.getElementById('f-editando-id').value;
+        const financaId = document.getElementById('f-editando-financa-id').value;
+
+        if(!desc || !valorInput || !dataVenc) throw new Error("Preencha Descrição, Valor e Data de Vencimento!");
+
+        let valorTotal, valorParcela;
+        if (tipoCalculo === 'total') {
+            valorTotal = valorInput;
+            valorParcela = (valorTotal / qtd).toFixed(2);
+        } else {
+            valorParcela = valorInput;
+            valorTotal = (valorParcela * qtd).toFixed(2);
+        }
+
+        if (editandoId) {
+            // ATUALIZAR PARCELA EXISTENTE
+            const payloadUpdate = {
+                valor_parcela: valorParcela,
+                data_vencimento: dataVenc,
+                status: dataPagamentoForm ? 'pago' : 'pendente',
+                data_pagamento: dataPagamentoForm || null
+            };
+
+            const { error: errUpdate } = await _supabase.from('parcelas').update(payloadUpdate).eq('id', editandoId);
+            if (errUpdate) throw errUpdate;
+
+            alert("Parcela atualizada com sucesso!");
+        } else {
+            // CRIAR NOVO LANÇAMENTO
+            const { data: financa, error: errF } = await _supabase.from('financas').insert([{
+                descricao: desc,
+                valor_total: valorTotal,
+                tipo,
+                categoria,
+                status_lancamento: statusLancamento,
+                num_parcelas: qtd,
+                telefone: telefone,
+                email: email
+            }]).select().single();
+            
+            if(errF) throw errF;
+
+            let parcelas = [];
+            for(let i = 1; i <= qtd; i++) {
+                let venc = new Date(dataVenc + 'T12:00:00');
+                if (recorrenciaVal === 'diario') {
+                    venc.setDate(venc.getDate() + (i - 1));
+                } else {
+                    venc.setMonth(venc.getMonth() + ((i - 1) * parseInt(recorrenciaVal)));
+                }
+                
+                parcelas.push({
+                    financa_id: financa.id,
+                    num_parcela: i,
+                    valor_parcela: valorParcela,
+                    data_vencimento: venc.toISOString().split('T')[0],
+                    status: dataPagamentoForm ? 'pago' : 'pendente',
+                    data_pagamento: dataPagamentoForm || null
+                });
+            }
+
+            const { error: errP } = await _supabase.from('parcelas').insert(parcelas);
+            if(errP) throw errP;
+
+            alert("Lançamento salvo!");
+        }
+        
+        cancelarEdicao();
+        document.getElementById('aba-formulario').classList.add('hidden');
+        document.getElementById('aba-listagem').classList.remove('hidden');
+        paginaAtual = 1;
+        await loadParcelas();
+
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = '<i class="fas fa-save"></i> Gravar Lançamento';
+    }
+}
+
+function cancelarEdicao() {
+    document.getElementById('f-editando-id').value = '';
+    document.getElementById('f-editando-financa-id').value = '';
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-valor').value = '';
+    document.getElementById('f-categoria').value = 'Geral';
+    document.getElementById('f-telefone').value = '';
+    document.getElementById('f-email').value = '';
+    document.getElementById('f-vencimento').value = '';
+    document.getElementById('f-data-pagamento').value = '';
+    document.getElementById('f-parcelas').value = '1';
+    document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-save"></i> Gravar Lançamento';
+    document.getElementById('btn-cancelar').classList.add('hidden');
+}
+
+async function prepararEdicao(id) {
+    const { data: p } = await _supabase.from('parcelas').select('*, financas(*)').eq('id', id).single();
+    if (p) {
+        document.getElementById('f-editando-id').value = p.id;
+        document.getElementById('f-editando-financa-id').value = p.financas.id;
+        
+        document.getElementById('f-desc').value = p.financas.descricao;
+        document.getElementById('f-tipo').value = p.financas.tipo;
+        document.getElementById('f-categoria').value = p.financas.categoria || 'Geral';
+        document.getElementById('f-status').value = p.financas.status_lancamento || 'aberto';
+        document.getElementById('f-telefone').value = p.financas.telefone || '';
+        document.getElementById('f-email').value = p.financas.email || '';
+        
+        document.getElementById('f-tipo-calculo').value = 'parcela';
+        ajustarLabelsValor();
+        document.getElementById('f-valor').value = p.valor_parcela;
+        document.getElementById('f-parcelas').value = 1;
+        
+        document.getElementById('f-vencimento').value = p.data_vencimento;
+        document.getElementById('f-data-pagamento').value = p.data_pagamento || '';
+        
+        document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Parcela';
+        document.getElementById('btn-cancelar').classList.remove('hidden');
+        
+        abrirFormulario();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// ============================================================
+// CARREGAMENTO E FILTROS DE PARCELAS
+// ============================================================
+async function loadParcelas() {
+    const busca = document.getElementById('filtro-busca').value;
+    const categoria = document.getElementById('filtro-categoria').value;
+    const dataInicio = document.getElementById('filtro-inicio').value;
+    const dataFim = document.getElementById('filtro-fim').value;
+
+    filtrosAtivos = { busca, categoria, dataInicio, dataFim };
+
+    let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas, telefone, email)').order('data_vencimento', { ascending: true });
+
+    if (busca) query = query.ilike('financas.descricao', `%${busca}%`);
+    if (categoria) query = query.eq('financas.categoria', categoria);
+    if (dataInicio) query = query.gte('data_vencimento', dataInicio);
+    if (dataFim) query = query.lte('data_vencimento', dataFim);
+
+    const { data, error } = await query;
+    if (error) {
+        console.error("Erro ao carregar parcelas:", error.message);
+        return;
+    }
+    
+    todasAsParcelas = data || [];
+    paginaAtual = 1;
+    
+    atualizarTotais();
+    renderizarPagina();
+    atualizarPaginacao();
+}
+
+function atualizarTotais() {
+    const hoje = new Date().toISOString().split('T')[0];
+    let totalReceita = 0, totalDespesa = 0, totalPendente = 0;
+
+    todasAsParcelas.forEach(p => {
+        const valor = parseFloat(p.valor_parcela || 0);
+        if (p.status === 'pago') {
+            if (p.financas.tipo === 'receita') totalReceita += valor;
+            else totalDespesa += valor;
+        } else {
+            totalPendente += valor;
+        }
+    });
+
+    const fmt = v => `R$ ${v.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+    document.getElementById('filtro-total-receita').innerText = fmt(totalReceita);
+    document.getElementById('filtro-total-despesa').innerText = fmt(totalDespesa);
+    document.getElementById('filtro-total-pendente').innerText = fmt(totalPendente);
+}
+
+function renderizarPagina() {
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
+    const parcelasPagina = todasAsParcelas.slice(inicio, fim);
+
+    const container = document.getElementById('lista-parcelas-tela');
+    const hoje = new Date().toISOString().split('T')[0];
+
+    container.innerHTML = parcelasPagina.map(p => {
+        let statusClass = p.status === 'pago' ? 'status-pago' : 'status-pendente';
+        let statusTxt = p.status.toUpperCase();
+        if(p.status === 'pendente' && p.data_vencimento < hoje) { 
+            statusClass = 'status-atrasado'; 
+            statusTxt = 'ATRASADO'; 
+        }
+
+        const dtVenc = new Date(p.data_vencimento + 'T12:00:00').toLocaleDateString('pt-br');
+        const dtPag = p.data_pagamento ? new Date(p.data_pagamento + 'T12:00:00').toLocaleDateString('pt-br') : '--/--/----';
+
+        return `
+            <tr>
+                <td><input type="checkbox" class="check-parcela" value="${p.id}"></td>
+                <td>
+                    <div class="text-sm">
+                        <div><strong>Venc:</strong> ${dtVenc}</div>
+                        <div><strong>Pag:</strong> ${dtPag}</div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <strong>${p.financas.descricao}</strong>
+                        <div class="text-xs text-slate-500">${p.financas.categoria || 'Geral'}</div>
+                    </div>
+                </td>
+                <td>${p.financas.categoria || 'Geral'}</td>
+                <td>${p.num_parcela} / ${p.financas.num_parcelas}</td>
+                <td class="font-bold ${p.financas.tipo === 'receita' ? 'text-emerald-600' : 'text-red-600'}">
+                    R$ ${parseFloat(p.valor_parcela).toFixed(2)}
+                </td>
+                <td><span class="${statusClass}">${statusTxt}</span></td>
+                <td>
+                    <button onclick="prepararEdicao('${p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-bold">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function atualizarPaginacao() {
+    const totalPaginas = Math.ceil(todasAsParcelas.length / itensPorPagina);
+    const container = document.getElementById('botoes-paginas');
+    const btnAnterior = document.getElementById('btn-anterior');
+    const btnProximo = document.getElementById('btn-proximo');
+    const info = document.getElementById('info-paginacao');
+
+    btnAnterior.disabled = paginaAtual === 1;
+    btnProximo.disabled = paginaAtual === totalPaginas;
+
+    container.innerHTML = '';
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.onclick = () => irParaPagina(i);
+        btn.className = paginaAtual === i ? 'active' : '';
+        container.appendChild(btn);
+    }
+
+    const inicio = (paginaAtual - 1) * itensPorPagina + 1;
+    const fim = Math.min(paginaAtual * itensPorPagina, todasAsParcelas.length);
+    info.innerText = `Mostrando ${inicio} a ${fim} de ${todasAsParcelas.length} registros`;
+}
+
+function irParaPagina(num) {
+    paginaAtual = num;
+    renderizarPagina();
+    atualizarPaginacao();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function proximaPagina() {
+    const totalPaginas = Math.ceil(todasAsParcelas.length / itensPorPagina);
+    if (paginaAtual < totalPaginas) {
+        irParaPagina(paginaAtual + 1);
+    }
+}
+
+function paginaAnterior() {
+    if (paginaAtual > 1) {
+        irParaPagina(paginaAtual - 1);
+    }
+}
+
+function limparFiltros() {
+    document.getElementById('filtro-busca').value = '';
+    document.getElementById('filtro-categoria').value = '';
+    document.getElementById('filtro-inicio').value = '';
+    document.getElementById('filtro-fim').value = '';
+    loadParcelas();
+}
+
+function toggleTodosChecks(source) {
+    const checkboxes = document.querySelectorAll('.check-parcela');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+
+async function excluirSelecionados() {
+    const selecionados = Array.from(document.querySelectorAll('.check-parcela:checked')).map(cb => cb.value);
+    if (selecionados.length === 0) return alert("Selecione ao menos uma parcela para excluir.");
+
+    if (confirm(`Atenção: Deseja realmente excluir ${selecionados.length} parcela(s)?`)) {
+        const { error } = await _supabase.from('parcelas').delete().in('id', selecionados);
+        if (!error) {
+            alert('Excluído com sucesso!');
+            loadParcelas();
+        } else {
+            alert('Erro ao excluir: ' + error.message);
+        }
+    }
+}
+
+// ============================================================
+// GERAÇÃO DE RELATÓRIO PARA IMPRESSÃO
+// ============================================================
+async function gerarRelatorioImpressao() {
+    // Buscar TODOS os dados com os filtros atuais (não apenas a página atual)
+    const busca = document.getElementById('filtro-busca').value;
+    const categoria = document.getElementById('filtro-categoria').value;
+    const dataInicio = document.getElementById('filtro-inicio').value;
+    const dataFim = document.getElementById('filtro-fim').value;
+
+    let query = _supabase.from('parcelas').select('*, financas!inner(descricao, tipo, categoria, num_parcelas)').order('data_vencimento', { ascending: true });
+
+    if (busca) query = query.ilike('financas.descricao', `%${busca}%`);
+    if (categoria) query = query.eq('financas.categoria', categoria);
+    if (dataInicio) query = query.gte('data_vencimento', dataInicio);
+    if (dataFim) query = query.lte('data_vencimento', dataFim);
+
+    const { data, error } = await query;
+    if (error) {
+        alert("Erro ao buscar dados: " + error.message);
+        return;
+    }
+
+    const parcelas = data || [];
+    const hoje = new Date().toISOString().split('T')[0];
+
+    // Calcular totais
+    let totalReceita = 0, totalDespesa = 0, totalPendente = 0;
+    parcelas.forEach(p => {
+        const valor = parseFloat(p.valor_parcela || 0);
+        if (p.status === 'pago') {
+            if (p.financas.tipo === 'receita') totalReceita += valor;
+            else totalDespesa += valor;
+        } else {
+            totalPendente += valor;
+        }
+    });
+
+    // Preencher informações do filtro
+    const partes = [];
+    if (busca) partes.push(`Descrição: "${busca}"`);
+    if (categoria) partes.push(`Categoria: ${categoria}`);
+    if (dataInicio) partes.push(`De: ${new Date(dataInicio + 'T12:00:00').toLocaleDateString('pt-br')}`);
+    if (dataFim) partes.push(`Até: ${new Date(dataFim + 'T12:00:00').toLocaleDateString('pt-br')}`);
+
+    const infoFiltros = partes.length > 0 ? `Filtros: ${partes.join(' | ')}` : 'Filtros: Todos os lançamentos';
+    const dataGeracao = `Gerado em: ${new Date().toLocaleString('pt-br')}`;
+
+    document.getElementById('print-filtros-info').innerText = infoFiltros;
+    document.getElementById('print-data-geracao').innerText = dataGeracao;
+    document.getElementById('print-total-receita').innerText = `R$ ${totalReceita.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+    document.getElementById('print-total-despesa').innerText = `R$ ${totalDespesa.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+    document.getElementById('print-total-pendente').innerText = `R$ ${totalPendente.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+
+    // Montar tabela para impressão
+    const tbody = document.getElementById('print-tabela-body');
+    tbody.innerHTML = parcelas.map(p => {
+        let statusTxt = p.status.toUpperCase();
+        if(p.status === 'pendente' && p.data_vencimento < hoje) {
+            statusTxt = 'ATRASADO';
+        }
+
+        const dtVenc = new Date(p.data_vencimento + 'T12:00:00').toLocaleDateString('pt-br');
+        const dtPag = p.data_pagamento ? new Date(p.data_pagamento + 'T12:00:00').toLocaleDateString('pt-br') : '--/--/----';
+
+        return `
+            <tr>
+                <td>${dtVenc} / ${dtPag}</td>
+                <td>${p.financas.descricao}</td>
+                <td>${p.num_parcela} / ${p.financas.num_parcelas}</td>
+                <td>R$ ${parseFloat(p.valor_parcela).toFixed(2)}</td>
+                <td>${statusTxt}</td>
+            </tr>
+        `;
+    }).join('');
+
+    // Mostrar elementos de impressão
+    document.getElementById('print-cabecalho').style.display = 'block';
+    document.getElementById('totais-impressao').style.display = 'grid';
+    document.getElementById('print-tabela-container').style.display = 'block';
+
+    // Imprimir
+    setTimeout(() => {
+        window.print();
+
+        // Esconder elementos de impressão
+        setTimeout(() => {
+            document.getElementById('print-cabecalho').style.display = 'none';
+            document.getElementById('totais-impressao').style.display = 'none';
+            document.getElementById('print-tabela-container').style.display = 'none';
+        }, 500);
+    }, 100);
+}
+</script>
+
+</body>
+</html>
