@@ -851,86 +851,6 @@ No seu navegador, vá até o seu repositório no GitHub.
 4. Adicione o nome VITE_SUPABASE_URL e cole o valor. Repita para o VITE_SUPABASE_ANON_KEY.
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-```json
-{
-  "lista_de_tarefas": true,
-  "diagnostico_atual": "O usuário está pronto para implementar a automação via GitHub Actions no Termux. Preciso fornecer os comandos exatos de terminal para criar a hierarquia de pastas e o arquivo de configuração.",
-  "proxima_tarefa_pendente": "Execução da criação da estrutura de pastas e do arquivo YAML no Termux.",
-  "historico_tarefas_concluidas": [
-    { "id": 1, "status": "ok", "objetivo": "Schema do Banco", "tarefa": "DDL das tabelas" },
-    { "id": 2, "status": "ok", "objetivo": "Trigger de Auth", "tarefa": "Sincronização de usuário" },
-    { "id": 3, "status": "ok", "objetivo": "View de Consulta", "tarefa": "Implementação da view" },
-    { "id": 4, "status": "ok", "objetivo": "Segurança RLS", "tarefa": "Refinamento das políticas" },
-    { "id": 5, "status": "ok", "objetivo": "Configuração do .env", "tarefa": "Criação de variáveis e gitignore" },
-    { "id": 6, "status": "ok", "objetivo": "Sincronização Git", "tarefa": "Resolução de conflitos de merge" },
-    { "id": 7, "status": "ok", "objetivo": "Scaffolding do Frontend", "tarefa": "Estrutura de pastas" },
-    { "id": 8, "status": "ok", "objetivo": "Verificação de Segurança", "tarefa": "Configuração de Secrets no GitHub" },
-    { "id": 9, "status": "ok", "objetivo": "Automação", "tarefa": "Criação de GitHub Action para gerar config" }
-  ]
-}
-
-```
-Para implementar a automação no seu terminal Termux, siga estes comandos sequenciais. Eles criarão a estrutura necessária e o arquivo de configuração automaticamente.
-### Comandos para o Termux
- 1. **Criar a estrutura de pastas:**
-   ```bash
-   mkdir -p .github/workflows
-   
-   ```
-   *(O comando mkdir -p cria a pasta .github e a subpasta workflows de uma só vez).*
- 2. **Criar e editar o arquivo generate-config.yml:**
-   ```bash
-   nano .github/workflows/generate-config.yml
-   
-   ```
- 3. **Colar o conteúdo:**
-   Assim que o editor nano abrir, cole o código abaixo:
-```
-
-name: Generate Supabase Config
-on: [push]
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: true
-
-      - name: Create supabase_config.js
-        run: |
-          mkdir -p assets/js
-          echo "const SUPABASE_URL = '${{ secrets.VITE_SUPABASE_URL }}';" > assets/js/supabase_config.js
-          echo "const SUPABASE_KEY = '${{ secrets.VITE_SUPABASE_ANON_KEY }}';" >> assets/js/supabase_config.js
-          echo "console.log('✅ supabase_config.js carregado');" >> assets/js/supabase_config.js
-
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Auto-gerando supabase_config.js"
-          file_pattern: 'assets/js/supabase_config.js'
-
-
-```
- 4. **Salvar e sair:**
-   * Pressione Ctrl + O, depois Enter para salvar.
-   * Pressione Ctrl + X para sair do editor.
-### Próximo passo após criar o arquivo:
-Agora que o arquivo foi criado localmente, envie-o para o seu repositório no GitHub para que a automação seja ativada:
-```bash
-git add .
-git commit -m "Adicionando automação de config via GitHub Actions"
-git push origin main
-
-```
-**Dica educativa:** O git add . adiciona todos os arquivos novos ao controle de versão. Como criamos a pasta .github, o Git agora passará a rastrear essa pasta e o arquivo de configuração.
-Assim que rodar esses comandos, vá até a aba **Actions** no seu repositório no GitHub. Você verá o processo rodando e, em instantes, o arquivo assets/js/supabase_config.js aparecerá no seu repositório! Conseguiu enviar com sucesso?
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
@@ -950,23 +870,101 @@ Assim que rodar esses comandos, vá até a aba **Actions** no seu repositório n
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
-## Ativar extençoes
 
-```
+# USUARIO ESPELHO (COMPLETO)
+``` 
+
 -- =========================================================================
--- COMO FAZER ATIVAÇÃO DAS EXTENSÕES VIA SQL
+-- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
 -- =========================================================================
 
--- 1. Ativa o suporte para ignorar acentos (ex: "oração" vira "oracao" na busca)
-CREATE EXTENSION IF NOT EXISTS "unaccent";
+-- CRIAR TABELA: usuario_espelho
+-- Depende apenas do esquema 'auth.users' nativo do Supabase.
+CREATE TABLE public.usuario_espelho (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    auth_users_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
+    nome_completo text,
+    bio text,
+    avatar_url text,
+    
+    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
+    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
+        REFERENCES auth.users(id) ON DELETE CASCADE
+);
 
--- 2. Ativa a busca inteligente por aproximação (corrige pequenos erros de digitação)
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
--- 3. Ativa o gerador de códigos de segurança para o login dos irmãos
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- =========================================================================
+-- FUNÇÃO TRIGGER PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
+-- =========================================================================
 
-```
+-- 1. Criação ou atualização da função que será executada pelo gatilho
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger 
+LANGUAGE plpgsql
+-- SECURITY DEFINER garante que a função execute com privilégios de superusuário,
+-- contornando restrições de permissão do usuário anônimo durante o cadastro.
+SECURITY DEFINER
+-- Boa prática de segurança: define explicitamente o search_path para evitar ataques de injeção
+SET search_path = public
+AS $$
+BEGIN
+    -- Insere o novo usuário na tabela espelho
+    -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
+    INSERT INTO public.usuario_espelho (
+        auth_users_id, 
+        nome_completo, 
+        avatar_url, 
+        bio
+    )
+    VALUES (
+        new.id,
+        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), -- Tenta ler 'full_name' ou 'name'
+        new.raw_user_meta_data->>'avatar_url',
+        NULL -- Bio inicia nula para o usuário preencher posteriormente na plataforma
+    );
+
+    -- O retorno 'new' é obrigatório em triggers do tipo AFTER INSERT
+    RETURN new;
+END;
+$$;
+
+-- 2. Criação do gatilho (Trigger) associado à tabela auth.users
+-- Garante que nenhum gatilho duplicado com o mesmo nome seja criado
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW 
+    EXECUTE FUNCTION public.handle_new_user();
+
+
+-- =========================================================================
+-- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: usuario_espelho
+-- =========================================================================
+
+-- 1. Garante que o Row Level Security está ativado na tabela
+ALTER TABLE public.usuario_espelho ENABLE ROW LEVEL SECURITY;
+
+-- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
+DROP POLICY IF EXISTS "User Propietario" ON public.usuario_espelho;
+
+-- 3. Criação da política de acesso estrita
+CREATE POLICY "User Propietario" 
+ON public.usuario_espelho
+AS PERMISSIVE
+FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
+TO authenticated -- Aplica-se apenas a usuários logados no sistema
+USING (
+    -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
+    auth_users_id = auth.uid()
+) 
+WITH CHECK (
+    -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
+    auth_users_id = auth.uid()
+);
+
+``` 
 
 
 # EXEMPLO DE SQL PARA CRIAR TABELAS 
@@ -985,20 +983,9 @@ CREATE TABLE public.categorias (
     CONSTRAINT categorias_pkey PRIMARY KEY (id)
 );
 
--- 2. TABELA: usuario_espelho
+-- 2. TABELA: usuario_espelho (FEITA ANTERIORMENTE)
 -- Depende apenas do esquema 'auth.users' nativo do Supabase.
-CREATE TABLE public.usuario_espelho (
-    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    auth_users_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
-    nome_completo text,
-    bio text,
-    avatar_url text,
-    
-    CONSTRAINT usuario_espelho_pkey PRIMARY KEY (id),
-    CONSTRAINT usuario_espelho_auth_users_id_fkey FOREIGN KEY (auth_users_id) 
-        REFERENCES auth.users(id) ON DELETE CASCADE
-);
+
 
 -- 3. TABELA: servicos
 -- Depende de 'categorias' e 'usuario_espelho'.
@@ -1060,74 +1047,6 @@ CREATE TABLE public.avaliacoes (
 ```
 
 
-
-# Prompt para criar functions trigger
-
-```
-Crie uma função Trigger para ser implementada no supabase com o seguinte objetivo:
-  - A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
-
-create table public.usuario_espelho (
-  id bigint generated always as identity not null,
-  created_at timestamp with time zone not null default now(),
-  auth_users_id uuid not null,
-  nome_completo text null,
-  bio text null,
-  avatar_url text null,
-  constraint usuario_espelho_pkey primary key (id),
-  constraint usuario_espelho_auth_users_id_fkey foreign KEY (auth_users_id) references auth.users (id) on delete CASCADE
-) TABLESPACE pg_default;
-
-
-```
-# Resposta:
-
-```
--- =========================================================================
--- FUNÇÃO TRIGGER PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
--- =========================================================================
-
--- 1. Criação ou atualização da função que será executada pelo gatilho
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger 
-LANGUAGE plpgsql
--- SECURITY DEFINER garante que a função execute com privilégios de superusuário,
--- contornando restrições de permissão do usuário anônimo durante o cadastro.
-SECURITY DEFINER
--- Boa prática de segurança: define explicitamente o search_path para evitar ataques de injeção
-SET search_path = public
-AS $$
-BEGIN
-    -- Insere o novo usuário na tabela espelho
-    -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
-    INSERT INTO public.usuario_espelho (
-        auth_users_id, 
-        nome_completo, 
-        avatar_url, 
-        bio
-    )
-    VALUES (
-        new.id,
-        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), -- Tenta ler 'full_name' ou 'name'
-        new.raw_user_meta_data->>'avatar_url',
-        NULL -- Bio inicia nula para o usuário preencher posteriormente na plataforma
-    );
-
-    -- O retorno 'new' é obrigatório em triggers do tipo AFTER INSERT
-    RETURN new;
-END;
-$$;
-
--- 2. Criação do gatilho (Trigger) associado à tabela auth.users
--- Garante que nenhum gatilho duplicado com o mesmo nome seja criado
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW 
-    EXECUTE FUNCTION public.handle_new_user();
-
-```
 # EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 
 ```
@@ -1140,91 +1059,7 @@ CREATE TRIGGER on_auth_user_created
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
 
-### Para popular essas tabelas de forma mockada e funcional, precisamos seguir a ordem lógica de dependência das chaves estrangeiras.
 
-Atenção ao ponto crítico: Como sua tabela usuario_espelho aponta obrigatoriamente para auth.users, o script abaixo inclui a inserção de dois usuários fictícios diretamente na tabela do sistema do Supabase (auth.users) para que os dados de teste não quebrem por restrição de chave estrangeira.
-
-**OBSERVAÇÃO: NAO ESTARAM NO Authentication/Users**
-
-Rode o script completo no seu SQL Editor:
-
-```
--- =========================================================================
--- SCRIPT DE POPULAÇÃO DE DADOS (SEED DATA)
--- =========================================================================
-
--- Certifique-se de que a extensão para gerar UUIDs está ativa (caso não esteja)
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- 1. POPULAR: auth.users (Tabela nativa do Supabase)
--- IDs estáticos criados manualmente via UUID para amarrar os relacionamentos abaixo
-INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_user_meta_data)
-VALUES 
-    ('a1111111-1111-1111-1111-111111111111', 'jose.silva@email.com', 'password_hash_mock', now(), '{"full_name": "José Silva"}'),
-    ('b2222222-2222-2222-2222-222222222222', 'maria.souza@email.com', 'password_hash_mock', now(), '{"full_name": "Maria Souza"}')
-ON CONFLICT (id) DO NOTHING;
-
--- 2. POPULAR: public.categorias
-INSERT INTO public.categorias (tipo_de_categoria) 
-VALUES 
-    ('Assistência Técnica'),
-    ('Aulas Particulares'),
-    ('Reformas e Reparos'),
-    ('Beleza e Estética')
-ON CONFLICT DO NOTHING;
-
--- 3. POPULAR: public.usuario_espelho
--- Mapeando os IDs do auth.users criados no passo 1
-INSERT INTO public.usuario_espelho (auth_users_id, nome_completo, bio, avatar_url)
-VALUES 
-    ('a1111111-1111-1111-1111-111111111111', 'José Silva', 'Desenvolvedor freelancer e técnico de informática nas horas vagas.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jose'),
-    ('b2222222-2222-2222-2222-222222222222', 'Maria Souza', 'Professora de matemática focada em ensino fundamental e médio.', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria')
-ON CONFLICT DO NOTHING;
-
--- 4. POPULAR: public.servicos
--- Vincula IDs gerados dinamicamente das categorias (1 e 2) e usuários (1 e 2)
-INSERT INTO public.servicos (
-    titulo, descricao, categoria, preco_estimado, preco_detalhe, foto_url, criado_por_usuario, terceiro, eu_mesmo, whatsapp
-)
-VALUES 
-    (
-        'Formatação de Computador e Notebook', 
-        'Instalação de Sistema Operacional, backup de dados e configuração de drivers.', 
-        1, -- Categoria: Assistência Técnica
-        150.00, 
-        'Preço fixo para computadores domésticos. Adicionais de softwares sob consulta.', 
-        'https://images.unsplash.com/photo-1588508065123-287b28e013da', 
-        1, -- Criado por: José Silva
-        false, 
-        true, 
-        '5511999999999'
-    ),
-    (
-        'Aula Particular de Álgebra e Cálculo', 
-        'Aulas focadas em preparação para o ENEM, vestibulares e reforço escolar universitário.', 
-        2, -- Categoria: Aulas Particulares
-        80.00, 
-        'Valor cobrado por hora/aula. Pacotes mensais têm desconto.', 
-        'https://images.unsplash.com/photo-1434030216411-0b793f4b4173', 
-        2, -- Criado por: Maria Souza
-        false, 
-        true, 
-        '5511988888888'
-    );
-
--- 5. POPULAR: public.favoritos
--- Simulação: O usuário 2 (Maria) favoritou o serviço do usuário 1 (José)
-INSERT INTO public.favoritos (usuario_id, servico_id)
-VALUES 
-    (2, 1);
-
--- 6. POPULAR: public.avaliacoes
--- Simulação: O usuário 2 (Maria) avaliou o serviço do usuário 1 (José)
-INSERT INTO public.avaliacoes (servico_id, author_id, nota, comentario)
-VALUES 
-    (1, 2, 5, 'Excelente profissional! Meu notebook ficou muito rápido e o atendimento foi excelente.');
-
-```
 # EXEMPLO DE PROMPT PARA CRIAR VIEWS
 ```
 Crie uma view chamada ver_servicos_destacados, ela deve listar os serviçõs com o nome da categoria e os detalhes do autor que esta na tabela de  "usuarios_espelho". Alem disso, deve calcular a media das notas (use 0 se nao houver) eo total de avaliações recebidas por cada serviço.
@@ -1338,8 +1173,8 @@ GROUP BY
     c.id, 
     u.id;
 ```
-# Criar políticas de segurança diretamente pelo SQL Editor é muito mais seguro e idempotente (pode ser executado várias vezes sem quebrar).
 
+# Criar políticas de segurança diretamente pelo SQL Editor é muito mais seguro e idempotente (pode ser executado várias vezes sem quebrar).
 O script abaixo garante que o RLS esteja explicitamente ativado na tabela, remove qualquer lixo ou tentativa anterior com o mesmo nome e cria a regra apontando para o campo correto (auth_users_id).
 ```
 -- =========================================================================
