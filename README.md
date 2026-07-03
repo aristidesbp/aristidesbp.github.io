@@ -873,9 +873,8 @@ No seu navegador, vá até o seu repositório no GitHub.
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
 
-# USUARIO ESPELHO (entidades COMPLETO)
+# SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
 ``` 
-
 -- =========================================================================
 -- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
 -- =========================================================================
@@ -890,8 +889,6 @@ CREATE TABLE public.entidades (
     nome_completo text,
     avatar_url text,
     bio text,
-
-
   cpf text,
   data_nascimento date,
   email text,
@@ -936,21 +933,8 @@ BEGIN
         user_id, 
         nome_completo, 
         avatar_url, 
-        bio,
-        cpf text,
-        data_nascimento date,
-        email text,
-        telefone text,
-        tipo_acesso text DEFAULT 'cliente'::text,
-        tipo_entidade text DEFAULT 'cliente'::text,
-        status_entidade text DEFAULT 'ativo'::text,
-  avaliacao integer DEFAULT 5,
-  cep text,
-  logradouro text,
-  numero text,
-  bairro text,
-  cidade text,
-  estado character varying,
+        bio
+       
     )
     VALUES (
         new.id,
