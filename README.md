@@ -3626,9 +3626,6 @@ itens_aristides:
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # JOGANDO COM IA
-
-![imagem gamer master](assets/png/gamer_master.png)
-* Sugiro usar o json para caso queria escutar as aventuras, dominar o json ajuda a trabalhar com dados, voçê podera usar futuramente json para exporta dados para o supabase, esta contido neste material. 
   
 ```
 {
@@ -3678,8 +3675,6 @@ itens_aristides:
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ASSITENTE DE SUPORTE
-
-![imagem agente de suporte](assets/png/suporte.png)
 
 ```
 
@@ -3772,8 +3767,8 @@ clear
 rm -rf nome_da_pasta
 ```
 
-
-# 🟥 TERMUX+ GIT+ GITHUB
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  TERMUX+ GIT+ GITHUB
 ```
 # verificar se o git está instalado 
 git --version
@@ -3831,8 +3826,8 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 # Altere a URL do repositório de HTTPS para SSH com o comando:
 git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
 ```
----
-# 🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 
 ```
 # clonar um repositório
@@ -3892,7 +3887,7 @@ git commit -m "DESCRIÇÃO_chekPointe"
 git push origin main
 
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO BAIXAR MIDIAS COM TERMUX 
 ```
 pkg update && pkg upgrade
@@ -3904,7 +3899,8 @@ python3 -m pip install --upgrade yt-dlp
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
-# 🟥 SERVIDOR PYTHON 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
  * Navegue até a pasta onde seus arquivos estão 
@@ -3936,6 +3932,7 @@ Aí o endereço vira:
 ## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
 ```
 # Descubra o IP do celular no Termux:
+```
 ip addr show wlan0
 ```
 Vai aparecer algo como:
@@ -3966,7 +3963,7 @@ proot-distro login ubuntu
 # atualizar 
 apt update && apt upgrade -y
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar buscador
 ```
@@ -4007,8 +4004,8 @@ proot-distro login ubuntu
 ```
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# 🟥 python3 organizar.py
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  python3 organizar.py
 ```
 
 import os
@@ -4103,8 +4100,9 @@ if __name__ == "__main__":
 
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  python limpar_duplicados.py
 
-# 🟥 python limpar_duplicados.py
 ```
 import hashlib
 import os
@@ -4214,8 +4212,11 @@ ORIGEM = "."
 if __name__ == "__main__":
     buscar_e_limpar_duplicados(ORIGEM)
 
+
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # extrair.py
+
 ```
 import os
 import shutil
@@ -4326,7 +4327,7 @@ if __name__ == "__main__":
     achatar_diretorio_e_limpar(DIRETORIO_ATUAL)
     print("\nProcesso concluído com sucesso!")
 
-``` 
+```
 
 
 
