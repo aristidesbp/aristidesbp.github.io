@@ -3041,7 +3041,7 @@ CREATE TABLE public.parcelas (
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="constates.js"></script>
+    <script src="constantes.js"></script>
     
     <style>
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
@@ -3057,11 +3057,15 @@ CREATE TABLE public.parcelas (
         
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* ADICIONADO: Estilos da zona de Drop idênticos ao do financeiro */
+        .drop-zone { border: 2px dashed #cbd5e1; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; background-color: #f8fafc; }
+        .drop-zone:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+        .drop-zone.dragover { border-color: #3ecf8e; background-color: #ecfdf5; }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
         <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
             <div class="text-center mb-8">
@@ -3085,10 +3089,8 @@ CREATE TABLE public.parcelas (
         </div>
     </div>
 
-    <!-- TELA DO SISTEMA -->
     <div id="tela-sistema" class="hidden">
         
-        <!-- NAV BAR -->
         <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
             <div class="flex items-center gap-4">
                 <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
@@ -3101,7 +3103,6 @@ CREATE TABLE public.parcelas (
             </button>
         </nav>
 
-        <!-- SIDEBAR MENU -->
         <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
             <div class="p-6 border-b border-slate-700 flex justify-between items-center">
                 <h2 class="text-xl font-bold"><i class="fas fa-bars text-emerald-500"></i> Menu</h2>
@@ -3115,7 +3116,7 @@ CREATE TABLE public.parcelas (
                 <li><a href="financeiro.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-wallet w-6"></i> Financeiro</a></li>
                 <li><a href="pdv.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> PDV Frente de Caixa</a></li>
                 <li><a href="produtos.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-boxes w-6"></i> Estoque</a></li>
-                <li><a href="clientes.html" class="block p-3 bg-slate-700 rounded transition"><i class="fas fa-users w-6"></i> Clientes / Entidades</a></li>
+                <li><a href="entidades.html" class="block p-3 bg-slate-700 rounded transition"><i class="fas fa-users w-6"></i> Entidades</a></li>
                 
                 <li><hr class="border-slate-700 my-4"></li>
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
@@ -3123,10 +3124,8 @@ CREATE TABLE public.parcelas (
         </div>
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
 
-        <!-- CONTEÚDO PRINCIPAL -->
         <div class="container mx-auto px-4 pb-10 pt-24">
             
-            <!-- DASHBOARD DE ENTIDADES -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="card border-l-4 border-emerald-500">
                     <p class="text-gray-500 text-sm">Total de Clientes</p>
@@ -3142,7 +3141,6 @@ CREATE TABLE public.parcelas (
                 </div>
             </div>
 
-            <!-- ALTERNADOR DE ABAS -->
             <div class="flex gap-4 mb-6">
                 <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
                     <i class="fas fa-list"></i> Ver Entidades
@@ -3152,7 +3150,6 @@ CREATE TABLE public.parcelas (
                 </button>
             </div>
 
-            <!-- FORMULÁRIO DE CADASTRO -->
             <div class="card mb-8 hidden" id="aba-formulario">
                 <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-user-plus"></i> Cadastro de Entidade</h3>
                 
@@ -3223,8 +3220,13 @@ CREATE TABLE public.parcelas (
                     </div>
                     
                     <div class="md:col-span-4">
-                        <label>URL da Foto do Perfil</label>
-                        <input type="text" id="f-foto" placeholder="https://linkdaimagem.com/foto.jpg">
+                        <label><i class="fas fa-image"></i> Foto de Perfil</label>
+                        <div class="drop-zone" id="drop-foto" onclick="document.getElementById('f-foto').click()">
+                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+                            <p class="text-xs text-slate-500">Clique ou arraste a imagem de perfil aqui</p>
+                            <input type="file" id="f-foto" accept="image/*" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-foto')">
+                            <p id="nome-foto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+                        </div>
                     </div>
                 </div>
                 
@@ -3238,7 +3240,6 @@ CREATE TABLE public.parcelas (
                 </div>
             </div>
 
-            <!-- LISTAGEM DE REGISTROS -->
             <div class="card" id="aba-listagem">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h3 class="font-bold text-slate-800"><i class="fas fa-users"></i> Entidades Cadastradas</h3>
@@ -3247,7 +3248,6 @@ CREATE TABLE public.parcelas (
                     </button>
                 </div>
 
-                <!-- FILTROS -->
                 <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
                     <div class="flex-1 min-w-[250px]">
                         <label class="text-xs">Buscar por Nome</label>
@@ -3272,7 +3272,6 @@ CREATE TABLE public.parcelas (
                     </div>
                 </div>
 
-                <!-- TABELA -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -3293,10 +3292,9 @@ CREATE TABLE public.parcelas (
         </div>
     </div> 
 
-    <!-- SCRIPT LOGIC -->
     <script>
-        // Configurações do Supabase obtidas do arquivo original
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        let usuarioLogadoId = null; // Guardará o ID do utilizador autenticado
 
         // CONTROLE DO MENU E ABAS
         function abrirMenu() {
@@ -3343,10 +3341,12 @@ CREATE TABLE public.parcelas (
                 telaLogin.classList.remove('hidden');
                 telaLogin.classList.add('flex');
                 telaSistema.classList.add('hidden');
+                usuarioLogadoId = null;
             } else {
                 telaLogin.classList.add('hidden');
                 telaLogin.classList.remove('flex');
                 telaSistema.classList.remove('hidden');
+                usuarioLogadoId = session.user.id; // Define o id obtido da sessão
                 init(); 
             }
         }
@@ -3376,14 +3376,53 @@ CREATE TABLE public.parcelas (
             verificar_login();
         }
 
-        document.addEventListener('DOMContentLoaded', verificar_login);
+        // Inicialização com os Event Listeners para a Drop Zone
+        document.addEventListener('DOMContentLoaded', () => {
+            verificar_login();
+            configurarDropZone('drop-foto', 'f-foto', 'nome-foto');
+        });
 
         function init() {
             loadDashboard();
             loadEntidades();
         }
 
-        // CONSUMO DE CEP (Utility Educativo)
+        // CONFIGURAÇÃO DRAG AND DROP (Igual ao módulo financeiro)
+        function configurarDropZone(dropId, inputId, txtId) {
+            const dropZone = document.getElementById(dropId);
+            const inputElement = document.getElementById(inputId);
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    inputElement.files = e.dataTransfer.files;
+                    mostrarNomeArquivo(inputElement, txtId);
+                }
+            });
+        }
+
+        function mostrarNomeArquivo(input, idCampoTexto) {
+            const campoTexto = document.getElementById(idCampoTexto);
+            if (input.files && input.files.length > 0) {
+                campoTexto.innerHTML = `<i class="fas fa-check"></i> ${input.files[0].name}`;
+            } else {
+                campoTexto.innerHTML = '';
+            }
+        }
+
+        // CONSUMO DE CEP
         async function buscarCEP(cep) {
             const limpo = cep.replace(/\D/g, '');
             if(limpo.length !== 8) return;
@@ -3417,7 +3456,7 @@ CREATE TABLE public.parcelas (
             document.getElementById('dash-inativos').innerText = inativos;
         }
 
-        // INSERT & UPDATE (CRUD)
+        // INSERT & UPDATE com Storage Upload integrado!
         async function salvarEntidade() {
             const btn = document.getElementById('btn-salvar');
             btn.disabled = true; btn.innerText = 'Salvando...';
@@ -3437,15 +3476,39 @@ CREATE TABLE public.parcelas (
                 const bairro = document.getElementById('f-bairro').value;
                 const cidade = document.getElementById('f-cidade').value;
                 const estado = document.getElementById('f-estado').value;
-                const foto = document.getElementById('f-foto').value;
+                
+                // Arquivo da foto selecionado na Drop Zone
+                const fileFoto = document.getElementById('f-foto').files[0];
 
                 if(!nome) throw new Error("O nome completo é obrigatório!");
 
+                let fotoUrlFinal = null;
+
+                // Processamento do Upload da Imagem para o bucket 'comprovantes'
+                if (fileFoto) {
+                    const fileName = `avatar_${Date.now()}_${fileFoto.name}`;
+                    const { error: uploadError } = await _supabase.storage
+                        .from('comprovantes')
+                        .upload(`public/${fileName}`, fileFoto);
+                    
+                    if(!uploadError) {
+                        fotoUrlFinal = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+                    } else {
+                        console.error("Erro no upload da foto: ", uploadError.message);
+                    }
+                }
+
+                // Montagem do payload estruturado conforme o seu Banco de Dados
                 const payload = {
                     nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
                     tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
-                    bairro, cidade, estado, foto_url: foto
+                    bairro, cidade, estado, user_id: usuarioLogadoId
                 };
+
+                // Se uma nova foto foi enviada, anexa ao payload
+                if(fotoUrlFinal) {
+                    payload.foto_url = fotoUrlFinal;
+                }
 
                 if(id) {
                     const { error } = await _supabase.from('entidades').update(payload).eq('id', id);
@@ -3528,7 +3591,10 @@ CREATE TABLE public.parcelas (
                 document.getElementById('f-bairro').value = e.bairro || '';
                 document.getElementById('f-cidade').value = e.cidade || '';
                 document.getElementById('f-estado').value = e.estado || '';
-                document.getElementById('f-foto').value = e.foto_url || '';
+                
+                // Limpa o input de arquivo ao carregar para edição
+                document.getElementById('f-foto').value = '';
+                document.getElementById('nome-foto').innerHTML = e.foto_url ? '<span class="text-blue-500"><i class="fas fa-image"></i> Possui foto cadastrada</span>' : '';
 
                 document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Registro';
                 document.getElementById('btn-cancelar').classList.remove('hidden');
@@ -3546,9 +3612,10 @@ CREATE TABLE public.parcelas (
             inputs.forEach(i => { if(i.id !== 'btn-salvar' && i.id !== 'btn-cancelar') i.value = ''; });
             document.getElementById('f-tipo-entidade').value = 'cliente';
             document.getElementById('f-status').value = 'ativo';
+            document.getElementById('nome-foto').innerHTML = '';
         }
 
-        // DELETE (Massa & Unidade)
+        // DELETE
         function toggleTodosChecks(source) {
             document.querySelectorAll('.check-entidade').forEach(cb => cb.checked = source.checked);
         }
