@@ -37,59 +37,8 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## ESTRUTURA UTILIZADA
-```
-# usarei SUPABASE E GITHUB_PAGES para esse projeto.
-# Utilizo meu github para testes e estudos, por isso vou separa por tipo de arquivo .
-# tambem utilizo desta forma devido automação em python que utilizo para organizar arquivos.
-# utiliso prefixos para separar e identificar os arquivos de cada projeto dentro das pastas.
-
-aristidesbp.github.io
-├── assets
-│   ├── apk
-│   ├── css
-│   ├── docx
-│   ├── html
-│   ├── jpeg
-│   ├── jpg
-│   ├── json
-│   ├── md
-│   ├── pdf
-│   ├── png
-│   ├── py
-│   ├── rels
-│   ├── sql
-│   ├── toml
-│   ├── ts
-│   ├── txt
-│   ├── xml
-│   └── zip
-│
-├── .env (na pasta local)
-├── index.html
-├── limpar_duplicado.py
-├── organizar.py
-└── README.md
-
-
-
-**OBSERVAÇÕES**
-
-## EXEMPLO DE CHAMADAS ENTRE PASTAS 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="../js/supabase_config.js"></script>
-<link rel="stylesheet href="../css/financeiro.css">
-
-## Armazenar as chaves secrtas no github 
-No seu navegador, vá até o seu repositório no GitHub.
-1. Clique em Settings (aba superior).
-2. No menu lateral esquerdo, procure por Secrets and variables -> Actions.
-3. Clique em New repository secret.
-4. Adicione o nome VITE_SUPABASE_URL e cole o valor. Repita para o VITE_SUPABASE_ANON_KEY.
-
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETOS COM O SUPABASE E GITHUB_PAGES
+# PROJETOS COM O SUPABASE E GITHUB_PAGES (todos os arquivos estao na pasta raiz)
 ```
 # Vamos criar uma  arquitetura full-stack (frontend e backend) para a plataforma
 "AristidesBP", um marketplace de serviços comunitário, onde pessoas de
