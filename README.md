@@ -870,1379 +870,14 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## supabase_config.js (funcionado)
-```
-// supabase_config.js
-// criar constantes com chave de acesso.
-const SUPABASE_KEY = 'Api_Keys/anon_key';
-const SUPABASE_URL = 'Data_api/url';
-console.log("✅ supabase_config.js");
-
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## login.html (funcionando)
-```
-<!DOCTYPE html>
-<html class="dark" lang="pt-BR">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP ABP</title>
-
-    
-    <!-- CONEXÃO SUPABASE -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-
-    
-    <!-- STYLE -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FIM DO STYLE -->
-
-    
-    <script>
-     //iciciando a conexao
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        // Exporta para ser usado em outros scripts
-        window.supabaseClient = _supabase;
-    </script>
-    <!-- FIM DO CONEXÃO SUPABASE -->
-
-</head>
-
-<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-
-
-    <!-- FORMULÁRIO -->
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
-            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
-        </div>
-        <!--
-        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
-            Entrar com Gmail
-        </button>
--->
-        <div class="relative mb-6 text-center border-b border-slate-800">
-            <span
-                class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou
-                e-mail</span>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
-                <input type="email" id="email" placeholder="seu@email.com"
-                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-            </div>
-
-            <div class="relative">
-                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
-                <input type="password" id="password" placeholder="••••••••"
-                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                <button type="button" onclick="alternarSenha()"
-                    class="absolute right-3 top-8 text-slate-500 hover:text-white">
-                    🔒
-                </button>
-            </div>
-
-            <div class="text-right">
-                <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a
-                    senha?</button>
-            </div>
-
-            <div class="flex gap-3 pt-2">
-                <button onclick="realizarLogin()"
-                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
-                    ENTRAR
-                </button>
-                <button onclick="confirmarCadastro()"
-                    class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-                    CADASTRAR
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- FIM DO FORMULÁRIO -->
-
-    <script>
-        
-        /**
-     * Nome do arquivo: alternar_senha.js
-     * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
-     */
-
-        function alternarSenha() {
-            // Busca o elemento de entrada pelo ID
-            const campo = document.getElementById('password');
-
-            if (campo) {
-                // Se for password, vira text (visível). Se for text, vira password (oculto).
-                campo.type = campo.type === 'password' ? 'text' : 'password';
-            }
-        }
-
-    </script>
-    <script>
-        /**
-         * Nome do arquivo: login_google.js
-         * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
-         */
-
-        async function loginComGoogle() {
-            const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    // Redireciona para o painel do ERP dentro do repositório
-                    redirectTo: window.location.origin + '/assets/erp/index.html'
-                }
-            });
-
-            if (error) {
-                console.error("Erro no login Google:", error.message);
-                alert("Erro ao conectar com Google: " + error.message);
-            }
-        }
-    </script>
-    <script>
-        /**
-     * Nome do arquivo: realizar_cadastro.js
-     * Objetivo: Criar uma nova conta de usuário no sistema.
-     */
-
-        async function realizarCadastro() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('password').value;
-
-            if (!email || !senha) {
-                alert("Preencha e-mail e senha primeiro!");
-                return;
-            }
-
-            // Cria o usuário no Supabase. 
-            // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
-            const { data, error } = await window.supabaseClient.auth.signUp({
-                email,
-                password: senha
-            });
-
-            if (error) {
-                alert("Erro no cadastro: " + error.message);
-            } else {
-                alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
-            }
-        }
-    </script>
-    <script>
-        /**
-         * Função de apoio para evitar cadastros acidentais (UX)
-         */
-        function confirmarCadastro() {
-            const email = document.getElementById('email').value;
-            if (!email) return alert("Digite um e-mail!");
-
-            if (confirm(`Deseja criar uma conta para: ${email}?`)) {
-                realizarCadastro();
-            }
-        }
-    </script>
-    <script>
-        /**
-       * Nome do arquivo: realizar_login.js
-       * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
-       */
-
-        async function realizarLogin() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('password').value;
-
-            // Validação básica de campos vazios
-            if (!email || !senha) {
-                alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
-                return;
-            }
-
-            try {
-                // Chamada oficial ao método de Sign In do Supabase
-                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: senha,
-                });
-
-                if (error) {
-                    console.error("Erro na autenticação:", error.message);
-                    alert("Erro ao entrar: " + error.message);
-                } else {
-                    console.log("Bem-vindo de volta!", data.user.email);
-                    // Redireciona para o painel principal após o sucesso
-                    window.location.href = 'index.html';
-                }
-            } catch (err) {
-                console.error("Ocorreu um erro inesperado no sistema:", err);
-            }
-        }  
-    </script>
-    <script>
-        /**
-     * Nome do arquivo: recuperar_senha.js
-     * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
-     */
-
-        async function solicitarRecuperacao() {
-            const email = document.getElementById('email').value;
-            if (!email) return alert("Digite seu e-mail.");
-
-            // O Supabase envia um link que redireciona o usuário para a página de redefinição
-            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-                redirectTo: 'redefinir_senha.html',
-            });
-
-            if (error) alert(error.message);
-            else alert("Link enviado! Verifique sua caixa de entrada.");
-        }
-
-        async function salvarNovaSenha() {
-            const novaSenha = document.getElementById('novaSenha').value;
-            if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
-
-            // Atualiza os dados do usuário que clicou no link de recuperação
-            const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
-
-            if (error) {
-                alert("Erro ao atualizar: " + error.message);
-            } else {
-                alert("Senha atualizada com sucesso!");
-                window.location.href = 'index.html';
-            }
-        }
-    </script>
-</body>
-
-</html>
+## constantes.js (funcionado)
+```  
+const supabaseKey = 'sua_anon_key';   
+const supabaseUrl = 'Sua_url';    
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# index.html
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA ERP ABP - Inicio</title>
-    
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-<!-- <link rel="stylesheet" href="css/index.css"> -->
- <style>   
-     /* index.css */
-        /* Configurações Gerais */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding-top: 80px; /* Espaço para a navbar fixa */
-        }
-
-        /* Grid de Cards */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-color: #3ecf8e;
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: #3ecf8e;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-nav {
-            background: #ef4444;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-home {
-            background: #3ecf8e !important;
-        }
-  
-</style>
-
-
-</head>
-<body>
-<!-- navbar -->
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- fim navbar -->
-
-<div class="content">      
-<div class="grid">
-
-<!-- cardes do menu-->
-
-    <a href="testes.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>testes</h3>
-    </a>
-    
-    
-    <a href="entidades.html" class="card">
-    <i class="fas fa-users"></i>
-    <h3>Gestão de Entidades</h3>
-    </a>
-
-    <a href="financeiro.html" class="card">
-    <i class="fas fa-hand-holding-usd"></i>
-    <h3>Financeiro</h3>
-    </a>
-
-    <a href="produtos.html" class="card">
-    <i class="fas fa-box"></i>
-    <h3>Produtos</h3>
-    </a>
-    
- 
-
-            
-            <a href="vitrine.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>vitrine</h3>
-            </a>
-            
-            <a href="pdv.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>pdv</h3>
-            </a>
-            
-             
-<!-- fim cardes do menu-->         
-</div>        
-</div>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-</body>
-</html>
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tarefas.html (funcionando)
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAREFAS - ERP ABP</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-    
-    <script src="https://unpkg.com/html5-qrcode"></script>
-
-    <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
-        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-        
-        .barcode-group { display: flex; gap: 5px; }
-        .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
-
-        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
-        .tag-pendente { background: #fef3c7; color: #92400e; }
-        .tag-realizada { background: #dcfce7; color: #166534; }
-        .tag-data { background: #e0f2fe; color: #0284c7; }
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-    </style>
-
-    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
-    <script src="supabase_config.js"></script>
-
-    <script>
-        // Inicializa o cliente usando as constantes do supabase_config.js
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let recordedAudioBlob = null;
-        let mediaRecorder;
-        let audioChunks = [];
-        let html5QrCode;
-
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) {
-                document.getElementById('tela-login').style.display = 'flex';
-                document.getElementById('tela-sistema').style.display = 'none';
-            } else {
-                document.getElementById('tela-login').style.display = 'none';
-                document.getElementById('tela-sistema').style.display = 'block';
-                loadtarefas(); 
-            }
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) alert("Erro: " + error.message);
-            else verificar_login();
-        }
-
-        document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-</head>
-<body>
-
-    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
-        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
-            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
-            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
-            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
-        </div>
-    </div>
-
-    <div id="tela-sistema" style="display: none;">
-        <div class="navbar">
-            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
-            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
-        </div>
-
-        <div class="container">
-            <div class="card">
-                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
-                <input type="hidden" id="edit-id">
-
-                <div class="section-title">Informações Básicas</div>
-                <div class="form-grid">
-                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
-                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
-                    <div>
-                        <label>Código de Barras</label>
-                        <div class="barcode-group">
-                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
-                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
-                                <i class="fas fa-barcode"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
-                    <div>
-                        <label>Status</label>
-                        <select id="status_exercicio">
-                            <option value="pendente">Pendente</option>
-                            <option value="realizada">Realizada</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="reader"></div>
-                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
-
-                <div class="section-title">Conteúdo do Exercício</div>
-                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
-
-                <div class="section-title">Mídias e Notas</div>
-                <div class="form-grid">
-                    <div>
-                        <label>Foto da Resolução</label>
-                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
-                    </div>
-                    <div>
-                        <label>Gravar Áudio</label>
-                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
-                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label>Observações do Responsável</label>
-                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
-                    </div>
-                </div>
-
-                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
-            </div>
-
-            <div class="card">
-                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
-                                <th class="p-4">Atividade / Categoria</th>
-                                <th class="p-4">Código</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4 text-center">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="exercises-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- FUNÇÕES DO SCANNER ---
-        function startScanner() {
-            const readerDiv = document.getElementById('reader');
-            const stopBtn = document.getElementById('btn-stop-scanner');
-            readerDiv.style.display = 'block';
-            stopBtn.style.display = 'block';
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
-            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                document.getElementById('codigo_de_barras').value = decodedText;
-                stopScanner();
-            }).catch(err => console.error(err));
-        }
-
-        function stopScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('reader').style.display = 'none';
-                    document.getElementById('btn-stop-scanner').style.display = 'none';
-                });
-            }
-        }
-
-        // --- ÁUDIO ---
-        async function toggleGravação() {
-            const btn = document.getElementById('btn-audio');
-            const preview = document.getElementById('audio-preview');
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
-            } else {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    preview.src = URL.createObjectURL(recordedAudioBlob);
-                    preview.style.display = 'block';
-                };
-                mediaRecorder.start();
-                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
-            }
-        }
-
-        // --- CRUD ---
-        async function loadtarefas() {
-            const { data, error } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
-            if (error) { console.error(error); return; }
-            const tbody = document.getElementById('exercises-list');
-            tbody.innerHTML = data.map(e => {
-                let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
-                return `
-                <tr class="border-t">
-                    <td class="p-4">
-                        <span class="font-bold text-slate-800">${e.titulo}</span><br>
-                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">${e.categoria || 'Geral'}</span>
-                        <span class="tag tag-data"><i class="far fa-calendar-alt"></i> ${prazo}</span>
-                    </td>
-                    <td class="p-4 font-mono text-sm text-slate-400">${e.codigo_de_barras || '-'}</td>
-                    <td class="p-4"><span class="tag tag-${e.status_exercicio}">${e.status_exercicio}</span></td>
-                    <td class="p-4 text-center">
-                        <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`}).join('');
-        }
-
-        async function handleSave() {
-            const btn = document.getElementById('btn-save');
-            btn.disabled = true; btn.innerText = "Salvando...";
-            try {
-                const id = document.getElementById('edit-id').value;
-                const { data: { user } } = await _supabase.auth.getUser();
-                const payload = {
-                    titulo: document.getElementById('titulo').value,
-                    descricao: document.getElementById('descricao').value,
-                    categoria: document.getElementById('categoria').value,
-                    codigo_de_barras: document.getElementById('codigo_de_barras').value,
-                    data_prazo: document.getElementById('data_prazo').value || null,
-                    status_exercicio: document.getElementById('status_exercicio').value,
-                    observacoes: document.getElementById('observacoes').value,
-                    user_id: user.id
-                };
-                
-                // Storage handling (simplificado)
-                const inputFoto = document.getElementById('foto_resolucao');
-                if (inputFoto.files[0]) {
-                    const fileName = `res_${Date.now()}.jpg`;
-                    await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
-                    payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-                }
-
-                const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
-                if (error) throw error;
-                resetForm(); loadtarefas();
-            } catch (e) { alert(e.message); }
-            finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
-        }
-
-        async function editFull(id) {
-            const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
-            if (data) {
-                document.getElementById('edit-id').value = data.id;
-                document.getElementById('titulo').value = data.titulo;
-                document.getElementById('descricao').value = data.descricao;
-                document.getElementById('categoria').value = data.categoria || '';
-                document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
-                document.getElementById('data_prazo').value = data.data_prazo || '';
-                document.getElementById('status_exercicio').value = data.status_exercicio;
-                document.getElementById('observacoes').value = data.observacoes || '';
-                document.getElementById('form-title').innerText = "Editando Atividade";
-                document.getElementById('btn-cancel').style.display = "block";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        async function deleteExercicio(id) {
-            if (confirm("Excluir?")) { await _supabase.from('tarefas').delete().eq('id', id); loadtarefas(); }
-        }
-
-        function resetForm() {
-            document.getElementById('edit-id').value = '';
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.getElementById('status_exercicio').value = 'pendente';
-            document.getElementById('form-title').innerText = "Nova Atividade";
-            document.getElementById('btn-cancel').style.display = "none";
-            recordedAudioBlob = null;
-            document.getElementById('audio-preview').style.display = 'none';
-        }
-
-        function filtrarTabela() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            document.querySelectorAll('#exercises-list tr').forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
-            });
-        }
-    </script>
-</body>
-    <!--
-    -- ============================================================================
--- SCRIPT: MÓDULO TAREFAS (GESTÃO DE EXERCÍCIOS)
--- ============================================================================
-
--- 1. Criação da Tabela com suporte a RLS e Identidade do Usuário
-CREATE TABLE IF NOT EXISTS public.tarefas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    titulo TEXT NOT NULL,
-    descricao TEXT,
-    categoria TEXT,
-    codigo_de_barras TEXT,
-    data_prazo DATE,
-    observacoes TEXT,
-    foto_url TEXT,
-    audio_url TEXT,
-    status_exercicio TEXT DEFAULT 'pendente' CHECK (status_exercicio IN ('pendente', 'realizada')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 2. Habilitar Row Level Security (RLS)
-ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
-
--- 3. Políticas de Segurança: O usuário só vê e edita o que é DELE
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Usuários podem gerenciar suas próprias tarefas') THEN
-        CREATE POLICY "Usuários podem gerenciar suas próprias tarefas" 
-        ON public.tarefas 
-        FOR ALL 
-        USING (auth.uid() = user_id) 
-        WITH CHECK (auth.uid() = user_id);
-    END IF;
-END $$;
-
--- 4. Configuração de Buckets para Mídias (Fotos e Áudios)
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('resolucoes', 'resolucoes', true) 
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('audios', 'audios', true) 
-ON CONFLICT (id) DO NOTHING;
-
--- 5. Políticas de Storage: Permitir upload apenas para usuários autenticados
--- Nota: 'public' no bucket permite leitura anônima via URL, mas o upload exige login.
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Upload autenticado em mídias') THEN
-        CREATE POLICY "Upload autenticado em mídias" 
-        ON storage.objects FOR INSERT 
-        WITH CHECK (auth.role() = 'authenticated');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Leitura pública de mídias') THEN
-        CREATE POLICY "Leitura pública de mídias" 
-        ON storage.objects FOR SELECT 
-        USING (bucket_id IN ('resolucoes', 'audios'));
-    END IF;
-END $$;
-    
-    -->
-</html>
-```
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# EXEMPLO DE CODIGO (SPA-entidades.html)
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Entidades - ERP ABP</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-    ```
-
-    <style>
-        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
-        
-        /* --- ESTILOS DO SISTEMA CRUD --- */
-        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
-        /* Ajuste para o botão de senha */
-        .password-wrapper { position: relative; display: flex; align-items: center; }
-        .password-wrapper i { position: absolute; right: 10px; cursor: pointer; color: #64748b; }
-        
-        /* Botões */
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-add:hover { opacity: 0.9; }
-        .btn-add:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-        
-        /* Tabela */
-        .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #f8fafc; padding: 15px; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; }
-        td { padding: 15px; border-top: 1px solid #f1f5f9; vertical-align: middle; }
-        
-        /* Elementos Visuais */
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .btn-nav { padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-logout { background: #ef4444; color: white; border: none; cursor: pointer; }
-        .tag { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
-        .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #eee; }
-
-        /* --- ESTILOS DA TELA DE LOGIN --- */
-        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--dark); }
-        .login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
-        .login-box h2 { margin-bottom: 20px; color: var(--dark); font-size: 24px; }
-        .login-box input { margin-bottom: 15px; }
-        .btn-login { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
-        .btn-login:hover { opacity: 0.9; }
-    </style>
-
-
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script>
-        // Configuração do Supabase (Atenção: substitui a chave abaixo pela tua verdadeira)
-        const SUPABASE_URL = 'https://xjmsksrhdedwrlanpmmi.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqbXNrc3JoZGVkd3JsYW5wbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNDE5ODQsImV4cCI6MjA5MDYxNzk4NH0.X2S4UZ3WGLoxx9LsNNbJ6-kyM0DAQoTr8wY57O6m4ZA'; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_key);
-
-        // --- FUNÇÕES DE AUTENTICAÇÃO E CONTROLE DE TELA ---
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            const telaLogin = document.getElementById('tela-login');
-            const telaSistema = document.getElementById('tela-sistema');
-
-            if (!session) {
-                telaLogin.style.display = 'flex';
-                telaSistema.style.display = 'none';
-            } else {
-                telaLogin.style.display = 'none';
-                telaSistema.style.display = 'block';
-                loadEntities(); 
-            }
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            
-            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
-
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) alert("Erro ao fazer login: " + error.message);
-            else {
-                document.getElementById('login-email').value = '';
-                document.getElementById('login-senha').value = '';
-                verificar_login(); 
-            }
-        }
-
-        async function sairDaConta() {
-            await _supabase.auth.signOut();
-            verificar_login();
-        }
-
-        document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-    
-    
-</head>
-<body>
-
-    <div id="tela-login" class="login-wrapper" style="display: none;">
-        <div class="login-box">
-            <h2><i class="fas fa-user-circle" style="color: var(--primary);"></i> Acesso ao Sistema</h2>
-            <input type="email" id="login-email" placeholder="Digite seu e-mail">
-            <input type="password" id="login-senha" placeholder="Digite sua senha">
-            <button class="btn-login" onclick="fazerLogin()">Entrar</button>
-        </div>
-    </div>
-
-    <div id="tela-sistema" style="display: none;">
-        
-        <div class="navbar">
-            <a href="menu.html" style="font-weight: bold; color: #0f172a; font-size: 1.2rem; text-decoration: none; cursor: pointer;">
-                <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-            </a>
-            <div class="flex gap-4">
-                <button class="btn-nav btn-logout" onclick="sairDaConta()"><i class="fas fa-sign-out-alt"></i> Sair do Sistema</button>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="card">
-                <h3 id="form-title" class="text-xl font-bold mb-4">Novo Cadastro de Entidade</h3>
-                <input type="hidden" id="edit-id">
-
-                <div class="section-title">Informações e Acesso</div>
-                <div class="form-grid">
-                    <div><label>Foto de Perfil</label><input type="file" id="foto" accept="image/*"></div>
-                    <div><label>Nome Completo *</label><input type="text" id="nome_completo"></div>
-                    <div><label>CPF / CNPJ</label><input type="text" id="cpf"></div>
-                    <div><label>Data Nascimento</label><input type="date" id="data_nascimento"></div>
-                    <div><label>E-mail</label><input type="email" id="email"></div>
-                    <div><label>Telefone *</label><input type="text" id="telefone"></div>
-                    <div>
-                        <label>Senha Interna (Auth)</label>
-                        <div class="password-wrapper">
-                            <input type="password" id="senha_acesso" placeholder="(Será gerido pelo Supabase Auth futuramente)">
-                            <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <label>Tipo de Acesso</label>
-                        <select id="tipo_acesso">
-                            <option value="cliente">Cliente</option>
-                            <option value="funcionario">Funcionário</option>
-                            <option value="master">Master</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Relacionamento</label>
-                        <select id="tipo_entidade">
-                            <option value="cliente">Cliente</option>
-                            <option value="fornecedor">Fornecedor</option>
-                            <option value="funcionario">Funcionário</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Status</label>
-                        <select id="status_entidade">
-                            <option value="ativo">Ativo</option>
-                            <option value="desativado">Desativado</option>
-                        </select>
-                    </div>
-                    <div><label>Avaliação (0-10)</label><input type="number" id="avaliacao" min="0" max="10" value="5"></div>
-                </div>
-
-                <div class="section-title">Endereço</div>
-                <div class="form-grid">
-                    <div><label>CEP</label><input type="text" id="cep" maxlength="8" onblur="buscaCEP()"></div>
-                    <div style="grid-column: span 2;"><label>Logradouro</label><input type="text" id="logradouro"></div>
-                    <div><label>Número</label><input type="text" id="numero"></div>
-                    <div><label>Bairro</label><input type="text" id="bairro"></div>
-                    <div><label>Cidade</label><input type="text" id="cidade"></div>
-                    <div><label>UF</label><input type="text" id="estado" maxlength="2"></div>
-                </div>
-
-                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Entidade</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
-            </div>
-
-            <div class="card">
-                <input type="text" id="inputBusca" placeholder="Filtrar por nome..." onkeyup="filtrarTabela()" class="mb-4">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Foto</th>
-                                <th>Nome / Tipo</th>
-                                <th>Contato</th>
-                                <th>Acesso / Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="entities-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Carregar dados na tabela
-        async function loadEntities() {
-            const { data, error } = await _supabase.from('entidades').select('*').order('nome_completo');
-            if (error) return console.error(error);
-            renderTable(data);
-        }
-
-        // Renderizar Tabela
-        function renderTable(data) {
-            const tbody = document.getElementById('entities-list');
-            tbody.innerHTML = data.map(e => {
-                const avatar = e.foto_url ? e.foto_url : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-                
-                return `
-                <tr>
-                    <td><img src="${avatar}" class="avatar-img" alt="Foto"></td>
-                    <td><strong>${e.nome_completo}</strong><br><small class="tag">${e.tipo_entidade || 'N/A'}</small></td>
-                    <td>${e.telefone || '-'}<br><small>${e.email || '-'}</small></td>
-                    <td><span class="tag">${e.tipo_acesso}</span> | ${e.status_entidade}</td>
-                    <td>
-                        <button class="text-blue-500 mr-2" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="text-red-500 mr-2" onclick="deleteEntity('${e.id}')"><i class="fas fa-trash"></i></button>
-                        <button class="text-green-500" onclick="window.open('https://wa.me/55${e.telefone?.replace(/\D/g,'')}')"><i class="fab fa-whatsapp"></i></button>
-                    </td>
-                </tr>
-                `;
-            }).join('');
-        }
-
-        // Salvar (Inserir ou Atualizar) com Upload de Foto
-        async function handleSave() {
-            const btnSave = document.getElementById('btn-save');
-            btnSave.disabled = true;
-            btnSave.innerText = "Salvando aguarde...";
-
-            try {
-                const id = document.getElementById('edit-id').value;
-                let fotoUrl = null;
-                const inputFoto = document.getElementById('foto');
-
-                // 1. Upload de Foto
-                if (inputFoto.files && inputFoto.files.length > 0) {
-                    const file = inputFoto.files[0];
-                    const fileExt = file.name.split('.').pop();
-                    const fileName = `${Date.now()}_${Math.random()}.${fileExt}`;
-                    
-                    const { data: uploadData, error: uploadError } = await _supabase.storage
-                        .from('avatares')
-                        .upload(`public/${fileName}`, file);
-
-                    if (uploadError) throw uploadError;
-
-                    const { data: publicUrlData } = _supabase.storage
-                        .from('avatares')
-                        .getPublicUrl(`public/${fileName}`);
-
-                    fotoUrl = publicUrlData.publicUrl;
-                }
-
-                // 2. Coletar campos
-                const campos = [
-                    'nome_completo', 'cpf', 'data_nascimento', 'email', 'telefone',
-                    'cep', 'logradouro', 'numero', 'bairro', 'cidade',
-                    'estado', 'avaliacao', 'tipo_acesso', 'tipo_entidade', 'status_entidade'
-                ];
-
-                const payload = {};
-                campos.forEach(c => {
-                    const el = document.getElementById(c);
-                    if (el) payload[c] = el.value === "" && el.type === "date" ? null : el.value;
-                });
-                
-                if (fotoUrl) payload.foto_url = fotoUrl;
-                
-                const { data: userData } = await _supabase.auth.getUser();
-                if(userData && userData.user) {
-                    payload.user_id = userData.user.id;
-                }
-
-                // 3. Salvar no Banco
-                const { error } = id 
-                    ? await _supabase.from('entidades').update(payload).eq('id', id)
-                    : await _supabase.from('entidades').insert([payload]);
-
-                if (error) throw error;
-                
-                alert("Sucesso!");
-                resetForm();
-                loadEntities();
-
-            } catch (error) {
-                alert("Erro: " + error.message);
-                console.error(error);
-            } finally {
-                btnSave.disabled = false;
-                btnSave.innerText = "Salvar Entidade";
-            }
-        }
-
-        // Editar
-        async function editFull(id) {
-            const { data } = await _supabase.from('entidades').select('*').eq('id', id).single();
-            if (!data) return;
-
-            Object.keys(data).forEach(key => {
-                const el = document.getElementById(key);
-                if (el && key !== 'foto') el.value = data[key] || '';
-            });
-
-            document.getElementById('edit-id').value = data.id;
-            document.getElementById('form-title').innerText = "Editando: " + data.nome_completo;
-            document.getElementById('btn-save').innerText = "Atualizar";
-            document.getElementById('btn-cancel').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Excluir
-        async function deleteEntity(id) {
-            if (!confirm("Excluir permanentemente?")) return;
-            await _supabase.from('entidades').delete().eq('id', id);
-            loadEntities();
-        }
-
-        // Reset
-        function resetForm() {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('form-title').innerText = "Novo Cadastro de Entidade";
-            document.getElementById('btn-save').innerText = "Salvar Entidade";
-            document.getElementById('btn-cancel').style.display = "none";
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = el.id === 'avaliacao' ? '5' : '');
-            document.getElementById('foto').value = ''; 
-        }
-
-        // Busca CEP
-        async function buscaCEP() {
-            const cep = document.getElementById('cep').value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                const data = await res.json();
-                if (!data.erro) {
-                    document.getElementById('logradouro').value = data.logradouro;
-                    document.getElementById('bairro').value = data.bairro;
-                    document.getElementById('cidade').value = data.localidade;
-                    document.getElementById('estado').value = data.uf;
-                }
-            }
-        }
-
-        // Filtro Tabela
-        function filtrarTabela() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            document.querySelectorAll('#entities-list tr').forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
-            });
-        }
-
-        // Visibilidade Senha
-        function togglePasswordVisibility() {
-            const input = document.getElementById('senha_acesso');
-            const icon = document.getElementById('togglePassword');
-            input.type = input.type === 'password' ? 'text' : 'password';
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        }
-    </script>
-
-<!-- 
--- ============================================================================
--- 0. LIMPEZA TOTAL DA VERSÃO ANTERIOR (DROP)
--- ============================================================================
--- Remove os gatilhos e funções antigas
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-DROP FUNCTION IF EXISTS public.handle_new_user();
--- CORREÇÃO AQUI: Procuramos na pasta public, não na auth
-DROP FUNCTION IF EXISTS public.get_user_role(); 
-
--- Remove as políticas do Storage antigas (se existirem)
-DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
-DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
-
--- Remove a tabela antiga e todas as políticas de segurança atreladas a ela
-DROP TABLE IF EXISTS public.entidades CASCADE;
-
-```
-```
--- ============================================================================
--- 1. CRIAÇÃO DA TABELA PRINCIPAL ATUALIZADA
--- ============================================================================
-CREATE TABLE public.entidades (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE, -- Vínculo de segurança com o Auth
-    nome_completo TEXT NOT NULL,
-    cpf TEXT,
-    data_nascimento DATE,
-    email TEXT,
-    telefone TEXT,
-    tipo_acesso TEXT DEFAULT 'cliente',
-    tipo_entidade TEXT DEFAULT 'cliente',
-    status_entidade TEXT DEFAULT 'ativo',
-    avaliacao INTEGER DEFAULT 5,
-    cep TEXT,
-    logradouro TEXT,
-    numero TEXT,
-    bairro TEXT,
-    cidade TEXT,
-    estado VARCHAR(2),
-    foto_url TEXT, -- Campo para armazenar o link da foto
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-```
-```
-
--- ============================================================================
--- 2. BLINDAGEM DA TABELA (ROW LEVEL SECURITY - RLS)
--- ============================================================================
--- Ativamos a segurança a nível de linha (ninguém acede sem permissão)
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
-
--- CORREÇÃO AQUI: Função segura criada na pasta 'public'
-CREATE OR REPLACE FUNCTION public.get_user_role() 
-RETURNS TEXT AS $$
-  SELECT tipo_acesso FROM public.entidades WHERE user_id = auth.uid() LIMIT 1;
-$$ LANGUAGE sql SECURITY DEFINER;
-
--- APLICAÇÃO DAS REGRAS POR CARGO:
-
--- REGRA MASTER: Tem poder absoluto
-CREATE POLICY "Master faz tudo" ON public.entidades 
-FOR ALL TO authenticated 
-USING (public.get_user_role() = 'master');
-
--- REGRA FUNCIONÁRIO: Pode ler, inserir e editar (Não pode apagar)
-CREATE POLICY "Funcionario le" ON public.entidades 
-FOR SELECT TO authenticated 
-USING (public.get_user_role() = 'funcionario');
-
-CREATE POLICY "Funcionario insere" ON public.entidades 
-FOR INSERT TO authenticated 
-WITH CHECK (public.get_user_role() = 'funcionario');
-
-CREATE POLICY "Funcionario atualiza" ON public.entidades 
-FOR UPDATE TO authenticated 
-USING (public.get_user_role() = 'funcionario');
-
--- REGRA CLIENTE/FORNECEDOR: O utilizador só vê e altera A SUA PRÓPRIA LINHA
-CREATE POLICY "Pessoa ve e edita os proprios dados" ON public.entidades 
-FOR ALL TO authenticated 
-USING (user_id = auth.uid())
-WITH CHECK (user_id = auth.uid());
-
-
--- ============================================================================
--- 3. AUTOMATIZAÇÃO SEGURA (TRIGGER DE REGISTO NOVO UTILIZADOR)
--- ============================================================================
--- Função que insere na tabela 'entidades' quando alguém se regista no Auth
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.entidades (user_id, email, nome_completo, status_entidade, tipo_acesso, tipo_entidade)
-  VALUES (
-    new.id, 
-    new.email, 
-    COALESCE(new.raw_user_meta_data->>'full_name', 'Utilizador Novo'),
-    'ativo',
-    'cliente',
-    'cliente'
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Cria o gatilho associando a função acima ao evento de novo usuário
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
-
--- ============================================================================
--- 4. SEGURANÇA DO STORAGE (IMPEDIR UPLOADS MALICIOSOS NO BUCKET 'avatares')
--- ============================================================================
--- Nota: Lembra-te que o bucket 'avatares' deve ser criado manualmente no painel Storage!
-
--- Permite que qualquer pessoa veja as fotos
-CREATE POLICY "Imagens publicas para visualizacao"
-ON storage.objects FOR SELECT TO public
-USING ( bucket_id = 'avatares' );
-
--- Permite que APENAS utilizadores logados façam upload
-CREATE POLICY "Upload apenas para logados"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK ( bucket_id = 'avatares' );
-
--- Permite que o utilizador edite ou apague apenas a sua própria foto
-CREATE POLICY "Usuario edita a propria foto"
-ON storage.objects FOR UPDATE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-CREATE POLICY "Usuario apaga a propria foto"
-ON storage.objects FOR DELETE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-    
-
-    -- ============================================================================
--- 4. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'avatares')
--- ============================================================================
-
--- A. LIMPEZA PREVENTIVA (Isto é o que evita o teu erro!)
-DROP POLICY IF EXISTS "Imagens publicas para visualizacao" ON storage.objects;
-DROP POLICY IF EXISTS "Upload apenas para logados" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario edita a propria foto" ON storage.objects;
-DROP POLICY IF EXISTS "Usuario apaga a propria foto" ON storage.objects;
-
-
--- B. CRIA O BUCKET AUTOMATICAMENTE (Se ele ainda não existir)
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('avatares', 'avatares', true)
-ON CONFLICT (id) DO NOTHING;
-
-
--- C. APLICA AS REGRAS DE SEGURANÇA
-CREATE POLICY "Imagens publicas para visualizacao"
-ON storage.objects FOR SELECT TO public
-USING ( bucket_id = 'avatares' );
-
-CREATE POLICY "Upload apenas para logados"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK ( bucket_id = 'avatares' );
-
-CREATE POLICY "Usuario edita a propria foto"
-ON storage.objects FOR UPDATE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
-
-CREATE POLICY "Usuario apaga a propria foto"
-ON storage.objects FOR DELETE TO authenticated
-USING ( bucket_id = 'avatares' AND auth.uid() = owner );
--->
-```
-    </body>
-</html>
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# financeiro (completo funcionando)
+# financeiro.html
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -2256,6 +891,7 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="constantes.js"></script>
     
     <style>
         :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
@@ -2332,6 +968,16 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
             <ul class="p-4 space-y-2 font-medium">
                 <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lançamentos</a></li>
                 <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Novo Lançamento</a></li>
+                
+                
+                 <!-- Nova Seção: Outras Páginas do ERP -->
+                <span class="text-xs text-slate-500 uppercase tracking-wider block pl-3 pt-4">Módulos</span>
+                <li><a href="financeiro.html"class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> Financeiro</a></li>
+                <li><a href="pdv.html"       class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> PDV Frente de Caixa</a></li>
+                <li><a href="produtos.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-chart-pie w-6"></i> Estoque </a></li>
+                <li><a href="clientes.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-users w-6"></i> Clientes / Entidades</a></li>
+                
+                
                 <li><hr class="border-slate-700 my-4"></li>
                 <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
             </ul>
@@ -2535,19 +1181,14 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
             </div>
         </div>
     </div> 
-    
+
+
     <script>
-        // Configuração do Supabase
-        const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Configuração do Supabase      
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let entidadesCache = [];
         let html5QrCode = null;
-
-        
-```
-```
 
 //====================================================================
         // CONTROLE DO MENU HAMBÚRGUER E ABAS
@@ -2907,8 +1548,7 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
             loadParcelas();
         }
 
-```
-```
+
         async function loadParcelas() {
             const busca = document.getElementById('filtro-busca').value;
             const categoria = document.getElementById('filtro-categoria').value;
@@ -3042,481 +1682,1951 @@ USING ( bucket_id = 'avatares' AND auth.uid() = owner );
         }
     </script>
 </body>
-```
-```
-  <!--
-     -- ============================================================================
--- 1. CRIAÇÃO DAS TABELAS FINANCEIRAS
--- ============================================================================
 
--- Tabela Pai: Lançamento Financeiro Geral (O "Cabeçalho" da conta)
+<!--
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.entidades (
+  user_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+  foto_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
 CREATE TABLE public.financas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    -- O default auth.uid() preenche automaticamente com o ID de quem está logado
-    user_id UUID DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    entidade_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL, -- Se apagar o cliente, a conta financeira não some
-    descricao TEXT NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL,
-    tipo TEXT CHECK (tipo IN ('receita', 'despesa')),
-    num_parcelas INTEGER DEFAULT 1,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  entidade_id uuid,
+  descricao text NOT NULL,
+  valor_total numeric NOT NULL,
+  tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  num_parcelas integer DEFAULT 1,
+  categoria text DEFAULT 'Geral'::text,
+  status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financas_pkey PRIMARY KEY (id),
+  CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
 );
-
--- Tabela Filha: Parcelas Individuais (As "Linhas" de pagamento)
 CREATE TABLE public.parcelas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    financa_id UUID REFERENCES public.financas(id) ON DELETE CASCADE, -- Se apagar o "cabeçalho", apaga as parcelas junto
-    num_parcela INTEGER NOT NULL,
-    valor_parcela DECIMAL(10,2) NOT NULL,
-    data_vencimento DATE NOT NULL,
-    data_pagamento DATE,
-    status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago', 'atrasado')),
-    codigo_barra TEXT,       -- Campo para o leitor de barras
-    boleto_url TEXT,         -- Link do boleto salvo no storage
-    comprovante_url TEXT,    -- Link do comprovante salvo no storage
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  financa_id uuid,
+  num_parcela integer NOT NULL,
+  valor_parcela numeric NOT NULL,
+  data_vencimento date NOT NULL,
+  data_pagamento date,
+  codigo_barra text,
+  boleto_url text,
+  comprovante_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  status text DEFAULT 'pendente'::text CHECK (status = ANY (ARRAY['pendente'::text, 'pago'::text, 'atrasado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT parcelas_pkey PRIMARY KEY (id),
+  CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
 );
 
--- ============================================================================
--- 2. SEGURANÇA DOS DADOS (ROW LEVEL SECURITY - RLS)
--- ============================================================================
-
-ALTER TABLE public.financas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
-
--- Regras para Finanças (Usuário só acessa as contas que ele mesmo criou)
-CREATE POLICY "Pessoa ve as proprias financas" ON public.financas FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa insere as proprias financas" ON public.financas FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "Pessoa atualiza as proprias financas" ON public.financas FOR UPDATE USING (auth.uid() = user_id);
-CREATE POLICY "Pessoa apaga as proprias financas" ON public.financas FOR DELETE USING (auth.uid() = user_id);
-
--- Regras para Parcelas (Usuário só acessa parcelas amarradas às suas finanças)
-CREATE POLICY "Pessoa ve as proprias parcelas" ON public.parcelas FOR SELECT USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa insere as proprias parcelas" ON public.parcelas FOR INSERT WITH CHECK (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa atualiza as proprias parcelas" ON public.parcelas FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-CREATE POLICY "Pessoa apaga as proprias parcelas" ON public.parcelas FOR DELETE USING (
-    EXISTS (SELECT 1 FROM public.financas WHERE financas.id = parcelas.financa_id AND financas.user_id = auth.uid())
-);
-
--- ============================================================================
--- 3. CRIAÇÃO E SEGURANÇA DO STORAGE (BUCKET 'comprovantes')
--- ============================================================================
-
--- Cria o bucket 'comprovantes' automaticamente se ele ainda não existir
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('comprovantes', 'comprovantes', true)
-ON CONFLICT (id) DO NOTHING;
-
--- Aplica as Regras de quem pode mexer nos arquivos
-CREATE POLICY "Comprovantes publicos" ON storage.objects FOR SELECT TO public USING ( bucket_id = 'comprovantes' );
-CREATE POLICY "Upload de comprovantes" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id = 'comprovantes' );
-CREATE POLICY "Edicao de comprovantes" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner );
-CREATE POLICY "Delecao de comprovantes" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id = 'comprovantes' AND auth.uid() = owner ); 
-      
-    
-
--- ============================================================================
--- ATUALIZAÇÃO DA TABELA 'financas'
--- ============================================================================
-
--- 1. Adiciona o campo 'categoria' com um valor padrão para não quebrar registros antigos
-ALTER TABLE public.financas 
-ADD COLUMN IF NOT EXISTS categoria TEXT DEFAULT 'Geral';
-
--- 2. Adiciona o campo 'status_lancamento' com validação (CHECK) para aceitar apenas os 3 status definidos
-ALTER TABLE public.financas 
-ADD COLUMN IF NOT EXISTS status_lancamento TEXT DEFAULT 'aberto' 
-CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado'));
-
--- ============================================================================
--- (OPCIONAL) ATUALIZAR REGISTROS ANTIGOS
--- Caso você já tenha dados cadastrados e queira garantir que todos tenham a
--- categoria 'Geral' e o status 'aberto' preenchidos (caso o default não aplique nos antigos)
--- ============================================================================
-
-UPDATE public.financas 
-SET categoria = 'Geral' 
-WHERE categoria IS NULL;
-
-UPDATE public.financas 
-SET status_lancamento = 'aberto' 
-WHERE status_lancamento IS NULL;
-    -->
+-->
 </html>
+
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TAREFAS
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# pdv
 ```
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento Pedagógico - ERP ABP</title>
-
+    <title>PDV Frente de Caixa - ERP ABP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <script src="https://unpkg.com/html5-qrcode"></script>
-
-    <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
-        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-        
-        /* Estilo para o campo de código de barras com botão */
-        .barcode-group { display: flex; gap: 5px; }
-        .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        /* Container do Scanner */
-        #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
-
-        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
-        .tag-pendente { background: #fef3c7; color: #92400e; }
-        .tag-realizada { background: #dcfce7; color: #166534; }
-        .tag-data { background: #e0f2fe; color: #0284c7; }
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-    </style>
-
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="constantes.js"></script>
+    
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        .status-receita { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-despesa { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        
+        label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
+            <div class="text-center mb-8">
+                <i class="fas fa-cash-register text-5xl text-emerald-500 mb-3"></i>
+                <h2 class="text-2xl font-bold text-slate-800">ERP PDV</h2>
+                <p class="text-slate-500 text-sm mt-1">Faça login para operar o Caixa</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold text-slate-700">E-mail</label>
+                    <input type="email" id="login-email" placeholder="seu@email.com" onkeyup="if(event.key === 'Enter') document.getElementById('login-senha').focus()">
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-slate-700">Senha</label>
+                    <input type="password" id="login-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') fazerLogin()">
+                </div>
+                <button id="btn-login" onclick="fazerLogin()" class="w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg mt-2">
+                    Entrar no Caixa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-sistema" class="hidden">
+        
+        <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-cash-register text-emerald-500"></i> Frente de Caixa PDV</h1>
+            </div>
+            <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
+                <span class="hidden sm:inline">Fechar Caixa</span> <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </nav>
+
+        <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
+            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-xl font-bold"><i class="fas fa-cash-register text-emerald-500"></i> Menu PDV</h2>
+                <button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            <ul class="p-4 space-y-2 font-medium">
+                <li><a href="#" onclick="alternarAba('pdv'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-shopping-cart w-6"></i> Frente de Caixa</a></li>
+                <li><a href="#" onclick="alternarAba('sangria'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-money-bill-wave w-6"></i> Sangria de Caixa</a></li>
+                
+                     <!-- Nova Seção: Outras Páginas do ERP -->
+                <span class="text-xs text-slate-500 uppercase tracking-wider block pl-3 pt-4">Módulos</span>
+                <li><a href="financeiro.html"class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> Financeiro</a></li>
+                <li><a href="pdv.html"       class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> PDV Frente de Caixa</a></li>
+                <li><a href="produtos.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-chart-pie w-6"></i> Estoque </a></li>
+                <li><a href="clientes.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-users w-6"></i> Clientes / Entidades</a></li>
+                
+                <li><hr class="border-slate-700 my-4"></li>
+                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair / Fechar Caixa</a></li>
+            </ul>
+        </div>
+        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
+
+        <div class="container mx-auto px-4 pb-10 pt-24">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="card border-l-4 border-emerald-500">
+                    <p class="text-gray-500 text-sm">Vendas Concluídas (Hoje)</p>
+                    <h2 id="dash-vendas-hoje" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+                </div>
+                <div class="card border-l-4 border-red-500">
+                    <p class="text-gray-500 text-sm">Total de Sangrias (Hoje)</p>
+                    <h2 id="dash-sangrias-hoje" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+                </div>
+                <div class="card border-l-4 border-blue-500">
+                    <p class="text-gray-500 text-sm">Itens no Carrinho Atual</p>
+                    <h2 id="dash-itens-carrinho" class="text-2xl font-bold text-blue-600">0</h2>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mb-6">
+                <button onclick="alternarAba('pdv')" id="btn-aba-pdv" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-shopping-cart"></i> Frente de Caixa (Vender)
+                </button>
+                <button onclick="alternarAba('sangria')" id="btn-aba-sangria" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-money-bill-wave"></i> Realizar Sangria / Histórico
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="aba-pdv">
+                
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="card">
+                        <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-search-plus"></i> BIPAR OU BUSCAR PRODUTO</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                            <div class="md:col-span-2">
+                                <label>Pesquisar ou Selecionar Produto</label>
+                                <select id="pdv-select-produto" onchange="adicionarDoSelect()">
+                                    <option value="">Selecione um produto para adicionar...</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button onclick="iniciarLeituraCamera()" class="w-full bg-slate-800 text-white p-2.5 rounded hover:bg-slate-700 transition flex items-center justify-center gap-2 font-bold text-sm">
+                                    <i class="fas fa-camera"></i> Ler Cód. Barras
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="camera-container" class="hidden mt-4 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+                            <div id="camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+                            <button onclick="pararCamera()" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-shopping-basket"></i> Itens da Venda</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
+                                        <th class="p-3">Item / Código</th>
+                                        <th class="p-3 text-center" style="width: 130px;">Qtd</th>
+                                        <th class="p-3 text-right">Unitário</th>
+                                        <th class="p-3 text-right">Subtotal</th>
+                                        <th class="p-3 text-center">Remover</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="carrinho-corpo" class="text-sm">
+                                    </tbody>
+                            </table>
+                            <div id="carrinho-vazio" class="text-center text-slate-400 py-8">
+                                <i class="fas fa-shopping-cart text-4xl mb-2 block"></i>
+                                Carrinho de compras vazio.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1">
+                    <div class="card sticky top-24 bg-slate-900 text-white">
+                        <h3 class="font-bold text-lg mb-4 border-b border-slate-700 pb-2 text-emerald-400"><i class="fas fa-calculator"></i> FECHAMENTO DA VENDA</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-slate-300">Cliente / Entidade Opcional</label>
+                                <select id="pdv-cliente" class="bg-slate-800 border-slate-700 text-white">
+                                    <option value="">Consumidor Final (Não identificado)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-slate-300">Desconto Total (R$)</label>
+                                <input type="number" id="pdv-desconto" value="0.00" step="0.01" min="0" oninput="recalcularTotais()" class="bg-slate-800 border-slate-700 text-white">
+                            </div>
+
+                            <div>
+                                <label class="text-slate-300">Forma de Pagamento *</label>
+                                <select id="pdv-forma-pagamento" class="bg-slate-800 border-slate-700 text-white font-bold text-emerald-400">
+                                    <option value="Dinheiro">Dinheiro (Espécie)</option>
+                                    <option value="PIX">PIX / Transferência</option>
+                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                    <option value="Cartão de Débito">Cartão de Débito</option>
+                                </select>
+                            </div>
+
+                            <div class="border-t border-slate-700 pt-4 mt-2">
+                                <div class="flex justify-between text-sm text-slate-400">
+                                    <span>Subtotal:</span>
+                                    <span id="resumo-subtotal">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between text-sm text-red-400">
+                                    <span>Desconto:</span>
+                                    <span id="resumo-desconto">- R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between items-center mt-2 border-t border-dashed border-slate-700 pt-2">
+                                    <span class="font-bold text-lg text-slate-200">TOTAL A PAGAR:</span>
+                                    <span id="resumo-total" class="text-3xl font-extrabold text-emerald-400">R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <button onclick="finalizarVendaPDV()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold py-4 rounded transition shadow-lg text-base mt-4 flex items-center justify-center gap-2">
+                                <i class="fas fa-check-circle text-xl"></i> CONFIRMAR E EMITIR (F8)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 hidden" id="aba-sangria">
+                <div class="card">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-hand-holding-usd text-red-500"></i> Executar Sangria de Caixa (Retirada Urgente)</h3>
+                    <p class="text-xs text-slate-500 mb-4">A sangria gera automaticamente um lançamento de <strong>Despesa (Saída)</strong> já finalizado na sua tabela financeira.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label>Valor da Retirada (R$) *</label>
+                            <input type="number" id="sangria-valor" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label>Motivo / Justificativa da Saída *</label>
+                            <input type="text" id="sangria-motivo" placeholder="Ex: Sangria para depósito bancário, Troco ou Compra emergencial">
+                        </div>
+                    </div>
+                    <button onclick="salvarSangria()" class="mt-4 bg-red-500 text-white font-bold py-2.5 px-6 rounded hover:bg-red-600 transition shadow">
+                        <i class="fas fa-arrow-down"></i> Confirmar Saída / Sangria
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-history"></i> Últimas Movimentações Financeiras do Caixa (Hoje)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
+                                    <th class="p-3">Horário</th>
+                                    <th class="p-3">Descrição da Operação</th>
+                                    <th class="p-3">Categoria</th>
+                                    <th class="p-3 text-center">Tipo</th>
+                                    <th class="p-3 text-right">Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-fluxo-caixa" class="text-sm">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <script>
-        const supabaseUrl = 'https://wyusolfkxrnwijwjusnv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dXNvbGZreHJud2lqd2p1c252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NzU0MTMsImV4cCI6MjA5MTA1MTQxM30.RJ0GOHHP4rB40CH0x8JZ1FWAzNcakSprgUwOBtOUVbA'; 
+        // Configuração do Supabase (Mesma dos arquivos anteriores) 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        let recordedAudioBlob = null;
-        let mediaRecorder;
-        let audioChunks = [];
-        let html5QrCode;
+        let html5QrCode = null;
+        let produtosCache = [];
+        let carrinho = [];
+
+        function abrirMenu() {
+            document.getElementById('sidebar-menu').classList.remove('-translate-x-full');
+            document.getElementById('menu-overlay').classList.remove('hidden');
+        }
+
+        function fecharMenu() {
+            document.getElementById('sidebar-menu').classList.add('-translate-x-full');
+            document.getElementById('menu-overlay').classList.add('hidden');
+        }
+
+        function alternarAba(abaAtiva) {
+            const pdv = document.getElementById('aba-pdv');
+            const sangria = document.getElementById('aba-sangria');
+            const btnPdv = document.getElementById('btn-aba-pdv');
+            const btnSangria = document.getElementById('btn-aba-sangria');
+
+            const classesVerde = ['bg-emerald-500', 'text-white', 'hover:bg-emerald-600'];
+            const classesCinza = ['bg-slate-200', 'text-slate-700', 'hover:bg-slate-300'];
+
+            btnPdv.classList.remove(...classesVerde, ...classesCinza);
+            btnSangria.classList.remove(...classesVerde, ...classesCinza);
+
+            if (abaAtiva === 'pdv') {
+                pdv.classList.remove('hidden');
+                sangria.classList.add('hidden');
+                btnPdv.add(...classesVerde);
+                btnSangria.add(...classesCinza);
+            } else {
+                pdv.classList.add('hidden');
+                sangria.classList.remove('hidden');
+                btnSangria.add(...classesVerde);
+                btnPdv.add(...classesCinza);
+                loadHistoricoCaixa();
+            }
+        }
 
         async function verificar_login() {
             const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
+
             if (!session) {
-                document.getElementById('tela-login').style.display = 'flex';
-                document.getElementById('tela-sistema').style.display = 'none';
+                telaLogin.classList.remove('hidden');
+                telaLogin.classList.add('flex');
+                telaSistema.classList.add('hidden');
             } else {
-                document.getElementById('tela-login').style.display = 'none';
-                document.getElementById('tela-sistema').style.display = 'block';
-                loadExercicios(); 
+                telaLogin.classList.add('hidden');
+                telaLogin.classList.remove('flex');
+                telaSistema.classList.remove('hidden');
+                init(); 
             }
         }
 
         async function fazerLogin() {
             const email = document.getElementById('login-email').value;
             const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+
+            btn.innerText = 'Autenticando Caixa...';
+            btn.disabled = true;
+
             const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) alert("Erro: " + error.message);
-            else verificar_login();
+            
+            if (error) {
+                alert("Erro ao fazer login no PDV.");
+                btn.innerText = 'Entrar no Caixa';
+                btn.disabled = false;
+            } else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                btn.innerText = 'Entrar no Caixa';
+                btn.disabled = false;
+                verificar_login(); 
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-</head>
-<body>
-
-    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
-        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
-            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
-            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
-            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
-        </div>
-    </div>
-
-    <div id="tela-sistema" style="display: none;">
-        <div class="navbar">
-            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
-            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut(); verificar_login();">Sair</button>
-        </div>
-
-        <div class="container">
-            <div class="card">
-                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
-                <input type="hidden" id="edit-id">
-
-                <div class="section-title">Informações Básicas</div>
-                <div class="form-grid">
-                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
-                    
-                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
-                    
-                    <div>
-                        <label>Código de Barras</label>
-                        <div class="barcode-group">
-                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
-                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
-                                <i class="fas fa-barcode"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
-                    <div>
-                        <label>Status</label>
-                        <select id="status_exercicio">
-                            <option value="pendente">Pendente</option>
-                            <option value="realizada">Realizada</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="reader"></div>
-                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
-
-                <div class="section-title">Conteúdo do Exercício</div>
-                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
-
-                <div class="section-title">Mídias e Notas</div>
-                <div class="form-grid">
-                    <div>
-                        <label>Foto da Resolução</label>
-                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
-                    </div>
-                    <div>
-                        <label>Gravar Áudio</label>
-                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
-                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label>Observações do Responsável</label>
-                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
-                    </div>
-                </div>
-
-                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
-            </div>
-
-            <div class="card">
-                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
-                                <th class="p-4">Atividade / Categoria</th>
-                                <th class="p-4">Código</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4 text-center">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="exercises-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- FUNÇÕES DO SCANNER DE CÓDIGO DE BARRAS ---
-        function startScanner() {
-            const readerDiv = document.getElementById('reader');
-            const stopBtn = document.getElementById('btn-stop-scanner');
-            readerDiv.style.display = 'block';
-            stopBtn.style.display = 'block';
-
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
-
-            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                document.getElementById('codigo_de_barras').value = decodedText;
-                stopScanner();
-                alert("Código lido: " + decodedText);
-            }).catch(err => console.error("Erro ao iniciar câmera: ", err));
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            fecharMenu();
+            verificar_login();
         }
 
-        function stopScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('reader').style.display = 'none';
-                    document.getElementById('btn-stop-scanner').style.display = 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            verificar_login();
+            
+            // Atalho de Teclado F8 para Finalizar Venda rápido
+            window.addEventListener('keydown', (e) => {
+                if(e.key === 'F8') {
+                    e.preventDefault();
+                    finalizarVendaPDV();
+                }
+            });
+        });
+
+        async function init() {
+            await fetchProdutosPDV();
+            await fetchEntidadesPDV();
+            await loadDashboardPDV();
+        }
+
+        // Busca produtos ativos em estoque para o Caixa
+        async function fetchProdutosPDV() {
+            const { data, error } = await _supabase.from('produtos').select('*').order('nome', { ascending: true });
+            if (!error && data) {
+                produtosCache = data;
+                const select = document.getElementById('pdv-select-produto');
+                select.innerHTML = '<option value="">Selecione um produto para adicionar...</option>';
+                data.forEach(p => {
+                    select.innerHTML += `<option value="${p.id}">${p.nome} - R$ ${parseFloat(p.preco_venda).toFixed(2)} (Estoque: ${p.quantidade_estoque})</option>`;
                 });
             }
         }
 
-        // --- FUNÇÕES DE ÁUDIO ---
-        async function toggleGravação() {
-            const btn = document.getElementById('btn-audio');
-            const preview = document.getElementById('audio-preview');
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
-            } else {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    preview.src = URL.createObjectURL(recordedAudioBlob);
-                    preview.style.display = 'block';
-                };
-                mediaRecorder.start();
-                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
+        // Busca clientes para associação na venda
+        async function fetchEntidadesPDV() {
+            const { data, error } = await _supabase.from('entidades').select('id, nome_completo').order('nome_completo', { ascending: true });
+            if (!error && data) {
+                const select = document.getElementById('pdv-cliente');
+                select.innerHTML = '<option value="">Consumidor Final (Não identificado)</option>';
+                data.forEach(e => {
+                    select.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`;
+                });
             }
         }
 
-        // --- CRUD ---
-        async function loadExercicios() {
-            const { data } = await _supabase.from('exercicios').select('*').order('created_at', { ascending: false });
-            const tbody = document.getElementById('exercises-list');
-            tbody.innerHTML = data.map(e => {
-                let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
-                return `
-                <tr class="border-t">
-                    <td class="p-4">
-                        <span class="font-bold text-slate-800">${e.titulo}</span><br>
-                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">${e.categoria || 'Geral'}</span>
-                        <span class="tag tag-data"><i class="far fa-calendar-alt"></i> ${prazo}</span>
-                    </td>
-                    <td class="p-4 font-mono text-sm text-slate-400">${e.codigo_de_barras || '-'}</td>
-                    <td class="p-4"><span class="tag tag-${e.status_exercicio}">${e.status_exercicio}</span></td>
-                    <td class="p-4 text-center">
-                        <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `}).join('');
-        }
-
-        async function handleSave() {
-            const btn = document.getElementById('btn-save');
-            btn.disabled = true; btn.innerText = "Salvando...";
+        // Leitor de código de barras por câmera (Idêntico ao original)
+        function iniciarLeituraCamera() {
+            const container = document.getElementById('camera-container');
+            container.classList.remove('hidden');
+            html5QrCode = new Html5Qrcode("camera-preview");
+            const config = { fps: 10, qrbox: { width: 280, height: 140 } };
             
-            try {
-                const id = document.getElementById('edit-id').value;
-                const { data: userData } = await _supabase.auth.getUser();
-
-                const payload = {
-                    titulo: document.getElementById('titulo').value,
-                    descricao: document.getElementById('descricao').value,
-                    categoria: document.getElementById('categoria').value,
-                    codigo_de_barras: document.getElementById('codigo_de_barras').value,
-                    data_prazo: document.getElementById('data_prazo').value || null,
-                    status_exercicio: document.getElementById('status_exercicio').value,
-                    observacoes: document.getElementById('observacoes').value,
-                    user_id: userData.user.id
-                };
-
-                const inputFoto = document.getElementById('foto_resolucao');
-                if (inputFoto.files[0]) {
-                    const fileName = `res_${Date.now()}.jpg`;
-                    await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
-                    payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-                }
-
-                if (recordedAudioBlob) {
-                    const audioName = `audio_${Date.now()}.webm`;
-                    await _supabase.storage.from('audios').upload(`public/${audioName}`, recordedAudioBlob);
-                    payload.audio_url = _supabase.storage.from('audios').getPublicUrl(`public/${audioName}`).data.publicUrl;
-                }
-
-                const { error } = id ? await _supabase.from('exercicios').update(payload).eq('id', id) : await _supabase.from('exercicios').insert([payload]);
-                if (error) throw error;
-                resetForm(); loadExercicios();
-            } catch (e) { alert(e.message); }
-            finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
-        }
-
-        async function editFull(id) {
-            const { data } = await _supabase.from('exercicios').select('*').eq('id', id).single();
-            document.getElementById('edit-id').value = data.id;
-            document.getElementById('titulo').value = data.titulo;
-            document.getElementById('descricao').value = data.descricao;
-            document.getElementById('categoria').value = data.categoria || '';
-            document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
-            document.getElementById('data_prazo').value = data.data_prazo || '';
-            document.getElementById('status_exercicio').value = data.status_exercicio;
-            document.getElementById('observacoes').value = data.observacoes || '';
-            
-            document.getElementById('form-title').innerText = "Editando Atividade";
-            document.getElementById('btn-cancel').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function deleteExercicio(id) {
-            if (confirm("Excluir?")) { await _supabase.from('exercicios').delete().eq('id', id); loadExercicios(); }
-        }
-
-        function resetForm() {
-            document.getElementById('edit-id').value = '';
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.getElementById('status_exercicio').value = 'pendente';
-            document.getElementById('form-title').innerText = "Nova Atividade";
-            document.getElementById('btn-cancel').style.display = "none";
-            recordedAudioBlob = null;
-            document.getElementById('audio-preview').style.display = 'none';
-        }
-
-        function filtrarTabela() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            document.querySelectorAll('#exercises-list tr').forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                adicionarPorCodigoBarras(decodedText);
+                pararCamera();
+            }).catch(() => { 
+                alert("Permissão de câmera negada ou dispositivo não encontrado."); 
+                container.classList.add('hidden'); 
             });
         }
+
+        function pararCamera() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => { document.getElementById('camera-container').classList.add('hidden'); });
+            } else { document.getElementById('camera-container').classList.add('hidden'); }
+        }
+
+        // Adiciona item se bipado pelo código de barras
+        function adicionarPorCodigoBarras(codigo) {
+            const prod = produtosCache.find(p => p.codigo_barras === codigo.trim());
+            if (prod) {
+                adicionarAoCarrinho(prod);
+            } else {
+                alert(`Produto com código [${codigo}] não foi localizado no estoque.`);
+            }
+        }
+
+        function adicionarDoSelect() {
+            const select = document.getElementById('pdv-select-produto');
+            if(!select.value) return;
+            const prod = produtosCache.find(p => p.id === select.value);
+            if(prod) adicionarAoCarrinho(prod);
+            select.value = ''; // Reseta
+        }
+
+        // Gerenciamento Interno do Carrinho
+        function adicionarAoCarrinho(produto) {
+            const itemExistente = carrinho.find(item => item.id === produto.id);
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+            } else {
+                carrinho.push({ ...produto, quantidade: 1 });
+            }
+            renderCarrinho();
+        }
+
+        function alterarQuantidade(id, delta) {
+            const item = carrinho.find(i => i.id === id);
+            if (item) {
+                item.quantidade += delta;
+                if(item.quantidade <= 0) {
+                    carrinho = carrinho.filter(i => i.id !== id);
+                }
+                renderCarrinho();
+            }
+        }
+
+        function removerDoCarrinho(id) {
+            carrinho = carrinho.filter(i => i.id !== id);
+            renderCarrinho();
+        }
+
+        function renderCarrinho() {
+            const tbody = document.getElementById('carrinho-corpo');
+            const vazio = document.getElementById('carrinho-vazio');
+            
+            document.getElementById('dash-itens-carrinho').innerText = carrinho.reduce((acc, curr) => acc + curr.quantidade, 0);
+
+            if(carrinho.length === 0) {
+                tbody.innerHTML = '';
+                vazio.classList.remove('hidden');
+                recalcularTotais();
+                return;
+            }
+            
+            vazio.classList.add('hidden');
+            tbody.innerHTML = carrinho.map(item => {
+                const sub = item.preco_venda * item.quantidade;
+                const cod = item.codigo_barras ? `[${item.codigo_barras}]` : '(Sem código)';
+                return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="p-3">
+                        <div class="font-bold text-slate-700">${item.nome}</div>
+                        <span class="text-xs text-slate-400 font-mono">${cod}</span>
+                    </td>
+                    <td class="p-3">
+                        <div class="flex items-center justify-center gap-1">
+                            <button onclick="alterarQuantidade('${item.id}', -1)" class="bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300 font-bold text-xs">-</button>
+                            <span class="font-bold px-2 text-slate-800">${item.quantidade}</span>
+                            <button onclick="alterarQuantidade('${item.id}', 1)" class="bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300 font-bold text-xs">+</button>
+                        </div>
+                    </td>
+                    <td class="p-3 text-right font-medium text-slate-600">R$ ${parseFloat(item.preco_venda).toFixed(2)}</td>
+                    <td class="p-3 text-right font-bold text-slate-800">R$ ${sub.toFixed(2)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="removerDoCarrinho('${item.id}')" class="text-red-500 hover:text-red-700 text-base"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+            }).join('');
+
+            recalcularTotais();
+        }
+
+        function recalcularTotais() {
+            const subtotal = carrinho.reduce((acc, item) => acc + (item.preco_venda * item.quantidade), 0);
+            const desconto = parseFloat(document.getElementById('pdv-desconto').value) || 0;
+            const total = Math.max(0, subtotal - desconto);
+
+            document.getElementById('resumo-subtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
+            document.getElementById('resumo-desconto').innerText = `- R$ ${desconto.toFixed(2)}`;
+            document.getElementById('resumo-total').innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        // SALVAR VENDA COMPLETA (Lança no PDV e espelha no Financeiro)
+        async function finalizarVendaPDV() {
+            if (carrinho.length === 0) return alert("Adicione ao menos um produto no carrinho para vender!");
+            
+            const totalFinal = Math.max(0, carrinho.reduce((acc, item) => acc + (item.preco_venda * item.quantidade), 0) - (parseFloat(document.getElementById('pdv-desconto').value) || 0));
+            const clienteId = document.getElementById('pdv-cliente').value;
+            const formaPagto = document.getElementById('pdv-forma-pagamento').value;
+            const desconto = parseFloat(document.getElementById('pdv-desconto').value) || 0;
+
+            if (confirm(`Deseja confirmar o recebimento e finalizar esta venda no valor de R$ ${totalFinal.toFixed(2)}?`)) {
+                try {
+                    // 1. Registra no módulo de Vendas (Cabeçalho do Pedido)
+                    const { data: venda, error: errVenda } = await _supabase.from('vendas').insert([{
+                        entidade_id: clienteId || null,
+                        valor_total: totalFinal,
+                        desconto: desconto,
+                        forma_pagamento: formaPagto,
+                        status: 'concluida'
+                    }]).select().single();
+
+                    if(errVenda) throw errVenda;
+
+                    // 2. Registra os Itens vinculados à venda
+                    const insertItens = carrinho.map(item => ({
+                        venda_id: venda.id,
+                        produto_id: item.id,
+                        quantidade: item.quantidade,
+                        preco_unitario: item.preco_venda,
+                        subtotal: item.preco_venda * item.quantidade
+                    }));
+
+                    const { error: errItens } = await _supabase.from('itens_venda').insert(insertItens);
+                    if(errItens) throw errItens;
+
+                    // 3. REGISTRA NO FINANCEIRO (Como Receita Concluída)
+                    const { data: fin, error: errFin } = await _supabase.from('financas').insert([{
+                        entidade_id: clienteId || null,
+                        descricao: `Venda PDV - Cupom #${venda.id.substring(0,8)} (${formaPagto})`,
+                        valor_total: totalFinal,
+                        tipo: 'receita',
+                        num_parcelas: 1,
+                        categoria: 'Vendas',
+                        status_lancamento: 'finalizado'
+                    }]).select().single();
+
+                    if(errFin) throw errFin;
+
+                    // 4. Cria parcela de quitação automática para não quebrar fluxo do Financeiro
+                    await _supabase.from('parcelas').insert([{
+                        financa_id: fin.id,
+                        num_parcela: 1,
+                        valor_parcela: totalFinal,
+                        data_vencimento: new Date().toISOString().split('T')[0],
+                        data_pagamento: new Date().toISOString().split('T')[0],
+                        status: 'pago'
+                    }]);
+
+                    alert("Venda registrada e integrada ao financeiro com sucesso!");
+                    carrinho = [];
+                    document.getElementById('pdv-desconto').value = '0.00';
+                    renderCarrinho();
+                    init(); // Atualiza estoque do cache e dashboards
+
+                } catch (error) {
+                    alert("Erro no processo de venda: " + error.message);
+                }
+            }
+        }
+
+        // SALVAR SANGRIA DE CAIXA (Lança no Financeiro como Despesa)
+        async function salvarSangria() {
+            const valor = parseFloat(document.getElementById('sangria-valor').value);
+            const motivo = document.getElementById('sangria-motivo').value.trim();
+
+            if(isNaN(valor) || valor <= 0 || !motivo) {
+                return alert("Por favor, preencha o valor correto e a justificativa da sangria.");
+            }
+
+            if (confirm(`Confirma a retirada/sangria física de R$ ${valor.toFixed(2)} do caixa?`)) {
+                try {
+                    // Registra a saída diretamente no financeiro (Tipo despesa)
+                    const { data: fin, error: errFin } = await _supabase.from('financas').insert([{
+                        descricao: `Sangria Caixa: ${motivo}`,
+                        valor_total: valor,
+                        tipo: 'despesa',
+                        num_parcelas: 1,
+                        categoria: 'Sangria',
+                        status_lancamento: 'finalizado'
+                    }]).select().single();
+
+                    if(errFin) throw errFin;
+
+                    // Vincula a parcela como Paga (Saída de dinheiro imediata)
+                    await _supabase.from('parcelas').insert([{
+                        financa_id: fin.id,
+                        num_parcela: 1,
+                        valor_parcela: valor,
+                        data_vencimento: new Date().toISOString().split('T')[0],
+                        data_pagamento: new Date().toISOString().split('T')[0],
+                        status: 'pago'
+                    }]);
+
+                    alert("Sangria registrada como saída financeira!");
+                    document.getElementById('sangria-valor').value = '';
+                    document.getElementById('sangria-motivo').value = '';
+                    
+                    await loadDashboardPDV();
+                    await loadHistoricoCaixa();
+
+                } catch (error) {
+                    alert("Erro ao salvar sangria: " + error.message);
+                }
+            }
+        }
+
+        // Atualização dos Indicadores de hoje superiores
+        async function loadDashboardPDV() {
+            const hoje = new Date().toISOString().split('T')[0];
+            
+            // Busca finanças do dia atual para vendas e sangrias
+            const { data: finDia } = await _supabase.from('financas')
+                .select('*')
+                .gte('created_at', `${hoje}T00:00:00Z`);
+
+            let totalVendas = 0;
+            let totalSangrias = 0;
+
+            if(finDia) {
+                finDia.forEach(f => {
+                    if (f.categoria === 'Vendas' && f.tipo === 'receita') totalVendas += parseFloat(f.valor_total || 0);
+                    if (f.categoria === 'Sangria' && f.tipo === 'despesa') totalSangrias += parseFloat(f.valor_total || 0);
+                });
+            }
+
+            document.getElementById('dash-vendas-hoje').innerText = `R$ ${totalVendas.toFixed(2)}`;
+            document.getElementById('dash-sangrias-hoje').innerText = `R$ ${totalSangrias.toFixed(2)}`;
+        }
+
+        // Carrega o histórico da tabela de fluxo na aba 2
+        async function loadHistoricoCaixa() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const { data } = await _supabase.from('financas')
+                .select('*')
+                .or("categoria.eq.Vendas,categoria.eq.Sangria")
+                .gte('created_at', `${hoje}T00:00:00Z`)
+                .order('created_at', { ascending: false });
+
+            const tbody = document.getElementById('lista-fluxo-caixa');
+            if(!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">Nenhuma transação efetuada hoje.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(f => {
+                const hora = new Date(f.created_at).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                const statusClass = f.tipo === 'receita' ? 'status-receita' : 'status-despesa';
+                const statusTxt = f.tipo === 'receita' ? 'ENTRADA' : 'SANGRIA / SAÍDA';
+                const corValor = f.tipo === 'receita' ? 'text-emerald-600' : 'text-red-600';
+
+                return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="p-3 font-medium text-slate-500">${hora}</td>
+                    <td class="p-3 font-bold text-slate-700">${f.descricao}</td>
+                    <td class="p-3 text-slate-500">${f.categoria}</td>
+                    <td class="p-3 text-center"><span class="${statusClass}">${statusTxt}</span></td>
+                    <td class="p-3 text-right font-extrabold ${corValor}">R$ ${parseFloat(f.valor_total).toFixed(2)}</td>
+                </tr>`;
+            }).join('');
+        }
     </script>
-
-<!--
--- ============================================================================
--- SCRIPT EXCLUSIVO: MÓDULO EXERCÍCIOS (COMPLETO E ATUALIZADO)
--- ============================================================================
-
--- 1. Limpa a tabela e as regras antigas
-DROP TABLE IF EXISTS public.exercicios CASCADE;
-
--- 2. Cria a tabela com todos os campos novos
-CREATE TABLE public.exercicios (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    titulo TEXT NOT NULL,
-    descricao TEXT NOT NULL,
-    categoria TEXT,
-    codigo_de_barras TEXT,
-    data_prazo DATE,
-    observacoes TEXT,
-    foto_url TEXT,
-    audio_url TEXT,
-    status_exercicio TEXT DEFAULT 'pendente',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 3. Segurança (RLS - Row Level Security)
-ALTER TABLE public.exercicios ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Exercícios: Acesso total ao próprio usuário" ON public.exercicios
-    FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-
--- 4. Buckets de Storage (Para fotos e áudios)
-INSERT INTO storage.buckets (id, name, public) VALUES ('resolucoes', 'resolucoes', true) ON CONFLICT (id) DO NOTHING;
-INSERT INTO storage.buckets (id, name, public) VALUES ('audios', 'audios', true) ON CONFLICT (id) DO NOTHING;
-
--- 5. Políticas de Storage
-DROP POLICY IF EXISTS "Acesso público select" ON storage.objects;
-DROP POLICY IF EXISTS "Acesso total autenticado" ON storage.objects;
-
-CREATE POLICY "Acesso público select" ON storage.objects FOR SELECT USING (bucket_id IN ('resolucoes', 'audios'));
-CREATE POLICY "Acesso total autenticado" ON storage.objects FOR ALL 
-USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
-
--->
 </body>
 </html>
-
 ```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# produtos
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque e Produtos - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="constantes.js"></script>
+    
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        /* Mantendo os mesmos estilos visuais de status para o Estoque */
+        .status-pago { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-pendente { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-atrasado { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; animation: pulse 2s infinite; }
+        
+        .highlight-parcelas { border: 2px solid #3b82f6 !important; background-color: #eff6ff !important; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        .highlight-label { color: #1d4ed8; font-weight: 900; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .drop-zone { border: 2px dashed #cbd5e1; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; background-color: #f8fafc; }
+        .drop-zone:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+        .drop-zone.dragover { border-color: #3ecf8e; background-color: #ecfdf5; }
+    </style>
+</head>
+<body>
+
+    <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
+            <div class="text-center mb-8">
+                <i class="fas fa-boxes text-5xl text-emerald-500 mb-3"></i>
+                <h2 class="text-2xl font-bold text-slate-800">ERP Estoque</h2>
+                <p class="text-slate-500 text-sm mt-1">Faça login para acessar os Produtos</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold text-slate-700">E-mail</label>
+                    <input type="email" id="login-email" placeholder="seu@email.com" onkeyup="if(event.key === 'Enter') document.getElementById('login-senha').focus()">
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-slate-700">Senha</label>
+                    <input type="password" id="login-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') fazerLogin()">
+                </div>
+                <button id="btn-login" onclick="fazerLogin()" class="w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg mt-2">
+                    Entrar no Sistema
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-sistema" class="hidden">
+        
+        <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-boxes text-emerald-500"></i> Produtos e Estoque ERP ABP</h1>
+            </div>
+            <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
+                <span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </nav>
+
+        <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
+            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-xl font-bold"><i class="fas fa-boxes text-emerald-500"></i> Menu</h2>
+                <button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            <ul class="p-4 space-y-2 font-medium">
+                <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Lista de Produtos</a></li>
+                <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Cadastrar Produto</a></li>
+                
+                     <!-- Nova Seção: Outras Páginas do ERP -->
+                <span class="text-xs text-slate-500 uppercase tracking-wider block pl-3 pt-4">Módulos</span>
+                <li><a href="financeiro.html"class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> Financeiro</a></li>
+                <li><a href="pdv.html"       class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> PDV Frente de Caixa</a></li>
+                <li><a href="produtos.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-chart-pie w-6"></i> Estoque </a></li>
+                <li><a href="clientes.html"  class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-users w-6"></i> Clientes / Entidades</a></li>
+                
+                <li><hr class="border-slate-700 my-4"></li>
+                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
+            </ul>
+        </div>
+        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
+
+        <div class="container mx-auto px-4 pb-10 pt-24">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="card border-l-4 border-emerald-500">
+                    <p class="text-gray-500 text-sm">Produtos Cadastrados</p>
+                    <h2 id="dash-total-produtos" class="text-2xl font-bold text-emerald-600">0</h2>
+                </div>
+                <div class="card border-l-4 border-amber-500">
+                    <p class="text-gray-500 text-sm">Alertas de Estoque Baixo</p>
+                    <h2 id="dash-estoque-baixo" class="text-2xl font-bold text-amber-600">0</h2>
+                </div>
+                <div class="card border-l-4 border-blue-500">
+                    <p class="text-gray-500 text-sm">Total de Itens em Estoque</p>
+                    <h2 id="dash-total-itens" class="text-2xl font-bold text-blue-600">0</h2>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mb-6">
+                <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-list"></i> Ver Produtos
+                </button>
+                <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-plus-circle"></i> Novo Produto
+                </button>
+            </div>
+
+            <div class="card mb-8 hidden" id="aba-formulario">
+                <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-plus-circle"></i> Informações do Produto</h3>
+                
+                <input type="hidden" id="f-editando-id">
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label>Nome do Produto *</label>
+                        <input type="text" id="f-nome" placeholder="Ex: Camiseta Polo Preta G">
+                    </div>
+                    
+                    <div>
+                        <label>Categoria</label>
+                        <input type="text" id="f-categoria" list="lista-categorias" placeholder="Digite ou escolha..." value="Geral">
+                        <datalist id="lista-categorias"></datalist>
+                    </div>
+
+                    <div class="p-2 rounded highlight-parcelas">
+                        <label class="highlight-label"><i class="fas fa-exclamation-triangle"></i> Estoque Mínimo *</label>
+                        <input type="number" id="f-estoque-minimo" value="5" min="0" class="border-blue-300 font-bold text-blue-700">
+                    </div>
+
+                    <div>
+                        <label>Preço de Custo (R$)</label>
+                        <input type="number" id="f-custo" step="0.01" placeholder="0.00" value="0.00">
+                    </div>
+                    
+                    <div>
+                        <label>Preço de Venda (R$) *</label>
+                        <input type="number" id="f-venda" step="0.01" placeholder="0.00">
+                    </div>
+
+                    <div>
+                        <label>Quantidade Atual em Estoque *</label>
+                        <input type="number" id="f-quantidade" value="0" min="0">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label>Descrição Opcional</label>
+                        <input type="text" id="f-descricao" placeholder="Detalhes, tamanho, marca...">
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label><i class="fas fa-barcode"></i> Código de Barras / SKU</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="f-barras" placeholder="Cole ou leia o código de barras do produto" class="flex-1">
+                            <button onclick="iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
+                                <i class="fas fa-camera"></i> Ler Código
+                            </button>
+                        </div>
+                        
+                        <div id="camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+                            <div id="camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+                            <button onclick="pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label><i class="fas fa-image"></i> Foto do Produto</label>
+                        <div class="drop-zone" id="drop-foto" onclick="document.getElementById('f-foto').click()">
+                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+                            <p class="text-xs text-slate-500">Clique ou arraste a imagem do produto aqui</p>
+                            <input type="file" id="f-foto" accept="image/*" class="hidden" onchange="mostrarNomeArquivo(this, 'nome-foto')">
+                            <p id="nome-foto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button onclick="salvarProdutoCompleto()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+                        <i class="fas fa-save"></i> Gravar Produto
+                    </button>
+                    <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+
+            <div class="card" id="aba-listagem">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h3 class="font-bold text-slate-800"><i class="fas fa-list"></i> Itens em Estoque</h3>
+                    <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
+                        <i class="fas fa-trash"></i> Excluir Selecionados
+                    </button>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="text-xs">Pesquisar Nome ou Código</label>
+                        <input type="text" id="filtro-busca" placeholder="Ex: Camiseta, Código..." onkeyup="if(event.key === 'Enter') loadProdutos()">
+                    </div>
+                    <div>
+                        <label class="text-xs">Filtrar Categoria</label>
+                        <select id="filtro-categoria" onchange="loadProdutos()">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadProdutos()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        <button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">
+                            Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
+                                <th class="p-3 w-10 text-center"><input type="checkbox" id="check-all" onclick="toggleTodosChecks(this)"></th>
+                                <th class="p-3">Foto / Código</th>
+                                <th class="p-3">Produto / Categoria</th>
+                                <th class="p-3">Preço Custo</th>
+                                <th class="p-3">Preço Venda</th>
+                                <th class="p-3 text-center">Estoque Atual</th>
+                                <th class="p-3 text-center">Status</th>
+                                <th class="p-3 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-produtos" class="text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+        // Configuração do Supabase (Mesma do Original)
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let html5QrCode = null;
+
+        function abrirMenu() {
+            document.getElementById('sidebar-menu').classList.remove('-translate-x-full');
+            document.getElementById('menu-overlay').classList.remove('hidden');
+        }
+
+        function fecharMenu() {
+            document.getElementById('sidebar-menu').classList.add('-translate-x-full');
+            document.getElementById('menu-overlay').classList.add('hidden');
+        }
+
+        function alternarAba(abaAtiva) {
+            const form = document.getElementById('aba-formulario');
+            const lista = document.getElementById('aba-listagem');
+            const btnForm = document.getElementById('btn-aba-formulario');
+            const btnLista = document.getElementById('btn-aba-listagem');
+
+            const classesVerde = ['bg-emerald-500', 'text-white', 'hover:bg-emerald-600'];
+            const classesCinza = ['bg-slate-200', 'text-slate-700', 'hover:bg-slate-300'];
+
+            btnForm.classList.remove(...classesVerde, ...classesCinza);
+            btnLista.classList.remove(...classesVerde, ...classesCinza);
+
+            if (abaAtiva === 'formulario') {
+                form.classList.remove('hidden');
+                lista.classList.add('hidden');
+                btnForm.classList.add(...classesVerde);
+                btnLista.classList.add(...classesCinza);
+            } else {
+                form.classList.add('hidden');
+                lista.classList.remove('hidden');
+                btnLista.classList.add(...classesVerde);
+                btnForm.classList.add(...classesCinza);
+            }
+        }
+
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
+
+            if (!session) {
+                telaLogin.classList.remove('hidden');
+                telaLogin.classList.add('flex');
+                telaSistema.classList.add('hidden');
+            } else {
+                telaLogin.classList.add('hidden');
+                telaLogin.classList.remove('flex');
+                telaSistema.classList.remove('hidden');
+                init(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+
+            btn.innerText = 'Autenticando...';
+            btn.disabled = true;
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            
+            if (error) {
+                alert("Erro ao fazer login: Verifique seu e-mail e senha.");
+                btn.innerText = 'Entrar no Sistema';
+                btn.disabled = false;
+            } else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-senha').value = '';
+                btn.innerText = 'Entrar no Sistema';
+                btn.disabled = false;
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            document.getElementById('lista-produtos').innerHTML = '';
+            fecharMenu();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            verificar_login();
+            configurarDropZone('drop-foto', 'f-foto', 'nome-foto');
+        });
+
+        async function init() {
+            loadCategoriasUnicas();
+            loadDashboard();
+            loadProdutos();
+        }
+
+        function configurarDropZone(dropId, inputId, txtId) {
+            const dropZone = document.getElementById(dropId);
+            const inputElement = document.getElementById(inputId);
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    inputElement.files = e.dataTransfer.files;
+                    mostrarNomeArquivo(inputElement, txtId);
+                }
+            });
+        }
+
+        function mostrarNomeArquivo(input, idCampoTexto) {
+            const campoTexto = document.getElementById(idCampoTexto);
+            if (input.files && input.files.length > 0) {
+                campoTexto.innerHTML = `<i class="fas fa-check"></i> ${input.files[0].name}`;
+            } else {
+                campoTexto.innerHTML = '';
+            }
+        }
+
+        async function loadCategoriasUnicas() {
+            const { data } = await _supabase.from('produtos').select('categoria');
+            if (!data) return;
+            
+            const categorias = [...new Set(data.map(item => item.categoria).filter(c => c))];
+            
+            const datalist = document.getElementById('lista-categorias');
+            const selectFiltro = document.getElementById('filtro-categoria');
+            
+            datalist.innerHTML = '';
+            selectFiltro.innerHTML = '<option value="">Todas</option>';
+            
+            categorias.forEach(cat => {
+                datalist.innerHTML += `<option value="${cat}">`;
+                selectFiltro.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+        }
+
+        // Câmera do Leitor (Código intacto e adaptado ao campo f-barras)
+        function iniciarLeituraCamera() {
+            const container = document.getElementById('camera-container');
+            container.classList.remove('hidden');
+            html5QrCode = new Html5Qrcode("camera-preview");
+            const config = { fps: 10, qrbox: { width: 300, height: 150 } };
+            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                document.getElementById('f-barras').value = decodedText;
+                pararCamera();
+            }).catch(() => { alert("Verifique as permissões da câmera."); container.classList.add('hidden'); });
+        }
+
+        function pararCamera() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => { document.getElementById('camera-container').classList.add('hidden'); });
+            } else { document.getElementById('camera-container').classList.add('hidden'); }
+        }
+
+        // Atualização do Dashboard de Estoque
+        async function loadDashboard() {
+            const { data: produtos } = await _supabase.from('produtos').select('*');
+            if(!produtos) return;
+            
+            let totalCadastrados = produtos.length;
+            let estoqueBaixo = 0;
+            let totalItens = 0;
+
+            produtos.forEach(p => {
+                let estoque = parseInt(p.quantidade_estoque || 0);
+                let minimo = parseInt(p.estoque_minimo || 0);
+                totalItens += estoque;
+                if(estoque <= minimo) estoqueBaixo++;
+            });
+
+            document.getElementById('dash-total-produtos').innerText = totalCadastrados;
+            document.getElementById('dash-estoque-baixo').innerText = estoqueBaixo;
+            document.getElementById('dash-total-itens').innerText = totalItens;
+        }
+
+        // Gravar/Atualizar Produto
+        async function salvarProdutoCompleto() {
+            const btn = document.getElementById('btn-salvar');
+            btn.disabled = true; btn.innerText = 'Salvando...';
+
+            try {
+                const nome = document.getElementById('f-nome').value;
+                const categoria = document.getElementById('f-categoria').value || 'Geral';
+                const estoqueMinimo = parseInt(document.getElementById('f-estoque-minimo').value) || 0;
+                const precoCusto = parseFloat(document.getElementById('f-custo').value) || 0;
+                const precoVenda = parseFloat(document.getElementById('f-venda').value);
+                const quantidade = parseInt(document.getElementById('f-quantidade').value) || 0;
+                const descricao = document.getElementById('f-descricao').value;
+                const barras = document.getElementById('f-barras').value;
+                const fileFoto = document.getElementById('f-foto').files[0];
+                const editandoId = document.getElementById('f-editando-id').value;
+
+                if(!nome || isNaN(precoVenda)) throw new Error("Preencha o Nome e o Preço de Venda do produto!");
+
+                let fotoUrl = null;
+                if (fileFoto) {
+                    const fileName = `prod_${Date.now()}_${fileFoto.name}`;
+                    const { error } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileFoto);
+                    if(!error) fotoUrl = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+                }
+
+                const dadosProduto = {
+                    nome, categoria, estoque_minimo: estoqueMinimo, preco_custo: precoCusto,
+                    preco_venda: precoVenda, quantidade_estoque: quantidade, descricao, codigo_barras: barras || null
+                };
+
+                if (fotoUrl) dadosProduto.foto_url = fotoUrl;
+
+                if (editandoId) {
+                    const { error } = await _supabase.from('produtos').update(dadosProduto).eq('id', editandoId);
+                    if (error) throw error;
+                    alert("Produto atualizado com sucesso!");
+                } else {
+                    const { error } = await _supabase.from('produtos').insert([dadosProduto]);
+                    if (error) throw error;
+                    alert("Produto cadastrado com sucesso!");
+                }
+                
+                cancelarEdicao();
+                loadProdutos();
+                loadDashboard();
+                alternarAba('listagem');
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Produto';
+            }
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtro-busca').value = '';
+            document.getElementById('filtro-categoria').value = '';
+            loadProdutos();
+        }
+
+        // Renderizar a Tabela com Status Dinâmico de Estoque
+        async function loadProdutos() {
+            const busca = document.getElementById('filtro-busca').value;
+            const categoria = document.getElementById('filtro-categoria').value;
+
+            let query = _supabase.from('produtos').select('*').order('nome', { ascending: true });
+
+            if (busca) {
+                // Filtra por nome ou pelo código de barras lido
+                query = query.or(`nome.ilike.%${busca}%,codigo_barras.ilike.%${busca}%`);
+            }
+            if (categoria) query = query.eq('categoria', categoria);
+
+            const { data, error } = await query;
+            if (error) return;
+            
+            const tbody = document.getElementById('lista-produtos');
+
+            tbody.innerHTML = data.map(p => {
+                let estoque = parseInt(p.quantidade_estoque || 0);
+                let minimo = parseInt(p.estoque_minimo || 0);
+                
+                let statusClass = 'status-pago';
+                let statusTxt = 'EM ESTOQUE';
+                
+                if (estoque === 0) {
+                    statusClass = 'status-atrasado';
+                    statusTxt = 'ZERADO';
+                } else if (estoque <= minimo) {
+                    statusClass = 'status-pendente';
+                    statusTxt = 'ESTOQUE BAIXO';
+                }
+
+                const imgHtml = p.foto_url ? `<img src="${p.foto_url}" class="w-10 h-10 object-cover rounded shadow-sm inline-block mr-2">` : `<div class="w-10 h-10 bg-slate-200 rounded flex items-center justify-center text-slate-400 inline-block mr-2 text-xs"><i class="fas fa-box"></i></div>`;
+                const codBarras = p.codigo_barras ? `<span class="text-xs font-mono text-slate-400 block"><i class="fas fa-barcode"></i> ${p.codigo_barras}</span>` : '<span class="text-xs text-slate-300 block">Sem código</span>';
+
+                return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="p-3 text-center">
+                        <input type="checkbox" class="check-parcela" value="${p.id}">
+                    </td>
+                    <td class="p-3 flex items-center">
+                        ${imgHtml}
+                        <div>${codBarras}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="font-bold text-slate-700">${p.nome}</div>
+                        <span class="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">${p.categoria || 'Geral'}</span>
+                    </td>
+                    <td class="p-3 font-bold text-slate-600">R$ ${parseFloat(p.preco_custo || 0).toFixed(2)}</td>
+                    <td class="p-3 font-bold text-emerald-600">R$ ${parseFloat(p.preco_venda || 0).toFixed(2)}</td>
+                    <td class="p-3 font-bold text-center text-slate-700">${estoque} <span class="text-xs text-slate-400 font-normal block">mín: ${minimo}</span></td>
+                    <td class="p-3 text-center"><span class="${statusClass}">${statusTxt}</span></td>
+                    <td class="p-3 text-center">
+                        <button onclick="prepararEdicao('${p.id}')" class="bg-blue-100 text-blue-600 px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition text-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function prepararEdicao(id) {
+            const { data: p } = await _supabase.from('produtos').select('*').eq('id', id).single();
+            if (p) {
+                document.getElementById('f-editando-id').value = p.id;
+                document.getElementById('f-nome').value = p.nome;
+                document.getElementById('f-categoria').value = p.categoria || 'Geral';
+                document.getElementById('f-estoque-minimo').value = p.estoque_minimo;
+                document.getElementById('f-custo').value = p.preco_custo;
+                document.getElementById('f-venda').value = p.preco_venda;
+                document.getElementById('f-quantidade').value = p.quantidade_estoque;
+                document.getElementById('f-descricao').value = p.descricao || '';
+                document.getElementById('f-barras').value = p.codigo_barras || '';
+                
+                document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Produto';
+                document.getElementById('btn-cancelar').classList.remove('hidden');
+                
+                alternarAba('formulario');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('f-editando-id').value = '';
+            document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-save"></i> Gravar Produto';
+            document.getElementById('btn-cancelar').classList.add('hidden');
+            
+            document.getElementById('f-nome').value = '';
+            document.getElementById('f-categoria').value = 'Geral';
+            document.getElementById('f-estoque-minimo').value = '5';
+            document.getElementById('f-custo').value = '0.00';
+            document.getElementById('f-venda').value = '';
+            document.getElementById('f-quantidade').value = '0';
+            document.getElementById('f-descricao').value = '';
+            document.getElementById('f-barras').value = '';
+            document.getElementById('f-foto').value = '';
+            document.getElementById('nome-foto').innerHTML = '';
+        }
+
+        function toggleTodosChecks(source) {
+            const checkboxes = document.querySelectorAll('.check-parcela');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+        }
+
+        async function excluirSelecionados() {
+            const selecionados = Array.from(document.querySelectorAll('.check-parcela:checked')).map(cb => cb.value);
+            if (selecionados.length === 0) return alert("Selecione ao menos um produto para excluir.");
+
+            if (confirm(`Atenção: Deseja realmente excluir ${selecionados.length} produto(s)?`)) {
+                const { error } = await _supabase.from('produtos').delete().in('id', selecionados);
+                if (!error) {
+                    alert('Excluído com sucesso!');
+                    loadProdutos();
+                    loadDashboard();
+                } else {
+                    alert('Erro ao excluir: ' + error.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# entidades
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Entidades - ERP ABP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="constates.js"></script>
+    
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        .status-ativo { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .status-inativo { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        
+        label { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 4px; display: block; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        input[type="checkbox"] { width: auto; transform: scale(1.2); cursor: pointer; }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <div id="tela-login" class="hidden min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full mx-4 border-t-4 border-emerald-500">
+            <div class="text-center mb-8">
+                <i class="fas fa-users text-5xl text-emerald-500 mb-3"></i>
+                <h2 class="text-2xl font-bold text-slate-800">ERP Entidades</h2>
+                <p class="text-slate-500 text-sm mt-1">Faça login para acessar o cadastro</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold text-slate-700">E-mail</label>
+                    <input type="email" id="login-email" placeholder="seu@email.com" onkeyup="if(event.key === 'Enter') document.getElementById('login-senha').focus()">
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-slate-700">Senha</label>
+                    <input type="password" id="login-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') fazerLogin()">
+                </div>
+                <button id="btn-login" onclick="fazerLogin()" class="w-full bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg mt-2">
+                    Entrar no Sistema
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DO SISTEMA -->
+    <div id="tela-sistema" class="hidden">
+        
+        <!-- NAV BAR -->
+        <nav class="bg-white p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="abrirMenu()" class="text-slate-600 hover:text-emerald-500 text-2xl focus:outline-none px-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="font-bold text-xl text-slate-800 hidden sm:block"><i class="fas fa-users text-emerald-500"></i> Controle de Entidades</h1>
+            </div>
+            <button onclick="sairDaConta()" class="text-slate-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
+                <span class="hidden sm:inline">Sair</span> <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </nav>
+
+        <!-- SIDEBAR MENU -->
+        <div id="sidebar-menu" class="fixed inset-y-0 left-0 w-64 bg-slate-800 text-white transform -translate-x-full transition-transform duration-300 z-50 shadow-2xl">
+            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-xl font-bold"><i class="fas fa-bars text-emerald-500"></i> Menu</h2>
+                <button onclick="fecharMenu()" class="text-slate-400 hover:text-white focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            <ul class="p-4 space-y-2 font-medium">
+                <li><a href="#" onclick="alternarAba('listagem'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-list w-6"></i> Ver Entidades</a></li>
+                <li><a href="#" onclick="alternarAba('formulario'); fecharMenu();" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-plus-circle w-6"></i> Nova Entidade</a></li>
+                
+                <span class="text-xs text-slate-500 uppercase tracking-wider block pl-3 pt-4">Módulos</span>
+                <li><a href="financeiro.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-wallet w-6"></i> Financeiro</a></li>
+                <li><a href="pdv.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-cash-register w-6"></i> PDV Frente de Caixa</a></li>
+                <li><a href="produtos.html" class="block p-3 rounded hover:bg-slate-700 transition"><i class="fas fa-boxes w-6"></i> Estoque</a></li>
+                <li><a href="clientes.html" class="block p-3 bg-slate-700 rounded transition"><i class="fas fa-users w-6"></i> Clientes / Entidades</a></li>
+                
+                <li><hr class="border-slate-700 my-4"></li>
+                <li><a href="#" onclick="sairDaConta()" class="block p-3 text-red-400 rounded hover:bg-slate-700 transition"><i class="fas fa-sign-out-alt w-6"></i> Sair do Sistema</a></li>
+            </ul>
+        </div>
+        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="fecharMenu()"></div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="container mx-auto px-4 pb-10 pt-24">
+            
+            <!-- DASHBOARD DE ENTIDADES -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="card border-l-4 border-emerald-500">
+                    <p class="text-gray-500 text-sm">Total de Clientes</p>
+                    <h2 id="dash-clientes" class="text-2xl font-bold text-emerald-600">0</h2>
+                </div>
+                <div class="card border-l-4 border-blue-500">
+                    <p class="text-gray-500 text-sm">Total de Fornecedores</p>
+                    <h2 id="dash-fornecedores" class="text-2xl font-bold text-blue-600">0</h2>
+                </div>
+                <div class="card border-l-4 border-amber-500">
+                    <p class="text-gray-500 text-sm">Entidades Inativas</p>
+                    <h2 id="dash-inativos" class="text-2xl font-bold text-amber-600">0</h2>
+                </div>
+            </div>
+
+            <!-- ALTERNADOR DE ABAS -->
+            <div class="flex gap-4 mb-6">
+                <button onclick="alternarAba('listagem')" id="btn-aba-listagem" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-list"></i> Ver Entidades
+                </button>
+                <button onclick="alternarAba('formulario')" id="btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+                    <i class="fas fa-plus-circle"></i> Nova Entidade
+                </button>
+            </div>
+
+            <!-- FORMULÁRIO DE CADASTRO -->
+            <div class="card mb-8 hidden" id="aba-formulario">
+                <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800"><i class="fas fa-user-plus"></i> Cadastro de Entidade</h3>
+                
+                <input type="hidden" id="f-editando-id">
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="md:col-span-2">
+                        <label>Nome Completo / Razão Social *</label>
+                        <input type="text" id="f-nome" placeholder="Ex: João da Silva ou Empresa LTDA">
+                    </div>
+                    <div>
+                        <label>CPF / CNPJ</label>
+                        <input type="text" id="f-cpf" placeholder="000.000.000-00">
+                    </div>
+                    <div>
+                        <label>Data de Nascimento</label>
+                        <input type="date" id="f-nascimento">
+                    </div>
+
+                    <div>
+                        <label>E-mail</label>
+                        <input type="email" id="f-email" placeholder="exemplo@email.com">
+                    </div>
+                    <div>
+                        <label>Telefone</label>
+                        <input type="text" id="f-telefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div>
+                        <label>Tipo de Entidade</label>
+                        <select id="f-tipo-entidade">
+                            <option value="cliente">Cliente</option>
+                            <option value="fornecedor">Fornecedor</option>
+                            <option value="colaborador">Colaborador</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <select id="f-status">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>CEP</label>
+                        <input type="text" id="f-cep" placeholder="00000-000" onblur="buscarCEP(this.value)">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label>Logradouro (Rua/Avenida)</label>
+                        <input type="text" id="f-logradouro" placeholder="Rua das Flores">
+                    </div>
+                    <div>
+                        <label>Número</label>
+                        <input type="text" id="f-numero" placeholder="123">
+                    </div>
+
+                    <div>
+                        <label>Bairro</label>
+                        <input type="text" id="f-bairro" placeholder="Centro">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label>Cidade</label>
+                        <input type="text" id="f-cidade" placeholder="Sua Cidade">
+                    </div>
+                    <div>
+                        <label>Estado (UF)</label>
+                        <input type="text" id="f-estado" placeholder="SP" maxlength="2">
+                    </div>
+                    
+                    <div class="md:col-span-4">
+                        <label>URL da Foto do Perfil</label>
+                        <input type="text" id="f-foto" placeholder="https://linkdaimagem.com/foto.jpg">
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button onclick="salvarEntidade()" id="btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+                        <i class="fas fa-save"></i> Gravar Registro
+                    </button>
+                    <button onclick="cancelarEdicao()" id="btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+
+            <!-- LISTAGEM DE REGISTROS -->
+            <div class="card" id="aba-listagem">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h3 class="font-bold text-slate-800"><i class="fas fa-users"></i> Entidades Cadastradas</h3>
+                    <button onclick="excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
+                        <i class="fas fa-trash"></i> Excluir Selecionados
+                    </button>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="bg-slate-50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200">
+                    <div class="flex-1 min-w-[250px]">
+                        <label class="text-xs">Buscar por Nome</label>
+                        <input type="text" id="filtro-busca" placeholder="Digite o nome..." onkeyup="if(event.key === 'Enter') loadEntidades()">
+                    </div>
+                    <div>
+                        <label class="text-xs">Filtrar por Perfil</label>
+                        <select id="filtro-tipo" onchange="loadEntidades()">
+                            <option value="">Todos os Tipos</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="fornecedor">Fornecedor</option>
+                            <option value="colaborador">Colaborador</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadEntidades()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        <button onclick="limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">
+                            Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABELA -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b-2 border-slate-200">
+                                <th class="p-3 w-10 text-center"><input type="checkbox" id="check-all" onclick="toggleTodosChecks(this)"></th>
+                                <th class="p-3">Perfil</th>
+                                <th class="p-3">Nome / Contato</th>
+                                <th class="p-3">CPF/CNPJ</th>
+                                <th class="p-3">Localização</th>
+                                <th class="p-3 text-center">Status</th>
+                                <th class="p-3 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-entidades" class="text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Configurações do Supabase obtidas do arquivo original
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // CONTROLE DO MENU E ABAS
+        function abrirMenu() {
+            document.getElementById('sidebar-menu').classList.remove('-translate-x-full');
+            document.getElementById('menu-overlay').classList.remove('hidden');
+        }
+        function fecharMenu() {
+            document.getElementById('sidebar-menu').classList.add('-translate-x-full');
+            document.getElementById('menu-overlay').classList.add('hidden');
+        }
+
+        function alternarAba(abaAtiva) {
+            const form = document.getElementById('aba-formulario');
+            const lista = document.getElementById('aba-listagem');
+            const btnForm = document.getElementById('btn-aba-formulario');
+            const btnLista = document.getElementById('btn-aba-listagem');
+
+            const classesVerde = ['bg-emerald-500', 'text-white', 'hover:bg-emerald-600'];
+            const classesCinza = ['bg-slate-200', 'text-slate-700', 'hover:bg-slate-300'];
+
+            btnForm.classList.remove(...classesVerde, ...classesCinza);
+            btnLista.classList.remove(...classesVerde, ...classesCinza);
+
+            if (abaAtiva === 'formulario') {
+                form.classList.remove('hidden');
+                lista.classList.add('hidden');
+                btnForm.classList.add(...classesVerde);
+                btnLista.classList.add(...classesCinza);
+            } else {
+                form.classList.add('hidden');
+                lista.classList.remove('hidden');
+                btnLista.classList.add(...classesVerde);
+                btnForm.classList.add(...classesCinza);
+            }
+        }
+
+        // SEGURANÇA E AUTENTICAÇÃO
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            const telaLogin = document.getElementById('tela-login');
+            const telaSistema = document.getElementById('tela-sistema');
+
+            if (!session) {
+                telaLogin.classList.remove('hidden');
+                telaLogin.classList.add('flex');
+                telaSistema.classList.add('hidden');
+            } else {
+                telaLogin.classList.add('hidden');
+                telaLogin.classList.remove('flex');
+                telaSistema.classList.remove('hidden');
+                init(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !senha) return alert("Por favor, preencha e-mail e senha.");
+            btn.innerText = 'Autenticando...';
+            btn.disabled = true;
+
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) {
+                alert("Erro ao fazer login!");
+                btn.innerText = 'Entrar no Sistema';
+                btn.disabled = false;
+            } else {
+                verificar_login(); 
+            }
+        }
+
+        async function sairDaConta() {
+            await _supabase.auth.signOut();
+            fecharMenu();
+            verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+
+        function init() {
+            loadDashboard();
+            loadEntidades();
+        }
+
+        // CONSUMO DE CEP (Utility Educativo)
+        async function buscarCEP(cep) {
+            const limpo = cep.replace(/\D/g, '');
+            if(limpo.length !== 8) return;
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${limpo}/json/`);
+                const data = await response.json();
+                if(!data.erro) {
+                    document.getElementById('f-logradouro').value = data.logradouro;
+                    document.getElementById('f-bairro').value = data.bairro;
+                    document.getElementById('f-cidade').value = data.localidade;
+                    document.getElementById('f-estado').value = data.uf;
+                    document.getElementById('f-numero').focus();
+                }
+            } catch(e) { console.error("Erro ao buscar CEP"); }
+        }
+
+        // OPERAÇÕES DO DASHBOARD
+        async function loadDashboard() {
+            const { data } = await _supabase.from('entidades').select('tipo_entidade, status_entidade');
+            if(!data) return;
+
+            let clientes = 0, fornecedores = 0, inativos = 0;
+            data.forEach(e => {
+                if(e.status_entidade === 'inativo') inativos++;
+                if(e.tipo_entidade === 'cliente') clientes++;
+                if(e.tipo_entidade === 'fornecedor') fornecedores++;
+            });
+
+            document.getElementById('dash-clientes').innerText = clientes;
+            document.getElementById('dash-fornecedores').innerText = fornecedores;
+            document.getElementById('dash-inativos').innerText = inativos;
+        }
+
+        // INSERT & UPDATE (CRUD)
+        async function salvarEntidade() {
+            const btn = document.getElementById('btn-salvar');
+            btn.disabled = true; btn.innerText = 'Salvando...';
+
+            try {
+                const id = document.getElementById('f-editando-id').value;
+                const nome = document.getElementById('f-nome').value;
+                const cpf = document.getElementById('f-cpf').value;
+                const nascimento = document.getElementById('f-nascimento').value || null;
+                const email = document.getElementById('f-email').value;
+                const telefone = document.getElementById('f-telefone').value;
+                const tipo = document.getElementById('f-tipo-entidade').value;
+                const status = document.getElementById('f-status').value;
+                const cep = document.getElementById('f-cep').value;
+                const logradouro = document.getElementById('f-logradouro').value;
+                const numero = document.getElementById('f-numero').value;
+                const bairro = document.getElementById('f-bairro').value;
+                const cidade = document.getElementById('f-cidade').value;
+                const estado = document.getElementById('f-estado').value;
+                const foto = document.getElementById('f-foto').value;
+
+                if(!nome) throw new Error("O nome completo é obrigatório!");
+
+                const payload = {
+                    nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
+                    tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
+                    bairro, cidade, estado, foto_url: foto
+                };
+
+                if(id) {
+                    const { error } = await _supabase.from('entidades').update(payload).eq('id', id);
+                    if(error) throw error;
+                    alert("Registro atualizado com sucesso!");
+                } else {
+                    const { error } = await _supabase.from('entidades').insert([payload]);
+                    if(error) throw error;
+                    alert("Entidade gravada com sucesso!");
+                }
+
+                cancelarEdicao();
+                init();
+                alternarAba('listagem');
+            } catch(error) {
+                alert(error.message);
+            } finally {
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Registro';
+            }
+        }
+
+        // READ / LISTAGEM COM FILTROS
+        async function loadEntidades() {
+            const busca = document.getElementById('filtro-busca').value;
+            const tipo = document.getElementById('filtro-tipo').value;
+
+            let query = _supabase.from('entidades').select('*').order('nome_completo', { ascending: true });
+
+            if(busca) query = query.ilike('nome_completo', `%${busca}%`);
+            if(tipo) query = query.eq('tipo_entidade', tipo);
+
+            const { data, error } = await query;
+            if(error) return;
+
+            const tbody = document.getElementById('lista-entidades');
+            tbody.innerHTML = data.map(e => {
+                const statusClass = e.status_entidade === 'ativo' ? 'status-ativo' : 'status-inativo';
+                const imgUrl = e.foto_url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                
+                return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="p-3 text-center"><input type="checkbox" class="check-entidade" value="${e.id}"></td>
+                    <td class="p-3 font-bold text-xs uppercase text-slate-500">
+                        <span class="bg-slate-200 px-2 py-1 rounded">${e.tipo_entidade}</span>
+                    </td>
+                    <td class="p-3 flex items-center gap-3">
+                        <img src="${imgUrl}" class="w-8 h-8 rounded-full border shadow-sm object-cover">
+                        <div>
+                            <div class="font-bold text-slate-800">${e.nome_completo}</div>
+                            <div class="text-xs text-slate-400">${e.email || 'Sem e-mail'} | ${e.telefone || 'Sem fone'}</div>
+                        </div>
+                    </td>
+                    <td class="p-3 font-mono text-slate-600">${e.cpf || '---'}</td>
+                    <td class="p-3 text-xs text-slate-600">${e.cidade || '---'}-${e.estado || ''}</td>
+                    <td class="p-3 text-center"><span class="${statusClass}">${e.status_entidade.toUpperCase()}</span></td>
+                    <td class="p-3 text-center">
+                        <button onclick="prepararEdicao('${e.id}')" class="bg-blue-100 text-blue-600 px-3 py-1.5 rounded hover:bg-blue-500 hover:text-white transition text-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // PREPARAR ATUALIZAÇÃO
+        async function prepararEdicao(id) {
+            const { data: e } = await _supabase.from('entidades').select('*').eq('id', id).single();
+            if(e) {
+                document.getElementById('f-editando-id').value = e.id;
+                document.getElementById('f-nome').value = e.nome_completo;
+                document.getElementById('f-cpf').value = e.cpf || '';
+                document.getElementById('f-nascimento').value = e.data_nascimento || '';
+                document.getElementById('f-email').value = e.email || '';
+                document.getElementById('f-telefone').value = e.telefone || '';
+                document.getElementById('f-tipo-entidade').value = e.tipo_entidade;
+                document.getElementById('f-status').value = e.status_entidade;
+                document.getElementById('f-cep').value = e.cep || '';
+                document.getElementById('f-logradouro').value = e.logradouro || '';
+                document.getElementById('f-numero').value = e.numero || '';
+                document.getElementById('f-bairro').value = e.bairro || '';
+                document.getElementById('f-cidade').value = e.cidade || '';
+                document.getElementById('f-estado').value = e.estado || '';
+                document.getElementById('f-foto').value = e.foto_url || '';
+
+                document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Registro';
+                document.getElementById('btn-cancelar').classList.remove('hidden');
+                alternarAba('formulario');
+            }
+        }
+
+        // RESET FORMULÁRIO
+        function cancelarEdicao() {
+            document.getElementById('f-editando-id').value = '';
+            document.getElementById('btn-salvar').innerHTML = '<i class="fas fa-save"></i> Gravar Registro';
+            document.getElementById('btn-cancelar').classList.add('hidden');
+            
+            const inputs = document.querySelectorAll('#aba-formulario input, #aba-formulario select');
+            inputs.forEach(i => { if(i.id !== 'btn-salvar' && i.id !== 'btn-cancelar') i.value = ''; });
+            document.getElementById('f-tipo-entidade').value = 'cliente';
+            document.getElementById('f-status').value = 'ativo';
+        }
+
+        // DELETE (Massa & Unidade)
+        function toggleTodosChecks(source) {
+            document.querySelectorAll('.check-entidade').forEach(cb => cb.checked = source.checked);
+        }
+
+        async function excluirSelecionados() {
+            const selecionados = Array.from(document.querySelectorAll('.check-entidade:checked')).map(cb => cb.value);
+            if(selecionados.length === 0) return alert("Selecione ao menos um item.");
+
+            if(confirm(`Excluir permanentemente ${selecionados.length} entidades?`)) {
+                const { error } = await _supabase.from('entidades').delete().in('id', selecionados);
+                if(!error) { alert("Removidos com sucesso!"); init(); }
+                else { alert("Erro ao deletar: " + error.message); }
+            }
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtro-busca').value = '';
+            document.getElementById('filtro-tipo').value = '';
+            loadEntidades();
+        }
+    </script>
+</body>
+</html>
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -4329,6 +4439,809 @@ if __name__ == "__main__":
 
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## login.html (funcionando)
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+
+    
+    <!-- CONEXÃO SUPABASE -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+
+    
+    <!-- STYLE -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FIM DO STYLE -->
+
+    
+    <script>
+     //iciciando a conexao
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Exporta para ser usado em outros scripts
+        window.supabaseClient = _supabase;
+    </script>
+    <!-- FIM DO CONEXÃO SUPABASE -->
+
+</head>
+
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+
+    <!-- FORMULÁRIO -->
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+        <!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span
+                class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou
+                e-mail</span>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com"
+                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+
+            <div class="relative">
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+                <input type="password" id="password" placeholder="••••••••"
+                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <button type="button" onclick="alternarSenha()"
+                    class="absolute right-3 top-8 text-slate-500 hover:text-white">
+                    🔒
+                </button>
+            </div>
+
+            <div class="text-right">
+                <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a
+                    senha?</button>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="realizarLogin()"
+                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+                    ENTRAR
+                </button>
+                <button onclick="confirmarCadastro()"
+                    class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+                    CADASTRAR
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- FIM DO FORMULÁRIO -->
+
+    <script>
+        
+        /**
+     * Nome do arquivo: alternar_senha.js
+     * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+     */
+
+        function alternarSenha() {
+            // Busca o elemento de entrada pelo ID
+            const campo = document.getElementById('password');
+
+            if (campo) {
+                // Se for password, vira text (visível). Se for text, vira password (oculto).
+                campo.type = campo.type === 'password' ? 'text' : 'password';
+            }
+        }
+
+    </script>
+    <script>
+        /**
+         * Nome do arquivo: login_google.js
+         * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
+         */
+
+        async function loginComGoogle() {
+            const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    // Redireciona para o painel do ERP dentro do repositório
+                    redirectTo: window.location.origin + '/assets/erp/index.html'
+                }
+            });
+
+            if (error) {
+                console.error("Erro no login Google:", error.message);
+                alert("Erro ao conectar com Google: " + error.message);
+            }
+        }
+    </script>
+    <script>
+        /**
+     * Nome do arquivo: realizar_cadastro.js
+     * Objetivo: Criar uma nova conta de usuário no sistema.
+     */
+
+        async function realizarCadastro() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            if (!email || !senha) {
+                alert("Preencha e-mail e senha primeiro!");
+                return;
+            }
+
+            // Cria o usuário no Supabase. 
+            // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email,
+                password: senha
+            });
+
+            if (error) {
+                alert("Erro no cadastro: " + error.message);
+            } else {
+                alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
+            }
+        }
+    </script>
+    <script>
+        /**
+         * Função de apoio para evitar cadastros acidentais (UX)
+         */
+        function confirmarCadastro() {
+            const email = document.getElementById('email').value;
+            if (!email) return alert("Digite um e-mail!");
+
+            if (confirm(`Deseja criar uma conta para: ${email}?`)) {
+                realizarCadastro();
+            }
+        }
+    </script>
+    <script>
+        /**
+       * Nome do arquivo: realizar_login.js
+       * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
+       */
+
+        async function realizarLogin() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            // Validação básica de campos vazios
+            if (!email || !senha) {
+                alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
+                return;
+            }
+
+            try {
+                // Chamada oficial ao método de Sign In do Supabase
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: senha,
+                });
+
+                if (error) {
+                    console.error("Erro na autenticação:", error.message);
+                    alert("Erro ao entrar: " + error.message);
+                } else {
+                    console.log("Bem-vindo de volta!", data.user.email);
+                    // Redireciona para o painel principal após o sucesso
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                console.error("Ocorreu um erro inesperado no sistema:", err);
+            }
+        }  
+    </script>
+    <script>
+        /**
+     * Nome do arquivo: recuperar_senha.js
+     * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
+     */
+
+        async function solicitarRecuperacao() {
+            const email = document.getElementById('email').value;
+            if (!email) return alert("Digite seu e-mail.");
+
+            // O Supabase envia um link que redireciona o usuário para a página de redefinição
+            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: 'redefinir_senha.html',
+            });
+
+            if (error) alert(error.message);
+            else alert("Link enviado! Verifique sua caixa de entrada.");
+        }
+
+        async function salvarNovaSenha() {
+            const novaSenha = document.getElementById('novaSenha').value;
+            if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+
+            // Atualiza os dados do usuário que clicou no link de recuperação
+            const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
+
+            if (error) {
+                alert("Erro ao atualizar: " + error.message);
+            } else {
+                alert("Senha atualizada com sucesso!");
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# index.html
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+ <style>   
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
+
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
+
+
+</head>
+<body>
+<!-- navbar -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- fim navbar -->
+
+<div class="content">      
+<div class="grid">
+
+<!-- cardes do menu-->
+
+    <a href="testes.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>testes</h3>
+    </a>
+    
+    
+    <a href="entidades.html" class="card">
+    <i class="fas fa-users"></i>
+    <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+    <i class="fas fa-box"></i>
+    <h3>Produtos</h3>
+    </a>
+    
+ 
+
+            
+            <a href="vitrine.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>vitrine</h3>
+            </a>
+            
+            <a href="pdv.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>pdv</h3>
+            </a>
+            
+             
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</body>
+</html>
+
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tarefas.html (funcionando)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAREFAS - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
+        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        
+        .barcode-group { display: flex; gap: 5px; }
+        .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
+
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
+        .tag-pendente { background: #fef3c7; color: #92400e; }
+        .tag-realizada { background: #dcfce7; color: #166534; }
+        .tag-data { background: #e0f2fe; color: #0284c7; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+    </style>
+
+    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        // Inicializa o cliente usando as constantes do supabase_config.js
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let recordedAudioBlob = null;
+        let mediaRecorder;
+        let audioChunks = [];
+        let html5QrCode;
+
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                document.getElementById('tela-login').style.display = 'flex';
+                document.getElementById('tela-sistema').style.display = 'none';
+            } else {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('tela-sistema').style.display = 'block';
+                loadtarefas(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro: " + error.message);
+            else verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body>
+
+    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
+        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
+            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
+            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
+            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
+            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        <div class="navbar">
+            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
+            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
+                <input type="hidden" id="edit-id">
+
+                <div class="section-title">Informações Básicas</div>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
+                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
+                    <div>
+                        <label>Código de Barras</label>
+                        <div class="barcode-group">
+                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
+                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
+                                <i class="fas fa-barcode"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status_exercicio">
+                            <option value="pendente">Pendente</option>
+                            <option value="realizada">Realizada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="reader"></div>
+                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
+
+                <div class="section-title">Conteúdo do Exercício</div>
+                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
+
+                <div class="section-title">Mídias e Notas</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Foto da Resolução</label>
+                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
+                    </div>
+                    <div>
+                        <label>Gravar Áudio</label>
+                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
+                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>Observações do Responsável</label>
+                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </div>
+
+            <div class="card">
+                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
+                                <th class="p-4">Atividade / Categoria</th>
+                                <th class="p-4">Código</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercises-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FUNÇÕES DO SCANNER ---
+        function startScanner() {
+            const readerDiv = document.getElementById('reader');
+            const stopBtn = document.getElementById('btn-stop-scanner');
+            readerDiv.style.display = 'block';
+            stopBtn.style.display = 'block';
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                document.getElementById('codigo_de_barras').value = decodedText;
+                stopScanner();
+            }).catch(err => console.error(err));
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('reader').style.display = 'none';
+                    document.getElementById('btn-stop-scanner').style.display = 'none';
+                });
+            }
+        }
+
+        // --- ÁUDIO ---
+        async function toggleGravação() {
+            const btn = document.getElementById('btn-audio');
+            const preview = document.getElementById('audio-preview');
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
+            } else {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    preview.src = URL.createObjectURL(recordedAudioBlob);
+                    preview.style.display = 'block';
+                };
+                mediaRecorder.start();
+                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
+            }
+        }
+
+        // --- CRUD ---
+        async function loadtarefas() {
+            const { data, error } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
+            if (error) { console.error(error); return; }
+            const tbody = document.getElementById('exercises-list');
+            tbody.innerHTML = data.map(e => {
+                let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
+                return `
+                <tr class="border-t">
+                    <td class="p-4">
+                        <span class="font-bold text-slate-800">${e.titulo}</span><br>
+                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">${e.categoria || 'Geral'}</span>
+                        <span class="tag tag-data"><i class="far fa-calendar-alt"></i> ${prazo}</span>
+                    </td>
+                    <td class="p-4 font-mono text-sm text-slate-400">${e.codigo_de_barras || '-'}</td>
+                    <td class="p-4"><span class="tag tag-${e.status_exercicio}">${e.status_exercicio}</span></td>
+                    <td class="p-4 text-center">
+                        <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`}).join('');
+        }
+
+        async function handleSave() {
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true; btn.innerText = "Salvando...";
+            try {
+                const id = document.getElementById('edit-id').value;
+                const { data: { user } } = await _supabase.auth.getUser();
+                const payload = {
+                    titulo: document.getElementById('titulo').value,
+                    descricao: document.getElementById('descricao').value,
+                    categoria: document.getElementById('categoria').value,
+                    codigo_de_barras: document.getElementById('codigo_de_barras').value,
+                    data_prazo: document.getElementById('data_prazo').value || null,
+                    status_exercicio: document.getElementById('status_exercicio').value,
+                    observacoes: document.getElementById('observacoes').value,
+                    user_id: user.id
+                };
+                
+                // Storage handling (simplificado)
+                const inputFoto = document.getElementById('foto_resolucao');
+                if (inputFoto.files[0]) {
+                    const fileName = `res_${Date.now()}.jpg`;
+                    await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
+                    payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+                }
+
+                const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
+                if (error) throw error;
+                resetForm(); loadtarefas();
+            } catch (e) { alert(e.message); }
+            finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
+        }
+
+        async function editFull(id) {
+            const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
+            if (data) {
+                document.getElementById('edit-id').value = data.id;
+                document.getElementById('titulo').value = data.titulo;
+                document.getElementById('descricao').value = data.descricao;
+                document.getElementById('categoria').value = data.categoria || '';
+                document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
+                document.getElementById('data_prazo').value = data.data_prazo || '';
+                document.getElementById('status_exercicio').value = data.status_exercicio;
+                document.getElementById('observacoes').value = data.observacoes || '';
+                document.getElementById('form-title').innerText = "Editando Atividade";
+                document.getElementById('btn-cancel').style.display = "block";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function deleteExercicio(id) {
+            if (confirm("Excluir?")) { await _supabase.from('tarefas').delete().eq('id', id); loadtarefas(); }
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+            document.getElementById('status_exercicio').value = 'pendente';
+            document.getElementById('form-title').innerText = "Nova Atividade";
+            document.getElementById('btn-cancel').style.display = "none";
+            recordedAudioBlob = null;
+            document.getElementById('audio-preview').style.display = 'none';
+        }
+
+        function filtrarTabela() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('#exercises-list tr').forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+    <!--
+    -- ============================================================================
+-- SCRIPT: MÓDULO TAREFAS (GESTÃO DE EXERCÍCIOS)
+-- ============================================================================
+
+-- 1. Criação da Tabela com suporte a RLS e Identidade do Usuário
+CREATE TABLE IF NOT EXISTS public.tarefas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    categoria TEXT,
+    codigo_de_barras TEXT,
+    data_prazo DATE,
+    observacoes TEXT,
+    foto_url TEXT,
+    audio_url TEXT,
+    status_exercicio TEXT DEFAULT 'pendente' CHECK (status_exercicio IN ('pendente', 'realizada')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. Habilitar Row Level Security (RLS)
+ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
+
+-- 3. Políticas de Segurança: O usuário só vê e edita o que é DELE
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Usuários podem gerenciar suas próprias tarefas') THEN
+        CREATE POLICY "Usuários podem gerenciar suas próprias tarefas" 
+        ON public.tarefas 
+        FOR ALL 
+        USING (auth.uid() = user_id) 
+        WITH CHECK (auth.uid() = user_id);
+    END IF;
+END $$;
+
+-- 4. Configuração de Buckets para Mídias (Fotos e Áudios)
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('resolucoes', 'resolucoes', true) 
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('audios', 'audios', true) 
+ON CONFLICT (id) DO NOTHING;
+
+-- 5. Políticas de Storage: Permitir upload apenas para usuários autenticados
+-- Nota: 'public' no bucket permite leitura anônima via URL, mas o upload exige login.
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Upload autenticado em mídias') THEN
+        CREATE POLICY "Upload autenticado em mídias" 
+        ON storage.objects FOR INSERT 
+        WITH CHECK (auth.role() = 'authenticated');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Leitura pública de mídias') THEN
+        CREATE POLICY "Leitura pública de mídias" 
+        ON storage.objects FOR SELECT 
+        USING (bucket_id IN ('resolucoes', 'audios'));
+    END IF;
+END $$;
+    
+    -->
+</html>
+```
 
 
 
