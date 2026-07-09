@@ -15,6 +15,7 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 
 ---
 ## 📚 LINKS PARA ESTUDOS
+```
 * 🌐 **HTML:** [w3schools.com](https://w3schools.com)
 * 🎨 **CSS:** [codecademy.com](https://codecademy.com)
 * ⚡ **JavaScript:** [freecodecamp.org](https://freecodecamp.org)
@@ -30,7 +31,7 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 * 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
 * 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
 * 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO))
-  
+  ```
 
 
 
