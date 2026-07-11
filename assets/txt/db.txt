@@ -1,0 +1,216 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.entidades (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id uuid NOT NULL,
+  nome_completo text,
+  avatar_url text,
+  bio text,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.categorias (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  tipo_de_categoria text NOT NULL,
+  CONSTRAINT categorias_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.servicos (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  titulo text NOT NULL,
+  descricao text,
+  categoria bigint,
+  preco_estimado numeric,
+  preco_detalhe text,
+  foto_url text,
+  criado_por_usuario bigint,
+  terceiro boolean DEFAULT false,
+  eu_mesmo boolean DEFAULT true,
+  whatsapp text,
+  CONSTRAINT servicos_pkey PRIMARY KEY (id),
+  CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) REFERENCES public.categorias(id),
+  CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.favoritos (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  usuario_id bigint NOT NULL,
+  servico_id bigint NOT NULL,
+  CONSTRAINT favoritos_pkey PRIMARY KEY (id),
+  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.entidades(id),
+  CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id)
+);
+CREATE TABLE public.avaliacoes (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  servico_id bigint NOT NULL,
+  author_id bigint NOT NULL,
+  nota smallint NOT NULL CHECK (nota >= 1 AND nota <= 5),
+  comentario text,
+  CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
+  CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id),
+  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.financas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id bigint,
+  descricao text NOT NULL,
+  valor_total numeric NOT NULL,
+  tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
+  num_parcelas integer DEFAULT 1,
+  categoria text DEFAULT 'Geral'::text,
+  status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financas_pkey PRIMARY KEY (id),
+  CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.parcelas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  financa_id uuid,
+  num_parcela integer NOT NULL,
+  valor_parcela numeric NOT NULL,
+  data_vencimento date NOT NULL,
+  data_pagamento date,
+  status text DEFAULT 'pendente'::text CHECK (status = ANY (ARRAY['pendente'::text, 'pago'::text, 'atrasado'::text])),
+  codigo_barra text,
+  boleto_url text,
+  comprovante_url text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT parcelas_pkey PRIMARY KEY (id),
+  CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
+);
+CREATE TABLE public.produtos (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  nome text NOT NULL,
+  descricao text,
+  codigo_barras text UNIQUE,
+  preco_custo numeric DEFAULT 0.00,
+  preco_venda numeric NOT NULL,
+  quantidade_estoque integer DEFAULT 0,
+  estoque_minimo integer DEFAULT 5,
+  categoria text DEFAULT 'Geral'::text,
+  foto_url text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT produtos_pkey PRIMARY KEY (id),
+  CONSTRAINT produtos_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.movimentacoes_estoque (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  produto_id uuid,
+  tipo text CHECK (tipo = ANY (ARRAY['entrada'::text, 'saida'::text])),
+  quantidade integer NOT NULL,
+  motivo text DEFAULT 'venda'::text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT movimentacoes_estoque_pkey PRIMARY KEY (id),
+  CONSTRAINT movimentacoes_estoque_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT movimentacoes_estoque_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
+);
+CREATE TABLE public.vendas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  entidade_id bigint,
+  valor_total numeric NOT NULL,
+  desconto numeric DEFAULT 0.00,
+  forma_pagamento text,
+  status text DEFAULT 'concluida'::text CHECK (status = ANY (ARRAY['pendente'::text, 'concluida'::text, 'cancelada'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT vendas_pkey PRIMARY KEY (id),
+  CONSTRAINT vendas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT vendas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.itens_venda (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  venda_id uuid,
+  produto_id uuid,
+  quantidade integer NOT NULL,
+  preco_unitario numeric NOT NULL,
+  subtotal numeric NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT itens_venda_pkey PRIMARY KEY (id),
+  CONSTRAINT itens_venda_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id),
+  CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
+);
+
+
+
+
+<!--
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.entidades (
+  user_id uuid,
+  nome_completo text NOT NULL,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+  foto_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT entidades_pkey PRIMARY KEY (id),
+  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.financas (
+  entidade_id uuid,
+  descricao text NOT NULL,
+  valor_total numeric NOT NULL,
+  tipo text CHECK (tipo = ANY (ARRAY['receita'::text, 'despesa'::text])),
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid DEFAULT auth.uid(),
+  num_parcelas integer DEFAULT 1,
+  categoria text DEFAULT 'Geral'::text,
+  status_lancamento text DEFAULT 'aberto'::text CHECK (status_lancamento = ANY (ARRAY['aberto'::text, 'finalizado'::text, 'cancelado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT financas_pkey PRIMARY KEY (id),
+  CONSTRAINT financas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT financas_entidade_id_fkey FOREIGN KEY (entidade_id) REFERENCES public.entidades(id)
+);
+CREATE TABLE public.parcelas (
+  financa_id uuid,
+  num_parcela integer NOT NULL,
+  valor_parcela numeric NOT NULL,
+  data_vencimento date NOT NULL,
+  data_pagamento date,
+  codigo_barra text,
+  boleto_url text,
+  comprovante_url text,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  status text DEFAULT 'pendente'::text CHECK (status = ANY (ARRAY['pendente'::text, 'pago'::text, 'atrasado'::text])),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT parcelas_pkey PRIMARY KEY (id),
+  CONSTRAINT parcelas_financa_id_fkey FOREIGN KEY (financa_id) REFERENCES public.financas(id)
+);
+
+-->
