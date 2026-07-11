@@ -34,6 +34,1612 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
   ```
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+![imagem gamer master](assets/png/yaml_json.png)
+
+# Poque uso JSON & YAML nos meus prompt de comando?
+A traves de testes de jogos RPG interativos com IA (gratuitas), constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens equivocadas, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
+
+Ancoragem de Atenção: Modelos de linguagem (LLMs) são excelentes em reconhecer padrões estruturados. Quando você força a IA a reescrever ou ler um JSON com chaves fixas ("historico_tarefas_concluidas", "localizacao_atual"), você está obrigando o mecanismo de atenção da IA a focar e atualizar esses pontos específicos.
+
+Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa confusa para saber onde o personagem está, ela lê apenas as poucas linhas do último JSON resumido. É um "Save State" de videogame.
+
+### Comparação de Formatos de Dados para Engenharia de Prompt que utlizo para memoria persistente
+
+| Formato | Foco Principal | Vantagens | Desvantagens | Consumo de Tokens |
+| :--- | :--- | :--- | :--- | :--- |
+| **JSON** | Intercâmbio de dados entre sistemas (APIs). | * Rigidez absoluta.<br>* Padrão universal na web.<br>* Suporte nativo em qualquer linguagem. | * Sintaxe verbosa (muitas aspas, chaves e vírgulas).<br>* Fácil de quebrar por erro humano.<br>* Difícil de ler/escrever manualmente em chats. | **Alto** (Sintaxe consome espaço precioso). |
+| **YAML** | Arquivos de configuração e dados legíveis. | * Extremamente limpo (sem chaves ou vírgulas).<br>* Economiza espaço (tokens).<br>* Altamente legível por humanos e IAs. | * Depende estritamente de espaços (identação).<br>* Um espaço errado pode mudar a hierarquia do dado.<br>* Menos tolerante a tabs acidentais. | **Baixo/Médio** (Focado apenas no conteúdo essencial). |
+| **Markdown** | Formatação de documentos e textos ricos. | * Imune a erros de sintaxe (não quebra o chat).<br>* Perfeito para instruções, regras e descrições textuais.<br>* Visualmente agradável para o usuário. | * Ruim para armazenar dados matemáticos estruturados.<br>* A IA pode variar a formatação ao longo do tempo.<br>* Não serve como "banco de dados" rígido. | **Baixo** (Usa poucos caracteres especiais). |
+
+
+
+# As 4 Regras de Ouro do JSON
+* Tudo começa e termina com Chaves { }: Elas representam o objeto principal.
+* Chaves sempre usam Aspas Duplas "": Nunca use aspas simples '' e nunca deixe a chave sem aspas.
+* Certo: "nome": "Aristides"   , Errado: 'nome': "Aristides" ou nome: "Aristides"
+* Separadores Obrigatórios:  Use dois pontos (:) para separar a chave do valor. Use vírgula (,) para separar um par de dados do próximo.
+
+**Observação:** A Última Linha NUNCA tem vírgula: Se não houver mais nada depois daquele dado, colocar uma vírgula quebra o código.
+
+## Tipos de Dados Permitidos o JSON só aceita estes tipos de valores:
+* Texto (String): Sempre entre aspas duplas. "profissao": "Mestre de RPG"
+* Número (Number): Fora das aspas. "nivel": 1 ou "peso": 75.5
+* Booleano (Boolean): true ou false (letras minúsculas e sem aspas). "ativo": true
+* Nulo (Null): null (sem aspas). "modificador": null
+* Objeto (Object): Outro grupo de chaves {} lá dentro.
+* Lista (Array): Uma lista de coisas dentro de colchetes [].
+
+## A Diferença Crucial: Chaves {} vs Colchetes []
+## Este é o erro mais comum. Memorize isto:
+* { } CHAVES (Objeto): Guarda pares de "chave": "valor". Exige que você dê um nome para cada informação.
+* [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
+
+
+## exemplo
+```json
+{
+  "nome_do_jogo": "RPG de Mesa",
+  "atributos_do_jogador": {    
+    "forca": 10,
+    "agilidade": 12
+  },
+  "itens_na_mochila": [
+    "Espada",
+    "Escudo",
+    "Pocao de Cura"
+  ]
+}
+```
+
+# ARQUIVO YAML (regras fundamentais)
+ *Criar um arquivo YAML é muito simples porque você não precisa gerenciar chaves {} ou vírgulas. Você só precisa dominar a identação (os espaços no início da linha).
+
+## As Regras de Espaçamento (Identação)
+* No YAML, a hierarquia é definida por espaços. Se um dado está "dentro" de outro, ele deve ter 2 espaços de recuo.
+* PROIBIDO usar a tecla TAB: O YAML aceita apenas espaços puros (aperte a barra de espaço duas vezes). O TAB quebra o arquivo.
+* Use dois pontos : seguido de obrigatoriamente um espaço para separar a chave do valor.
+
+##  Os Elementos Básicos do YAML
+### A) Variável Simples (Texto ou Número)
+Apenas a chave, dois pontos, um espaço e o valor. Não precisa de aspas (a menos que o texto tenha caracteres muito estranhos).
+```
+EXEMPLO DE VARIAVERIAVEIS (Texto ou Número):
+  nome_do_mestre: aristidesbp
+  nivel_dificuldade: 5
+  jogo_ativo: true
+```
+### B) Objetos (Dados aninhados)
+Para colocar dados dentro de um grupo (Dados aninhados), quebre a linha e dê 2 espaços de recuo.
+```
+jogador_aristides:
+  nivel: 1
+  vida: 100/100
+  sono: 0/100
+```
+### C) Listas (Arrays)
+Para fazer uma lista de coisas simples, use o hífen - seguido de um espaço.
+
+```
+itens_aristides:
+  - 1 porção de cura
+  - 1 pergaminho do terremoto
+  - 2 porções de previsões
+```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# JOGANDO COM IA
+  
+```
+{
+  "diretrizes": true,
+  "como_voce_deve_se_comportar": "Se torne aristidesbp, um mestre de um jogo de RPG de mesa, criando aventuras imersivas e emocionantes, também administrando as mecânicas do jogo",
+  "tarefa": "ABSOLUTAMENTE sempre No início de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO STATUS DO GRUPO E AS REGRAS de forma completas dentro de uma caixa de texto em formato json descrita abaixo",
+  "FICHA_STATUS_DO_GRUPO": [
+    { "DIA": "1" },
+    { "HORARIO": "00:00h" },
+    { "MISSÃO_ATUAL": "objetivo da missão, quem é o patrocinador, recompensa" },
+    { "RESUMO_DA_MISSAO": "Resumo dos fatos e objetivo atual para manter o contexto, sempre atualizados" },
+    { "LOCALIZAÇÃO_ATUAL": "descrição do cenário atual e NPCs presentes relevantes para CONTEXTO E CONTINUAÇAO DA HISTORIA" }
+  ],
+  "jogador_aristides": [
+    { "nivel": "01" },
+    { "sono": "valor_atual/valor_maximo" },
+    { "fome": "valor_atual/valor_maximo" },
+    { "habilidade": "valor_atual/valor_maximo" },
+    { "inteligencia": "valor_atual/valor_maximo" },
+    { "vida": "valor_atual/valor_maximo" }
+  ],
+  "itens_aristides": [
+    "1 porção de cura(regenera 50% da energia total, uso individual)",
+    "1 pergaminho do terremoto (dando em área,-4 de energia)",
+    "1 pergaminho fortuna (individual, regenera 50% da sorte, acrescenta +1 ao nível máximo de sorte)",
+    "2 porções de previsões (comida regenera 100% da fome)"
+  ],
+  "REGRAS": [
+    { "ESTRUTURAÇÃO_DO_FEEDBACK": "Não jogue por mim. Narre o parágrafo atual, apresente 3 sugestões ao jogador de forma numerada" },
+    { "imparcialidade": "não puxe o saco, seja realista e coerente com a história, não facilitar ou salvar os jogadores" },
+    { "narrativas": "faça narrativas logo após o arquivo json, use no máximo 900 caracteres para o usuário poder escutar, devem ser imersivas, emocionais e detalhadas." },
+    { "MISSÃO": "uma por vez, os jogadores devem concluir ou escolher abandonar a missão antes de aceitar a outra." },
+    { "HORA_E_DIA": "1 dia = 24 horas (cada interação do jogador equivalem a 30 minutos)" },
+    { "FOME_E_SONO": "(aumentam +1 cada para cada hora que passa, se atingirem 100, desmaia -5 de energia)=0%;" },
+    { "CRIANDO_PERSONAGEM_MONSTROS_DESAFIOS_NPC": "Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total." },
+    { "desafios": "criar uma ficha aleatória igual a dos jogadores para cada monstro ou npc ou desafio, apresentá-la ao personagem antes de confrontos e testes" },
+    { "TESTES_E_COMBATES": "(ambos rolam: 2d6 + valor_do_atributo_testado) quem tirar o maior valor vence. Em caso de combate subtrair -2 ENERGIA no oponente que perdeu" },
+    { "habilidade": "testar para todo esforço físico, subtrair -1 do valor atual (fadiga)" },
+    { "inteligencia": "testar sempre que o personagem usar para persuadir, criar algo, descobrir..., subtrair -1 do valor atual (fadiga)" },
+    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL o nome dos jogadores E O TIPO DE AVENTURA ELE QUER JOGAR" },
+    { "combates": "sempre mostrar as fichas de todos os envolvidos e rolagem dos dados, pois assim os jogadores poderam analizar se deve fugir ou continuar" }
+  ]
+}
+
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# ASSITENTE DE SUPORTE
+
+```
+
+{
+"prontuário_das_conversas": true,
+"protocolo_anti_cache": "Para mitigar a perda de contexto em conversas longas, você deve ler o pronuario (arquivo json) do usuário no turno anterior e verificar se o passo foi solucionado.",
+"atualização_do_prontuario":"No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de código JSON, copiar todos os itens passados e adicionar o resumo da converssa atual,o obejetivo e criar um prontuario das conversas para que nao esquessamos oque ja foi feito ou realizado",
+"prontuario": [
+{ "item": 1,"resumo_da_conversa": "ususario pediu para Analisar o problema antes de responder. Faça quantas perguntas precisar ao usuário até compreender o cenário perfeitamente." },
+{ "item": 2,"resumo_da_conversa": "usuario pediu para Nunca envie blocos gigantes de código ou várias tarefas de uma vez. Envie apenas UMA única tarefa clara por vez, explique o porquê e AGUARDE o feedback/resultado do usuário antes de sugerir o próximo passo."},
+]
+
+"proxima_tarefa_pendente": "...",
+
+}
+
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
+ 
+## Download do aplicativo direto no git
+* Acesse o link oficial no Github não use da Play Store!
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
+
+```
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
+```
+```
+# comando para atualizar o termux:
+pkg update && pkg upgrade -y
+```
+```
+# comando para autorizar o uso de pastas do celular
+termux-setup-storage
+```
+```
+## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
+pkg install git -y
+pkg install nano -y
+pkg install openssh -y
+pkg install curl -y
+pkg install tree -y
+```
+```
+# ver as pastas ocultas (-a) do diretorio
+ls -a
+```
+```
+# ver pastas e arquivos
+tree
+```
+```
+# ir para o diretorio
+cd nome_do_diretorio
+```
+```
+# voltar para pasta anterior
+cd ..
+```
+```
+# voltar para pasta raiz
+cd
+```
+```
+# comando para criar pasta
+mkdir novo_projeto
+```
+``` 
+nano teste.txt 
+# abre o arquivo teste.txt 
+# obs: ele cria caso não exista
+# Ctrl+S  para salvar
+# Crtl+X  para sair
+```
+```
+mv teste.txt ./repositorios_git 
+# mover pasta ou arquivo (./pasta_destino)
+```
+```
+# limpar atela
+clear
+```
+```
+# como apagar pasta/arquivos/projetos
+rm -rf nome_da_pasta
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  TERMUX+ GIT+ GITHUB
+```
+# verificar se o git está instalado 
+git --version
+```
+```
+# vá para pasta onde ficará o repositório
+cd storage/downloads
+```
+```
+# Lista todas as configurações ativas: 
+git config --list
+```
+```
+# Configurar a pasta como segura (evita erros de segurança)
+git config --global --add safe.directory "$(pwd)"                     
+```
+```
+# Configurar nome de usuário
+git config --global user.name "nome_do_usuario"
+```
+```
+# Configurar email do GitHub
+git config --global user.email "seu@email.com"
+```
+```
+# verificar se tem chave SSH
+ls -a ~/.ssh
+```
+```
+# criar uma chave SSH
+# Aperte [Enter] (deixe tudo em branco).
+ssh-keygen -t ed25519 -C "email_cadastrado"
+```
+```
+# exibir o código que você deve copiar e colar no GitHub:
+cat ~/.ssh/id_ed25519.pub
+```
+
+* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
+* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
+* após salvar tem que confirmar por email.
+ssh criado use este comando no termux:
+```
+# testar a conexão:
+# Digite a palavra "yes" e aperte Enter.
+# DEVE APARECER:
+# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
+ssh -T git@github.com
+```
+```
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
+```
+# Altere a URL do repositório de HTTPS para SSH com o comando:
+git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+
+```
+# clonar um repositório
+# exemplo:
+git clone https://github.com/aristidesbp/aristidesbp.github.io.git
+```
+```
+# entrar na pasta
+cd aristidesbp.github.io
+```
+```
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
+```
+---
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
+```
+# 1. Sincroniza as informações com o GitHub 
+git fetch origin
+# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git reset --hard origin/main
+```
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+---
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
+```
+```
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
+```
+```
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_chekPointe"
+
+```
+```
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO BAIXAR MIDIAS COM TERMUX 
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+
+```
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  SERVIDOR PYTHON 
+# Passo 1: Instalar o Python3
+ * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+ * Navegue até a pasta onde seus arquivos estão 
+
+
+python3 -m http.server 8080
+```
+* Ele inicia um servidor web simples na porta 8080:
+* caso queira encerrar o processo basta apertar Ctr+C;
+
+**Como Acessar o Site no Navegador**
+Abra o navegador do seu celular (Chrome, Firefox, etc.).
+
+## [localhost CLIQUE AQUI](http://localhost:8080)
+```
+http://localhost:8080
+```
+
+## ⚠️ Observações importantes
+O servidor só funciona enquanto o Termux estiver aberto
+A porta 8080 pode ser trocada por outra, ex:
+Copiar código
+```
+python -m http.server 3000
+```
+Aí o endereço vira:
+* http://localhost:3000
+
+## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
+```
+# Descubra o IP do celular no Termux:
+```
+ip addr show wlan0
+```
+Vai aparecer algo como:
+* inet 192.168.1.105
+No navegador do outro dispositivo, acesse:
+* http://192.168.1.105:8080
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
+## instalar linux (terminal basico)
+```
+# instalador do Linux
+pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# instalar ubuntu
+proot-distro ubuntu
+```
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
+```
+# atualizar 
+apt update && apt upgrade -y
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
+## instalar buscador
+```
+# instalando o buscador
+apt install curl -y
+```
+```
+# instalando Ollama 
+curl a-fsSl http://ollama.com/install
+```
+```
+# abrir lista
+ollama list
+```
+```
+# baixar modelo
+ollama run qwen2.5-coder:7b
+```
+```
+# baixar modelo de linguagem básico
+ollama run phi3
+```
+```
+# baixar modelo de linguagem para programação
+ollama run deepsek-code:1.36
+```
+```
+ollama serve
+```
+* ess código vai ficar rodando em segundo plano,
+* arraste para direita e abra uma "NEW SESSION"
+
+
+## em uma nova Session
+```
+# entrar no Ubuntu
+proot-distro login ubuntu
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  python3 organizar.py
+```
+
+import os
+import shutil
+
+
+def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
+    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
+
+    separando-os exclusivamente por suas extensões (tipos).
+    """
+    pasta_origem = os.path.abspath(pasta_origem)
+    pasta_destino = os.path.abspath(pasta_destino)
+
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
+
+    arquivos_copiados = 0
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        # Evita que o script leia a própria pasta de destino
+        if pasta_atual_abs.startswith(pasta_destino):
+            continue
+
+        for nome_arquivo in arquivos:
+            # Ignora o próprio script e arquivos ocultos do sistema
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
+            nome_puro, extensao = os.path.splitext(nome_arquivo)
+
+            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
+            if extensao:
+
+            nome_subpasta_tipo = extensao.replace(".", "").lower()
+
+            else:
+                nome_subpasta_tipo = "SEM_EXTENSAO"
+
+            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
+            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
+
+            if not os.path.exists(caminho_pasta_tipo):
+                os.makedirs(caminho_pasta_tipo)
+
+            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
+            caminho_destino_final = os.path.join(
+                caminho_pasta_tipo, nome_arquivo
+            )
+
+            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
+            contador = 1
+            while os.path.exists(caminho_destino_final):
+                novo_nome = f"{nome_puro}_{contador}{extensao}"
+                caminho_destino_final = os.path.join(
+                    caminho_pasta_tipo, novo_nome
+                )
+                contador += 1
+
+            try:
+                # Copia o arquivo mantendo o original intacto na pasta de origem
+                shutil.copy2(caminho_origem, caminho_destino_final)
+                arquivos_copiados += 1
+                nome_final_exibicao = os.path.basename(caminho_destino_final)
+                print(
+                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
+                )
+            except Exception as erro:
+                print(f"Erro ao copiar {nome_arquivo}: {erro}")
+
+    if arquivos_copiados == 0:
+        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+ORIGEM = "."
+DESTINO = "./organizado"
+
+if __name__ == "__main__":
+    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
+    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
+    print("Processo concluído!")
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  python limpar_duplicados.py
+
+```
+import hashlib
+import os
+
+
+def calcular_hash(caminho_arquivo):
+    """Calcula a 'impressão digital' (hash SHA-256) do arquivo para garantir
+
+    que o conteúdo é identico.
+    """
+    hasher = hashlib.sha256()
+    # Lê o arquivo em blocos para não travar a memória do celular se o arquivo for grande
+    with open(caminho_arquivo, "rb") as f:
+        while bloco := f.read(4096):
+            hasher.update(bloco)
+    return hasher.hexdigest()
+
+
+def buscar_e_limpar_duplicados(pasta_origem):
+    """Identifica arquivos idênticos pelo conteúdo e pergunta antes de apagar."""
+    pasta_origem = os.path.abspath(pasta_origem)
+
+    # Dicionário para guardar { hash_do_arquivo: [lista_de_caminhos_com_esse_hash] }
+    registro_hashes = {}
+
+    print(" Analisando arquivos em busca de conteúdo idêntico...")
+
+    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas e lixeiras
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        for nome_arquivo in arquivos:
+            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
+                continue
+
+            caminho_completo = os.path.join(pasta_atual, nome_arquivo)
+
+            try:
+                # Calcula a impressão digital do arquivo
+                hash_arquivo = calcular_hash(caminho_completo)
+
+                # Se o hash já existe, encontramos uma duplicata
+                if hash_arquivo in registro_hashes:
+                    registro_hashes[hash_arquivo].append(caminho_completo)
+                else:
+                    # Se for a primeira vez que vemos esse hash, registra como o 'original'
+                    registro_hashes[hash_arquivo] = [caminho_completo]
+            except Exception as e:
+                print(f"Não foi possível ler {nome_arquivo}: {e}")
+
+    # Filtrar apenas os hashes que possuem mais de 1 arquivo (ou seja, têm duplicatas)
+    duplicatas_detectadas = {
+        hash_f: caminhos
+        for hash_f, caminhos in registro_hashes.items()
+        if len(caminhos) > 1
+    }
+
+    if not duplicatas_detectadas:
+        print("\n Excelente! Nenhum arquivo idêntico foi encontrado.")
+        return
+
+    # Lista na tela as duplicatas encontradas
+    print(f"\n Foram encontrados {len(duplicatas_detectadas)} grupos de arquivos idênticos:\n")
+    
+    arquivos_para_deletar = []
+
+    for i, (hash_f, caminhos) in enumerate(duplicatas_detectadas.items(), 1):
+        original = caminhos[0]
+        copias = caminhos[1:]
+        
+        print(f"Grupo {i}:")
+        print(f"  [MANTER] -> {os.path.relpath(original)}")
+        for copia in copias:
+            print(f"  [APAGAR] -> {os.path.relpath(copia)}")
+            arquivos_para_deletar.append(copia)
+        print("-" * 40)
+
+    print(f"\nNo total, {len(arquivos_para_deletar)} cópias repetidas serão apagadas.")
+    
+    # INTERAÇÃO: Pergunta ao usuário no Termux se pode deletar
+    resposta = input("Deseja apagar essas duplicatas agora? (s/n): ").strip().lower()
+
+    if resposta == 's':
+        print("\nApagando arquivos duplicados...")
+        deletados = 0
+        for caminho in arquivos_para_deletar:
+            try:
+                os.remove(caminho)
+                print(f"Deletado com sucesso: {os.path.basename(caminho)}")
+                deletados += 1
+            except Exception as e:
+                print(f"Erro ao deletar {os.path.basename(caminho)}: {e}")
+        print(f"\nPronto! {deletados} arquivos inúteis foram removidos.")
+    else:
+        print("\nAção cancelada. Nenhum arquivo foi alterado.")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+# Varre a pasta atual onde o Termux está aberto
+ORIGEM = "."
+
+if __name__ == "__main__":
+    buscar_e_limpar_duplicados(ORIGEM)
+
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# extrair.py
+
+```
+import os
+import shutil
+
+
+def achatar_diretorio_e_limpar(pasta_principal):
+    """Move todos os arquivos das subpastas para a pasta principal,
+
+    evitando duplicatas ao renomear arquivos repetidos, e deleta as pastas vazias.
+    """
+    pasta_principal = os.path.abspath(pasta_principal)
+    arquivos_movidos = 0
+
+    print("Fase 1: Movendo arquivos para a raiz...")
+    print("-" * 50)
+
+    # 1. Primeira Varredura: Mover os arquivos
+    for pasta_atual, subpastas, arquivos in os.walk(
+        pasta_principal, topdown=False
+    ):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas do sistema (.git, etc.)
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        # Se já estamos na pasta principal raiz, não fazemos nada com os arquivos daqui
+        if pasta_atual_abs == pasta_principal:
+            continue
+
+        for nome_arquivo in arquivos:
+            # Ignora o próprio script e arquivos ocultos
+            if (
+                nome_arquivo == "desfazer_organizacao.py"
+                or nome_arquivo.startswith(".")
+            ):
+                continue
+
+            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
+            nome_puro, extensao = os.path.splitext(nome_arquivo)
+
+            # Define o destino inicial (direto na raiz)
+            caminho_destino_final = os.path.join(pasta_principal, nome_arquivo)
+
+            # Tratamento de duplicatas: se o arquivo já existe na raiz, renomeia
+            contador = 1
+            while os.path.exists(caminho_destino_final):
+                novo_nome = f"{nome_puro}_{contador}{extensao}"
+                caminho_destino_final = os.path.join(pasta_principal, novo_nome)
+                contador += 1
+
+            try:
+                # Move o arquivo para a raiz
+                shutil.move(caminho_origem, caminho_destino_final)
+                arquivos_movidos += 1
+                nome_final_exibicao = os.path.basename(caminho_destino_final)
+                print(f"[{arquivos_movidos}] Movido: {nome_final_exibicao}")
+            except Exception as erro:
+                print(f"Erro ao mover {nome_arquivo}: {erro}")
+
+    print("-" * 50)
+    print(f"Total de arquivos movidos para a raiz: {arquivos_movidos}")
+    print("-" * 50)
+
+    # 2. Segunda Varredura: Apagar as subpastas que agora estão vazias
+    print("\nFase 2: Removendo pastas vazias...")
+    pastas_removidas = 0
+
+    for pasta_atual, subpastas, arquivos in os.walk(
+        pasta_principal, topdown=False
+    ):
+        pasta_atual_abs = os.path.abspath(pasta_atual)
+
+        # Ignora pastas ocultas do sistema
+        if any(
+            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
+        ):
+            continue
+
+        # Nunca deleta a própria pasta principal
+        if pasta_atual_abs == pasta_principal:
+            continue
+
+        # Verifica se a pasta está realmente vazia (sem arquivos e sem subpastas)
+        if (
+            not os.listdir(pasta_atual)
+            and pasta_atual_abs != pasta_principal
+        ):
+            try:
+                os.rmdir(pasta_atual)
+                pastas_removidas += 1
+                print(f"Pasta removida: {os.path.basename(pasta_atual)}")
+            except Exception as erro:
+                print(f"Não foi possível remover a pasta {pasta_atual}: {erro}")
+
+    print("-" * 50)
+    print(f"Total de pastas vazias deletadas: {pastas_removidas}")
+
+
+# --- ÁREA DE EXECUÇÃO ---
+# "." significa o diretório atual onde o script está rodando
+DIRETORIO_ATUAL = "."
+
+if __name__ == "__main__":
+    print("Iniciando processo de achatamento e limpeza...")
+    achatar_diretorio_e_limpar(DIRETORIO_ATUAL)
+    print("\nProcesso concluído com sucesso!")
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+## login.html (funcionando)
+```
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP ABP</title>
+
+    
+    <!-- CONEXÃO SUPABASE -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+
+    
+    <!-- STYLE -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FIM DO STYLE -->
+
+    
+    <script>
+     //iciciando a conexao
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Exporta para ser usado em outros scripts
+        window.supabaseClient = _supabase;
+    </script>
+    <!-- FIM DO CONEXÃO SUPABASE -->
+
+</head>
+
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
+
+
+    <!-- FORMULÁRIO -->
+    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
+            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
+        </div>
+        <!--
+        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
+            Entrar com Gmail
+        </button>
+-->
+        <div class="relative mb-6 text-center border-b border-slate-800">
+            <span
+                class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou
+                e-mail</span>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com"
+                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+
+            <div class="relative">
+                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
+                <input type="password" id="password" placeholder="••••••••"
+                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <button type="button" onclick="alternarSenha()"
+                    class="absolute right-3 top-8 text-slate-500 hover:text-white">
+                    🔒
+                </button>
+            </div>
+
+            <div class="text-right">
+                <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a
+                    senha?</button>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="realizarLogin()"
+                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
+                    ENTRAR
+                </button>
+                <button onclick="confirmarCadastro()"
+                    class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
+                    CADASTRAR
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- FIM DO FORMULÁRIO -->
+
+    <script>
+        
+        /**
+     * Nome do arquivo: alternar_senha.js
+     * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
+     */
+
+        function alternarSenha() {
+            // Busca o elemento de entrada pelo ID
+            const campo = document.getElementById('password');
+
+            if (campo) {
+                // Se for password, vira text (visível). Se for text, vira password (oculto).
+                campo.type = campo.type === 'password' ? 'text' : 'password';
+            }
+        }
+
+    </script>
+    <script>
+        /**
+         * Nome do arquivo: login_google.js
+         * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
+         */
+
+        async function loginComGoogle() {
+            const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    // Redireciona para o painel do ERP dentro do repositório
+                    redirectTo: window.location.origin + '/assets/erp/index.html'
+                }
+            });
+
+            if (error) {
+                console.error("Erro no login Google:", error.message);
+                alert("Erro ao conectar com Google: " + error.message);
+            }
+        }
+    </script>
+    <script>
+        /**
+     * Nome do arquivo: realizar_cadastro.js
+     * Objetivo: Criar uma nova conta de usuário no sistema.
+     */
+
+        async function realizarCadastro() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            if (!email || !senha) {
+                alert("Preencha e-mail e senha primeiro!");
+                return;
+            }
+
+            // Cria o usuário no Supabase. 
+            // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email,
+                password: senha
+            });
+
+            if (error) {
+                alert("Erro no cadastro: " + error.message);
+            } else {
+                alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
+            }
+        }
+    </script>
+    <script>
+        /**
+         * Função de apoio para evitar cadastros acidentais (UX)
+         */
+        function confirmarCadastro() {
+            const email = document.getElementById('email').value;
+            if (!email) return alert("Digite um e-mail!");
+
+            if (confirm(`Deseja criar uma conta para: ${email}?`)) {
+                realizarCadastro();
+            }
+        }
+    </script>
+    <script>
+        /**
+       * Nome do arquivo: realizar_login.js
+       * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
+       */
+
+        async function realizarLogin() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            // Validação básica de campos vazios
+            if (!email || !senha) {
+                alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
+                return;
+            }
+
+            try {
+                // Chamada oficial ao método de Sign In do Supabase
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: senha,
+                });
+
+                if (error) {
+                    console.error("Erro na autenticação:", error.message);
+                    alert("Erro ao entrar: " + error.message);
+                } else {
+                    console.log("Bem-vindo de volta!", data.user.email);
+                    // Redireciona para o painel principal após o sucesso
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                console.error("Ocorreu um erro inesperado no sistema:", err);
+            }
+        }  
+    </script>
+    <script>
+        /**
+     * Nome do arquivo: recuperar_senha.js
+     * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
+     */
+
+        async function solicitarRecuperacao() {
+            const email = document.getElementById('email').value;
+            if (!email) return alert("Digite seu e-mail.");
+
+            // O Supabase envia um link que redireciona o usuário para a página de redefinição
+            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: 'redefinir_senha.html',
+            });
+
+            if (error) alert(error.message);
+            else alert("Link enviado! Verifique sua caixa de entrada.");
+        }
+
+        async function salvarNovaSenha() {
+            const novaSenha = document.getElementById('novaSenha').value;
+            if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
+
+            // Atualiza os dados do usuário que clicou no link de recuperação
+            const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
+
+            if (error) {
+                alert("Erro ao atualizar: " + error.message);
+            } else {
+                alert("Senha atualizada com sucesso!");
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# index.html
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ERP ABP - Inicio</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+ <style>   
+     /* index.css */
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-top: 80px; /* Espaço para a navbar fixa */
+        }
+
+        /* Grid de Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: #3ecf8e;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #3ecf8e;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            background: #ef4444;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home {
+            background: #3ecf8e !important;
+        }
+  
+</style>
+
+
+</head>
+<body>
+<!-- navbar -->
+    <div class="navbar">
+        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
+            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
+            <button class="btn-nav" onclick="sairDaConta()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </div>
+<!-- fim navbar -->
+
+<div class="content">      
+<div class="grid">
+
+<!-- cardes do menu-->
+
+    <a href="testes.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>testes</h3>
+    </a>
+    
+    
+    <a href="entidades.html" class="card">
+    <i class="fas fa-users"></i>
+    <h3>Gestão de Entidades</h3>
+    </a>
+
+    <a href="financeiro.html" class="card">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h3>Financeiro</h3>
+    </a>
+
+    <a href="produtos.html" class="card">
+    <i class="fas fa-box"></i>
+    <h3>Produtos</h3>
+    </a>
+    
+ 
+
+            
+            <a href="vitrine.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>vitrine</h3>
+            </a>
+            
+            <a href="pdv.html" class="card">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>pdv</h3>
+            </a>
+            
+             
+<!-- fim cardes do menu-->         
+</div>        
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</body>
+</html>
+
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# tarefas.html (funcionando)
+```
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAREFAS - ERP ABP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
+        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        
+        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
+        
+        .barcode-group { display: flex; gap: 5px; }
+        .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
+
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
+        .tag-pendente { background: #fef3c7; color: #92400e; }
+        .tag-realizada { background: #dcfce7; color: #166534; }
+        .tag-data { background: #e0f2fe; color: #0284c7; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+    </style>
+
+    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        // Inicializa o cliente usando as constantes do supabase_config.js
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let recordedAudioBlob = null;
+        let mediaRecorder;
+        let audioChunks = [];
+        let html5QrCode;
+
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                document.getElementById('tela-login').style.display = 'flex';
+                document.getElementById('tela-sistema').style.display = 'none';
+            } else {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('tela-sistema').style.display = 'block';
+                loadtarefas(); 
+            }
+        }
+
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+            if (error) alert("Erro: " + error.message);
+            else verificar_login();
+        }
+
+        document.addEventListener('DOMContentLoaded', verificar_login);
+    </script>
+</head>
+<body>
+
+    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
+        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
+            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
+            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
+            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
+            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="tela-sistema" style="display: none;">
+        <div class="navbar">
+            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
+            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
+                <input type="hidden" id="edit-id">
+
+                <div class="section-title">Informações Básicas</div>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
+                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
+                    <div>
+                        <label>Código de Barras</label>
+                        <div class="barcode-group">
+                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
+                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
+                                <i class="fas fa-barcode"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
+                    <div>
+                        <label>Status</label>
+                        <select id="status_exercicio">
+                            <option value="pendente">Pendente</option>
+                            <option value="realizada">Realizada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="reader"></div>
+                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
+
+                <div class="section-title">Conteúdo do Exercício</div>
+                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
+
+                <div class="section-title">Mídias e Notas</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Foto da Resolução</label>
+                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
+                    </div>
+                    <div>
+                        <label>Gravar Áudio</label>
+                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
+                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>Observações do Responsável</label>
+                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
+                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            </div>
+
+            <div class="card">
+                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
+                                <th class="p-4">Atividade / Categoria</th>
+                                <th class="p-4">Código</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercises-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FUNÇÕES DO SCANNER ---
+        function startScanner() {
+            const readerDiv = document.getElementById('reader');
+            const stopBtn = document.getElementById('btn-stop-scanner');
+            readerDiv.style.display = 'block';
+            stopBtn.style.display = 'block';
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                document.getElementById('codigo_de_barras').value = decodedText;
+                stopScanner();
+            }).catch(err => console.error(err));
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('reader').style.display = 'none';
+                    document.getElementById('btn-stop-scanner').style.display = 'none';
+                });
+            }
+        }
+
+        // --- ÁUDIO ---
+        async function toggleGravação() {
+            const btn = document.getElementById('btn-audio');
+            const preview = document.getElementById('audio-preview');
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
+            } else {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    preview.src = URL.createObjectURL(recordedAudioBlob);
+                    preview.style.display = 'block';
+                };
+                mediaRecorder.start();
+                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
+            }
+        }
+
+        // --- CRUD ---
+        async function loadtarefas() {
+            const { data, error } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
+            if (error) { console.error(error); return; }
+            const tbody = document.getElementById('exercises-list');
+            tbody.innerHTML = data.map(e => {
+                let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
+                return `
+                <tr class="border-t">
+                    <td class="p-4">
+                        <span class="font-bold text-slate-800">${e.titulo}</span><br>
+                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">${e.categoria || 'Geral'}</span>
+                        <span class="tag tag-data"><i class="far fa-calendar-alt"></i> ${prazo}</span>
+                    </td>
+                    <td class="p-4 font-mono text-sm text-slate-400">${e.codigo_de_barras || '-'}</td>
+                    <td class="p-4"><span class="tag tag-${e.status_exercicio}">${e.status_exercicio}</span></td>
+                    <td class="p-4 text-center">
+                        <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`}).join('');
+        }
+
+        async function handleSave() {
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true; btn.innerText = "Salvando...";
+            try {
+                const id = document.getElementById('edit-id').value;
+                const { data: { user } } = await _supabase.auth.getUser();
+                const payload = {
+                    titulo: document.getElementById('titulo').value,
+                    descricao: document.getElementById('descricao').value,
+                    categoria: document.getElementById('categoria').value,
+                    codigo_de_barras: document.getElementById('codigo_de_barras').value,
+                    data_prazo: document.getElementById('data_prazo').value || null,
+                    status_exercicio: document.getElementById('status_exercicio').value,
+                    observacoes: document.getElementById('observacoes').value,
+                    user_id: user.id
+                };
+                
+                // Storage handling (simplificado)
+                const inputFoto = document.getElementById('foto_resolucao');
+                if (inputFoto.files[0]) {
+                    const fileName = `res_${Date.now()}.jpg`;
+                    await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
+                    payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+                }
+
+                const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
+                if (error) throw error;
+                resetForm(); loadtarefas();
+            } catch (e) { alert(e.message); }
+            finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
+        }
+
+        async function editFull(id) {
+            const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
+            if (data) {
+                document.getElementById('edit-id').value = data.id;
+                document.getElementById('titulo').value = data.titulo;
+                document.getElementById('descricao').value = data.descricao;
+                document.getElementById('categoria').value = data.categoria || '';
+                document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
+                document.getElementById('data_prazo').value = data.data_prazo || '';
+                document.getElementById('status_exercicio').value = data.status_exercicio;
+                document.getElementById('observacoes').value = data.observacoes || '';
+                document.getElementById('form-title').innerText = "Editando Atividade";
+                document.getElementById('btn-cancel').style.display = "block";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function deleteExercicio(id) {
+            if (confirm("Excluir?")) { await _supabase.from('tarefas').delete().eq('id', id); loadtarefas(); }
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+            document.getElementById('status_exercicio').value = 'pendente';
+            document.getElementById('form-title').innerText = "Nova Atividade";
+            document.getElementById('btn-cancel').style.display = "none";
+            recordedAudioBlob = null;
+            document.getElementById('audio-preview').style.display = 'none';
+        }
+
+        function filtrarTabela() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('#exercises-list tr').forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+    <!--
+    -- ============================================================================
+-- SCRIPT: MÓDULO TAREFAS (GESTÃO DE EXERCÍCIOS)
+-- ============================================================================
+
+-- 1. Criação da Tabela com suporte a RLS e Identidade do Usuário
+CREATE TABLE IF NOT EXISTS public.tarefas (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    categoria TEXT,
+    codigo_de_barras TEXT,
+    data_prazo DATE,
+    observacoes TEXT,
+    foto_url TEXT,
+    audio_url TEXT,
+    status_exercicio TEXT DEFAULT 'pendente' CHECK (status_exercicio IN ('pendente', 'realizada')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. Habilitar Row Level Security (RLS)
+ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
+
+-- 3. Políticas de Segurança: O usuário só vê e edita o que é DELE
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Usuários podem gerenciar suas próprias tarefas') THEN
+        CREATE POLICY "Usuários podem gerenciar suas próprias tarefas" 
+        ON public.tarefas 
+        FOR ALL 
+        USING (auth.uid() = user_id) 
+        WITH CHECK (auth.uid() = user_id);
+    END IF;
+END $$;
+
+-- 4. Configuração de Buckets para Mídias (Fotos e Áudios)
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('resolucoes', 'resolucoes', true) 
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('audios', 'audios', true) 
+ON CONFLICT (id) DO NOTHING;
+
+-- 5. Políticas de Storage: Permitir upload apenas para usuários autenticados
+-- Nota: 'public' no bucket permite leitura anônima via URL, mas o upload exige login.
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Upload autenticado em mídias') THEN
+        CREATE POLICY "Upload autenticado em mídias" 
+        ON storage.objects FOR INSERT 
+        WITH CHECK (auth.role() = 'authenticated');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Leitura pública de mídias') THEN
+        CREATE POLICY "Leitura pública de mídias" 
+        ON storage.objects FOR SELECT 
+        USING (bucket_id IN ('resolucoes', 'audios'));
+    END IF;
+END $$;
+    
+    -->
+</html>
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -3639,1624 +5245,6 @@ CREATE TABLE public.parcelas (
         }
     </script>
 </body>
-</html>
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥      🟥🟥🟥    🟥🟥    🟥🟥  🟥  🟥🟥  🟥🟥          🟥🟥
-🟥🟥  🟥🟥  🟥  🟥🟥  🟥  🟥  🟥  🟥  🟥🟥  🟥🟥  🟥🟥🟥🟥🟥🟥
-🟥🟥  🟥🟥  🟥  🟥🟥  🟥  🟥🟥    🟥  🟥🟥  🟥🟥  🟥🟥🟥🟥🟥🟥
-🟥🟥      🟥🟥  🟥🟥  🟥  🟥🟥🟥  🟥  🟥🟥  🟥🟥🟥      🟥🟥🟥
-🟥🟥  🟥🟥  🟥  🟥🟥  🟥  🟥🟥🟥  🟥  🟥🟥  🟥🟥🟥🟥🟥🟥  🟥🟥
-🟥🟥  🟥🟥  🟥  🟥🟥  🟥  🟥🟥🟥  🟥  🟥🟥  🟥🟥🟥🟥🟥🟥  🟥🟥
-🟥🟥      🟥🟥🟥    🟥🟥  🟥🟥🟥  🟥        🟥🟥         🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-
-![imagem gamer master](assets/png/yaml_json.png)
-
-# Poque uso JSON & YAML nos meus prompt de comando?
-A traves de testes de jogos RPG interativos com IA (gratuitas), constatei que  ao atigir media de 20.000 a 25.000 caracteres elea começa a esquescer e mandar mensagens equivocadas, por isso decidi fazer um chekliste para ela revisar sempre antes de continuar com a aventura na tentativa de criar uma memoria persistente atraves de Ancoragem de Atenção.
-
-Ancoragem de Atenção: Modelos de linguagem (LLMs) são excelentes em reconhecer padrões estruturados. Quando você força a IA a reescrever ou ler um JSON com chaves fixas ("historico_tarefas_concluidas", "localizacao_atual"), você está obrigando o mecanismo de atenção da IA a focar e atualizar esses pontos específicos.
-
-Compactação de Contexto: Em vez de a IA ter que reler 10 páginas de conversa confusa para saber onde o personagem está, ela lê apenas as poucas linhas do último JSON resumido. É um "Save State" de videogame.
-
-### Comparação de Formatos de Dados para Engenharia de Prompt que utlizo para memoria persistente
-
-| Formato | Foco Principal | Vantagens | Desvantagens | Consumo de Tokens |
-| :--- | :--- | :--- | :--- | :--- |
-| **JSON** | Intercâmbio de dados entre sistemas (APIs). | * Rigidez absoluta.<br>* Padrão universal na web.<br>* Suporte nativo em qualquer linguagem. | * Sintaxe verbosa (muitas aspas, chaves e vírgulas).<br>* Fácil de quebrar por erro humano.<br>* Difícil de ler/escrever manualmente em chats. | **Alto** (Sintaxe consome espaço precioso). |
-| **YAML** | Arquivos de configuração e dados legíveis. | * Extremamente limpo (sem chaves ou vírgulas).<br>* Economiza espaço (tokens).<br>* Altamente legível por humanos e IAs. | * Depende estritamente de espaços (identação).<br>* Um espaço errado pode mudar a hierarquia do dado.<br>* Menos tolerante a tabs acidentais. | **Baixo/Médio** (Focado apenas no conteúdo essencial). |
-| **Markdown** | Formatação de documentos e textos ricos. | * Imune a erros de sintaxe (não quebra o chat).<br>* Perfeito para instruções, regras e descrições textuais.<br>* Visualmente agradável para o usuário. | * Ruim para armazenar dados matemáticos estruturados.<br>* A IA pode variar a formatação ao longo do tempo.<br>* Não serve como "banco de dados" rígido. | **Baixo** (Usa poucos caracteres especiais). |
-
-
-
-# As 4 Regras de Ouro do JSON
-* Tudo começa e termina com Chaves { }: Elas representam o objeto principal.
-* Chaves sempre usam Aspas Duplas "": Nunca use aspas simples '' e nunca deixe a chave sem aspas.
-* Certo: "nome": "Aristides"   , Errado: 'nome': "Aristides" ou nome: "Aristides"
-* Separadores Obrigatórios:  Use dois pontos (:) para separar a chave do valor. Use vírgula (,) para separar um par de dados do próximo.
-
-**Observação:** A Última Linha NUNCA tem vírgula: Se não houver mais nada depois daquele dado, colocar uma vírgula quebra o código.
-
-## Tipos de Dados Permitidos o JSON só aceita estes tipos de valores:
-* Texto (String): Sempre entre aspas duplas. "profissao": "Mestre de RPG"
-* Número (Number): Fora das aspas. "nivel": 1 ou "peso": 75.5
-* Booleano (Boolean): true ou false (letras minúsculas e sem aspas). "ativo": true
-* Nulo (Null): null (sem aspas). "modificador": null
-* Objeto (Object): Outro grupo de chaves {} lá dentro.
-* Lista (Array): Uma lista de coisas dentro de colchetes [].
-
-## A Diferença Crucial: Chaves {} vs Colchetes []
-## Este é o erro mais comum. Memorize isto:
-* { } CHAVES (Objeto): Guarda pares de "chave": "valor". Exige que você dê um nome para cada informação.
-* [ ] COLCHETES (Array/Lista): Guarda apenas uma lista de valores diretos, separados por vírgula. Não tem chaves internas para cada item.
-
-
-## exemplo
-```json
-{
-  "nome_do_jogo": "RPG de Mesa",
-  "atributos_do_jogador": {    
-    "forca": 10,
-    "agilidade": 12
-  },
-  "itens_na_mochila": [
-    "Espada",
-    "Escudo",
-    "Pocao de Cura"
-  ]
-}
-```
-
-# ARQUIVO YAML (regras fundamentais)
- *Criar um arquivo YAML é muito simples porque você não precisa gerenciar chaves {} ou vírgulas. Você só precisa dominar a identação (os espaços no início da linha).
-
-## As Regras de Espaçamento (Identação)
-* No YAML, a hierarquia é definida por espaços. Se um dado está "dentro" de outro, ele deve ter 2 espaços de recuo.
-* PROIBIDO usar a tecla TAB: O YAML aceita apenas espaços puros (aperte a barra de espaço duas vezes). O TAB quebra o arquivo.
-* Use dois pontos : seguido de obrigatoriamente um espaço para separar a chave do valor.
-
-##  Os Elementos Básicos do YAML
-### A) Variável Simples (Texto ou Número)
-Apenas a chave, dois pontos, um espaço e o valor. Não precisa de aspas (a menos que o texto tenha caracteres muito estranhos).
-```
-EXEMPLO DE VARIAVERIAVEIS (Texto ou Número):
-  nome_do_mestre: aristidesbp
-  nivel_dificuldade: 5
-  jogo_ativo: true
-```
-### B) Objetos (Dados aninhados)
-Para colocar dados dentro de um grupo (Dados aninhados), quebre a linha e dê 2 espaços de recuo.
-```
-jogador_aristides:
-  nivel: 1
-  vida: 100/100
-  sono: 0/100
-```
-### C) Listas (Arrays)
-Para fazer uma lista de coisas simples, use o hífen - seguido de um espaço.
-
-```
-itens_aristides:
-  - 1 porção de cura
-  - 1 pergaminho do terremoto
-  - 2 porções de previsões
-```
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# JOGANDO COM IA
-  
-```
-{
-  "diretrizes": true,
-  "como_voce_deve_se_comportar": "Se torne aristidesbp, um mestre de um jogo de RPG de mesa, criando aventuras imersivas e emocionantes, também administrando as mecânicas do jogo",
-  "tarefa": "ABSOLUTAMENTE sempre No início de TODAS as suas mensagens, você copiar obrigatoriamente a FICHA DO STATUS DO GRUPO E AS REGRAS de forma completas dentro de uma caixa de texto em formato json descrita abaixo",
-  "FICHA_STATUS_DO_GRUPO": [
-    { "DIA": "1" },
-    { "HORARIO": "00:00h" },
-    { "MISSÃO_ATUAL": "objetivo da missão, quem é o patrocinador, recompensa" },
-    { "RESUMO_DA_MISSAO": "Resumo dos fatos e objetivo atual para manter o contexto, sempre atualizados" },
-    { "LOCALIZAÇÃO_ATUAL": "descrição do cenário atual e NPCs presentes relevantes para CONTEXTO E CONTINUAÇAO DA HISTORIA" }
-  ],
-  "jogador_aristides": [
-    { "nivel": "01" },
-    { "sono": "valor_atual/valor_maximo" },
-    { "fome": "valor_atual/valor_maximo" },
-    { "habilidade": "valor_atual/valor_maximo" },
-    { "inteligencia": "valor_atual/valor_maximo" },
-    { "vida": "valor_atual/valor_maximo" }
-  ],
-  "itens_aristides": [
-    "1 porção de cura(regenera 50% da energia total, uso individual)",
-    "1 pergaminho do terremoto (dando em área,-4 de energia)",
-    "1 pergaminho fortuna (individual, regenera 50% da sorte, acrescenta +1 ao nível máximo de sorte)",
-    "2 porções de previsões (comida regenera 100% da fome)"
-  ],
-  "REGRAS": [
-    { "ESTRUTURAÇÃO_DO_FEEDBACK": "Não jogue por mim. Narre o parágrafo atual, apresente 3 sugestões ao jogador de forma numerada" },
-    { "imparcialidade": "não puxe o saco, seja realista e coerente com a história, não facilitar ou salvar os jogadores" },
-    { "narrativas": "faça narrativas logo após o arquivo json, use no máximo 900 caracteres para o usuário poder escutar, devem ser imersivas, emocionais e detalhadas." },
-    { "MISSÃO": "uma por vez, os jogadores devem concluir ou escolher abandonar a missão antes de aceitar a outra." },
-    { "HORA_E_DIA": "1 dia = 24 horas (cada interação do jogador equivalem a 30 minutos)" },
-    { "FOME_E_SONO": "(aumentam +1 cada para cada hora que passa, se atingirem 100, desmaia -5 de energia)=0%;" },
-    { "CRIANDO_PERSONAGEM_MONSTROS_DESAFIOS_NPC": "Jogue um dado de 6 lados (1d6), some 6 ao número que tirar esse será o total de HABILIDADE MAXIMA. Jogar 2d6 some 12 ao número, será o total maximo de ENERGIA. Há também o de SORTE. Jogue um 1d6, some 6 para obter o total." },
-    { "desafios": "criar uma ficha aleatória igual a dos jogadores para cada monstro ou npc ou desafio, apresentá-la ao personagem antes de confrontos e testes" },
-    { "TESTES_E_COMBATES": "(ambos rolam: 2d6 + valor_do_atributo_testado) quem tirar o maior valor vence. Em caso de combate subtrair -2 ENERGIA no oponente que perdeu" },
-    { "habilidade": "testar para todo esforço físico, subtrair -1 do valor atual (fadiga)" },
-    { "inteligencia": "testar sempre que o personagem usar para persuadir, criar algo, descobrir..., subtrair -1 do valor atual (fadiga)" },
-    { "INICIANDO_JOGO": "PERGUNTE PARA O USUARIO QUAL o nome dos jogadores E O TIPO DE AVENTURA ELE QUER JOGAR" },
-    { "combates": "sempre mostrar as fichas de todos os envolvidos e rolagem dos dados, pois assim os jogadores poderam analizar se deve fugir ou continuar" }
-  ]
-}
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ASSITENTE DE SUPORTE
-
-```
-
-{
-"prontuário_das_conversas": true,
-"protocolo_anti_cache": "Para mitigar a perda de contexto em conversas longas, você deve ler o pronuario (arquivo json) do usuário no turno anterior e verificar se o passo foi solucionado.",
-"atualização_do_prontuario":"No INICIO de TODAS as mensagens, sem exceção, você deve gerar um bloco de código JSON, copiar todos os itens passados e adicionar o resumo da converssa atual,o obejetivo e criar um prontuario das conversas para que nao esquessamos oque ja foi feito ou realizado",
-"prontuario": [
-{ "item": 1,"resumo_da_conversa": "ususario pediu para Analisar o problema antes de responder. Faça quantas perguntas precisar ao usuário até compreender o cenário perfeitamente." },
-{ "item": 2,"resumo_da_conversa": "usuario pediu para Nunca envie blocos gigantes de código ou várias tarefas de uma vez. Envie apenas UMA única tarefa clara por vez, explique o porquê e AGUARDE o feedback/resultado do usuário antes de sugerir o próximo passo."},
-]
-
-"proxima_tarefa_pendente": "...",
-
-}
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
- 
-## Download do aplicativo direto no git
-* Acesse o link oficial no Github não use da Play Store!
-* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
-[TERMUX](https://github.com/termux/termux-app/releases)
-
-
-```
-# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
-# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
-```
-```
-# comando para atualizar o termux:
-pkg update && pkg upgrade -y
-```
-```
-# comando para autorizar o uso de pastas do celular
-termux-setup-storage
-```
-```
-## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
-pkg install git -y
-pkg install nano -y
-pkg install openssh -y
-pkg install curl -y
-pkg install tree -y
-```
-```
-# ver as pastas ocultas (-a) do diretorio
-ls -a
-```
-```
-# ver pastas e arquivos
-tree
-```
-```
-# ir para o diretorio
-cd nome_do_diretorio
-```
-```
-# voltar para pasta anterior
-cd ..
-```
-```
-# voltar para pasta raiz
-cd
-```
-```
-# comando para criar pasta
-mkdir novo_projeto
-```
-``` 
-nano teste.txt 
-# abre o arquivo teste.txt 
-# obs: ele cria caso não exista
-# Ctrl+S  para salvar
-# Crtl+X  para sair
-```
-```
-mv teste.txt ./repositorios_git 
-# mover pasta ou arquivo (./pasta_destino)
-```
-```
-# limpar atela
-clear
-```
-```
-# como apagar pasta/arquivos/projetos
-rm -rf nome_da_pasta
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  TERMUX+ GIT+ GITHUB
-```
-# verificar se o git está instalado 
-git --version
-```
-```
-# vá para pasta onde ficará o repositório
-cd storage/downloads
-```
-```
-# Lista todas as configurações ativas: 
-git config --list
-```
-```
-# Configurar a pasta como segura (evita erros de segurança)
-git config --global --add safe.directory "$(pwd)"                     
-```
-```
-# Configurar nome de usuário
-git config --global user.name "nome_do_usuario"
-```
-```
-# Configurar email do GitHub
-git config --global user.email "seu@email.com"
-```
-```
-# verificar se tem chave SSH
-ls -a ~/.ssh
-```
-```
-# criar uma chave SSH
-# Aperte [Enter] (deixe tudo em branco).
-ssh-keygen -t ed25519 -C "email_cadastrado"
-```
-```
-# exibir o código que você deve copiar e colar no GitHub:
-cat ~/.ssh/id_ed25519.pub
-```
-
-* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
-* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
-* após salvar tem que confirmar por email.
-ssh criado use este comando no termux:
-```
-# testar a conexão:
-# Digite a palavra "yes" e aperte Enter.
-# DEVE APARECER:
-# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
-ssh -T git@github.com
-```
-```
-# iniciar o agente de chaves e registrar nova chave:
-eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
-```
-```
-# Altere a URL do repositório de HTTPS para SSH com o comando:
-git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
-
-```
-# clonar um repositório
-# exemplo:
-git clone https://github.com/aristidesbp/aristidesbp.github.io.git
-```
-```
-# entrar na pasta
-cd aristidesbp.github.io
-```
-```
-# dar permissão
-git config --global --add safe.directory "$(pwd)"
-```
-```
-# testar
-git status 
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main
-
-```
----
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
-```
-# 1. Sincroniza as informações com o GitHub 
-git fetch origin
-# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
-git reset --hard origin/main
-```
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
----
-# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-
-```
-```
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .
-
-```
-```
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_chekPointe"
-
-```
-```
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO BAIXAR MIDIAS COM TERMUX 
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-
-```
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  SERVIDOR PYTHON 
-# Passo 1: Instalar o Python3
- * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
- * Navegue até a pasta onde seus arquivos estão 
-
-
-python3 -m http.server 8080
-```
-* Ele inicia um servidor web simples na porta 8080:
-* caso queira encerrar o processo basta apertar Ctr+C;
-
-**Como Acessar o Site no Navegador**
-Abra o navegador do seu celular (Chrome, Firefox, etc.).
-
-## [localhost CLIQUE AQUI](http://localhost:8080)
-```
-http://localhost:8080
-```
-
-## ⚠️ Observações importantes
-O servidor só funciona enquanto o Termux estiver aberto
-A porta 8080 pode ser trocada por outra, ex:
-Copiar código
-```
-python -m http.server 3000
-```
-Aí o endereço vira:
-* http://localhost:3000
-
-## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
-```
-# Descubra o IP do celular no Termux:
-```
-ip addr show wlan0
-```
-Vai aparecer algo como:
-* inet 192.168.1.105
-No navegador do outro dispositivo, acesse:
-* http://192.168.1.105:8080
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
-## instalar linux (terminal basico)
-```
-# instalador do Linux
-pkg install proot-distro
-```
-```
-# verificar iso disponível
-proot-distro list
-```
-```
-# instalar ubuntu
-proot-distro ubuntu
-```
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
-```
-# atualizar 
-apt update && apt upgrade -y
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
-## instalar buscador
-```
-# instalando o buscador
-apt install curl -y
-```
-```
-# instalando Ollama 
-curl a-fsSl http://ollama.com/install
-```
-```
-# abrir lista
-ollama list
-```
-```
-# baixar modelo
-ollama run qwen2.5-coder:7b
-```
-```
-# baixar modelo de linguagem básico
-ollama run phi3
-```
-```
-# baixar modelo de linguagem para programação
-ollama run deepsek-code:1.36
-```
-```
-ollama serve
-```
-* ess código vai ficar rodando em segundo plano,
-* arraste para direita e abra uma "NEW SESSION"
-
-
-## em uma nova Session
-```
-# entrar no Ubuntu
-proot-distro login ubuntu
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  python3 organizar.py
-```
-
-import os
-import shutil
-
-
-def achatar_e_categorizar_por_tipo(pasta_origem, pasta_destino):
-    """Varre as subpastas e apenas COPIA os arquivos para a pasta de destino,
-
-    separando-os exclusivamente por suas extensões (tipos).
-    """
-    pasta_origem = os.path.abspath(pasta_origem)
-    pasta_destino = os.path.abspath(pasta_destino)
-
-    if not os.path.exists(pasta_destino):
-        os.makedirs(pasta_destino)
-
-    arquivos_copiados = 0
-
-    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas e lixeiras do sistema (.git, .Trash, etc)
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        # Evita que o script leia a própria pasta de destino
-        if pasta_atual_abs.startswith(pasta_destino):
-            continue
-
-        for nome_arquivo in arquivos:
-            # Ignora o próprio script e arquivos ocultos do sistema
-            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
-                continue
-
-            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
-            nome_puro, extensao = os.path.splitext(nome_arquivo)
-
-            # 1. Classifica EXCLUSIVAMENTE pelo tipo (ex: HTML, CSS, JS)
-            if extensao:
-
-            nome_subpasta_tipo = extensao.replace(".", "").lower()
-
-            else:
-                nome_subpasta_tipo = "SEM_EXTENSAO"
-
-            # 2. Define a pasta do tipo (ex: ./bkps/HTML)
-            caminho_pasta_tipo = os.path.join(pasta_destino, nome_subpasta_tipo)
-
-            if not os.path.exists(caminho_pasta_tipo):
-                os.makedirs(caminho_pasta_tipo)
-
-            # 3. Define o caminho final do arquivo direto dentro da pasta do tipo
-            caminho_destino_final = os.path.join(
-                caminho_pasta_tipo, nome_arquivo
-            )
-
-            # 4. Tratamento de duplicatas com nomes iguais dentro da mesma pasta de tipo
-            contador = 1
-            while os.path.exists(caminho_destino_final):
-                novo_nome = f"{nome_puro}_{contador}{extensao}"
-                caminho_destino_final = os.path.join(
-                    caminho_pasta_tipo, novo_nome
-                )
-                contador += 1
-
-            try:
-                # Copia o arquivo mantendo o original intacto na pasta de origem
-                shutil.copy2(caminho_origem, caminho_destino_final)
-                arquivos_copiados += 1
-                nome_final_exibicao = os.path.basename(caminho_destino_final)
-                print(
-                    f"[{arquivos_copiados}] Copiado: {nome_arquivo} -> bkps/{nome_subpasta_tipo}/{nome_final_exibicao}"
-                )
-            except Exception as erro:
-                print(f"Erro ao copiar {nome_arquivo}: {erro}")
-
-    if arquivos_copiados == 0:
-        print("\n[AVISO]: Nenhum arquivo real encontrado para copiar!")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-ORIGEM = "."
-DESTINO = "./organizado"
-
-if __name__ == "__main__":
-    print("Iniciando cópia organizada apenas por Tipo (Extensão)...")
-    achatar_e_categorizar_por_tipo(ORIGEM, DESTINO)
-    print("Processo concluído!")
-
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  python limpar_duplicados.py
-
-```
-import hashlib
-import os
-
-
-def calcular_hash(caminho_arquivo):
-    """Calcula a 'impressão digital' (hash SHA-256) do arquivo para garantir
-
-    que o conteúdo é identico.
-    """
-    hasher = hashlib.sha256()
-    # Lê o arquivo em blocos para não travar a memória do celular se o arquivo for grande
-    with open(caminho_arquivo, "rb") as f:
-        while bloco := f.read(4096):
-            hasher.update(bloco)
-    return hasher.hexdigest()
-
-
-def buscar_e_limpar_duplicados(pasta_origem):
-    """Identifica arquivos idênticos pelo conteúdo e pergunta antes de apagar."""
-    pasta_origem = os.path.abspath(pasta_origem)
-
-    # Dicionário para guardar { hash_do_arquivo: [lista_de_caminhos_com_esse_hash] }
-    registro_hashes = {}
-
-    print(" Analisando arquivos em busca de conteúdo idêntico...")
-
-    for pasta_atual, subpastas, arquivos in os.walk(pasta_origem):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas e lixeiras
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        for nome_arquivo in arquivos:
-            if nome_arquivo == "organizar.py" or nome_arquivo.startswith("."):
-                continue
-
-            caminho_completo = os.path.join(pasta_atual, nome_arquivo)
-
-            try:
-                # Calcula a impressão digital do arquivo
-                hash_arquivo = calcular_hash(caminho_completo)
-
-                # Se o hash já existe, encontramos uma duplicata
-                if hash_arquivo in registro_hashes:
-                    registro_hashes[hash_arquivo].append(caminho_completo)
-                else:
-                    # Se for a primeira vez que vemos esse hash, registra como o 'original'
-                    registro_hashes[hash_arquivo] = [caminho_completo]
-            except Exception as e:
-                print(f"Não foi possível ler {nome_arquivo}: {e}")
-
-    # Filtrar apenas os hashes que possuem mais de 1 arquivo (ou seja, têm duplicatas)
-    duplicatas_detectadas = {
-        hash_f: caminhos
-        for hash_f, caminhos in registro_hashes.items()
-        if len(caminhos) > 1
-    }
-
-    if not duplicatas_detectadas:
-        print("\n Excelente! Nenhum arquivo idêntico foi encontrado.")
-        return
-
-    # Lista na tela as duplicatas encontradas
-    print(f"\n Foram encontrados {len(duplicatas_detectadas)} grupos de arquivos idênticos:\n")
-    
-    arquivos_para_deletar = []
-
-    for i, (hash_f, caminhos) in enumerate(duplicatas_detectadas.items(), 1):
-        original = caminhos[0]
-        copias = caminhos[1:]
-        
-        print(f"Grupo {i}:")
-        print(f"  [MANTER] -> {os.path.relpath(original)}")
-        for copia in copias:
-            print(f"  [APAGAR] -> {os.path.relpath(copia)}")
-            arquivos_para_deletar.append(copia)
-        print("-" * 40)
-
-    print(f"\nNo total, {len(arquivos_para_deletar)} cópias repetidas serão apagadas.")
-    
-    # INTERAÇÃO: Pergunta ao usuário no Termux se pode deletar
-    resposta = input("Deseja apagar essas duplicatas agora? (s/n): ").strip().lower()
-
-    if resposta == 's':
-        print("\nApagando arquivos duplicados...")
-        deletados = 0
-        for caminho in arquivos_para_deletar:
-            try:
-                os.remove(caminho)
-                print(f"Deletado com sucesso: {os.path.basename(caminho)}")
-                deletados += 1
-            except Exception as e:
-                print(f"Erro ao deletar {os.path.basename(caminho)}: {e}")
-        print(f"\nPronto! {deletados} arquivos inúteis foram removidos.")
-    else:
-        print("\nAção cancelada. Nenhum arquivo foi alterado.")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-# Varre a pasta atual onde o Termux está aberto
-ORIGEM = "."
-
-if __name__ == "__main__":
-    buscar_e_limpar_duplicados(ORIGEM)
-
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# extrair.py
-
-```
-import os
-import shutil
-
-
-def achatar_diretorio_e_limpar(pasta_principal):
-    """Move todos os arquivos das subpastas para a pasta principal,
-
-    evitando duplicatas ao renomear arquivos repetidos, e deleta as pastas vazias.
-    """
-    pasta_principal = os.path.abspath(pasta_principal)
-    arquivos_movidos = 0
-
-    print("Fase 1: Movendo arquivos para a raiz...")
-    print("-" * 50)
-
-    # 1. Primeira Varredura: Mover os arquivos
-    for pasta_atual, subpastas, arquivos in os.walk(
-        pasta_principal, topdown=False
-    ):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas do sistema (.git, etc.)
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        # Se já estamos na pasta principal raiz, não fazemos nada com os arquivos daqui
-        if pasta_atual_abs == pasta_principal:
-            continue
-
-        for nome_arquivo in arquivos:
-            # Ignora o próprio script e arquivos ocultos
-            if (
-                nome_arquivo == "desfazer_organizacao.py"
-                or nome_arquivo.startswith(".")
-            ):
-                continue
-
-            caminho_origem = os.path.join(pasta_atual, nome_arquivo)
-            nome_puro, extensao = os.path.splitext(nome_arquivo)
-
-            # Define o destino inicial (direto na raiz)
-            caminho_destino_final = os.path.join(pasta_principal, nome_arquivo)
-
-            # Tratamento de duplicatas: se o arquivo já existe na raiz, renomeia
-            contador = 1
-            while os.path.exists(caminho_destino_final):
-                novo_nome = f"{nome_puro}_{contador}{extensao}"
-                caminho_destino_final = os.path.join(pasta_principal, novo_nome)
-                contador += 1
-
-            try:
-                # Move o arquivo para a raiz
-                shutil.move(caminho_origem, caminho_destino_final)
-                arquivos_movidos += 1
-                nome_final_exibicao = os.path.basename(caminho_destino_final)
-                print(f"[{arquivos_movidos}] Movido: {nome_final_exibicao}")
-            except Exception as erro:
-                print(f"Erro ao mover {nome_arquivo}: {erro}")
-
-    print("-" * 50)
-    print(f"Total de arquivos movidos para a raiz: {arquivos_movidos}")
-    print("-" * 50)
-
-    # 2. Segunda Varredura: Apagar as subpastas que agora estão vazias
-    print("\nFase 2: Removendo pastas vazias...")
-    pastas_removidas = 0
-
-    for pasta_atual, subpastas, arquivos in os.walk(
-        pasta_principal, topdown=False
-    ):
-        pasta_atual_abs = os.path.abspath(pasta_atual)
-
-        # Ignora pastas ocultas do sistema
-        if any(
-            parte.startswith(".") for parte in pasta_atual_abs.split(os.sep)
-        ):
-            continue
-
-        # Nunca deleta a própria pasta principal
-        if pasta_atual_abs == pasta_principal:
-            continue
-
-        # Verifica se a pasta está realmente vazia (sem arquivos e sem subpastas)
-        if (
-            not os.listdir(pasta_atual)
-            and pasta_atual_abs != pasta_principal
-        ):
-            try:
-                os.rmdir(pasta_atual)
-                pastas_removidas += 1
-                print(f"Pasta removida: {os.path.basename(pasta_atual)}")
-            except Exception as erro:
-                print(f"Não foi possível remover a pasta {pasta_atual}: {erro}")
-
-    print("-" * 50)
-    print(f"Total de pastas vazias deletadas: {pastas_removidas}")
-
-
-# --- ÁREA DE EXECUÇÃO ---
-# "." significa o diretório atual onde o script está rodando
-DIRETORIO_ATUAL = "."
-
-if __name__ == "__main__":
-    print("Iniciando processo de achatamento e limpeza...")
-    achatar_diretorio_e_limpar(DIRETORIO_ATUAL)
-    print("\nProcesso concluído com sucesso!")
-
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## login.html (funcionando)
-```
-<!DOCTYPE html>
-<html class="dark" lang="pt-BR">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP ABP</title>
-
-    
-    <!-- CONEXÃO SUPABASE -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-
-    
-    <!-- STYLE -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FIM DO STYLE -->
-
-    
-    <script>
-     //iciciando a conexao
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        // Exporta para ser usado em outros scripts
-        window.supabaseClient = _supabase;
-    </script>
-    <!-- FIM DO CONEXÃO SUPABASE -->
-
-</head>
-
-<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-4">
-
-
-    <!-- FORMULÁRIO -->
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black tracking-tighter text-blue-500">ERP ABP</h1>
-            <p class="text-slate-400 text-sm">Acesse sua conta para gerenciar seus PDFs</p>
-        </div>
-        <!--
-        <button onclick="loginComGoogle()" class="w-full py-3 mb-6 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
-            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google icon"> 
-            Entrar com Gmail
-        </button>
--->
-        <div class="relative mb-6 text-center border-b border-slate-800">
-            <span
-                class="absolute top-[-10px] left-1/2 -translate-x-1/2 bg-slate-950 px-2 text-xs text-slate-500 uppercase tracking-widest">ou
-                e-mail</span>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">E-mail</label>
-                <input type="email" id="email" placeholder="seu@email.com"
-                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-            </div>
-
-            <div class="relative">
-                <label class="block text-xs font-bold mb-1 text-slate-400 uppercase">Senha</label>
-                <input type="password" id="password" placeholder="••••••••"
-                    class="w-full bg-slate-900 border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                <button type="button" onclick="alternarSenha()"
-                    class="absolute right-3 top-8 text-slate-500 hover:text-white">
-                    🔒
-                </button>
-            </div>
-
-            <div class="text-right">
-                <button onclick="solicitarRecuperacao()" class="text-xs text-blue-400 hover:underline">Esqueceu a
-                    senha?</button>
-            </div>
-
-            <div class="flex gap-3 pt-2">
-                <button onclick="realizarLogin()"
-                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20">
-                    ENTRAR
-                </button>
-                <button onclick="confirmarCadastro()"
-                    class="flex-1 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-                    CADASTRAR
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- FIM DO FORMULÁRIO -->
-
-    <script>
-        
-        /**
-     * Nome do arquivo: alternar_senha.js
-     * Objetivo: Alternar a visibilidade do campo de senha entre texto e asteriscos.
-     */
-
-        function alternarSenha() {
-            // Busca o elemento de entrada pelo ID
-            const campo = document.getElementById('password');
-
-            if (campo) {
-                // Se for password, vira text (visível). Se for text, vira password (oculto).
-                campo.type = campo.type === 'password' ? 'text' : 'password';
-            }
-        }
-
-    </script>
-    <script>
-        /**
-         * Nome do arquivo: login_google.js
-         * Objetivo: Realizar autenticação social utilizando o provedor Google via OAuth.
-         */
-
-        async function loginComGoogle() {
-            const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    // Redireciona para o painel do ERP dentro do repositório
-                    redirectTo: window.location.origin + '/assets/erp/index.html'
-                }
-            });
-
-            if (error) {
-                console.error("Erro no login Google:", error.message);
-                alert("Erro ao conectar com Google: " + error.message);
-            }
-        }
-    </script>
-    <script>
-        /**
-     * Nome do arquivo: realizar_cadastro.js
-     * Objetivo: Criar uma nova conta de usuário no sistema.
-     */
-
-        async function realizarCadastro() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('password').value;
-
-            if (!email || !senha) {
-                alert("Preencha e-mail e senha primeiro!");
-                return;
-            }
-
-            // Cria o usuário no Supabase. 
-            // Nota: Se o 'Confirm Email' estiver ativo no painel, o user precisa validar o e-mail antes de logar.
-            const { data, error } = await window.supabaseClient.auth.signUp({
-                email,
-                password: senha
-            });
-
-            if (error) {
-                alert("Erro no cadastro: " + error.message);
-            } else {
-                alert("Conta criada com sucesso! Verifique seu e-mail ou tente fazer login.");
-            }
-        }
-    </script>
-    <script>
-        /**
-         * Função de apoio para evitar cadastros acidentais (UX)
-         */
-        function confirmarCadastro() {
-            const email = document.getElementById('email').value;
-            if (!email) return alert("Digite um e-mail!");
-
-            if (confirm(`Deseja criar uma conta para: ${email}?`)) {
-                realizarCadastro();
-            }
-        }
-    </script>
-    <script>
-        /**
-       * Nome do arquivo: realizar_login.js
-       * Objetivo: Autenticar o usuário utilizando e-mail e senha no Supabase Auth.
-       */
-
-        async function realizarLogin() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('password').value;
-
-            // Validação básica de campos vazios
-            if (!email || !senha) {
-                alert("Ops! Você esqueceu de preencher o e-mail ou a senha. ✍️");
-                return;
-            }
-
-            try {
-                // Chamada oficial ao método de Sign In do Supabase
-                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: senha,
-                });
-
-                if (error) {
-                    console.error("Erro na autenticação:", error.message);
-                    alert("Erro ao entrar: " + error.message);
-                } else {
-                    console.log("Bem-vindo de volta!", data.user.email);
-                    // Redireciona para o painel principal após o sucesso
-                    window.location.href = 'index.html';
-                }
-            } catch (err) {
-                console.error("Ocorreu um erro inesperado no sistema:", err);
-            }
-        }  
-    </script>
-    <script>
-        /**
-     * Nome do arquivo: recuperar_senha.js
-     * Objetivo: Enviar e-mail de recuperação e atualizar a senha do usuário logado.
-     */
-
-        async function solicitarRecuperacao() {
-            const email = document.getElementById('email').value;
-            if (!email) return alert("Digite seu e-mail.");
-
-            // O Supabase envia um link que redireciona o usuário para a página de redefinição
-            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
-                redirectTo: 'redefinir_senha.html',
-            });
-
-            if (error) alert(error.message);
-            else alert("Link enviado! Verifique sua caixa de entrada.");
-        }
-
-        async function salvarNovaSenha() {
-            const novaSenha = document.getElementById('novaSenha').value;
-            if (novaSenha.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
-
-            // Atualiza os dados do usuário que clicou no link de recuperação
-            const { error } = await window.supabaseClient.auth.updateUser({ password: novaSenha });
-
-            if (error) {
-                alert("Erro ao atualizar: " + error.message);
-            } else {
-                alert("Senha atualizada com sucesso!");
-                window.location.href = 'index.html';
-            }
-        }
-    </script>
-</body>
-
-</html>
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# index.html
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA ERP ABP - Inicio</title>
-    
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-<!-- <link rel="stylesheet" href="css/index.css"> -->
- <style>   
-     /* index.css */
-        /* Configurações Gerais */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding-top: 80px; /* Espaço para a navbar fixa */
-        }
-
-        /* Grid de Cards */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-color: #3ecf8e;
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: #3ecf8e;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-nav {
-            background: #ef4444;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-home {
-            background: #3ecf8e !important;
-        }
-  
-</style>
-
-
-</head>
-<body>
-<!-- navbar -->
-    <div class="navbar">
-        <div style="font-weight: bold; color: #0f172a; font-size: 1.2rem;">
-            <i class="fas fa-chart-line" style="color: #3ecf8e;"></i> ERP ABP
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="btn-nav btn-home"><i class="fas fa-home"></i> Início</a>
-            <button class="btn-nav" onclick="sairDaConta()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-    </div>
-<!-- fim navbar -->
-
-<div class="content">      
-<div class="grid">
-
-<!-- cardes do menu-->
-
-    <a href="testes.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>testes</h3>
-    </a>
-    
-    
-    <a href="entidades.html" class="card">
-    <i class="fas fa-users"></i>
-    <h3>Gestão de Entidades</h3>
-    </a>
-
-    <a href="financeiro.html" class="card">
-    <i class="fas fa-hand-holding-usd"></i>
-    <h3>Financeiro</h3>
-    </a>
-
-    <a href="produtos.html" class="card">
-    <i class="fas fa-box"></i>
-    <h3>Produtos</h3>
-    </a>
-    
- 
-
-            
-            <a href="vitrine.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>vitrine</h3>
-            </a>
-            
-            <a href="pdv.html" class="card">
-                <i class="fas fa-shopping-basket"></i>
-                <h3>pdv</h3>
-            </a>
-            
-             
-<!-- fim cardes do menu-->         
-</div>        
-</div>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-</body>
-</html>
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# tarefas.html (funcionando)
-```
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAREFAS - ERP ABP</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-    
-    <script src="https://unpkg.com/html5-qrcode"></script>
-
-    <style>
-        :root { --primary: #3ecf8e; --dark: #0f172a; --bg: #f1f5f9; --danger: #ef4444; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); }
-        .container { max-width: 1100px; margin: auto; padding: 20px; padding-top: 85px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { color: var(--primary); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: bold; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        
-        .btn-add { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-cancel { background: #64748b; color: white; margin-top: 10px; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: none; width: 100%; }
-        
-        .barcode-group { display: flex; gap: 5px; }
-        .btn-scan { background: var(--dark); color: white; padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        #reader { width: 100%; max-width: 400px; margin: 10px auto; border-radius: 8px; overflow: hidden; display: none; }
-
-        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 4px;}
-        .tag-pendente { background: #fef3c7; color: #92400e; }
-        .tag-realizada { background: #dcfce7; color: #166534; }
-        .tag-data { background: #e0f2fe; color: #0284c7; }
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-    </style>
-
-    <!-- 1. Carrega a biblioteca do Supabase primeiro -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <!-- 2. Carrega sua configuração centralizada (Certifique-se que o caminho está correto) -->
-    <script src="supabase_config.js"></script>
-
-    <script>
-        // Inicializa o cliente usando as constantes do supabase_config.js
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let recordedAudioBlob = null;
-        let mediaRecorder;
-        let audioChunks = [];
-        let html5QrCode;
-
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) {
-                document.getElementById('tela-login').style.display = 'flex';
-                document.getElementById('tela-sistema').style.display = 'none';
-            } else {
-                document.getElementById('tela-login').style.display = 'none';
-                document.getElementById('tela-sistema').style.display = 'block';
-                loadtarefas(); 
-            }
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) alert("Erro: " + error.message);
-            else verificar_login();
-        }
-
-        document.addEventListener('DOMContentLoaded', verificar_login);
-    </script>
-</head>
-<body>
-
-    <div id="tela-login" class="flex justify-center items-center h-screen bg-slate-900" style="display: none;">
-        <div class="bg-white p-10 rounded-xl w-full max-w-sm text-center border-t-4 border-emerald-500">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800">ERP ABP</h2>
-            <input type="email" id="login-email" placeholder="E-mail" class="mb-4">
-            <input type="password" id="login-senha" placeholder="Senha" class="mb-6">
-            <button class="bg-emerald-500 text-white w-full p-3 rounded font-bold" onclick="fazerLogin()">Entrar</button>
-        </div>
-    </div>
-
-    <div id="tela-sistema" style="display: none;">
-        <div class="navbar">
-            <div class="font-bold text-slate-800 text-xl"><i class="fas fa-tasks text-emerald-500"></i> Gestão de Exercícios</div>
-            <button class="text-red-500 font-bold" onclick="_supabase.auth.signOut().then(() => verificar_login());">Sair</button>
-        </div>
-
-        <div class="container">
-            <div class="card">
-                <h3 id="form-title" class="text-xl font-bold mb-4">Nova Atividade</h3>
-                <input type="hidden" id="edit-id">
-
-                <div class="section-title">Informações Básicas</div>
-                <div class="form-grid">
-                    <div style="grid-column: span 2;"><label>Título do Exercício *</label><input type="text" id="titulo"></div>
-                    <div><label>Categoria</label><input type="text" id="categoria" placeholder="Ex: Matemática, Cognitivo..."></div>
-                    <div>
-                        <label>Código de Barras</label>
-                        <div class="barcode-group">
-                            <input type="text" id="codigo_de_barras" placeholder="Digite ou leia">
-                            <button type="button" class="btn-scan" onclick="startScanner()" title="Abrir Câmera">
-                                <i class="fas fa-barcode"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div><label>Data Prazo</label><input type="date" id="data_prazo"></div>
-                    <div>
-                        <label>Status</label>
-                        <select id="status_exercicio">
-                            <option value="pendente">Pendente</option>
-                            <option value="realizada">Realizada</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="reader"></div>
-                <button id="btn-stop-scanner" class="bg-red-500 text-white p-2 rounded w-full mb-4 font-bold" style="display:none;" onclick="stopScanner()">Fechar Câmera</button>
-
-                <div class="section-title">Conteúdo do Exercício</div>
-                <textarea id="descricao" placeholder="Digite o enunciado aqui..."></textarea>
-
-                <div class="section-title">Mídias e Notas</div>
-                <div class="form-grid">
-                    <div>
-                        <label>Foto da Resolução</label>
-                        <input type="file" id="foto_resolucao" accept="image/*" capture="environment">
-                    </div>
-                    <div>
-                        <label>Gravar Áudio</label>
-                        <button class="w-full border-2 border-dashed p-3 rounded bg-slate-50 text-slate-500 font-bold" id="btn-audio" onclick="toggleGravação()"><i class="fas fa-microphone"></i> Gravar Leitura</button>
-                        <audio id="audio-preview" controls style="display:none; width:100%; margin-top:10px; height:35px;"></audio>
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label>Observações do Responsável</label>
-                        <textarea id="observacoes" placeholder="Relate dificuldades ou progressos..."></textarea>
-                    </div>
-                </div>
-
-                <button class="btn-add" id="btn-save" onclick="handleSave()">Salvar Registro</button>
-                <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
-            </div>
-
-            <div class="card">
-                <input type="text" id="inputBusca" placeholder="Pesquisar exercícios..." onkeyup="filtrarTabela()" class="mb-4">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b">
-                                <th class="p-4">Atividade / Categoria</th>
-                                <th class="p-4">Código</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4 text-center">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="exercises-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- FUNÇÕES DO SCANNER ---
-        function startScanner() {
-            const readerDiv = document.getElementById('reader');
-            const stopBtn = document.getElementById('btn-stop-scanner');
-            readerDiv.style.display = 'block';
-            stopBtn.style.display = 'block';
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
-            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                document.getElementById('codigo_de_barras').value = decodedText;
-                stopScanner();
-            }).catch(err => console.error(err));
-        }
-
-        function stopScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('reader').style.display = 'none';
-                    document.getElementById('btn-stop-scanner').style.display = 'none';
-                });
-            }
-        }
-
-        // --- ÁUDIO ---
-        async function toggleGravação() {
-            const btn = document.getElementById('btn-audio');
-            const preview = document.getElementById('audio-preview');
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                btn.innerHTML = '<i class="fas fa-microphone"></i> Gravar Novo Áudio';
-            } else {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    preview.src = URL.createObjectURL(recordedAudioBlob);
-                    preview.style.display = 'block';
-                };
-                mediaRecorder.start();
-                btn.innerHTML = '<i class="fas fa-stop-circle text-red-500"></i> Parar Gravação';
-            }
-        }
-
-        // --- CRUD ---
-        async function loadtarefas() {
-            const { data, error } = await _supabase.from('tarefas').select('*').order('created_at', { ascending: false });
-            if (error) { console.error(error); return; }
-            const tbody = document.getElementById('exercises-list');
-            tbody.innerHTML = data.map(e => {
-                let prazo = e.data_prazo ? new Date(e.data_prazo).toLocaleDateString('pt-BR') : 'Sem prazo';
-                return `
-                <tr class="border-t">
-                    <td class="p-4">
-                        <span class="font-bold text-slate-800">${e.titulo}</span><br>
-                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">${e.categoria || 'Geral'}</span>
-                        <span class="tag tag-data"><i class="far fa-calendar-alt"></i> ${prazo}</span>
-                    </td>
-                    <td class="p-4 font-mono text-sm text-slate-400">${e.codigo_de_barras || '-'}</td>
-                    <td class="p-4"><span class="tag tag-${e.status_exercicio}">${e.status_exercicio}</span></td>
-                    <td class="p-4 text-center">
-                        <button class="text-blue-500 mr-4" onclick="editFull('${e.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="text-red-500" onclick="deleteExercicio('${e.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`}).join('');
-        }
-
-        async function handleSave() {
-            const btn = document.getElementById('btn-save');
-            btn.disabled = true; btn.innerText = "Salvando...";
-            try {
-                const id = document.getElementById('edit-id').value;
-                const { data: { user } } = await _supabase.auth.getUser();
-                const payload = {
-                    titulo: document.getElementById('titulo').value,
-                    descricao: document.getElementById('descricao').value,
-                    categoria: document.getElementById('categoria').value,
-                    codigo_de_barras: document.getElementById('codigo_de_barras').value,
-                    data_prazo: document.getElementById('data_prazo').value || null,
-                    status_exercicio: document.getElementById('status_exercicio').value,
-                    observacoes: document.getElementById('observacoes').value,
-                    user_id: user.id
-                };
-                
-                // Storage handling (simplificado)
-                const inputFoto = document.getElementById('foto_resolucao');
-                if (inputFoto.files[0]) {
-                    const fileName = `res_${Date.now()}.jpg`;
-                    await _supabase.storage.from('resolucoes').upload(`public/${fileName}`, inputFoto.files[0]);
-                    payload.foto_url = _supabase.storage.from('resolucoes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-                }
-
-                const { error } = id ? await _supabase.from('tarefas').update(payload).eq('id', id) : await _supabase.from('tarefas').insert([payload]);
-                if (error) throw error;
-                resetForm(); loadtarefas();
-            } catch (e) { alert(e.message); }
-            finally { btn.disabled = false; btn.innerText = "Salvar Registro"; }
-        }
-
-        async function editFull(id) {
-            const { data } = await _supabase.from('tarefas').select('*').eq('id', id).single();
-            if (data) {
-                document.getElementById('edit-id').value = data.id;
-                document.getElementById('titulo').value = data.titulo;
-                document.getElementById('descricao').value = data.descricao;
-                document.getElementById('categoria').value = data.categoria || '';
-                document.getElementById('codigo_de_barras').value = data.codigo_de_barras || '';
-                document.getElementById('data_prazo').value = data.data_prazo || '';
-                document.getElementById('status_exercicio').value = data.status_exercicio;
-                document.getElementById('observacoes').value = data.observacoes || '';
-                document.getElementById('form-title').innerText = "Editando Atividade";
-                document.getElementById('btn-cancel').style.display = "block";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        async function deleteExercicio(id) {
-            if (confirm("Excluir?")) { await _supabase.from('tarefas').delete().eq('id', id); loadtarefas(); }
-        }
-
-        function resetForm() {
-            document.getElementById('edit-id').value = '';
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.getElementById('status_exercicio').value = 'pendente';
-            document.getElementById('form-title').innerText = "Nova Atividade";
-            document.getElementById('btn-cancel').style.display = "none";
-            recordedAudioBlob = null;
-            document.getElementById('audio-preview').style.display = 'none';
-        }
-
-        function filtrarTabela() {
-            const termo = document.getElementById('inputBusca').value.toLowerCase();
-            document.querySelectorAll('#exercises-list tr').forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
-            });
-        }
-    </script>
-</body>
-    <!--
-    -- ============================================================================
--- SCRIPT: MÓDULO TAREFAS (GESTÃO DE EXERCÍCIOS)
--- ============================================================================
-
--- 1. Criação da Tabela com suporte a RLS e Identidade do Usuário
-CREATE TABLE IF NOT EXISTS public.tarefas (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    titulo TEXT NOT NULL,
-    descricao TEXT,
-    categoria TEXT,
-    codigo_de_barras TEXT,
-    data_prazo DATE,
-    observacoes TEXT,
-    foto_url TEXT,
-    audio_url TEXT,
-    status_exercicio TEXT DEFAULT 'pendente' CHECK (status_exercicio IN ('pendente', 'realizada')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 2. Habilitar Row Level Security (RLS)
-ALTER TABLE public.tarefas ENABLE ROW LEVEL SECURITY;
-
--- 3. Políticas de Segurança: O usuário só vê e edita o que é DELE
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Usuários podem gerenciar suas próprias tarefas') THEN
-        CREATE POLICY "Usuários podem gerenciar suas próprias tarefas" 
-        ON public.tarefas 
-        FOR ALL 
-        USING (auth.uid() = user_id) 
-        WITH CHECK (auth.uid() = user_id);
-    END IF;
-END $$;
-
--- 4. Configuração de Buckets para Mídias (Fotos e Áudios)
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('resolucoes', 'resolucoes', true) 
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('audios', 'audios', true) 
-ON CONFLICT (id) DO NOTHING;
-
--- 5. Políticas de Storage: Permitir upload apenas para usuários autenticados
--- Nota: 'public' no bucket permite leitura anônima via URL, mas o upload exige login.
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Upload autenticado em mídias') THEN
-        CREATE POLICY "Upload autenticado em mídias" 
-        ON storage.objects FOR INSERT 
-        WITH CHECK (auth.role() = 'authenticated');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Leitura pública de mídias') THEN
-        CREATE POLICY "Leitura pública de mídias" 
-        ON storage.objects FOR SELECT 
-        USING (bucket_id IN ('resolucoes', 'audios'));
-    END IF;
-END $$;
-    
-    -->
 </html>
 ```
 
