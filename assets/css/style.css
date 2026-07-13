@@ -1,0 +1,132 @@
+/* 
+==========================================================================
+   ABP ERP - FOLHA DE ESTILOS GLOBAL E PADRONIZADA (V1)
+   Objetivo: Unificar a identidade visual premium e o suporte a Dark Mode
+========================================================================== 
+*/
+
+/* 1. VARIÁVEIS DE CORES E CONFIGURAÇÕES BASE (Light & Dark Mode) */
+:root {
+    /* Tema Claro (Light Mode) */
+    --bg-principal: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.75);
+    --border-card: rgba(226, 232, 240, 0.8);
+    --texto-principal: #0f172a;
+    --texto-secundario: #475569;
+    --sombra-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Cores de Destaque */
+    --cor-primaria: #3b82f6;      /* Azul Executivo */
+    --cor-sucesso: #10b981;       /* Verde Financeiro */
+    --cor-alerta: #f59e0b;        /* Amarelo/Laranja */
+    --cor-perigo: #ef4444;        /* Vermelho */
+}
+
+.dark {
+    /* Tema Escuro (Dark Mode) */
+    --bg-principal: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --border-card: rgba(51, 65, 85, 0.5);
+    --texto-principal: #f8fafc;
+    --texto-secundario: #94a3b8;
+    --sombra-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* 2. ESTILIZAÇÃO DO CORPO E SCOPE GLOBAL */
+body {
+    background-color: var(--bg-principal);
+    color: var(--texto-principal);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 3. EFEITO GLASSMORPHISM PREMIUM (Herdado de Entidades) */
+.glass-card {
+    background-color: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--sombra-premium);
+    border-radius: 1rem; /* 16px */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efeito de passar o mouse nos cards de ação */
+.glass-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: var(--cor-primaria);
+}
+
+.dark .glass-card-hover:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 4. PADRONIZAÇÃO DE TABELAS (Para o Módulo Financeiro) */
+.tabela-premium {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.tabela-premium th {
+    background-color: rgba(59, 130, 246, 0.08);
+    color: var(--texto-principal);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.875rem 1rem;
+    border-bottom: 2px solid var(--border-card);
+}
+
+.dark .tabela-premium th {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.tabela-premium td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-card);
+    color: var(--texto-secundario);
+    transition: background-color 0.2s ease;
+}
+
+.tabela-premium tr:hover td {
+    background-color: rgba(59, 130, 246, 0.04);
+    color: var(--texto-principal);
+}
+
+/* 5. INPUTS E FORMULÁRIOS PADRONIZADOS */
+.input-premium {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-card);
+    color: var(--texto-principal);
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.input-premium:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* 6. BARRAS DE ROLAGEM CUSTOMIZADAS (Scrollbars) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-principal);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-card);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--texto-secundario);
+}
+
