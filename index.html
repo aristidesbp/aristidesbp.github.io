@@ -315,7 +315,7 @@
 <span class="material-symbols-outlined" data-icon="logout">logout</span> Sair
                 </a>
 
-  <!--teste ari-->      
+  <!--teste ari      
 <div class="flex gap-1 sm:gap-2 bg-[#F1F5F9] dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-fit mb-8 border border-slate-200 dark:border-slate-700">
 <button class="flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-white dark:bg-slate-700 text-primary shadow-sm ring-1 ring-slate-200 dark:ring-slate-600" id="btn-aba-listagem" onclick="alternarAba('listagem')">
 <span class="material-symbols-outlined text-lg" data-icon="list">list</span> <span class="hidden xs:inline">Diretório</span><span class="xs:hidden">Lista</span>
@@ -324,7 +324,19 @@
 <span class="material-symbols-outlined text-lg" data-icon="add_circle">add_circle</span> Cadastro
 </button>
 </div> 
+-->
 
+<!-- Tab Navigation (Substituído por Select) -->
+<div class="w-full sm:w-64 mb-8">
+    <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
+        <option value="listagem">📋 Diretório (Listagem)</option>
+        <option value="formulario">➕ Cadastro de Entidade</option>
+    </select>
+</div>
+        
+
+        
 
         
 </div>
@@ -698,6 +710,7 @@
             verificar_login();
         }
 
+        /*
         function alternarAba(abaAtiva) {
             const form = document.getElementById('aba-formulario');
             const lista = document.getElementById('aba-listagem');
@@ -719,7 +732,31 @@
                 btnForm.classList.remove('bg-white', 'dark:bg-slate-700', 'text-primary', 'shadow-sm', 'ring-1', 'ring-slate-200', 'dark:ring-slate-600');
                 btnForm.classList.add('text-slate-500', 'dark:text-slate-400');
             }
+        }*/
+        function alternarAba(abaAtiva) {
+    const form = document.getElementById('aba-formulario');
+    const lista = document.getElementById('aba-listagem');
+    const selectAba = document.getElementById('select-aba');
+
+    // 1. Sincroniza o valor do select se a alteração vier de fora (ex: salvar/editar)
+    if (selectAba) {
+        selectAba.value = abaAtiva;
+    }
+
+    // 2. Controla a visibilidade dos painéis de conteúdo
+    if (abaAtiva === 'formulario') {
+        form.classList.remove('hidden');
+        lista.classList.add('hidden');
+    } else {
+        form.classList.add('hidden');
+        lista.classList.remove('hidden');
+    }
         }
+
+
+
+
+        
 
         // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
