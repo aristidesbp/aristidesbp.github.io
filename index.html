@@ -307,7 +307,7 @@
 <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
 <option value="listagem"> ENTIDADES-LISTAR</option>
 <option value="formulario">ENTIDADES-CADASTRAR</option>
-<option value="financeiro">FINANCEIRO-CADASTRAR</option>
+<option value="estoque">📦 Estoque</option> 
 </select>
 </div>
         
@@ -513,22 +513,17 @@
 
 
 
-<!--######################################################-->       
-<!-- FORM financeiro -->
-<!--######################################################-->
-<div class="hidden fade-in max-w-5xl mx-auto" id="aba-financeiro">
-<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
-<div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800">
-<div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary text-2xl" data-icon="edit_document">edit_document</span>
-</div>
-<h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações do financeiro</h3>
-</div>
-</div>
-</div>      
 
 
 
+<!-- NOVA TELA DE ESTOQUE (100% compatível sem tocar no JS!) -->
+<div class="hidden fade-in max-w-5xl mx-auto" id="aba-estoque">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Gestão de Estoque</h3>
+        <!-- O teu conteúdo do estoque entra aqui -->
+    </div>
+</div>
+        
 
 
 
@@ -750,27 +745,29 @@
 
         
         
-        function alternarAba(abaAtiva) {
-    const form = document.getElementById('aba-formulario');
-    const lista = document.getElementById('aba-listagem');
-    const financeiro = document.getElementById('aba-financeiro');
-                
+       
+function alternarAba(abaAtiva) {
     const selectAba = document.getElementById('select-aba');
 
-    // 1. Sincroniza o valor do select se a alteração vier de fora (ex: salvar/editar)
+    // 1. Sincroniza o valor do select (caso a navegação seja disparada via botão/código)
     if (selectAba) {
         selectAba.value = abaAtiva;
     }
 
-    // 2. Controla a visibilidade dos painéis de conteúdo
-    if (abaAtiva === 'formulario') {
-        form.classList.remove('hidden');
-        lista.classList.add('hidden');
-    } else {
-        form.classList.add('hidden');
-        lista.classList.remove('hidden');
-    }
+    // 2. Seleciona dinamicamente TODOS os elementos na página cujo ID começa com "aba-"
+    const paineis = document.querySelectorAll('[id^="aba-"]');
+
+    // 3. Varre todos os painéis encontrados
+    paineis.forEach(painel => {
+        // Se o ID do painel for exatamente "aba-" + o valor ativo, exibe-o. Caso contrário, oculta.
+        if (painel.id === `aba-${abaAtiva}`) {
+            painel.classList.remove('hidden');
+        } else {
+            painel.classList.add('hidden');
         }
+    });
+}
+
 
 
 
@@ -1095,4 +1092,14 @@
             loadEntidades();
         }
     </script>
-</body></html>
+
+
+        
+</body>
+</html>
+
+
+
+
+
+
