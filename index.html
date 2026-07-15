@@ -771,9 +771,12 @@
                 btnForm.classList.add('text-slate-500', 'dark:text-slate-400');
             }
         }*/
+        
         function alternarAba(abaAtiva) {
     const form = document.getElementById('aba-formulario');
     const lista = document.getElementById('aba-listagem');
+    const financeiro = document.getElementById('aba-financeiro');
+                
     const selectAba = document.getElementById('select-aba');
 
     // 1. Sincroniza o valor do select se a alteração vier de fora (ex: salvar/editar)
