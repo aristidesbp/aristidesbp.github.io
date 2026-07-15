@@ -1265,9 +1265,10 @@ function alternarAba(abaAtiva) {
         // --- VARIÁVEIS DE CONTROLO DO ESTOQUE ---
 let est_html5QrCode = null;
 
-// Reutiliza a instância global do Supabase do teu ERP, ou cria uma nova se necessário
+/*Reutiliza a instância global do Supabase do teu ERP, ou cria uma nova se necessário
 const est_supabase = typeof _supabase !== 'undefined' ? _supabase : supabase.createClient(supabaseUrl, supabaseKey);
-
+*/
+        
 // Inicializador disparado ao abrir a aba Estoque
 async function est_init() {
     est_loadCategoriasUnicas();
