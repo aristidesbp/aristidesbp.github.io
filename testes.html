@@ -220,15 +220,9 @@
         }
     </script>
 </head>
-<!--######################################################-->    
-<!-- definir tema -->
-<!--######################################################-->
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
 
-
-<!--######################################################-->    
 <!-- Login Screen -->
-<!--######################################################-->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-3xl"></div>
@@ -268,9 +262,7 @@
 </div>
 
 
-<!--######################################################-->        
 <!-- Main System Interface -->
-<!--######################################################-->
 <div class="hidden min-h-screen" id="tela-sistema">
 <!-- Sidebar Drawer Overlay (Mobile Only) -->
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
@@ -304,7 +296,7 @@
 </div>
 </div>
 
-<!-- Tab Navigation (Substituído por Select) -->
+<!-- Tab Navigation -->
 <div class="w-full sm:w-64 mb-8">
 <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
 <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
@@ -314,8 +306,6 @@
 <option value="financeiro">💰 FINANCEIRO</option> 
 </select>
 </div>
-        
-        
 
 <!-- botões -->       
 <div class="px-4 pt-6 mt-auto space-y-1 border-t border-slate-100 dark:border-slate-800">
@@ -325,16 +315,10 @@
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-label-md text-label-md" href="#" onclick="sairDaConta()">
 <span class="material-symbols-outlined" data-icon="logout">logout</span> Sair
                 </a>
-
-          
 </div>
 </aside>
 
-
-
-<!--######################################################-->    
 <!-- TopAppBar Component -->
-<!--######################################################-->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
 <div class="flex items-center gap-4 sm:gap-gutter">
 <button class="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all" onclick="toggleMobileSidebar()">
@@ -364,29 +348,16 @@
 <!-- Main Canvas Content -->
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
-        
 
-
-        
-
-        
-
-
-<!--######################################################-->    
 <!-- Content Panels -->
-<!--######################################################-->
 <div id="content-panels">
 
-
-<!--🟥🟥🟥🟥🟥🟥🟥⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️🟥🟥🟥🟥🟥🟥🟥-->
-<!-- NOVA TELA  (100% compatível sem tocar no JS!) -->
+<!-- NOVA TELA -->
 <div class="hidden fade-in max-w-5xl mx-auto" id="aba-NOVA_TELA">
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">NOVA_TELA</h3>
-        <!-- O teu conteúdo do estoque entra aqui -->
     </div>
 </div>
-<!--🟥🟥🟥🟥🟥🟥🟥⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️🟥🟥🟥🟥🟥🟥🟥-->
         
 
 <!-- ================= TELA DE ESTOQUE (COMPLETA E ISOLADA) ================= -->
@@ -405,974 +376,56 @@
         <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-blue-500">
             <p class="text-slate-500 text-sm">Total de Itens em Estoque</p>
             <h2 id="est-dash-total-itens" class="text-2xl font-bold text-blue-600">0</h2>
-        </div>
-    </div>
-
-    <!-- Botões de Sub-Navegação Interna do Estoque -->
-    <div class="flex gap-4 mb-6 flex-wrap">
-        <button onclick="est_alternarSubAba('listagem')" id="est-btn-listagem" class="flex-1 min-w-[150px] bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
-            <i class="fas fa-list"></i> Ver Produtos
-        </button>
-        <button onclick="est_alternarSubAba('formulario')" id="est-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
-            <i class="fas fa-plus-circle"></i> Novo Produto
-        </button>
-        <input type="file" id="est-import-xml" accept=".xml" class="hidden" onchange="est_processarXML(this)">
-        <button onclick="document.getElementById('est-import-xml').click()" id="est-btn-importar-xml" class="flex-1 min-w-[150px] bg-purple-500 text-white hover:bg-purple-600 font-bold py-3 rounded transition shadow">
-            <i class="fas fa-file-import"></i> Importar NFe (XML)
-        </button>
-    </div>
-
-    <!-- SUB-ABA: FORMULÁRIO DE PRODUTO -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6 sm:p-10 mb-8 hidden" id="est-painel-formulario">
-        <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Informações do Produto</h3>
-        
-        <input type="hidden" id="est-f-editando-id">
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-            <div class="md:col-span-2">
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Nome do Produto *</label>
-                <input type="text" id="est-f-nome" placeholder="Ex: Camiseta Polo Preta G" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-            
-            <div>
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Categoria</label>
-                <input type="text" id="est-f-categoria" list="est-lista-categorias" placeholder="Digite ou escolha..." value="Geral" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-                <datalist id="est-lista-categorias"></datalist>
-            </div>
-
-            <div class="p-2 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
-                <label class="text-xs font-bold text-blue-700 dark:text-blue-400"><i class="fas fa-exclamation-triangle"></i> Estoque Mínimo *</label>
-                <input type="number" id="est-f-estoque-minimo" value="5" min="0" class="w-full p-1 border rounded bg-white dark:bg-slate-800 font-bold text-blue-700 dark:text-blue-300">
-            </div>
-
-            <div>
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Custo (R$)</label>
-                <input type="number" id="est-f-custo" step="0.01" placeholder="0.00" value="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-            
-            <div>
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Venda (R$) *</label>
-                <input type="number" id="est-f-venda" step="0.01" placeholder="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-
-            <div>
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Quantidade Atual *</label>
-                <input type="number" id="est-f-quantidade" value="0" min="0" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-
-            <div class="md:col-span-2">
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Descrição Opcional</label>
-                <input type="text" id="est-f-descricao" placeholder="Detalhes, tamanho, marca..." class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-
-            <div class="md:col-span-4 mt-2">
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-barcode"></i> Código de Barras / SKU</label>
-                <div class="flex gap-2">
-                    <input type="text" id="est-f-barras" placeholder="Cole ou leia o código de barras do produto" class="flex-1 p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-                    <button onclick="est_iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
-                        <i class="fas fa-camera"></i> Ler Código
-                    </button>
-                </div>
-                
-                <div id="est-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50 dark:bg-slate-800">
-                    <div id="est-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
-                    <button onclick="est_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="md:col-span-4 mt-2">
-                <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-image"></i> Foto do Produto</label>
-                <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-5 text-center cursor-pointer transition bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100" id="est-drop-foto" onclick="document.getElementById('est-f-foto').click()">
-                    <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                    <p class="text-xs text-slate-500">Clique ou arraste a imagem do produto aqui</p>
-                    <input type="file" id="est-f-foto" accept="image/*" class="hidden" onchange="est_mostrarNomeArquivo(this, 'est-nome-foto')">
-                    <p id="est-nome-foto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="flex gap-4 mt-6">
-            <button onclick="est_salvarProdutoCompleto()" id="est-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
-                <i class="fas fa-save"></i> Gravar Produto
-            </button>
-            <button onclick="est_cancelarEdicao()" id="est-btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
-                Cancelar
-            </button>
-        </div>
-    </div>
-
-    <!-- SUB-ABA: TABELA / LISTAGEM DE PRODUTOS -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6" id="est-painel-listagem">
-        <div class="flex justify-between items-center mb-4 border-b pb-2">
-            <h3 class="font-bold text-slate-800 dark:text-white"><i class="fas fa-list"></i> Itens em Estoque</h3>
-            <button onclick="est_excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
-                <i class="fas fa-trash"></i> Excluir Selecionados
-            </button>
-        </div>
-
-        <div class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-lg mb-4 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-800">
-            <div class="flex-1 min-w-[200px]">
-                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Pesquisar Nome ou Código</label>
-                <input type="text" id="est-filtro-busca" placeholder="Ex: Camiseta, Código..." onkeyup="if(event.key === 'Enter') est_loadProdutos()" class="w-full p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
-            </div>
-            <div>
-                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Filtrar Categoria</label>
-                <select id="est-filtro-categoria" onchange="est_loadProdutos()" class="p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
-                    <option value="">Todas</option>
-                </select>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="est_loadProdutos()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 shadow transition">
-                    <i class="fas fa-search"></i> Filtrar
-                </button>
-                <button onclick="est_limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400 transition">
-                    Limpar
-                </button>
-            </div>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
-                        <th class="p-3 w-10 text-center"><input type="checkbox" id="est-check-all" onclick="est_toggleTodosChecks(this)" class="transform scale-120"></th>
-                        <th class="p-3">Foto / Código</th>
-                        <th class="p-3">Produto / Categoria</th>
-                        <th class="p-3">Preço Custo</th>
-                        <th class="p-3">Preço Venda</th>
-                        <th class="p-3 text-center">Estoque Atual</th>
-                        <th class="p-3 text-center">Status</th>
-                        <th class="p-3 text-center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="est-lista-produtos" class="text-sm dark:text-slate-300"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-        
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-</main>
 </div>
 
+<!-- Card 2: Valor Total do Estoque -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+    <p class="text-slate-500 text-sm">Valor Total do Estoque</p>
+    <h2 id="est-dash-valor-total" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">R$ 0,00</h2>
+</div>
 
-<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 global functions 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
-<script>
-       /* criar conexão com sua base*/
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHd4cHdnb3VraGlucWZ1cHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE5MzAsImV4cCI6MjA5ODU3NzkzMH0.vudMl-45gMMEg6EJpM8BZa0rC6k7YiAdqtxuUUB_OWM';   
-        const supabaseUrl = 'https://mvxwxpwgoukhinqfuppz.supabase.co';            
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+<!-- Card 3: Alertas de Estoque Baixo -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-rose-500">
+    <p class="text-slate-500 text-sm">Alertas de Estoque Baixo</p>
+    <h2 id="est-dash-alerta" class="text-2xl font-bold text-rose-600 dark:text-rose-400">0</h2>
+</div>
+</div>
 
-        let usuarioLogadoId = null;
-        let paginaAtual = 1;
-        const itensPorPagina = 10;
-        let totalRegistros = 0;
-
-        /* Mobile Sidebar Logic: Controla a abertura e o fecho do menu de navegação lateral em ecrãs de telemóveis.*/
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobile-overlay');
-            const isVisible = sidebar.classList.contains('translate-x-0');
-
-                
-            if (isVisible) {
-                sidebar.classList.replace('translate-x-0', '-translate-x-full');
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            } else {
-                sidebar.classList.replace('-translate-x-full', 'translate-x-0');
-                overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        // Dark Mode Toggle Logic controlar o tema escuro
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const isDark = html.classList.toggle('dark');
-            
-            document.getElementById('dark-icon').classList.toggle('hidden', isDark);
-            document.getElementById('light-icon').classList.toggle('hidden', !isDark);
-            
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
-
-        // Initialize Theme
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            document.getElementById('dark-icon').classList.add('hidden');
-            document.getElementById('light-icon').classList.remove('hidden');
-        }
-
-        // UI Helper: Toggle Password Visibility
-        function togglePasswordVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            const icon = btn.querySelector('.material-symbols-outlined');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.innerText = 'visibility_off';
-            } else {
-                input.type = 'password';
-                icon.innerText = 'visibility';
-            }
-        }
-
-        // AUTH & NAVIGATION
-        async function verificar_login() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            const telaLogin = document.getElementById('tela-login');
-            const telaSistema = document.getElementById('tela-sistema');
-
-            if (!session) {
-                telaLogin.classList.remove('hidden');
-                telaSistema.classList.add('hidden');
-                usuarioLogadoId = null;
-            } else {
-                telaLogin.classList.add('hidden');
-                telaSistema.classList.remove('hidden');
-                usuarioLogadoId = session.user.id;
-                
-                // Update User Profile UI
-                document.getElementById('user-display-email').innerText = session.user.email;
-                document.getElementById('user-display-name').innerText = session.user.user_metadata?.full_name || 'Usuário ERP';
-                if(session.user.user_metadata?.avatar_url) {
-                    document.getElementById('user-avatar').src = session.user.user_metadata.avatar_url;
-                }
-                
-                init(); 
-            }
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-            const btn = document.getElementById('btn-login');
-            
-            if(!email || !senha) return alert("Credenciais obrigatórias.");
-            btn.innerText = 'Autenticando Segurança...';
-            btn.disabled = true;
-
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-            if (error) {
-                alert("Falha na autenticação. Verifique suas credenciais.");
-                btn.innerText = 'Autenticar Acesso';
-                btn.disabled = false;
-            } else {
-                verificar_login(); 
-            }
-        }
-
-        async function sairDaConta() {
-            await _supabase.auth.signOut();
-            verificar_login();
-        }
-
-        
-        
-       
-function alternarAba(abaAtiva) {
-    const selectAba = document.getElementById('select-aba');
-
-    // 1. Sincroniza o valor do select (caso a navegação seja disparada via botão/código)
-    if (selectAba) {
-        selectAba.value = abaAtiva;
-    }
-
-    // 2. Seleciona dinamicamente TODOS os elementos na página cujo ID começa com "aba-"
-    const paineis = document.querySelectorAll('[id^="aba-"]');
-
-    // 3. Varre todos os painéis encontrados
-    paineis.forEach(painel => {
-        // Se o ID do painel for exatamente "aba-" + o valor ativo, exibe-o. Caso contrário, oculta.
-        if (painel.id === `aba-${abaAtiva}`) {
-            painel.classList.remove('hidden');
-        } else {
-            painel.classList.add('hidden');
-        }
-    });
-}
-
-        
-        // INITIALIZATION
-        document.addEventListener('DOMContentLoaded', () => {
-            verificar_login();
-            configurarDropZone('drop-foto', 'f-foto', 'nome-foto');
-        });
-
-/*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
-
-
-         = data.bairro;
-                    document.getElementById('f-cidade').value = data.localidade;
-                    document.getElementById('f-estado').value = data.uf;
-                    document.getElementById('f-numero').focus();
-                }
-            } catch(e) { console.error("CEP fetch error"); }
-        }
-
-        async function loadDashboard() {
-            const { data } = await _supabase.from('entidades').select('tipo_entidade, status_entidade');
-            if(!data) return;
-
-            let clientes = 0, fornecedores = 0, inativos = 0;
-            data.forEach(e => {
-                if(e.status_entidade === 'inativo') inativos++;
-                if(e.tipo_entidade === 'cliente') clientes++;
-                if(e.tipo_entidade === 'fornecedor') fornecedores++;
-            });
-
-            document.getElementById('dash-clientes').innerText = clientes;
-            document.getElementById('dash-fornecedores').innerText = fornecedores;
-            document.getElementById('dash-inativos').innerText = inativos;
-        }
-
-        // PDF EXPORT STUB
-        function gerarPDF() {
-            console.log("Gerando exportação de lista filtrada...");
-            alert("Preparando PDF das entidades filtradas para download. (Simulação de Logic)");
-            // Here you would integrate a library like jsPDF or html2canvas
-        }
-
-        // PAGINATION LOGIC
-        function mudarPagina(direcao) {
-            const novaPagina = paginaAtual + direcao;
-            const totalPaginas = Math.ceil(totalRegistros / itensPorPagina);
-            
-            if (novaPagina >= 1 && (totalRegistros === 0 || novaPagina <= totalPaginas)) {
-                paginaAtual = novaPagina;
-                loadEntidades();
-            }
-        }
-
-        // DATABASE OPERATIONS
-        async function salvarEntidade() {
-            const btn = document.getElementById('btn-salvar');
-            btn.disabled = true; btn.innerText = 'Gravando...';
-
-            try {
-                const id = document.getElementById('f-editando-id').value;
-                const nome = document.getElementById('f-nome').value;
-                const cpf = document.getElementById('f-cpf').value;
-                const nascimento = document.getElementById('f-nascimento').value || null;
-                const email = document.getElementById('f-email').value;
-                const telefone = document.getElementById('f-telefone').value;
-                const tipo = document.getElementById('f-tipo-entidade').value;
-                const status = document.getElementById('f-status').value;
-                const cep = document.getElementById('f-cep').value;
-                const logradouro = document.getElementById('f-logradouro').value;
-                const numero = document.getElementById('f-numero').value;
-                const bairro = document.getElementById('f-bairro').value;
-                const city = document.getElementById('f-cidade').value;
-                const state = document.getElementById('f-estado').value;
-                
-                const fileFoto = document.getElementById('f-foto').files[0];
-
-                if(!nome) throw new Error("O Nome Completo é obrigatório.");
-
-                let fotoUrlFinal = null;
-
-                if (fileFoto) {
-                    const fileName = `avatar_${Date.now()}_${fileFoto.name}`;
-                    const { error: uploadError } = await _supabase.storage
-                        .from('comprovantes')
-                        .upload(`public/${fileName}`, fileFoto);
-                    
-                    if(!uploadError) {
-                        fotoUrlFinal = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-                    }
-                }
-
-                const payload = {
-                    nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
-                    tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
-                    bairro, cidade: city, estado: state, user_id: usuarioLogadoId
-                };
-
-                if(fotoUrlFinal) payload.foto_url = fotoUrlFinal;
-
-                if(id) {
-                    const { error } = await _supabase.from('entidades').update(payload).eq('id', id);
-                    if(error) throw error;
-                    alert("Registro sincronizado.");
-                } else {
-                    const { error } = await _supabase.from('entidades').insert([payload]);
-                    if(error) throw error;
-                    alert("Nova entidade integrada.");
-                }
-
-                cancelarEdicao();
-                init();
-                alternarAba('listagem');
-            } catch(error) {
-                alert(error.message);
-            } finally {
-                btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
-            }
-        }
-
-        async function loadEntidades() {
-            const busca = document.getElementById('filtro-busca').value;
-            const tipo = document.getElementById('filtro-tipo').value;
-
-            // First get count for pagination
-            let countQuery = _supabase.from('entidades').select('*', { count: 'exact', head: true });
-            if(busca) countQuery = countQuery.ilike('nome_completo', `%${busca}%`);
-            if(tipo) countQuery = countQuery.eq('tipo_entidade', tipo);
-            
-            const { count } = await countQuery;
-            totalRegistros = count || 0;
-
-            // Then get data with limit
-            let query = _supabase.from('entidades').select('*').order('nome_completo', { ascending: true });
-            if(busca) query = query.ilike('nome_completo', `%${busca}%`);
-            if(tipo) query = query.eq('tipo_entidade', tipo);
-            
-            const start = (paginaAtual - 1) * itensPorPagina;
-            query = query.range(start, start + itensPorPagina - 1);
-
-            const { data, error } = await query;
-            if(error) return;
-
-            // Update Pagination UI
-            const totalPaginas = Math.ceil(totalRegistros / itensPorPagina);
-            document.getElementById('page-indicator').innerText = `Página ${paginaAtual} de ${totalPaginas || 1}`;
-            document.getElementById('pagination-info').innerText = `Mostrando ${data.length} de ${totalRegistros}`;
-            document.getElementById('btn-anterior').disabled = paginaAtual === 1;
-            document.getElementById('btn-proximo').disabled = paginaAtual >= totalPaginas;
-
-            const grid = document.getElementById('lista-entidades-grid');
-            if(data.length === 0) {
-                grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 font-bold">Nenhum registro encontrado.</div>';
-                return;
-            }
-
-            grid.innerHTML = data.map(e => {
-                const statusColor = e.status_entidade === 'ativo' ? 'bg-emerald-500' : 'bg-slate-300';
-                const imgUrl = e.foto_url || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(e.nome_completo);
-                const whatsappUrl = `https://wa.me/${(e.telefone || '').replace(/\D/g, '')}`;
-                const mailtoUrl = `mailto:${e.email}`;
-                
-                return `
-                <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 shadow-sm hover:shadow-premium transition-all duration-300 flex flex-col items-center group relative">
-                    <!-- Overlay Selection Checkbox -->
-                    <div class="absolute top-3 left-3 z-10">
-                        <input type="checkbox" class="check-entidade w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" value="${e.id}">
-                    </div>
-                    
-                    <!-- Profile Image -->
-                    <div class="relative mb-4">
-                        <img src="${imgUrl}" class="w-20 h-20 rounded-2xl object-cover border-4 border-slate-50 dark:border-slate-700 shadow-sm">
-                        <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-slate-800 ${statusColor}"></div>
-                    </div>
-                    
-                    <!-- Info -->
-                    <div class="text-center w-full mb-6">
-                        <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
-                            ${e.tipo_entidade}
-                        </span>
-                        <h4 class="font-bold text-slate-900 dark:text-white truncate px-2 mb-1" title="${e.nome_completo}">${e.nome_completo}</h4>
-                        <p class="text-xs text-slate-400 truncate px-4">${e.email || 'Sem e-mail'}</p>
-                        <p class="text-[11px] text-slate-500 mt-1 font-mono-sm">${e.telefone || '---'}</p>
-                    </div>
-                    
-                    <!-- Quick Actions -->
-                    <div class="flex items-center gap-3 mt-auto pt-4 border-t border-slate-50 dark:border-slate-700 w-full justify-center">
-                        <button onclick="window.open('${whatsappUrl}', '_blank')" class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="WhatsApp">
-                            <span class="material-symbols-outlined text-lg">chat</span>
-                        </button>
-                        <a href="${mailtoUrl}" class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="E-mail">
-                            <span class="material-symbols-outlined text-lg">mail</span>
-                        </a>
-                        <button onclick="prepararEdicao('${e.id}')" class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-400 dark:text-slate-300 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm" title="Editar">
-                            <span class="material-symbols-outlined text-lg">edit_square</span>
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        async function prepararEdicao(id) {
-            const { data: e } = await _supabase.from('entidades').select('*').eq('id', id).single();
-            if(e) {
-                document.getElementById('f-editando-id').value = e.id;
-                document.getElementById('f-nome').value = e.nome_completo;
-                document.getElementById('f-cpf').value = e.cpf || '';
-
-
-        
-        
-/*🟥🟥🟥🟥🟥🟥🟥🟥 ESTOQUE 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
-        // --- VARIÁVEIS DE CONTROLO DO ESTOQUE ---
-let est_html5QrCode = null;
-
-/*Reutiliza a instância global do Supabase do teu ERP, ou cria uma nova se necessário
-const est_supabase = typeof _supabase !== 'undefined' ? _supabase : supabase.createClient(supabaseUrl, supabaseKey);
-*/
-        
-// Inicializador disparado ao abrir a aba Estoque
-async function est_init() {
-    est_loadCategoriasUnicas();
-    est_loadDashboard();
-    est_loadProdutos();
-    est_configurarDropZone();
-}
-
-
-
-
-// Alternador de sub-abas interno (Listagem vs Formulário)
-function est_alternarSubAba(subAba) {
-    const painelForm = document.getElementById('est-painel-formulario');
-    const painelLista = document.getElementById('est-painel-listagem');
-    const btnForm = document.getElementById('est-btn-formulario');
-    const btnLista = document.getElementById('est-btn-listagem');
-
-    const classesAtivo = ['bg-emerald-500', 'text-white', 'hover:bg-emerald-600'];
-    const classesInativo = ['bg-slate-200', 'text-slate-700', 'hover:bg-slate-300'];
-
-    btnForm.classList.remove(...classesAtivo, ...classesInativo);
-    btnLista.classList.remove(...classesAtivo, ...classesInativo);
-
-    if (subAba === 'formulario') {
-        painelForm.classList.remove('hidden');
-        painelLista.classList.add('hidden');
-        btnForm.classList.add(...classesAtivo);
-        btnLista.classList.add(...classesInativo);
-    } else {
-        painelForm.classList.add('hidden');
-        painelLista.classList.remove('hidden');
-        btnLista.classList.add(...classesAtivo);
-        btnForm.classList.add(...classesInativo);
-    }
-}
-
-
-
-
-// --- GATILHO DE CARREGAMENTO AUTOMÁTICO (DOM Ready) ---
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Verifica se a aba de estoque é a aba padrão ativa no momento (sem a classe 'hidden')
-    const abaEstoque = document.getElementById('aba-estoque');
+<!-- Seção da Tabela de Itens do Estoque -->
+<div class="mt-8 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <!-- Cabeçalho da Tabela -->
+    <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Itens Cadastrados</h3>
+        <button id="btn-novo-item" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            + Adicionar Item
+        </button>
+    </div>
     
-    if (abaEstoque && !abaEstoque.classList.contains('hidden')) {
-        console.log("Aba de estoque ativa no início. Carregando dados...");
-        est_init();
-    }
-    
-    // 2. Segurança Extra: Se o teu ERP usa uma função geral de inicialização (ex: init() ou onload)
-    // podes garantir que o estoque seja carregado executando-o aqui se necessário.
-});
-
-
-
-        
-
-// Configuração Drag-and-Drop da Foto
-function est_configurarDropZone() {
-    const dropZone = document.getElementById('est-drop-foto');
-    const inputElement = document.getElementById('est-f-foto');
-
-    if(!dropZone) return;
-
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('bg-slate-100', 'dark:bg-slate-800');
-    });
-
-    dropZone.addEventListener('dragleave', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('bg-slate-100', 'dark:bg-slate-800');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('bg-slate-100', 'dark:bg-slate-800');
-        
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            inputElement.files = e.dataTransfer.files;
-            est_mostrarNomeArquivo(inputElement, 'est-nome-foto');
-        }
-    });
-}
-
-function est_mostrarNomeArquivo(input, idCampoTexto) {
-    const campoTexto = document.getElementById(idCampoTexto);
-    if (input.files && input.files.length > 0) {
-        campoTexto.innerHTML = `<i class="fas fa-check"></i> ${input.files[0].name}`;
-    } else {
-        campoTexto.innerHTML = '';
-    }
-}
-
-// Buscar Categorias no Supabase para Datalist e Filtro
-async function est_loadCategoriasUnicas() {
-    const { data } = await est_supabase.from('produtos').select('categoria');
-    if (!data) return;
-    
-    const categorias = [...new Set(data.map(item => item.categoria).filter(c => c))];
-    
-    const datalist = document.getElementById('est-lista-categorias');
-    const selectFiltro = document.getElementById('est-filtro-categoria');
-    
-    datalist.innerHTML = '';
-    selectFiltro.innerHTML = '<option value="">Todas</option>';
-    
-    categorias.forEach(cat => {
-        datalist.innerHTML += `<option value="${cat}">`;
-        selectFiltro.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
-}
-
-// Controlo da Câmara de Código de Barras
-function est_iniciarLeituraCamera() {
-    const container = document.getElementById('est-camera-container');
-    container.classList.remove('hidden');
-    est_html5QrCode = new Html5Qrcode("est-camera-preview");
-    const config = { fps: 10, qrbox: { width: 300, height: 150 } };
-    
-    est_html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-        document.getElementById('est-f-barras').value = decodedText;
-        est_pararCamera();
-    }).catch(() => { 
-        alert("Não foi possível acessar a câmara. Verifique as permissões de acesso."); 
-        container.classList.add('hidden'); 
-    });
-}
-
-function est_pararCamera() {
-    if (est_html5QrCode) {
-        est_html5QrCode.stop().then(() => { 
-            document.getElementById('est-camera-container').classList.add('hidden'); 
-        }).catch(() => {
-            document.getElementById('est-camera-container').classList.add('hidden'); 
-        });
-    } else { 
-        document.getElementById('est-camera-container').classList.add('hidden'); 
-    }
-}
-
-// Processador Inteligente de NFe (XML)
-async function est_processarXML(input) {
-    const file = input.files[0];
-    if (!file) return;
-
-    const btnImport = document.getElementById('est-btn-importar-xml');
-    const textoOriginalBtn = btnImport.innerHTML;
-    btnImport.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lendo XML...';
-    btnImport.disabled = true;
-
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-        try {
-            const text = e.target.result;
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(text, "text/xml");
-            const itens = xmlDoc.getElementsByTagName("det");
-            
-            if (itens.length === 0) {
-                alert("Nenhum produto encontrado neste arquivo XML.");
-                return;
-            }
-
-            let novosCadastrados = 0;
-            let estoquesAtualizados = 0;
-
-            for (let i = 0; i < itens.length; i++) {
-                const det = itens[i];
-                const prod = det.getElementsByTagName("prod")[0];
-                if (!prod) continue;
-
-                const nomeXML = prod.getElementsByTagName("xProd")[0]?.textContent || "";
-                let eanXML = prod.getElementsByTagName("cEAN")[0]?.textContent || "";
-                if (eanXML === "SEM GTIN") eanXML = null;
-
-                const precoCustoXML = parseFloat(prod.getElementsByTagName("vUnCom")[0]?.textContent || 0);
-                const quantidadeXML = parseInt(parseFloat(prod.getElementsByTagName("qCom")[0]?.textContent || 0));
-                
-                const ncmXML = prod.getElementsByTagName("NCM")[0]?.textContent || null;
-                const cestXML = prod.getElementsByTagName("CEST")[0]?.textContent || null;
-                const unidadeXML = prod.getElementsByTagName("uCom")[0]?.textContent || null;
-                const cfopXML = prod.getElementsByTagName("CFOP")[0]?.textContent || null;
-
-                let query = est_supabase.from('produtos').select('*');
-                if (eanXML) {
-                    query = query.eq('codigo_barras', eanXML);
-                } else {
-                    query = query.eq('nome', nomeXML);
-                }
-
-                const { data: prodExistente } = await query.maybeSingle();
-
-                if (prodExistente) {
-                    const estoqueSomado = parseInt(prodExistente.quantidade_estoque || 0) + quantidadeXML;
-                    await est_supabase.from('produtos').update({
-                        quantidade_estoque: estoqueSomado,
-                        preco_custo: precoCustoXML
-                    }).eq('id', prodExistente.id);
-                    estoquesAtualizados++;
-                } else {
-                    await est_supabase.from('produtos').insert([{
-                        nome: nomeXML,
-                        codigo_barras: eanXML,
-                        preco_custo: precoCustoXML,
-                        preco_venda: precoCustoXML * 1.30, 
-                        quantidade_estoque: quantidadeXML,
-                        estoque_minimo: 5,
-                        categoria: 'Geral',
-                        ncm: ncmXML,
-                        cest: cestXML,
-                        unidade_medida: unidadeXML,
-                        cfop_entrada: cfopXML
-                    }]);
-                    novosCadastrados++;
-                }
-            }
-
-            alert(`NF-e Importada com sucesso!\n✅ Novos cadastrados: ${novosCadastrados}\n🔄 Estoques atualizados: ${estoquesAtualizados}`);
-            input.value = ""; 
-            est_loadProdutos();
-            est_loadDashboard();
-        } catch (err) {
-            console.error(err);
-            alert("Erro ao processar o XML: " + err.message);
-        } finally {
-            btnImport.innerHTML = textoOriginalBtn;
-            btnImport.disabled = false;
-        }
-    };
-    reader.readAsText(file);
-}
-
-// Carregar Dados dos Painéis Superiores (Cards)
-async function est_loadDashboard() {
-    const { data: produtos } = await est_supabase.from('produtos').select('*');
-    if(!produtos) return;
-    
-    let totalCadastrados = produtos.length;
-    let estoqueBaixo = 0;
-    let totalItens = 0;
-
-    produtos.forEach(p => {
-        let estoque = parseInt(p.quantidade_estoque || 0);
-        let minimo = parseInt(p.estoque_minimo || 0);
-        totalItens += estoque;
-        if(estoque <= minimo) estoqueBaixo++;
-    });
-
-    document.getElementById('est-dash-total-produtos').innerText = totalCadastrados;
-    document.getElementById('est-dash-estoque-baixo').innerText = estoqueBaixo;
-    document.getElementById('est-dash-total-itens').innerText = totalItens;
-}
-
-// Gravar ou Atualizar Produtos no Supabase
-async function est_salvarProdutoCompleto() {
-    const btn = document.getElementById('est-btn-salvar');
-    btn.disabled = true; btn.innerText = 'Salvando...';
-
-    try {
-        const nome = document.getElementById('est-f-nome').value;
-        const categoria = document.getElementById('est-f-categoria').value || 'Geral';
-        const estoqueMinimo = parseInt(document.getElementById('est-f-estoque-minimo').value) || 0;
-        const precoCusto = parseFloat(document.getElementById('est-f-custo').value) || 0;
-        const precoVenda = parseFloat(document.getElementById('est-f-venda').value);
-        const quantidade = parseInt(document.getElementById('est-f-quantidade').value) || 0;
-        const descricao = document.getElementById('est-f-descricao').value;
-        const barras = document.getElementById('est-f-barras').value;
-        const fileFoto = document.getElementById('est-f-foto').files[0];
-        const editandoId = document.getElementById('est-f-editando-id').value;
-
-        if(!nome || isNaN(precoVenda)) throw new Error("Preencha o Nome e o Preço de Venda do produto!");
-
-        let fotoUrl = null;
-        if (fileFoto) {
-            const fileName = `prod_${Date.now()}_${fileFoto.name}`;
-            const { error } = await est_supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileFoto);
-            if(!error) fotoUrl = est_supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
-        }
-
-        const dadosProduto = {
-            nome, categoria, estoque_minimo: estoqueMinimo, preco_custo: precoCusto,
-            preco_venda: precoVenda, quantidade_estoque: quantidade, descricao, codigo_barras: barras || null
-        };
-
-        if (fotoUrl) dadosProduto.foto_url = fotoUrl;
-
-        if (editandoId) {
-            const { error } = await est_supabase.from('produtos').update(dadosProduto).eq('id', editandoId);
-            if (error) throw error;
-            alert("Produto atualizado!");
-        } else {
-            const { error } = await est_supabase.from('produtos').insert([dadosProduto]);
-            if (error) throw error;
-            alert("Produto cadastrado!");
-        }
-        
-        est_cancelarEdicao();
-        est_loadProdutos();
-        est_loadDashboard();
-        est_alternarSubAba('listagem');
-    } catch (error) {
-        alert(error.message);
-    } finally {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Produto';
-    }
-}
-
-function est_limparFiltros() {
-    document.getElementById('est-filtro-busca').value = '';
-    document.getElementById('est-filtro-categoria').value = '';
-    est_loadProdutos();
-}
-
-// Carregar Tabela com Filtros Ativos
-async function est_loadProdutos() {
-    const busca = document.getElementById('est-filtro-busca').value;
-    const categoria = document.getElementById('est-filtro-categoria').value;
-
-    let query = est_supabase.from('produtos').select('*').order('nome', { ascending: true });
-
-    if (busca) {
-        query = query.or(`nome.ilike.%${busca}%,codigo_barras.ilike.%${busca}%`);
-    }
-    if (categoria) query = query.eq('categoria', categoria);
-
-    const { data, error } = await query;
-    if (error) return;
-    
-    const tbody = document.getElementById('est-lista-produtos');
-
-    tbody.innerHTML = data.map(p => {
-        let estoque = parseInt(p.quantidade_estoque || 0);
-        let minimo = parseInt(p.estoque_minimo || 0);
-        
-        let statusClass = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300';
-        let statusTxt = 'EM ESTOQUE';
-        
-        if (estoque === 0) {
-            statusClass = 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300 animate-pulse';
-            statusTxt = 'ZERADO';
-        } else if (estoque <= minimo) {
-            statusClass = 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300';
-            statusTxt = 'ESTOQUE BAIXO';
-        }
-
-        const imgHtml = p.foto_url 
-            ? `<img src="${p.foto_url}" class="w-10 h-10 object-cover rounded shadow-sm inline-block mr-2">` 
-            : `<div class="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded flex items-center justify-center text-slate-400 inline-block mr-2 text-xs"><i class="fas fa-box"></i></div>`;
-        
-        const codBarras = p.codigo_barras 
-            ? `<span class="text-xs font-mono text-slate-400 block"><i class="fas fa-barcode"></i> ${p.codigo_barras}</span>` 
-            : '<span class="text-xs text-slate-300 dark:text-slate-500 block">Sem código</span>';
-
-        return `
-        <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
-            <td class="p-3 text-center">
-                <input type="checkbox" class="est-check-parcela" value="${p.id}">
-            </td>
-            <td class="p-3 flex items-center">
-                ${imgHtml}
-                <div>${codBarras}</div>
-            </td>
-            <td class="p-3">
-                <div class="font-bold text-slate-700 dark:text-white">${p.nome}</div>
-                <span class="text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">${p.categoria || 'Geral'}</span>
-            </td>
-            <td class="p-3 font-bold text-slate-600 dark:text-slate-300">R$ ${parseFloat(p.preco_custo || 0).toFixed(2)}</td>
-            <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 font-mono">R$ ${parseFloat(p.preco_venda || 0).toFixed(2)}</td>
-            <td class="p-3 font-bold text-center text-slate-700 dark:text-white">${estoque} <span class="text-xs text-slate-400 font-normal block">mín: ${minimo}</span></td>
-            <td class="p-3 text-center"><span class="px-2.5 py-1 rounded text-xs font-bold ${statusClass}">${statusTxt}</span></td>
-            <td class="p-3 text-center">
-                <button onclick="est_prepararEdicao('${p.id}')" class="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300 px-3 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition text-sm">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-            </td>
-        </tr>`;
-    }).join('');
-}
-
-// Abrir Edição de Produto
-async function est_prepararEdicao(id) {
-    const { data: p } = await est_supabase.from('produtos').select('*').eq('id', id).single();
-    if (p) {
-        document.getElementById('est-f-editando-id').value = p.id;
-        document.getElementById('est-f-nome').value = p.nome;
-        document.getElementById('est-f-categoria').value = p.categoria || 'Geral';
-        document.getElementById('est-f-estoque-minimo').value = p.estoque_minimo;
-        document.getElementById('est-f-custo').value = p.preco_custo;
-        document.getElementById('est-f-venda').value = p.preco_venda;
-        document.getElementById('est-f-quantidade').value = p.quantidade_estoque;
-        document.getElementById('est-f-descricao').value = p.descricao || '';
-        document.getElementById('est-f-barras').value = p.codigo_barras || '';
-        
-        document.getElementById('est-btn-salvar').innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Produto';
-        document.getElementById('est-btn-cancelar').classList.remove('hidden');
-        
-        est_alternarSubAba('formulario');
-    }
-}
-
-function est_cancelarEdicao() {
-    document.getElementById('est-f-editando-id').value = '';
-    document.getElementById('est-btn-salvar').innerHTML = '<i class="fas fa-save"></i> Gravar Produto';
-    document.getElementById('est-btn-cancelar').classList.add('hidden');
-    
-    document.getElementById('est-f-nome').value = '';
-    document.getElementById('est-f-categoria').value = 'Geral';
-    document.getElementById('est-f-estoque-minimo').value = '5';
-    document.getElementById('est-f-custo').value = '0.00';
-    document.getElementById('est-f-venda').value = '';
-    document.getElementById('est-f-quantidade').value = '0';
-    document.getElementById('est-f-descricao').value = '';
-    document.getElementById('est-f-barras').value = '';
-    document.getElementById('est-f-foto').value = '';
-    document.getElementById('est-nome-foto').innerHTML = '';
-}
-
-function est_toggleTodosChecks(source) {
-    const checkboxes = document.querySelectorAll('.est-check-parcela');
-    checkboxes.forEach(cb => cb.checked = source.checked);
-}
-
-// Eliminar Itens Selecionados no Supabase
-async function est_excluirSelecionados() {
-    const selecionados = Array.from(document.querySelectorAll('.est-check-parcela:checked')).map(cb => cb.value);
-    if (selecionados.length === 0) return alert("Selecione ao menos um produto para excluir.");
-
-    if (confirm(`Atenção: Deseja realmente excluir ${selecionados.length} produto(s)?`)) {
-        const { error } = await est_supabase.from('produtos').delete().in('id', selecionados);
-        if (!error) {
-            alert('Excluído com sucesso!');
-            est_loadProdutos();
-            est_loadDashboard();
-        } else {
-            alert('Erro ao excluir: ' + error.message);
-        }
-    }
-                }
-                                                                                                             
-    </script>
-
-
-        
-</body>
-</html>
-
-
-
-
-
-
+    <!-- Tabela Responsiva -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs uppercase font-semibold">
+                    <th class="p-4">Produto</th>
+                    <th class="p-4">Categoria</th>
+                    <th class="p-4">Quantidade</th>
+                    <th class="p-4">Preço Unitário</th>
+                    <th class="p-4">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-estoque-corpo" class="text-slate-700 dark:text-slate-300 text-sm divide-y divide-slate-100 dark:divide-slate-800">
+                <!-- Linha de exemplo (será substituída dinamicamente por JavaScript se aplicável) -->
+                <tr>
+                    <td class="p-4 font-medium text-slate-900 dark:text-white">Produto Exemplo</td>
+                    <td class="p-4">Eletrônicos</td>
+                    <td class="p-4">12</td>
+                    <td class="p-4">R$ 150,00</td>
+                    <td class="p-4 flex gap-2">
+                        <button class="text-blue-600 dark:text-blue-400 hover:underline">Editar</button>
+                        <button class="text-rose-600 dark:text-rose-400 hover:underline">Excluir</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
