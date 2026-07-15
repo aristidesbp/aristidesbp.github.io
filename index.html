@@ -794,7 +794,11 @@
 </div>
 </main>
 </div>
+
+
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 global functions 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <script>
+       /* criar conexão com sua base*/
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHd4cHdnb3VraGlucWZ1cHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE5MzAsImV4cCI6MjA5ODU3NzkzMH0.vudMl-45gMMEg6EJpM8BZa0rC6k7YiAdqtxuUUB_OWM';   
         const supabaseUrl = 'https://mvxwxpwgoukhinqfuppz.supabase.co';            
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -804,12 +808,13 @@
         const itensPorPagina = 10;
         let totalRegistros = 0;
 
-        // Mobile Sidebar Logic
+        /* Mobile Sidebar Logic: Controla a abertura e o fecho do menu de navegação lateral em ecrãs de telemóveis.*/
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
             const isVisible = sidebar.classList.contains('translate-x-0');
 
+                
             if (isVisible) {
                 sidebar.classList.replace('translate-x-0', '-translate-x-full');
                 overlay.classList.add('hidden');
@@ -821,7 +826,7 @@
             }
         }
 
-        // Dark Mode Toggle Logic
+        // Dark Mode Toggle Logic controlar o tema escuro
         function toggleDarkMode() {
             const html = document.documentElement;
             const isDark = html.classList.toggle('dark');
@@ -927,24 +932,24 @@ function alternarAba(abaAtiva) {
     });
 }
 
-
-
-
-
         
-
         // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
             verificar_login();
             configurarDropZone('drop-foto', 'f-foto', 'nome-foto');
         });
 
+/*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
+
+
         function init() {
             loadDashboard();
             loadEntidades();
-        }
+        }/*Função de arranque que carrega as informações iniciais do painel de Entidades.*/
+        
 
         // DROP ZONE LOGIC
+        /*Prepara a área visual para o utilizador arrastar e soltar a foto de uma entidade.*/
         function configurarDropZone(dropId, inputId, txtId) {
             const dropZone = document.getElementById(dropId);
             const inputElement = document.getElementById(inputId);
