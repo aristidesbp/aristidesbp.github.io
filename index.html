@@ -1277,6 +1277,9 @@ async function est_init() {
     est_configurarDropZone();
 }
 
+
+
+
 // Alternador de sub-abas interno (Listagem vs Formulário)
 function est_alternarSubAba(subAba) {
     const painelForm = document.getElementById('est-painel-formulario');
@@ -1302,6 +1305,27 @@ function est_alternarSubAba(subAba) {
         btnForm.classList.add(...classesInativo);
     }
 }
+
+
+
+
+// --- GATILHO DE CARREGAMENTO AUTOMÁTICO (DOM Ready) ---
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Verifica se a aba de estoque é a aba padrão ativa no momento (sem a classe 'hidden')
+    const abaEstoque = document.getElementById('aba-estoque');
+    
+    if (abaEstoque && !abaEstoque.classList.contains('hidden')) {
+        console.log("Aba de estoque ativa no início. Carregando dados...");
+        est_init();
+    }
+    
+    // 2. Segurança Extra: Se o teu ERP usa uma função geral de inicialização (ex: init() ou onload)
+    // podes garantir que o estoque seja carregado executando-o aqui se necessário.
+});
+
+
+
+        
 
 // Configuração Drag-and-Drop da Foto
 function est_configurarDropZone() {
