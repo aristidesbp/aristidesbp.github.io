@@ -217,8 +217,15 @@
         }
     </script>
 </head>
+<!--######################################################-->    
+<!-- definir tema -->
+<!--######################################################-->
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
+
+
+<!--######################################################-->    
 <!-- Login Screen -->
+<!--######################################################-->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-3xl"></div>
@@ -256,7 +263,11 @@
 </div>
 </div>
 </div>
+
+
+<!--######################################################-->        
 <!-- Main System Interface -->
+<!--######################################################-->
 <div class="hidden min-h-screen" id="tela-sistema">
 <!-- Sidebar Drawer Overlay (Mobile Only) -->
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
@@ -316,8 +327,9 @@
 
 
 
-        
+<!--######################################################-->    
 <!-- TopAppBar Component -->
+<!--######################################################-->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
 <div class="flex items-center gap-4 sm:gap-gutter">
 <button class="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all" onclick="toggleMobileSidebar()">
@@ -355,8 +367,9 @@
         
 
 
-        
+<!--######################################################-->    
 <!-- Content Panels -->
+<!--######################################################-->
 <div id="content-panels">
 <!-- TABLE LISTING REPLACED BY CARDS -->
 <div class="fade-in" id="aba-listagem">
@@ -365,9 +378,11 @@
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
 <span class="material-symbols-outlined text-primary" data-icon="dataset">dataset</span>
+</div>       
+<h3 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white">LISTA DE ENTIDADES</h3>
 </div>
-<h3 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white">Base de Dados Ativa</h3>
 
+        
 <!-- Dashboard Grid -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
 <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
@@ -406,7 +421,7 @@
 </div>      
         
 
-</div>
+
 
 
         
