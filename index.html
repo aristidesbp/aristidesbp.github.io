@@ -260,6 +260,7 @@
 <div class="hidden min-h-screen" id="tela-sistema">
 <!-- Sidebar Drawer Overlay (Mobile Only) -->
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
 <!-- Sidebar Component -->
 <aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
 <div class="px-6 mb-8 flex items-center justify-between">
@@ -272,6 +273,7 @@
 <span class="text-[10px] uppercase font-bold tracking-[0.1em] text-primary">Gestão</span>
 </div>
 </div>
+        
 <!-- Close Button (Mobile Only) -->
 <button class="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" onclick="toggleMobileSidebar()">
 <span class="material-symbols-outlined">close</span>
@@ -288,25 +290,18 @@
 </div>
 </div>
 
+<!-- Tab Navigation (Substituído por Select) -->
+<div class="w-full sm:w-64 mb-8">
+<label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+<select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
+<option value="listagem"> ENTIDADES-LISTAR</option>
+<option value="formulario">ENTIDADES-CADASTRAR</option>
+</select>
+</div>
         
         
-        
-<!-- ###########  MENU LATERAL  #############-->
-<nav class="flex-1 px-4 space-y-1" id="sidebar-menu">
-        
-<a class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-label-md text-label-md" href="assets/html/financeiro.html">
-<span class="material-symbols-outlined text-slate-400" data-icon="payments">payments</span> Financeiro
-                </a>
-<a class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-label-md text-label-md" href="assets/html/pdv.html">
-<span class="material-symbols-outlined text-slate-400" data-icon="point_of_sale">point_of_sale</span> PDV
-                </a>
-<a class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-label-md text-label-md" href="assets/html/produtos.html">
-<span class="material-symbols-outlined text-slate-400" data-icon="inventory_2">inventory_2</span> Estoque
-                </a>
-<a class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-bold text-primary bg-primary/5 border border-primary/10 font-label-md text-label-md" href="#">
-<span class="material-symbols-outlined" data-icon="groups">groups</span> Entidades
-                </a>
-</nav>
+
+<!-- botões -->       
 <div class="px-4 pt-6 mt-auto space-y-1 border-t border-slate-100 dark:border-slate-800">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-label-md text-label-md" href="assets/md/README.md">
 <span class="material-symbols-outlined text-slate-400" data-icon="settings">settings</span> Configurações
@@ -315,30 +310,7 @@
 <span class="material-symbols-outlined" data-icon="logout">logout</span> Sair
                 </a>
 
-  <!--teste ari      
-<div class="flex gap-1 sm:gap-2 bg-[#F1F5F9] dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-fit mb-8 border border-slate-200 dark:border-slate-700">
-<button class="flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-white dark:bg-slate-700 text-primary shadow-sm ring-1 ring-slate-200 dark:ring-slate-600" id="btn-aba-listagem" onclick="alternarAba('listagem')">
-<span class="material-symbols-outlined text-lg" data-icon="list">list</span> <span class="hidden xs:inline">Diretório</span><span class="xs:hidden">Lista</span>
-</button>
-<button class="flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/50" id="btn-aba-formulario" onclick="alternarAba('formulario')">
-<span class="material-symbols-outlined text-lg" data-icon="add_circle">add_circle</span> Cadastro
-</button>
-</div> 
--->
-
-<!-- Tab Navigation (Substituído por Select) -->
-<div class="w-full sm:w-64 mb-8">
-    <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
-    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
-        <option value="listagem">📋 Diretório (Listagem)</option>
-        <option value="formulario">➕ Cadastro de Entidade</option>
-    </select>
-</div>
-        
-
-        
-
-        
+          
 </div>
 </aside>
 
@@ -376,7 +348,12 @@
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
         
-<!-- Dashboard Grid -->
+
+
+        
+
+        
+  <!-- Dashboard Grid 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
 <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
 <div class="flex items-center justify-between">
@@ -411,10 +388,13 @@
 </div>
 </div>
 </div>
-</div>
-
+</div>      
         
-<!-- Tab Navigation 
+        
+        
+        
+        
+        Tab Navigation 
 <div class="flex gap-1 sm:gap-2 bg-[#F1F5F9] dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-fit mb-8 border border-slate-200 dark:border-slate-700">
 <button class="flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-white dark:bg-slate-700 text-primary shadow-sm ring-1 ring-slate-200 dark:ring-slate-600" id="btn-aba-listagem" onclick="alternarAba('listagem')">
 <span class="material-symbols-outlined text-lg" data-icon="list">list</span> <span class="hidden xs:inline">Diretório</span><span class="xs:hidden">Lista</span>
