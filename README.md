@@ -326,7 +326,7 @@ git push origin main
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # GERAR QUALQUER IMAGEM
-* https://youtu.be/ui47w1XCFas?is=Js2VjmDH1hCXRTXr
+https://perchance.org/ai-text-to-image-generator
   
 # COMO BAIXAR MIDIAS COM TERMUX 
 ```
