@@ -1650,11 +1650,18 @@ tailwind.config = {
 </script>
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
+
+<div id=teste>
+<h1> ola mundo!</h1>
+</div>
+</body>
+</html>
 ```
 
 
 ## 🟥 LOGIN
 ```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -1695,59 +1702,826 @@ tailwind.config = {
 
 ```
 
+## 🟥 SISTEMA PRINCIPA/ NAVEGAÇÃO
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
+<div class="hidden min-h-screen" id="tela-sistema">
+<div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
+  <div class="px-6 mb-8 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+        <span class="material-symbols-outlined text-white">hub</span>
+      </div>
+      <div>
+        <h1 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white leading-none">ERP_ABP</h1>
+        <span class="text-[10px] uppercase font-bold tracking-[0.1em] text-primary">Gestão</span>
+      </div>
+    </div>
+    <button class="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" onclick="toggleMobileSidebar()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="mx-4 mb-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/80 flex items-center gap-3">
+    <div class="w-11 h-11 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary font-bold border border-primary/10 shadow-sm overflow-hidden shrink-0">
+      <img alt="Perfil" class="w-full h-full object-cover" id="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIsbihL_w90GpJIrblCeEiPA1jv_U_s0BEKugPAVGTPTEp01J7Ggx2PMmJN7JtfzSWwSiXyLb29Sj-Z_Wwzqr16GSq3Q2U62gO7GiPagmNAu9WPyg7cmZPh0h6A41cpLqnWV4If789DovL7F772KJwx4ix2DS9_vecx0tV452nfWJKpCaOFOZwWFsolc6crYk_oQVLZ17boir9Z70aWI_9wQY74MLyuyMGBnwmU6P8GJGA-5ttsTn0Eg"/>
+    </div>
+    <div class="min-w-0">
+      <p class="text-sm font-bold text-slate-900 dark:text-white leading-tight truncate" id="user-display-name">Administrador</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate" id="user-display-email">admin@erpabp.com</p>
+    </div>
+  </div>
+
+
+  <div class="w-full sm:w-64 mb-8 px-4">
+    <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
+ 
+     <option value="estoque">📦 ESTOQUE</option>   
+     <option value="financeiro">💰 FINANCEIRO</option>  
+     <option value="entidades">🙋 ENTIDADES</option>
+     <option value="pdv">🖥️ PDV — Frente de Caixa</option>
+
+    </select>
+  </div>
+
+
+  <div class="px-4 pt-6 mt-auto space-y-1 border-t border-slate-100 dark:border-slate-800">
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-label-md text-label-md" href="assets/md/README.md">
+      <span class="material-symbols-outlined text-slate-400">settings</span> Configurações
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-label-md text-label-md" href="#" onclick="sairDaConta()">
+      <span class="material-symbols-outlined">logout</span> Sair
+    </a>
+  </div>
+</aside>
+
+<!-- HEADER -->
+<header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
+  <div class="flex items-center gap-4 sm:gap-gutter">
+    <button class="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all" onclick="toggleMobileSidebar()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <h2 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white truncate">ERP-ABP</h2>
+  </div>
+  <div class="flex items-center gap-2 sm:gap-6">
+    <div class="hidden md:flex items-center bg-[#F1F5F9] dark:bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+      <span class="material-symbols-outlined text-slate-400 text-sm mr-2">search</span>
+      <input class="bg-transparent border-none outline-none text-body-sm font-body-sm w-48 lg:w-64 placeholder:text-slate-400 dark:text-white" placeholder="Busca Global..." type="text"/>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-4">
+      <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" id="theme-toggle" onclick="toggleDarkMode()">
+        <span class="material-symbols-outlined" id="dark-icon">dark_mode</span>
+        <span class="material-symbols-outlined hidden" id="light-icon">light_mode</span>
+      </button>
+      <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+      </button>
+    </div>
+  </div>
+</header>
+```
+
+## 🟥 MAIN CONTENT / CORPO PRINCIPAL COM AS ABAS
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- MAIN CONTENT -->
+<main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
+<div class="p-4 sm:p-8 max-w-container-max mx-auto">
+<div id="content-panels">
+
+<!-- ════════════ ABA: NOVA TELA (EXEMPLO) ════════════ -->
+<div class="hidden fade-in max-w-5xl mx-auto" id="aba-NOVA_TELA">
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-white">NOVA_TELA</h3>
+  </div>
+</div>
+
+```
+
+## 🟥 ENTIDADES
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
+
+  <!-- Dashboard Stats (fora do card branco, igual ao estoque) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Total de Clientes</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-clientes">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">person_search</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Fornecedores</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-fornecedores">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">local_shipping</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Entidades Inativas</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-inativos">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">person_off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub-navegação de Entidades (igual ao estoque) -->
+  <div class="flex gap-4 mb-6 flex-wrap">
+    <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">groups</span> Ver Entidades
+    </button>
+    <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade
+    </button>
+  </div>
+
+  <!-- SUB-PAINEL: FORMULÁRIO DE ENTIDADE (hidden por padrão) -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10 hidden" id="ent-painel-formulario">
+    <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800">
+      <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-primary text-2xl">edit_document</span>
+      </div>
+      <h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3>
+    </div>
+    <input id="f-editando-id" type="hidden"/>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nome" placeholder="Ex: João da Silva ou Enterprise Soluções Ltda" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cpf" placeholder="000.000.000-00" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nascimento" type="date"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-email" placeholder="exemplo@empresa.com" type="email"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-telefone" placeholder="(00) 00000-0000" type="text"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label>
+          <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-tipo-entidade">
+            <option value="cliente">Cliente</option>
+            <option value="fornecedor">Fornecedor</option>
+            <option value="colaborador">Colaborador</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label>
+          <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-status">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cep" onblur="buscarCEP(this.value)" placeholder="00000-000" type="text"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-logradouro" placeholder="Av. Exemplo, 123" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-numero" placeholder="Nº ou Complemento" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-bairro" placeholder="Bairro Central" type="text"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cidade" placeholder="Nome da Cidade" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-estado" maxlength="2" placeholder="UF" type="text"/>
+      </div>
+      <div class="md:col-span-4">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-widest">Mídia de Identificação</label>
+        <div class="drop-zone" id="drop-foto" onclick="document.getElementById('f-foto').click()">
+          <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100 dark:border-slate-600">
+            <span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+          </div>
+          <p class="font-bold text-slate-900 dark:text-white text-lg">Arraste &amp; Solte</p>
+          <p class="text-xs text-slate-400 mt-2">Formatos: JPG, PNG. Máx 2MB.</p>
+          <input accept="image/*" class="hidden" id="f-foto" onchange="mostrarNomeArquivo(this,'nome-foto')" type="file"/>
+          <p class="font-mono-sm text-sm text-primary mt-6 font-bold flex items-center justify-center gap-2 bg-primary/5 py-2 px-4 rounded-lg inline-flex" id="nome-foto" style="display:none;"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+      <button class="flex-1 bg-primary text-white font-bold py-4 rounded-2xl hover:brightness-105 transition shadow-xl shadow-primary/20 flex items-center justify-center gap-3" id="btn-salvar" onclick="salvarEntidade()">
+        <span class="material-symbols-outlined">save</span> Confirmar Registro
+      </button>
+      <button class="hidden w-full sm:w-auto px-12 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-4 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="btn-cancelar" onclick="cancelarEdicao()">
+        Abortar
+      </button>
+    </div>
+  </div>
+
+  <!-- SUB-PAINEL: LISTAGEM DE ENTIDADES (visível por padrão) -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium overflow-hidden" id="ent-painel-listagem">
+    <!-- Cabeçalho -->
+    <div class="px-6 sm:px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary">dataset</span>
+        </div>
+        <h3 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white">LISTA DE ENTIDADES</h3>
+      </div>
+    </div>
+    <!-- Filtros -->
+    <div class="px-6 sm:px-8 py-6 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row flex-wrap gap-6 items-stretch lg:items-end">
+      <div class="flex-1 min-w-0">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Busca de Termos</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
+          <input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white" id="filtro-busca" onkeyup="if(event.key==='Enter'){paginaAtual=1;loadEntidades();}" placeholder="Nome, e-mail ou CPF/CNPJ..." type="text"/>
+        </div>
+      </div>
+      <div class="w-full lg:w-56">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Tipo de Perfil</label>
+        <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer" id="filtro-tipo" onchange="paginaAtual=1;loadEntidades()">
+          <option value="">Todas as Entidades</option>
+          <option value="cliente">Clientes</option>
+          <option value="fornecedor">Fornecedores</option>
+          <option value="colaborador">Colaboradores</option>
+        </select>
+      </div>
+      <div class="flex gap-2 w-full lg:w-auto">
+        <button class="flex-1 lg:flex-none bg-primary text-white px-8 py-3 rounded-xl font-bold hover:brightness-105 transition shadow-lg shadow-primary/10" onclick="paginaAtual=1;loadEntidades()">Aplicar</button>
+        <button class="flex-1 lg:flex-none bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-8 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition" onclick="limparFiltros()">Limpar</button>
+      </div>
+    </div>
+    <!-- Barra de seleção -->
+    <div class="px-6 py-2 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <input class="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" id="check-all" onclick="toggleTodosChecks(this)" type="checkbox"/>
+        <label class="text-[10px] font-bold uppercase tracking-wider text-primary" for="check-all">Selecionar Todos</label>
+      </div>
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+        <button class="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2" onclick="gerarPDF()">
+          <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
+        </button>
+        <button class="flex-1 sm:flex-none px-5 py-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold text-sm rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2" onclick="excluirSelecionados()">
+          <span class="material-symbols-outlined text-sm">delete</span> Excluir Selecionados
+        </button>
+      </div>
+    </div>
+    <div class="px-6 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400" id="pagination-info">Mostrando 0 de 0</div>
+    <!-- Grid de cards -->
+    <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6" id="lista-entidades-grid"></div>
+    <!-- Paginação -->
+    <div class="px-8 py-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-anterior" onclick="mudarPagina(-1)">
+        <span class="material-symbols-outlined text-sm">chevron_left</span> Anterior
+      </button>
+      <div class="text-sm font-bold text-slate-400" id="page-indicator">Página 1</div>
+      <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-proximo" onclick="mudarPagina(1)">
+        Próximo <span class="material-symbols-outlined text-sm">chevron_right</span>
+      </button>
+    </div>
+  </div>
+</div><!-- fim aba-entidades -->
+```
+
+
+## 🟥 FINANCEIRO
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ════════════ ABA: FINANCEIRO ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
+  <!-- Dashboard -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Receitas (Pagas)</p>
+      <h2 id="fin-dash-receita" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-red-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Despesas (Pagas)</p>
+      <h2 id="fin-dash-despesa" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-amber-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Previsão (Pendentes)</p>
+      <h2 id="fin-dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
+    </div>
+  </div>
+  <!-- Sub-navegação -->
+  <div class="flex gap-4 mb-6">
+    <button onclick="fin_alternarSubAba('listagem')" id="fin-btn-aba-listagem" class="flex-1 bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-list"></i> Ver Lançamentos
+    </button>
+    <button onclick="fin_alternarSubAba('formulario')" id="fin-btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-plus-circle"></i> Novo Lançamento
+    </button>
+  </div>
+  <!-- Formulário de Lançamento -->
+  <div class="card mb-8 hidden" id="fin-aba-formulario">
+    <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+    <input type="hidden" id="fin-f-editando-id">
+    <input type="hidden" id="fin-f-editando-financa-id">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <div class="md:col-span-2"><label>Descrição da Conta *</label><input type="text" id="fin-f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
+      <div>
+        <label>Tipo de Valor</label>
+        <select id="fin-f-tipo-calculo" onchange="fin_ajustarLabelsValor()">
+          <option value="total">Valor Total</option>
+          <option value="parcela">Valor da Parcela</option>
+        </select>
+      </div>
+      <div><label id="fin-label-valor">Valor Total (R$) *</label><input type="number" id="fin-f-valor" step="0.01" placeholder="0.00"></div>
+      <div><label>Tipo de Operação</label>
+        <select id="fin-f-tipo">
+          <option value="despesa">Despesa (Saída)</option>
+          <option value="receita">Receita (Entrada)</option>
+        </select>
+      </div>
+      <div>
+        <label>Categoria</label>
+        <input type="text" id="fin-f-categoria" list="fin-lista-categorias" placeholder="Digite ou escolha..." value="Geral">
+        <datalist id="fin-lista-categorias"></datalist>
+      </div>
+      <div><label>Status do Lançamento</label>
+        <select id="fin-f-status">
+          <option value="aberto">Aberto</option>
+          <option value="finalizado">Finalizado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="relative md:col-span-1">
+        <label>Entidade / Cliente</label>
+        <input type="text" id="fin-f-entidade-busca" placeholder="Buscar..." autocomplete="off">
+        <input type="hidden" id="fin-f-entidade-id">
+        <ul id="fin-lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden no-scrollbar"></ul>
+      </div>
+      <div>
+        <label>Frequência / Recorrência</label>
+        <select id="fin-f-recorrencia">
+          <option value="1">Mensal</option>
+          <option value="3">Trimestral</option>
+          <option value="6">Semestral</option>
+          <option value="12">Anual</option>
+          <option value="diario">Diário</option>
+        </select>
+      </div>
+      <div class="p-2 rounded highlight-parcelas">
+        <label class="highlight-label"><i class="fas fa-layer-group"></i> N° de Parcelas *</label>
+        <input type="number" id="fin-f-parcelas" value="1" min="1" class="border-blue-300 font-bold text-blue-700">
+      </div>
+      <div><label>Data Vencimento *</label><input type="date" id="fin-f-vencimento"></div>
+      <div><label>Data de Pagamento</label><input type="date" id="fin-f-data-pagamento"></div>
+      <div class="md:col-span-4">
+        <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
+        <div class="flex gap-2">
+          <input type="text" id="fin-f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
+          <button onclick="fin_iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
+            <i class="fas fa-camera"></i> Ler Código
+          </button>
+        </div>
+        <div id="fin-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+          <div id="fin-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="fin_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
+        <div class="drop-zone" id="fin-drop-boleto" onclick="document.getElementById('fin-f-boleto').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-boleto" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-boleto')">
+          <p id="fin-nome-boleto" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
+        <div class="drop-zone" id="fin-drop-comprovante" onclick="document.getElementById('fin-f-comprovante').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-comprovante" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-comprovante')">
+          <p id="fin-nome-comprovante" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-6">
+      <button onclick="fin_gerarLancamentoCompleto()" id="fin-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+        <i class="fas fa-save"></i> Gravar Lançamento
+      </button>
+      <button onclick="fin_cancelarEdicao()" id="fin-btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <!-- Listagem de Parcelas -->
+  <div class="card" id="fin-aba-listagem">
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="font-bold text-slate-800 dark:text-white"><i class="fas fa-list"></i> Controle de Parcelas</h3>
+      <button onclick="fin_excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
+        <i class="fas fa-trash"></i> Excluir Selecionados
+      </button>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-700">
+      <div class="flex-1 min-w-[200px]">
+        <label class="text-xs">Pesquisar Descrição</label>
+        <input type="text" id="fin-filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key==='Enter') fin_loadParcelas()">
+      </div>
+      <div>
+        <label class="text-xs">Categoria</label>
+        <select id="fin-filtro-categoria" onchange="fin_loadParcelas()"><option value="">Todas</option></select>
+      </div>
+      <div><label class="text-xs">Data Início</label><input type="date" id="fin-filtro-inicio" onchange="fin_loadParcelas()"></div>
+      <div><label class="text-xs">Data Fim</label><input type="date" id="fin-filtro-fim" onchange="fin_loadParcelas()"></div>
+      <div class="flex gap-2">
+        <button onclick="fin_loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition"><i class="fas fa-search"></i> Filtrar</button>
+        <button onclick="fin_limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">Limpar</button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+            <th class="p-3 w-10 text-center"><input type="checkbox" id="fin-check-all" onclick="fin_toggleTodosChecks(this)"></th>
+            <th class="p-3">Datas (Venc. / Pag.)</th>
+            <th class="p-3">Descrição / Anexos</th>
+            <th class="p-3">Nº Parcela</th>
+            <th class="p-3">Valor (R$)</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="fin-lista-parcelas" class="text-sm dark:text-slate-300"></tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- fim aba-financeiro -->
+```
+
+## 🟥 ABA: ESTOQUE
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ════════════ ABA: ESTOQUE ════════════ -->
+<!-- <option value="estoque">📦 ESTOQUE</option> -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
+  <!-- Dashboard do Estoque -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-slate-500 text-sm">Produtos Cadastrados</p>
+      <h2 id="est-dash-total-produtos" class="text-2xl font-bold text-emerald-600">0</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-amber-500">
+      <p class="text-slate-500 text-sm">Alertas de Estoque Baixo</p>
+      <h2 id="est-dash-estoque-baixo" class="text-2xl font-bold text-amber-600">0</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-blue-500">
+      <p class="text-slate-500 text-sm">Total de Itens em Estoque</p>
+      <h2 id="est-dash-total-itens" class="text-2xl font-bold text-blue-600">0</h2>
+    </div>
+  </div>
+  <!-- Sub-navegação do Estoque -->
+  <div class="flex gap-4 mb-6 flex-wrap">
+    <button onclick="est_alternarSubAba('listagem')" id="est-btn-listagem" class="flex-1 min-w-[150px] bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-list"></i> Ver Produtos
+    </button>
+    <button onclick="est_alternarSubAba('formulario')" id="est-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-plus-circle"></i> Novo Produto
+    </button>
+    <input type="file" id="est-import-xml" accept=".xml" class="hidden" onchange="est_processarXML(this)">
+    <button onclick="document.getElementById('est-import-xml').click()" class="flex-1 min-w-[150px] bg-purple-500 text-white hover:bg-purple-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-file-import"></i> Importar NFe (XML)
+    </button>
+  </div>
+  <!-- Sub-painel: Formulário de Produto -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6 sm:p-10 mb-8 hidden" id="est-painel-formulario">
+    <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Informações do Produto</h3>
+    <input type="hidden" id="est-f-editando-id">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <div class="md:col-span-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Nome do Produto *</label>
+        <input type="text" id="est-f-nome" placeholder="Ex: Camiseta Polo Preta G" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Categoria</label>
+        <input type="text" id="est-f-categoria" list="est-lista-categorias" placeholder="Digite ou escolha..." value="Geral" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+        <datalist id="est-lista-categorias"></datalist>
+      </div>
+      <div class="p-2 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+        <label class="text-xs font-bold text-blue-700 dark:text-blue-400"><i class="fas fa-exclamation-triangle"></i> Estoque Mínimo *</label>
+        <input type="number" id="est-f-estoque-minimo" value="5" min="0" class="w-full p-1 border rounded bg-white dark:bg-slate-800 font-bold text-blue-700 dark:text-blue-300">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Custo (R$)</label>
+        <input type="number" id="est-f-custo" step="0.01" placeholder="0.00" value="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Venda (R$) *</label>
+        <input type="number" id="est-f-venda" step="0.01" placeholder="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Quantidade Atual *</label>
+        <input type="number" id="est-f-quantidade" value="0" min="0" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div class="md:col-span-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Descrição Opcional</label>
+        <input type="text" id="est-f-descricao" placeholder="Detalhes, tamanho, marca..." class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div class="md:col-span-4 mt-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-barcode"></i> Código de Barras / SKU</label>
+        <div class="flex gap-2">
+          <input type="text" id="est-f-barras" placeholder="Cole ou leia o código de barras do produto" class="flex-1 p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+          <button onclick="est_iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
+            <i class="fas fa-camera"></i> Ler Código
+          </button>
+        </div>
+        <div id="est-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50 dark:bg-slate-800">
+          <div id="est-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="est_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="md:col-span-4 mt-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-image"></i> Foto do Produto</label>
+        <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-5 text-center cursor-pointer transition bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100" id="est-drop-foto" onclick="document.getElementById('est-f-foto').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste a imagem do produto aqui</p>
+          <input type="file" id="est-f-foto" accept="image/*" class="hidden" onchange="est_mostrarNomeArquivo(this,'est-nome-foto')">
+          <p id="est-nome-foto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-6">
+      <button onclick="est_salvarProdutoCompleto()" id="est-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+        <i class="fas fa-save"></i> Gravar Produto
+      </button>
+      <button onclick="est_cancelarEdicao()" id="est-btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <!-- Sub-painel: Listagem de Produtos -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6" id="est-painel-listagem">
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="font-bold text-slate-800 dark:text-white"><i class="fas fa-list"></i> Itens em Estoque</h3>
+      <button onclick="est_excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
+        <i class="fas fa-trash"></i> Excluir Selecionados
+      </button>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-lg mb-4 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-800">
+      <div class="flex-1 min-w-[200px]">
+        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Pesquisar Nome ou Código</label>
+        <input type="text" id="est-filtro-busca" placeholder="Ex: Camiseta, Código..." onkeyup="if(event.key==='Enter')est_loadProdutos()" class="w-full p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Filtrar Categoria</label>
+        <select id="est-filtro-categoria" onchange="est_loadProdutos()" class="p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="est_loadProdutos()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 shadow transition">
+          <i class="fas fa-search"></i> Filtrar
+        </button>
+        <button onclick="est_limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400 transition">Limpar</button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+            <th class="p-3 w-10 text-center"><input type="checkbox" id="est-check-all" onclick="est_toggleTodosChecks(this)"></th>
+            <th class="p-3">Foto / Código</th>
+            <th class="p-3">Produto / Categoria</th>
+            <th class="p-3">Preço Custo</th>
+            <th class="p-3">Preço Venda</th>
+            <th class="p-3 text-center">Estoque Atual</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="est-lista-produtos" class="text-sm dark:text-slate-300"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+```
+
+
+## 🟥
+```
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<!-- ════════════ ABA: PDV ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
+  <!-- Dashboard -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Vendas Concluídas (Hoje)</p>
+      <h2 id="pdv-dash-vendas" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-red-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Total de Sangrias (Hoje)</p>
+      <h2 id="pdv-dash-sangrias" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-blue-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Itens no Carrinho Atual</p>
+      <h2 id="pdv-dash-carrinho" class="text-2xl font-bold text-blue-600">0</h2>
+    </div>
+  </div>
+  <!-- Sub-navegação -->
+  <div class="flex gap-4 mb-6">
+    <button onclick="pdv_alternarSubAba('caixa')" id="pdv-btn-caixa" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-shopping-cart"></i> Frente de Caixa (Vender)
+    </button>
+    <button onclick="pdv_alternarSubAba('sangria')" id="pdv-btn-sangria" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-money-bill-wave"></i> Sangria / Histórico
+    </button>
+  </div>
+  <!-- Painel Caixa PDV -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="pdv-painel-caixa">
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card">
+        <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white"><i class="fas fa-search-plus"></i> BIPAR OU BUSCAR PRODUTO</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div class="md:col-span-2">
+            <label>Pesquisar ou Selecionar Produto</label>
+            <select id="pdv-select-produto" onchange="pdv_adicionarDoSelect()">
+              <option value="">Selecione um produto para adicionar...</option>
+            </select>
+          </div>
+          <div>
+            <button onclick="pdv_iniciarLeituraCamera()" class="w-full bg-slate-800 text-white p-2.5 rounded hover:bg-slate-700 transition flex items-center justify-center gap-2 font-bold text-sm">
+              <i class="fas fa-camera"></i> Ler Cód. Barras
+            </button>
+          </div>
+        </div>
+        <div id="pdv-camera-container" class="hidden mt-4 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+          <div id="pdv-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="pdv_pararCamera()" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fas fa-shopping-basket"></i> Itens da Venda</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+                <th class="p-3">Item / Código</th>
+                <th class="p-3 text-center" style="width:130px">Qtd</th>
+                <th class="p-3 text-right">Unitário</th>
+                <th class="p-3 text-right">Subtotal</th>
+                <th class="p-3 text-center">Remover</th>
+              </tr>
+            </thead>
+            <tbody id="pdv-carrinho-corpo" class="text-sm"></tbody>
+          </table>
+          <div id="pdv-carrinho-vazio" class="text-center text-slate-400 py-8">
+            <i class="fas fa-shopping-cart text-4xl mb-2 block"></i>Carrinho de compras vazio.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-1">
+      <div class="card sticky top-24 bg-slate-900 text-white">
+        <h3 class="font-bold text-lg mb-4 border-b border-slate-700 pb-2 text-emerald-400"><i class="fas fa-calculator"></i> FECHAMENTO DA VENDA</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="text-slate-300">Cliente / Entidade Opcional</label>
+            <select id="pdv-cliente" class="bg-slate-800 border-slate-700 text-white">
+              <option value="">Consumidor Final (Não identificado)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-slate-300">Desconto Total (R$)</label>
+            <input type="number" id="pdv-desconto" value="0.00" step="0.01" min="0" oninput="pdv_recalcularTotais()" class="bg-slate-800 border-slate-700 text-white">
+          </div>
+          <div>
+            <label class="text-slate-300">Forma de Pagamento *</label>
+            <select id="pdv-forma-pagamento" class="bg-slate-800 border-slate-700 text-white font-bold text-emerald-400">
+              <option value="Dinheiro">Dinheiro (Espécie)</option>
+              <option value="PIX">PIX / Transferência</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+            </select>
+          </div>
+          <div class="border-t border-slate-700 pt-4 mt-2">
+            <div class="flex justify-between text-sm text-slate-400"><span>Subtotal:</span><span id="pdv-resumo-subtotal">R$ 0,00</span></div>
+            <div class="flex justify-between text-sm text-red-400"><span>Desconto:</span><span id="pdv-resumo-desconto">- R$ 0,00</span></div>
+            <div class="flex justify-between items-center mt-2 border-t border-dashed border-slate-700 pt-2">
+              <span class="font-bold text-lg text-slate-200">TOTAL A PAGAR:</span>
+              <span id="pdv-resumo-total" class="text-3xl font-extrabold text-emerald-400">R$ 0,00</span>
+            </div>
+          </div>
+          <button onclick="pdv_finalizarVenda()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold py-4 rounded transition shadow-lg text-base mt-4 flex items-center justify-center gap-2">
+            <i class="fas fa-check-circle text-xl"></i> CONFIRMAR E EMITIR (F8)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Painel Sangria -->
+  <div class="space-y-6 hidden" id="pdv-painel-sangria">
+    <div class="card">
+      <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white"><i class="fas fa-hand-holding-usd text-red-500"></i> Executar Sangria de Caixa</h3>
+      <p class="text-xs text-slate-500 mb-4">A sangria gera automaticamente um lançamento de <strong>Despesa</strong> já finalizado na sua tabela financeira.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+        <div><label>Valor da Retirada (R$) *</label><input type="number" id="pdv-sangria-valor" step="0.01" placeholder="0.00"></div>
+        <div class="md:col-span-2"><label>Motivo / Justificativa *</label><input type="text" id="pdv-sangria-motivo" placeholder="Ex: Sangria para depósito bancário"></div>
+      </div>
+      <button onclick="pdv_salvarSangria()" class="mt-4 bg-red-500 text-white font-bold py-2.5 px-6 rounded hover:bg-red-600 transition shadow">
+        <i class="fas fa-arrow-down"></i> Confirmar Saída / Sangria
+      </button>
+    </div>
+    <div class="card">
+      <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fas fa-history"></i> Últimas Movimentações (Hoje)</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+              <th class="p-3">Horário</th>
+              <th class="p-3">Descrição</th>
+              <th class="p-3">Categoria</th>
+              <th class="p-3 text-center">Tipo</th>
+              <th class="p-3 text-right">Valor</th>
+            </tr>
+          </thead>
+          <tbody id="pdv-lista-fluxo" class="text-sm dark:text-slate-300"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><!-- fim aba-pdv -->
+
+</div><!-- fim content-panels -->
+</div><!-- fim p-4 sm:p-8 -->
+</main>
+</div><!-- fim tela-sistema -->
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
+```
 ## 🟥
 ```
 
-``
-## 🟥
 ```
-
-``
-## 🟥
-```
-
-``
-## 🟥
-```
-
-``
-## 🟥
-```
-
-``
-## 🟥
-```
-
-``
