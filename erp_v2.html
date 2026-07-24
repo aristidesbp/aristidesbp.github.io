@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Controle de Entidades - ERP_ABP</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style id="custom-styles">
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; vertical-align:middle; }
+    .status-ativo { background:#ecfdf5; color:#059669; padding:4px 12px; border-radius:9999px; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border:1px solid #d1fae5; }
+    .dark .status-ativo { background:rgba(16,185,129,.1); color:#34d399; border-color:rgba(16,185,129,.2); }
+    .status-inativo { background:#fef2f2; color:#dc2626; padding:4px 12px; border-radius:9999px; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border:1px solid #fee2e2; }
+    .dark .status-inativo { background:rgba(239,68,68,.1); color:#f87171; border-color:rgba(239,68,68,.2); }
+    .drop-zone { border:2px dashed #E5E7EB; border-radius:12px; padding:32px; text-align:center; cursor:pointer; transition:all .3s cubic-bezier(.4,0,.2,1); background-color:#f9fafb; }
+    .dark .drop-zone { background-color:#1e293b; border-color:#334155; }
+    .drop-zone:hover { background-color:#f3f4f6; border-color:#006c45; }
+    .dark .drop-zone:hover { background-color:#334155; border-color:#3ecf8e; }
+    .drop-zone.dragover { border-color:#006c45; background-color:#ecfdf5; transform:scale(1.02); }
+    .dark .drop-zone.dragover { border-color:#3ecf8e; background-color:rgba(62,207,142,.1); }
+    .no-scrollbar::-webkit-scrollbar { display:none; }
+    .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+    /* ── Financeiro ────────────────────────────── */
+    .card { background:white; padding:20px; border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,.05); }
+    .dark .card { background:#1e293b; }
+    .status-pago      { background:#d1fae5; color:#065f46; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .status-pendente  { background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .status-atrasado  { background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; animation:pulse 2s infinite; }
+    .highlight-parcelas { border:2px solid #3b82f6 !important; background-color:#eff6ff !important; box-shadow:0 0 10px rgba(59,130,246,.2); }
+    .highlight-label    { color:#1d4ed8; font-weight:900; }
+    /* ── PDV ────────────────────────────────     */
+    .status-receita { background:#d1fae5; color:#065f46; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .status-despesa { background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    #aba-financeiro input[type="text"],#aba-financeiro input[type="number"],
+    #aba-financeiro input[type="date"],#aba-financeiro select,
+    #aba-pdv input[type="text"],#aba-pdv input[type="number"],
+    #aba-pdv input[type="date"],#aba-pdv select,#aba-pdv textarea {
+        width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;
+    }
+    #aba-financeiro input[type="checkbox"],#aba-pdv input[type="checkbox"] { width:auto; transform:scale(1.2); cursor:pointer; }
+    .dark #aba-financeiro input, .dark #aba-financeiro select,
+    .dark #aba-pdv input, .dark #aba-pdv select { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+    .fade-in { animation:fadeIn .4s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .glass-card { background:rgba(255,255,255,.8); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.3); }
+    .dark .glass-card { background:rgba(30,41,59,.8); border-color:rgba(255,255,255,.1); }
+    #mobile-overlay { transition:opacity .3s ease; }
+    aside { transition:transform .3s ease-in-out; }
+</style>
+<script id="tailwind-config">
+tailwind.config = {
+    darkMode:"class",
+    theme:{ extend:{
+        "colors":{"tertiary":"#934a23","on-background":"#191c1d","tertiary-container":"#ffa072","on-tertiary-container":"#78350f","inverse-primary":"#51df9c","secondary-container":"#e2dfde","primary-container":"#3ecf8e","secondary-fixed-dim":"#c8c6c5","tertiary-fixed-dim":"#ffb694","on-primary-container":"#005434","on-primary-fixed-variant":"#005233","primary-fixed-dim":"#51df9c","tertiary-fixed":"#ffdbcc","background":"#f8f9fa","inverse-surface":"#2e3132","surface-container-lowest":"#ffffff","on-primary-fixed":"#002112","primary-fixed":"#71fcb6","surface-variant":"#e1e3e4","surface-container":"#edeeef","on-tertiary":"#ffffff","surface-container-low":"#f3f4f5","on-tertiary-fixed":"#351000","on-secondary-fixed":"#1c1b1b","on-secondary-container":"#636262","on-secondary":"#ffffff","secondary":"#5f5e5e","surface":"#f8f9fa","surface-bright":"#f8f9fa","error-container":"#ffdad6","surface-card":"#FFFFFF","surface-dim":"#d9dadb","on-secondary-fixed-variant":"#474746","on-error":"#ffffff","border-subtle":"#EDEDED","secondary-fixed":"#e5e2e1","surface-container-high":"#e7e8e9","surface-tint":"#006c45","on-surface-variant":"#3d4a41","outline":"#6c7a70","on-error-container":"#93000a","outline-variant":"#bbcabe","surface-container-highest":"#e1e3e4","error":"#ba1a1a","text-muted":"#687076","on-tertiary-fixed-variant":"#76330d","inverse-on-surface":"#f0f1f2","on-surface":"#191c1d","primary":"#006c45","on-primary":"#ffffff"},
+        "borderRadius":{"DEFAULT":"0.125rem","lg":"0.5rem","xl":"0.75rem","2xl":"1rem","full":"9999px"},
+        "spacing":{"sidebar-width":"260px","margin-desktop":"32px","gutter":"24px","margin-mobile":"16px","container-max":"1440px","unit":"4px"},
+        "fontFamily":{"label-md":["Inter"],"display-lg":["Inter"],"headline-sm":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-md":["Inter"],"mono-sm":["JetBrains Mono"],"title-md":["Inter"]},
+        "fontSize":{"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"mono-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"500"}]},
+        "boxShadow":{"premium":"0 10px 15px -3px rgba(0,0,0,.04), 0 4px 6px -2px rgba(0,0,0,.02), 0 0 0 1px rgba(0,0,0,.03)","premium-hover":"0 20px 25px -5px rgba(0,0,0,.05), 0 10px 10px -5px rgba(0,0,0,.03), 0 0 0 1px rgba(0,0,0,.04)"}
+    }}
+}
+</script>
+</head>
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
+
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+  <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary-container/10 rounded-full blur-3xl"></div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-2xl shadow-premium border border-white/40 dark:border-slate-800 max-w-md w-full fade-in relative z-10 glass-card mx-4">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+      <span class="material-symbols-outlined text-primary text-4xl">groups</span>
+    </div>
+    <h2 class="font-headline-md text-headline-md text-on-surface dark:text-white tracking-tight">ERP_ABP</h2>
+    <p class="text-text-muted dark:text-slate-400 font-body-sm text-body-sm mt-2 px-4">Faça login!</p>
+  </div>
+  <div class="space-y-6">
+    <div>
+      <label class="font-label-md text-label-md text-on-surface dark:text-slate-300 mb-2 block">E-mail Corporativo</label>
+      <input class="w-full bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white" id="login-email" onkeyup="if(event.key==='Enter')document.getElementById('login-senha').focus()" placeholder="usuario@empresa.com.br" type="email"/>
+    </div>
+    <div>
+      <label class="font-label-md text-label-md text-on-surface dark:text-slate-300 mb-2 block">Senha de Segurança</label>
+      <div class="relative">
+        <input class="w-full bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white" id="login-senha" onkeyup="if(event.key==='Enter')fazerLogin()" placeholder="••••••••" type="password"/>
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1" onclick="togglePasswordVisibility('login-senha',this)" type="button">
+          <span class="material-symbols-outlined text-xl">visibility</span>
+        </button>
+      </div>
+    </div>
+    <button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/95 transition-all shadow-lg shadow-primary/20 active:scale-[0.98] mt-2" id="btn-login" onclick="fazerLogin()">Autenticar Acesso</button>
+  </div>
+  <div class="flex items-center justify-center gap-2 mt-10 opacity-60">
+    <span class="material-symbols-outlined text-xs dark:text-slate-400">verified_user</span>
+    <p class="text-xs text-text-muted dark:text-slate-400 font-medium">Armazenamento Local IndexedDB Ativado.</p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
+<div class="hidden min-h-screen" id="tela-sistema">
+<div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
+  <div class="px-6 mb-8 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+        <span class="material-symbols-outlined text-white">hub</span>
+      </div>
+      <div>
+        <h1 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white leading-none">ERP_ABP</h1>
+        <span class="text-[10px] uppercase font-bold tracking-[0.1em] text-primary">Gestão</span>
+      </div>
+    </div>
+    <button class="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" onclick="toggleMobileSidebar()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="mx-4 mb-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/80 flex items-center gap-3">
+    <div class="w-11 h-11 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary font-bold border border-primary/10 shadow-sm overflow-hidden shrink-0">
+      <img alt="Perfil" class="w-full h-full object-cover" id="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIsbihL_w90GpJIrblCeEiPA1jv_U_s0BEKugPAVGTPTEp01J7Ggx2PMmJN7JtfzSWwSiXyLb29Sj-Z_Wwzqr16GSq3Q2U62gO7GiPagmNAu9WPyg7cmZPh0h6A41cpLqnWV4If789DovL7F772KJwx4ix2DS9_vecx0tV452nfWJKpCaOFOZwWFsolc6crYk_oQVLZ17boir9Z70aWI_9wQY74MLyuyMGBnwmU6P8GJGA-5ttsTn0Eg"/>
+    </div>
+    <div class="min-w-0">
+      <p class="text-sm font-bold text-slate-900 dark:text-white leading-tight truncate" id="user-display-name">Administrador</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate" id="user-display-email">admin@erpabp.com</p>
+          
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-label-md text-label-md" href="#" onclick="sairDaConta()">
+      <span class="material-symbols-outlined">logout</span> Sair
+    </a>
+    </div>
+  </div>
+  <div class="w-full sm:w-64 mb-8 px-4">
+    <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
+      <option value="entidades">🙋 ENTIDADES</option>
+      <option value="estoque">📦 ESTOQUE</option>
+      <option value="pdv">🖥️ PDV — Frente de Caixa</option>
+      <option value="financeiro">💰 FINANCEIRO</option>
+    <option value="configuracoes">⚙️ CONFIGURAÇÕES</option>
+    </select>
+  </div>
+</aside>
+
+<!-- HEADER -->
+<header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
+  <div class="flex items-center gap-4 sm:gap-gutter">
+    <button class="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all" onclick="toggleMobileSidebar()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <h2 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white truncate">ERP-ABP</h2>
+  </div>
+  <div class="flex items-center gap-2 sm:gap-6">
+
+    <div class="flex items-center gap-1 sm:gap-4">
+      <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" id="theme-toggle" onclick="toggleDarkMode()">
+        <span class="material-symbols-outlined" id="dark-icon">dark_mode</span>
+        <span class="material-symbols-outlined hidden" id="light-icon">light_mode</span>
+      </button>
+      <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
+<div class="p-4 sm:p-8 max-w-container-max mx-auto">
+<div id="content-panels">
+
+
+
+<!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
+  <div class="card mb-8 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium">
+    <h3 class="font-bold text-lg mb-2 text-slate-800 dark:text-white flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">settings</span> Configurações do Sistema e Permissões
+    </h3>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+      Gerencie as permissões do dispositivo necessárias para o funcionamento correto do leitor de códigos de barras via câmera.
+    </p>
+    <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white text-base">Permissão de Câmera</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Concede acesso para que o ERP utilize a câmera do celular na leitura de códigos de barras.</p>
+        </div>
+        <button onclick="solicitarPermissaoCamera()" class="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:brightness-105 transition shadow-lg shadow-primary/10 flex items-center gap-2">
+          <span class="material-symbols-outlined">photo_camera</span> Conceder Permissão de Câmera
+        </button>
+      </div>
+      <div id="status-permissao-camera" class="text-xs font-bold text-slate-600 dark:text-slate-300 mt-2 hidden p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+        <i class="fas fa-check-circle text-emerald-500"></i> Câmera autorizada com sucesso!
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- ════════════ ABA: ESTOQUE ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-slate-500 text-sm">Produtos Cadastrados</p>
+      <h2 id="est-dash-total-produtos" class="text-2xl font-bold text-emerald-600">0</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-amber-500">
+      <p class="text-slate-500 text-sm">Alertas de Estoque Baixo</p>
+      <h2 id="est-dash-estoque-baixo" class="text-2xl font-bold text-amber-600">0</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-blue-500">
+      <p class="text-slate-500 text-sm">Total de Itens em Estoque</p>
+      <h2 id="est-dash-total-itens" class="text-2xl font-bold text-blue-600">0</h2>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-6 flex-wrap">
+    <button onclick="est_alternarSubAba('listagem')" id="est-btn-listagem" class="flex-1 min-w-[150px] bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-list"></i> Ver Produtos
+    </button>
+    <button onclick="est_alternarSubAba('formulario')" id="est-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-plus-circle"></i> Novo Produto
+    </button>
+    <input type="file" id="est-import-xml" accept=".xml" class="hidden" onchange="est_processarXML(this)">
+    <button onclick="document.getElementById('est-import-xml').click()" class="flex-1 min-w-[150px] bg-purple-500 text-white hover:bg-purple-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-file-import"></i> Importar NFe (XML)
+    </button>
+  </div>
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6 sm:p-10 mb-8 hidden" id="est-painel-formulario">
+    <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Informações do Produto</h3>
+    <input type="hidden" id="est-f-editando-id">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <div class="md:col-span-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Nome do Produto *</label>
+        <input type="text" id="est-f-nome" placeholder="Ex: Camiseta Polo Preta G" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Categoria</label>
+        <input type="text" id="est-f-categoria" list="est-lista-categorias" placeholder="Digite ou escolha..." value="Geral" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+        <datalist id="est-lista-categorias"></datalist>
+      </div>
+      <div class="p-2 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+        <label class="text-xs font-bold text-blue-700 dark:text-blue-400"><i class="fas fa-exclamation-triangle"></i> Estoque Mínimo *</label>
+        <input type="number" id="est-f-estoque-minimo" value="5" min="0" class="w-full p-1 border rounded bg-white dark:bg-slate-800 font-bold text-blue-700 dark:text-blue-300">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Custo (R$)</label>
+        <input type="number" id="est-f-custo" step="0.01" placeholder="0.00" value="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Preço de Venda (R$) *</label>
+        <input type="number" id="est-f-venda" step="0.01" placeholder="0.00" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Quantidade Atual *</label>
+        <input type="number" id="est-f-quantidade" value="0" min="0" class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div class="md:col-span-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300">Descrição Opcional</label>
+        <input type="text" id="est-f-descricao" placeholder="Detalhes, tamanho, marca..." class="w-full p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div class="md:col-span-4 mt-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-barcode"></i> Código de Barras / SKU</label>
+        <div class="flex gap-2">
+          <input type="text" id="est-f-barras" placeholder="Cole ou leia o código de barras do produto" class="flex-1 p-2.5 border rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+          <button onclick="est_iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
+            <i class="fas fa-camera"></i> Ler Código
+          </button>
+        </div>
+        <div id="est-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50 dark:bg-slate-800">
+          <div id="est-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="est_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="md:col-span-4 mt-2">
+        <label class="text-sm font-bold text-slate-600 dark:text-slate-300"><i class="fas fa-image"></i> Foto do Produto</label>
+        <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-5 text-center cursor-pointer transition bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100" id="est-drop-foto" onclick="document.getElementById('est-f-foto').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste a imagem do produto aqui</p>
+          <input type="file" id="est-f-foto" accept="image/*" class="hidden" onchange="est_mostrarNomeArquivo(this,'est-nome-foto')">
+          <p id="est-nome-foto" class="text-[11px] font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-6">
+      <button onclick="est_salvarProdutoCompleto()" id="est-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+        <i class="fas fa-save"></i> Gravar Produto
+      </button>
+      <button onclick="est_cancelarEdicao()" id="est-btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6" id="est-painel-listagem">
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="font-bold text-slate-800 dark:text-white"><i class="fas fa-list"></i> Itens em Estoque</h3>
+      <button onclick="est_excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
+        <i class="fas fa-trash"></i> Excluir Selecionados
+      </button>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-lg mb-4 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-800">
+      <div class="flex-1 min-w-[200px]">
+        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Pesquisar Nome ou Código</label>
+        <input type="text" id="est-filtro-busca" placeholder="Ex: Camiseta, Código..." onkeyup="if(event.key==='Enter')est_loadProdutos()" class="w-full p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Filtrar Categoria</label>
+        <select id="est-filtro-categoria" onchange="est_loadProdutos()" class="p-2 border rounded-lg bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700">
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="est_loadProdutos()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 shadow transition">
+          <i class="fas fa-search"></i> Filtrar
+        </button>
+        <button onclick="est_limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400 transition">Limpar</button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+            <th class="p-3 w-10 text-center"><input type="checkbox" id="est-check-all" onclick="est_toggleTodosChecks(this)"></th>
+            <th class="p-3">Foto / Código</th>
+            <th class="p-3">Produto / Categoria</th>
+            <th class="p-3">Preço Custo</th>
+            <th class="p-3">Preço Venda</th>
+            <th class="p-3 text-center">Estoque Atual</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="est-lista-produtos" class="text-sm dark:text-slate-300"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ ABA: ENTIDADES ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Total de Clientes</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-clientes">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">person_search</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Fornecedores</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-fornecedores">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">local_shipping</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium group hover:shadow-premium-hover transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-slate-500 dark:text-slate-400 font-label-md text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-bold">Entidades Inativas</p>
+          <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="dash-inativos">0</h3>
+        </div>
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-2xl sm:text-3xl">person_off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-4 mb-6 flex-wrap">
+    <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">groups</span> Ver Entidades
+    </button>
+    <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade
+    </button>
+  </div>
+
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10 hidden" id="ent-painel-formulario">
+    <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800">
+      <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-primary text-2xl">edit_document</span>
+      </div>
+      <h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3>
+    </div>
+    <input id="f-editando-id" type="hidden"/>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nome" placeholder="Ex: João da Silva ou Enterprise Soluções Ltda" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cpf" placeholder="000.000.000-00" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nascimento" type="date"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-email" placeholder="exemplo@empresa.com" type="email"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-telefone" placeholder="(00) 00000-0000" type="text"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label>
+          <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-tipo-entidade">
+            <option value="cliente">Cliente</option>
+            <option value="fornecedor">Fornecedor</option>
+            <option value="colaborador">Colaborador</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label>
+          <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-status">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cep" onblur="buscarCEP(this.value)" placeholder="00000-000" type="text"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-logradouro" placeholder="Av. Exemplo, 123" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-numero" placeholder="Nº ou Complemento" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-bairro" placeholder="Bairro Central" type="text"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cidade" placeholder="Nome da Cidade" type="text"/>
+      </div>
+      <div>
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label>
+        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-estado" maxlength="2" placeholder="UF" type="text"/>
+      </div>
+      <div class="md:col-span-4">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-widest">Mídia de Identificação</label>
+        <div class="drop-zone" id="drop-foto" onclick="document.getElementById('f-foto').click()">
+          <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100 dark:border-slate-600">
+            <span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+          </div>
+          <p class="font-bold text-slate-900 dark:text-white text-lg">Arraste &amp; Solte</p>
+          <p class="text-xs text-slate-400 mt-2">Formatos: JPG, PNG. Máx 2MB.</p>
+          <input accept="image/*" class="hidden" id="f-foto" onchange="mostrarNomeArquivo(this,'nome-foto')" type="file"/>
+          <p class="font-mono-sm text-sm text-primary mt-6 font-bold flex items-center justify-center gap-2 bg-primary/5 py-2 px-4 rounded-lg inline-flex" id="nome-foto" style="display:none;"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+      <button class="flex-1 bg-primary text-white font-bold py-4 rounded-2xl hover:brightness-105 transition shadow-xl shadow-primary/20 flex items-center justify-center gap-3" id="btn-salvar" onclick="salvarEntidade()">
+        <span class="material-symbols-outlined">save</span> Confirmar Registro
+      </button>
+      <button class="hidden w-full sm:w-auto px-12 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-4 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="btn-cancelar" onclick="cancelarEdicao()">
+        Abortar
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium overflow-hidden" id="ent-painel-listagem">
+    <div class="px-6 sm:px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary">dataset</span>
+        </div>
+        <h3 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white">LISTA DE ENTIDADES</h3>
+      </div>
+    </div>
+    <div class="px-6 sm:px-8 py-6 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row flex-wrap gap-6 items-stretch lg:items-end">
+      <div class="flex-1 min-w-0">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Busca de Termos</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
+          <input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white" id="filtro-busca" onkeyup="if(event.key==='Enter'){paginaAtual=1;loadEntidades();}" placeholder="Nome, e-mail ou CPF/CNPJ..." type="text"/>
+        </div>
+      </div>
+      <div class="w-full lg:w-56">
+        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Tipo de Perfil</label>
+        <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer" id="filtro-tipo" onchange="paginaAtual=1;loadEntidades()">
+          <option value="">Todas as Entidades</option>
+          <option value="cliente">Clientes</option>
+          <option value="fornecedor">Fornecedores</option>
+          <option value="colaborador">Colaboradores</option>
+        </select>
+      </div>
+      <div class="flex gap-2 w-full lg:w-auto">
+        <button class="flex-1 lg:flex-none bg-primary text-white px-8 py-3 rounded-xl font-bold hover:brightness-105 transition shadow-lg shadow-primary/10" onclick="paginaAtual=1;loadEntidades()">Aplicar</button>
+        <button class="flex-1 lg:flex-none bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-8 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition" onclick="limparFiltros()">Limpar</button>
+      </div>
+    </div>
+    <div class="px-6 py-2 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <input class="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" id="check-all" onclick="toggleTodosChecks(this)" type="checkbox"/>
+        <label class="text-[10px] font-bold uppercase tracking-wider text-primary" for="check-all">Selecionar Todos</label>
+      </div>
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+        <button class="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2" onclick="gerarPDF()">
+          <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
+        </button>
+        <button class="flex-1 sm:flex-none px-5 py-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold text-sm rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2" onclick="excluirSelecionados()">
+          <span class="material-symbols-outlined text-sm">delete</span> Excluir Selecionados
+        </button>
+      </div>
+    </div>
+    <div class="px-6 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400" id="pagination-info">Mostrando 0 de 0</div>
+    <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6" id="lista-entidades-grid"></div>
+    <div class="px-8 py-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-anterior" onclick="mudarPagina(-1)">
+        <span class="material-symbols-outlined text-sm">chevron_left</span> Anterior
+      </button>
+      <div class="text-sm font-bold text-slate-400" id="page-indicator">Página 1</div>
+      <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-proximo" onclick="mudarPagina(1)">
+        Próximo <span class="material-symbols-outlined text-sm">chevron_right</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ ABA: FINANCEIRO ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Receitas (Pagas)</p>
+      <h2 id="fin-dash-receita" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-red-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Despesas (Pagas)</p>
+      <h2 id="fin-dash-despesa" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-amber-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Previsão (Pendentes)</p>
+      <h2 id="fin-dash-pendente" class="text-2xl font-bold text-amber-600">R$ 0,00</h2>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-6">
+    <button onclick="fin_alternarSubAba('listagem')" id="fin-btn-aba-listagem" class="flex-1 bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-list"></i> Ver Lançamentos
+    </button>
+    <button onclick="fin_alternarSubAba('formulario')" id="fin-btn-aba-formulario" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-plus-circle"></i> Novo Lançamento
+    </button>
+  </div>
+  <div class="card mb-8 hidden" id="fin-aba-formulario">
+    <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+    <input type="hidden" id="fin-f-editando-id">
+    <input type="hidden" id="fin-f-editando-financa-id">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <div class="md:col-span-2"><label>Descrição da Conta *</label><input type="text" id="fin-f-desc" placeholder="Ex: Aluguel, Internet, Venda"></div>
+      <div>
+        <label>Tipo de Valor</label>
+        <select id="fin-f-tipo-calculo" onchange="fin_ajustarLabelsValor()">
+          <option value="total">Valor Total</option>
+          <option value="parcela">Valor da Parcela</option>
+        </select>
+      </div>
+      <div><label id="fin-label-valor">Valor Total (R$) *</label><input type="number" id="fin-f-valor" step="0.01" placeholder="0.00"></div>
+      <div><label>Tipo de Operação</label>
+        <select id="fin-f-tipo">
+          <option value="despesa">Despesa (Saída)</option>
+          <option value="receita">Receita (Entrada)</option>
+        </select>
+      </div>
+      <div>
+        <label>Categoria</label>
+        <input type="text" id="fin-f-categoria" list="fin-lista-categorias" placeholder="Digite ou escolha..." value="Geral">
+        <datalist id="fin-lista-categorias"></datalist>
+      </div>
+      <div><label>Status do Lançamento</label>
+        <select id="fin-f-status">
+          <option value="aberto">Aberto</option>
+          <option value="finalizado">Finalizado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="relative md:col-span-1">
+        <label>Entidade / Cliente</label>
+        <input type="text" id="fin-f-entidade-busca" placeholder="Buscar..." autocomplete="off">
+        <input type="hidden" id="fin-f-entidade-id">
+        <ul id="fin-lista-entidades" class="absolute z-10 w-full bg-white border border-slate-200 shadow-lg rounded max-h-40 overflow-y-auto hidden no-scrollbar"></ul>
+      </div>
+      <div>
+        <label>Frequência / Recorrência</label>
+        <select id="fin-f-recorrencia">
+          <option value="1">Mensal</option>
+          <option value="3">Trimestral</option>
+          <option value="6">Semestral</option>
+          <option value="12">Anual</option>
+          <option value="diario">Diário</option>
+        </select>
+      </div>
+      <div class="p-2 rounded highlight-parcelas">
+        <label class="highlight-label"><i class="fas fa-layer-group"></i> N° de Parcelas *</label>
+        <input type="number" id="fin-f-parcelas" value="1" min="1" class="border-blue-300 font-bold text-blue-700">
+      </div>
+      <div><label>Data Vencimento *</label><input type="date" id="fin-f-vencimento"></div>
+      <div><label>Data de Pagamento</label><input type="date" id="fin-f-data-pagamento"></div>
+      <div class="md:col-span-4">
+        <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
+        <div class="flex gap-2">
+          <input type="text" id="fin-f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
+          <button onclick="fin_iniciarLeituraCamera()" type="button" class="bg-slate-800 text-white px-4 rounded hover:bg-slate-700 transition flex items-center gap-2">
+            <i class="fas fa-camera"></i> Ler Código
+          </button>
+        </div>
+        <div id="fin-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+          <div id="fin-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="fin_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
+        <div class="drop-zone" id="fin-drop-boleto" onclick="document.getElementById('fin-f-boleto').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-boleto" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-boleto')">
+          <p id="fin-nome-boleto" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
+        <div class="drop-zone" id="fin-drop-comprovante" onclick="document.getElementById('fin-f-comprovante').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-comprovante" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-comprovante')">
+          <p id="fin-nome-comprovante" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-6">
+      <button onclick="fin_gerarLancamentoCompleto()" id="fin-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
+        <i class="fas fa-save"></i> Gravar Lançamento
+      </button>
+      <button onclick="fin_cancelarEdicao()" id="fin-btn-cancelar" class="hidden bg-slate-500 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition shadow-lg">
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <div class="card" id="fin-aba-listagem">
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="font-bold text-slate-800 dark:text-white"><i class="fas fa-list"></i> Controle de Parcelas</h3>
+      <button onclick="fin_excluirSelecionados()" class="bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition text-sm">
+        <i class="fas fa-trash"></i> Excluir Selecionados
+      </button>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded mb-4 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-700">
+      <div class="flex-1 min-w-[200px]">
+        <label class="text-xs">Pesquisar Descrição</label>
+        <input type="text" id="fin-filtro-busca" placeholder="Ex: Aluguel..." onkeyup="if(event.key==='Enter') fin_loadParcelas()">
+      </div>
+      <div>
+        <label class="text-xs">Categoria</label>
+        <select id="fin-filtro-categoria" onchange="fin_loadParcelas()"><option value="">Todas</option></select>
+      </div>
+      <div><label class="text-xs">Data Início</label><input type="date" id="fin-filtro-inicio" onchange="fin_loadParcelas()"></div>
+      <div><label class="text-xs">Data Fim</label><input type="date" id="fin-filtro-fim" onchange="fin_loadParcelas()"></div>
+      <div class="flex gap-2">
+        <button onclick="fin_loadParcelas()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow transition"><i class="fas fa-search"></i> Filtrar</button>
+        <button onclick="fin_limparFiltros()" class="bg-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-400 transition">Limpar</button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+            <th class="p-3 w-10 text-center"><input type="checkbox" id="fin-check-all" onclick="fin_toggleTodosChecks(this)"></th>
+            <th class="p-3">Datas (Venc. / Pag.)</th>
+            <th class="p-3">Descrição / Anexos</th>
+            <th class="p-3">Nº Parcela</th>
+            <th class="p-3">Valor (R$)</th>
+            <th class="p-3 text-center">Status</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="fin-lista-parcelas" class="text-sm dark:text-slate-300"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ ABA: PDV ════════════ -->
+<div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Vendas Concluídas (Hoje)</p>
+      <h2 id="pdv-dash-vendas" class="text-2xl font-bold text-emerald-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-red-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Total de Sangrias (Hoje)</p>
+      <h2 id="pdv-dash-sangrias" class="text-2xl font-bold text-red-600">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-blue-500">
+      <p class="text-gray-500 dark:text-slate-400 text-sm">Itens no Carrinho Atual</p>
+      <h2 id="pdv-dash-carrinho" class="text-2xl font-bold text-blue-600">0</h2>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-6">
+    <button onclick="pdv_alternarSubAba('caixa')" id="pdv-btn-caixa" class="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-shopping-cart"></i> Frente de Caixa (Vender)
+    </button>
+    <button onclick="pdv_alternarSubAba('sangria')" id="pdv-btn-sangria" class="flex-1 bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow">
+      <i class="fas fa-money-bill-wave"></i> Sangria / Histórico
+    </button>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="pdv-painel-caixa">
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card">
+        <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white"><i class="fas fa-search-plus"></i> BIPAR OU BUSCAR PRODUTO</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div class="md:col-span-2">
+            <label>Pesquisar ou Selecionar Produto</label>
+            <select id="pdv-select-produto" onchange="pdv_adicionarDoSelect()">
+              <option value="">Selecione um produto para adicionar...</option>
+            </select>
+          </div>
+          <div>
+            <button onclick="pdv_iniciarLeituraCamera()" class="w-full bg-slate-800 text-white p-2.5 rounded hover:bg-slate-700 transition flex items-center justify-center gap-2 font-bold text-sm">
+              <i class="fas fa-camera"></i> Ler Cód. Barras
+            </button>
+          </div>
+        </div>
+        <div id="pdv-camera-container" class="hidden mt-4 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
+          <div id="pdv-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
+          <button onclick="pdv_pararCamera()" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fas fa-shopping-basket"></i> Itens da Venda</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+                <th class="p-3">Item / Código</th>
+                <th class="p-3 text-center" style="width:130px">Qtd</th>
+                <th class="p-3 text-right">Unitário</th>
+                <th class="p-3 text-right">Subtotal</th>
+                <th class="p-3 text-center">Remover</th>
+              </tr>
+            </thead>
+            <tbody id="pdv-carrinho-corpo" class="text-sm"></tbody>
+          </table>
+          <div id="pdv-carrinho-vazio" class="text-center text-slate-400 py-8">
+            <i class="fas fa-shopping-cart text-4xl mb-2 block"></i>Carrinho de compras vazio.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-1">
+      <div class="card sticky top-24 bg-slate-900 text-white">
+        <h3 class="font-bold text-lg mb-4 border-b border-slate-700 pb-2 text-emerald-400"><i class="fas fa-calculator"></i> FECHAMENTO DA VENDA</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="text-slate-300">Cliente / Entidade Opcional</label>
+            <select id="pdv-cliente" class="bg-slate-800 border-slate-700 text-white">
+              <option value="">Consumidor Final (Não identificado)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-slate-300">Desconto Total (R$)</label>
+            <input type="number" id="pdv-desconto" value="0.00" step="0.01" min="0" oninput="pdv_recalcularTotais()" class="bg-slate-800 border-slate-700 text-white">
+          </div>
+          <div>
+            <label class="text-slate-300">Forma de Pagamento *</label>
+            <select id="pdv-forma-pagamento" class="bg-slate-800 border-slate-700 text-white font-bold text-emerald-400">
+              <option value="Dinheiro">Dinheiro (Espécie)</option>
+              <option value="PIX">PIX / Transferência</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+            </select>
+          </div>
+          <div class="border-t border-slate-700 pt-4 mt-2">
+            <div class="flex justify-between text-sm text-slate-400"><span>Subtotal:</span><span id="pdv-resumo-subtotal">R$ 0,00</span></div>
+            <div class="flex justify-between text-sm text-red-400"><span>Desconto:</span><span id="pdv-resumo-desconto">- R$ 0,00</span></div>
+            <div class="flex justify-between items-center mt-2 border-t border-dashed border-slate-700 pt-2">
+              <span class="font-bold text-lg text-slate-200">TOTAL A PAGAR:</span>
+              <span id="pdv-resumo-total" class="text-3xl font-extrabold text-emerald-400">R$ 0,00</span>
+            </div>
+          </div>
+          <button onclick="pdv_finalizarVenda()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold py-4 rounded transition shadow-lg text-base mt-4 flex items-center justify-center gap-2">
+            <i class="fas fa-check-circle text-xl"></i> CONFIRMAR E EMITIR (F8)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-6 hidden" id="pdv-painel-sangria">
+    <div class="card">
+      <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white"><i class="fas fa-hand-holding-usd text-red-500"></i> Executar Sangria de Caixa</h3>
+      <p class="text-xs text-slate-500 mb-4">A sangria gera automaticamente um lançamento de <strong>Despesa</strong> já finalizado na sua tabela financeira.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+        <div><label>Valor da Retirada (R$) *</label><input type="number" id="pdv-sangria-valor" step="0.01" placeholder="0.00"></div>
+        <div class="md:col-span-2"><label>Motivo / Justificativa *</label><input type="text" id="pdv-sangria-motivo" placeholder="Ex: Sangria para depósito bancário"></div>
+      </div>
+      <button onclick="pdv_salvarSangria()" class="mt-4 bg-red-500 text-white font-bold py-2.5 px-6 rounded hover:bg-red-600 transition shadow">
+        <i class="fas fa-arrow-down"></i> Confirmar Saída / Sangria
+      </button>
+    </div>
+    <div class="card">
+      <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fas fa-history"></i> Últimas Movimentações (Hoje)</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase border-b-2 border-slate-200 dark:border-slate-700">
+              <th class="p-3">Horário</th>
+              <th class="p-3">Descrição</th>
+              <th class="p-3">Categoria</th>
+              <th class="p-3 text-center">Tipo</th>
+              <th class="p-3 text-right">Valor</th>
+            </tr>
+          </thead>
+          <tbody id="pdv-lista-fluxo" class="text-sm dark:text-slate-300"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+//      ERP ABP — INDEXEDDB & WRAPPER STORAGE (OFFLINE LOCAL)
+// ══════════════════════════════════════════════════════════════════════════
+
+const DB_NAME = 'ERP_ABP_DB';
+const DB_VERSION = 1;
+let db;
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+            const database = e.target.result;
+            const stores = ['entidades', 'produtos', 'financas', 'parcelas', 'vendas', 'itens_venda'];
+            stores.forEach(storeName => {
+                if (!database.objectStoreNames.contains(storeName)) {
+                    database.createObjectStore(storeName, { keyPath: 'id' });
+                }
+            });
+        };
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            resolve(db);
+        };
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+const DB = {
+    async put(storeName, item) {
+        if (!item.id) item.id = crypto.randomUUID();
+        if (!item.created_at) item.created_at = new Date().toISOString();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.put(item);
+            req.onsuccess = () => resolve(item);
+            req.onerror = (e) => reject(e.target.error);
+        });
+    },
+    async get(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.get(id);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+    },
+    async getAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = (e) => reject(e.target.error);
+        });
+    },
+    async delete(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.delete(id);
+            req.onsuccess = () => resolve(true);
+            req.onerror = (e) => reject(e.target.error);
+        });
+    },
+    async deleteMultiple(storeName, ids) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            let completed = 0;
+            ids.forEach(id => {
+                const req = store.delete(id);
+                req.onsuccess = () => {
+                    completed++;
+                    if (completed === ids.length) resolve(true);
+                };
+                req.onerror = (e) => reject(e.target.error);
+            });
+            if (ids.length === 0) resolve(true);
+        });
+    }
+};
+
+let usuarioLogadoId = 'local_admin';
+let paginaAtual = 1;
+const itensPorPagina = 10;
+let totalRegistros = 0;
+
+// ── Sidebar Mobile ────────────────────────────────────────────────────
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    const isVisible = sidebar.classList.contains('translate-x-0');
+    if (isVisible) {
+        sidebar.classList.replace('translate-x-0','-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    } else {
+        sidebar.classList.replace('-translate-x-full','translate-x-0');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// ── Dark Mode ─────────────────────────────────────────────────────────
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDark = html.classList.toggle('dark');
+    document.getElementById('dark-icon').classList.toggle('hidden', isDark);
+    document.getElementById('light-icon').classList.toggle('hidden', !isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+if (localStorage.getItem('theme')==='dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    document.getElementById('dark-icon').classList.add('hidden');
+    document.getElementById('light-icon').classList.remove('hidden');
+}
+
+function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (input.type === 'password') { input.type = 'text'; icon.innerText = 'visibility_off'; }
+    else { input.type = 'password'; icon.innerText = 'visibility'; }
+}
+
+// ── Auth (Offline Local) ──────────────────────────────────────────────
+async function verificar_login() {
+    const logado = localStorage.getItem('erp_logado');
+    const telaLogin = document.getElementById('tela-login');
+    const telaSistema = document.getElementById('tela-sistema');
+    if (!logado) {
+        telaLogin.classList.remove('hidden');
+        telaSistema.classList.add('hidden');
+        usuarioLogadoId = null;
+    } else {
+        telaLogin.classList.add('hidden');
+        telaSistema.classList.remove('hidden');
+        usuarioLogadoId = 'local_admin';
+        document.getElementById('user-display-email').innerText = 'admin@erp-local.local';
+        document.getElementById('user-display-name').innerText = 'Administrador Local';
+        await initDB();
+        init();
+    }
+}
+
+async function fazerLogin() {
+    const email = document.getElementById('login-email').value;
+    const senha = document.getElementById('login-senha').value;
+    const btn = document.getElementById('btn-login');
+    if (!email || !senha) return alert("Credenciais obrigatórias.");
+    btn.innerText = 'Autenticando...';
+    btn.disabled = true;
+    localStorage.setItem('erp_logado', 'true');
+    await initDB();
+    verificar_login();
+    btn.innerText = 'Autenticar Acesso';
+    btn.disabled = false;
+}
+
+async function sairDaConta() {
+    localStorage.removeItem('erp_logado');
+    verificar_login();
+}
+
+// ── Navegação entre abas ──────────────────────────────────────────────
+function alternarAba(abaAtiva) {
+    const selectAba = document.getElementById('select-aba');
+    if (selectAba) selectAba.value = abaAtiva;
+
+    document.querySelectorAll('[id^="aba-"]').forEach(painel => {
+        painel.classList.toggle('hidden', painel.id !== `aba-${abaAtiva}`);
+    });
+
+    if (abaAtiva === 'estoque')       { est_init(); }
+    if (abaAtiva === 'entidades')     { loadDashboard(); loadEntidades(); }
+    if (abaAtiva === 'financeiro')    { fin_init(); }
+    if (abaAtiva === 'pdv')           { pdv_init(); }
+    if (abaAtiva === 'configuracoes') { /* Aba de configurações carregada */ }
+}
+
+function ent_alternarSubAba(subAba) {
+    const painelForm  = document.getElementById('ent-painel-formulario');
+    const painelLista = document.getElementById('ent-painel-listagem');
+    const btnForm     = document.getElementById('ent-btn-formulario');
+    const btnLista    = document.getElementById('ent-btn-listagem');
+
+    const ativo   = ['bg-primary','text-white','hover:brightness-105'];
+    const inativo = ['bg-slate-200','text-slate-700','hover:bg-slate-300'];
+
+    btnForm.classList.remove(...ativo,...inativo);
+    btnLista.classList.remove(...ativo,...inativo);
+
+    if (subAba === 'formulario') {
+        painelForm.classList.remove('hidden');
+        painelLista.classList.add('hidden');
+        btnForm.classList.add(...ativo);
+        btnLista.classList.add(...inativo);
+    } else {
+        painelForm.classList.add('hidden');
+        painelLista.classList.remove('hidden');
+        btnLista.classList.add(...ativo);
+        btnForm.classList.add(...inativo);
+    }
+}
+
+function init() {
+    alternarAba('entidades');
+    loadDashboard();
+    loadEntidades();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    verificar_login();
+    configurarDropZone('drop-foto','f-foto','nome-foto');
+    window.addEventListener('keydown', e => {
+        if (e.key === 'F8') { e.preventDefault(); if (typeof pdv_finalizarVenda === 'function') pdv_finalizarVenda(); }
+    });
+});
+
+// ── Drop Zone de Foto (Entidades) ─────────────────────────────────────
+function configurarDropZone(dropId, inputId, txtId) {
+    const dropZone = document.getElementById(dropId);
+    const inputEl  = document.getElementById(inputId);
+    if (!dropZone || !inputEl) return;
+    dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files?.length > 0) {
+            inputEl.files = e.dataTransfer.files;
+            mostrarNomeArquivo(inputEl, txtId);
+        }
+    });
+}
+
+function mostrarNomeArquivo(input, idCampoTexto) {
+    const campoTexto = document.getElementById(idCampoTexto);
+    if (input.files?.length > 0) {
+        campoTexto.style.display = 'inline-flex';
+        campoTexto.innerHTML = `<span class="material-symbols-outlined text-sm">verified</span> ${input.files[0].name}`;
+    } else {
+        campoTexto.style.display = 'none';
+        campoTexto.innerHTML = '';
+    }
+}
+
+// ── Busca de CEP ──────────────────────────────────────────────────────
+async function buscarCEP(cep) {
+    const limpo = cep.replace(/\D/g,'');
+    if (limpo.length !== 8) return;
+    try {
+        const res  = await fetch(`https://viacep.com.br/ws/${limpo}/json/`);
+        const data = await res.json();
+        if (!data.erro) {
+            document.getElementById('f-logradouro').value = data.logradouro;
+            document.getElementById('f-bairro').value     = data.bairro;
+            document.getElementById('f-cidade').value     = data.localidade;
+            document.getElementById('f-estado').value     = data.uf;
+            document.getElementById('f-numero').focus();
+        }
+    } catch(e) { console.error("CEP fetch error"); }
+}
+
+// ── Dashboard de Entidades ────────────────────────────────────────────
+async function loadDashboard() {
+    const data = await DB.getAll('entidades');
+    let clientes=0, fornecedores=0, inativos=0;
+    data.forEach(e => {
+        if (e.status_entidade==='inativo') inativos++;
+        if (e.tipo_entidade==='cliente')   clientes++;
+        if (e.tipo_entidade==='fornecedor') fornecedores++;
+    });
+    document.getElementById('dash-clientes').innerText    = clientes;
+    document.getElementById('dash-fornecedores').innerText = fornecedores;
+    document.getElementById('dash-inativos').innerText    = inativos;
+}
+
+// ── Paginação ─────────────────────────────────────────────────────────
+function mudarPagina(direcao) {
+    const nova = paginaAtual + direcao;
+    const total = Math.ceil(totalRegistros / itensPorPagina);
+    if (nova >= 1 && (totalRegistros === 0 || nova <= total)) {
+        paginaAtual = nova;
+        loadEntidades();
+    }
+}
+
+// ── PDF ───────────────────────────────────────────────────────────────
+function gerarPDF() {
+    alert("Preparando PDF das entidades filtradas para download.");
+}
+
+// ── CRUD de Entidades (IndexedDB) ─────────────────────────────────────
+async function salvarEntidade() {
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true; btn.innerText = 'Gravando...';
+    try {
+        const id         = document.getElementById('f-editando-id').value;
+        const nome       = document.getElementById('f-nome').value;
+        const cpf        = document.getElementById('f-cpf').value;
+        const nascimento = document.getElementById('f-nascimento').value || null;
+        const email      = document.getElementById('f-email').value;
+        const telefone   = document.getElementById('f-telefone').value;
+        const tipo       = document.getElementById('f-tipo-entidade').value;
+        const status     = document.getElementById('f-status').value;
+        const cep        = document.getElementById('f-cep').value;
+        const logradouro = document.getElementById('f-logradouro').value;
+        const numero     = document.getElementById('f-numero').value;
+        const bairro     = document.getElementById('f-bairro').value;
+        const city       = document.getElementById('f-cidade').value;
+        const state      = document.getElementById('f-estado').value;
+        const fileFoto   = document.getElementById('f-foto').files[0];
+
+        if (!nome) throw new Error("O Nome Completo é obrigatório.");
+
+        let fotoUrlFinal = null;
+        if (fileFoto) {
+            fotoUrlFinal = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(fileFoto);
+            });
+        }
+
+        const payload = {
+            id: id || crypto.randomUUID(),
+            nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
+            tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
+            bairro, cidade: city, estado: state, user_id: usuarioLogadoId,
+            created_at: new Date().toISOString()
+        };
+        if (fotoUrlFinal) {
+            payload.foto_url = fotoUrlFinal;
+        } else if (id) {
+            const existente = await DB.get('entidades', id);
+            if (existente && existente.foto_url) payload.foto_url = existente.foto_url;
+        }
+
+        await DB.put('entidades', payload);
+        alert(id ? "Registro sincronizado." : "Nova entidade integrada.");
+
+        cancelarEdicao();
+        loadDashboard();
+        loadEntidades();
+        ent_alternarSubAba('listagem');
+    } catch(error) {
+        alert(error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
+    }
+}
+
+async function loadEntidades() {
+    const busca = (document.getElementById('filtro-busca').value || '').toLowerCase();
+    const tipo  = document.getElementById('filtro-tipo').value;
+
+    let data = await DB.getAll('entidades');
+    if (busca) {
+        data = data.filter(e => e.nome_completo && e.nome_completo.toLowerCase().includes(busca));
+    }
+    if (tipo) {
+        data = data.filter(e => e.tipo_entidade === tipo);
+    }
+
+    data.sort((a, b) => (a.nome_completo || '').localeCompare(b.nome_completo || ''));
+    totalRegistros = data.length;
+
+    const totalPaginas = Math.ceil(totalRegistros / itensPorPagina);
+    const start = (paginaAtual - 1) * itensPorPagina;
+    const dataPaginada = data.slice(start, start + itensPorPagina);
+
+    document.getElementById('page-indicator').innerText    = `Página ${paginaAtual} de ${totalPaginas || 1}`;
+    document.getElementById('pagination-info').innerText   = `Mostrando ${dataPaginada.length} de ${totalRegistros}`;
+    document.getElementById('btn-anterior').disabled       = paginaAtual === 1;
+    document.getElementById('btn-proximo').disabled        = paginaAtual >= totalPaginas || totalPaginas === 0;
+
+    const grid = document.getElementById('lista-entidades-grid');
+    if (!grid) return;
+    if (dataPaginada.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 font-bold">Nenhum registro encontrado.</div>';
+        return;
+    }
+
+    grid.innerHTML = dataPaginada.map(e => {
+        const statusColor  = e.status_entidade === 'ativo' ? 'bg-emerald-500' : 'bg-slate-300';
+        const imgUrl       = e.foto_url || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(e.nome_completo);
+        const whatsappUrl  = `https://wa.me/${(e.telefone||'').replace(/\D/g,'')}`;
+        const mailtoUrl    = `mailto:${e.email}`;
+        return `
+        <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 shadow-sm hover:shadow-premium transition-all duration-300 flex flex-col items-center group relative">
+          <div class="absolute top-3 left-3 z-10">
+            <input type="checkbox" class="check-entidade w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" value="${e.id}">
+          </div>
+          <div class="relative mb-4">
+            <img src="${imgUrl}" class="w-20 h-20 rounded-2xl object-cover border-4 border-slate-50 dark:border-slate-700 shadow-sm">
+            <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-slate-800 ${statusColor}"></div>
+          </div>
+          <div class="text-center w-full mb-6">
+            <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">${e.tipo_entidade}</span>
+            <h4 class="font-bold text-slate-900 dark:text-white truncate px-2 mb-1" title="${e.nome_completo}">${e.nome_completo}</h4>
+            <p class="text-xs text-slate-400 truncate px-4">${e.email || 'Sem e-mail'}</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-mono-sm">${e.telefone || '---'}</p>
+          </div>
+          <div class="flex items-center gap-3 mt-auto pt-4 border-t border-slate-50 dark:border-slate-700 w-full justify-center">
+            <button onclick="window.open('${whatsappUrl}','_blank')" class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="WhatsApp">
+              <span class="material-symbols-outlined text-lg">chat</span>
+            </button>
+            <a href="${mailtoUrl}" class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="E-mail">
+              <span class="material-symbols-outlined text-lg">mail</span>
+            </a>
+            <button onclick="prepararEdicao('${e.id}')" class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-400 dark:text-slate-300 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm" title="Editar">
+              <span class="material-symbols-outlined text-lg">edit_square</span>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+async function prepararEdicao(id) {
+    const e = await DB.get('entidades', id);
+    if (e) {
+        document.getElementById('f-editando-id').value   = e.id;
+        document.getElementById('f-nome').value          = e.nome_completo;
+        document.getElementById('f-cpf').value           = e.cpf || '';
+        document.getElementById('f-nascimento').value    = e.data_nascimento || '';
+        document.getElementById('f-email').value         = e.email || '';
+        document.getElementById('f-telefone').value      = e.telefone || '';
+        document.getElementById('f-tipo-entidade').value = e.tipo_entidade;
+        document.getElementById('f-status').value        = e.status_entidade;
+        document.getElementById('f-cep').value           = e.cep || '';
+        document.getElementById('f-logradouro').value    = e.logradouro || '';
+        document.getElementById('f-numero').value        = e.numero || '';
+        document.getElementById('f-bairro').value        = e.bairro || '';
+        document.getElementById('f-cidade').value        = e.cidade || '';
+        document.getElementById('f-estado').value        = e.estado || '';
+        document.getElementById('f-foto').value          = '';
+
+        const fotoTxt = document.getElementById('nome-foto');
+        if (e.foto_url) { fotoTxt.style.display='inline-flex'; fotoTxt.innerHTML='<span class="material-symbols-outlined text-sm">image</span> Mídia anexada'; }
+        else { fotoTxt.style.display='none'; }
+
+        document.getElementById('btn-salvar').innerHTML = '<span class="material-symbols-outlined">sync</span> Atualizar Registro';
+        document.getElementById('btn-cancelar').classList.remove('hidden');
+
+        ent_alternarSubAba('formulario');
+    }
+}
+
+function cancelarEdicao() {
+    document.getElementById('f-editando-id').value = '';
+    document.getElementById('btn-salvar').innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
+    document.getElementById('btn-cancelar').classList.add('hidden');
+
+    document.querySelectorAll('#ent-painel-formulario input, #ent-painel-formulario select').forEach(i => {
+        if (i.type !== 'hidden') i.value = '';
+    });
+    document.getElementById('f-tipo-entidade').value = 'cliente';
+    document.getElementById('f-status').value        = 'ativo';
+    document.getElementById('nome-foto').style.display = 'none';
+    document.getElementById('nome-foto').innerHTML   = '';
+
+    ent_alternarSubAba('listagem');
+}
+
+function toggleTodosChecks(source) {
+    document.querySelectorAll('.check-entidade').forEach(cb => cb.checked = source.checked);
+}
+
+async function excluirSelecionados() {
+    const ids = Array.from(document.querySelectorAll('.check-entidade:checked')).map(cb => cb.value);
+    if (ids.length === 0) return alert("Selecione registros para excluir.");
+    if (confirm(`Confirmar exclusão de ${ids.length} registro(s)?`)) {
+        await DB.deleteMultiple('entidades', ids);
+        alert("Registros excluídos.");
+        paginaAtual=1;
+        loadDashboard();
+        loadEntidades();
+    }
+}
+
+function limparFiltros() {
+    document.getElementById('filtro-busca').value = '';
+    document.getElementById('filtro-tipo').value  = '';
+    paginaAtual = 1;
+    loadEntidades();
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//      JAVASCRIPT — MÓDULO ESTOQUE (INDEXEDDB)
+// ══════════════════════════════════════════════════════════════════════════
+let est_html5QrCode = null;
+
+async function est_init() {
+    est_loadCategoriasUnicas();
+    est_loadDashboard();
+    est_loadProdutos();
+    est_configurarDropZone();
+}
+
+function est_alternarSubAba(subAba) {
+    const painelForm  = document.getElementById('est-painel-formulario');
+    const painelLista = document.getElementById('est-painel-listagem');
+    const btnForm     = document.getElementById('est-btn-formulario');
+    const btnLista    = document.getElementById('est-btn-listagem');
+
+    const ativo   = ['bg-emerald-500','text-white','hover:bg-emerald-600'];
+    const inativo = ['bg-slate-200','text-slate-700','hover:bg-slate-300'];
+
+    btnForm.classList.remove(...ativo,...inativo);
+    btnLista.classList.remove(...ativo,...inativo);
+
+    if (subAba === 'formulario') {
+        painelForm.classList.remove('hidden');
+        painelLista.classList.add('hidden');
+        btnForm.classList.add(...ativo);
+        btnLista.classList.add(...inativo);
+    } else {
+        painelForm.classList.add('hidden');
+        painelLista.classList.remove('hidden');
+        btnLista.classList.add(...ativo);
+        btnForm.classList.add(...inativo);
+    }
+}
+
+function est_configurarDropZone() {
+    const dropZone = document.getElementById('est-drop-foto');
+    const inputEl  = document.getElementById('est-f-foto');
+    if (!dropZone) return;
+    dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('bg-slate-100'); });
+    dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.classList.remove('bg-slate-100'); });
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('bg-slate-100');
+        if (e.dataTransfer.files?.length > 0) {
+            inputEl.files = e.dataTransfer.files;
+            est_mostrarNomeArquivo(inputEl,'est-nome-foto');
+        }
+    });
+}
+
+function est_mostrarNomeArquivo(input, idCampoTexto) {
+    const campoTexto = document.getElementById(idCampoTexto);
+    if (!campoTexto) return;
+    if (input.files?.length > 0) {
+        campoTexto.innerHTML = `<i class="fas fa-check"></i> ${input.files[0].name}`;
+    } else {
+        campoTexto.innerHTML = '';
+    }
+}
+
+async function est_loadCategoriasUnicas() {
+    const data = await DB.getAll('produtos');
+    const categorias = [...new Set(data.map(item => item.categoria).filter(c => c))];
+    const datalist   = document.getElementById('est-lista-categorias');
+    const selectFiltro = document.getElementById('est-filtro-categoria');
+    if (!datalist || !selectFiltro) return;
+    datalist.innerHTML = '';
+    selectFiltro.innerHTML = '<option value="">Todas</option>';
+    categorias.forEach(cat => {
+        datalist.innerHTML     += `<option value="${cat}">`;
+        selectFiltro.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+}
+
+function est_iniciarLeituraCamera() {
+    const container = document.getElementById('est-camera-container');
+    container.classList.remove('hidden');
+    est_html5QrCode = new Html5Qrcode("est-camera-preview");
+    est_html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:300,height:150}}, decodedText => {
+        document.getElementById('est-f-barras').value = decodedText;
+        est_pararCamera();
+    }).catch(() => {
+        alert("Não foi possível acessar a câmera. Verifique as permissões.");
+        container.classList.add('hidden');
+    });
+}
+
+function est_pararCamera() {
+    if (est_html5QrCode) {
+        est_html5QrCode.stop().then(() => {
+            document.getElementById('est-camera-container').classList.add('hidden');
+        }).catch(() => {
+            document.getElementById('est-camera-container').classList.add('hidden');
+        });
+    } else {
+        document.getElementById('est-camera-container').classList.add('hidden');
+    }
+}
+
+async function est_processarXML(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const btnImport = document.getElementById('est-btn-importar-xml') || {};
+    const textoOriginal = btnImport.innerHTML || '';
+    if (btnImport.innerHTML !== undefined) { btnImport.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lendo XML...'; btnImport.disabled = true; }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const xmlDoc = new DOMParser().parseFromString(e.target.result,"text/xml");
+            const itens  = xmlDoc.getElementsByTagName("det");
+            if (itens.length === 0) { alert("Nenhum produto encontrado neste XML."); return; }
+
+            let novos=0, atualizados=0;
+            const produtosAtuais = await DB.getAll('produtos');
+
+            for (let i=0; i<itens.length; i++) {
+                const prod = itens[i].getElementsByTagName("prod")[0];
+                if (!prod) continue;
+                const nome  = prod.getElementsByTagName("xProd")[0]?.textContent || "";
+                let ean     = prod.getElementsByTagName("cEAN")[0]?.textContent || "";
+                if (ean==="SEM GTIN") ean = null;
+                const custo = parseFloat(prod.getElementsByTagName("vUnCom")[0]?.textContent || 0);
+                const qtd   = parseInt(parseFloat(prod.getElementsByTagName("qCom")[0]?.textContent || 0));
+
+                const existente = produtosAtuais.find(p => (ean && p.codigo_barras === ean) || p.nome === nome);
+
+                if (existente) {
+                    existente.quantidade_estoque = parseInt(existente.quantidade_estoque||0) + qtd;
+                    existente.preco_custo = custo;
+                    await DB.put('produtos', existente);
+                    atualizados++;
+                } else {
+                    const novoProd = {
+                        id: crypto.randomUUID(),
+                        nome,
+                        codigo_barras: ean || null,
+                        preco_custo: custo,
+                        preco_venda: custo * 1.3,
+                        quantidade_estoque: qtd,
+                        estoque_minimo: 5,
+                        categoria: 'Geral',
+                        created_at: new Date().toISOString()
+                    };
+                    await DB.put('produtos', novoProd);
+                    produtosAtuais.push(novoProd);
+                    novos++;
+                }
+            }
+            alert(`NF-e importada!\n✅ Novos: ${novos}\n🔄 Atualizados: ${atualizados}`);
+            input.value='';
+            est_loadProdutos(); est_loadDashboard();
+        } catch(err) {
+            alert("Erro ao processar XML: "+err.message);
+        } finally {
+            if (btnImport.innerHTML !== undefined) { btnImport.innerHTML = textoOriginal; btnImport.disabled = false; }
+        }
+    };
+    reader.readAsText(file);
+}
+
+async function est_loadDashboard() {
+    const produtos = await DB.getAll('produtos');
+    let totalCadastrados=produtos.length, estoqueBaixo=0, totalItens=0;
+    produtos.forEach(p => {
+        const est = parseInt(p.quantidade_estoque||0);
+        const min = parseInt(p.estoque_minimo||0);
+        totalItens += est;
+        if (est <= min) estoqueBaixo++;
+    });
+    const elTot = document.getElementById('est-dash-total-produtos');
+    const elBaix = document.getElementById('est-dash-estoque-baixo');
+    const elItens = document.getElementById('est-dash-total-itens');
+    if (elTot) elTot.innerText = totalCadastrados;
+    if (elBaix) elBaix.innerText  = estoqueBaixo;
+    if (elItens) elItens.innerText    = totalItens;
+}
+
+async function est_salvarProdutoCompleto() {
+    const btn = document.getElementById('est-btn-salvar');
+    btn.disabled = true; btn.innerText = 'Salvando...';
+    try {
+        const nome        = document.getElementById('est-f-nome').value;
+        const categoria   = document.getElementById('est-f-categoria').value || 'Geral';
+        const estoqueMin  = parseInt(document.getElementById('est-f-estoque-minimo').value) || 0;
+        const precoCusto  = parseFloat(document.getElementById('est-f-custo').value) || 0;
+        const precoVenda  = parseFloat(document.getElementById('est-f-venda').value);
+        const quantidade  = parseInt(document.getElementById('est-f-quantidade').value) || 0;
+        const descricao   = document.getElementById('est-f-descricao').value;
+        const barras      = document.getElementById('est-f-barras').value;
+        const fileFoto    = document.getElementById('est-f-foto').files[0];
+        const editandoId  = document.getElementById('est-f-editando-id').value;
+
+        if (!nome || isNaN(precoVenda)) throw new Error("Preencha o Nome e o Preço de Venda!");
+
+        let fotoUrl = null;
+        if (fileFoto) {
+            fotoUrl = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(fileFoto);
+            });
+        }
+
+        const dados = {
+            id: editandoId || crypto.randomUUID(),
+            nome, categoria, estoque_minimo:estoqueMin, preco_custo:precoCusto, preco_venda:precoVenda, quantidade_estoque:quantidade, descricao, codigo_barras:barras||null,
+            created_at: new Date().toISOString()
+        };
+        if (fotoUrl) {
+            dados.foto_url = fotoUrl;
+        } else if (editandoId) {
+            const existente = await DB.get('produtos', editandoId);
+            if (existente && existente.foto_url) dados.foto_url = existente.foto_url;
+        }
+
+        await DB.put('produtos', dados);
+        alert(editandoId ? "Produto atualizado!" : "Produto cadastrado!");
+
+        est_cancelarEdicao();
+        est_loadProdutos();
+        est_loadDashboard();
+        est_alternarSubAba('listagem');
+    } catch(error) {
+        alert(error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Gravar Produto';
+    }
+}
+
+function est_limparFiltros() {
+    document.getElementById('est-filtro-busca').value      = '';
+    document.getElementById('est-filtro-categoria').value  = '';
+    est_loadProdutos();
+}
+
+async function est_loadProdutos() {
+    const busca     = (document.getElementById('est-filtro-busca')?.value    || '').toLowerCase();
+    const categoria = document.getElementById('est-filtro-categoria')?.value || '';
+
+    let data = await DB.getAll('produtos');
+    if (busca) {
+        data = data.filter(p => (p.nome && p.nome.toLowerCase().includes(busca)) || (p.codigo_barras && p.codigo_barras.toLowerCase().includes(busca)));
+    }
+    if (categoria) {
+        data = data.filter(p => p.categoria === categoria);
+    }
+
+    data.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+
+    const tbody = document.getElementById('est-lista-produtos');
+    if (!tbody) return;
+
+    tbody.innerHTML = data.map(p => {
+        const estoque = parseInt(p.quantidade_estoque || 0);
+        const minimo  = parseInt(p.estoque_minimo || 0);
+        let statusClass = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300';
+        let statusTxt   = 'EM ESTOQUE';
+        if (estoque === 0)       { statusClass='bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300 animate-pulse'; statusTxt='ZERADO'; }
+        else if (estoque<=minimo){ statusClass='bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300';       statusTxt='ESTOQUE BAIXO'; }
+
+        const imgHtml   = p.foto_url
+            ? `<img src="${p.foto_url}" class="w-10 h-10 object-cover rounded shadow-sm inline-block mr-2">`
+            : `<div class="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded flex items-center justify-center text-slate-400 inline-block mr-2 text-xs"><i class="fas fa-box"></i></div>`;
+        const codBarras = p.codigo_barras
+            ? `<span class="text-xs font-mono text-slate-400 block"><i class="fas fa-barcode"></i> ${p.codigo_barras}</span>`
+            : '<span class="text-xs text-slate-300 dark:text-slate-500 block">Sem código</span>';
+
+        return `
+        <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+          <td class="p-3 text-center"><input type="checkbox" class="est-check-parcela" value="${p.id}"></td>
+          <td class="p-3 flex items-center">${imgHtml}<div>${codBarras}</div></td>
+          <td class="p-3">
+            <div class="font-bold text-slate-700 dark:text-white">${p.nome}</div>
+            <span class="text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">${p.categoria||'Geral'}</span>
+          </td>
+          <td class="p-3 font-bold text-slate-600 dark:text-slate-300">R$ ${parseFloat(p.preco_custo||0).toFixed(2)}</td>
+          <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400 font-mono">R$ ${parseFloat(p.preco_venda||0).toFixed(2)}</td>
+          <td class="p-3 font-bold text-center text-slate-700 dark:text-white">${estoque} <span class="text-xs text-slate-400 font-normal block">mín: ${minimo}</span></td>
+          <td class="p-3 text-center"><span class="px-2.5 py-1 rounded text-xs font-bold ${statusClass}">${statusTxt}</span></td>
+          <td class="p-3 text-center">
+            <button onclick="est_prepararEdicao('${p.id}')" class="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300 px-3 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition text-sm">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+          </td>
+        </tr>`;
+    }).join('');
+}
+
+async function est_prepararEdicao(id) {
+    const p = await DB.get('produtos', id);
+    if (p) {
+        document.getElementById('est-f-editando-id').value       = p.id;
+        document.getElementById('est-f-nome').value              = p.nome;
+        document.getElementById('est-f-categoria').value         = p.categoria || 'Geral';
+        document.getElementById('est-f-estoque-minimo').value    = p.estoque_minimo;
+        document.getElementById('est-f-custo').value             = p.preco_custo;
+        document.getElementById('est-f-venda').value             = p.preco_venda;
+        document.getElementById('est-f-quantidade').value        = p.quantidade_estoque;
+        document.getElementById('est-f-descricao').value         = p.descricao || '';
+        document.getElementById('est-f-barras').value            = p.codigo_barras || '';
+        document.getElementById('est-btn-salvar').innerHTML      = '<i class="fas fa-sync-alt"></i> Atualizar Produto';
+        document.getElementById('est-btn-cancelar').classList.remove('hidden');
+        est_alternarSubAba('formulario');
+    }
+}
+
+function est_cancelarEdicao() {
+    document.getElementById('est-f-editando-id').value    = '';
+    document.getElementById('est-btn-salvar').innerHTML   = '<i class="fas fa-save"></i> Gravar Produto';
+    document.getElementById('est-btn-cancelar').classList.add('hidden');
+    document.getElementById('est-f-nome').value           = '';
+    document.getElementById('est-f-categoria').value      = 'Geral';
+    document.getElementById('est-f-estoque-minimo').value = '5';
+    document.getElementById('est-f-custo').value          = '0.00';
+    document.getElementById('est-f-venda').value          = '';
+    document.getElementById('est-f-quantidade').value     = '0';
+    document.getElementById('est-f-descricao').value      = '';
+    document.getElementById('est-f-barras').value         = '';
+    document.getElementById('est-f-foto').value           = '';
+    document.getElementById('est-nome-foto').innerHTML    = '';
+}
+
+function est_toggleTodosChecks(source) {
+    document.querySelectorAll('.est-check-parcela').forEach(cb => cb.checked = source.checked);
+}
+
+async function est_excluirSelecionados() {
+    const ids = Array.from(document.querySelectorAll('.est-check-parcela:checked')).map(cb => cb.value);
+    if (ids.length === 0) return alert("Selecione ao menos um produto para excluir.");
+    if (confirm(`Deseja excluir ${ids.length} produto(s)?`)) {
+        await DB.deleteMultiple('produtos', ids);
+        alert('Excluído com sucesso!');
+        est_loadProdutos();
+        est_loadDashboard();
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//      JAVASCRIPT — MÓDULO FINANCEIRO (INDEXEDDB)
+// ══════════════════════════════════════════════════════════════════════════
+let fin_entidadesCache    = [];
+let fin_html5QrCode       = null;
+let fin_listenerSetup     = false;
+
+async function fin_init() {
+    await fin_loadEntidades();
+    await fin_loadCategoriasUnicas();
+    await fin_loadDashboard();
+    await fin_loadParcelas();
+    fin_configurarDropZone('fin-drop-boleto','fin-f-boleto','fin-nome-boleto');
+    fin_configurarDropZone('fin-drop-comprovante','fin-f-comprovante','fin-nome-comprovante');
+    if (!fin_listenerSetup) {
+        const inputBusca   = document.getElementById('fin-f-entidade-busca');
+        const listaDropdown = document.getElementById('fin-lista-entidades');
+        const inputId      = document.getElementById('fin-f-entidade-id');
+        if (inputBusca) {
+            inputBusca.addEventListener('input', e => {
+                const termo = e.target.value.toLowerCase();
+                listaDropdown.innerHTML = '';
+                if (!termo) { listaDropdown.classList.add('hidden'); inputId.value=''; return; }
+                const filtradas = fin_entidadesCache.filter(ent => ent.nome_completo.toLowerCase().includes(termo));
+                if (filtradas.length > 0) {
+                    listaDropdown.classList.remove('hidden');
+                    filtradas.forEach(ent => {
+                        const li = document.createElement('li');
+                        li.className = 'p-3 hover:bg-slate-100 cursor-pointer text-sm border-b last:border-b-0 dark:hover:bg-slate-700';
+                        li.innerHTML = `<i class="fas fa-user-circle text-slate-400 mr-2"></i>${ent.nome_completo}`;
+                        li.onclick = () => { inputBusca.value = ent.nome_completo; inputId.value = ent.id; listaDropdown.classList.add('hidden'); };
+                        listaDropdown.appendChild(li);
+                    });
+                } else { listaDropdown.classList.add('hidden'); inputId.value=''; }
+            });
+            fin_listenerSetup = true;
+        }
+    }
+}
+
+function fin_alternarSubAba(subAba) {
+    const form   = document.getElementById('fin-aba-formulario');
+    const lista  = document.getElementById('fin-aba-listagem');
+    const btnF   = document.getElementById('fin-btn-aba-formulario');
+    const btnL   = document.getElementById('fin-btn-aba-listagem');
+    const verde  = ['bg-primary','text-white','hover:brightness-105'];
+    const cinza  = ['bg-slate-200','text-slate-700','hover:bg-slate-300'];
+    btnF.classList.remove(...verde,...cinza); btnL.classList.remove(...verde,...cinza);
+    if (subAba === 'formulario') {
+        form.classList.remove('hidden'); lista.classList.add('hidden');
+        btnF.classList.add(...verde);   btnL.classList.add(...cinza);
+    } else {
+        form.classList.add('hidden');   lista.classList.remove('hidden');
+        btnL.classList.add(...verde);   btnF.classList.add(...cinza);
+    }
+}
+
+function fin_ajustarLabelsValor() {
+    const tipo = document.getElementById('fin-f-tipo-calculo').value;
+    document.getElementById('fin-label-valor').innerText = tipo === 'total' ? 'Valor Total (R$) *' : 'Valor da Parcela (R$) *';
+}
+
+async function fin_loadEntidades() {
+    const data = await DB.getAll('entidades');
+    if (data) fin_entidadesCache = data;
+}
+
+async function fin_loadCategoriasUnicas() {
+    const data = await DB.getAll('financas');
+    const cats = [...new Set(data.map(i => i.categoria).filter(c => c))];
+    const dl   = document.getElementById('fin-lista-categorias');
+    const sel  = document.getElementById('fin-filtro-categoria');
+    if (!dl || !sel) return;
+    dl.innerHTML  = '';
+    sel.innerHTML = '<option value="">Todas</option>';
+    cats.forEach(c => { dl.innerHTML += `<option value="${c}">`; sel.innerHTML += `<option value="${c}">${c}</option>`; });
+}
+
+async function fin_loadDashboard() {
+    const parcelas = await DB.getAll('parcelas');
+    const financas = await DB.getAll('financas');
+    const financasMap = new Map(financas.map(f => [f.id, f]));
+
+    let receita=0, despesa=0, pendente=0;
+    parcelas.forEach(p => {
+        const v = parseFloat(p.valor_parcela||0);
+        const fin = financasMap.get(p.financa_id);
+        if (p.status==='pago') {
+            fin?.tipo==='receita' ? receita+=v : despesa+=v;
+        } else {
+            pendente+=v;
+        }
+    });
+    const fmt = n => `R$ ${n.toLocaleString('pt-br',{minimumFractionDigits:2})}`;
+    document.getElementById('fin-dash-receita').innerText  = fmt(receita);
+    document.getElementById('fin-dash-despesa').innerText  = fmt(despesa);
+    document.getElementById('fin-dash-pendente').innerText = fmt(pendente);
+}
+
+async function fin_gerarLancamentoCompleto() {
+    const btn = document.getElementById('fin-btn-salvar');
+    btn.disabled=true; btn.innerText='Salvando...';
+    try {
+        const desc          = document.getElementById('fin-f-desc').value;
+        const tipoCalculo   = document.getElementById('fin-f-tipo-calculo').value;
+        const valorInput    = parseFloat(document.getElementById('fin-f-valor').value);
+        const tipo          = document.getElementById('fin-f-tipo').value;
+        const categoria     = document.getElementById('fin-f-categoria').value || 'Geral';
+        const statusLanc    = document.getElementById('fin-f-status').value;
+        const qtd           = parseInt(document.getElementById('fin-f-parcelas').value);
+        const recorrencia   = document.getElementById('fin-f-recorrencia').value;
+        const dataVenc      = document.getElementById('fin-f-vencimento').value;
+        const dataPag       = document.getElementById('fin-f-data-pagamento').value;
+        const entidade      = document.getElementById('fin-f-entidade-id').value || null;
+        const barras        = document.getElementById('fin-f-barras').value;
+        const fileBoleto    = document.getElementById('fin-f-boleto').files[0];
+        const fileComp      = document.getElementById('fin-f-comprovante').files[0];
+        const editandoId    = document.getElementById('fin-f-editando-id').value;
+        const financaId     = document.getElementById('fin-f-editando-financa-id').value;
+
+        if (!desc || !valorInput || !dataVenc) throw new Error("Preencha Descrição, Valor e Data de Vencimento!");
+
+        let valorTotal, valorParcela;
+        if (tipoCalculo==='total') { valorTotal=valorInput; valorParcela=(valorTotal/qtd).toFixed(2); }
+        else { valorParcela=valorInput; valorTotal=(valorParcela*qtd).toFixed(2); }
+
+        const fileToBase64 = file => new Promise((resolve) => {
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
+
+        let boletoUrl = await fileToBase64(fileBoleto);
+        let comprovanteUrl = await fileToBase64(fileComp);
+
+        if (editandoId) {
+            const finObj = await DB.get('financas', financaId) || { id: financaId };
+            finObj.descricao = desc;
+            finObj.tipo = tipo;
+            finObj.categoria = categoria;
+            finObj.status_lancamento = statusLanc;
+            finObj.entidade_id = entidade;
+            await DB.put('financas', finObj);
+
+            const pObj = await DB.get('parcelas', editandoId);
+            if (pObj) {
+                pObj.valor_parcela = valorParcela;
+                pObj.data_vencimento = dataVenc;
+                pObj.status = dataPag ? 'pago' : 'pendente';
+                pObj.data_pagamento = dataPag || null;
+                pObj.codigo_barra = barras;
+                if (boletoUrl) pObj.boleto_url = boletoUrl;
+                if (comprovanteUrl) pObj.comprovante_url = comprovanteUrl;
+                await DB.put('parcelas', pObj);
+            }
+            alert("Parcela atualizada!");
+        } else {
+            const novaFin = {
+                id: crypto.randomUUID(),
+                descricao: desc,
+                valor_total: valorTotal,
+                tipo,
+                categoria,
+                status_lancamento: statusLanc,
+                num_parcelas: qtd,
+                entidade_id: entidade,
+                created_at: new Date().toISOString()
+            };
+            await DB.put('financas', novaFin);
+
+            for (let i=1; i<=qtd; i++) {
+                let venc = new Date(dataVenc+'T12:00:00');
+                if (recorrencia==='diario') venc.setDate(venc.getDate()+(i-1));
+                else venc.setMonth(venc.getMonth()+((i-1)*parseInt(recorrencia)));
+
+                const novaParcela = {
+                    id: crypto.randomUUID(),
+                    financa_id: novaFin.id,
+                    num_parcela: i,
+                    valor_parcela: valorParcela,
+                    data_vencimento: venc.toISOString().split('T')[0],
+                    status: dataPag ? 'pago' : 'pendente',
+                    data_pagamento: dataPag || null,
+                    codigo_barra: barras,
+                    boleto_url: boletoUrl,
+                    comprovante_url: comprovanteUrl,
+                    created_at: new Date().toISOString()
+                };
+                await DB.put('parcelas', novaParcela);
+            }
+            alert("Lançamento salvo!");
+        }
+        fin_cancelarEdicao();
+        fin_loadParcelas();
+        fin_loadDashboard();
+        fin_alternarSubAba('listagem');
+    } catch(error) { alert(error.message); }
+    finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-save"></i> Gravar Lançamento'; }
+}
+
+async function fin_loadParcelas() {
+    const busca    = (document.getElementById('fin-filtro-busca').value || '').toLowerCase();
+    const cat      = document.getElementById('fin-filtro-categoria').value;
+    const inicio   = document.getElementById('fin-filtro-inicio').value;
+    const fim      = document.getElementById('fin-filtro-fim').value;
+
+    let parcelas = await DB.getAll('parcelas');
+    let financas = await DB.getAll('financas');
+    const financasMap = new Map(financas.map(f => [f.id, f]));
+
+    let data = parcelas.map(p => ({
+        ...p,
+        financas: financasMap.get(p.financa_id) || { descricao: '', tipo: 'receita', categoria: 'Geral', num_parcelas: 1 }
+    })).filter(item => item.financas);
+
+    if (busca) {
+        data = data.filter(p => p.financas.descricao.toLowerCase().includes(busca));
+    }
+    if (cat) {
+        data = data.filter(p => p.financas.categoria === cat);
+    }
+    if (inicio) {
+        data = data.filter(p => p.data_vencimento >= inicio);
+    }
+    if (fim) {
+        data = data.filter(p => p.data_vencimento <= fim);
+    }
+
+    data.sort((a, b) => a.data_vencimento.localeCompare(b.data_vencimento));
+
+    const tbody = document.getElementById('fin-lista-parcelas');
+    const hoje  = new Date().toISOString().split('T')[0];
+    if (!tbody) return;
+
+    tbody.innerHTML = data.map(p => {
+        let sc = p.status==='pago' ? 'status-pago' : 'status-pendente';
+        let st = p.status.toUpperCase();
+        if (p.status==='pendente' && p.data_vencimento < hoje) { sc='status-atrasado'; st='ATRASADO'; }
+        const dtVenc = new Date(p.data_vencimento+'T12:00:00').toLocaleDateString('pt-br');
+        const dtPag  = p.data_pagamento ? new Date(p.data_pagamento+'T12:00:00').toLocaleDateString('pt-br') : '--/--/----';
+        const iBoleto = p.boleto_url     ? `<a href="${p.boleto_url}" target="_blank" class="text-blue-500 bg-blue-50 px-2 py-1 rounded text-xs"><i class="fas fa-file-invoice"></i> Boleto</a>` : '';
+        const iComp   = p.comprovante_url? `<a href="${p.comprovante_url}" target="_blank" class="text-emerald-500 bg-emerald-50 px-2 py-1 rounded text-xs"><i class="fas fa-receipt"></i> Recibo</a>` : '';
+        const tBarras = p.codigo_barra   ? `<div class="text-gray-400 font-mono text-[10px] mt-1 break-all bg-slate-50 p-1 rounded"><i class="fas fa-barcode"></i> ${p.codigo_barra}</div>` : '';
+        return `<tr class="border-b border-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 text-center"><input type="checkbox" class="fin-check-parcela" value="${p.id}"></td>
+          <td class="p-3"><div class="text-slate-800 dark:text-white font-bold">${dtVenc}</div><div class="text-xs text-slate-500 mt-1">${dtPag}</div></td>
+          <td class="p-3"><div class="font-bold text-slate-700 dark:text-slate-200 mb-1">${p.financas.descricao} <span class="text-[10px] bg-gray-200 text-gray-600 px-1 rounded">${p.financas.categoria||'Geral'}</span></div><div class="flex gap-1 mb-1">${iBoleto}${iComp}</div>${tBarras}</td>
+          <td class="p-3 font-bold text-slate-600 dark:text-slate-300">${p.num_parcela}/${p.financas.num_parcelas}</td>
+          <td class="p-3 font-bold ${p.financas.tipo==='receita'?'text-emerald-600':'text-red-600'}">R$ ${parseFloat(p.valor_parcela).toFixed(2)}</td>
+          <td class="p-3 text-center"><span class="${sc}">${st}</span></td>
+          <td class="p-3 text-center"><button onclick="fin_prepararEdicao('${p.id}')" class="bg-blue-100 text-blue-600 px-3 py-2 rounded hover:bg-blue-500 hover:text-white transition text-sm"><i class="fas fa-edit"></i> Editar</button></td>
+        </tr>`;
+    }).join('');
+}
+
+async function fin_prepararEdicao(id) {
+    const p = await DB.get('parcelas', id);
+    if (p) {
+        const fin = await DB.get('financas', p.financa_id);
+        document.getElementById('fin-f-editando-id').value          = p.id;
+        document.getElementById('fin-f-editando-financa-id').value  = fin.id;
+        document.getElementById('fin-f-desc').value                 = fin.descricao;
+        document.getElementById('fin-f-tipo').value                 = fin.tipo;
+        document.getElementById('fin-f-categoria').value            = fin.categoria||'Geral';
+        document.getElementById('fin-f-status').value               = fin.status_lancamento||'aberto';
+        document.getElementById('fin-f-tipo-calculo').value         = 'parcela';
+        fin_ajustarLabelsValor();
+        document.getElementById('fin-f-valor').value                = p.valor_parcela;
+        document.getElementById('fin-f-parcelas').value             = 1;
+        document.getElementById('fin-f-parcelas').disabled          = true;
+        document.getElementById('fin-f-recorrencia').disabled       = true;
+        document.getElementById('fin-f-vencimento').value           = p.data_vencimento;
+        document.getElementById('fin-f-data-pagamento').value       = p.data_pagamento||'';
+        document.getElementById('fin-f-barras').value               = p.codigo_barra||'';
+        document.getElementById('fin-btn-salvar').innerHTML         = '<i class="fas fa-sync-alt"></i> Atualizar Parcela';
+        document.getElementById('fin-btn-cancelar').classList.remove('hidden');
+        fin_alternarSubAba('formulario');
+    }
+}
+
+function fin_cancelarEdicao() {
+    ['fin-f-editando-id','fin-f-editando-financa-id'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('fin-f-parcelas').disabled    = false;
+    document.getElementById('fin-f-recorrencia').disabled = false;
+    document.getElementById('fin-btn-salvar').innerHTML   = '<i class="fas fa-save"></i> Gravar Lançamento';
+    document.getElementById('fin-btn-cancelar').classList.add('hidden');
+    ['fin-f-desc','fin-f-valor','fin-f-vencimento','fin-f-data-pagamento','fin-f-barras'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('fin-f-categoria').value = 'Geral';
+    document.getElementById('fin-nome-boleto').innerHTML      = '';
+    document.getElementById('fin-nome-comprovante').innerHTML = '';
+}
+
+function fin_toggleTodosChecks(src) { document.querySelectorAll('.fin-check-parcela').forEach(cb => cb.checked=src.checked); }
+
+async function fin_excluirSelecionados() {
+    const ids = Array.from(document.querySelectorAll('.fin-check-parcela:checked')).map(cb => cb.value);
+    if (!ids.length) return alert("Selecione ao menos uma parcela.");
+    if (confirm(`Excluir ${ids.length} parcela(s)?`)) {
+        await DB.deleteMultiple('parcelas', ids);
+        alert('Excluído!');
+        fin_loadParcelas();
+        fin_loadDashboard();
+    }
+}
+
+function fin_limparFiltros() {
+    ['fin-filtro-busca','fin-filtro-inicio','fin-filtro-fim'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('fin-filtro-categoria').value='';
+    fin_loadParcelas();
+}
+
+function fin_iniciarLeituraCamera() {
+    const c = document.getElementById('fin-camera-container');
+    c.classList.remove('hidden');
+    fin_html5QrCode = new Html5Qrcode("fin-camera-preview");
+    fin_html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:300,height:150}},txt=>{
+        document.getElementById('fin-f-barras').value=txt; fin_pararCamera();
+    }).catch(()=>{ alert("Verifique as permissões da câmera."); c.classList.add('hidden'); });
+}
+
+function fin_pararCamera() {
+    if (fin_html5QrCode) fin_html5QrCode.stop().then(()=>document.getElementById('fin-camera-container').classList.add('hidden'));
+    else document.getElementById('fin-camera-container').classList.add('hidden');
+}
+
+function fin_configurarDropZone(dropId, inputId, txtId) {
+    const dz = document.getElementById(dropId);
+    const ip = document.getElementById(inputId);
+    if (!dz||!ip) return;
+    dz.addEventListener('dragover', e=>{e.preventDefault(); dz.classList.add('dragover');});
+    dz.addEventListener('dragleave',e=>{e.preventDefault(); dz.classList.remove('dragover');});
+    dz.addEventListener('drop',e=>{e.preventDefault(); dz.classList.remove('dragover'); if(e.dataTransfer.files?.length){ip.files=e.dataTransfer.files; fin_mostrarNomeArquivo(ip,txtId);}});
+}
+
+function fin_mostrarNomeArquivo(input, idCampo) {
+    const el = document.getElementById(idCampo);
+    if (el) el.innerHTML = input.files?.length ? `<i class="fas fa-check"></i> ${input.files[0].name}` : '';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//      JAVASCRIPT — MÓDULO PDV (INDEXEDDB)
+// ══════════════════════════════════════════════════════════════════════════
+let pdv_html5QrCode  = null;
+let pdv_produtosCache = [];
+let pdv_carrinho      = [];
+
+async function pdv_init() {
+    await pdv_fetchProdutos();
+    await pdv_fetchEntidades();
+    await pdv_loadDashboard();
+}
+
+function pdv_alternarSubAba(subAba) {
+    const pCaixa   = document.getElementById('pdv-painel-caixa');
+    const pSangria = document.getElementById('pdv-painel-sangria');
+    const btnC     = document.getElementById('pdv-btn-caixa');
+    const btnS     = document.getElementById('pdv-btn-sangria');
+    const verde    = ['bg-emerald-500','text-white','hover:bg-emerald-600'];
+    const cinza    = ['bg-slate-200','text-slate-700','hover:bg-slate-300'];
+    btnC.classList.remove(...verde,...cinza); btnS.classList.remove(...verde,...cinza);
+    if (subAba==='caixa') {
+        pCaixa.classList.remove('hidden');   pSangria.classList.add('hidden');
+        btnC.classList.add(...verde);         btnS.classList.add(...cinza);
+    } else {
+        pCaixa.classList.add('hidden');       pSangria.classList.remove('hidden');
+        btnS.classList.add(...verde);         btnC.classList.add(...cinza);
+        pdv_loadHistoricoCaixa();
+    }
+}
+
+async function pdv_fetchProdutos() {
+    const data = await DB.getAll('produtos');
+    if (data) {
+        pdv_produtosCache = data.sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+        const sel = document.getElementById('pdv-select-produto');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">Selecione um produto para adicionar...</option>';
+        pdv_produtosCache.forEach(p => sel.innerHTML += `<option value="${p.id}">${p.nome} - R$ ${parseFloat(p.preco_venda).toFixed(2)} (Estoque: ${p.quantidade_estoque})</option>`);
+    }
+}
+
+async function pdv_fetchEntidades() {
+    const data = await DB.getAll('entidades');
+    if (data) {
+        const sel = document.getElementById('pdv-cliente');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">Consumidor Final (Não identificado)</option>';
+        data.sort((a,b)=>a.nome_completo.localeCompare(b.nome_completo)).forEach(e => sel.innerHTML += `<option value="${e.id}">${e.nome_completo}</option>`);
+    }
+}
+
+function pdv_iniciarLeituraCamera() {
+    const c = document.getElementById('pdv-camera-container');
+    c.classList.remove('hidden');
+    pdv_html5QrCode = new Html5Qrcode("pdv-camera-preview");
+    pdv_html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:280,height:140}},txt=>{
+        pdv_adicionarPorCodigoBarras(txt); pdv_pararCamera();
+    }).catch(()=>{ alert("Permissão de câmera negada."); c.classList.add('hidden'); });
+}
+
+function pdv_pararCamera() {
+    if (pdv_html5QrCode) pdv_html5QrCode.stop().then(()=>document.getElementById('pdv-camera-container').classList.add('hidden'));
+    else document.getElementById('pdv-camera-container').classList.add('hidden');
+}
+
+function pdv_adicionarPorCodigoBarras(codigo) {
+    const prod = pdv_produtosCache.find(p => p.codigo_barras===codigo.trim());
+    if (prod) pdv_adicionarAoCarrinho(prod);
+    else alert(`Produto [${codigo}] não localizado.`);
+}
+
+function pdv_adicionarDoSelect() {
+    const sel = document.getElementById('pdv-select-produto');
+    if (!sel || !sel.value) return;
+    const prod = pdv_produtosCache.find(p => p.id===sel.value);
+    if (prod) pdv_adicionarAoCarrinho(prod);
+    sel.value='';
+}
+
+function pdv_adicionarAoCarrinho(produto) {
+    const item = pdv_carrinho.find(i => i.id===produto.id);
+    if (item) item.quantidade+=1;
+    else pdv_carrinho.push({...produto, quantidade:1});
+    pdv_renderCarrinho();
+}
+
+function pdv_alterarQuantidade(id, delta) {
+    const item = pdv_carrinho.find(i => i.id===id);
+    if (item) { item.quantidade+=delta; if (item.quantidade<=0) pdv_carrinho=pdv_carrinho.filter(i=>i.id!==id); }
+    pdv_renderCarrinho();
+}
+
+function pdv_removerDoCarrinho(id) { pdv_carrinho=pdv_carrinho.filter(i=>i.id!==id); pdv_renderCarrinho(); }
+
+function pdv_renderCarrinho() {
+    const tbody  = document.getElementById('pdv-carrinho-corpo');
+    const vazio  = document.getElementById('pdv-carrinho-vazio');
+    if (!tbody || !vazio) return;
+    document.getElementById('pdv-dash-carrinho').innerText = pdv_carrinho.reduce((a,c)=>a+c.quantidade,0);
+    if (!pdv_carrinho.length) { tbody.innerHTML=''; vazio.classList.remove('hidden'); pdv_recalcularTotais(); return; }
+    vazio.classList.add('hidden');
+    tbody.innerHTML = pdv_carrinho.map(item => {
+        const sub = item.preco_venda*item.quantidade;
+        const cod = item.codigo_barras ? `[${item.codigo_barras}]` : '(Sem código)';
+        return `<tr class="border-b border-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3"><div class="font-bold text-slate-700 dark:text-white">${item.nome}</div><span class="text-xs text-slate-400 font-mono">${cod}</span></td>
+          <td class="p-3"><div class="flex items-center justify-center gap-1">
+            <button onclick="pdv_alterarQuantidade('${item.id}',-1)" class="bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300 font-bold text-xs">-</button>
+            <span class="font-bold px-2">${item.quantidade}</span>
+            <button onclick="pdv_alterarQuantidade('${item.id}',1)" class="bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300 font-bold text-xs">+</button>
+          </div></td>
+          <td class="p-3 text-right font-medium text-slate-600 dark:text-slate-300">R$ ${parseFloat(item.preco_venda).toFixed(2)}</td>
+          <td class="p-3 text-right font-bold text-slate-800 dark:text-white">R$ ${sub.toFixed(2)}</td>
+          <td class="p-3 text-center"><button onclick="pdv_removerDoCarrinho('${item.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button></td>
+        </tr>`;
+    }).join('');
+    pdv_recalcularTotais();
+}
+
+function pdv_recalcularTotais() {
+    const sub  = pdv_carrinho.reduce((a,i)=>a+(i.preco_venda*i.quantidade),0);
+    const desc = parseFloat(document.getElementById('pdv-desconto').value)||0;
+    const tot  = Math.max(0,sub-desc);
+    document.getElementById('pdv-resumo-subtotal').innerText = `R$ ${sub.toFixed(2)}`;
+    document.getElementById('pdv-resumo-desconto').innerText = `- R$ ${desc.toFixed(2)}`;
+    document.getElementById('pdv-resumo-total').innerText    = `R$ ${tot.toFixed(2)}`;
+}
+
+async function pdv_finalizarVenda() {
+    if (!pdv_carrinho.length) return alert("Adicione ao menos um produto!");
+    const totalFinal = Math.max(0, pdv_carrinho.reduce((a,i)=>a+(i.preco_venda*i.quantidade),0) - (parseFloat(document.getElementById('pdv-desconto').value)||0));
+    const clienteId  = document.getElementById('pdv-cliente').value;
+    const formaPagto = document.getElementById('pdv-forma-pagamento').value;
+    const desconto   = parseFloat(document.getElementById('pdv-desconto').value)||0;
+    if (!confirm(`Confirmar recebimento e finalizar venda de R$ ${totalFinal.toFixed(2)}?`)) return;
+    try {
+        const vendaId = crypto.randomUUID();
+        const novaVenda = {
+            id: vendaId,
+            entidade_id: clienteId || null,
+            valor_total: totalFinal,
+            desconto,
+            forma_pagamento: formaPagto,
+            status: 'concluida',
+            created_at: new Date().toISOString()
+        };
+        await DB.put('vendas', novaVenda);
+
+        for (const i of pdv_carrinho) {
+            const itemVenda = {
+                id: crypto.randomUUID(),
+                venda_id: vendaId,
+                produto_id: i.id,
+                quantidade: i.quantidade,
+                preco_unitario: i.preco_venda,
+                subtotal: i.preco_venda * i.quantidade,
+                created_at: new Date().toISOString()
+            };
+            await DB.put('itens_venda', itemVenda);
+
+            const prod = await DB.get('produtos', i.id);
+            if (prod) {
+                prod.quantidade_estoque = Math.max(0, (parseInt(prod.quantidade_estoque)||0) - i.quantidade);
+                await DB.put('produtos', prod);
+            }
+        }
+
+        const financaId = crypto.randomUUID();
+        const novaFin = {
+            id: financaId,
+            entidade_id: clienteId || null,
+            descricao: `Venda PDV - Cupom #${vendaId.substring(0,8)} (${formaPagto})`,
+            valor_total: totalFinal,
+            tipo: 'receita',
+            num_parcelas: 1,
+            categoria: 'Vendas',
+            status_lancamento: 'finalizado',
+            created_at: new Date().toISOString()
+        };
+        await DB.put('financas', novaFin);
+
+        const novaParcela = {
+            id: crypto.randomUUID(),
+            financa_id: financaId,
+            num_parcela: 1,
+            valor_parcela: totalFinal,
+            data_vencimento: new Date().toISOString().split('T')[0],
+            data_pagamento: new Date().toISOString().split('T')[0],
+            status: 'pago',
+            created_at: new Date().toISOString()
+        };
+        await DB.put('parcelas', novaParcela);
+
+        alert("Venda registrada e integrada ao financeiro!");
+        pdv_carrinho=[];
+        document.getElementById('pdv-desconto').value='0.00';
+        pdv_renderCarrinho();
+        pdv_loadDashboard();
+        await pdv_fetchProdutos();
+    } catch(error) { alert("Erro na venda: "+error.message); }
+}
+
+async function pdv_salvarSangria() {
+    const valor  = parseFloat(document.getElementById('pdv-sangria-valor').value);
+    const motivo = document.getElementById('pdv-sangria-motivo').value.trim();
+    if (isNaN(valor)||valor<=0||!motivo) return alert("Preencha o valor e a justificativa.");
+    if (!confirm(`Confirmar sangria de R$ ${valor.toFixed(2)}?`)) return;
+    try {
+        const financaId = crypto.randomUUID();
+        const novaFin = {
+            id: financaId,
+            descricao: `Sangria Caixa: ${motivo}`,
+            valor_total: valor,
+            tipo: 'despesa',
+            num_parcelas: 1,
+            categoria: 'Sangria',
+            status_lancamento: 'finalizado',
+            created_at: new Date().toISOString()
+        };
+        await DB.put('financas', novaFin);
+
+        const novaParcela = {
+            id: crypto.randomUUID(),
+            financa_id: financaId,
+            num_parcela: 1,
+            valor_parcela: valor,
+            data_vencimento: new Date().toISOString().split('T')[0],
+            data_pagamento: new Date().toISOString().split('T')[0],
+            status: 'pago',
+            created_at: new Date().toISOString()
+        };
+        await DB.put('parcelas', novaParcela);
+
+        alert("Sangria registrada!");
+        document.getElementById('pdv-sangria-valor').value='';
+        document.getElementById('pdv-sangria-motivo').value='';
+        pdv_loadDashboard();
+        pdv_loadHistoricoCaixa();
+    } catch(error) { alert("Erro: "+error.message); }
+}
+
+async function pdv_loadDashboard() {
+    const hoje = new Date().toISOString().split('T')[0];
+    const data = await DB.getAll('financas');
+    let tv=0, ts=0;
+    if (data) data.forEach(f => {
+        const fDate = (f.created_at || '').split('T')[0];
+        if (fDate === hoje) {
+            if (f.categoria==='Vendas' && f.tipo==='receita') tv+=parseFloat(f.valor_total||0);
+            if (f.categoria==='Sangria'&& f.tipo==='despesa') ts+=parseFloat(f.valor_total||0);
+        }
+    });
+    const elVendas = document.getElementById('pdv-dash-vendas');
+    const elSangrias = document.getElementById('pdv-dash-sangrias');
+    if (elVendas) elVendas.innerText   = `R$ ${tv.toFixed(2)}`;
+    if (elSangrias) elSangrias.innerText = `R$ ${ts.toFixed(2)}`;
+}
+
+async function pdv_loadHistoricoCaixa() {
+    const hoje = new Date().toISOString().split('T')[0];
+    const data = await DB.getAll('financas');
+    const hojeData = data.filter(f => {
+        const fDate = (f.created_at || '').split('T')[0];
+        return fDate === hoje && (f.categoria === 'Vendas' || f.categoria === 'Sangria');
+    });
+    hojeData.sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''));
+
+    const tbody = document.getElementById('pdv-lista-fluxo');
+    if (!tbody) return;
+    if (!hojeData.length) { tbody.innerHTML='<tr><td colspan="5" class="p-4 text-center text-slate-400">Nenhuma transação hoje.</td></tr>'; return; }
+    tbody.innerHTML = hojeData.map(f => {
+        const hora = f.created_at ? new Date(f.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '--:--';
+        const sc   = f.tipo==='receita'?'status-receita':'status-despesa';
+        const st   = f.tipo==='receita'?'ENTRADA':'SANGRIA';
+        const cor  = f.tipo==='receita'?'text-emerald-600':'text-red-600';
+        return `<tr class="border-b border-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-medium text-slate-500">${hora}</td>
+          <td class="p-3 font-bold text-slate-700 dark:text-white">${f.descricao}</td>
+          <td class="p-3 text-slate-500">${f.categoria}</td>
+          <td class="p-3 text-center"><span class="${sc}">${st}</span></td>
+          <td class="p-3 text-right font-extrabold ${cor}">R$ ${parseFloat(f.valor_total).toFixed(2)}</td>
+        </tr>`;
+    }).join('');
+}
+
+
+async function solicitarPermissaoCamera() {
+    const statusDiv = document.getElementById('status-permissao-camera');
+    try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("Seu navegador ou dispositivo não suporta o acesso à câmera.");
+            return;
+        }
+        // Solicita o stream de vídeo para disparar o pop-up de permissão do navegador
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        
+        // Encerra o uso imediato para liberar a câmera após obter a permissão
+        stream.getTracks().forEach(track => track.stop());
+        
+        statusDiv.classList.remove('hidden');
+        statusDiv.className = "text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-2 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800";
+        statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Permissão concedida com sucesso! A câmera já pode ser utilizada nos cadastros.';
+        alert("Permissão de câmera concedida com sucesso!");
+    } catch (error) {
+        console.error("Erro ao solicitar permissão de câmera:", error);
+        statusDiv.classList.remove('hidden');
+        statusDiv.className = "text-xs font-bold text-red-600 dark:text-red-400 mt-2 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800";
+        statusDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Permissão negada ou indisponível: ${error.message}. Verifique as configurações do navegador.`;
+        alert("Não foi possível obter acesso à câmera. Verifique se o acesso foi bloqueado nas configurações do navegador ou do celular.");
+    }
+}
+</script>
+</body>
+</html>
