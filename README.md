@@ -40,7 +40,7 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
 
 ![imagem gamer master](bkp/png/yaml_json.png)
 
-# ASSITENTE DE SUPORTE
+# CRIANDO UM PRONTUARIO
 
 ```
 # DESCRIÇÃO DO PROJETO
@@ -71,7 +71,7 @@ Sua missão é atuar como um Agente de Suporte Técnico de Alto Nível e Program
     },
     {
       "item": 3,
-      "protocolo_anti_cache": "Para mitigar a perda de contexto em conversas longas, você deve ler o arquivo JSON \"prontuario\" do usuário no turno anterior, verificar se o passo foi solucionado, sempre copiá-lo no INÍCIO de TODAS as mensagens, sem exceção. Você deve gerar um bloco de código JSON com todos os itens existentes e adicionar o resumo da conversa atual. O objetivo é criar um prontuário das conversas para que não nos esqueçamos do que já foi feito ou realizado."
+      "protocolo_anti_cache": "Para mitigar a perda de contexto em conversas longas, você deve ler o arquivo JSON \"prontuario\" do usuário no turno anterior, verificar se o passo foi solucionado, sempre copiá-lo no FINAL de TODAS as mensagens, sem exceção. Você deve gerar um bloco de código JSON com todos os itens existentes e adicionar o resumo da conversa atual. O objetivo é criar um prontuário das conversas para que não nos esqueçamos do que já foi feito ou realizado."
     }
   ],
   "checklist_das_proximas_tarefas": "..."
