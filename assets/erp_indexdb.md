@@ -178,7 +178,8 @@ tailwind.config = {
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
 <div id="content-panels">
-
+```
+``` 
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -318,7 +319,8 @@ tailwind.config = {
     </div>
   </div>
 </div>
-
+```
+```
 <!-- ════════════ ABA: ENTIDADES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -517,7 +519,8 @@ tailwind.config = {
     </div>
   </div>
 </div>
-
+```
+```
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -680,7 +683,8 @@ tailwind.config = {
     </div>
   </div>
 </div>
-
+```
+```
 <!-- ════════════ ABA: PDV ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -1032,7 +1036,8 @@ function ent_alternarSubAba(subAba) {
         btnForm.classList.add(...inativo);
     }
 }
-
+```
+```
 function init() {
     alternarAba('entidades');
     loadDashboard();
@@ -1316,7 +1321,8 @@ function limparFiltros() {
     paginaAtual = 1;
     loadEntidades();
 }
-
+```
+```
 // ══════════════════════════════════════════════════════════════════════════
 //      JAVASCRIPT — MÓDULO ESTOQUE (INDEXEDDB)
 // ══════════════════════════════════════════════════════════════════════════
@@ -1658,7 +1664,8 @@ async function est_excluirSelecionados() {
         est_loadDashboard();
     }
 }
-
+```
+```
 // ══════════════════════════════════════════════════════════════════════════
 //      JAVASCRIPT — MÓDULO FINANCEIRO (INDEXEDDB)
 // ══════════════════════════════════════════════════════════════════════════
@@ -1998,6 +2005,8 @@ function fin_mostrarNomeArquivo(input, idCampo) {
     const el = document.getElementById(idCampo);
     if (el) el.innerHTML = input.files?.length ? `<i class="fas fa-check"></i> ${input.files[0].name}` : '';
 }
+```
+```
 
 // ══════════════════════════════════════════════════════════════════════════
 //      JAVASCRIPT — MÓDULO PDV (INDEXEDDB)
