@@ -69,6 +69,8 @@ tailwind.config = {
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
 
+```
+```
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -105,6 +107,8 @@ tailwind.config = {
   </div>
 </div>
 </div>
+```
+```
 
 <!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
 <div class="hidden min-h-screen" id="tela-sistema">
