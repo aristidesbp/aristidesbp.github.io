@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
 <head>
@@ -823,7 +824,8 @@ tailwind.config = {
 </div>
 </main>
 </div>
-
+```
+``` 
 <script>
 // ══════════════════════════════════════════════════════════════════════════
 //      ERP ABP — INDEXEDDB & WRAPPER STORAGE (OFFLINE LOCAL)
@@ -2283,5 +2285,7 @@ async function pdv_loadHistoricoCaixa() {
     }).join('');
 }
 </script>
+
 </body>
 </html>
+```
