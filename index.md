@@ -2322,7 +2322,8 @@ function fin_mostrarNomeArquivo(input, idCampo) {
     </div>
   </div>
 </div><!-- fim aba-pdv -->
-
+```
+```
 <!-- Elemento Oculto exclusivo para Impressão de Cupom -->
 <div id="pdv-cupom-impressao" class="hidden">
   <div style="font-family: monospace; width: 300px; padding: 10px; margin: 0 auto; color: #000; background: #fff;">
@@ -2348,7 +2349,8 @@ function fin_mostrarNomeArquivo(input, idCampo) {
     <p style="text-align: center; font-size: 10px; margin-top: 15px;">Obrigado pela preferência!</p>
   </div>
 </div>
-
+```
+```
 <script>
 let pdv_html5QrCode  = null;
 let pdv_produtosCache = [];
