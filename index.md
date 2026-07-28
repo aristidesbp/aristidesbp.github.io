@@ -1,3 +1,5 @@
+# INDEX_V1
+```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
 <head>
@@ -371,7 +373,8 @@ function ent_alternarSubAba(subAba) {
 
 
 
-
+```
+```
 
 
 
@@ -640,6 +643,9 @@ function ent_alternarSubAba(subAba) {
     }
 }
 </script>
+
+```
+```
 
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
@@ -1184,7 +1190,8 @@ async function est_excluirSelecionados() {
 }
 </script>
 
-
+```
+```
 
 
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
@@ -1675,6 +1682,8 @@ function limparFiltros() {
 }
 </script>
 
+```
+```
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
   <!-- Dashboard -->
@@ -2119,6 +2128,9 @@ function fin_mostrarNomeArquivo(input, idCampo) {
 }
 </script>
 
+
+```
+```
 
 <!-- ════════════ ABA: PDV ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
@@ -2765,7 +2777,8 @@ async function pdv_excluirVenda(vendaId) {
     }
 }
 </script>
-
+```
+```
 
 
 
@@ -2781,3 +2794,4 @@ async function pdv_excluirVenda(vendaId) {
 
 </body>
 </html>
+```
