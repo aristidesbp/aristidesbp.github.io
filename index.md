@@ -201,7 +201,9 @@ tailwind.config = {
     <h3 class="text-lg font-bold text-slate-900 dark:text-white">SEJA BEM VINDO!</h3>
   </div>
 </div>
-
+```
+# app js
+```
 <script>
 // ==========================================
 // ESCOPO GLOBAL DA APLICAÇÃO (app.js)
@@ -475,6 +477,10 @@ function ent_alternarSubAba(subAba) {
 
   </div>
 </div>
+
+```
+# config js
+```
 <script>
 // ==========================================
 // ESCOPO GLOBAL DA APLICAÇÃO (app.js)
@@ -790,7 +796,9 @@ function ent_alternarSubAba(subAba) {
     </div>
   </div>
 </div>
-
+```
+# estoque js
+```
 <script>
 // ==========================================
 // MÓDULO DE ESTOQUE (estoque.js)
@@ -1403,7 +1411,9 @@ async function est_excluirSelecionados() {
   </div>
 
 </div><!-- fim aba-entidades -->
-
+```
+# entidades js
+```
 <script>
 // ── Inicialização ─────────────────────────────────────────────────────
 function init() {
@@ -1850,6 +1860,10 @@ function limparFiltros() {
     </div>
   </div>
 </div><!-- fim aba-financeiro -->
+
+```
+# financeiro
+```
 <script>
 let fin_entidadesCache    = [];
 let fin_html5QrCode       = null;
