@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Configurações básicas do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Projetos ERP</title>
+
+    <!-- Aqui começa o CSS, responsável pelo visual da página -->
+    <style>
+        /* Estilizando o corpo (body) da página para centralizar tudo */
+        body {
+            display: flex; /* Ativa o Flexbox */
+            flex-direction: column; /* Organiza os elementos em uma coluna (um embaixo do outro) */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+            height: 100vh; /* Faz o corpo ocupar 100% da altura da tela */
+            margin: 0; /* Remove as margens padrão do navegador */
+            font-family: Arial, sans-serif; /* Define uma fonte limpa e legível */
+            background-color: #f4f4f9; /* Uma cor de fundo cinza bem clara */
+        }
+
+        /* Estilizando a caixa que vai guardar os botões */
+        .botoes-container {
+            display: flex; /* Usa Flexbox novamente para colocar os botões lado a lado */
+            gap: 20px; /* Cria um espaço de 20 pixels entre os botões */
+            margin-top: 20px; /* Dá um espaço acima dos botões, separando do título */
+        }
+
+        /* Estilizando os links para que pareçam botões */
+        .botao {
+            padding: 15px 30px; /* Espaço interno: 15px em cima/embaixo, 30px nas laterais */
+            background-color: #0056b3; /* Cor de fundo azul */
+            color: white; /* Cor do texto branca */
+            text-decoration: none; /* Remove o sublinhado padrão dos links */
+            border-radius: 8px; /* Arredonda as pontas do botão */
+            font-weight: bold; /* Deixa o texto em negrito */
+            transition: background-color 0.3s; /* Cria uma animação suave ao passar o mouse */
+        }
+
+        /* Efeito quando o mouse passa por cima do botão (hover) */
+        .botao:hover {
+            background-color: #003d82; /* Muda para um azul mais escuro */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mensagem de Boas-Vindas -->
+    <h1>Bem-vindo ao meu Portfólio de Projetos!</h1>
+    <p>Escolha um dos sistemas abaixo para acessar os repositórios.</p>
+
+    <!-- Container dos Botões -->
+    <div class="botoes-container">
+        <!-- Botão 1: ERP Supabase Monolítico -->
+        <a href="https://github.com/aristidesbp/aristidesbp.github.io/tree/main/erp_monolitico_supabase" class="botao" target="_blank">
+            ERP Supabase Monolítico
+        </a>
+
+        <!-- Botão 2: ERP Modular -->
+        <a href="https://github.com/aristidesbp/aristidesbp.github.io/tree/main/erp/dist" class="botao" target="_blank">
+            ERP Modular
+        </a>
+    </div>
+
+</body>
+</html>
