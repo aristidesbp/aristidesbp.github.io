@@ -2,6 +2,29 @@
 
 Sistema completo de Gestão Empresarial (ERP), Frente de Caixa (PDV), Controle de Estoque, Financeiro, Cadastro de Entidades e Loja Virtual Delivery para Supermercados e Comércio Geral.
 
+# Tecnologias Identificadas no Projeto
+Com base na análise da estrutura de pastas, arquivos de configuração e no código fornecido, aqui está a lista detalhada de todas as tecnologias e ferramentas utilizadas no seu projeto:
+
+## Tailwind CSS (Versão 4.3.3): 
+Framework CSS utilitário utilizado para a estilização responsiva e customização visual da interface.  
+## TypeScript: 
+Superset do JavaScript com tipagem estática, evidenciado pela presença do arquivo de configuração tsconfig.json e de scripts como vite.config.ts.
+## Vite: 
+Empacotador (bundler) e ferramenta de build de altíssima performance para desenvolvimento web moderno (vite.config.ts).
+## Bun: 
+Gerenciador de pacotes e runtime moderno de alto desempenho (bun.lock).
+## npm: 
+Gerenciador de pacotes padrão do Node.js, indicado pelos arquivos package.json e package-lock.json.
+## HTML5: 
+Linguagem padrão de marcação para a estrutura da página web (index.html).
+## Node.js: 
+Ambiente de execução base para gerenciar as dependências e ferramentas de automação do projeto (node_modules).
+
+
+
+
+
+
 ---
 
 ## ⚠️ Por que ocorre a "Tela Branca" no GitHub Pages? (Entenda o Motivo)
