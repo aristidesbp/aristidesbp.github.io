@@ -60,7 +60,39 @@ Como este é um projeto em **React com TypeScript**, cada pasta tem uma função
 
 ---
 
-Qual parte ou arquivo desse sistema você gostaria de abrir, analisar ou modificar primeiro?
+Antes de criar qualquer código novo, precisamos verificar o que já foi gerado pelo Google AI Studio para evitar duplicar arquivos ou bagunçar a estrutura.
+
+Como você não sabe onde "caçar" os componentes e as páginas, vamos fazer um mapa prático de como achar qualquer coisa no seu projeto agora mesmo.
+
+# Como encontrar páginas e componentes no seu projeto
+## 1. A Página Principal (App.tsx) — O Mapa do Sistema
+O arquivo src/App.tsx é o ponto de partida visual. É quase certo que ele funcione como um menu ou roteador que chama as telas principais (por exemplo, a tela de produtos, clientes, vendas, etc.).
+
+Como caçar: Abra o arquivo src/App.tsx e leia o código dele. Procure por nomes como <Products/>, <ClientList/>, <Sidebar/> ou instruções de rotas/abas. Os nomes que aparecem ali revelam quais são os blocos principais da aplicação.
+
+## 2. A Pasta de Componentes (src/components/) — O Armazém de Peças
+Se o projeto for modular, todos os pedaços visuais (tabelas, modais, formulários de cadastro) estarão guardados dentro da pasta src/components/.
+
+Como caçar: Dentro de src/components/, verifique se existem subpastas (como products/, sales/, ui/) ou arquivos soltos com nomes intuitivos (ex: ProductForm.tsx, ProductTable.tsx).
+
+## 3. O Atalho Mágico do Editor de Código (A melhor forma de achar)
+Se você estiver usando o VS Code (Visual Studio Code) para editar o projeto, você não precisa ficar navegando manualmente pelas pastas:
+
+Pressione Ctrl + P (ou Cmd + P no Mac).
+
+Uma barrinha de pesquisa vai se abrir no topo.
+
+Digite partes do que você procura, como product, form, bar ou table. O editor vai listar instantaneamente todos os arquivos que têm esse nome, mostrando em qual pasta eles estão.
+
+Pressione Ctrl + F (navegador/bloco de notas).
+
+
+
+
+
+
+
+
 
 
 
