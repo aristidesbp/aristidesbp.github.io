@@ -100,6 +100,70 @@ TypeScript: Adiciona tipagem estática ao JavaScript, ajudando a evitar erros co
 
 TSX: Permite escrever a interface visual (elementos HTML como botões, tabelas e inputs) diretamente dentro do código JavaScript/TypeScript de forma limpa e estruturada.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+
+```
+# clonar um repositório
+# exemplo:
+git clone https://github.com/aristidesbp/aristidesbp.github.io.git
+```
+```
+# entrar na pasta
+cd aristidesbp.github.io
+```
+```
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
+```
+---
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
+```
+# 1. Sincroniza as informações com o GitHub 
+git fetch origin
+```
+``` 
+# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git reset --hard origin/main
+```
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+---
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
+```
+```
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
+```
+```
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_chekPointe"
+
+```
+```
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
+```
+
 
 ---
 
@@ -175,70 +239,6 @@ export default defineConfig({
   plugins: [react()],
 });
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
-
-```
-# clonar um repositório
-# exemplo:
-git clone https://github.com/aristidesbp/aristidesbp.github.io.git
-```
-```
-# entrar na pasta
-cd aristidesbp.github.io
-```
-```
-# dar permissão
-git config --global --add safe.directory "$(pwd)"
-```
-```
-# testar
-git status 
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main
-
-```
----
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
-```
-# 1. Sincroniza as informações com o GitHub 
-git fetch origin
-```
-``` 
-# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
-git reset --hard origin/main
-```
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
----
-# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-
-```
-```
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .
-
-```
-```
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_chekPointe"
-
-```
-```
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main
-
-```
-
 
 ---
 
