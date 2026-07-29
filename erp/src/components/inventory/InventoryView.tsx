@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { formatCurrency } from '../../lib/sanitizer';
 import { Product, ProductUnit } from '../../types';
 import { parseNFeXml, NFeParsedData } from '../../lib/nfeParser';
+import { ScannerModal } from '../common/ScannerModal'; // Importação do leitor de código de barras
 import {
   Package,
   Plus,
@@ -25,6 +26,10 @@ export const InventoryView: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+
+  // Estados para o Modal de Leitura de Código de Barras via Câmera
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [scannerMode, setScannerMode] = useState<'search' | 'form' | null>(null);
 
   // XML NF-e Import Modal State
   const [isNfeModalOpen, setIsNfeModalOpen] = useState(false);
@@ -235,6 +240,17 @@ export const InventoryView: React.FC = () => {
     setParsedNFe(null);
   };
 
+  // Função centralizada para lidar com o sucesso da leitura da câmera
+  const handleScanSuccess = (code: string) => {
+    if (scannerMode === 'form') {
+      setEditingProduct((prev) => (prev ? { ...prev, codigo_barras: code } : null));
+    } else if (scannerMode === 'search') {
+      setSearchTerm(code);
+    }
+    setIsScannerOpen(false);
+    setScannerMode(null);
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Top Controls Bar */}
@@ -282,15 +298,29 @@ export const InventoryView: React.FC = () => {
 
       {/* Filters & Search */}
       <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Pesquisar por Nome do produto ou Código de Barras EAN..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 outline-none"
-          />
+        <div className="relative flex-1 flex gap-2">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Pesquisar por Nome do produto ou Código de Barras EAN..."
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 outline-none"
+            />
+          </div>
+          {/* Botão de câmera para PESQUISA adicionado aqui */}
+          <button
+            type="button"
+            onClick={() => {
+              setScannerMode('search');
+              setIsScannerOpen(true);
+            }}
+            className="bg-slate-900 dark:bg-slate-800 hover:bg-slate-700 text-white p-2.5 rounded-xl transition flex items-center justify-center shrink-0"
+            title="Pesquisar com Câmera"
+          >
+            <Barcode className="w-5 h-5 text-emerald-400" />
+          </button>
         </div>
 
         <select
@@ -438,13 +468,28 @@ export const InventoryView: React.FC = () => {
                   <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">
                     Código de Barras (EAN-13 / SKU)
                   </label>
-                  <input
-                    type="text"
-                    value={editingProduct.codigo_barras || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, codigo_barras: e.target.value })}
-                    placeholder="7891234567890"
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono"
-                  />
+                  {/* Container flex para alinhar o input de texto com o botão da câmera */}
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={editingProduct.codigo_barras || ''}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, codigo_barras: e.target.value })}
+                      placeholder="7891234567890"
+                      className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono"
+                    />
+                    {/* Botão de câmera para CADASTRO adicionado aqui */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setScannerMode('form');
+                        setIsScannerOpen(true);
+                      }}
+                      className="bg-slate-900 dark:bg-slate-800 hover:bg-slate-700 text-white px-3 py-2.5 rounded-xl transition flex items-center justify-center shrink-0"
+                      title="Ler Código com a Câmera"
+                    >
+                      <Barcode className="w-5 h-5 text-emerald-400" />
+                    </button>
+                  </div>
                 </div>
 
                 <div>
@@ -667,6 +712,16 @@ export const InventoryView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Componente Modal da Câmera adicionado no final do arquivo */}
+      <ScannerModal
+        isOpen={isScannerOpen}
+        onClose={() => {
+          setIsScannerOpen(false);
+          setScannerMode(null);
+        }}
+        onScanSuccess={handleScanSuccess}
+      />
     </div>
   );
 };
