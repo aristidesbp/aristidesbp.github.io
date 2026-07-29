@@ -157,8 +157,28 @@ pkg install curl -y
 pkg install tree -y
 ```
 ```
+# ver as pastas do diretorio
+ls
+```
+```
 # ver as pastas ocultas (-a) do diretorio
 ls -a
+```
+```
+# basta adicionar a flag -d (que significa  apenas diretórios):
+tree -d
+```
+```
+# limitar quantos níveis para baixo ela deve mostrar  -L  a 2 níveis
+tree -d -L 2
+```
+```
+# Se preferir uma listagem
+find . -type d
+```
+```
+# Limitando a profundidade
+find . -maxdepth 2 -type d
 ```
 ```
 # ver pastas e arquivos
