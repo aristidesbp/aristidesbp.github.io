@@ -93,8 +93,12 @@ Perfeito! Vamos fazer exatamente assim, com calma, um passo de cada vez, garanti
 📋 Tarefa 1: Localizar o arquivo de produtosPara sabermos exatamente em qual arquivo vamos mexer para adicionar o leitor de código de barras, preciso que você descubra quais arquivos estão dentro dessa pasta de estoque.
 
 
+O que é um arquivo .tsx?
+Um arquivo .tsx é um arquivo de código-fonte que combina TypeScript com TSX (uma extensão do XML/HTML usada pelo React).
 
+TypeScript: Adiciona tipagem estática ao JavaScript, ajudando a evitar erros comuns de código.
 
+TSX: Permite escrever a interface visual (elementos HTML como botões, tabelas e inputs) diretamente dentro do código JavaScript/TypeScript de forma limpa e estruturada.
 
 
 ---
