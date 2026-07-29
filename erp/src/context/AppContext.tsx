@@ -6,10 +6,13 @@ import {
   Finance,
   Installment,
   EcommerceOrder,
+  EcommerceOrderStatus,
   CartItem,
   StoreConfig,
   PaymentMethod,
   SaleItem,
+  UserProfile,
+  UserRole,
 } from '../types';
 import { initialDataLoad, flushSyncQueue, syncSaveProduct, syncDeleteProduct } from '../lib/syncService';
 import {
@@ -34,6 +37,14 @@ interface AppContextType {
   syncPendingCount: number;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+
+  // Staff / User Auth
+  currentUser: UserProfile | null;
+  isLoginModalOpen: boolean;
+  openLoginModal: () => void;
+  closeLoginModal: () => void;
+  loginStaff: (email: string, pass: string, role?: UserRole) => Promise<boolean>;
+  logoutStaff: () => void;
   
   // Products
   products: Product[];
@@ -59,11 +70,22 @@ interface AppContextType {
   setSelectedEntityId: (id: string | null) => void;
   selectedPaymentMethod: PaymentMethod;
   setSelectedPaymentMethod: (method: PaymentMethod) => void;
-  processSale: () => Promise<Sale | null>;
+  processSale: (deliveryInfo?: {
+    is_entrega?: boolean;
+    cliente_nome?: string;
+    cliente_telefone?: string;
+    cliente_endereco?: string;
+    observacoes_entrega?: string;
+  }) => Promise<Sale | null>;
 
   // Sales & History
   sales: Sale[];
   cancelSale: (saleId: string) => Promise<void>;
+  updateSaleDeliveryStatus: (
+    saleId: string,
+    status_entrega: EcommerceOrderStatus,
+    motoboy_nome?: string
+  ) => Promise<void>;
 
   // Financials
   finances: Finance[];
@@ -75,7 +97,11 @@ interface AppContextType {
   // E-Commerce
   ecommerceOrders: EcommerceOrder[];
   createEcommerceOrder: (order: Omit<EcommerceOrder, 'id' | 'created_at' | 'status'>) => Promise<EcommerceOrder>;
-  updateEcommerceOrderStatus: (orderId: string, status: EcommerceOrder['status']) => Promise<void>;
+  updateEcommerceOrderStatus: (
+    orderId: string,
+    status: EcommerceOrder['status'],
+    motoboy_nome?: string
+  ) => Promise<void>;
 
   // Store Configuration
   storeConfig: StoreConfig;
@@ -98,10 +124,72 @@ const DEFAULT_STORE_CONFIG: StoreConfig = {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeTab, setActiveTab] = useState<string>('ecommerce');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [syncPendingCount, setSyncPendingCount] = useState<number>(0);
+
+  // User Auth & Login Modal
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem('erp_abp_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+
+  const openLoginModal = () => setIsLoginModalOpen(true);
+  const closeLoginModal = () => setIsLoginModalOpen(false);
+
+  const loginStaff = async (email: string, pass: string, role?: UserRole): Promise<boolean> => {
+    if (isOnline) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+        if (data?.user && !error) {
+          const profile: UserProfile = {
+            id: data.user.id,
+            email: data.user.email || email,
+            name: data.user.user_metadata?.full_name || email.split('@')[0],
+            role: role || (data.user.user_metadata?.role as UserRole) || 'admin',
+            avatar_url: data.user.user_metadata?.avatar_url,
+          };
+          setCurrentUser(profile);
+          localStorage.setItem('erp_abp_current_user', JSON.stringify(profile));
+          return true;
+        }
+      } catch (err) {
+        console.warn('Supabase login fallback:', err);
+      }
+    }
+
+    const nameMap: Record<string, string> = {
+      admin: 'Administrador ERP',
+      caixa: 'Operador de Caixa',
+      gerente: 'Gerente de Loja',
+      estoquista: 'Estoquista Principal',
+      cliente: 'Cliente Registrado',
+    };
+    const assignedRole: UserRole = role || 'admin';
+    const profile: UserProfile = {
+      id: `user_${Date.now()}`,
+      email: email,
+      name: nameMap[assignedRole] || email.split('@')[0],
+      role: assignedRole,
+    };
+    setCurrentUser(profile);
+    localStorage.setItem('erp_abp_current_user', JSON.stringify(profile));
+    return true;
+  };
+
+  const logoutStaff = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('erp_abp_current_user');
+    if (isOnline) {
+      supabase.auth.signOut().catch(() => {});
+    }
+  };
 
   const [products, setProducts] = useState<Product[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
@@ -163,6 +251,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       window.removeEventListener('offline', handleOffline);
     };
   }, [loadInitialData]);
+
+  useEffect(() => {
+    if (storeConfig && storeConfig.store_name) {
+      document.title = storeConfig.store_name;
+    }
+  }, [storeConfig?.store_name]);
 
   // Sync Trigger
   const triggerSync = async () => {
@@ -299,7 +393,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Process POS Sale
-  const processSale = async (): Promise<Sale | null> => {
+  const processSale = async (deliveryInfo?: {
+    is_entrega?: boolean;
+    cliente_nome?: string;
+    cliente_telefone?: string;
+    cliente_endereco?: string;
+    observacoes_entrega?: string;
+  }): Promise<Sale | null> => {
     if (cart.length === 0) return null;
 
     const saleId = `venda_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
@@ -322,7 +422,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newSale: Sale = {
       id: saleId,
       entidade_id: selectedEntityId,
-      entidade_nome: selectedEntity ? selectedEntity.nome_completo : 'Consumidor Final',
+      entidade_nome: selectedEntity ? selectedEntity.nome_completo : (deliveryInfo?.cliente_nome || 'Consumidor Final'),
       valor_total: cartSubtotal,
       desconto: cartDiscount,
       valor_liquido: cartTotal,
@@ -331,6 +431,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       origem: 'pdv',
       created_at: nowIso,
       itens: saleItems,
+      is_entrega: deliveryInfo?.is_entrega || false,
+      status_entrega: deliveryInfo?.is_entrega ? 'novo' : undefined,
+      cliente_nome: deliveryInfo?.cliente_nome || selectedEntity?.nome_completo,
+      cliente_telefone: deliveryInfo?.cliente_telefone || selectedEntity?.telefone,
+      cliente_endereco: deliveryInfo?.cliente_endereco || (selectedEntity ? `${selectedEntity.logradouro || ''}, ${selectedEntity.numero || ''} - ${selectedEntity.bairro || ''}` : undefined),
+      observacoes_entrega: deliveryInfo?.observacoes_entrega,
     };
 
     // Save Sale to IndexedDB
@@ -475,6 +581,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setSales((prev) => prev.map((s) => (s.id === saleId ? updatedSale : s)));
   };
 
+  const updateSaleDeliveryStatus = async (
+    saleId: string,
+    status_entrega: EcommerceOrderStatus,
+    motoboy_nome?: string
+  ) => {
+    const sale = sales.find((s) => s.id === saleId);
+    if (!sale) return;
+
+    const updated: Sale = {
+      ...sale,
+      is_entrega: true,
+      status_entrega,
+      ...(motoboy_nome !== undefined ? { motoboy_nome } : {}),
+    };
+
+    await idbSaveSale(updated);
+
+    if (isOnline) {
+      try {
+        await supabase
+          .from('vendas')
+          .update({
+            is_entrega: true,
+            status_entrega,
+            motoboy_nome: updated.motoboy_nome,
+          })
+          .eq('id', saleId);
+      } catch (err) {
+        console.warn('Network issue updating sale delivery status remotely:', err);
+      }
+    }
+
+    setSales((prev) => prev.map((s) => (s.id === saleId ? updated : s)));
+  };
+
   // Financial Actions
   const saveFinance = async (finance: Finance, newInstallments: Installment[]) => {
     await idbSaveFinance(finance);
@@ -571,12 +712,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateEcommerceOrderStatus = async (
     orderId: string,
-    status: EcommerceOrder['status']
+    status: EcommerceOrder['status'],
+    motoboy_nome?: string
   ) => {
     const order = ecommerceOrders.find((o) => o.id === orderId);
     if (!order) return;
 
-    const updated = { ...order, status };
+    const updated: EcommerceOrder = {
+      ...order,
+      status,
+      ...(motoboy_nome !== undefined ? { motoboy_nome } : {}),
+    };
     await idbSaveEcommerceOrder(updated);
 
     // If order is delivered, deduct stock and convert to completed sale
@@ -609,6 +755,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         syncPendingCount,
         activeTab,
         setActiveTab,
+        currentUser,
+        isLoginModalOpen,
+        openLoginModal,
+        closeLoginModal,
+        loginStaff,
+        logoutStaff,
         products,
         saveProduct,
         deleteProduct,
@@ -631,6 +783,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         processSale,
         sales,
         cancelSale,
+        updateSaleDeliveryStatus,
         finances,
         installments,
         saveFinance,

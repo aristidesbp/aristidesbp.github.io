@@ -265,3 +265,23 @@ export async function idbGetSettings(): Promise<StoreConfig | null> {
   const record = await db.get('settings', 'store_config');
   return record ? record.data : null;
 }
+
+// Clear all local IndexedDB database stores
+export async function idbClearAllData(): Promise<void> {
+  const db = await getDB();
+  const stores = [
+    'products',
+    'entities',
+    'sales',
+    'finances',
+    'installments',
+    'ecommerce_orders',
+    'comprovantes',
+    'sync_queue',
+    'settings',
+  ] as const;
+  
+  const tx = db.transaction(stores as any, 'readwrite');
+  await Promise.all(stores.map((s) => tx.objectStore(s as any).clear()));
+  await tx.done;
+}

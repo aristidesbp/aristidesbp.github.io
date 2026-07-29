@@ -57,3 +57,26 @@ export function formatDateTimeBR(dateIsoString: string | null | undefined): stri
     return dateIsoString;
   }
 }
+
+export function formatTimestampFilename(dateInput?: string | Date | null): string {
+  const d = dateInput ? new Date(dateInput) : new Date();
+  if (isNaN(d.getTime())) {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
+  }
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}_${hours}-${minutes}`;
+}
+
+export function formatSiteOrderCode(id: string | null | undefined): string {
+  if (!id) return 'SITE-000000';
+  if (id.startsWith('SITE-')) return id.toUpperCase();
+  const clean = id.replace(/[^a-zA-Z0-9]/g, '');
+  const code = clean.length > 6 ? clean.slice(-6).toUpperCase() : clean.toUpperCase();
+  return `SITE-${code}`;
+}
+

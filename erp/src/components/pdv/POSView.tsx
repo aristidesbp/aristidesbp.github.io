@@ -4,6 +4,7 @@ import { formatCurrency } from '../../lib/sanitizer';
 import { Product, PaymentMethod, Sale } from '../../types';
 import { ScannerModal } from '../common/ScannerModal';
 import { ReceiptModal } from '../common/ReceiptModal';
+import { MercadoPagoModal } from '../payment/MercadoPagoModal';
 import {
   Barcode,
   Camera,
@@ -18,6 +19,8 @@ import {
   Receipt,
   Search,
   CheckCircle,
+  Truck,
+  Zap,
 } from 'lucide-react';
 
 export const POSView: React.FC = () => {
@@ -48,6 +51,14 @@ export const POSView: React.FC = () => {
   const [cashGiven, setCashGiven] = useState<string>('');
   const [lastProcessedSale, setLastProcessedSale] = useState<Sale | null>(null);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isMpModalOpen, setIsMpModalOpen] = useState(false);
+
+  // Delivery Option State in POS
+  const [isDelivery, setIsDelivery] = useState(false);
+  const [delivCustomerName, setDelivCustomerName] = useState('');
+  const [delivCustomerPhone, setDelivCustomerPhone] = useState('');
+  const [delivCustomerAddress, setDelivCustomerAddress] = useState('');
+  const [delivObs, setDelivObs] = useState('');
 
   // Sangria Modal State
   const [isSangriaOpen, setIsSangriaOpen] = useState(false);
@@ -131,12 +142,47 @@ export const POSView: React.FC = () => {
       return;
     }
 
-    const sale = await processSale();
+    if (isDelivery && (!delivCustomerName.trim() || !delivCustomerAddress.trim())) {
+      alert('Para entregar por Delivery, informe o Nome do Cliente e o Endereço de Entrega.');
+      return;
+    }
+
+    if (selectedPaymentMethod.startsWith('Mercado Pago')) {
+      setIsMpModalOpen(true);
+      return;
+    }
+
+    await executeSaleFinalize();
+  };
+
+  const executeSaleFinalize = async (extraObs: string = '') => {
+    const sale = await processSale(
+      isDelivery
+        ? {
+            is_entrega: true,
+            cliente_nome: delivCustomerName,
+            cliente_telefone: delivCustomerPhone,
+            cliente_endereco: delivCustomerAddress,
+            observacoes_entrega: extraObs ? `${delivObs} | ${extraObs}`.trim() : delivObs,
+          }
+        : undefined
+    );
+
     if (sale) {
       setLastProcessedSale(sale);
       setIsReceiptOpen(true);
       setCashGiven('');
+      setIsDelivery(false);
+      setDelivCustomerName('');
+      setDelivCustomerPhone('');
+      setDelivCustomerAddress('');
+      setDelivObs('');
+      setIsMpModalOpen(false);
     }
+  };
+
+  const handleMpPaymentSuccess = (details: { payment_id: string; method: string; status: string }) => {
+    executeSaleFinalize(`Aprovado Mercado Pago (ID: ${details.payment_id})`);
   };
 
   const handleSangriaSubmit = async (e: React.FormEvent) => {
@@ -368,18 +414,28 @@ export const POSView: React.FC = () => {
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {(
-                  ['Dinheiro', 'PIX', 'Cartão de Crédito', 'Cartão de Débito', 'Fiado'] as PaymentMethod[]
+                  [
+                    'Dinheiro',
+                    'PIX',
+                    'Cartão de Crédito',
+                    'Cartão de Débito',
+                    'Fiado',
+                    'Mercado Pago PIX',
+                    'Mercado Pago Cartão',
+                    'Mercado Pago Boleto',
+                  ] as PaymentMethod[]
                 ).map((method) => (
                   <button
                     key={method}
                     onClick={() => setSelectedPaymentMethod(method)}
-                    className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 border ${
+                    className={`px-2.5 py-2 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1 border ${
                       selectedPaymentMethod === method
                         ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
                         : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    <span>{method}</span>
+                    {method.startsWith('Mercado Pago') && <Zap className="w-3 h-3 text-amber-300 shrink-0" />}
+                    <span className="truncate">{method}</span>
                   </button>
                 ))}
               </div>
@@ -408,6 +464,60 @@ export const POSView: React.FC = () => {
                 )}
               </div>
             )}
+
+            {/* Delivery Option Toggle */}
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label className="flex items-center gap-2 cursor-pointer bg-emerald-50 dark:bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                <input
+                  type="checkbox"
+                  checked={isDelivery}
+                  onChange={(e) => setIsDelivery(e.target.checked)}
+                  className="w-4 h-4 accent-emerald-600 rounded"
+                />
+                <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                  <Truck className="w-4 h-4" /> Venda para Entrega (Delivery / Motoboy)
+                </span>
+              </label>
+
+              {isDelivery && (
+                <div className="mt-2.5 p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 animate-in fade-in duration-200">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Nome do Cliente *"
+                      value={delivCustomerName}
+                      onChange={(e) => setDelivCustomerName(e.target.value)}
+                      className="w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-medium text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Telefone / WhatsApp"
+                      value={delivCustomerPhone}
+                      onChange={(e) => setDelivCustomerPhone(e.target.value)}
+                      className="w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-medium text-slate-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Observações (Troco, etc)"
+                      value={delivObs}
+                      onChange={(e) => setDelivObs(e.target.value)}
+                      className="w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-medium text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Endereço Completo de Entrega *"
+                      value={delivCustomerAddress}
+                      onChange={(e) => setDelivCustomerAddress(e.target.value)}
+                      className="w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-medium text-slate-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Discount Control */}
             <div className="flex justify-between items-center text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800">
@@ -530,6 +640,20 @@ export const POSView: React.FC = () => {
         isOpen={isReceiptOpen}
         onClose={() => setIsReceiptOpen(false)}
       />
+
+      {/* Mercado Pago Interactive Checkout Modal */}
+      {isMpModalOpen && (
+        <MercadoPagoModal
+          isOpen={isMpModalOpen}
+          onClose={() => setIsMpModalOpen(false)}
+          amount={cartTotal}
+          description={`Venda PDV Caixa (${cart.length} produtos)`}
+          paymentMethod={selectedPaymentMethod as any}
+          customerName={delivCustomerName || 'Cliente PDV'}
+          customerPhone={delivCustomerPhone || ''}
+          onPaymentSuccess={handleMpPaymentSuccess}
+        />
+      )}
     </div>
   );
 };

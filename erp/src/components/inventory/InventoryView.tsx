@@ -7,6 +7,7 @@ import {
   Package,
   Plus,
   FileSpreadsheet,
+  FileJson,
   Search,
   Edit2,
   Trash2,
@@ -88,6 +89,61 @@ export const InventoryView: React.FC = () => {
     if (confirm('Deseja realmente excluir este produto do estoque?')) {
       await deleteProduct(id);
     }
+  };
+
+  // Handle JSON File Import for Products
+  const handleJsonFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const content = evt.target?.result as string;
+        const parsed = JSON.parse(content);
+        let itemsToImport: any[] = [];
+
+        if (Array.isArray(parsed)) {
+          itemsToImport = parsed;
+        } else if (parsed.products && Array.isArray(parsed.products)) {
+          itemsToImport = parsed.products;
+        } else if (parsed.items && Array.isArray(parsed.items)) {
+          itemsToImport = parsed.items;
+        }
+
+        if (itemsToImport.length === 0) {
+          alert('Nenhum produto válido encontrado no arquivo JSON selecionado.');
+          return;
+        }
+
+        let importedCount = 0;
+        for (const item of itemsToImport) {
+          if (!item.nome && !item.name) continue;
+
+          const prod: Product = {
+            id: item.id || `prod_${Date.now()}_${Math.random().toString().slice(-4)}`,
+            nome: item.nome || item.name || 'Produto Sem Nome',
+            codigo_barras: item.codigo_barras || item.barcode || item.ean || '',
+            categoria: item.categoria || item.category || 'Geral',
+            unidade: (item.unidade || item.unit || 'UN') as ProductUnit,
+            preco_custo: Number(item.preco_custo ?? item.costPrice ?? 0),
+            preco_venda: Number(item.preco_venda ?? item.price ?? item.salePrice ?? 0),
+            quantidade_estoque: Number(item.quantidade_estoque ?? item.quantity ?? item.stock ?? 0),
+            estoque_minimo: Number(item.estoque_minimo ?? item.minStock ?? 5),
+            descricao: item.descricao || item.description || '',
+          };
+
+          await saveProduct(prod);
+          importedCount++;
+        }
+
+        alert(`Importação JSON Concluída com Sucesso!\n${importedCount} produtos foram processados e salvos no estoque.`);
+      } catch (err: any) {
+        alert('Erro ao importar arquivo JSON: ' + (err.message || 'Formato de arquivo inválido.'));
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   // Handle XML NF-e File Select
@@ -196,6 +252,19 @@ export const InventoryView: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleJsonFileUpload}
+            className="hidden"
+            id="import-json-products-input"
+          />
+          <label
+            htmlFor="import-json-products-input"
+            className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer"
+          >
+            <FileJson className="w-4 h-4" /> Importar via JSON
+          </label>
           <button
             onClick={() => setIsNfeModalOpen(true)}
             className="flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-xs shadow-sm"

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Sale, StoreConfig } from '../../types';
-import { formatCurrency, formatDateTimeBR, escapeHtml } from '../../lib/sanitizer';
-import { Printer, X, CheckCircle, ShieldCheck } from 'lucide-react';
+import { formatCurrency, formatDateTimeBR, escapeHtml, formatSiteOrderCode, formatTimestampFilename } from '../../lib/sanitizer';
+import { Printer, X, CheckCircle, ShieldCheck, Download } from 'lucide-react';
 
 interface ReceiptModalProps {
   sale: Sale | null;
@@ -20,12 +20,59 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   if (!isOpen || !sale) return null;
 
+  const siteOrderCode = formatSiteOrderCode(sale.id);
+  const timestampStr = formatTimestampFilename(sale.created_at);
+  const storeFilenameClean = (storeConfig.store_name || 'Supermercado_ABP').replace(/[^a-zA-Z0-9]/g, '_');
+  const filename = `Comprovante_${storeFilenameClean}_${siteOrderCode}_${timestampStr}`;
+
   const sanitizedStoreName = escapeHtml(storeConfig.store_name);
   const sanitizedCnpj = escapeHtml(storeConfig.cnpj);
   const sanitizedAddress = escapeHtml(storeConfig.address);
   const sanitizedPhone = escapeHtml(storeConfig.phone);
   const sanitizedFooter = escapeHtml(storeConfig.receipt_footer);
   const sanitizedCustomerName = escapeHtml(sale.entidade_nome || 'Consumidor Final');
+
+  const downloadReceiptText = () => {
+    const itemsText = (sale.itens || [])
+      .map(
+        (it) =>
+          `  - ${it.produto_nome} x${it.quantidade} (${formatCurrency(it.preco_unitario)}) = ${formatCurrency(it.subtotal)}`
+      )
+      .join('\n');
+
+    const content = `================================================
+${storeConfig.store_name.toUpperCase()}
+CNPJ: ${storeConfig.cnpj}
+ENDEREÇO: ${storeConfig.address}
+TEL: ${storeConfig.phone}
+================================================
+COMPROVANTE DE VENDA - CUPOM NÃO FISCAL
+CÓDIGO: ${siteOrderCode}
+DATA E HORA: ${formatDateTimeBR(sale.created_at)}
+CLIENTE: ${sale.entidade_nome || 'Consumidor Final'}
+FORMA DE PAGAMENTO: ${sale.forma_pagamento}
+================================================
+ITENS VENDIDOS:
+${itemsText}
+================================================
+SUBTOTAL: ${formatCurrency(sale.valor_total)}
+${sale.desconto > 0 ? `DESCONTO: - ${formatCurrency(sale.desconto)}\n` : ''}TOTAL PAGO: ${formatCurrency(sale.valor_liquido)}
+================================================
+${storeConfig.receipt_footer}
+================================================
+Arquivo gerado em: ${new Date().toLocaleString('pt-BR')}
+`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${filename}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const printReceipt = () => {
     if (!printIframeRef.current) return;
@@ -52,7 +99,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Cupom #${escapeHtml(sale.id.slice(-6).toUpperCase())}</title>
+          <title>${filename}</title>
           <style>
             body {
               font-family: 'Courier New', Courier, monospace;
@@ -79,7 +126,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div class="divider"></div>
           
           <div><strong>CUPOM NÃO FISCAL</strong></div>
-          <div>Venda ID: #${escapeHtml(sale.id.slice(-6).toUpperCase())}</div>
+          <div>CÓDIGO: <strong>${escapeHtml(siteOrderCode)}</strong></div>
           <div>Data: ${formatDateTimeBR(sale.created_at)}</div>
           <div>Cliente: ${sanitizedCustomerName}</div>
           <div>Pagamento: ${escapeHtml(sale.forma_pagamento)}</div>
@@ -148,8 +195,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             </div>
             <div>
               <h3 className="font-bold text-slate-900 dark:text-white">Comprovante de Venda</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                ID #{sale.id.slice(-6).toUpperCase()} • {formatDateTimeBR(sale.created_at)}
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                {siteOrderCode} • {formatDateTimeBR(sale.created_at)}
               </p>
             </div>
           </div>
@@ -172,6 +219,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
           <div className="border-b border-dashed border-slate-300 dark:border-slate-700 my-3"></div>
 
+          <div className="flex justify-between">
+            <span className="text-slate-500">CÓDIGO:</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400">{siteOrderCode}</span>
+          </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Cliente:</span>
             <span className="font-bold">{sale.entidade_nome}</span>
@@ -236,16 +287,23 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row gap-2 pt-2">
           <button
             onClick={printReceipt}
-            className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2"
+            className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2 text-xs"
           >
-            <Printer className="w-5 h-5" /> Impresso / 2ª Via Thermal
+            <Printer className="w-4 h-4" /> Impresso / 2ª Via Thermal
+          </button>
+          <button
+            onClick={downloadReceiptText}
+            className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-xs"
+            title={`Baixar ${filename}.txt`}
+          >
+            <Download className="w-4 h-4" /> Baixar Comprovante TXT
           </button>
           <button
             onClick={onClose}
-            className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 px-5 rounded-xl transition"
+            className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2.5 px-4 rounded-xl transition text-xs"
           >
             Fechar
           </button>
@@ -257,3 +315,4 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     </div>
   );
 };
+

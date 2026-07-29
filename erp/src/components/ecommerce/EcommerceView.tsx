@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { formatCurrency, formatDateTimeBR } from '../../lib/sanitizer';
 import { Product, PaymentMethod, CartItem, EcommerceOrder } from '../../types';
+import { MercadoPagoModal } from '../payment/MercadoPagoModal';
 import {
   Store,
   ShoppingBag,
@@ -19,6 +20,7 @@ import {
   User,
   X,
   CreditCard,
+  Zap,
 } from 'lucide-react';
 
 export const EcommerceView: React.FC = () => {
@@ -28,6 +30,8 @@ export const EcommerceView: React.FC = () => {
     createEcommerceOrder,
     updateEcommerceOrderStatus,
     storeConfig,
+    openLoginModal,
+    currentUser,
   } = useApp();
 
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
@@ -45,6 +49,7 @@ export const EcommerceView: React.FC = () => {
   const [custPayment, setCustPayment] = useState<PaymentMethod>('PIX');
   const [custObs, setCustAddressObs] = useState('');
   const [isCheckoutSuccess, setIsCheckoutSuccess] = useState(false);
+  const [isMpModalOpen, setIsMpModalOpen] = useState(false);
 
   const categories = Array.from(new Set(products.map((p) => p.categoria || 'Geral')));
 
@@ -117,6 +122,15 @@ export const EcommerceView: React.FC = () => {
       return;
     }
 
+    if (custPayment.startsWith('Mercado Pago')) {
+      setIsMpModalOpen(true);
+      return;
+    }
+
+    await finalizeOrder(custPayment);
+  };
+
+  const finalizeOrder = async (paymentMethod: PaymentMethod, extraObs: string = '') => {
     await createEcommerceOrder({
       cliente_nome: custName,
       cliente_telefone: custPhone,
@@ -125,12 +139,20 @@ export const EcommerceView: React.FC = () => {
       subtotal: cartSubtotal,
       taxa_entrega: deliveryFee,
       total: cartTotal,
-      forma_pagamento: custPayment,
-      observacoes: custObs,
+      forma_pagamento: paymentMethod,
+      observacoes: extraObs ? `${custObs} | ${extraObs}`.trim() : custObs,
     });
 
     setIsCheckoutSuccess(true);
     setStoreCart([]);
+    setIsMpModalOpen(false);
+  };
+
+  const handleMpPaymentSuccess = (details: { payment_id: string; method: string; status: string }) => {
+    finalizeOrder(
+      details.method as PaymentMethod,
+      `Aprovado Mercado Pago (ID: ${details.payment_id})`
+    );
   };
 
   return (
@@ -149,26 +171,43 @@ export const EcommerceView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex-1 sm:flex-none">
+            <button
+              onClick={() => setViewMode('storefront')}
+              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                viewMode === 'storefront'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <ShoppingBag className="w-4 h-4" /> Loja Virtual (Visão do Cliente)
+            </button>
+            <button
+              onClick={() => setViewMode('admin')}
+              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                viewMode === 'admin'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Truck className="w-4 h-4" /> Pedidos Recebidos ({ecommerceOrders.length})
+            </button>
+          </div>
+
           <button
-            onClick={() => setViewMode('storefront')}
-            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              viewMode === 'storefront'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
+            onClick={openLoginModal}
+            className="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition border border-slate-700 shadow-sm active:scale-95"
+            title="Acesso dos funcionários e administradores"
           >
-            <ShoppingBag className="w-4 h-4" /> Loja Virtual (Visão do Cliente)
-          </button>
-          <button
-            onClick={() => setViewMode('admin')}
-            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              viewMode === 'admin'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Truck className="w-4 h-4" /> Pedidos Recebidos ({ecommerceOrders.length})
+            <User className="w-4 h-4 text-amber-400" />
+            {currentUser ? (
+              <span className="truncate max-w-[140px]">
+                {currentUser.name} ({currentUser.role})
+              </span>
+            ) : (
+              <span>🔐 Área do Funcionário / Login ERP</span>
+            )}
           </button>
         </div>
       </div>
@@ -479,19 +518,28 @@ export const EcommerceView: React.FC = () => {
                     <select
                       value={custPayment}
                       onChange={(e) => setCustPayment(e.target.value as PaymentMethod)}
-                      className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold"
+                      className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white"
                     >
-                      <option value="PIX">Pagamento via PIX</option>
-                      <option value="Dinheiro">Dinheiro na Entrega</option>
-                      <option value="Cartão de Crédito">Cartão de Crédito na Entrega</option>
-                      <option value="Cartão de Débito">Cartão de Débito na Entrega</option>
+                      <option value="PIX">⚡ Pagamento via PIX Tradicional</option>
+                      <option value="Mercado Pago PIX">💙 Mercado Pago PIX (QR Code & Copia/Cola)</option>
+                      <option value="Mercado Pago Cartão">💳 Mercado Pago Cartão (Transparente 1x-12x)</option>
+                      <option value="Mercado Pago Boleto">📄 Mercado Pago Boleto Bancário</option>
+                      <option value="Dinheiro">💵 Dinheiro na Entrega</option>
+                      <option value="Cartão de Crédito">💳 Cartão de Crédito na Entrega</option>
+                      <option value="Cartão de Débito">💳 Cartão de Débito na Entrega</option>
                     </select>
 
                     <button
                       type="submit"
-                      className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-xl shadow-lg transition text-xs"
+                      className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-xl shadow-lg transition text-xs flex items-center justify-center gap-2"
                     >
-                      FINALIZAR & ENVIAR PEDIDO
+                      {custPayment.startsWith('Mercado Pago') ? (
+                        <>
+                          <Zap className="w-4 h-4 text-amber-300" /> PAGAR COM MERCADO PAGO
+                        </>
+                      ) : (
+                        'FINALIZAR & ENVIAR PEDIDO'
+                      )}
                     </button>
                   </form>
                 </div>
@@ -499,6 +547,20 @@ export const EcommerceView: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Mercado Pago Interactive Modal */}
+      {isMpModalOpen && (
+        <MercadoPagoModal
+          isOpen={isMpModalOpen}
+          onClose={() => setIsMpModalOpen(false)}
+          amount={cartTotal}
+          description={`Pedido E-Commerce (${storeCart.length} itens)`}
+          paymentMethod={custPayment as any}
+          customerName={custName}
+          customerPhone={custPhone}
+          onPaymentSuccess={handleMpPaymentSuccess}
+        />
       )}
     </div>
   );
