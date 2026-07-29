@@ -21,7 +21,46 @@ Linguagem padrão de marcação para a estrutura da página web (index.html).
 Ambiente de execução base para gerenciar as dependências e ferramentas de automação do projeto (node_modules).
 
 
+Sobre o comando para ver as pastas, você pode usar qualquer um dos dois (`tree -d` ou `find`) quando precisar verificar alguma outra estrutura. No entanto, como você já listou o conteúdo da pasta `src` (`App.tsx`, `components`, `context`, `index.css`, `lib`, `main.tsx`, `types`), já temos o mapa principal para entender como o seu ERP foi construído!
 
+Como este é um projeto em **React com TypeScript**, cada pasta tem uma função muito específica para organizar o código. Vamos ver o que cada uma faz:
+
+---
+
+### 📂 Descrição das Pastas e Arquivos da Pasta `src`
+
+* **`components/` (Componentes)**
+* **O que é:** É onde ficam os "blocos de montar" visuais da sua aplicação.
+* **Para que serve:** Em vez de fazer uma página inteira gigante, você divide a interface em pedaços menores e reutilizáveis, como botões, barras de navegação, tabelas de produtos, modais de cadastro e gráficos.
+
+
+* **`context/` (Contexto / Estado Global)**
+* **O que é:** O cérebro que gerencia os dados que precisam ser compartilhados por várias telas ao mesmo tempo.
+* **Para que serve:** Em um ERP, informações como o usuário logado, configurações do sistema ou a lista global de produtos/clientes precisam ser acessadas de qualquer lugar. O Context evita que você tenha que passar esses dados manualmente de componente em componente.
+
+
+* **`lib/` (Bibliotecas e Utilitários)**
+* **O que é:** Pasta reservada para configurações de serviços externos ou funções auxiliares.
+* **Para que serve:** É aqui que normalmente ficam conexões com bancos de dados (como o Supabase), clientes de API, ou funções utilitárias que você usa no dia a dia (por exemplo, uma função para formatar valores em Reais `R$`, formatar datas, etc.).
+
+
+* **`types/` (Tipos do TypeScript)**
+* **O que é:** O dicionário de dados do seu projeto.
+* **Para que serve:** Como o projeto usa **TypeScript**, esta pasta define o formato dos dados (interfaces). Por exemplo, ela diz ao código exatamente quais campos um objeto do tipo `Cliente` deve ter (como `id`, `nome`, `email`, `telefone`), ajudando a evitar erros de digitação enquanto você programa.
+
+
+
+---
+
+### 📄 Arquivos Principais na Raiz de `src`
+
+* **`main.tsx`**: É o ponto de partida do aplicativo. É o arquivo responsável por "conectar" o seu código React dentro da página HTML (`index.html`).
+* **`App.tsx`**: É o componente principal do aplicativo. Geralmente é ele que organiza as rotas, o menu lateral e decide qual tela ou módulo do ERP deve aparecer para o usuário.
+* **`index.css`**: Arquivo de estilos globais onde o **Tailwind CSS** é configurado e aplicado a todo o projeto.
+
+---
+
+Qual parte ou arquivo desse sistema você gostaria de abrir, analisar ou modificar primeiro?
 
 
 
