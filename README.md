@@ -294,6 +294,8 @@ git pull origin main
 ```
 # 1. Sincroniza as informações com o GitHub 
 git fetch origin
+```
+``` 
 # 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
 git reset --hard origin/main
 ```
