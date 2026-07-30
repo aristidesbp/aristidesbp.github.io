@@ -4415,7 +4415,8 @@ src/
 ├── main.tsx                     # Ponto de partida técnico do React. Injeta o App.tsx no navegador.
 └── types/
     └── index.ts                 # "Contratos" do TypeScript. Define o formato exato de um Produto, Usuário, Venda, etc.
-    ``` 
+
+```
 
 Sistema completo de Gestão Empresarial (ERP), Frente de Caixa (PDV), Controle de Estoque, Financeiro, Cadastro de Entidades e Loja Virtual Delivery para Supermercados e Comércio Geral.
 
