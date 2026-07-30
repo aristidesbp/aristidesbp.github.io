@@ -4365,6 +4365,54 @@ async function pdv_excluirVenda(vendaId) {
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ERP_ABP - Gestão Integrada ERP, PDV & Loja Virtual Delivery
 *mandar o google ai studio analizar (ele usa o react, vai mudar a estrutura do codio!)
+```
+src/
+├── App.tsx                      # Arquivo principal de interface. Controla as abas, o bloqueio de acesso (login) e o layout geral (menu lateral e topo).
+├── components/                  # Pasta que guarda todas as telas e "pedacinhos" visuais do sistema.
+│   ├── chat/
+│   │   └── CustomerChatView.tsx # Tela do Chat com clientes (integração WhatsApp & n8n IA).
+│   ├── common/                  # Componentes reutilizados em várias partes do sistema.
+│   │   ├── LoginModal.tsx       # Formulário flutuante onde o funcionário digita usuário e senha.
+│   │   ├── Navigation.tsx       # Menus de navegação (barra superior e menu lateral).
+│   │   ├── ReceiptModal.tsx     # Modal para exibir e imprimir os cupons/recibos de venda.
+│   │   └── ScannerModal.tsx     # O leitor de código de barras pela câmera (que reintegramos no estoque).
+│   ├── dashboard/
+│   │   └── DashboardView.tsx    # Tela de visão geral da empresa (gráficos, resumos do dia, métricas).
+│   ├── deliveries/
+│   │   └── DeliveriesView.tsx   # Tela para gestão das entregas de pedidos.
+│   ├── ecommerce/
+│   │   └── EcommerceView.tsx    # A loja virtual pública (única tela que não exige login para o cliente final).
+│   ├── entities/
+│   │   └── EntitiesView.tsx     # Cadastro e gestão de Clientes e Fornecedores.
+│   ├── financial/
+│   │   └── FinancialView.tsx    # Controle financeiro (contas a pagar/receber e gestão do caixa).
+│   ├── inventory/
+│   │   └── InventoryView.tsx    # Cadastro de produtos, gestão de estoque e importação de XML/NF-e.
+│   ├── payment/
+│   │   └── MercadoPagoModal.tsx # Tela flutuante para gerenciar pagamentos integrados via Mercado Pago.
+│   ├── pdv/                     # Telas exclusivas para frente de loja (Point of Sale).
+│   │   ├── POSView.tsx          # O Caixa em si, para bipar os produtos e registrar as compras do cliente.
+│   │   └── SalesHistoryView.tsx # Histórico de todas as vendas já finalizadas.
+│   ├── reports/
+│   │   └── ReportsView.tsx      # Geração de relatórios financeiros e de vendas do supermercado.
+│   ├── settings/
+│   │   └── SettingsView.tsx     # Configurações gerais do sistema, regras de negócio e da loja.
+│   └── tutorial/
+│       └── TutorialView.tsx     # Tela de ajuda e instruções de uso do sistema.
+├── context/
+│   └── AppContext.tsx           # O "cérebro" do estado. Guarda quem está logado, lista de produtos, carrinho e distribui para o app inteiro.
+├── index.css                    # Arquivo de estilos visuais globais (gerenciamento das classes Tailwind CSS).
+├── lib/                         # Funções utilitárias e conexões com o mundo externo (serviços/backend).
+│   ├── mercadoPagoService.ts    # Código de comunicação direta com a API do Mercado Pago.
+│   ├── nfeParser.ts             # Lógica inteligente para ler e extrair dados de notas fiscais em XML.
+│   ├── offlineDb.ts             # Gerencia o banco de dados local (IndexedDB) para o ERP continuar funcionando sem internet.
+│   ├── sanitizer.ts             # Funções para limpar e formatar textos e números (como as máscaras de moeda/dinheiro).
+│   ├── supabase.ts              # Conexão principal com o banco de dados real na nuvem (Supabase).
+│   └── syncService.ts           # Motor que sincroniza os dados locais (offlineDb) com a nuvem (Supabase) quando a internet volta.
+├── main.tsx                     # Ponto de partida técnico do React. Injeta o App.tsx no navegador.
+└── types/
+    └── index.ts                 # "Contratos" do TypeScript. Define o formato exato de um Produto, Usuário, Venda, etc.
+    ``` 
 
 Sistema completo de Gestão Empresarial (ERP), Frente de Caixa (PDV), Controle de Estoque, Financeiro, Cadastro de Entidades e Loja Virtual Delivery para Supermercados e Comércio Geral.
 
