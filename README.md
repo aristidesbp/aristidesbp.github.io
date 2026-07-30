@@ -4362,9 +4362,12 @@ async function pdv_excluirVenda(vendaId) {
 </html>
 
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ERP_ABP - Gestão Integrada ERP, PDV & Loja Virtual Delivery
 *mandar o google ai studio analizar (ele usa o react, vai mudar a estrutura do codio!)
+
+
 ```
 src/
 ├── App.tsx                      # Arquivo principal de interface. Controla as abas, o bloqueio de acesso (login) e o layout geral (menu lateral e topo).
