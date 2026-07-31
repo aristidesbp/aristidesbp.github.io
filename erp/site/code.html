@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Supermercado ABP | Frescor e Qualidade</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#95d3ba",
+                    "inverse-primary": "#7bd8b1",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#bacac3",
+                    "surface-variant": "#e1e3e4",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-tertiary-fixed-variant": "#3b4a44",
+                    "on-surface-variant": "#3e4943",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary-container": "#306d58",
+                    "background": "#f8f9fa",
+                    "tertiary-container": "#5d6d67",
+                    "on-primary-fixed-variant": "#00513a",
+                    "primary": "#005d42",
+                    "tertiary-fixed": "#d5e6df",
+                    "secondary": "#2b6954",
+                    "primary-fixed": "#97f5cc",
+                    "on-tertiary-container": "#ddeee6",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#002117",
+                    "on-primary-container": "#9ffdd3",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-background": "#191c1d",
+                    "primary-container": "#047857",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "outline-variant": "#bdc9c1",
+                    "on-primary-fixed": "#002115",
+                    "secondary-fixed": "#b0f0d6",
+                    "on-surface": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#006c4e",
+                    "secondary-container": "#adedd3",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-fixed": "#101e1a",
+                    "primary-fixed-dim": "#7bd8b1",
+                    "tertiary": "#45554f",
+                    "outline": "#6e7a73",
+                    "inverse-surface": "#2e3132",
+                    "surface-container": "#edeeef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "price-lg": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .product-card-shadow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card-shadow:hover {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex flex-col w-full bg-surface dark:bg-inverse-surface px-margin-desktop max-w-container-max mx-auto border-b border-outline-variant dark:border-outline">
+<nav class="flex items-center justify-between py-4 gap-gutter">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary shrink-0">ABP</div>
+<div class="flex-1 max-w-2xl relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary font-body-md text-body-md" placeholder="Busque por produtos, marcas..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md hidden md:block">Minha Conta</span>
+</button>
+<button class="relative flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+<span class="font-label-md text-label-md hidden md:block">Carrinho</span>
+</button>
+</div>
+</nav>
+<div class="flex items-center gap-8 py-3 overflow-x-auto no-scrollbar">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md shrink-0" href="#">Hortifruti</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md shrink-0" href="#">Padaria</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md shrink-0" href="#">Carnes</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md shrink-0" href="#">Bebidas</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md shrink-0" href="#">Limpeza</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md shrink-0" href="#">Laticínios</a>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-base">
+<!-- Hero Banner -->
+<section class="mt-8 relative rounded-xl overflow-hidden h-[400px] md:h-[500px]">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A premium, wide-angle cinematic shot of a vibrant farmers market stall overflowing with fresh, dew-covered organic vegetables and fruits. The scene is bathed in warm, soft morning sunlight, highlighting the textures of ripe tomatoes, crisp greens, and bright citrus. The aesthetic is clean, professional, and corporate-modern with high-key lighting. The color palette focuses on deep greens and natural earth tones, evoking health and reliability." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlYJhIt5qyOQmt3rDKb7VtEac4kJelXxnmM7njFbfic05C4R6aRz4mHiaZyzRFSSEExd1HkdugZmt7dXrmf0Wy-SZT8sw0g6Rc6tZ3Ibd3DKVCyOQOGn7q102dTyJwR0VyGfwUO8acz9kHv1MUymOWLygFOMbQB2GdFN5D7v54GqmRr-Hu_N1ptNLQUHRBWRWC8tKtJU8gvZJpGRKihHL7uHsQtsLsEZIRlnos6dBYOHL9mKHHbQhu')"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center p-12">
+<div class="max-w-xl text-white">
+<span class="bg-secondary px-3 py-1 rounded-full font-label-md text-label-md mb-4 inline-block">FRESCOR DIÁRIO</span>
+<h1 class="font-display-lg text-display-lg mb-6 leading-tight">Sua feira completa, colhida hoje, na sua porta amanhã.</h1>
+<p class="font-body-lg text-body-lg mb-8 opacity-90">Frutas e legumes selecionados com o rigor que sua família merece. Qualidade ABP garantida.</p>
+<button class="bg-primary hover:bg-primary-container text-white px-8 py-3 rounded-full font-label-md text-label-md transition-all">Ver Ofertas de Hortifruti</button>
+</div>
+</div>
+</section>
+<!-- Category Grid (Chips Style) -->
+<section class="mt-16 overflow-x-auto no-scrollbar pb-4">
+<div class="flex gap-4">
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="nutrition">nutrition</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Hortifruti</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="bakery_dining">bakery_dining</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Padaria</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="set_meal">set_meal</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Peixaria</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="restaurant">restaurant</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Açougue</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="wine_bar">wine_bar</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Bebidas</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="ice_cream">redeem</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Congelados</span>
+</div>
+<div class="flex flex-col items-center gap-3 shrink-0 group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="cleaning_services">cleaning_services</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Limpeza</span>
+</div>
+</div>
+</section>
+<!-- Ofertas da Semana -->
+<section class="mt-16">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="local_fire_department">local_fire_department</span>
+                    Ofertas da Semana
+                </h2>
+<a class="font-label-md text-label-md text-primary hover:underline" href="#">Ver tudo</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-gutter">
+<!-- Product Card 1 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="absolute top-2 left-2 bg-error text-white text-[10px] font-bold px-2 py-1 rounded">20% OFF</div>
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A professional high-quality product photography shot of a bunch of bright red, ripe organic vine tomatoes against a pure white background. The lighting is soft and studio-quality, emphasizing the freshness and water droplets on the surface. Minimalist composition for a clean grocery e-commerce catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqezdq6IJLvAozt8I4Q9tX9hXi7wQxYFZ3K1pw6G0BWK7qotsb7kx95Zcry074gEmHweZefqijE3N2bCTqK55LpPXsxeYym0BJPUg9eFaR2BZDkMCaJJBSQcFQIou5SnSitEeKFzjxEH7Lhghza3owUY1v-lC0gY3VPSDVzU2E-CYQehR_fsIvVCh6YJ7QdGccEUqHGpupR8tevyJnVkWbSkAzam59DB40TGhKzbc_lvQIVKR2ians"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Hortifruti</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Tomate Gaúcho Orgânico - 500g</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 6,80</span>
+<span class="text-xs text-outline line-through">R$ 8,50</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A high-end product photo of a freshly baked sourdough bread loaf, golden brown crust with artistic score marks, isolated on a clean white background. Soft lighting captures the artisanal texture and dusted flour. Corporate minimalist style for a grocery store bakery section." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9-wyuxI1LlI80jP_JohZpS5zVTBsEmPD7cuzzzu96KqIU2f-ha7wBWTJ-Sdg4nIdK-g_o1MA9FzcYpcwHCo5EhhpQfaq-ZetRAacW7oiQDo9n5shoLLblMXzOnlJkmpGtbBXps0u4wGYCAl2FnXGLbzif-fDjw_osth_iWqMCpPZQgfFlJuhvw3yGk2wgnZRYvGf8ABZNtONboQXh-P8jchiPIN383lIo0rF-95rYe5QsCuANwQS4"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Padaria</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Pão de Fermentação Natural Sourdough</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 18,90</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="absolute top-2 left-2 bg-error text-white text-[10px] font-bold px-2 py-1 rounded">15% OFF</div>
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="Close-up professional product shot of two premium raw wagyu beef ribeye steaks on a clean white background. Visible high-quality marbling, deep red color, and fresh texture. Professional kitchen studio lighting. Minimalist presentation for a luxury supermarket meat section." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW8HV-yYV0q1WUwOxP4G3VOjRYtymAYqybpUC9x7dB5fkqJRIVzEKYvY-q-fSnaOxtHm5tcc8yMo2DkqMKFR5JfMqQl2_sTSxOJ5GZgoeHErZOWR0qWdHpbMs_PIZIdS7uiN20QNof7aUQCT3fkrC8ErKzu827_gjDZg9ojqNHOxDW6VscR-MSHjP_4pq6Unslw6DSgKD35EdDbLJGec7ZrFMSszSUprOi_r7or-JvHMR5LVyaTCYP"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Carnes</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Entrecôte Bovino Angus (kg)</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 84,90</span>
+<span class="text-xs text-outline line-through">R$ 99,80</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="Product photography of a glass bottle of premium cold-pressed green juice, containing spinach, apple, and cucumber. Isolated on white background with crisp lighting and condensation droplets. Vibrant green color, minimalist corporate aesthetic for healthy beverages." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsnqrd7TEYls9nIZ1iaM-LOV5j03x-BBE-aHQU8xA0K4OUismaQBRwDw-l8CB6bsp-fR5q06VgP6TmyiX0h5_ZJ3WspQ1nXU2Y8d0eJbgeO3DyVEnrpg4S3RmNl1ysyt8XTLNFAuKw-d8xAsZ5k4lcAo3eZpexsv9tsJovx3YBoE8-a84JyJHQWKTz6ESAbBTXTZ1g-fymdnHet29pqrV3GY-1qV4RRWQNBYNmxcceP7I50lcgrHDE"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Bebidas</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Suco Green Detox Prensado a Frio 300ml</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 12,50</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="High-quality product image of a pack of large, clean brown organic eggs in a recycled paper carton. Isolated on a white background with bright, even studio lighting. Focus on natural texture and eco-friendly packaging. Clean modern grocery design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh8s8TAxvQzLK4xgK9-_SxRbkmxFvHuR-ribrUVpEv61MWc9B8BL4nwDq-DkhZUxBmGPYU1j5hq2JW-keENIbEgAaXossHszM2E3B5k95kObSsAOPhJGczFkLBGiWc0TMrSj4mJn_1E9PjPgXjSBf_RvII_K8NWeH_GOYWCoyyvgfCPx7Bjr6Cm2VSIJnLRa-9xoWE6lzgcZu54ghT06OU3P91mE8RWnpvbxsRuh4aLuInptyEYk7h"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Laticínios &amp; Ovos</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Ovos Caipira Grandes - 12 Unidades</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 14,90</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Feature -->
+<section class="mt-20">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-8 bg-primary-container rounded-3xl p-8 flex flex-col justify-between min-h-[320px] relative overflow-hidden text-on-primary-container">
+<div class="relative z-10">
+<h3 class="font-headline-md text-headline-md mb-2">Clube ABP Rewards</h3>
+<p class="font-body-lg text-body-lg max-w-md">Ganhe pontos em cada compra e troque por descontos exclusivos ou frete grátis ilimitado.</p>
+</div>
+<div class="relative z-10">
+<button class="bg-on-primary-container text-primary font-label-md text-label-md px-6 py-2 rounded-full">Quero Participar</button>
+</div>
+<div class="absolute right-0 bottom-0 w-1/2 h-full opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[200px]" data-icon="loyalty" style="font-variation-settings: 'FILL' 1;">loyalty</span>
+</div>
+</div>
+<div class="md:col-span-4 bg-secondary-container rounded-3xl p-8 flex flex-col justify-between min-h-[320px] text-on-secondary-container">
+<div>
+<h3 class="font-headline-md text-headline-md mb-2">Entrega Express</h3>
+<p class="font-body-md text-body-md">Receba seus produtos em até 2 horas na região metropolitana.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span class="font-label-md text-label-md">Consulte seu CEP</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Mais Vendidos -->
+<section class="mt-20 mb-20">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+                    Mais Vendidos
+                </h2>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-gutter">
+<!-- Product Card 6 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="Product shot of a professional bag of premium whole bean coffee, matte black packaging with minimalist typography, sitting on a clean white surface with a few scattered coffee beans. Soft side lighting. Modern corporate aesthetic for a gourmet grocery section." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRY5J3rPdc4j8uwaPgZYLc18glqVMjN1dy2HtD7GVAYU8ag-wpCqkchWo-JBvSUIHtGX_FNJaAHAXUngmtXQqxPmMEQ1h6qnkL5HIjWUQgZYlo2iZoO9sT2AzscJoU7Sx0Z-b9KaY4yWgdQdqom0PEYsOIBEH0RJBfELbPI0Yu78qEoclAEb9j2V-7dDjxd7UpCbIKCpx30_mvcPyu6hw5yxoaHRcmC8XurprFTeA7eh6nsCpLydQ7"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Cafés</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Café Especial Blend Arábica - 250g</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 32,00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 7 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="High-end product photography of a bottle of extra virgin olive oil, dark green glass with a clean minimalist label, placed on a white background. Gentle reflections on the glass. Freshness and quality visual cues for a supermarket shelf." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP0Fnlpk_mJy0Wj87mE0VBdk-GNip9aVo0zdQqyWZc9pNJnV60rJhlRUi5_iu6VtHfz1I0KGONaN_UBFfXIi64Ye9p3ENiYdmj83GAbwXhaRsZc20xg4eiT8mtpepS_D1aloZK81Yr_S0oaJkMcWDOauUFg6krOPKnba9-uyzR5eLVJOY4WdFBGt-d5aTw6QraVvu31p9dnC3fqzfpuv3Ajlg_15jRnbAmsYAmV0sgof5TTMtOHJUy"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Mercearia</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Azeite de Oliva Extra Virgem 500ml</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 48,90</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 8 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="Clean product photo of a Greek yogurt container, white and blue minimalist branding, isolated on white. Creamy texture slightly visible. Professional studio lighting, focus on health and freshness for a dairy section catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFdHnJwD7q6vjCH0U3U8YCDX5Y57NsdZTzUdihmjzf1TXNWdiODLnfF7zwxNYjXg7Xc6DVT-dFj-S2Eelgg7SpS0BS8LT4aUxDTa2Kxuas1N3UZc65913FAR_5JDchRWww1Dxy5LuLdDvoX9MFWGcfMUtL8AO-Wb-gNIeTI_uNmSR9OW2BHuOu07jkjtsnnxiVBOiup33L0IM4EmrsCh3qv1iWXPOJdT5-ogP6OeUFuIL7yO0BUaPE"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Laticínios</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Iogurte Grego Natural Integral 500g</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 9,50</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 9 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="Studio shot of a cluster of organic bananas, perfectly yellow with minimal spots, on a white background. Natural, bright lighting. Fresh grocery e-commerce style, emphasizing healthy produce." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCObn7pD0w0pidZiaOY_owwRBOG34VyHQFIUFjwK1V4Df7CtNE-6C8WKJcO7W-SPhoarEzvBCSB7a8uXE4Ia7l_oALoy3EPerVVlxYfX6uSuCbmnlcRVhyH-3KZC6QZpO9fma0oPCFOI5XaKiExZjZly-fqnZhDqwLCDNXiSrn6VzLhtOkSF7LfZuvpq5amTHy86f2IoxxhbXpDBa0huW7SbrfccHZh--8LXNQ7G8DOwjGmuUkriBHI"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Hortifruti</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Banana Prata Orgânica (kg)</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 7,20</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+<!-- Product Card 10 -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 product-card-shadow group relative">
+<div class="aspect-square mb-4 bg-white rounded-lg overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A pack of premium quality kitchen paper towels, clean white packaging with minimalist green leaf logo, isolated on white background. Professional cleaning product photography with bright, clean lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnlEQhv_MPt7xikLkMQlPL-8zeWcrdX1YJIGvBGm_7ywGNlSUxNCWX09ulf15TEhGTamclq5GBtOimyY9Dp5e0C2jiZmqOuaSBnc4GiSM64DmPPTrSwBUH5l3NZlwB3g-d1SYwXHGAPDqsv1u4aWyMQP44stJFIgVncg8CdGmXZQPixvVQozOBNZwFjs3_s7qotbGAMVIaYq5qC8zNRzOx_1KhNPTDbhpv_VlW7-NiYwqerVUsqqJU"/>
+</div>
+<p class="font-label-md text-label-md text-outline mb-1">Limpeza</p>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold mb-2 line-clamp-2">Toalha de Papel Premium - 2 Unid</h3>
+<div class="flex items-baseline gap-2 mb-4">
+<span class="font-price-lg text-price-lg text-primary">R$ 8,90</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2 rounded-full flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
+<span class="font-label-md text-label-md">Adicionar</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-surface-container-highest w-full py-12 px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter border-t border-outline-variant/30">
+<div class="flex flex-col gap-4">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary">ABP</div>
+<p class="font-label-md text-label-md text-on-surface-variant max-w-[200px]">Qualidade e frescor que transformam seu dia a dia.</p>
+<div class="flex gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-all" href="#"><span class="material-symbols-outlined" data-icon="facebook">qr_code_2</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-all" href="#"><span class="material-symbols-outlined" data-icon="instagram">camera</span></a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold text-secondary dark:text-secondary-fixed-dim">Institucional</h4>
+<ul class="flex flex-col gap-2">
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Sobre Nós</a></li>
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Trabalhe Conosco</a></li>
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Lojas Físicas</a></li>
+</ul>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold text-secondary dark:text-secondary-fixed-dim">Ajuda</h4>
+<ul class="flex flex-col gap-2">
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Fale Conosco</a></li>
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Políticas de Privacidade</a></li>
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Termos de Uso</a></li>
+<li><a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Trocas e Devoluções</a></li>
+</ul>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold text-secondary dark:text-secondary-fixed-dim">Pagamento</h4>
+<div class="flex flex-wrap gap-2">
+<div class="w-10 h-6 bg-surface-container-high rounded flex items-center justify-center font-bold text-[8px] text-outline">VISA</div>
+<div class="w-10 h-6 bg-surface-container-high rounded flex items-center justify-center font-bold text-[8px] text-outline">MASTERCARD</div>
+<div class="w-10 h-6 bg-surface-container-high rounded flex items-center justify-center font-bold text-[8px] text-outline">PIX</div>
+<div class="w-10 h-6 bg-surface-container-high rounded flex items-center justify-center font-bold text-[8px] text-outline">EL0</div>
+</div>
+</div>
+<div class="md:col-span-4 pt-8 border-t border-outline-variant/30 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">© 2024 Supermercado ABP. Todos os direitos reservados.</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70 text-center md:text-right">Rua das Frutas, 123 - São Paulo/SP - CNPJ: 00.000.000/0001-00</p>
+</div>
+</footer>
+<!-- Mobile Nav Bar -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around py-3 z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-bold">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="text-[10px] font-bold">Buscar</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="text-[10px] font-bold">Pedidos</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold">Perfil</span>
+</a>
+</div>
+<script>
+        // Micro-interactions and cart logic
+        const cartButtons = document.querySelectorAll('button');
+        cartButtons.forEach(btn => {
+            if(btn.innerText.includes('Adicionar')) {
+                btn.addEventListener('click', function() {
+                    this.classList.add('scale-95', 'opacity-80');
+                    const originalContent = this.innerHTML;
+                    this.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Adicionado';
+                    this.classList.replace('bg-primary', 'bg-secondary');
+                    
+                    setTimeout(() => {
+                        this.classList.remove('scale-95', 'opacity-80');
+                        this.innerHTML = originalContent;
+                        this.classList.replace('bg-secondary', 'bg-primary');
+                    }, 2000);
+                });
+            }
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

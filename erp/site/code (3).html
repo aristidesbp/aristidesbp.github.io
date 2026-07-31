@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pedido Confirmado | Supermercado ABP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#95d3ba",
+                    "inverse-primary": "#7bd8b1",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#bacac3",
+                    "surface-variant": "#e1e3e4",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-tertiary-fixed-variant": "#3b4a44",
+                    "on-surface-variant": "#3e4943",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary-container": "#306d58",
+                    "background": "#f8f9fa",
+                    "tertiary-container": "#5d6d67",
+                    "on-primary-fixed-variant": "#00513a",
+                    "primary": "#005d42",
+                    "tertiary-fixed": "#d5e6df",
+                    "secondary": "#2b6954",
+                    "primary-fixed": "#97f5cc",
+                    "on-tertiary-container": "#ddeee6",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#002117",
+                    "on-primary-container": "#9ffdd3",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-background": "#191c1d",
+                    "primary-container": "#047857",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "outline-variant": "#bdc9c1",
+                    "on-primary-fixed": "#002115",
+                    "secondary-fixed": "#b0f0d6",
+                    "on-surface": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#006c4e",
+                    "secondary-container": "#adedd3",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-fixed": "#101e1a",
+                    "primary-fixed-dim": "#7bd8b1",
+                    "tertiary": "#45554f",
+                    "outline": "#6e7a73",
+                    "inverse-surface": "#2e3132",
+                    "surface-container": "#edeeef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "price-lg": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #005d42;
+            opacity: 0;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .animate-fall {
+            animation: fall 3s linear forwards;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Header Section (Suppressed Navigation as per Task Focus Rule) -->
+<header class="sticky top-0 z-50 flex flex-col w-full bg-surface px-margin-mobile md:px-margin-desktop py-4 border-b border-outline-variant">
+<div class="max-w-container-max mx-auto w-full flex items-center justify-between">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">ABP</h1>
+<div class="flex items-center gap-4">
+<span class="font-label-md text-label-md text-secondary">Sucesso</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center py-12 px-margin-mobile">
+<div class="fixed inset-0 pointer-events-none overflow-hidden" id="confetti-container"></div>
+<div class="max-w-3xl w-full bg-surface-container-lowest rounded-xl border border-outline-variant p-8 md:p-12 text-center shadow-sm relative">
+<!-- Hero Icon -->
+<div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary-container text-primary mb-6">
+<span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<!-- Main Message -->
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">Pedido Enviado com Sucesso!</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
+                Tudo certo! Sua lista de compras foi enviada diretamente para nossa equipe via WhatsApp.
+            </p>
+<!-- WhatsApp Card -->
+<div class="bg-surface-container-low rounded-lg p-6 mb-10 flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant">
+<div class="flex items-center gap-4 text-left">
+<div class="w-12 h-12 bg-[#25D366] rounded-full flex items-center justify-center text-white">
+<svg class="w-6 h-6 fill-current" viewbox="0 0 24 24"><path d="M12.031 6.172c-2.135 0-4.141.832-5.648 2.339s-2.339 3.513-2.339 5.648c0 2.135.832 4.141 2.339 5.648s3.513 2.339 5.648 2.339c2.135 0 4.141-.832 5.648-2.339s2.339-3.513 2.339-5.648c0-2.135-.832-4.141-2.339-5.648s-3.513-2.339-5.648-2.339zM12 19.5c-4.136 0-7.5-3.364-7.5-7.5s3.364-7.5 7.5-7.5 7.5 3.364 7.5 7.5-3.364 7.5-7.5 7.5zM15.422 13.916c-.222-.111-1.312-.647-1.516-.721-.204-.074-.352-.111-.5.111-.148.222-.573.721-.703.87-.13.149-.259.167-.481.056-.222-.111-.937-.345-1.784-1.101-.659-.588-1.104-1.313-1.233-1.536-.13-.222-.014-.342.097-.453.1-.1.222-.259.333-.389.111-.13.148-.222.222-.37.074-.148.037-.278-.019-.389-.056-.111-.5-1.204-.685-1.648-.181-.435-.363-.376-.5-.383-.129-.007-.277-.008-.425-.008-.148 0-.389.056-.593.278-.204.222-.778.759-.778 1.852s.796 2.148.907 2.3c.111.148 1.567 2.393 3.796 3.356.53.23 1.15.37 1.54.494.532.17 1.016.146 1.399.088.427-.064 1.312-.537 1.497-1.056.185-.519.185-.963.13-1.056-.056-.093-.204-.148-.426-.259z"></path></svg>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Contato ABP</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">(91) 99242-0981</p>
+</div>
+</div>
+<a class="px-6 py-3 bg-primary text-on-primary rounded-full font-label-md hover:bg-primary-container transition-all flex items-center gap-2" href="https://wa.me/5591992420981" target="_blank">
+                    Continuar conversa no WhatsApp
+                    <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+</a>
+</div>
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+<!-- Order ID -->
+<div class="bg-surface-container rounded-lg p-4 border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Número do Pedido</p>
+<p class="font-headline-sm text-headline-sm text-primary">#ABP-240981</p>
+</div>
+<!-- Status -->
+<div class="bg-surface-container rounded-lg p-4 border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Status</p>
+<p class="font-headline-sm text-headline-sm text-secondary">Aguardando Coleta</p>
+</div>
+<!-- Delivery Time -->
+<div class="bg-surface-container rounded-lg p-4 border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Entrega Estimada</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">45 - 60 min</p>
+</div>
+</div>
+<!-- Divider -->
+<div class="my-10 border-t border-outline-variant"></div>
+<!-- Footer Action -->
+<div class="flex flex-col items-center gap-4">
+<p class="font-body-md text-body-md text-on-surface-variant">Surgiu algum problema com seu pedido?</p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="px-8 py-3 bg-secondary text-on-secondary rounded-full font-label-md hover:opacity-90 transition-all">
+                        Ver Meus Pedidos
+                    </button>
+<button class="px-8 py-3 border border-primary text-primary rounded-full font-label-md hover:bg-primary-fixed transition-all" onclick="window.location.href='/'">
+                        Voltar para a Loja
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Detailed Image / Aesthetic Filler Section -->
+<section class="max-w-container-max mx-auto w-full px-margin-mobile mb-20">
+<div class="relative w-full h-[300px] rounded-xl overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="A premium overhead photograph of a rustic wooden kitchen counter filled with fresh, vibrant organic vegetables including bell peppers, leafy greens, and tomatoes. Soft morning sunlight streams from a side window creating a warm, healthy atmosphere. The style is clean and professional, matching a high-end grocery e-commerce brand with a natural and trustworthy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjPnb3HKndL8-UcC4YwrlIU_hLgUtrnEtsmEglsUntmSmivvMUIt7EGhaZl16hHYlRf0ewtpj2JiJ97Cd61hiQxqCAZPitzCUwD8uXvaF90kmKj54xCOi6ZL9alTgKrzEazVWz24rdOnPzzl7l4UxWnRqQC-hVpmFmtmhgbkPvkiPU2p--HyZyoYM8_St4HgOBhUH39_iu3bhH1Px_aKxoNISqdQ5QGJexWH9BdfqFFIvSRSeu1m6g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-8">
+<h3 class="font-headline-md text-headline-md text-white mb-2">Qualidade ABP do Campo à sua Mesa</h3>
+<p class="font-body-md text-body-md text-white/90 max-w-lg">Nossa equipe já está selecionando os melhores itens do seu pedido com todo o cuidado e higiene que você merece.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-low w-full py-12 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="flex flex-col gap-4">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">ABP</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">O seu supermercado online de confiança.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2">Institucional</h3>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Sobre Nós</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Trabalhe Conosco</a>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2">Suporte</h3>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Políticas de Privacidade</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Fale Conosco</a>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider">Social</h3>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer">qr_code_2</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">camera</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">alternate_email</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-4">© 2024 Supermercado ABP. Todos os direitos reservados.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Confetti Effect
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#005d42', '#2b6954', '#97f5cc', '#7bd8b1'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 8 + 4) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                confetti.classList.add('animate-fall');
+                container.appendChild(confetti);
+
+                // Clean up
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Trigger confetti on load
+        window.addEventListener('load', () => {
+            createConfetti();
+        });
+
+        // Interactive micro-interaction for the order ID card
+        document.querySelectorAll('.bg-surface-container').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'all 0.2s ease-out';
+                card.classList.add('shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.classList.remove('shadow-md');
+            });
+        });
+    </script>
+</body></html>

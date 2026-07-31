@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Carrinho de Compras | Supermercado ABP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .product-card-border {
+            border: 1px solid #E5E7EB;
+        }
+        .product-card-shadow:hover {
+            box-shadow: 0px 4px 20px rgba(0,0,0,0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#95d3ba",
+                      "inverse-primary": "#7bd8b1",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#bacac3",
+                      "surface-variant": "#e1e3e4",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-fixed-variant": "#3b4a44",
+                      "on-surface-variant": "#3e4943",
+                      "surface-dim": "#d9dadb",
+                      "on-secondary-fixed-variant": "#0b513d",
+                      "surface-container-high": "#e7e8e9",
+                      "on-secondary-container": "#306d58",
+                      "background": "#f8f9fa",
+                      "tertiary-container": "#5d6d67",
+                      "on-primary-fixed-variant": "#00513a",
+                      "primary": "#005d42",
+                      "tertiary-fixed": "#d5e6df",
+                      "secondary": "#2b6954",
+                      "primary-fixed": "#97f5cc",
+                      "on-tertiary-container": "#ddeee6",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#002117",
+                      "on-primary-container": "#9ffdd3",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-background": "#191c1d",
+                      "primary-container": "#047857",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "outline-variant": "#bdc9c1",
+                      "on-primary-fixed": "#002115",
+                      "secondary-fixed": "#b0f0d6",
+                      "on-surface": "#191c1d",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#006c4e",
+                      "secondary-container": "#adedd3",
+                      "surface": "#f8f9fa",
+                      "on-tertiary-fixed": "#101e1a",
+                      "primary-fixed-dim": "#7bd8b1",
+                      "tertiary": "#45554f",
+                      "outline": "#6e7a73",
+                      "inverse-surface": "#2e3132",
+                      "surface-container": "#edeeef"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "base": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "price-lg": ["Plus Jakarta Sans"],
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 z-50 flex flex-col w-full bg-surface border-b border-outline-variant px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center justify-between h-20">
+<div class="font-headline-md text-headline-md font-extrabold text-primary">ABP</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Hortifruti</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Padaria</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Carnes</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Bebidas</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Limpeza</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Laticínios</a>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 w-64 transition-all" placeholder="Buscar produtos..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-primary text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">3</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Items Section -->
+<div class="flex-grow">
+<h1 class="font-display-lg text-headline-md md:text-display-lg mb-8 text-on-surface">Meu Carrinho</h1>
+<div class="space-y-4">
+<!-- Cart Item 1 -->
+<div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl product-card-border product-card-shadow flex items-center gap-4 md:gap-6 transition-all duration-300 cart-item" data-name="Maçã Gala Nacional - 1kg" data-price="12.90">
+<div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro photograph of several fresh, crisp red Gala apples with subtle yellow streaks, sitting on a clean white surface. The lighting is bright and airy, emphasizing the smooth texture and natural droplets of water on the skin, evoking a healthy and organic supermarket feel in a minimalist corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq2YYnYlx7V1MalbuATmamnFOvMeFTpMJTk47iSwIeYUu8Foptef9gOFFQ9sIL0GQKb60m0-xrJrIHGkgU2Xq4ctJ-xjl54R6J2WNT15eKgazDKgqA6X-U8hdPnMJduu-sjIwG13VQEk-oTAhe3LC8cVAt1qxxc8AkS55HVBaCcFkRcYMd9aDbJZlnM6uPSZOLNEgzLK7DUHMkOIYOX3-PsTJtYwe4iLko_tx-OXRfEUdAMC8uoZ5x"/>
+</div>
+<div class="flex-grow grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Maçã Gala Nacional</h3>
+<p class="text-label-md text-on-surface-variant">Unidade: 1kg</p>
+</div>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, -1)">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<span class="font-body-md text-body-md w-8 text-center qty">1</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, 1)">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="md:text-right">
+<p class="font-price-lg text-price-lg text-primary">R$ 12,90</p>
+<p class="text-label-md text-outline">Unitário: R$ 12,90</p>
+</div>
+</div>
+<button class="text-outline hover:text-error transition-colors p-2">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Cart Item 2 -->
+<div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl product-card-border product-card-shadow flex items-center gap-4 md:gap-6 transition-all duration-300 cart-item" data-name="Pão Artesanal de Fermentação Natural" data-price="24.50">
+<div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional studio shot of a rustic sourdough bread loaf, sliced to show a perfect airy crumb, placed on a white wooden board. The golden crust is dusted with flour, and the background is a soft, out-of-focus light gray. The aesthetic is clean, premium, and emphasizes freshness and high-quality bakery craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGY0UfA7Vrw0_fJ5U9oTXpcwh0BTNLlgKgGa-FEj82HfBdzjsKVTITBrND64377yCVanCgvTJVnnhwUPashAAbfGFkn83jlxgs2azRgs0iWsmjiGXTMmdJtsogEIs78Kg7D8qHphS3dO_FPWESKEJSf5FMT1YAOEk82lXeYOxUKJUFeZa7gT_aTlt5NH5-TKn8U3Lt28SRsVGZotAEES_iNthzzEzKEeVURPjGsnCsWlz1ROINpVqL"/>
+</div>
+<div class="flex-grow grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pão Artesanal</h3>
+<p class="text-label-md text-on-surface-variant">Unidade: 500g</p>
+</div>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, -1)">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<span class="font-body-md text-body-md w-8 text-center qty">1</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, 1)">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="md:text-right">
+<p class="font-price-lg text-price-lg text-primary">R$ 24,50</p>
+<p class="text-label-md text-outline">Unitário: R$ 24,50</p>
+</div>
+</div>
+<button class="text-outline hover:text-error transition-colors p-2">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Cart Item 3 -->
+<div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl product-card-border product-card-shadow flex items-center gap-4 md:gap-6 transition-all duration-300 cart-item" data-name="Vinho Tinto Chileno Cabernet Sauvignon" data-price="45.00">
+<div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="An elegant product shot of a dark glass wine bottle with a clean, modern white label, standing upright against a soft beige background. The lighting is sophisticated, with a single sharp highlights along the bottle's edge, conveying luxury and high-quality beverage selection in a modern grocery setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFQ0HspxRWJj4YxL6j2Vx0-ITt71m5hLyOzKVYSs8sYXETSZpS3u6vUTve4OSHh2KiuvKQzDedlD0JdVV2yL4VieNLzuhQP1kuBnCOpSBQhwZzHvZxTqLnu3ZxHVuum8QK9F6N9FM0-_o3lIRfH7gyyLYGP9SwdmJqgqymrU-1K7UrlmGOWOU20jzBkTAsiQ5QTF1-LEJDNJLCCRuRx_a10L8dxF6nwBw1GBF9NEH2TnXXuTKQnIvJ"/>
+</div>
+<div class="flex-grow grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Vinho Chileno</h3>
+<p class="text-label-md text-on-surface-variant">Unidade: 750ml</p>
+</div>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, -1)">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<span class="font-body-md text-body-md w-8 text-center qty">1</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="updateQty(this, 1)">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="md:text-right">
+<p class="font-price-lg text-price-lg text-primary">R$ 45,00</p>
+<p class="text-label-md text-outline">Unitário: R$ 45,00</p>
+</div>
+</div>
+<button class="text-outline hover:text-error transition-colors p-2">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Summary Sidebar -->
+<aside class="w-full lg:w-[400px] flex-shrink-0">
+<div class="bg-surface-container-lowest p-8 rounded-2xl product-card-border sticky top-28">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Resumo da Compra</h2>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Subtotal</span>
+<span id="subtotal">R$ 82,40</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Entrega</span>
+<span class="text-primary font-bold">Grátis</span>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Possui cupom de desconto?</label>
+<div class="flex gap-2">
+<input class="flex-grow px-4 py-2 bg-surface border border-outline-variant rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all uppercase" id="coupon" placeholder="CUPOM10" type="text"/>
+<button class="px-4 py-2 bg-secondary-container text-on-secondary-container font-label-md rounded-lg hover:bg-secondary transition-colors hover:text-white">Aplicar</button>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant flex justify-between items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">Total</span>
+<div class="text-right">
+<span class="font-display-lg text-headline-md text-primary block leading-tight" id="grand-total">R$ 82,40</span>
+<span class="text-[12px] text-outline">em até 3x sem juros</span>
+</div>
+</div>
+</div>
+<button class="w-full py-5 bg-primary text-white rounded-full font-headline-sm flex items-center justify-center gap-3 hover:bg-primary-container transition-all active:scale-[0.98] shadow-lg shadow-primary/20 group" onclick="checkoutToWhatsApp()">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">shopping_cart_checkout</span>
+                        Finalizar Pedido
+                    </button>
+<div class="mt-6 flex items-center justify-center gap-2 text-label-md text-outline">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+                        Compra segura & entrega rápida
+                    </div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-surface-container-low mt-24 py-16 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-primary mb-6">ABP</div>
+<p class="text-body-md text-on-surface-variant mb-4">Sua melhor experiência em compras de supermercado online, entregando frescor na sua porta.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-wider">Empresa</h4>
+<ul class="space-y-3">
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Sobre Nós</a></li>
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Trabalhe Conosco</a></li>
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-wider">Suporte</h4>
+<ul class="space-y-3">
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Fale Conosco</a></li>
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Políticas de Privacidade</a></li>
+<li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Ajuda</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-wider">Siga-nos</h4>
+<div class="flex space-x-4">
+<a class="w-10 h-10 rounded-full bg-white border border-outline-variant flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-white border border-outline-variant flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-16 pt-8 border-t border-outline-variant text-center">
+<p class="text-label-md text-on-surface-variant">© 2024 Supermercado ABP. Todos os direitos reservados.</p>
+</div>
+</footer>
+<script>
+        function updateQty(btn, delta) {
+            const item = btn.closest('.cart-item');
+            const qtyElement = item.querySelector('.qty');
+            let qty = parseInt(qtyElement.innerText);
+            
+            qty = Math.max(1, qty + delta);
+            qtyElement.innerText = qty;
+            
+            const unitPrice = parseFloat(item.getAttribute('data-price'));
+            const totalElement = item.querySelector('.text-primary');
+            totalElement.innerText = `R$ ${(unitPrice * qty).toFixed(2).replace('.', ',')}`;
+            
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const qty = parseInt(item.querySelector('.qty').innerText);
+                const price = parseFloat(item.getAttribute('data-price'));
+                total += qty * price;
+            });
+
+            const formattedTotal = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('subtotal').innerText = formattedTotal;
+            document.getElementById('grand-total').innerText = formattedTotal;
+        }
+
+        function checkoutToWhatsApp() {
+            const phone = "5591992420981";
+            const coupon = document.getElementById('coupon').value.trim();
+            let message = "*Novo Pedido - Supermercado ABP*\n\n";
+            
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const name = item.getAttribute('data-name');
+                const qty = item.querySelector('.qty').innerText;
+                const price = item.querySelector('.text-primary').innerText;
+                message += `• ${name} (${qty}x) - ${price}\n`;
+            });
+
+            const total = document.getElementById('grand-total').innerText;
+            message += `\n*Cupom:* ${coupon || 'Nenhum'}`;
+            message += `\n*TOTAL:* ${total}`;
+            message += `\n\n_Desejo finalizar meu pedido e combinar a entrega._`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
+        }
+
+        // Initialize calculations
+        calculateTotals();
+    </script>
+</body></html>
