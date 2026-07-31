@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vitrine de Produtos - ERP_ABP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- SDK do Mercado Pago para Pagamentos -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Cabeçalho da Vitrine -->
+    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                    <span class="material-symbols-outlined">storefront</span>
+                </div>
+                <h1 class="text-xl font-extrabold tracking-tight">ERP_ABP <span class="text-emerald-600 text-xs uppercase block">Vitrine Virtual</span></h1>
+            </div>
+            <div>
+                <button onclick="abrirCarrinho()" class="relative bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <span class="material-symbols-outlined">shopping_cart</span> Carrinho
+                    <span id="contador-carrinho" class="absolute -top-2 -right-2 bg-amber-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900 font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal: Listagem de Produtos -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="text-2xl font-black tracking-tight">Nossos Produtos e Serviços</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Selecione os itens desejados e finalize sua compra com segurança.</p>
+            </div>
+            <div class="w-full sm:w-72">
+                <input type="text" id="busca-vitrine" onkeyup="filtrarVitrine()" placeholder="Pesquisar produto..." class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+        </div>
+
+        <!-- Grid de Produtos -->
+        <div id="grid-vitrine-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Os produtos serão injetados dinamicamente via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Modal do Carrinho de Compras e Checkout -->
+    <div id="modal-carrinho" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">shopping_bag</span> Seu Carrinho
+                </h3>
+                <button onclick="fecharCarrinho()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Lista de Itens no Carrinho -->
+            <div id="lista-itens-carrinho" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2">
+                <!-- Itens inseridos dinamicamente -->
+            </div>
+
+            <!-- Dados do Cliente para Envio do WhatsApp -->
+            <div class="space-y-4 mb-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Seu WhatsApp (com DDD) *</label>
+                    <input type="text" id="whatsapp-cliente" placeholder="Ex: 5591999999999" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+            </div>
+
+            <!-- Total e Ações -->
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="carrinho-total" class="text-emerald-600">R$ 0,00</span>
+                </div>
+                <button onclick="finalizarCompraWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">send</span> Finalizar e Enviar Cupom via WhatsApp
+                </button>
+                <div id="wallet_container" class="mt-2">
+                    <!-- Botão de Integração Mercado Pago renderizado via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Lógica da Vitrine -->
+    <script>
+        // Conexão Supabase (mesmas credenciais do ERP principal)
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHd4cHdnb3VraGlucWZ1cHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE5MzAsImV4cCI6MjA5ODU3NzkzMH0.vudMl-45gMMEg6EJpM8BZa0rC6k7YiAdqtxuUUB_OWM';
+        const supabaseUrl = 'https://mvxwxpwgoukhinqfuppz.supabase.co';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let produtosVitrine = [];
+        let carrinho = [];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarProdutosVitrine();
+        });
+
+        // Carrega produtos da tabela 'produtos' do Supabase
+        async function carregarProdutosVitrine() {
+            const { data, error } = await _supabase.from('produtos').select('*').gt('quantidade_estoque', 0);
+            if (error) {
+                console.error("Erro ao carregar produtos:", error);
+                return;
+            }
+            produtosVitrine = data || [];
+            renderizarVitrine(produtosVitrine);
+        }
+
+        // Renderiza os cards de produtos na tela
+        function renderizarVitrine(lista) {
+            const grid = document.getElementById('grid-vitrine-produtos');
+            if (!grid) return;
+
+            if (lista.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10">Nenhum produto disponível no momento.</p>';
+                return;
+            }
+
+            grid.innerHTML = lista.map(p => {
+                const img = p.foto_url ? `<img src="${p.foto_url}" class="w-full h-48 object-cover">` : `<div class="w-full h-48 bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"><span class="material-symbols-outlined text-4xl">inventory_2</span></div>`;
+                return `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+                        ${img}
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">${p.categoria || 'Geral'}</span>
+                                <h3 class="font-bold text-slate-800 dark:text-white mt-2">${p.nome}</h3>
+                                <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.descricao || 'Sem descrição.'}</p>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <span class="font-bold text-emerald-600 text-lg">R$ ${parseFloat(p.preco_venda || 0).toFixed(2)}</span>
+                                <button onclick="adicionarAoCarrinho('${p.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white p-2.5 rounded-xl transition flex items-center justify-center shadow">
+                                    <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filtro de produtos por texto
+        function filtrarVitrine() {
+            const termo = document.getElementById('busca-vitrine').value.toLowerCase();
+            const filtrados = produtosVitrine.filter(p => p.nome.toLowerCase().includes(termo) || (p.categoria && p.categoria.toLowerCase().includes(termo)));
+            renderizarVitrine(filtrados);
+        }
+
+        // Adiciona item ao carrinho
+        function adicionarAoCarrinho(id) {
+            const produto = produtosVitrine.find(p => p.id === id);
+            if (!produto) return;
+
+            const itemExistente = carrinho.find(i => i.id === id);
+            if (itemExistente) {
+                if (itemExistente.qtd < produto.quantidade_estoque) {
+                    itemExistente.qtd++;
+                } else {
+                    alert("Estoque máximo atingido para este item.");
+                }
+            } else {
+                carrinho.push({ ...produto, qtd: 1 });
+            }
+            atualizarContadorCarrinho();
+        }
+
+        // Atualiza badge do carrinho
+        function atualizarContadorCarrinho() {
+            const totalItens = carrinho.reduce((sum, item) => sum + item.qtd, 0);
+            document.getElementById('contador-carrinho').innerText = totalItens;
+        }
+
+        // Abre modal do carrinho
+        function abrirCarrinho() {
+            const lista = document.getElementById('lista-itens-carrinho');
+            if (carrinho.length === 0) {
+                lista.innerHTML = '<p class="text-center text-slate-400 py-6">Seu carrinho está vazio.</p>';
+                document.getElementById('carrinho-total').innerText = 'R$ 0,00';
+            } else {
+                let totalGeral = 0;
+                lista.innerHTML = carrinho.map(item => {
+                    const subtotal = item.preco_venda * item.qtd;
+                    totalGeral += subtotal;
+                    return `
+                        <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-800 dark:text-white">${item.nome}</h4>
+                                <span class="text-xs text-slate-500">R$ ${parseFloat(item.preco_venda).toFixed(2)} x ${item.qtd}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-sm text-emerald-600">R$ ${subtotal.toFixed(2)}</span>
+                                <button onclick="removerDoCarrinho('${item.id}')" class="text-red-500 hover:text-red-700 p-1">
+                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('carrinho-total').innerText = `R$ ${totalGeral.toFixed(2)}`;
+            }
+            document.getElementById('modal-carrinho').classList.remove('hidden');
+        }
+
+        // Fecha modal do carrinho
+        function fecharCarrinho() {
+            document.getElementById('modal-carrinho').classList.add('hidden');
+        }
+
+        // Remove item do carrinho
+        function removerDoCarrinho(id) {
+            carrinho = carrinho.filter(i => i.id !== id);
+            atualizarContadorCarrinho();
+            abrirCarrinho();
+        }
+
+        // Finaliza a compra enviando o cupom/resumo via WhatsApp
+        function finalizarCompraWhatsApp() {
+            const whatsapp = document.getElementById('whatsapp-cliente').value.trim();
+            if (!whatsapp) {
+                alert("Por favor, insira o número do seu WhatsApp com DDD.");
+                return;
+            }
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio.");
+                return;
+            }
+
+            // Gera um cupom de compra aleatório
+            const codigoCupom = 'CUPOM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            let mensagem = `*🛍️ PEDIDO REALIZADO - ERP_ABP*\n*Cupom de Desconto/Compra:* ${codigoCupom}\n\n*Itens:*\n`;
+            
+            let totalGeral = 0;
+            carrinho.forEach(item => {
+                const sub = item.preco_venda * item.qtd;
+                totalGeral += sub;
+                mensagem += `- ${item.qtd}x ${item.nome} (R$ ${sub.toFixed(2)})\n`;
+            });
+
+            mensagem += `\n*Total a Pagar:* R$ ${totalGeral.toFixed(2)}\nAguardamos a confirmação do pagamento!`;
+
+            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${whatsapp}&text=${encodeURIComponent(mensagem)}`;
+            window.open(urlWhatsApp, '_blank');
+            
+            // Limpa carrinho após envio
+            carrinho = [];
+            atualizarContadorCarrinho();
+            fecharCarrinho();
+            alert("Cupom gerado e redirecionado para o WhatsApp com sucesso!");
+        }
+    </script>
+</body>
+</html>
