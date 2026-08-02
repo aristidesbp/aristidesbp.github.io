@@ -2372,12 +2372,12 @@ let pdv_html5QrCode  = null;
 let pdv_produtosCache = [];
 let pdv_carrinho      = [];
 
-    /*
+    
 async function pdv_init() {
     await pdv_fetchProdutos();
     await pdv_fetchEntidades();
     await pdv_loadDashboard();
-}*/
+}
 
 function pdv_alternarSubAba(subAba) {
     const pCaixa     = document.getElementById('pdv-painel-caixa');
@@ -2809,6 +2809,17 @@ async function pdv_excluirVenda(vendaId) {
         alert("Erro ao excluir venda: " + error.message);
     }
 }
+
+
+
+
+
+    function init() {
+    alternarAba('home'); // garante aba inicial correta
+    loadDashboard();
+    loadEntidades();
+    }
+    
 </script>
 
 
