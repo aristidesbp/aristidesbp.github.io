@@ -720,6 +720,9 @@ function ent_alternarSubAba(subAba) {
   </div>
 </div>
 
+```
+# JS ESTOQUE
+```
 <script>
 // ==========================================
 // MÓDULO DE ESTOQUE (estoque.js)
