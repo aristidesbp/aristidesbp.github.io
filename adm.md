@@ -2627,7 +2627,9 @@ async function pdv_loadHistoricoVendas() {
         `;
     }).join('');
 }
-
+```
+# CONTINUA
+```
 async function pdv_reimprimirVenda(vendaId) {
     try {
         const { data: venda, error: errV } = await _supabase.from('vendas').select('*').eq('id', vendaId).single();
