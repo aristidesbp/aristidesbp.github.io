@@ -1,9 +1,4 @@
-// ── Inicialização ─────────────────────────────────────────────────────
-function init() {
-    alternarAba('entidades'); // garante aba inicial correta
-    loadDashboard();
-    loadEntidades();
-}
+
 
 // ── Drop Zone de Foto (Entidades) ─────────────────────────────────────
 function configurarDropZone(dropId, inputId, txtId) {
