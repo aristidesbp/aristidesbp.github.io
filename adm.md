@@ -1317,7 +1317,9 @@ async function est_excluirSelecionados() {
   </div>
 
 </div><!-- fim aba-entidades -->
-
+```
+# JS ENTIDADES
+```
 <script>
 // ── Inicialização ─────────────────────────────────────────────────────
 function init() {
