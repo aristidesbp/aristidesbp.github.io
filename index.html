@@ -32,30 +32,37 @@
                 </button>
             </div>
 
-            <div>
 
-                
-                
-                <button onclick="abrirCarrinho()" class="relative bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition flex items-center gap-1.5 shadow-md shadow-red-600/20 text-sm">
-                    <span class="material-symbols-outlined text-sm">shopping_bag</span> 
-                    <span class="hidden sm:inline">Carrinho</span>
-                    <span id="contador-carrinho" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900 font-extrabold">0</span>
-                </button>
-            </div>
+ <!-- Botão de Login ADM -->
+<a href="adm.html" title="Acessar Painel Administrativo" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3.5 py-2 rounded-full font-bold transition flex items-center gap-1.5 text-sm border border-slate-200 dark:border-slate-700"><span class="material-symbols-outlined text-base">login</span> <span class="hidden sm:inline">Entrar</span>
+</a> <!-- /Botão de Login ADM -->
+
+
+<!--bt carrinho -->
+<div><button onclick="abrirCarrinho()" class="relative bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition flex items-center gap-1.5 shadow-md shadow-red-600/20 text-sm">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> 
+<span class="hidden sm:inline">Carrinho</span>
+<span id="contador-carrinho" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900 font-extrabold">0</span>
+</button></div><!-- /bt carrinho -->
+
+
         </div>
+
 
         <div class="max-w-7xl mx-auto px-4 pb-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
             <div class="min-w-[140px]">
                 <select id="filtro-categoria" onchange="filtrarVitrine()" class="w-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2 px-3 focus:ring-2 focus:ring-red-500">
                     <option value="">Todas Categorias</option>
                 </select>
-            </div>
+            </div
+
+
             
-            <!-- Botão de Login ADM -->
-<a href="adm.html" title="Acessar Painel Administrativo" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3.5 py-2 rounded-full font-bold transition flex items-center gap-1.5 text-sm border border-slate-200 dark:border-slate-700">
-    <span class="material-symbols-outlined text-base">login</span> 
-    <span class="hidden sm:inline">Entrar</span>
-</a>
+           
+
+
+
+
             
             <div class="flex items-center gap-2">
                 <button onclick="filtrarPorPromocao()" class="px-3 py-1.5 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-xl text-xs font-bold whitespace-nowrap hover:bg-red-100 transition flex items-center gap-1">
