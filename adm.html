@@ -1688,6 +1688,8 @@ function limparFiltros() {
 }
 </script>
 
+
+<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
   <!-- Dashboard -->
@@ -1714,9 +1716,14 @@ function limparFiltros() {
       <i class="fas fa-plus-circle"></i> Novo Lançamento
     </button>
   </div>
-  <!-- Formulário de Lançamento -->
-  <div class="card mb-8 hidden" id="fin-aba-formulario">
-    <h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white"><i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+ 
+<!-- Formulário de Lançamento -->
+<div class="card mb-8 hidden" id="fin-aba-formulario">
+<h3 class="font-bold text-lg mb-4 border-b pb-2 text-slate-800 dark:text-white">
+    <i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
+
+
+    
     <input type="hidden" id="fin-f-editando-id">
     <input type="hidden" id="fin-f-editando-financa-id">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -1770,6 +1777,8 @@ function limparFiltros() {
       <div><label>Data Vencimento *</label><input type="date" id="fin-f-vencimento"></div>
       <div><label>Data de Pagamento</label><input type="date" id="fin-f-data-pagamento"></div>
       <div class="md:col-span-4">
+
+          
         <label><i class="fas fa-barcode"></i> Código de Barras / Linha Digitável</label>
         <div class="flex gap-2">
           <input type="text" id="fin-f-barras" placeholder="Cole ou leia o código de barras" class="flex-1">
@@ -1777,6 +1786,7 @@ function limparFiltros() {
             <i class="fas fa-camera"></i> Ler Código
           </button>
         </div>
+          
         <div id="fin-camera-container" class="hidden mt-3 relative border-2 border-dashed border-slate-300 p-2 rounded bg-slate-50">
           <div id="fin-camera-preview" class="w-full max-w-sm mx-auto overflow-hidden rounded"></div>
           <button onclick="fin_pararCamera()" type="button" class="absolute top-4 right-4 bg-red-500 text-white w-8 h-8 rounded-full flex justify-center items-center hover:bg-red-600 shadow-lg z-10">
@@ -1784,6 +1794,8 @@ function limparFiltros() {
           </button>
         </div>
       </div>
+
+    <!--anexar boleto e comprovante --> 
       <div class="md:col-span-2">
         <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
         <div class="drop-zone" id="fin-drop-boleto" onclick="document.getElementById('fin-f-boleto').click()">
@@ -1803,6 +1815,10 @@ function limparFiltros() {
         </div>
       </div>
     </div>
+<!-- /anexar boleto e comprovante --> 
+
+
+    
     <div class="flex gap-4 mt-6">
       <button onclick="fin_gerarLancamentoCompleto()" id="fin-btn-salvar" class="flex-1 bg-emerald-500 text-white font-bold py-3 rounded hover:bg-emerald-600 transition shadow-lg">
         <i class="fas fa-save"></i> Gravar Lançamento
