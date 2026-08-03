@@ -225,7 +225,9 @@ tailwind.config = {
           <p class="text-sm text-slate-500">Gestão de contas a pagar, receber e fluxo de caixa.</p>
         </div>
       </div>
-
+```
+# ABA ENTIDADES
+```
 
       <!-- ABA: ENTIDADES -->
       <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
@@ -454,7 +456,9 @@ tailwind.config = {
     </div>
   </main>
 </div>
-
+```
+# JAVA SCRIPT
+```
 
 <script>
 // ==========================================
@@ -697,6 +701,9 @@ async function ent_editar(id) {
 }
 
 
+```
+# CONTINUA
+```
 // ── MÓDULO ESTOQUE ────────────────────────────────────────────────────
 async function est_init() {
     est_loadDashboard();
