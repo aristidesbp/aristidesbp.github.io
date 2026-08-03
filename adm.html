@@ -1688,7 +1688,8 @@ function limparFiltros() {
 }
 </script>
 
-
+<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
@@ -1723,6 +1724,29 @@ function limparFiltros() {
     <i class="fas fa-plus-circle"></i> Novo Lançamento</h3>
 
 
+    <!--anexar boleto e comprovante --> 
+      <div class="md:col-span-2">
+        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
+        <div class="drop-zone" id="fin-drop-boleto" onclick="document.getElementById('fin-f-boleto').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-boleto" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-boleto')">
+          <p id="fin-nome-boleto" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
+        <div class="drop-zone" id="fin-drop-comprovante" onclick="document.getElementById('fin-f-comprovante').click()">
+          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
+          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
+          <input type="file" id="fin-f-comprovante" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-comprovante')">
+          <p id="fin-nome-comprovante" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
+        </div>
+      </div>
+    </div>
+<!-- /anexar boleto e comprovante --> 
+
+    
     
     <input type="hidden" id="fin-f-editando-id">
     <input type="hidden" id="fin-f-editando-financa-id">
@@ -1795,27 +1819,7 @@ function limparFiltros() {
         </div>
       </div>
 
-    <!--anexar boleto e comprovante --> 
-      <div class="md:col-span-2">
-        <label><i class="fas fa-file-invoice"></i> Anexar Boleto</label>
-        <div class="drop-zone" id="fin-drop-boleto" onclick="document.getElementById('fin-f-boleto').click()">
-          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-          <input type="file" id="fin-f-boleto" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-boleto')">
-          <p id="fin-nome-boleto" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
-        </div>
-      </div>
-      <div class="md:col-span-2">
-        <label><i class="fas fa-receipt"></i> Anexar Comprovante</label>
-        <div class="drop-zone" id="fin-drop-comprovante" onclick="document.getElementById('fin-f-comprovante').click()">
-          <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-          <p class="text-xs text-slate-500">Clique ou arraste o arquivo aqui</p>
-          <input type="file" id="fin-f-comprovante" accept="image/*,.pdf" class="hidden" onchange="fin_mostrarNomeArquivo(this,'fin-nome-comprovante')">
-          <p id="fin-nome-comprovante" class="text-xs font-bold text-emerald-600 mt-2 truncate"></p>
-        </div>
-      </div>
-    </div>
-<!-- /anexar boleto e comprovante --> 
+    
 
 
     
