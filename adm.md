@@ -1786,6 +1786,10 @@ function limparFiltros() {
     </div>
   </div>
 </div><!-- fim aba-financeiro -->
+
+```
+# JS FINANCEIRO
+```
 <script>
 let fin_entidadesCache    = [];
 let fin_html5QrCode       = null;
@@ -2271,6 +2275,9 @@ function fin_mostrarNomeArquivo(input, idCampo) {
     <p style="text-align: center; font-size: 10px; margin-top: 15px;">Obrigado pela preferência!</p>
   </div>
 </div>
+```
+# JS PDV
+```
 
 <script>
 let pdv_html5QrCode  = null;
