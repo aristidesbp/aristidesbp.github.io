@@ -393,7 +393,7 @@ function ent_alternarSubAba(subAba) {
 
 
 
-# BLOCO 3 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 CONFIGURAÇÕES
 ```
 <!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
@@ -499,7 +499,7 @@ function ent_alternarSubAba(subAba) {
 
 
 
-# BLOCO 4 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# estoque 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ```
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
@@ -1720,40 +1720,32 @@ let fin_entidadesCache    = [];
 let fin_html5QrCode       = null;
 let fin_listenerSetup     = false; // evita registrar addEventListener múltiplas vezes
 
-async function fin_init() {
-    fin_loadEntidades();
-    fin_loadCategoriasUnicas();
-    fin_loadDashboard();
-    fin_loadParcelas();
-    fin_configurarDropZone('fin-drop-boleto','fin-f-boleto','fin-nome-boleto');
-    fin_configurarDropZone('fin-drop-comprovante','fin-f-comprovante','fin-nome-comprovante');
-    // Autocomplete de entidades (registra só uma vez)
-    if (!fin_listenerSetup) {
-        const inputBusca   = document.getElementById('fin-f-entidade-busca');
-        const listaDropdown = document.getElementById('fin-lista-entidades');
-        const inputId      = document.getElementById('fin-f-entidade-id');
-        if (inputBusca) {
-            inputBusca.addEventListener('input', e => {
-                const termo = e.target.value.toLowerCase();
-                listaDropdown.innerHTML = '';
-                if (!termo) { listaDropdown.classList.add('hidden'); inputId.value=''; return; }
-                const filtradas = fin_entidadesCache.filter(ent => ent.nome_completo.toLowerCase().includes(termo));
-                if (filtradas.length > 0) {
-                    listaDropdown.classList.remove('hidden');
-                    filtradas.forEach(ent => {
-                        const li = document.createElement('li');
-                        li.className = 'p-3 hover:bg-slate-100 cursor-pointer text-sm border-b last:border-b-0 dark:hover:bg-slate-700';
-                        li.innerHTML = `<i class="fas fa-user-circle text-slate-400 mr-2"></i>${ent.nome_completo}`;
-                        li.onclick = () => { inputBusca.value = ent.nome_completo; inputId.value = ent.id; listaDropdown.classList.add('hidden'); };
-                        listaDropdown.appendChild(li);
-                    });
-                } else { listaDropdown.classList.add('hidden'); inputId.value=''; }
-            });
-            fin_listenerSetup = true;
-        }
-    }
-}
 
+
+async function fin_init() {
+    try {
+        await Promise.all([
+            fin_loadEntidades(),
+            fin_loadCategoriasUnicas(),
+            fin_loadDashboard(),
+            fin_loadParcelas()
+        ]);
+        fin_configurarDropZone('fin-drop-boleto','fin-f-boleto','fin-nome-boleto');
+        fin_configurarDropZone('fin-drop-comprovante','fin-f-comprovante','fin-nome-comprovante');
+    } catch (error) {
+        console.error("Erro crítico ao inicializar o módulo financeiro:", error);
+        alert("Erro ao carregar dados financeiros. Verifique sua conexão.");
+    }
+    // Autocomplete de entidades (registra só uma vez)
+
+
+
+
+
+
+
+
+    
 function fin_alternarSubAba(subAba) {
     const form   = document.getElementById('fin-aba-formulario');
     const lista  = document.getElementById('fin-aba-listagem');
