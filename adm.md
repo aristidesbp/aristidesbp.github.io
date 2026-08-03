@@ -1,4 +1,5 @@
 # código do ADM.html
+# BLOCO 1 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
@@ -70,7 +71,9 @@ tailwind.config = {
 </script>
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
-
+```
+# BLOCO 2 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -383,6 +386,7 @@ function ent_alternarSubAba(subAba) {
 }
 </script>
 
+```
 
 
 
@@ -390,6 +394,9 @@ function ent_alternarSubAba(subAba) {
 
 
 
+
+# BLOCO 3 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
   <div class="card mb-8 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium space-y-6">
@@ -654,7 +661,14 @@ function ent_alternarSubAba(subAba) {
     }
 }
 </script>
+```
 
+
+
+
+
+# BLOCO 4 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
   <!-- Dashboard do Estoque -->
@@ -1199,7 +1213,14 @@ async function est_excluirSelecionados() {
 </script>
 
 
+```
 
+
+
+
+
+# BLOCO 5 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
@@ -1689,9 +1710,11 @@ function limparFiltros() {
 }
 </script>
 
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
-<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
+```
+
+
+# BLOCO 7 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
   <!-- Dashboard -->
@@ -2153,7 +2176,11 @@ function fin_mostrarNomeArquivo(input, idCampo) {
 }
 </script>
 
+```
 
+
+# BLOCO 8 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <!-- ════════════ ABA: PDV ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
   <!-- Dashboard -->
@@ -2811,11 +2838,6 @@ async function pdv_excluirVenda(vendaId) {
     }
     
 </script>
-
-
-
-
-
 
 
 </div><!-- fim content-panels -->
