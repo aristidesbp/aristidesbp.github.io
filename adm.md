@@ -167,6 +167,9 @@ tailwind.config = {
   </div>
 </aside>
 ```
+
+
+
 # HEADER / nave topo fixo 🟥🟥🟥
 ```
 <!-- HEADER -->
@@ -194,7 +197,9 @@ tailwind.config = {
     </div>
   </div>
 </header>
-
+```
+# MAIN CONTENT 🟥🟥🟥
+```
 
 <!-- MAIN CONTENT -->
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
