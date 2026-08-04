@@ -223,6 +223,7 @@ tailwind.config = {
 </div>
 
 ```
+# APP.JS  🟥🟥🟥
 ```
 
 <script>
@@ -401,7 +402,7 @@ function ent_alternarSubAba(subAba) {
 
 
 
-# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 CONFIGURAÇÕES
+# CONFIGURAÇÕES.HTML 🟥🟥🟥
 ```
 <!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
@@ -507,7 +508,7 @@ function ent_alternarSubAba(subAba) {
 
 
 
-# estoque 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# estoque.html 🟥🟥🟥
 ```
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
