@@ -1,5 +1,5 @@
 # código do ADM.html
-# BLOCO 1 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# ESTRUTURA BÁSICA 🟥🟥🟥
 ```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
@@ -72,7 +72,10 @@ tailwind.config = {
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
 ```
-# BLOCO 2 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+
+
+# LOGIN 🟥🟥🟥
 ```
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
@@ -110,11 +113,17 @@ tailwind.config = {
   </div>
 </div>
 </div>
-
+```
+# SISTEM PRINCIPAL 🟥🟥🟥
+```
 <!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
 <div class="hidden min-h-screen" id="tela-sistema">
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
+```
+
+# SIDEBAR / VENDO LATERAL  🟥🟥🟥
+```
 <!-- SIDEBAR -->
 <aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
   <div class="px-6 mb-8 flex items-center justify-between">
@@ -156,12 +165,10 @@ tailwind.config = {
       <option value="configuracoes">⚙️ CONFIGURAÇÕES</option>
     </select>
   </div>
-
-
-
-
 </aside>
-
+```
+# HEADER / nave topo fixo 🟥🟥🟥
+```
 <!-- HEADER -->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
   <div class="flex items-center gap-4 sm:gap-gutter">
