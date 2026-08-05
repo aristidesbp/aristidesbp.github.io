@@ -440,6 +440,19 @@ resultado = calcular_area_retangulo(5, 10)
 print(f"A área calculada é: {resultado}")
 
 
+import os
+
+# Mostra o diretório atual de trabalho absoluto
+diretorio_atual = os.path.abspath(".")
+print("Diretório atual:", diretorio_atual)
+
+# Junta caminhos de forma segura (independente do sistema operacional)
+caminho_teste = os.path.join(diretorio_atual, "pasta_ficticia", "arquivo.txt")
+print("Caminho montado:", caminho_teste)
+
+# Separa o nome do arquivo da sua extensão
+nome_puro, extensao = os.path.splitext("documento.html")
+print(f"Nome: {nome_puro} | Extensão: {extensao}")
 ```
 ```
 # Executar
