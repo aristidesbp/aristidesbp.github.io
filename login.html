@@ -14,7 +14,9 @@
     
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
 
+    
     <style id="custom-styles">
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -126,10 +128,7 @@
 
     <!-- Script de Autenticação -->
     <script>
-        // Inicialização do Supabase
-        const supabaseUrl = 'https://mvxwxpwgoukhinqfuppz.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHd4cHdnb3VraGlucWZ1cHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE5MzAsImV4cCI6MjA5ODU3NzkzMH0.vudMl-45gMMEg6EJpM8BZa0rC6k7YiAdqtxuUUB_OWM';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  
 
         // Alternar visibilidade da senha (mostrar/ocultar)
         function togglePasswordVisibility(inputId, btn) {
