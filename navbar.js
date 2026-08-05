@@ -1,5 +1,3 @@
-
-
 // =================================================================
 // 2. VERIFICAÇÃO DE LOGIN E SESSÃO
 // =================================================================
@@ -49,17 +47,9 @@ function toggleDarkMode() {
 })();
 
 // =================================================================
-// 4. REDIRECIONAMENTO DE PÁGINAS (SELECT NAVIGATION)
+// 4. RENDERIZAÇÃO DA NAVBAR SIMPLIFICADA
 // =================================================================
-function navegarParaPagina(pagina) {
-    if (!pagina) return;
-    window.location.href = `${pagina}.html`;
-}
-
-// =================================================================
-// 5. RENDERIZAÇÃO DA NAVBAR
-// =================================================================
-function renderizarNavbar(paginaAtiva) {
+function renderizarNavbar() {
     const container = document.getElementById('navbar-container');
     if (!container) {
         console.error('Elemento #navbar-container não encontrado no HTML.');
@@ -70,30 +60,22 @@ function renderizarNavbar(paginaAtiva) {
         <!-- HEADER FIXO NO TOPO (100% DE LARGURA) -->
         <header class="fixed top-0 left-0 right-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-16 sm:h-20 px-4 sm:px-8 transition-all">
             
-            <!-- LOGO / NOME DO SISTEMA -->
-            <div class="flex items-center gap-2">
+            <!-- LOGO / NOME DO SISTEMA E BOTÃO DE RETORNO -->
+            <div class="flex items-center gap-3 sm:gap-4">
                 <h2 class="font-bold text-base sm:text-xl text-slate-900 dark:text-white truncate">ERP-ABP</h2>
-            </div>
-
-            <!-- SELETOR DE MÓDULO / PÁGINA -->
-            <div class="flex-1 max-w-[200px] sm:max-w-xs mx-2 sm:mx-4">
-                <select id="select-aba" onchange="navegarParaPagina(this.value)" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer">
-                    <option value="home" ${paginaAtiva === 'home' ? 'selected' : ''}>🏠 HOME</option>
-                    <option value="financeiro" ${paginaAtiva === 'financeiro' ? 'selected' : ''}>💰 FINANCEIRO</option>
-                    <option value="entidades" ${paginaAtiva === 'entidades' ? 'selected' : ''}>🙋 ENTIDADES</option>
-                    <option value="estoque" ${paginaAtiva === 'estoque' ? 'selected' : ''}>📦 ESTOQUE</option>
-                    <option value="pdv" ${paginaAtiva === 'pdv' ? 'selected' : ''}>🖥️ PDV — Frente de Caixa</option>
-                    <option value="configuracoes" ${paginaAtiva === 'configuracoes' ? 'selected' : ''}>⚙️ CONFIGURAÇÕES</option>
-                </select>
+                <button onclick="window.location.href='index.html'" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all cursor-pointer" title="Voltar para a página inicial">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span class="hidden sm:inline">Voltar</span>
+                </button>
             </div>
 
             <!-- AÇÕES DA BARRA: MODO ESCURO E LOGOUT -->
             <div class="flex items-center gap-1 sm:gap-2">
-                <button class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" id="theme-toggle" onclick="toggleDarkMode()" title="Alternar tema">
+                <button class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer" id="theme-toggle" onclick="toggleDarkMode()" title="Alternar tema">
                     <span class="material-symbols-outlined text-xl" id="dark-icon">dark_mode</span>
                     <span class="material-symbols-outlined text-xl hidden" id="light-icon">light_mode</span>
                 </button>
-                <button title="Sair da conta" onclick="sairDaConta()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-slate-800 transition-all">
+                <button title="Sair da conta" onclick="sairDaConta()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
                     <span class="material-symbols-outlined text-xl">logout</span>
                 </button>
             </div>
@@ -113,10 +95,9 @@ function renderizarNavbar(paginaAtiva) {
 }
 
 // =================================================================
-// 6. INICIALIZAÇÃO AUTOMÁTICA
+// 5. INICIALIZAÇÃO AUTOMÁTICA
 // =================================================================
 document.addEventListener('DOMContentLoaded', async () => {
     // Valida autenticação antes de liberar a renderização da página
     await verificarLogin();
 });
-
