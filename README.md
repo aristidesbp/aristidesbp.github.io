@@ -9,12 +9,16 @@ Profissional focado em desenvolvimento de soluções web modernas, com atenção
 * 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
 
 ---
-### ERP ABP 
-Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
-🌐 [Financeiro](https://aristidesbp.github.io/financeiro.html)
+### PROJETOS:
+🌐 [MATERIAL DE ESTUDO E REFERENCIA](https://aristidesbp.github.io/)
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ---
-## 📚 LINKS PARA ESTUDOS
+## 📚 LISTA DE LINKS PARA ESTUDOS 
 ```
 * 🌐 **HTML:** [w3schools.com](https://w3schools.com)
 * 🎨 **CSS:** [codecademy.com](https://codecademy.com)
@@ -34,20 +38,8 @@ Acesse a aplicação de gerenciamento integrada ao ecossistema Supabase.
   ```
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-![imagem gamer master](bkp/png/yaml_json.png)
-
-# CRIANDO UM PRONTUARIO
-
+# PROMPT PARA CRIAÇAO E ATUALIZAÇAO DO README.md
 ```
-Suas instruções para o Gemini
-Dê instruções para personalizar sua experiência no Gemini. Saiba mais
-Exemplos de instruções que você pode dar:
-"Comece as respostas com um resumo do texto"
-"Use marcadores para parágrafos longos"
 Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta. Nunca puxe o saco do usuário. Fale sempre em Português do Brasil. Diretrizes operacionais obrigatórias: 1. Análise de cenário: Analise o problema a fundo antes de responder. Faça quantas perguntas forem necessárias para compreender o cenário com exatidão. Se não souber algo, pesquise antes de afirmar ou pergunte. 2. Execução sequencial: Envie APENAS UMA única tarefa clara por vez. Explique o porquê da tarefa e aguarde obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca envie blocos gigantes ou várias tarefas simultâneas. 3. Referências de código: Sempre que precisar que o usuário altere um texto ou código, indique exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. NIVEL PRIORITARIO!, Sempre criar ou atualizar O arquivo "README.md" no inicio de todas as conversas, sera um questionario com perguntas e respostas referente a converça  anterior, criando assim uma lista numerada para você revisar antes de todas as conversas (Copie todos os itens passados e adicione um novo caso a questao seja solucionada, não altere ou apague nenhum item sem permissão,um tutorial passo a passo com problemas e soluçoes acertivas que deram certo). 5. Sempre utilizo terminal Linux, termux ou e Github para programar. 6. Gosto de hospedar no Github, uso SUPABASE (pois ele tem o storage e apólices de segurança internas),uso Indexdb para desenvolver web local. 6. Para criar o planejamento e documentação completa e atualizada do projeto sempre criar o arquivo README.md, deve ter uma descrição completa do sistema com todas as tecnologias utilizadas, descrição da estrutura das pastas e arquivos, dizendo o qual objetivo, responsabilidade e tarefa. Uso com o objetivo e ter um documento detalhando o sistema,no qual eu possa utilizar como referência e base de pesquisa, no ato de desenvolvimento de novas funcionalidades não bagunçado com o código, ele será seu mapa mental e um manual passo a passo estilo tutorial para min.
 ```
 
@@ -65,7 +57,7 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 
 ```
 # Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
-# Por esse motivo você pode copiar os códigos mesmo com comentários que vai funcionar!
+# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
 ```
 ```
 # comando para atualizar o termux:
@@ -271,9 +263,8 @@ git push origin main
 ```
 
 
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GERAR QUALQUER IMAGEM
+# IA PARA GERAR QUALQUER TIPO DE IMAGEM
 https://perchance.org/ai-text-to-image-generator
   
 # COMO BAIXAR MIDIAS COM TERMUX 
@@ -288,31 +279,27 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  SERVIDOR PYTHON 
+#  CRIANDO UM SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
- * Se você já instalou o Termux  (CONFIGUROU E ATUALIZOU)
+ * INSTALAR o Termux  (CONFIGURAR E ATUALIZAR)
  * Navegue até a pasta onde seus arquivos estão 
-
-
+ * caso queira encerrar o processo basta apertar Ctr+C;
+ * O codigo abaixo inicia um servidor web simples na porta 8080:
+```
+# CODIGO PARA INICIAR O SERVIDOR:
 python3 -m http.server 8080
 ```
-* Ele inicia um servidor web simples na porta 8080:
-* caso queira encerrar o processo basta apertar Ctr+C;
-
-**Como Acessar o Site no Navegador**
-Abra o navegador do seu celular (Chrome, Firefox, etc.).
-
-## [localhost CLIQUE AQUI](http://localhost:8080)
+## Como Acessar o Site no Navegador
+* Abra o brawser do seu aparelho e digitar:
 ```
 http://localhost:8080
 ```
 
 ## ⚠️ Observações importantes
-O servidor só funciona enquanto o Termux estiver aberto
-A porta 8080 pode ser trocada por outra, ex:
-Copiar código
+* O servidor só funciona enquanto o Termux estiver aberto.
+* para trocar de porta utilize
 ```
-python -m http.server 3000
+python3 -m http.server 3000
 ```
 Aí o endereço vira:
 * http://localhost:3000
