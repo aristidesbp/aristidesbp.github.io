@@ -973,7 +973,7 @@ WITH CHECK (
 );
 
 ``` 
-*OBSERVAÇÃO:* crie um usuario e veja se foi cadastrado de forma altomatica na tabela entidades.
+**OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
 ## supabase_config.js
 ```
