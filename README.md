@@ -429,6 +429,17 @@ while contador > 0:
     contador -= 1
 
 
+# Módulo de Introdução: Funções
+def calcular_area_retangulo(largura, altura):
+    """Calcula a área de um retângulo com base nos parâmetros fornecidos."""
+    area = largura * altura
+    return area
+
+# Chamada da função com valores fixos
+resultado = calcular_area_retangulo(5, 10)
+print(f"A área calculada é: {resultado}")
+
+
 ```
 ```
 # Executar
