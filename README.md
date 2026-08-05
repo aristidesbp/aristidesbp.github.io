@@ -47,7 +47,7 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  CURSO DE TERMUX ( Terminal linux para android):
  
 ## Download do aplicativo direto no git
@@ -380,7 +380,7 @@ ollama phi3
 ```
 
 
-# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CURSO DE PYTHON:
 ## 🟥🟥🟥 INTRODUÇÃO BASICA 
 ```
@@ -417,7 +417,16 @@ else:
     print("Acesso permitido: Maior de idade.")
 
 
+# Módulo de Introdução: Laços de Repetição
+print("--- Usando FOR ---")
+for i in range(1, 6):
+    print(f"Contador: {i}")
 
+print("--- Usando WHILE ---")
+contador = 3
+while contador > 0:
+    print(f"Regressiva: {contador}")
+    contador -= 1
 
 
 ```
