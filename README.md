@@ -10,12 +10,11 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 ---
 ### PROJETOS:
-🌐 [MATERIAL DE ESTUDO E REFERENCIA](https://aristidesbp.github.io/)
+🌐 [MEUS TUTORIAIS](https://aristidesbp.github.io/)
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 
 ---
 ## 📚 LISTA DE LINKS PARA ESTUDOS 
@@ -381,6 +380,52 @@ ollama phi3
 ```
 
 
+# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CURSO DE PYTHON:
+## 🟥🟥🟥 INTRODUÇÃO BASICA 
+```
+# criar uma pasta dedicada ,acessar e verifique a versão do Python instalada
+mkdir -p curso_python && cd curso_python && python3 --version
+```
+```
+# Para criar um arquivo ou abrilo
+nano python_basico.py
+```
+```
+# Codigo para o arquivo python_basico.py
+# cola(mouse+bt_direito), salvar (Crt+s), sair (Crt+x)
+
+# Módulo de Introdução: Variáveis e Tipos de Dados
+nome = "Aristides"
+idade = 35
+altura = 1.75
+ativo = True
+
+print("Nome:", nome, type(nome))
+print("Idade:", idade, type(idade))
+print("Altura:", altura, type(altura))
+print("Ativo:", ativo, type(ativo))
+
+# Módulo de Introdução: Condicionais
+idade = 20
+
+if idade < 18:
+    print("Acesso negado: Menor de idade.")
+elif idade == 18:
+    print("Atenção: Exatamente 18 anos.")
+else:
+    print("Acesso permitido: Maior de idade.")
+
+
+
+
+
+```
+```
+# Executar
+python3 python_basico.py
+```
+
 
 
 # 🟥🟥🟥 python3 organizar.py
@@ -477,9 +522,7 @@ if __name__ == "__main__":
     print("Processo concluído!")
 
 ```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  python limpar_duplicados.py
+## 🟥🟥🟥 python3 limpar_duplicados.py
 
 ```
 import hashlib
@@ -592,8 +635,8 @@ if __name__ == "__main__":
 
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# extrair.py
+
+# 🟥🟥🟥  python3 extrair.py
 
 ```
 import os
