@@ -74,6 +74,16 @@ tailwind.config = {
 
  <!-- CONTAINER ONDE A NAVBAR SERÁ INJETADA -->
     <div id="navbar-container"></div>
+      <!-- IMPORTAÇÃO DO SCRIPT DA NAVBAR -->
+    <script src="navbar.js"></script>
+ <!-- INICIALIZAÇÃO ESPECÍFICA DA PÁGINA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            renderizarNavbar('entidades');
+        });
+    </script>
+    
 
     <!-- CONTEÚDO DA PÁGINA -->
     <main class="pt-24 px-4 sm:px-8">
@@ -567,16 +577,9 @@ function limparFiltros() {
 
     </main>
 
-    <!-- IMPORTAÇÃO DO SCRIPT DA NAVBAR -->
-    <script src="navbar.js"></script>
+  
 
-    <!-- INICIALIZAÇÃO ESPECÍFICA DA PÁGINA -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Renderiza a navbar definindo o valor ativo no <select> (ex: 'home')
-            renderizarNavbar('home');
-        });
-    </script>
+   
 
 </body>
 </html>
