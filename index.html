@@ -74,11 +74,65 @@ tailwind.config = {
 
  <!-- CONTAINER ONDE A NAVBAR SERÁ INJETADA -->
     <div id="navbar-container"></div>
+ <!-- IMPORTAÇÃO DO SCRIPT DA NAVBAR -->
+    <script src="navbar.js"></script>
 
     <!-- CONTEÚDO DA PÁGINA -->
     <main class="pt-24 px-4 sm:px-8">
-        <h1 class="text-2xl font-bold">Painel Inicial (Home)</h1>
-        <p>Bem-vindo ao sistema modularizado!</p>
+       <!-- CONTEÚDO DA PÁGINA -->
+    <main class="pt-24 px-4 sm:px-8 max-w-7xl mx-auto pb-12">
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Painel Inicial (Home)</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">Selecione abaixo o módulo que deseja acessar:</p>
+        </div>
+
+        <!-- GRADE DE MÓDULOS / LINKS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Módulo Financeiro -->
+            <a href="financeiro.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">payments</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Financeiro</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Controle de contas a pagar, receber e fluxo de caixa.</p>
+            </a>
+
+            <!-- Módulo Entidades -->
+            <a href="entidades.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">group</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Entidades</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Gerenciamento de clientes, fornecedores e parceiros.</p>
+            </a>
+
+            <!-- Módulo Estoque -->
+            <a href="estoque.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Estoque</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Controle de produtos, entradas, saídas e saldos.</p>
+            </a>
+
+            <!-- Módulo PDV -->
+            <a href="pdv.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">point_of_sale</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">PDV — Frente de Caixa</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Ambiente de vendas rápidas e emissão de cupom.</p>
+            </a>
+
+            <!-- Módulo Configurações -->
+            <a href="configuracoes.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">settings</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Configurações</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Parâmetros do sistema, perfis e preferências.</p>
+            </a>
+        </div>
     </main>
 
     <!-- IMPORTAÇÃO DO SCRIPT DA NAVBAR -->
@@ -87,10 +141,15 @@ tailwind.config = {
     <!-- INICIALIZAÇÃO ESPECÍFICA DA PÁGINA -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Renderiza a navbar definindo o valor ativo no <select> (ex: 'home')
-            renderizarNavbar('home');
+            // Renderiza a navbar limpa sem o antigo select
+            renderizarNavbar();
         });
     </script>
+    </main>
+
+   
+
+   
 
 </body>
 </html>
