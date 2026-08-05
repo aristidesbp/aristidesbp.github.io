@@ -19,7 +19,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 ---
 ## 📚 LISTA DE LINKS PARA ESTUDOS 
-```
+
 * 🌐 **HTML:** [w3schools.com](https://w3schools.com)
 * 🎨 **CSS:** [codecademy.com](https://codecademy.com)
 * ⚡ **JavaScript:** [freecodecamp.org](https://freecodecamp.org)
@@ -34,8 +34,9 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 🤖 **IA/ML:** [coursera.org](https://coursera.org)
 * 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
 * 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
-* 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO))
-  ```
+* 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO)
+* 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
+
 
 
 # PROMPT PARA CRIAÇAO E ATUALIZAÇAO DO README.md
@@ -48,7 +49,7 @@ Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  TERMINAL LINUX PARA CELULAR ANDROID (TERMUX)
+#  CURSO DE TERMUX ( Terminal linux para android):
  
 ## Download do aplicativo direto no git
 * Acesse o link oficial no Github não use da Play Store!
@@ -68,7 +69,7 @@ pkg update && pkg upgrade -y
 termux-setup-storage
 ```
 ```
-## INSTALE AS FERRAMENTAS BÁSICAS PARA A PROGRAMAÇÃO:
+## EXEMPLO DE COMO INSTALE AS FERRAMENTAS 
 pkg install git -y
 pkg install nano -y
 pkg install openssh -y
@@ -82,6 +83,10 @@ ls
 ```
 # ver as pastas ocultas (-a) do diretorio
 ls -a
+```
+```
+# ver pastas e arquivos
+tree
 ```
 ```
 # basta adicionar a flag -d (que significa  apenas diretórios):
@@ -100,10 +105,6 @@ find . -type d
 find . -maxdepth 2 -type d
 ```
 ```
-# ver pastas e arquivos
-tree
-```
-```
 # ir para o diretorio
 cd nome_do_diretorio
 ```
@@ -120,14 +121,13 @@ cd
 mkdir novo_projeto
 ```
 ``` 
-nano teste.txt 
-# abre o arquivo teste.txt 
-# obs: ele cria caso não exista
+# COMO CRIAR OU ABRIR ARQUIVOS COM EDITOR DE TEXTO (nome.tipo)
 # Ctrl+S  para salvar
 # Crtl+X  para sair
+nano nome_do_arquivo.txt 
 ```
 ```
-mv teste.txt ./repositorios_git 
+mv arquivo.tipo ./pasta_destino 
 # mover pasta ou arquivo (./pasta_destino)
 ```
 ```
@@ -139,8 +139,8 @@ clear
 rm -rf nome_da_pasta
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  TERMUX+ GIT+ GITHUB
+
+# 🟥🟥🟥 TERMUX+ GIT+ GITHUB
 ```
 # verificar se o git está instalado 
 git --version
@@ -198,8 +198,8 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 # Altere a URL do repositório de HTTPS para SSH com o comando:
 git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+
+# 🟥🟥🟥 GITHUB : BAIXAR E ENVIAR ARQUIVOS 
 
 ```
 # clonar um repositório
@@ -261,13 +261,8 @@ git commit -m "DESCRIÇÃO_chekPointe"
 git push origin main
 
 ```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# IA PARA GERAR QUALQUER TIPO DE IMAGEM
-https://perchance.org/ai-text-to-image-generator
   
-# COMO BAIXAR MIDIAS COM TERMUX 
+# 🟥🟥🟥 COMO BAIXAR MIDIAS COM TERMUX 
 ```
 pkg update && pkg upgrade
 pkg install python ffmpeg
@@ -278,19 +273,22 @@ python3 -m pip install --upgrade yt-dlp
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  CRIANDO UM SERVIDOR PYTHON 
+
+# 🟥🟥🟥 CRIANDO UM SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * INSTALAR o Termux  (CONFIGURAR E ATUALIZAR)
  * Navegue até a pasta onde seus arquivos estão 
  * caso queira encerrar o processo basta apertar Ctr+C;
  * O codigo abaixo inicia um servidor web simples na porta 8080:
+   
 ```
 # CODIGO PARA INICIAR O SERVIDOR:
 python3 -m http.server 8080
 ```
+
 ## Como Acessar o Site no Navegador
 * Abra o brawser do seu aparelho e digitar:
+  
 ```
 http://localhost:8080
 ```
@@ -298,25 +296,28 @@ http://localhost:8080
 ## ⚠️ Observações importantes
 * O servidor só funciona enquanto o Termux estiver aberto.
 * para trocar de porta utilize
+  
 ```
 python3 -m http.server 3000
 ```
-Aí o endereço vira:
-* http://localhost:3000
+
+* Abra o brawser do seu aparelho e digitar:
+  
+```
+ http://localhost:3000
+``` 
 
 ## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
+* Vai aparecer algo como: inet 192.168.1.105
+* No navegador do outro dispositivo, acesse: http://192.168.1.105:8080
+  
 ```
 # Descubra o IP do celular no Termux:
-```
 ip addr show wlan0
 ```
-Vai aparecer algo como:
-* inet 192.168.1.105
-No navegador do outro dispositivo, acesse:
-* http://192.168.1.105:8080
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
+
+# 🟥🟥🟥 COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
 ## instalar linux (terminal basico)
 ```
 # instalador do Linux
@@ -338,8 +339,8 @@ proot-distro login ubuntu
 # atualizar 
 apt update && apt upgrade -y
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
+
+# 🟥🟥🟥 COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar buscador
 ```
 # instalando o buscador
@@ -366,21 +367,23 @@ ollama run phi3
 ollama run deepsek-code:1.36
 ```
 ```
+# Iniciar,esse código vai ficar rodando em segundo plano.
+# Abra uma nova guia ,arraste para direita e abra uma "NEW SESSION"
 ollama serve
 ```
-* ess código vai ficar rodando em segundo plano,
-* arraste para direita e abra uma "NEW SESSION"
-
-
-## em uma nova Session
 ```
-# entrar no Ubuntu
+# em uma nova Session entrar no Ubuntu
 proot-distro login ubuntu
 ```
+```
+# ativar modelo de linguagem básico
+ollama phi3
+```
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  python3 organizar.py
+
+
+# 🟥🟥🟥 python3 organizar.py
 ```
 
 import os
