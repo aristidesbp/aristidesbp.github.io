@@ -862,6 +862,119 @@ Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
+# SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
+``` 
+-- =========================================================================
+-- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
+-- =========================================================================
+
+-- CRIAR TABELA: entidades
+-- Depende apenas do esquema 'auth.users' nativo do Supabase.
+
+CREATE TABLE public.entidades (
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    user_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
+    nome_completo text,
+    avatar_url text,
+    bio text,
+  cpf text,
+  data_nascimento date,
+  email text,
+  telefone text,
+  tipo_acesso text DEFAULT 'cliente'::text,
+  tipo_entidade text DEFAULT 'cliente'::text,
+  status_entidade text DEFAULT 'ativo'::text,
+  avaliacao integer DEFAULT 5,
+  cep text,
+  logradouro text,
+  numero text,
+  bairro text,
+  cidade text,
+  estado character varying,
+
+    
+    CONSTRAINT entidades_pkey PRIMARY KEY (id),
+    CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) 
+        REFERENCES auth.users(id) ON DELETE CASCADE
+);
+
+
+
+-- =========================================================================
+-- FUNÇÃO TRIGGER PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
+-- =========================================================================
+
+-- 1. Criação ou atualização da função que será executada pelo gatilho
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger 
+LANGUAGE plpgsql
+-- SECURITY DEFINER garante que a função execute com privilégios de superusuário,
+-- contornando restrições de permissão do usuário anônimo durante o cadastro.
+SECURITY DEFINER
+-- Boa prática de segurança: define explicitamente o search_path para evitar ataques de injeção
+SET search_path = public
+AS $$
+BEGIN
+    -- Insere o novo usuário na tabela espelho
+    -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
+    INSERT INTO public.entidades (
+        user_id, 
+        nome_completo, 
+        avatar_url, 
+        bio
+       
+    )
+    VALUES (
+        new.id,
+        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), -- Tenta ler 'full_name' ou 'name'
+        new.raw_user_meta_data->>'avatar_url',
+        NULL -- Bio inicia nula para o usuário preencher posteriormente na plataforma
+    );
+
+    -- O retorno 'new' é obrigatório em triggers do tipo AFTER INSERT
+    RETURN new;
+END;
+$$;
+
+-- 2. Criação do gatilho (Trigger) associado à tabela auth.users
+-- Garante que nenhum gatilho duplicado com o mesmo nome seja criado
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW 
+    EXECUTE FUNCTION public.handle_new_user();
+
+
+-- =========================================================================
+-- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: entidades
+-- =========================================================================
+
+-- 1. Garante que o Row Level Security está ativado na tabela
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
+DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
+
+-- 3. Criação da política de acesso estrita
+CREATE POLICY "User Propietario" 
+ON public.entidades
+AS PERMISSIVE
+FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
+TO authenticated -- Aplica-se apenas a usuários logados no sistema
+USING (
+    -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
+    user_id = auth.uid()
+) 
+WITH CHECK (
+    -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
+    user_id = auth.uid()
+);
+
+``` 
+*OBSERVAÇÃO:* crie um usuario e veja se foi cadastrado de forma altomatica na tabela entidades.
+
 ## supabase_config.js
 ```
 // Inicialização do Supabase
@@ -1078,117 +1191,6 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 
 
-# SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
-``` 
--- =========================================================================
--- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
--- =========================================================================
-
--- CRIAR TABELA: entidades
--- Depende apenas do esquema 'auth.users' nativo do Supabase.
-
-CREATE TABLE public.entidades (
-    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    user_id uuid NOT NULL, -- Alterado para NOT NULL assumindo que todo espelho precisa de um auth válido
-    nome_completo text,
-    avatar_url text,
-    bio text,
-  cpf text,
-  data_nascimento date,
-  email text,
-  telefone text,
-  tipo_acesso text DEFAULT 'cliente'::text,
-  tipo_entidade text DEFAULT 'cliente'::text,
-  status_entidade text DEFAULT 'ativo'::text,
-  avaliacao integer DEFAULT 5,
-  cep text,
-  logradouro text,
-  numero text,
-  bairro text,
-  cidade text,
-  estado character varying,
-
-    
-    CONSTRAINT entidades_pkey PRIMARY KEY (id),
-    CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) 
-        REFERENCES auth.users(id) ON DELETE CASCADE
-);
-
-
-
--- =========================================================================
--- FUNÇÃO TRIGGER PARA SINCRONIZAÇÃO DE USUÁRIOS (AUTH -> PUBLIC)
--- =========================================================================
-
--- 1. Criação ou atualização da função que será executada pelo gatilho
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger 
-LANGUAGE plpgsql
--- SECURITY DEFINER garante que a função execute com privilégios de superusuário,
--- contornando restrições de permissão do usuário anônimo durante o cadastro.
-SECURITY DEFINER
--- Boa prática de segurança: define explicitamente o search_path para evitar ataques de injeção
-SET search_path = public
-AS $$
-BEGIN
-    -- Insere o novo usuário na tabela espelho
-    -- Os operadores ->> extraem o texto de chaves específicas dentro do JSONB de metadados do Supabase
-    INSERT INTO public.entidades (
-        user_id, 
-        nome_completo, 
-        avatar_url, 
-        bio
-       
-    )
-    VALUES (
-        new.id,
-        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), -- Tenta ler 'full_name' ou 'name'
-        new.raw_user_meta_data->>'avatar_url',
-        NULL -- Bio inicia nula para o usuário preencher posteriormente na plataforma
-    );
-
-    -- O retorno 'new' é obrigatório em triggers do tipo AFTER INSERT
-    RETURN new;
-END;
-$$;
-
--- 2. Criação do gatilho (Trigger) associado à tabela auth.users
--- Garante que nenhum gatilho duplicado com o mesmo nome seja criado
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW 
-    EXECUTE FUNCTION public.handle_new_user();
-
-
--- =========================================================================
--- CONFIGURAÇÃO DE SEGURANÇA (RLS) VIA SQL - TABELA: entidades
--- =========================================================================
-
--- 1. Garante que o Row Level Security está ativado na tabela
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
-
--- 2. Remove a política antiga se ela já existir para evitar conflitos de duplicação
-DROP POLICY IF EXISTS "User Propietario" ON public.entidades;
-
--- 3. Criação da política de acesso estrita
-CREATE POLICY "User Propietario" 
-ON public.entidades
-AS PERMISSIVE
-FOR ALL -- Aplica-se a SELECT, INSERT, UPDATE e DELETE
-TO authenticated -- Aplica-se apenas a usuários logados no sistema
-USING (
-    -- Linhas existentes só podem ser lidas/modificadas se o ID do autor for igual ao ID do usuário logado
-    user_id = auth.uid()
-) 
-WITH CHECK (
-    -- Novas inserções ou atualizações só são permitidas se o ID gravado for idêntico ao ID do usuário logado
-    user_id = auth.uid()
-);
-
-``` 
 
 
 # EXEMPLO DE SQL PARA CRIAR TABELAS 
