@@ -1,6 +1,0 @@
-{
-  "name": "ERP ABP - Gestão Integrada",
-  "description": "Sistema ERP com gestão de Entidades, Estoque, Financeiro, PDV e Configurações",
-  "requestFramePermissions": ["camera"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
