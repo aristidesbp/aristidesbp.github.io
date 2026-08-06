@@ -862,6 +862,8 @@ Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
 ``` 
 -- =========================================================================
@@ -975,15 +977,24 @@ WITH CHECK (
 ``` 
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # supabase_config.js
 ```
-// Inicialização do Supabase
-const supabaseUrl = 'https://mvxwxpwgoukhinqfuppz.supabase.co';
+// =================================================================
+// 1. CONEXÃO COM O SUPABASE
+// =================================================================
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlcnJ5eXFnbGZuZnhqemVybmZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MDQ2MzMsImV4cCI6MjEwMTQ4MDYzM30.x8Jd49NeiuYqm9AReTph-y3KIGN6O8z0CejMhDu6Gpw';
+const supabaseUrl = 'https://derryyqglfnfxjzernfc.supabase.co';
 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHd4cHdnb3VraGlucWZ1cHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE5MzAsImV4cCI6MjA5ODU3NzkzMH0.vudMl-45gMMEg6EJpM8BZa0rC6k7YiAdqtxuUUB_OWM';
 
+// Instância global do cliente Supabase
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const est_supabase = _supabase; // Compatibilidade com módulo de estoque
+
+let usuarioLogadoId = null;
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ## login.html
 ```
@@ -1178,7 +1189,10 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 </body>
 </html>
 
-``` 
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # index.html
 ```
 <!DOCTYPE html>
