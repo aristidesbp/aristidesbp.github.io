@@ -1531,6 +1531,85 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
+# Prevenção de Erros em handle_new_user(): 
+* Adicionada a instrução ON CONFLICT para evitar erros em execuções repetidas durante testes ou falhas de rede.
+```
+-- 1. Criação automática de perfil ao cadastrar usuário
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+    INSERT INTO public.entidades (user_id, nome_completo, avatar_url, bio)
+    VALUES (
+        NEW.id,
+        coalesce(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name'),
+        NEW.raw_user_meta_data->>'avatar_url',
+        NULL
+    )
+    ON CONFLICT (user_id) DO NOTHING;
+    
+    RETURN NEW;
+END;
+$function$;
+
+-- 2. Baixa de estoque e registro de histórico ao inserir item
+CREATE OR REPLACE FUNCTION public.handle_item_venda_inserido()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+DECLARE
+    v_user_id uuid;
+BEGIN
+    -- Subtrai a quantidade vendida do estoque do produto
+    UPDATE public.produtos
+    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
+    WHERE id = NEW.produto_id;
+
+    -- Busca o ID do usuário dono da venda
+    SELECT user_id INTO v_user_id FROM public.vendas WHERE id = NEW.venda_id;
+
+    -- Grava o histórico da movimentação de saída
+    INSERT INTO public.movimentacoes_estoque (user_id, produto_id, tipo, quantidade, motivo)
+    VALUES (coalesce(v_user_id, auth.uid()), NEW.produto_id, 'saida', NEW.quantidade, 'venda');
+
+    RETURN NEW;
+END;
+$function$;
+
+-- 3. Lançamento financeiro com proteção contra duplicidade
+CREATE OR REPLACE FUNCTION public.handle_venda_concluida()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+    -- Gera a receita apenas se for uma nova venda concluída OU se o status mudou para 'concluida'
+    IF NEW.status = 'concluida' AND (TG_OP = 'INSERT' OR OLD.status IS DISTINCT FROM 'concluida') THEN
+        INSERT INTO public.financas (user_id, entidade_id, descricao, valor_total, tipo, categoria, status_lancamento)
+        VALUES (
+            NEW.user_id, 
+            NEW.entidade_id, 
+            'Venda PDV #' || substr(NEW.id::text, 1, 8),
+            NEW.valor_total, 
+            'receita', 
+            'Vendas', 
+            'finalizado'
+        );
+    END IF;
+    
+    RETURN NEW;
+END;
+$function$;
+```
+
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 1. Verificar todas as Políticas de Segurança (RLS)
 ```
