@@ -1,9 +1,26 @@
 // ── Inicialização ─────────────────────────────────────────────────────
+
 function init() {
-    alternarAba('entidades'); // garante aba inicial correta
+    // alternarAba('entidades'); // COMENTADO: Esta função não existe neste arquivo e gera erro no console.
     loadDashboard();
     loadEntidades();
 }
+
+function ent_alternarSubAba(alvo) {
+    const form = document.getElementById('ent-painel-formulario');
+    const lista = document.getElementById('ent-painel-listagem');
+    
+    if (alvo === 'formulario') {
+        form.classList.remove('hidden');
+        lista.classList.add('hidden');
+    } else {
+        lista.classList.remove('hidden');
+        form.classList.add('hidden');
+    }
+}
+
+
+
 
 // ── Drop Zone de Foto (Entidades) ─────────────────────────────────────
 function configurarDropZone(dropId, inputId, txtId) {
