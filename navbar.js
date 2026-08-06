@@ -97,7 +97,13 @@ function renderizarNavbar() {
 // =================================================================
 // 5. INICIALIZAÇÃO AUTOMÁTICA
 // =================================================================
+
 document.addEventListener('DOMContentLoaded', async () => {
-    // Valida autenticação antes de liberar a renderização da página
     await verificarLogin();
+    renderizarNavbar();
+    init();
 });
+
+
+
+
