@@ -1047,7 +1047,10 @@ tailwind.config = {
 
 // ── Conexão Supabase ──────────────────────────────────────────────────
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZHlxY3Jhd3Btd2ptdGtkaWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTUxMzAsImV4cCI6MjEwMTU5MTEzMH0.iyOsri9yjNrUzDAMF2EuDRGhEZznWRliN7GE_yuRiZ0';
+
+    
 const supabaseUrl = 'https://fwdyqcrawpmwjmtkdiba.supabase.co';
+    
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // ── FIX BUG 2: est_supabase estava comentado — definido aqui ──────────
@@ -1207,8 +1210,9 @@ function ent_alternarSubAba(subAba) {
         btnForm.classList.add(...inativo);
     }
 }
-</script>
-<script>
+
+
+    
 // ==========================================
 // MÓDULO DE ESTOQUE (estoque.js)
 // ==========================================
@@ -1605,8 +1609,9 @@ async function est_excluirSelecionados() {
         }
     }
 }
-</script>
-<script>
+
+
+    
 // ── Inicialização ─────────────────────────────────────────────────────
 function init() {
     alternarAba('entidades'); // garante aba inicial correta
