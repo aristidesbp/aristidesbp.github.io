@@ -1945,8 +1945,8 @@ function ent_alternarSubAba(subAba) {
 }
 </script>
 
-```
-```
+
+
 <!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
   <div class="card mb-8 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium space-y-6">
@@ -2212,8 +2212,7 @@ function ent_alternarSubAba(subAba) {
 }
 </script>
 
-```
-```
+
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
   <!-- Dashboard do Estoque -->
@@ -2759,8 +2758,6 @@ async function est_excluirSelecionados() {
 
 
 
-```
-```
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
 
@@ -3249,8 +3246,9 @@ function limparFiltros() {
 }
 </script>
 
-```
-```
+
+
+
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
   <!-- Dashboard -->
@@ -3695,8 +3693,7 @@ function fin_mostrarNomeArquivo(input, idCampo) {
 }
 </script>
 
-```
-```
+
 <!-- ════════════ ABA: PDV ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
   <!-- Dashboard -->
@@ -4343,8 +4340,7 @@ async function pdv_excluirVenda(vendaId) {
 }
 </script>
 
-```
-```
+
 </div><!-- fim content-panels -->
 </div><!-- fim p-4 sm:p-8 -->
 </main>
