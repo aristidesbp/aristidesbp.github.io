@@ -1568,7 +1568,54 @@ WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
 -- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
 -- ou ele apagará TODOS os usuários da tabela inteira!
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# 1. Verificar todas as Políticas de Segurança (RLS)
+```
+SELECT 
+    schemaname AS esquema,
+    tablename AS tabela,
+    policyname AS nome_da_politica,
+    roles AS papeis_aplicados,
+    cmd AS comando,
+    qual AS regra_using,
+    with_check AS regra_with_check
+FROM 
+    pg_policies
+ORDER BY 
+    schemaname, 
+    tablename;
+```
+# 2. Verificar todas as Funções (Functions)
+```
+SELECT 
+    routine_schema AS esquema,
+    routine_name AS nome_da_funcao,
+    data_type AS tipo_de_retorno
+FROM 
+    information_schema.routines
+WHERE 
+    routine_schema NOT IN ('pg_catalog', 'information_schema')
+    AND routine_type = 'FUNCTION'
+ORDER BY 
+    routine_schema, 
+    routine_name;
+```
+# 3. Verificar todas as Triggers
+```
+SELECT 
+    event_object_schema AS esquema,
+    event_object_table AS tabela,
+    trigger_name AS nome_da_trigger,
+    action_timing AS momento,
+    event_manipulation AS evento,
+    action_statement AS acao_executada
+FROM 
+    information_schema.triggers
+ORDER BY 
+    event_object_schema, 
+    event_object_table, 
+    trigger_name;
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ERP-MONOLITIOC (HTML.CSS E JS)
