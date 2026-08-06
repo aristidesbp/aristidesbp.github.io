@@ -2607,6 +2607,47 @@ async function pdv_excluirVenda(vendaId) {
         alert("Erro ao excluir venda: " + error.message);
     }
 }
+
+
+
+
+    /**
+ * Realiza o upload de um arquivo para o bucket 'arquivos' do Supabase Storage
+ * e retorna a sua URL pública para salvar no banco de dados.
+ * 
+ * @param {File} file - Objeto de arquivo do input HTML (e.g., input.files[0])
+ * @returns {Promise<string>} URL pública do arquivo enviado
+ */
+async function enviarArquivoParaStorage(file) {
+    try {
+        // Extrai a extensão do arquivo original
+        const extensao = file.name.split('.').pop();
+        
+        // Gera um nome único de arquivo usando timestamp e hash aleatório
+        const nomeUnico = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${extensao}`;
+        const caminhoArquivo = `uploads/${nomeUnico}`;
+
+        // 1. Envia o arquivo para o bucket 'arquivos'
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('arquivos')
+            .upload(caminhoArquivo, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (uploadError) throw uploadError;
+
+        // 2. Obtém a URL pública gerada
+        const { data: urlData } = supabase.storage
+            .from('arquivos')
+            .getPublicUrl(caminhoArquivo);
+
+        return urlData.publicUrl;
+    } catch (error) {
+        console.error('Erro no upload para o Supabase Storage:', error.message);
+        throw error;
+    }
+}
 </script>
 
 </body>
