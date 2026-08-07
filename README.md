@@ -316,7 +316,8 @@ ip addr show wlan0
 ```
 
 
-# 🟥🟥🟥 COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE
+# 🟥🟥🟥 COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE 
+* usaremos para compilar projetos do Google AI Studio
 ## instalar linux (terminal basico)
 ```
 # instalador do Linux
@@ -377,6 +378,10 @@ npm install @rollup/rollup-linux-arm64-gnu
 # iniciar servidor de desenvolvimento
 python3 run_linux.py
 
+```
+```
+# gerar pasta dist para producao
+npm run build
 ```
 ```
 # sair do Linux 
