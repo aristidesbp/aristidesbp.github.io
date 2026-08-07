@@ -347,6 +347,38 @@ cat /etc/os-release
 cd sdcard
 ```
 ```
+# limpar dependencias corrompidas e listar diretorio
+cd /root/erp && rm -rf node_modules package-lock.json && ls -la
+```
+```
+# instalar dependencias do projeto
+npm install
+```
+```
+# verificar origem do executavel do node
+which node
+```
+```
+# atualizar repositorios e instalar nodejs nativo do ubuntu
+apt update && apt install -y nodejs npm
+
+```
+```
+# verificar novo caminho do node e plataforma do sistema
+which node && node -e "console.log(process.platform)"
+
+```
+```
+# instalar dependência do rollup para linux arm64
+npm install @rollup/rollup-linux-arm64-gnu
+
+```
+```
+# iniciar servidor de desenvolvimento
+python3 run_linux.py
+
+```
+```
 # sair do Linux 
 exit
 ```
