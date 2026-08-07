@@ -331,7 +331,7 @@ proot-distro list
 proot-distro ubuntu
 ```
 ```
-# entrar no Ubuntu
+# ENTRANDO NO  LUNUX UBUNTU:
 proot-distro login ubuntu
 ```
 ```
@@ -341,6 +341,10 @@ apt update && apt upgrade -y
 ``` 
 # verificar informações do sistema instalado 
 cat /etc/os-release
+```
+```
+# pastas do celular
+cd sdcard
 ```
 ```
 # sair do Linux 
