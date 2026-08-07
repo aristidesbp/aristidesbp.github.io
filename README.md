@@ -338,6 +338,14 @@ proot-distro login ubuntu
 # atualizar 
 apt update && apt upgrade -y
 ```
+``` 
+# verificar informações do sistema instalado 
+cat /etc/os-release
+```
+```
+# sair do Linux 
+exit
+```
 
 # 🟥🟥🟥 COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar buscador
