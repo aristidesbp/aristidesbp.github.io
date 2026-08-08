@@ -376,7 +376,7 @@ npm install @rollup/rollup-linux-arm64-gnu
 ```
 ```
 # iniciar servidor de desenvolvimento
-python3 run_linux.py
+bun run dev
 
 ```
 ```
