@@ -1,0 +1,6 @@
+{
+  "name": "Tapiocaria Sabor & Arte",
+  "description": "Cardápio digital e sistema de pedidos online via WhatsApp para Tapiocaria Sabor & Arte.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
