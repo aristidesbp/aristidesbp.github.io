@@ -986,11 +986,7 @@ WITH CHECK (
     user_id = auth.uid()
 );
 
-``` 
-**OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
-# EXEMPLO DE SQL PARA CRIAR TABELAS 
-```
 -- =========================================================================
 -- SCRIPT DE CRIAÇÃO DE TABELAS E RELACIONAMENTOS (SUPABASE / POSTGRESQL)
 -- =========================================================================
@@ -1157,6 +1153,10 @@ CREATE TABLE public.itens_venda (
   CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
 );
 ```
+
+**OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
+
+
 # EXEMPLO DE COMO CRIAR AS FUNÇÕES
 ```
 -- =========================================================================
