@@ -1154,9 +1154,6 @@ CREATE TABLE public.itens_venda (
 );
 ```
 
-**OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
-
-
 # EXEMPLO DE COMO CRIAR AS FUNÇÕES
 ```
 -- =========================================================================
@@ -1649,6 +1646,7 @@ ORDER BY
     event_object_table, 
     trigger_name;
 ```
+**OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ERP-MONOLITIOC (HTML.CSS E JS)
