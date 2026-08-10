@@ -43,9 +43,49 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 Atue como um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta. Nunca puxe o saco do usuário. Fale sempre em Português do Brasil. Diretrizes operacionais obrigatórias: 1. Análise de cenário: Analise o problema a fundo antes de responder. Faça quantas perguntas forem necessárias para compreender o cenário com exatidão. Se não souber algo, pesquise antes de afirmar ou pergunte. 2. Execução sequencial: Envie APENAS UMA única tarefa clara por vez. Explique o porquê da tarefa e aguarde obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca envie blocos gigantes ou várias tarefas simultâneas. 3. Referências de código: Sempre que precisar que o usuário altere um texto ou código, indique exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. NIVEL PRIORITARIO!, Sempre criar ou atualizar O arquivo "README.md" no inicio de todas as conversas, sera um questionario com perguntas e respostas referente a converça  anterior, criando assim uma lista numerada para você revisar antes de todas as conversas (Copie todos os itens passados e adicione um novo caso a questao seja solucionada, não altere ou apague nenhum item sem permissão,um tutorial passo a passo com problemas e soluçoes acertivas que deram certo). 5. Sempre utilizo terminal Linux, termux ou e Github para programar. 6. Gosto de hospedar no Github, uso SUPABASE (pois ele tem o storage e apólices de segurança internas),uso Indexdb para desenvolver web local. 6. Para criar o planejamento e documentação completa e atualizada do projeto sempre criar o arquivo README.md, deve ter uma descrição completa do sistema com todas as tecnologias utilizadas, descrição da estrutura das pastas e arquivos, dizendo o qual objetivo, responsabilidade e tarefa. Uso com o objetivo e ter um documento detalhando o sistema,no qual eu possa utilizar como referência e base de pesquisa, no ato de desenvolvimento de novas funcionalidades não bagunçado com o código, ele será seu mapa mental e um manual passo a passo estilo tutorial para min.
 ```
 
-
-
-
+# JOGANDO COM IA
+```
+{
+  "prontuario_do_jogo": true,
+  "prontuario": [
+    {
+      "item": 1,
+      "protocolo": "Para mitigar a perda de contexto, leia o JSON anterior, confirme se a ação ocorreu, copie TODO este JSON no INÍCIO de toda resposta e adicione ao fim desta lista 'prontuario' um novo item numerado sequencialmente com o resumo compacto do turno atual (formando um livro da nossa história)."
+    },
+    {
+      "item": 2,
+      "comportamento": "Aja como um Mestre de RPG imparcial e realista. Narre as cenas com foco imersivo, administre as mecânicas de forma justa e apresente sempre 3 sugestões de ação numeradas ao final da resposta."
+    },
+    {
+      "item": 3,
+      "missao": {
+        "tempo": "Dia 1, 06:00",
+        "foco": "Templo da Deusa",
+        "objetivo": "Renascer e entender o novo mundo",
+        "patrocínio": "Deusa do Equilíbrio",
+        "recompensa": "Indefinida"
+      }
+    },
+    {
+      "item": 4,
+      "char": {
+        "nome": "Aristides",
+        "lv": 1,
+        "xp": "0/300",
+        "atrib": { "FOR": 10, "DES": 10, "CON": 10, "INT": 10, "SAB": 10, "CAR": 10 },
+        "stats": { "hp": "12/12", "fome": 0, "sono": 0 },
+        "prof": ["Alquimia", "Sobrevivência"],
+        "inv": ["Roupas rasgadas"],
+        "bg": "Acordou no templo após uma morte cômica. Afinidade zero com a deusa."
+      }
+    },
+    {
+      "item": 5,
+      "regras": "D&D5e: Testes de d20+Modificador vs CD (Fácil 10, Médio 15, Difícil 20). Mod=(Atrib-10)/2 arredondado para baixo. Sobrevivência: Turno=+30min, +1 fome/sono. Se fome/sono=100 desmaia e -10 HP. Combate: Iniciativa d20+DES, Ataque d20+Mod vs CA do inimigo. Crafting: Se tiver materiais e proficiência, teste INT ou DES vs CD do item. Narrativa: max 900 caracteres."
+    }
+  ]
+}
+```
 
 # 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  CURSO DE TERMUX ( Terminal linux para android):
@@ -846,18 +886,53 @@ if __name__ == "__main__":
 
 # PROJETOS COM O SUPABASE E GITHUB_PAGES (todos os arquivos estao na pasta raiz)
 ```
-# Vamos criar uma  arquitetura full-stack (frontend e backend) para a plataforma
-"ERP_ABP", um marketplace de venda de produtos e serviçõs comunitário, onde pessoas de
-uma mesma comunidade possam oferecer e administrar vendas produtos e serviços, com sertor administrativo completo sua empresa.
+# Vamos criar uma  arquitetura full-stack (frontend e backend) para a plataforma
+"AristidesBP", um marketplace de serviços comunitário, onde pessoas de
+uma mesma comunidade possam oferecer produtos e serviços, com sertor administrativo completo.
 
 * Hospedagem: github-pages
 * Banco de dados com o Supabase
-* Arquivos anexados serão tratados e armazenados no storage do supabase
-* controle de entidades (usuarios,clientes, fornecedores, parceiros,funcionarios, tec...)
-* Finaceiro (gerenciameto completoatraves de parcelas e automaçao de inclusoes automaticas entre tabelas e arquivos)
-* Pdv frente de loja para vendas locais
+* ERP para controle de seu negocio (entidades,produtos,serviços,financeiro,pdv,tarefas).
 
+# PAGINAS:
+index.html(Vitrine de Serviços - Pública/Híbrida):
+A) Hero Section: Título grande "Encontre profissionais de confiança na sua regiao", 
+com uma barra de busca centralizada grande (Input com ícone
+de lupa) e filtros rápidos (Pills/Badges) para categorias (Reformas,
+Aulas, Culinária).
+* Grid de Destaques: Utilize a (View SQL v_servicos_destaque & View SQL v_produtos_destaque) para renderizar
+cards.
+* Componente do Card: Deve conter a foto do serviço/produto (aspect-ratio 16/9),
+foto do prestador (avatar circular pequeno), título, preço estimado e,
+obrigatoriamente, a média de estrelas (ícone ⭐ + nota) que vem da View.
+Floating Action Button (Mobile): Um botão flutuante para "Anunciar" no
+canto inferior direito.
 
+B). Detalhes do Serviço (/servico/:id - Onde :id é Int8):
+Layout de Coluna Dupla (Desktop):
+* Esquerda: Galeria de fotos do serviço e descrição detalhada.
+* Direita (Sticky): Card do perfil do prestador (tabela profiles) com botão
+"Chamar no Chat" (CTA Primário) e botão "Favoritar" (ícone de coração
+outline/fill).
+* Seção de Prova Social: Lista de comentários vindos da tabela avaliacoes,
+exibindo nome do vizinho e a nota dada.
+
+C). Dashboard do Usuário (Área Protegida):
+* Sidebar ou Menu Superior: Links para "Meus Anúncios", "Favoritos" e
+"Mensagens".
+* Meus Anúncios: Tabela ou Lista de cards mostrando os serviços que o
+usuário cadastrou (tabela servicos), com opções de Editar/Excluir.
+* Chat Interno: Interface tipo WhatsApp Web. Lista de conversas à esquerda
+e área de chat à direita. Deve ler da tabela mensagens.
+Requisitos Arquiteturais e de Dados:
+- Conexão Supabase: O projeto DEVE respeitar o schema existente onde os IDs
+são numéricos (int8), não UUIDs nas rotas (ex: /servico/42).
+- Autenticação: Telas de Login/Registro limpas e centralizadas, usando o
+componente Auth do Supabase.
+* Componentização:
+Use Card, Badge, Avatar, Button e Dialog do Shadcn/UI.
+Crie um componente StarRating reutilizável para exibir as notas.
+Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
 
 ```
 
@@ -884,6 +959,9 @@ uma mesma comunidade possam oferecer e administrar vendas produtos e serviços, 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
+
+
+
 ``` 
 -- =========================================================================
 -- SCRIPT EXEMPLO DE CRIAÇÃO DE TABELA/FUNCTION/APOLICIE
@@ -993,7 +1071,9 @@ WITH CHECK (
     user_id = auth.uid()
 );
 
-
+```
+# EXEMPLO DE SQL PARA CRIAR TABELAS
+```
 -- =========================================================================
 -- SCRIPT DE CRIAÇÃO DE TABELAS E RELACIONAMENTOS (SUPABASE / POSTGRESQL)
 -- =========================================================================
@@ -1159,8 +1239,8 @@ CREATE TABLE public.itens_venda (
   CONSTRAINT itens_venda_venda_id_fkey FOREIGN KEY (venda_id) REFERENCES public.vendas(id),
   CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
 );
-```
 
+```
 # EXEMPLO DE COMO CRIAR AS FUNÇÕES
 ```
 -- =========================================================================
@@ -1465,83 +1545,6 @@ FOR ALL TO authenticated
 USING ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) )
 WITH CHECK ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) );
 ```
-# Prevenção de Erros em handle_new_user(): 
-* Adicionada a instrução ON CONFLICT para evitar erros em execuções repetidas durante testes ou falhas de rede.
-```
--- 1. Criação automática de perfil ao cadastrar usuário
-CREATE OR REPLACE FUNCTION public.handle_new_user()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
- SET search_path TO 'public'
-AS $function$
-BEGIN
-    INSERT INTO public.entidades (user_id, nome_completo, avatar_url, bio)
-    VALUES (
-        NEW.id,
-        coalesce(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name'),
-        NEW.raw_user_meta_data->>'avatar_url',
-        NULL
-    )
-    ON CONFLICT (user_id) DO NOTHING;
-    
-    RETURN NEW;
-END;
-$function$;
-
--- 2. Baixa de estoque e registro de histórico ao inserir item
-CREATE OR REPLACE FUNCTION public.handle_item_venda_inserido()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
- SET search_path TO 'public'
-AS $function$
-DECLARE
-    v_user_id uuid;
-BEGIN
-    -- Subtrai a quantidade vendida do estoque do produto
-    UPDATE public.produtos
-    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
-    WHERE id = NEW.produto_id;
-
-    -- Busca o ID do usuário dono da venda
-    SELECT user_id INTO v_user_id FROM public.vendas WHERE id = NEW.venda_id;
-
-    -- Grava o histórico da movimentação de saída
-    INSERT INTO public.movimentacoes_estoque (user_id, produto_id, tipo, quantidade, motivo)
-    VALUES (coalesce(v_user_id, auth.uid()), NEW.produto_id, 'saida', NEW.quantidade, 'venda');
-
-    RETURN NEW;
-END;
-$function$;
-
--- 3. Lançamento financeiro com proteção contra duplicidade
-CREATE OR REPLACE FUNCTION public.handle_venda_concluida()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
- SET search_path TO 'public'
-AS $function$
-BEGIN
-    -- Gera a receita apenas se for uma nova venda concluída OU se o status mudou para 'concluida'
-    IF NEW.status = 'concluida' AND (TG_OP = 'INSERT' OR OLD.status IS DISTINCT FROM 'concluida') THEN
-        INSERT INTO public.financas (user_id, entidade_id, descricao, valor_total, tipo, categoria, status_lancamento)
-        VALUES (
-            NEW.user_id, 
-            NEW.entidade_id, 
-            'Venda PDV #' || substr(NEW.id::text, 1, 8),
-            NEW.valor_total, 
-            'receita', 
-            'Vendas', 
-            'finalizado'
-        );
-    END IF;
-    
-    RETURN NEW;
-END;
-$function$;
-```
-
 
 # INSERINDO DADOS EM USUARIOS
 ```
