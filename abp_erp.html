@@ -506,6 +506,8 @@ function gerarPDF() {
 
 // ── CRUD de Entidades (COM TRATAMENTO RIGOROSO DE UPLOAD) ─────────────
 async function salvarEntidade() {
+          
+    const state = document.getElementById('f-estado').value;
     const btn = document.getElementById('btn-salvar');
     btn.disabled = true; 
     btn.innerText = 'Gravando...';
@@ -526,7 +528,8 @@ async function salvarEntidade() {
         const city       = document.getElementById('f-cidade').value;
         const state      = document.getElementById('f-estado').value;
         const fileFoto   = document.getElementById('f-foto').files[0];
-
+        
+        
         if (!nome) throw new Error("O Nome Completo é obrigatório.");
 
         let fotoUrlFinal = null;
@@ -559,11 +562,19 @@ async function salvarEntidade() {
         }
 
         // Montagem final do pacote de dados para o banco
-        const payload = {
+        /*const payload = {
             nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
             tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
             bairro, cidade: city, estado: state, user_id: usuarioLogadoId
+        };*/
+
+        const payload = {
+            nome_completo: nome, cpf, data_nascimento: nascimento, email, telefone,
+            tipo_entidade: tipo, status_entidade: status, cep, logradouro, numero,
+            bairro, cidade: city, estado: state, codigo_barras: codigoBarras || null, user_id: usuarioLogadoId
         };
+        
+
         
         // Atribui a foto apenas se ela foi gerada (nome compatível com o banco: foto_url)
         if (fotoUrlFinal) payload.foto_url = fotoUrlFinal;
