@@ -841,14 +841,15 @@ if __name__ == "__main__":
 # PROJETOS COM O SUPABASE E GITHUB_PAGES (todos os arquivos estao na pasta raiz)
 ```
 # Vamos criar uma  arquitetura full-stack (frontend e backend) para a plataforma
-"ERP_ABP", um marketplace de serviços  e venda de produtos comunitário, onde pessoas de
-uma mesma comunidade possam oferecer produtos e serviços, com sertor administrativo completo.
+"ERP_ABP", um marketplace de venda de produtos e serviçõs comunitário, onde pessoas de
+uma mesma comunidade possam oferecer e administrar vendas produtos e serviços, com sertor administrativo completo sua empresa.
 
 * Hospedagem: github-pages
 * Banco de dados com o Supabase
-* Modo offline com indexdb ou superior
-* Arquivos anexados serao tratados e armazenados no storage do supabase
-* ERP para controle de seu negocio (entidades,produtos,serviços,financeiro,pdv,tarefas).
+* Arquivos anexados serão tratados e armazenados no storage do supabase
+* controle de entidades (usuarios,clientes, fornecedores, parceiros,funcionarios, tec...)
+* Finaceiro (gerenciameto completoatraves de parcelas e automaçao de inclusoes automaticas entre tabelas e arquivos)
+* Pdv frente de loja para vendas locais
 
 
 
@@ -1296,18 +1297,6 @@ CREATE EVENT TRIGGER rls_auto_enable
 
 ```
 
-# EXEMPLO DE COMO APAGAR UMA FUNÇÃO
-
-```
--- =========================================================================
--- SCRIPT PARA REMOÇÃO DE FUNÇÃO DE EVENT TRIGGER
--- =========================================================================
-
--- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
--- também seja removido, evitando erros de objetos dependentes.
-DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
-```
-
 
 # EXEMPLO DE PROMPT PARA CRIAR VIEWS
 ```
@@ -1470,55 +1459,6 @@ FOR ALL TO authenticated
 USING ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) )
 WITH CHECK ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) );
 ```
-
-
-# INSERINDO DADOS EM USUARIOS
-```
-INSERT INTO public.entidades (id, nome, role)
-VALUES (
-  'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
-  'Nome do Usuário',              -- Nome que aparecerá no sistema
-  'psicopedagoga'                 -- Pode ser: 'psicopedagoga', 'supervisor' ou 'paciente'
-)
-ON CONFLICT (id) DO UPDATE 
-SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
- 
-```
-
-# UPDATE
-```
-UPDATE public.entidades
-SET 
-    nome = 'Novo Nome Corrigido',
-    role = 'supervisor' -- Pode alterar para o cargo desejado
-WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
-```
-
-#  LIST (Listar / Select)
-* Existem duas formas principais de listar: ver todos os usuários ou buscar um específico.
-###  A) Listar TODOS os usuários do sistema:
-```
-SELECT id, nome, role, created_at
-FROM public.entidades
-ORDER BY created_at DESC; -- Mostra os mais recentes primeiro
-```
-### Listar APENAS os pacientes (Filtrando por cargo):
-```
-SELECT nome, role 
-FROM public.entidades
-WHERE role = 'paciente';
-```
-
-## DELETAR 
-```
--- DELETE (Excluir / Apagar)
--- Apagar um usuário específico do sistema pelo seu ID
-DELETE FROM public.entidades
-WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
-
--- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
--- ou ele apagará TODOS os usuários da tabela inteira!
-```
 # Prevenção de Erros em handle_new_user(): 
 * Adicionada a instrução ON CONFLICT para evitar erros em execuções repetidas durante testes ou falhas de rede.
 ```
@@ -1597,6 +1537,57 @@ $function$;
 ```
 
 
+# INSERINDO DADOS EM USUARIOS
+```
+INSERT INTO public.entidades (id, nome, role)
+VALUES (
+  'COLE-AQUI-O-UUID-DO-USUARIO', -- O ID que você copiou
+  'Nome do Usuário',              -- Nome que aparecerá no sistema
+  'psicopedagoga'                 -- Pode ser: 'psicopedagoga', 'supervisor' ou 'paciente'
+)
+ON CONFLICT (id) DO UPDATE 
+SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
+ 
+```
+
+# UPDATE
+```
+UPDATE public.entidades
+SET 
+    nome = 'Novo Nome Corrigido',
+    role = 'supervisor' -- Pode alterar para o cargo desejado
+WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
+```
+
+#  LIST (Listar / Select)
+* Existem duas formas principais de listar: ver todos os usuários ou buscar um específico.
+###  A) Listar TODOS os usuários do sistema:
+```
+SELECT id, nome, role, created_at
+FROM public.entidades
+ORDER BY created_at DESC; -- Mostra os mais recentes primeiro
+```
+### Listar APENAS os pacientes (Filtrando por cargo):
+```
+SELECT nome, role 
+FROM public.entidades
+WHERE role = 'paciente';
+```
+
+## DELETAR 
+```
+-- DELETE (Excluir / Apagar)
+-- Apagar um usuário específico do sistema pelo seu ID
+DELETE FROM public.entidades
+WHERE id = 'COLE-AQUI-O-UUID-DO-USUARIO';
+
+-- ⚠️ ATENÇÃO: Nunca rode um DELETE sem o "WHERE", 
+-- ou ele apagará TODOS os usuários da tabela inteira!
+```
+
+
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # 1. Verificar todas as Políticas de Segurança (RLS)
@@ -1646,6 +1637,19 @@ ORDER BY
     event_object_table, 
     trigger_name;
 ```
+
+# EXEMPLO DE COMO APAGAR UMA FUNÇÃO
+
+```
+-- =========================================================================
+-- SCRIPT PARA REMOÇÃO DE FUNÇÃO DE EVENT TRIGGER
+-- =========================================================================
+
+-- O argumento 'CASCADE' garante que o Event Trigger associado a esta função 
+-- também seja removido, evitando erros de objetos dependentes.
+DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
+```
+
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
