@@ -1656,6 +1656,19 @@ ORDER BY
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
 
+# EXEMPLO DE COMO APAGAR TODAS AS FUNÇÕES
+```
+SELECT 
+    format('DROP FUNCTION IF EXISTS %I.%I(%s) CASCADE;', 
+           n.nspname, 
+           p.proname, 
+           pg_get_function_identity_arguments(p.oid)) AS comando_drop_gerado
+FROM pg_proc p
+JOIN pg_namespace n ON n.oid = p.pronamespace
+WHERE n.nspname = 'public'
+  AND p.prokind IN ('f', 'p');
+```
+
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
 
