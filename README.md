@@ -1668,6 +1668,21 @@ JOIN pg_namespace n ON n.oid = p.pronamespace
 WHERE n.nspname = 'public'
   AND p.prokind IN ('f', 'p');
 ```
+# COMO APAGAR TODAS AS TABELAS DO SUPABASE (destruir e recriar o schema public)
+```
+-- 1. Destrói o schema public e todos os seus objetos vinculados via CASCADE
+DROP SCHEMA public CASCADE;
+
+-- 2. Recria o schema public totalmente limpo
+CREATE SCHEMA public;
+
+-- 3. Restaura as permissões padrão necessárias para a API do Supabase operar
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO anon;
+GRANT ALL ON SCHEMA public TO authenticated;
+GRANT ALL ON SCHEMA public TO service_role;
+```
+
 
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
