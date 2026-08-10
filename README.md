@@ -1316,66 +1316,8 @@ DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
 Crie uma view chamada ver_servicos_destacados, ela deve listar os serviçõs com o nome da categoria e os detalhes do autor que esta na tabela de  "usuarios_espelho". Alem disso, deve calcular a media das notas (use 0 se nao houver) eo total de avaliações recebidas por cada serviço.
 
-conforme o schema abaixo:
-
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
-
-CREATE TABLE public.categorias (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  tipo_de_categoria text NOT NULL,
-  CONSTRAINT categorias_pkey PRIMARY KEY (id)
-);
-CREATE TABLE public.entidades (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  user_id uuid NOT NULL,
-  nome_completo text,
-  bio text,
-  avatar_url text,
-  CONSTRAINT entidades_pkey PRIMARY KEY (id),
-  CONSTRAINT entidades_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
-);
-CREATE TABLE public.servicos (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  titulo text NOT NULL,
-  descricao text,
-  categoria bigint,
-  preco_estimado numeric,
-  preco_detalhe text,
-  foto_url text,
-  criado_por_usuario bigint,
-  terceiro boolean DEFAULT false,
-  eu_mesmo boolean DEFAULT true,
-  whatsapp text,
-  CONSTRAINT servicos_pkey PRIMARY KEY (id),
-  CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) REFERENCES public.categorias(id),
-  CONSTRAINT servicos_criado_por_usuario_fkey FOREIGN KEY (criado_por_usuario) REFERENCES public.entidades(id)
-);
-CREATE TABLE public.favoritos (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  usuario_id bigint NOT NULL,
-  servico_id bigint NOT NULL,
-  CONSTRAINT favoritos_pkey PRIMARY KEY (id),
-  CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.entidades(id),
-  CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id)
-);
-CREATE TABLE public.avaliacoes (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  servico_id bigint NOT NULL,
-  author_id bigint NOT NULL,
-  nota smallint NOT NULL CHECK (nota >= 1 AND nota <= 5),
-  comentario text,
-  CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
-  CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id) REFERENCES public.servicos(id),
-  CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (author_id) REFERENCES public.entidades(id)
-);
-
-
+conforme o schema abaixo: 
+[Cole o schema do seu banco de dados!]
 ```
 # RESPOSTA
 ```
