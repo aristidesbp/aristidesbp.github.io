@@ -10,13 +10,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-
-
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
+```
 
+
+# CSS
+```
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style id="custom-styles">
     .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; vertical-align:middle; }
@@ -73,9 +75,14 @@ tailwind.config = {
     }}
 }
 </script>
+```
+# body
+```
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
-
+```
+# login
+```
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -112,11 +119,18 @@ tailwind.config = {
   </div>
 </div>
 </div>
+```
+
+# SISTEMA PRINCIPAL
+```
 
 <!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
 <div class="hidden min-h-screen" id="tela-sistema">
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+```
 
+# menu lateral 
+```
 <!-- SIDEBAR -->
 <aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
   <div class="px-6 mb-8 flex items-center justify-between">
@@ -162,7 +176,9 @@ tailwind.config = {
     </select>
   </div>
 </aside>
-
+```
+# navbar
+```
 
 <!-- HEADER -->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
@@ -189,22 +205,26 @@ tailwind.config = {
     </div>
   </div>
 </header>
-
-
+```
+# corpo
+```
 <!-- MAIN CONTENT -->
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
 <div id="content-panels">
-
-
+```
+# aba bem vindo
+```
 <!-- ════════════ ABA: NOVA TELA (template) ════════════ -->
 <div class="hidden fade-in max-w-5xl mx-auto" id="aba-bem_vindo">
   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
     <h3 class="text-lg font-bold text-slate-900 dark:text-white">SEJA BEM VINDO!</h3>
   </div>
 </div>
+```
 
-
+# aba entidades 
+```
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
 
@@ -245,10 +265,16 @@ tailwind.config = {
     </div>
   </div>
 
-  <!-- Sub-navegação de Entidades (igual ao estoque) --> <div class="flex gap-4 mb-6 flex-wrap"> <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">groups</span> Ver Entidades </button> <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade </button> </div> <!-- SUB-PAINEL: FORMULÁRIO DE ENTIDADE (hidden por padrão) --> <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10 hidden" id="ent-painel-formulario"> <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800"> <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0"> <span class="material-symbols-outlined text-primary text-2xl">edit_document</span> </div> <h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3> </div> <input id="f-editando-id" type="hidden"/> <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8"> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nome" placeholder="Ex: João da Silva ou Enterprise Soluções Ltda" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cpf" placeholder="000.000.000-00" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nascimento" type="date"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-email" placeholder="exemplo@empresa.com" type="email"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-telefone" placeholder="(00) 00000-0000" type="text"/> </div> <div class="grid grid-cols-2 gap-4"> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-tipo-entidade"> <option value="cliente">Cliente</option> <option value="fornecedor">Fornecedor</option> <option value="colaborador">Colaborador</option> </select> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-status"> <option value="ativo">Ativo</option> <option value="inativo">Inativo</option> </select> </div> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cep" onblur="buscarCEP(this.value)" placeholder="00000-000" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-logradouro" placeholder="Av. Exemplo, 123" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-numero" placeholder="Nº ou Complemento" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-bairro" placeholder="Bairro Central" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cidade" placeholder="Nome da Cidade" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-estado" maxlength="2" placeholder="UF" type="text"/> </div>
+```
+# sub aba entidades 
+```
+  <!-- Sub-navegação de Entidades (igual ao estoque) -->
+<div class="flex gap-4 mb-6 flex-wrap"> <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">groups</span> Ver Entidades </button> <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade </button> </div> <!-- SUB-PAINEL: FORMULÁRIO DE ENTIDADE (hidden por padrão) --> <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10 hidden" id="ent-painel-formulario"> <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800"> <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0"> <span class="material-symbols-outlined text-primary text-2xl">edit_document</span> </div> <h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3> </div> <input id="f-editando-id" type="hidden"/> <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8"> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nome" placeholder="Ex: João da Silva ou Enterprise Soluções Ltda" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cpf" placeholder="000.000.000-00" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nascimento" type="date"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-email" placeholder="exemplo@empresa.com" type="email"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-telefone" placeholder="(00) 00000-0000" type="text"/> </div> <div class="grid grid-cols-2 gap-4"> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-tipo-entidade"> <option value="cliente">Cliente</option> <option value="fornecedor">Fornecedor</option> <option value="colaborador">Colaborador</option> </select> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-status"> <option value="ativo">Ativo</option> <option value="inativo">Inativo</option> </select> </div> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cep" onblur="buscarCEP(this.value)" placeholder="00000-000" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-logradouro" placeholder="Av. Exemplo, 123" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-numero" placeholder="Nº ou Complemento" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-bairro" placeholder="Bairro Central" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cidade" placeholder="Nome da Cidade" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-estado" maxlength="2" placeholder="UF" type="text"/> </div>
 
 
-
+```
+# código de barras
+```
 <div class="md:col-span-4 mt-2">
   <label class="text-sm font-bold text-slate-600 dark:text-slate-300">
     <i class="fas fa-barcode"></i> Código de Barras / SKU da Carteirinha
@@ -267,7 +293,7 @@ tailwind.config = {
   </div>
 </div>
 
-
+```
 
 
  <div class="md:col-span-4"> 
