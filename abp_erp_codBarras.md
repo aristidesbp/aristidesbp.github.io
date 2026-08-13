@@ -542,6 +542,8 @@ function togglePasswordVisibility(inputId, btn) {
     if (input.type === 'password') { input.type = 'text'; icon.innerText = 'visibility_off'; }
     else { input.type = 'password'; icon.innerText = 'visibility'; }
 }
+```
+```
 
 // ── Auth ──────────────────────────────────────────────────────────────
 async function verificar_login() {
@@ -586,6 +588,8 @@ async function sairDaConta() {
     await _supabase.auth.signOut();
     verificar_login();
 }
+```
+```
 
 // ── Navegação entre abas ──────────────────────────────────────────────
 function alternarAba(abaAtiva) {
@@ -716,6 +720,8 @@ function mudarPagina(direcao) {
 function gerarPDF() {
     alert("Preparando PDF das entidades filtradas para download.");
 }
+```
+```
 
 // ── CRUD de Entidades (COM TRATAMENTO RIGOROSO DE UPLOAD) ─────────────
 async function salvarEntidade() {
@@ -815,6 +821,8 @@ async function salvarEntidade() {
         btn.innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
     }
 }
+```
+```
 
 async function loadEntidades() {
     const busca = document.getElementById('filtro-busca').value;
@@ -949,7 +957,8 @@ function limparFiltros() {
     loadEntidades();
 }
 
-
+```
+```
 
 
 
