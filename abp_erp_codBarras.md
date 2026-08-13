@@ -1,6 +1,4 @@
-# CODIGO
 
-```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
 <head>
@@ -14,11 +12,10 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-```
 
 
-# CSS
-```
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style id="custom-styles">
     .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; vertical-align:middle; }
@@ -75,14 +72,13 @@ tailwind.config = {
     }}
 }
 </script>
-```
-# body
-```
+
+
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
-```
-# login
-```
+
+
+
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -119,18 +115,12 @@ tailwind.config = {
   </div>
 </div>
 </div>
-```
 
-# SISTEMA PRINCIPAL
-```
 
 <!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
 <div class="hidden min-h-screen" id="tela-sistema">
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
-```
 
-# menu lateral 
-```
 <!-- SIDEBAR -->
 <aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
   <div class="px-6 mb-8 flex items-center justify-between">
@@ -176,9 +166,7 @@ tailwind.config = {
     </select>
   </div>
 </aside>
-```
-# navbar
-```
+
 
 <!-- HEADER -->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
@@ -205,26 +193,23 @@ tailwind.config = {
     </div>
   </div>
 </header>
-```
-# corpo
-```
+
 <!-- MAIN CONTENT -->
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
 <div id="content-panels">
-```
-# aba bem vindo
-```
+
+
+
 <!-- ════════════ ABA: NOVA TELA (template) ════════════ -->
 <div class="hidden fade-in max-w-5xl mx-auto" id="aba-bem_vindo">
   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
     <h3 class="text-lg font-bold text-slate-900 dark:text-white">SEJA BEM VINDO!</h3>
   </div>
 </div>
-```
 
-# aba entidades 
-```
+
+
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
 
@@ -265,14 +250,8 @@ tailwind.config = {
     </div>
   </div>
 
-```
-# sub aba entidades 
-```
-  <!-- Sub-navegação de Entidades (igual ao estoque) -->
-<div class="flex gap-4 mb-6 flex-wrap"> <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">groups</span> Ver Entidades </button> <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2"> <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade </button> </div> <!-- SUB-PAINEL: FORMULÁRIO DE ENTIDADE (hidden por padrão) --> <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10 hidden" id="ent-painel-formulario"> <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800"> <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0"> <span class="material-symbols-outlined text-primary text-2xl">edit_document</span> </div> <h3 class="font-headline-md text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3> </div> <input id="f-editando-id" type="hidden"/> <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8"> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nome" placeholder="Ex: João da Silva ou Enterprise Soluções Ltda" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cpf" placeholder="000.000.000-00" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-nascimento" type="date"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-email" placeholder="exemplo@empresa.com" type="email"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-telefone" placeholder="(00) 00000-0000" type="text"/> </div> <div class="grid grid-cols-2 gap-4"> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-tipo-entidade"> <option value="cliente">Cliente</option> <option value="fornecedor">Fornecedor</option> <option value="colaborador">Colaborador</option> </select> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300" id="f-status"> <option value="ativo">Ativo</option> <option value="inativo">Inativo</option> </select> </div> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cep" onblur="buscarCEP(this.value)" placeholder="00000-000" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-logradouro" placeholder="Av. Exemplo, 123" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-numero" placeholder="Nº ou Complemento" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-bairro" placeholder="Bairro Central" type="text"/> </div> <div class="md:col-span-2"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-cidade" placeholder="Nome da Cidade" type="text"/> </div> <div> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label> <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white" id="f-estado" maxlength="2" placeholder="UF" type="text"/> </div>
-```
-# identado
-```
+
+
 <!-- Sub-navegação de Entidades (igual ao estoque) -->
 <div class="flex gap-4 mb-6 flex-wrap">
   <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded transition shadow flex items-center justify-center gap-2">
@@ -359,9 +338,7 @@ tailwind.config = {
   </div>
 </div>
 
-```
-# código de barras
-```
+
 <div class="md:col-span-4 mt-2">
   <label class="text-sm font-bold text-slate-600 dark:text-slate-300">
     <i class="fas fa-barcode"></i> Código de Barras / SKU da Carteirinha
@@ -380,9 +357,6 @@ tailwind.config = {
   </div>
 </div>
 
-```
-# identado
-```
 
 <div class="md:col-span-4">
   <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-widest">Mídia de Identificação</label>
@@ -477,18 +451,7 @@ tailwind.config = {
 
 
 
-
-
-
-```
-```
- <div class="md:col-span-4"> 
-<label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-widest">Mídia de Identificação</label> <div class="drop-zone" id="drop-foto" onclick="document.getElementById('f-foto').click()"> <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100 dark:border-slate-600"> <span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span> </div> <p class="font-bold text-slate-900 dark:text-white text-lg">Arraste &amp; Solte</p> <p class="text-xs text-slate-400 mt-2">Formatos: JPG, PNG. Máx 2MB.</p> <input accept="image/*" class="hidden" id="f-foto" onchange="mostrarNomeArquivo(this,'nome-foto')" type="file"/> <p class="font-mono-sm text-sm text-primary mt-6 font-bold flex items-center justify-center gap-2 bg-primary/5 py-2 px-4 rounded-lg inline-flex" id="nome-foto" style="display:none;"></p> </div> </div> </div> <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-12 pt-8 border-t border-slate-100 dark:border-slate-800"> <button class="flex-1 bg-primary text-white font-bold py-4 rounded-2xl hover:brightness-105 transition shadow-xl shadow-primary/20 flex items-center justify-center gap-3" id="btn-salvar" onclick="salvarEntidade()"> <span class="material-symbols-outlined">save</span> Confirmar Registro </button> <button class="hidden w-full sm:w-auto px-12 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-4 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="btn-cancelar" onclick="cancelarEdicao()"> Abortar </button> </div> </div> <!-- SUB-PAINEL: LISTAGEM DE ENTIDADES (visível por padrão) --> <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium overflow-hidden" id="ent-painel-listagem"> <!-- Cabeçalho --> <div class="px-6 sm:px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"> <div class="flex items-center gap-3"> <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center"> <span class="material-symbols-outlined text-primary">dataset</span> </div> <h3 class="font-headline-sm text-lg font-bold text-slate-900 dark:text-white">LISTA DE ENTIDADES</h3> </div> </div> <!-- Filtros --> <div class="px-6 sm:px-8 py-6 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row flex-wrap gap-6 items-stretch lg:items-end"> <div class="flex-1 min-w-0"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Busca de Termos</label> <div class="relative"> <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span> <input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white" id="filtro-busca" onkeyup="if(event.key==='Enter'){paginaAtual=1;loadEntidades();}" placeholder="Nome, e-mail ou CPF/CNPJ..." type="text"/> </div> </div> <div class="w-full lg:w-56"> <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Tipo de Perfil</label> <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer" id="filtro-tipo" onchange="paginaAtual=1;loadEntidades()"> <option value="">Todas as Entidades</option> <option value="cliente">Clientes</option> <option value="fornecedor">Fornecedores</option> <option value="colaborador">Colaboradores</option> </select> </div> <div class="flex gap-2 w-full lg:w-auto"> <button class="flex-1 lg:flex-none bg-primary text-white px-8 py-3 rounded-xl font-bold hover:brightness-105 transition shadow-lg shadow-primary/10" onclick="paginaAtual=1;loadEntidades()">Aplicar</button> <button class="flex-1 lg:flex-none bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-8 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition" onclick="limparFiltros()">Limpar</button> </div> </div> 
-<!-- Barra de seleção --> <div class="px-6 py-2 bg-primary/5 border-b border-primary/10 flex items-center justify-between"> <div class="flex items-center gap-2"> <input class="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" id="check-all" onclick="toggleTodosChecks(this)" type="checkbox"/> <label class="text-[10px] font-bold uppercase tracking-wider text-primary" for="check-all">Selecionar Todos</label> </div> <div class="flex items-center gap-3 w-full sm:w-auto justify-end"> <button class="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2" onclick="gerarPDF()"> <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF </button> <button class="flex-1 sm:flex-none px-5 py-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold text-sm rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2" onclick="excluirSelecionados()"> <span class="material-symbols-outlined text-sm">delete</span> Excluir Selecionados </button> </div> </div> <div class="px-6 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400" id="pagination-info">Mostrando 0 de 0</div> <!-- Grid de cards --> <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6" id="lista-entidades-grid"></div> <!-- Paginação --> <div class="px-8 py-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between"> <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-anterior" onclick="mudarPagina(-1)"> <span class="material-symbols-outlined text-sm">chevron_left</span> Anterior </button> <div class="text-sm font-bold text-slate-400" id="page-indicator">Página 1</div> <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="btn-proximo" onclick="mudarPagina(1)"> Próximo <span class="material-symbols-outlined text-sm">chevron_right</span> </button> </div> </div> </div><!-- fim aba-entidades --> </div><!-- fim content-panels --> </div><!-- fim p-4 sm:p-8 --> </main><!-- fim do main --> </div><!-- fim tela-sistema -
-```
-```
-
--> <script>
+ <script>
 // ==========================================
 // ESCOPO GLOBAL DA APLICAÇÃO (app.js)
 // ==========================================
@@ -542,8 +505,7 @@ function togglePasswordVisibility(inputId, btn) {
     if (input.type === 'password') { input.type = 'text'; icon.innerText = 'visibility_off'; }
     else { input.type = 'password'; icon.innerText = 'visibility'; }
 }
-```
-```
+
 
 // ── Auth ──────────────────────────────────────────────────────────────
 async function verificar_login() {
@@ -588,8 +550,7 @@ async function sairDaConta() {
     await _supabase.auth.signOut();
     verificar_login();
 }
-```
-```
+
 
 // ── Navegação entre abas ──────────────────────────────────────────────
 function alternarAba(abaAtiva) {
@@ -821,8 +782,7 @@ async function salvarEntidade() {
         btn.innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
     }
 }
-```
-```
+
 
 async function loadEntidades() {
     const busca = document.getElementById('filtro-busca').value;
@@ -957,8 +917,7 @@ function limparFiltros() {
     loadEntidades();
 }
 
-```
-```
+
 
 
 
@@ -1002,4 +961,4 @@ function ent_pararCamera() {
 
     
 </script> </body> </html>
-```
+
