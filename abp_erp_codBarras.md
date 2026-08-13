@@ -1,3 +1,6 @@
+# CODIGO
+
+```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
 <head>
@@ -780,3 +783,4 @@ function ent_pararCamera() {
 
     
 </script> </body> </html>
+```
