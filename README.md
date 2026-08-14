@@ -1104,29 +1104,6 @@ WITH CHECK (
 );
 
 ```
-```
--- 1. Renomeia a coluna na tabela para alinhar com o código JavaScript
-ALTER TABLE public.entidades RENAME COLUMN avatar_url TO foto_url;
-
--- 2. Cria o bucket 'comprovantes' e o define como público (se já existir, ignora)
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('comprovantes', 'comprovantes', true)
-ON CONFLICT (id) DO NOTHING;
-
--- 3. Remove políticas de storage conflitantes (prevenção de duplicidade)
-DROP POLICY IF EXISTS "Public Access" ON storage.objects;
-DROP POLICY IF EXISTS "Auth Upload" ON storage.objects;
-
--- 4. Cria política permitindo leitura pública das imagens pela URL gerada
-CREATE POLICY "Public Access" 
-ON storage.objects FOR SELECT 
-USING (bucket_id = 'comprovantes');
-
--- 5. Cria política permitindo upload (INSERT) apenas para usuários autenticados no ERP
-CREATE POLICY "Auth Upload" 
-ON storage.objects FOR INSERT 
-WITH CHECK (bucket_id = 'comprovantes' AND auth.role() = 'authenticated');
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
