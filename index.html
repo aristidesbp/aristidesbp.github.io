@@ -8,7 +8,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="variavel_e_constante.js"></script>
+<script src="supabase_config.js"></script>
+
+<!--
+// ==========================================
+// ESCOPO GLOBAL DA APLICAÇÃO (supabase_config.js)
+// ==========================================
+
+// ── Conexão Supabase ──────────────────────────────────────────────────
+const supabaseKey = 'chave';
+const supabaseUrl = 'url';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// ── FIX BUG 2: est_supabase estava comentado — definido aqui ──────────
+const est_supabase = _supabase;
+
+-->
+
+
+    
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style id="custom-styles">
@@ -201,17 +219,7 @@ tailwind.config = {
 </div>
 
 <script>
-// ==========================================
-// ESCOPO GLOBAL DA APLICAÇÃO (app.js)
-// ==========================================
 
-// ── Conexão Supabase ──────────────────────────────────────────────────
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvaXR4eHdsb29ld2d1ZHpzaWNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MTMyOTgsImV4cCI6MjEwMjI4OTI5OH0.UZso7AR55AMcYsLKoK66q1wKpbEMChQnyowoRBSiEEo';
-const supabaseUrl = 'https://woitxxwlooewgudzsici.supabase.co/rest/v1/';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-// ── FIX BUG 2: est_supabase estava comentado — definido aqui ──────────
-const est_supabase = _supabase;
 
 let usuarioLogadoId = null;
 let paginaAtual = 1;
