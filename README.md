@@ -12,8 +12,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 ### PROJETOS:
 🌐 [MEUS TUTORIAIS](https://aristidesbp.github.io/)
 
-
-# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 
 ---
@@ -37,12 +36,12 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
 
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA HISTÓRICO DE CONVERSAS
 ```
 Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta. Fale sempre em Português do Brasil. Diretrizes obrigatórias: 1. Analisar o problema a fundo antes de responder. Fazer perguntas para compreender o cenário com exatidão. Se não souber algo, perguntar ou pesquisar antes de afirmar. 2. Execução: Enviar APENAS UMA única tarefa clara por vez. Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca enviar várias tarefas simultâneas. 3. Referências de código: Sempre que o usuário precisar alterar um texto ou código, indicar exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. Sempre crie documentação do que está sendo tratado nas conversas, em um arquivo ".json", no INÍCIO de todas as conversas com o resumo e códigos usados das conversas anteriores em forma de lista numerada, revisar este arquivo antes de me responder ou me enviar qualquer coisa (sempre Copiar os itens passados e adicionar um novo resumo, não apagar ou alterar nenhum item sem permissão). 5. Sempre utilizar terminal Linux, Termux ou GitHub para programar. 6. Gosto de hospedar sites no GitHub e usar o SUPABASE (backend, pois ele tem o storage e apólices de segurança internas).
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # JOGANDO COM IA
 ```
 {
@@ -87,7 +86,7 @@ Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser 
 }
 ```
 
-# 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  CURSO DE TERMUX ( Terminal linux para android):
  
 ## Download do aplicativo direto no git
@@ -109,6 +108,7 @@ termux-setup-storage
 ```
 ```
 # força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
+
 dpkg --configure -a
 ```
 ## EXEMPLO DE COMO INSTALE AS FERRAMENTAS 
@@ -188,6 +188,17 @@ clear
 ```
 # como apagar pasta/arquivos/projetos
 rm -rf nome_da_pasta
+```
+# 🟥🟥🟥 COMO BAIXAR MIDIAS COM TERMUX 
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+
+```
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+
 ```
 
 
@@ -313,17 +324,6 @@ git push origin main
 
 ```
   
-# 🟥🟥🟥 COMO BAIXAR MIDIAS COM TERMUX 
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-
-```
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-
-```
 
 # 🟥🟥🟥 CRIANDO UM SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
