@@ -109,10 +109,20 @@ termux-setup-storage
 ```
 ```
 ## EXEMPLO DE COMO INSTALE AS FERRAMENTAS 
+```
+```
 pkg install git -y
+```
+```
 pkg install nano -y
+```
+```
 pkg install openssh -y
+```
+```
 pkg install curl -y
+```
+```
 pkg install tree -y
 ```
 ```
