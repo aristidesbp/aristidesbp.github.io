@@ -395,10 +395,8 @@ apt update && apt upgrade -y
 # verificar informações do sistema instalado 
 cat /etc/os-release
 ```
-```
-# pastas do celular
-cd sdcard
-```
+
+# rodando local Google ai Studio 
 ```
 # limpar dependencias corrompidas e listar diretorio
 cd /root/erp && rm -rf node_modules package-lock.json && ls -la
@@ -439,6 +437,16 @@ npm run build
 # sair do Linux 
 exit
 ```
+# RODANDO LOCAL LOVABLE
+```
+# Verifica as versões instaladas do Node.js, NPM e Bun no sistema
+node -v; npm -v; bun -v
+```
+```
+# Atualiza a lista de pacotes do Ubuntu e instala o Node.js junto com o gerenciador NPM
+apt update && apt install -y nodejs npm
+```
+
 
 # 🟥🟥🟥 COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar buscador
