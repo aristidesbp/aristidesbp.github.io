@@ -108,8 +108,10 @@ pkg update && pkg upgrade -y
 termux-setup-storage
 ```
 ```
-## EXEMPLO DE COMO INSTALE AS FERRAMENTAS 
+# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
+dpkg --configure -a
 ```
+## EXEMPLO DE COMO INSTALE AS FERRAMENTAS 
 ```
 pkg install git -y
 ```
