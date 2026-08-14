@@ -972,60 +972,6 @@ if __name__ == "__main__":
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# PROJETOS COM O SUPABASE E GITHUB_PAGES (todos os arquivos estao na pasta raiz)
-```
-# Vamos criar uma  arquitetura full-stack (frontend e backend) para a plataforma
-"AristidesBP", um marketplace de serviços comunitário, onde pessoas de
-uma mesma comunidade possam oferecer produtos e serviços, com sertor administrativo completo.
-
-* Hospedagem: github-pages
-* Banco de dados com o Supabase
-* ERP para controle de seu negocio (entidades,produtos,serviços,financeiro,pdv,tarefas).
-
-# PAGINAS:
-index.html(Vitrine de Serviços - Pública/Híbrida):
-A) Hero Section: Título grande "Encontre profissionais de confiança na sua regiao", 
-com uma barra de busca centralizada grande (Input com ícone
-de lupa) e filtros rápidos (Pills/Badges) para categorias (Reformas,
-Aulas, Culinária).
-* Grid de Destaques: Utilize a (View SQL v_servicos_destaque & View SQL v_produtos_destaque) para renderizar
-cards.
-* Componente do Card: Deve conter a foto do serviço/produto (aspect-ratio 16/9),
-foto do prestador (avatar circular pequeno), título, preço estimado e,
-obrigatoriamente, a média de estrelas (ícone ⭐ + nota) que vem da View.
-Floating Action Button (Mobile): Um botão flutuante para "Anunciar" no
-canto inferior direito.
-
-B). Detalhes do Serviço (/servico/:id - Onde :id é Int8):
-Layout de Coluna Dupla (Desktop):
-* Esquerda: Galeria de fotos do serviço e descrição detalhada.
-* Direita (Sticky): Card do perfil do prestador (tabela profiles) com botão
-"Chamar no Chat" (CTA Primário) e botão "Favoritar" (ícone de coração
-outline/fill).
-* Seção de Prova Social: Lista de comentários vindos da tabela avaliacoes,
-exibindo nome do vizinho e a nota dada.
-
-C). Dashboard do Usuário (Área Protegida):
-* Sidebar ou Menu Superior: Links para "Meus Anúncios", "Favoritos" e
-"Mensagens".
-* Meus Anúncios: Tabela ou Lista de cards mostrando os serviços que o
-usuário cadastrou (tabela servicos), com opções de Editar/Excluir.
-* Chat Interno: Interface tipo WhatsApp Web. Lista de conversas à esquerda
-e área de chat à direita. Deve ler da tabela mensagens.
-Requisitos Arquiteturais e de Dados:
-- Conexão Supabase: O projeto DEVE respeitar o schema existente onde os IDs
-são numéricos (int8), não UUIDs nas rotas (ex: /servico/42).
-- Autenticação: Telas de Login/Registro limpas e centralizadas, usando o
-componente Auth do Supabase.
-* Componentização:
-Use Card, Badge, Avatar, Button e Dialog do Shadcn/UI.
-Crie um componente StarRating reutilizável para exibir as notas.
-Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
@@ -1181,6 +1127,11 @@ CREATE POLICY "Auth Upload"
 ON storage.objects FOR INSERT 
 WITH CHECK (bucket_id = 'comprovantes' AND auth.role() = 'authenticated');
 ```
+
+
+
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # erp_abp.js
