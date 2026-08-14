@@ -380,8 +380,8 @@ pkg install proot-distro
 proot-distro list
 ```
 ```
-# instalar ubuntu
-proot-distro ubuntu
+# Baixa e instala o Ubuntu (versão..)
+proot-distro install ubuntu:versão..
 ```
 ```
 # ENTRANDO NO  LUNUX UBUNTU:
