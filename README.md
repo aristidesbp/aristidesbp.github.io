@@ -444,7 +444,75 @@ node -v; npm -v; bun -v
 ```
 ```
 # Atualiza a lista de pacotes do Ubuntu e instala o Node.js junto com o gerenciador NPM
+# Digite 2 no terminal (que corresponde a America) e pressione ENTER.
+# Na tela lista numerada de cidades/fusos horários. Digite o número correspondente à sua região, pressione ENTER.
 apt update && apt install -y nodejs npm
+```
+```
+# dentro do projeto, instala todas as bibliotecas listadas no arquivo package.json
+npm install
+```
+```
+# caso de errado
+# Limpa o cache corrompido do NPM e instala as dependências sem criar links simbólicos problemáticos
+npm cache clean --force && npm install --no-bin-links
+```
+```
+# Inicia o servidor local de desenvolvimento do Vite liberando acesso na rede local
+npm run dev -- --host
+```
+# caso erro
+```
+# Executa diretamente o arquivo principal do Vite via Node.js liberando a porta para a rede local
+node node_modules/vite/bin/vite.js --host
+```
+```
+# Instala o utilitário curl, adiciona o repositório oficial da NodeSource para Node.js 20.x e atualiza o pacote
+apt update && apt install -y curl && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt install -y nodejs
+```
+```
+# Executa o ponto de entrada do Vite utilizando o Node.js v20 e disponibiliza a aplicação na rede local
+node node_modules/vite/bin/vite.js --host
+```
+```
+# Remove a pasta de dependências antigas e realiza uma reinstalação limpa no Node 20 para baixar os binários ARM64
+rm -rf node_modules && npm install --no-bin-links
+
+```
+# após conseguir rodar, criar pasta DIST
+```
+# Exibe o conteúdo do arquivo de configuração do Vite
+cat vite.config.ts
+```
+```
+# Sobrescreve o arquivo vite.config.ts incluindo a propriedade base: "./" para compatibilidade com GitHub Pages
+cat << 'EOF' > vite.config.ts
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+export default defineConfig({
+  vite: {
+    // Configura caminhos relativos para garantir que os arquivos funcionem no GitHub Pages
+    base: "./",
+  },
+  tanstackStart: {
+    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+    // nitro/vite builds from this
+    server: { entry: "server" },
+  },
+});
+EOF
+```
+```
+# Executa a compilação de produção do Vite e gera a pasta 'dist' pronta para produção
+node node_modules/vite/bin/vite.js build
+```
+```
+# Copia os arquivos compilados da build para a pasta 'dist' e exibe seu conteúdo
+cp -r .output/public dist && ls -la dist
+```
+```
+# Exibe os arquivos CSS e JavaScript gerados na pasta dist/assets
+ls -la dist/assets
 ```
 
 
