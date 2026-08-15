@@ -141,6 +141,126 @@ Código da Página (index.html)
 </html>
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# JOGO DO MARIO
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Camuflagem AR</title>
+  
+  <!-- Importando a biblioteca A-Frame -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  
+  <style>
+    /* Estilo para manter nosso botão mágico inicializado por cima do motor 3D */
+    #ui-container {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none; /* Para não bloquear cliques na tela */
+    }
+    #btn-iniciar {
+      pointer-events: auto;
+      padding: 16px 32px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+
+  <script>
+    // 1. Criamos um "componente" inteligente para a nossa moeda
+    AFRAME.registerComponent('moeda-magica', {
+      init: function () {
+        let el = this.el; // A nossa moeda
+        el.setAttribute('visible', 'false'); // Começa invisível
+        this.iniciado = false;
+
+        // 2. Fica escutando o momento em que o modo Realidade Aumentada (AR) é ativado
+        this.el.sceneEl.addEventListener('enter-vr', () => {
+          // Verifica se entramos em AR
+          if (this.el.sceneEl.is('ar-mode') && !this.iniciado) {
+            this.iniciado = true;
+            
+            // 3. Inicia o cronômetro de 5 segundos
+            setTimeout(() => {
+              // Pega o objeto da câmera para saber posição e giroscópio (rotação)
+              let camera = document.querySelector('[camera]').object3D;
+              
+              // No mundo 3D, a "frente" da câmera é o eixo Z negativo (-1)
+              let direcao = new THREE.Vector3(0, 0, -1);
+              direcao.applyQuaternion(camera.quaternion); // Aplica a rotação do giroscópio do celular
+              
+              // Calcula a posição exata 1 metro a partir de onde o celular está
+              let pos = new THREE.Vector3().copy(camera.position).add(direcao);
+              
+              // Move a moeda para esse local e a deixa visível
+
+
+
+
+    // Move a moeda para esse local e a deixa visível
+              el.setAttribute('position', `${pos.x} ${pos.y} ${pos.z}`);
+              el.setAttribute('visible', 'true');
+              
+              // 4. Mantém a posição fixa e adiciona APENAS o giro no próprio eixo
+              el.setAttribute('animation__giro', 'property: rotation; to: 90 360 0; loop: true; dur: 2500; easing: linear');
+              
+            }, 5000); // 5000 milissegundos = 5 segundos
+
+
+
+          }
+        });
+      }
+    });
+
+    // Função para acionar a mágica ao clicar no botão
+    function iniciarMagica() {
+      document.getElementById('ui-container').style.display = 'none';
+      // Força a cena do A-Frame a entrar em modo VR/AR nativo do Android
+      document.querySelector('a-scene').enterVR(); 
+    }
+  </script>
+</head>
+<body style="margin: 0; overflow: hidden; background-color: #000;">
+
+  <div id="ui-container">
+    <button id="btn-iniciar" onclick="iniciarMagica()">Iniciar Mágica</button>
+  </div>
+  
+  <!-- Cena 3D: A tag 'a-scene' é onde a mágica do A-Frame acontece -->
+  <!-- xr-mode-ui="enabled: false" esconde o botão padrão do A-Frame pois fizemos o nosso -->
+  <a-scene webxr="optionalFeatures: hit-test;" xr-mode-ui="enabled: false" background="color: transparent;">
+    
+    <a-camera position="0 1.6 0"></a-camera>
+    
+    <!-- Nossa Moeda: Usamos um cilindro achatado com a cor Dourada (#FFD700) -->
+    <a-cylinder 
+      moeda-magica 
+      radius="0.15" 
+      height="0.02" 
+      color="#FFD700" 
+      rotation="90 0 0">
+    </a-cylinder>
+
+  </a-scene>
+
+</body>
+</html>
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # JOGANDO COM IA
 ```
 {
