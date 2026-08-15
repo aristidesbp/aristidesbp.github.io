@@ -2090,13 +2090,30 @@ GRANT ALL ON SCHEMA public TO service_role;
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# ERP-MONOLITIOC (HTML.CSS E JS)
+# ERP-MONOLITIOC (FUNCIONANDO)
 
+
+# ###########
+# INICIANDO HTML- BLOCO 1
+# ###########
 ```
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
@@ -2107,10 +2124,34 @@ GRANT ALL ON SCHEMA public TO service_role;
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+```
+
+
+# ###########
+# CONEXAO COM SUPABASE
+# ###########
+```
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="variavel_e_constante.js"></script>
+<script>
+/*## Conexão Supabase ##*/
+const supabaseUrl = 'https://zzciepjkvvzwjygysgjb.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6Y2llcGprdnZ6d2p5Z3lzZ2piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTM1NzAsImV4cCI6MjEwMTkyOTU3MH0.RjVps7D7VbvuLd3PAUOkgaDybt4YuUbSoFHyZukpXMw';
+
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+/*## est_supabase estava comentado /*##
+const est_supabase = _supabase;
+</script>
+
+
+```
+# ###########
+# ADICIONANDO CSS - BLOCO 2
+# ###########
+```
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
 <style id="custom-styles">
     .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; vertical-align:middle; }
     .status-ativo { background:#ecfdf5; color:#059669; padding:4px 12px; border-radius:9999px; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border:1px solid #d1fae5; }
@@ -2166,9 +2207,22 @@ tailwind.config = {
     }}
 }
 </script>
+
+
+```
+# ###########
+# FEICHANDO HEAD E ABRINDO O BODY
+# ###########
+```
 </head>
 <body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-background dark:text-slate-200 font-body-md text-body-md overflow-x-hidden transition-colors duration-300">
 
+
+```
+# ###########
+# ABA DE LOGIN
+# ###########
+```
 <!-- ══════════════ LOGIN SCREEN ══════════════ -->
 <div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-margin-mobile relative overflow-hidden" id="tela-login">
 <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -2206,10 +2260,22 @@ tailwind.config = {
 </div>
 </div>
 
+
+
+```
+# ###########
+# SISTEMA DE NAVEGAÇÃO
+# ###########
+```
 <!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
 <div class="hidden min-h-screen" id="tela-sistema">
 <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
+```
+# ###########
+# MENU LATERAL
+# ###########
+```
 <!-- SIDEBAR -->
 <aside class="fixed h-full w-sidebar-width left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
   <div class="px-6 mb-8 flex items-center justify-between">
@@ -2240,27 +2306,25 @@ tailwind.config = {
   </div>
 
 
-  <div class="w-full sm:w-64 mb-8 px-4">
-    <label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
-    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
-
-
-
+<div class="w-full sm:w-64 mb-8 px-4">
+<label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+<select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
       <option value="financeiro">💰 FINANCEIRO</option>
       <option value="entidades">🙋 ENTIDADES</option>
       <option value="estoque">📦 ESTOQUE</option>
       <option value="pdv">🖥️ PDV — Frente de Caixa</option>
       <option value="configuracoes">⚙️ CONFIGURAÇÕES</option>
-
-
-    </select>
-  </div>
-
-
+</select>
+</div>
 
 
 </aside>
 
+```
+# ###########
+# MENU NAVBAR/TOPO FIXO
+# ###########
+```
 <!-- HEADER -->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8 transition-all">
   <div class="flex items-center gap-4 sm:gap-gutter">
@@ -2287,31 +2351,52 @@ tailwind.config = {
   </div>
 </header>
 
-
+```
+# ###########
+# ABRINDO SISTEMA DE ABAS
+# ###########
+```
 <!-- MAIN CONTENT -->
 <main class="lg:ml-sidebar-width pt-20 min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] transition-colors">
 <div class="p-4 sm:p-8 max-w-container-max mx-auto">
 <div id="content-panels">
-
+```
+# ###########
+# EXEMPLO BASICO PARA UMA ABA
+# ###########
+```
 <!-- ════════════ ABA: NOVA TELA (template) ════════════ -->
 <div class="hidden fade-in max-w-5xl mx-auto" id="aba-bem_vindo">
   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium p-6 sm:p-10">
     <h3 class="text-lg font-bold text-slate-900 dark:text-white">SEJA BEM VINDO!</h3>
+  
+<div class="w-full sm:w-64 mb-8 px-4">
+<label for="select-aba" class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Painel Ativo</label>
+<select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none cursor-pointer">
+
+      <option value="bem_vindo">HOME</option>
+      <option value="entidades">🙋 ENTIDADES</option>
+      <option value="financeiro">💰 FINANCEIRO</option>
+      <option value="estoque">📦 ESTOQUE</option>
+      <option value="pdv">🖥️ PDV — Frente de Caixa</option>
+      <option value="configuracoes">⚙️ CONFIGURAÇÕES</option>
+</select>
+</div>
+    
   </div>
 </div>
 
+```
+# ###########
+# EXEMPLO BASICO PARA UMA ABA
+# ###########
+```
 <script>
 // ==========================================
 // ESCOPO GLOBAL DA APLICAÇÃO (app.js)
 // ==========================================
 
-// ── Conexão Supabase ──────────────────────────────────────────────────
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6Y2llcGprdnZ6d2p5Z3lzZ2piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTM1NzAsImV4cCI6MjEwMTkyOTU3MH0.RjVps7D7VbvuLd3PAUOkgaDybt4YuUbSoFHyZukpXMw';
-const supabaseUrl = 'https://zzciepjkvvzwjygysgjb.supabase.co';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ── FIX BUG 2: est_supabase estava comentado — definido aqui ──────────
-const est_supabase = _supabase;
 
 let usuarioLogadoId = null;
 let paginaAtual = 1;
