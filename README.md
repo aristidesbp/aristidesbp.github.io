@@ -41,6 +41,95 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 ```
 Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta. Fale sempre em Português do Brasil. Diretrizes obrigatórias: 1. Analisar o problema a fundo antes de responder. Fazer perguntas para compreender o cenário com exatidão. Se não souber algo, perguntar ou pesquisar antes de afirmar. 2. Execução: Enviar APENAS UMA única tarefa clara por vez. Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca enviar várias tarefas simultâneas. 3. Referências de código: Sempre que o usuário precisar alterar um texto ou código, indicar exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. Sempre crie documentação do que está sendo tratado nas conversas, em um arquivo ".json", no INÍCIO de todas as conversas com o resumo e códigos usados das conversas anteriores em forma de lista numerada, revisar este arquivo antes de me responder ou me enviar qualquer coisa (sempre Copiar os itens passados e adicionar um novo resumo, não apagar ou alterar nenhum item sem permissão). 5. Sempre utilizar terminal Linux, Termux ou GitHub para programar. 6. Gosto de hospedar sites no GitHub e usar o SUPABASE (backend, pois ele tem o storage e apólices de segurança internas).
 ```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#  VR PARA CELULAR (FUNCIONANDO)
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Camuflagem</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #000;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    /* O vídeo ocupa 100% da largura e altura do visor */
+    #camera-feed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 1;
+      display: none;
+    }
+    /* Botão inicial centralizado */
+    #btn-iniciar {
+      position: relative;
+      z-index: 10;
+      padding: 16px 32px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="btn-iniciar" onclick="iniciarMagica()">Iniciar Mágica</button>
+  <video id="camera-feed" autoplay playsinline muted></video>
+
+  <script>
+    async function iniciarMagica() {
+      const btn = document.getElementById('btn-iniciar');
+      const video = document.getElementById('camera-feed');
+
+      try {
+        // Solicita a câmera traseira do dispositivo
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: "environment" }
+          },
+          audio: false
+        });
+
+        // Aloca o fluxo de vídeo e exibe o elemento na tela
+        video.srcObject = stream;
+        video.style.display = 'block';
+        btn.style.display = 'none';
+
+        // Solicita o modo Tela Cheia
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          document.documentElement.webkitRequestFullscreen();
+        }
+      } catch (err) {
+        alert('Erro ao acessar a câmera: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # JOGANDO COM IA
 ```
