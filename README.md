@@ -43,6 +43,16 @@ Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser 
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO MEU VR 
+## Panorama Geral da Solução
+* Criar o efeito de "celular invisível", combinamos duas APIs nativas dos navegadores modernos:
+  - MediaDevices API (getUserMedia): Permite solicitar permissão e acessar o fluxo de vídeo da câmera traseira (facingMode: "environment").
+  - Fullscreen API (requestFullscreen): Oculta a barra de endereços do navegador e os botões de navegação, fazendo o fluxo de vídeo cobrir 100% da tela do aparelho (100vw por 100vh com object-fit: cover).
+
+Ao clicar no botão inicial, a câmera é ativada, o botão é escondido instantaneamente e a tela entra em modo fullscreen, deixando apenas a imagem ao vivo da câmera.
+
+Código da Página (index.html)
+
 #  VR PARA CELULAR (FUNCIONANDO).
 ```
 <!DOCTYPE html>
