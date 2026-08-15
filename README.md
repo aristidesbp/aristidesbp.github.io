@@ -43,7 +43,7 @@ Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser 
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  VR PARA CELULAR (FUNCIONANDO)
+#  VR PARA CELULAR (FUNCIONANDO).
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
