@@ -668,6 +668,10 @@ node -v; npm -v; bun -v
 apt update && apt install -y nodejs npm
 ```
 ```
+# confugurar regiao
+dpkg --configure -a
+```
+```
 # dentro do projeto, instala todas as bibliotecas listadas no arquivo package.json
 npm install
 ```
