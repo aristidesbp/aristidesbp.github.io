@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Jogo AR - Caça à Moeda</title>
+  
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; overflow: hidden; background-color: #000; font-family: sans-serif; touch-action: none; }
+
+    /* Bloqueia a barra de notificação do navegador */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: #000;
+      z-index: 99998;
+      pointer-events: none;
+    }
+
+    /* MENU DE CONFIGURAÇÃO INICIAL */
+    #menu-config {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(10, 10, 20, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20000;
+      color: white;
+    }
+    .config-box {
+      background: #222;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid #0284c7;
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+    }
+    .config-item { margin-bottom: 15px; text-align: left; }
+    .config-item label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .config-item input { width: 100%; padding: 10px; border-radius: 6px; border: none; font-size: 16px; background: #fff; color: #000; }
+    .btn-salvar {
+      width: 100%; padding: 15px; font-size: 18px; font-weight: bold;
+      color: #fff; background-color: #16a34a; border: none; border-radius: 8px;
+      cursor: pointer; margin-top: 10px;
+    }
+
+    /* TELA DE CONTAGEM REGRESSIVA */
+    #tela-contador {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 15000;
+      color: #ffd700;
+      font-size: 120px;
+      font-weight: bold;
+      text-shadow: 0 0 30px rgba(0,0,0,0.9);
+    }
+
+    /* TELA DE GAME OVER */
+    #menu-gameover {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(220, 38, 38, 0.95);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20000;
+      color: white;
+      text-align: center;
+      pointer-events: auto;
+    }
+
+    /* INTERFACE DO JOGO */
+    #ui-container {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+
+    .top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+    .bottom-bar { display: flex; justify-content: center; width: 100%; }
+    
+    button.btn-ui {
+      pointer-events: auto; padding: 10px 18px; font-size: 15px; font-weight: bold;
+      color: #ffffff; border-radius: 8px; border: 2px solid #ffffff; cursor: pointer;
+    }
+    #btn-sair { background-color: #dc2626; }
+    
+    #placar {
+      pointer-events: auto; color: #ffd700; font-size: 18px; font-weight: bold;
+      text-shadow: 2px 2px 4px #000; background: rgba(0,0,0,0.6); padding: 8px 14px; border-radius: 8px;
+    }
+
+    /* Timer do jogo */
+    #timer-jogo {
+      pointer-events: none; color: #fff; font-size: 16px; font-weight: bold;
+      text-shadow: 2px 2px 4px #000; background: rgba(0,0,0,0.6); padding: 6px 12px; border-radius: 8px;
+      position: fixed;
+      top: 70px;
+      right: 15px;
+      z-index: 9999;
+      display: none;
+    }
+
+    #btn-atirar {
+      pointer-events: auto; background-color: #0284c7; width: 90%; font-size: 20px;
+      font-weight: bold; color: #ffffff; padding: 16px; border-radius: 10px;
+      border: 2px solid #ffffff; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+    button:active { transform: scale(0.95); }
+
+    /* Barra de progresso do tempo */
+    #barra-tempo-container {
+      position: fixed;
+      top: 60px;
+      left: 15px;
+      right: 15px;
+      height: 8px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
+      z-index: 9999;
+      display: none;
+    }
+    #barra-tempo-fill {
+      height: 100%;
+      background: #16a34a;
+      border-radius: 4px;
+      width: 100%;
+      transition: width 0.1s linear, background-color 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menu de Configuração Inicial -->
+  <div id="menu-config">
+    <div class="config-box">
+      <h2>Configurações do Jogo (AR)</h2>
+      <div class="config-item">
+        <label>Distância Mínima (m):</label>
+        <input type="number" id="cfg-min" value="1.5" min="1">
+      </div>
+      <div class="config-item">
+        <label>Distância Máxima (m):</label>
+        <input type="number" id="cfg-max" value="3" min="1.5">
+      </div>
+      <div class="config-item">
+        <label>Tempo de jogo (segundos):</label>
+        <input type="number" id="cfg-tempo" value="60" min="10">
+      </div>
+      <button class="btn-salvar" onclick="aplicarConfiguracoes()">INICIAR JOGO AR</button>
+    </div>
+  </div>
+
+  <!-- Tela de Contagem Regressiva (após câmera ativar) -->
+  <div id="tela-contador"><span id="numero-contador">10</span></div>
+
+  <!-- Tela Game Over -->
+  <div id="menu-gameover">
+    <h1 style="font-size: 36px; margin-bottom: 10px;">FIM DE JOGO</h1>
+    <h2 id="texto-pontuacao-final" style="margin-bottom: 20px;">Pontos: 0</h2>
+    <p style="margin-bottom: 20px;">Tempo esgotado!</p>
+    <button class="btn-ui" style="background-color: #111; font-size: 18px; padding: 15px 30px;" onclick="sairJogo()">Jogar Novamente</button>
+  </div>
+
+  <!-- Interface Jogo (Overlay) -->
+  <div id="ui-container">
+    <div class="top-bar">
+      <button id="btn-sair" class="btn-ui" onclick="sairJogo()">Sair</button>
+      <span id="placar">Pontos: 0</span>
+    </div>
+    <div class="bottom-bar">
+      <button id="btn-atirar" onclick="atirar()">ATIRAR 🎯</button>
+    </div>
+  </div>
+
+  <!-- Barra de tempo do jogo -->
+  <div id="barra-tempo-container">
+    <div id="barra-tempo-fill"></div>
+  </div>
+
+  <!-- Timer numérico -->
+  <div id="timer-jogo">⏱ <span id="timer-valor">60</span>s</div>
+
+  <!-- Cena A-Frame -->
+  <a-scene 
+    id="cena-aframe"
+    webxr="requiredFeatures: hit-test; optionalFeatures: dom-overlay, local-floor; overlayElement: #ui-container;" 
+    xr-mode-ui="enabled: false"
+    background="color: transparent">
+    
+    <a-camera id="camera-principal" position="0 1.6 0">
+      <!-- Arma presa à câmera -->
+      <a-entity id="arma-holder" position="0 -0.25 -0.4">
+        <a-cylinder radius="0.03" height="0.45" rotation="90 0 0" color="#333333" material="shader: flat; color: #333333"></a-cylinder>
+      </a-entity>
+    </a-camera>
+
+    <!-- Moeda -->
+    <a-cylinder id="moeda" radius="0.15" height="0.02" color="#FFD700" rotation="90 0 0"
+      material="shader: flat; color: #FFD700"
+      animation="property: rotation; to: 90 360 0; loop: true; dur: 2500; easing: linear" visible="false">
+    </a-cylinder>
+  </a-scene>
+
+  <script>
+    let pontos = 0;
+    let distMin = 1.5, distMax = 3, tempoJogo = 60;
+    let jogoRodando = false;
+    let cronometroJogo = null;       // Timer global do jogo (segundos restantes)
+    let tempoRestante = 0;
+    let intervaloTimer = null;
+
+    // Bloqueia o gesto de swipe para fechar a AR (reduz chance de aparecer notificação)
+    document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+
+    // AudioContext
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function tocarSomTiro() {
+      if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+      const oscilador = audioCtx.createOscillator();
+      const ganho = audioCtx.createGain();
+      oscilador.connect(ganho);
+      ganho.connect(audioCtx.destination);
+      oscilador.type = 'square';
+      oscilador.frequency.setValueAtTime(800, audioCtx.currentTime);
+      oscilador.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+      ganho.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      ganho.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      oscilador.start(audioCtx.currentTime);
+      oscilador.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function tocarSomAcerto() {
+      if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+      const osc = audioCtx.createOscillator();
+      const ganho = audioCtx.createGain();
+      osc.connect(ganho);
+      ganho.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+      ganho.gain.setValueAtTime(0.4, audioCtx.currentTime);
+      ganho.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+
+    function aplicarConfiguracoes() {
+      distMin = parseFloat(document.getElementById('cfg-min').value);
+      distMax = parseFloat(document.getElementById('cfg-max').value);
+      tempoJogo = parseFloat(document.getElementById('cfg-tempo').value);
+
+      document.getElementById('menu-config').style.display = 'none';
+      document.getElementById('ui-container').style.display = 'flex';
+
+      const scene = document.querySelector('a-scene');
+
+      // Entra em AR e aguarda a câmera ativar para iniciar contagem
+      if (scene.hasLoaded) {
+        iniciarAR(scene);
+      } else {
+        scene.addEventListener('loaded', () => { iniciarAR(scene); });
+      }
+    }
+
+    function iniciarAR(scene) {
+      // Tenta entrar em AR
+      scene.enterAR();
+
+      // Aguarda o evento de início da sessão AR (câmera real ativada)
+      // Usa 'enter-vr' que é disparado quando AR/VR inicia
+      scene.addEventListener('enter-vr', function onEnterAR() {
+        scene.removeEventListener('enter-vr', onEnterAR);
+        // Pequeno delay para garantir que a câmera já está mostrando
+        setTimeout(() => {
+          iniciarContagemRegressiva();
+        }, 500);
+      }, { once: false });
+
+      // Fallback: se o evento não disparar em 3s (ex: modo desktop/simulado), inicia mesmo assim
+      setTimeout(() => {
+        if (!jogoRodando && document.getElementById('tela-contador').style.display !== 'flex') {
+          iniciarContagemRegressiva();
+        }
+      }, 3000);
+    }
+
+    function iniciarContagemRegressiva() {
+      const telaContador = document.getElementById('tela-contador');
+      const numContador = document.getElementById('numero-contador');
+      telaContador.style.display = 'flex';
+
+      let contador = 10; // 10 segundos para sensação de realidade aumentada
+      numContador.innerText = contador;
+
+      const timerContador = setInterval(() => {
+        contador--;
+        if (contador > 0) {
+          numContador.innerText = contador;
+        } else {
+          clearInterval(timerContador);
+          telaContador.style.display = 'none';
+          iniciarJogo();
+        }
+      }, 1000);
+    }
+
+    function iniciarJogo() {
+      pontos = 0;
+      document.getElementById('placar').innerText = `Pontos: ${pontos}`;
+      jogoRodando = true;
+
+      // Garante que a arma está visível
+      garantirArma();
+
+      // Mostra UI de tempo
+      document.getElementById('barra-tempo-container').style.display = 'block';
+      document.getElementById('timer-jogo').style.display = 'block';
+
+      // Inicia timer global do jogo
+      tempoRestante = tempoJogo;
+      atualizarBarraTempo();
+      
+      intervaloTimer = setInterval(() => {
+        tempoRestante--;
+        atualizarBarraTempo();
+        if (tempoRestante <= 0) {
+          gameOver();
+        }
+      }, 1000);
+
+      // Spawna a primeira moeda
+      spawnMoeda();
+    }
+
+    function atualizarBarraTempo() {
+      const pct = (tempoRestante / tempoJogo) * 100;
+      const fill = document.getElementById('barra-tempo-fill');
+      fill.style.width = pct + '%';
+      document.getElementById('timer-valor').innerText = tempoRestante;
+
+      if (pct > 50) fill.style.backgroundColor = '#16a34a';
+      else if (pct > 25) fill.style.backgroundColor = '#f59e0b';
+      else fill.style.backgroundColor = '#dc2626';
+    }
+
+    function garantirArma() {
+      // Recria a arma se sumiu (bug de AR)
+      const cameraEl = document.getElementById('camera-principal');
+      let arma = document.getElementById('arma-holder');
+      if (!arma) {
+        arma = document.createElement('a-entity');
+        arma.setAttribute('id', 'arma-holder');
+        arma.setAttribute('position', '0 -0.25 -0.4');
+        const cano = document.createElement('a-cylinder');
+        cano.setAttribute('radius', '0.03');
+        cano.setAttribute('height', '0.45');
+        cano.setAttribute('rotation', '90 0 0');
+        cano.setAttribute('color', '#333333');
+        cano.setAttribute('material', 'shader: flat; color: #333333');
+        arma.appendChild(cano);
+        cameraEl.appendChild(arma);
+      }
+    }
+
+    function spawnMoeda() {
+      if (!jogoRodando) return;
+
+      const cameraEl = document.getElementById('camera-principal');
+      const moedaEl = document.getElementById('moeda');
+
+      const posCam = new THREE.Vector3();
+      const dirCam = new THREE.Vector3();
+      cameraEl.object3D.getWorldPosition(posCam);
+      cameraEl.object3D.getWorldDirection(dirCam);
+      
+      // Frente da câmera
+      dirCam.multiplyScalar(-1);
+      dirCam.y = 0;
+      dirCam.normalize();
+
+      const distAleatoria = Math.random() * (distMax - distMin) + distMin;
+      const anguloAleatorio = (Math.random() - 0.5) * (Math.PI / 3);
+      dirCam.applyAxisAngle(new THREE.Vector3(0, 1, 0), anguloAleatorio);
+
+      const posFinal = posCam.clone().add(dirCam.multiplyScalar(distAleatoria));
+      posFinal.y = posCam.y - 0.2;
+
+      moedaEl.object3D.position.copy(posFinal);
+      moedaEl.setAttribute('visible', 'true');
+
+      // Garante que animação de rotação está rodando
+      moedaEl.setAttribute('animation', 'property: rotation; to: 90 360 0; loop: true; dur: 2500; easing: linear');
+    }
+
+    function atirar() {
+      if (!jogoRodando) return;
+
+      tocarSomTiro();
+
+      const cena = document.querySelector('a-scene');
+      const cameraEl = document.getElementById('camera-principal');
+      const moedaEl = document.getElementById('moeda');
+
+      // Verifica que a arma ainda está presente
+      garantirArma();
+
+      const projecao = document.createElement('a-sphere');
+      projecao.setAttribute('radius', '0.04');
+      projecao.setAttribute('color', '#FF0000');
+      projecao.setAttribute('material', 'shader: flat; color: #FF0000');
+
+      const posCam = new THREE.Vector3();
+      const dirCam = new THREE.Vector3();
+      cameraEl.object3D.getWorldPosition(posCam);
+      cameraEl.object3D.getWorldDirection(dirCam);
+      dirCam.multiplyScalar(-1);
+
+      const posInicial = posCam.clone().add(dirCam.clone().multiplyScalar(0.3));
+      projecao.object3D.position.copy(posInicial);
+      cena.appendChild(projecao);
+
+      let distanciaPercorrida = 0;
+      const velocidade = 0.25;
+
+      const intervalo = setInterval(() => {
+        projecao.object3D.position.add(dirCam.clone().multiplyScalar(velocidade));
+        distanciaPercorrida += velocidade;
+
+        // Verifica colisão com moeda visível
+        const moedaVisivel = moedaEl.getAttribute('visible');
+        if (moedaVisivel === true || moedaVisivel === 'true') {
+          const posMoeda = moedaEl.object3D.position;
+          const distMoeda = projecao.object3D.position.distanceTo(posMoeda);
+
+          if (distMoeda < 0.35) {
+            // Acertou! A moeda some e uma nova aparece
+            moedaEl.setAttribute('visible', 'false');
+            pontos += 1;
+            document.getElementById('placar').innerText = `Pontos: ${pontos}`;
+            
+            tocarSomAcerto();
+
+            clearInterval(intervalo);
+            if (projecao.parentNode) projecao.parentNode.removeChild(projecao);
+
+            // Spawna nova moeda imediatamente (não há timer por moeda — só o timer global)
+            setTimeout(() => { spawnMoeda(); }, 300);
+            return;
+          }
+        }
+
+        if (distanciaPercorrida > 12) {
+          clearInterval(intervalo);
+          if (projecao.parentNode) projecao.parentNode.removeChild(projecao);
+        }
+      }, 30);
+    }
+
+    function gameOver() {
+      if (!jogoRodando) return;
+      jogoRodando = false;
+
+      // Para o timer global
+      if (intervaloTimer) {
+        clearInterval(intervaloTimer);
+        intervaloTimer = null;
+      }
+
+      // Esconde moeda
+      document.getElementById('moeda').setAttribute('visible', 'false');
+
+      // Esconde UI de tempo
+      document.getElementById('barra-tempo-container').style.display = 'none';
+      document.getElementById('timer-jogo').style.display = 'none';
+
+      // Mostra tela de Game Over
+      document.getElementById('menu-gameover').style.display = 'flex';
+      document.getElementById('texto-pontuacao-final').innerText = `Pontos: ${pontos}`;
+    }
+
+    function sairJogo() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
