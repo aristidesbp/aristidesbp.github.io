@@ -607,6 +607,19 @@ proot-distro install ubuntu:versão..
 proot-distro login ubuntu
 ```
 ```
+# verificar acesso as pastas do celular
+ls /sdcard
+```
+```
+# apagar pasta
+rm -rf nome_da_pasta
+```
+```
+# movendo para pasta de downloads do celular
+mv nome_da_pasta /sdcard/Download/
+
+```
+```
 # atualizar 
 apt update && apt upgrade -y
 ```
