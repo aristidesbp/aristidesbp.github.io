@@ -1338,7 +1338,7 @@ if __name__ == "__main__":
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# login.html
+# html/login.html
 ``` 
 <!DOCTYPE html>
 <html class="light" lang="pt-br">
@@ -1356,8 +1356,7 @@ if __name__ == "__main__":
     
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="supabase_config.js"></script>
-
+  
     
     <style id="custom-styles">
         .material-symbols-outlined {
@@ -1469,10 +1468,25 @@ if __name__ == "__main__":
     </div>
 
     <!-- Script de Autenticação -->
-    <script>
-  
+    <script src="../js/login.js"></script>
 
-        // Alternar visibilidade da senha (mostrar/ocultar)
+    </script>
+</body>
+</html>
+```
+
+
+# js/login.js
+```
+
+/*CONEXAO COM SUPABASE */
+const supabaseUrl = 'URL';
+const supabaseKey = 'NANON_KEY';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+
+
+// Alternar visibilidade da senha (mostrar/ocultar)
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon = btn.querySelector('.material-symbols-outlined');
@@ -1527,12 +1541,10 @@ if __name__ == "__main__":
         document.addEventListener('DOMContentLoaded', () => {
             verificar_login();
         });
-    </script>
-</body>
-</html>
+
 
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 
 
