@@ -39,271 +39,13 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA HISTÓRICO DE CONVERSAS
 ```
-Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta. Fale sempre em Português do Brasil. Diretrizes obrigatórias: 1. Analisar o problema a fundo antes de responder. Fazer perguntas para compreender o cenário com exatidão. Se não souber algo, perguntar ou pesquisar antes de afirmar. 2. Execução: Enviar APENAS UMA única tarefa clara por vez. Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca enviar várias tarefas simultâneas. 3. Referências de código: Sempre que o usuário precisar alterar um texto ou código, indicar exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. Sempre crie documentação do que está sendo tratado nas conversas, em um arquivo ".json", no INÍCIO de todas as conversas com o resumo e códigos usados das conversas anteriores em forma de lista numerada, revisar este arquivo antes de me responder ou me enviar qualquer coisa (sempre Copiar os itens passados e adicionar um novo resumo, não apagar ou alterar nenhum item sem permissão). 5. Sempre utilizar terminal Linux, Termux ou GitHub para programar. 6. Gosto de hospedar sites no GitHub e usar o SUPABASE (backend, pois ele tem o storage e apólices de segurança internas).
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CRIANDO MEU VR 
-## Panorama Geral da Solução
-* Criar o efeito de "celular invisível", combinamos duas APIs nativas dos navegadores modernos:
-  - MediaDevices API (getUserMedia): Permite solicitar permissão e acessar o fluxo de vídeo da câmera traseira (facingMode: "environment").
-  - Fullscreen API (requestFullscreen): Oculta a barra de endereços do navegador e os botões de navegação, fazendo o fluxo de vídeo cobrir 100% da tela do aparelho (100vw por 100vh com object-fit: cover).
-
-Ao clicar no botão inicial, a câmera é ativada, o botão é escondido instantaneamente e a tela entra em modo fullscreen, deixando apenas a imagem ao vivo da câmera.
-
-Código da Página (index.html)
-
-#  VR PARA CELULAR (FUNCIONANDO).
-```
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Camuflagem</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      background-color: #000;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* O vídeo ocupa 100% da largura e altura do visor */
-    #camera-feed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: 1;
-      display: none;
-    }
-    /* Botão inicial centralizado */
-    #btn-iniciar {
-      position: relative;
-      z-index: 10;
-      padding: 16px 32px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #ffffff;
-      background-color: #2563eb;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <button id="btn-iniciar" onclick="iniciarMagica()">Iniciar Mágica</button>
-  <video id="camera-feed" autoplay playsinline muted></video>
-
-  <script>
-    async function iniciarMagica() {
-      const btn = document.getElementById('btn-iniciar');
-      const video = document.getElementById('camera-feed');
-
-      try {
-        // Solicita a câmera traseira do dispositivo
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: "environment" }
-          },
-          audio: false
-        });
-
-        // Aloca o fluxo de vídeo e exibe o elemento na tela
-        video.srcObject = stream;
-        video.style.display = 'block';
-        btn.style.display = 'none';
-
-        // Solicita o modo Tela Cheia
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-          document.documentElement.webkitRequestFullscreen();
-        }
-      } catch (err) {
-        alert('Erro ao acessar a câmera: ' + err.message);
-      }
-    }
-  </script>
-</body>
-</html>
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# JOGO DO MARIO
-```
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Camuflagem AR</title>
-  
-  <!-- Importando a biblioteca A-Frame -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  
-  <style>
-    /* Estilo para manter nosso botão mágico inicializado por cima do motor 3D */
-    #ui-container {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: none; /* Para não bloquear cliques na tela */
-    }
-    #btn-iniciar {
-      pointer-events: auto;
-      padding: 16px 32px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      background-color: #2563eb;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
-
-  <script>
-    // 1. Criamos um "componente" inteligente para a nossa moeda
-    AFRAME.registerComponent('moeda-magica', {
-      init: function () {
-        let el = this.el; // A nossa moeda
-        el.setAttribute('visible', 'false'); // Começa invisível
-        this.iniciado = false;
-
-        // 2. Fica escutando o momento em que o modo Realidade Aumentada (AR) é ativado
-        this.el.sceneEl.addEventListener('enter-vr', () => {
-          // Verifica se entramos em AR
-          if (this.el.sceneEl.is('ar-mode') && !this.iniciado) {
-            this.iniciado = true;
-            
-            // 3. Inicia o cronômetro de 5 segundos
-            setTimeout(() => {
-              // Pega o objeto da câmera para saber posição e giroscópio (rotação)
-              let camera = document.querySelector('[camera]').object3D;
-              
-              // No mundo 3D, a "frente" da câmera é o eixo Z negativo (-1)
-              let direcao = new THREE.Vector3(0, 0, -1);
-              direcao.applyQuaternion(camera.quaternion); // Aplica a rotação do giroscópio do celular
-              
-              // Calcula a posição exata 1 metro a partir de onde o celular está
-              let pos = new THREE.Vector3().copy(camera.position).add(direcao);
-              
-              // Move a moeda para esse local e a deixa visível
-
-
-
-
-    // Move a moeda para esse local e a deixa visível
-              el.setAttribute('position', `${pos.x} ${pos.y} ${pos.z}`);
-              el.setAttribute('visible', 'true');
-              
-              // 4. Mantém a posição fixa e adiciona APENAS o giro no próprio eixo
-              el.setAttribute('animation__giro', 'property: rotation; to: 90 360 0; loop: true; dur: 2500; easing: linear');
-              
-            }, 5000); // 5000 milissegundos = 5 segundos
-
-
-
-          }
-        });
-      }
-    });
-
-    // Função para acionar a mágica ao clicar no botão
-    function iniciarMagica() {
-      document.getElementById('ui-container').style.display = 'none';
-      // Força a cena do A-Frame a entrar em modo VR/AR nativo do Android
-      document.querySelector('a-scene').enterVR(); 
-    }
-  </script>
-</head>
-<body style="margin: 0; overflow: hidden; background-color: #000;">
-
-  <div id="ui-container">
-    <button id="btn-iniciar" onclick="iniciarMagica()">Iniciar Mágica</button>
-  </div>
-  
-  <!-- Cena 3D: A tag 'a-scene' é onde a mágica do A-Frame acontece -->
-  <!-- xr-mode-ui="enabled: false" esconde o botão padrão do A-Frame pois fizemos o nosso -->
-  <a-scene webxr="optionalFeatures: hit-test;" xr-mode-ui="enabled: false" background="color: transparent;">
-    
-    <a-camera position="0 1.6 0"></a-camera>
-    
-    <!-- Nossa Moeda: Usamos um cilindro achatado com a cor Dourada (#FFD700) -->
-    <a-cylinder 
-      moeda-magica 
-      radius="0.15" 
-      height="0.02" 
-      color="#FFD700" 
-      rotation="90 0 0">
-    </a-cylinder>
-
-  </a-scene>
-
-</body>
-</html>
+Torne-se um Agente de Suporte Técnico de Alto Nível. Suas respostas devem ser pautadas pela honestidade brutal, criticidade e precisão absoluta.
+Fale sempre em Português do Brasil.
+Diretrizes obrigatórias:]
+1. Analisar o problema a fundo antes de responder. Fazer perguntas para compreender o cenário com exatidão. Se não souber algo, perguntar ou pesquisar antes de afirmar. 2. Execução: Enviar APENAS UMA única tarefa clara por vez. Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo. Nunca enviar várias tarefas simultâneas. 3. Referências de código: Sempre que o usuário precisar alterar um texto ou código, indicar exatamente a linha superior e a linha inferior de referência para facilitar a localização rápida via Ctrl+F. 4. Sempre crie documentação do que está sendo tratado nas conversas, em um arquivo ".json", no INÍCIO de todas as conversas com o resumo e códigos usados das conversas anteriores em forma de lista numerada, revisar este arquivo antes de me responder ou me enviar qualquer coisa (sempre Copiar os itens passados e adicionar um novo resumo, não apagar ou alterar nenhum item sem permissão). 5. Sempre utilizar terminal Linux, Termux ou GitHub para programar. 6. Gosto de hospedar sites no GitHub e usar o SUPABASE (backend, pois ele tem o storage e apólices de segurança internas).
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# JOGANDO COM IA
-```
-{
-  "prontuario_do_jogo": true,
-  "prontuario": [
-    {
-      "item": 1,
-      "protocolo": "Para mitigar a perda de contexto, leia o JSON anterior, confirme se a ação ocorreu, copie TODO este JSON no INÍCIO de toda resposta e adicione ao fim desta lista 'prontuario' um novo item numerado sequencialmente com o resumo compacto do turno atual (formando um livro da nossa história)."
-    },
-    {
-      "item": 2,
-      "comportamento": "Aja como um Mestre de RPG imparcial e realista. Narre as cenas com foco imersivo, administre as mecânicas de forma justa e apresente sempre 3 sugestões de ação numeradas ao final da resposta."
-    },
-    {
-      "item": 3,
-      "missao": {
-        "tempo": "Dia 1, 06:00",
-        "foco": "Templo da Deusa",
-        "objetivo": "Renascer e entender o novo mundo",
-        "patrocínio": "Deusa do Equilíbrio",
-        "recompensa": "Indefinida"
-      }
-    },
-    {
-      "item": 4,
-      "char": {
-        "nome": "Aristides",
-        "lv": 1,
-        "xp": "0/300",
-        "atrib": { "FOR": 10, "DES": 10, "CON": 10, "INT": 10, "SAB": 10, "CAR": 10 },
-        "stats": { "hp": "12/12", "fome": 0, "sono": 0 },
-        "prof": ["Alquimia", "Sobrevivência"],
-        "inv": ["Roupas rasgadas"],
-        "bg": "Acordou no templo após uma morte cômica. Afinidade zero com a deusa."
-      }
-    },
-    {
-      "item": 5,
-      "regras": "D&D5e: Testes de d20+Modificador vs CD (Fácil 10, Médio 15, Difícil 20). Mod=(Atrib-10)/2 arredondado para baixo. Sobrevivência: Turno=+30min, +1 fome/sono. Se fome/sono=100 desmaia e -10 HP. Combate: Iniciativa d20+DES, Ataque d20+Mod vs CA do inimigo. Crafting: Se tiver materiais e proficiência, teste INT ou DES vs CD do item. Narrativa: max 900 caracteres."
-    }
-  ]
-}
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  CURSO DE TERMUX ( Terminal linux para android):
@@ -1596,7 +1338,209 @@ if __name__ == "__main__":
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
+# login.html
+``` 
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Login - ERP_ABP</title>
+    
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+
+    
+    <style id="custom-styles">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .fade-in {
+            animation: fadeIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, .8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, .3);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, .8);
+            border-color: rgba(255, 255, 255, .1);
+        }
+    </style>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006c45",
+                        "primary-container": "#3ecf8e",
+                        "on-surface": "#191c1d",
+                        "text-muted": "#687076"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-surface dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Fundo Decorativo -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary-container/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Card de Login -->
+    <div class="bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-2xl shadow-xl border border-white/40 dark:border-slate-800 max-w-md w-full fade-in relative z-10 glass-card">
+        
+        <!-- Cabeçalho do Card -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+                <span class="material-symbols-outlined text-primary text-4xl">groups</span>
+            </div>
+            <h2 class="text-2xl font-bold text-on-surface dark:text-white tracking-tight">ERP_ABP</h2>
+            <p class="text-text-muted dark:text-slate-400 text-sm mt-2">Faça login para acessar a plataforma</p>
+        </div>
+
+        <!-- Formulário de Entrada -->
+        <div class="space-y-6">
+            <div>
+                <label class="text-xs font-semibold text-on-surface dark:text-slate-300 mb-2 block uppercase tracking-wider">E-mail Corporativo</label>
+                <input 
+                    id="login-email" 
+                    type="email" 
+                    placeholder="usuario@empresa.com.br" 
+                    onkeyup="if(event.key==='Enter') document.getElementById('login-senha').focus()"
+                    class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white"
+                />
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-on-surface dark:text-slate-300 mb-2 block uppercase tracking-wider">Senha de Segurança</label>
+                <div class="relative">
+                    <input 
+                        id="login-senha" 
+                        type="password" 
+                        placeholder="••••••••" 
+                        onkeyup="if(event.key==='Enter') fazerLogin()"
+                        class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white"
+                    />
+                    <button 
+                        type="button" 
+                        onclick="togglePasswordVisibility('login-senha', this)"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1"
+                    >
+                        <span class="material-symbols-outlined text-xl">visibility</span>
+                    </button>
+                </div>
+            </div>
+
+            <button 
+                id="btn-login" 
+                onclick="fazerLogin()"
+                class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/95 transition-all shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
+            >
+                Autenticar Acesso
+            </button>
+        </div>
+
+        <!-- Rodapé do Card -->
+        <div class="flex items-center justify-center gap-2 mt-10 opacity-60">
+            <span class="material-symbols-outlined text-xs dark:text-slate-400">verified_user</span>
+            <p class="text-xs text-text-muted dark:text-slate-400 font-medium">Criptografia AES de 256 bits ativada.</p>
+        </div>
+    </div>
+
+    <!-- Script de Autenticação -->
+    <script>
+  
+
+        // Alternar visibilidade da senha (mostrar/ocultar)
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('.material-symbols-outlined');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerText = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.innerText = 'visibility';
+            }
+        }
+
+        // Verifica se o usuário já possui sessão ativa ao carregar a página
+        async function verificar_login() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                // Redireciona para a index.html caso já esteja autenticado
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Processa o login no Supabase
+        async function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            const btn = document.getElementById('btn-login');
+
+            if (!email || !senha) {
+                return alert("Credenciais obrigatórias.");
+            }
+
+            btn.innerText = 'Autenticando...';
+            btn.disabled = true;
+
+            const { data, error } = await _supabase.auth.signInWithPassword({ 
+                email: email, 
+                password: senha 
+            });
+
+            if (error) {
+                alert("Falha na autenticação: " + error.message);
+                btn.innerText = 'Autenticar Acesso';
+                btn.disabled = false;
+            } else {
+                // Redirecionamento com sucesso
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Checar sessão ao iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            verificar_login();
+        });
+    </script>
+</body>
+</html>
+
+```
+
+
+
+
+
+
+
+
+# SQL DAS TABELAS 
 
 ``` 
 -- =========================================================================
@@ -2324,11 +2268,6 @@ GRANT ALL ON SCHEMA public TO service_role;
 
 
 **OBSERVAÇÃO:** Em Authentication, crie um usuario, adicione a url do site. Depois veja se foi cadastrado de forma altomatica na tabela entidades.
-
-
-
-
-
 
 
 
