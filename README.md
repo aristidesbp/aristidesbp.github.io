@@ -2262,11 +2262,25 @@ async function ent_salvarEntidade() {
                 throw new Error("O arquivo excede o limite de 2MB estabelecido por segurança.");
             }
 
-            const fileName = `avatar_${Date.now()}_${fileFoto.name}`;
-            const { error: uploadError } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileFoto);
-            if (!uploadError) {
-                fotoUrlFinal = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+
+
+
+
+    
+
+
+            const { error: uploadError } = await _supabase.storage.from('avatares').upload(`public/${fileName}`, fileFoto);
+            
+            if (uploadError) {
+                throw new Error("Erro de segurança no Storage: Falha ao enviar a foto. " + uploadError.message);
             }
+            
+            fotoUrlFinal = _supabase.storage.from('avatares').getPublicUrl(`public/${fileName}`).data.publicUrl;
+
+
+
+
+
         }
 
         // Construção do Payload JSON para a Função RPC no Banco de Dados
