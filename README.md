@@ -46,7 +46,7 @@ Diretrizes obrigatórias:]
 
 # Evitar os problemas :
 1- RLS desligado no supabase
-2- regra de negocio no frontende (admin)
+2- regra de negocio no frontende (admin), devem ser feitas via RPC do backend de forma segura!
 3- fetch de dados no backend sem auth
 4- chaves expostas
 5- input sem tratar : xss, upload de qualquer arquivo, sem rate limit.
