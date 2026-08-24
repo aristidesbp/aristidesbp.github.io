@@ -1860,10 +1860,949 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# entidades/entidades.sql
+```
+-- =========================================================================
+-- 1. LIMPEZA SEGURA (DROP DE ESTRUTURAS ANTIGAS)
+-- =========================================================================
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP FUNCTION IF EXISTS public.handle_new_user();
+DROP FUNCTION IF EXISTS public.upsert_entidade_rpc(jsonb);
+DROP FUNCTION IF EXISTS public.delete_entidades_rpc(bigint[]);
+-- ATENÇÃO: CASCADE apaga a tabela e qualquer relacionamento que dependa dela
+DROP TABLE IF EXISTS public.entidades CASCADE;
 
 
+-- =========================================================================
+-- 2. CRIAÇÃO DA TABELA BLINDADA COM CONSTRAINTS
+-- =========================================================================
+CREATE TABLE public.entidades (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    
+    -- Dados Pessoais / Identificação
+    -- CHECK garante que o nome não seja salvo vazio ou só com espaços
+    nome_completo text NOT NULL CHECK (char_length(trim(nome_completo)) > 0),
+    url_foto_avatar text, 
+    codigo_barras_carteirinha text, 
+    bio text,
+    
+    -- Contato e Documentos
+    cpf text,
+    data_nascimento date,
+    -- CHECK básico para garantir formato de e-mail válido
+    email text CHECK (email IS NULL OR email = '' OR email ~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+    telefone text,
+    
+    -- Validações Rígidas de Regra de Negócio (Bloqueia injeção de valores inválidos)
+    tipo_acesso text DEFAULT 'cliente' CHECK (tipo_acesso IN ('cliente', 'admin', 'colaborador')),
+    tipo_entidade text DEFAULT 'cliente' CHECK (tipo_entidade IN ('cliente', 'fornecedor', 'colaborador')),
+    status_entidade text DEFAULT 'ativo' CHECK (status_entidade IN ('ativo', 'inativo')),
+    avaliacao integer DEFAULT 5 CHECK (avaliacao >= 1 AND avaliacao <= 5),
+    
+    -- Endereço
+    cep text,
+    logradouro text,
+    numero text,
+    bairro text,
+    cidade text,
+    estado varchar(2)
+);
+
+-- Garantir que a carteirinha e o CPF não se repitam PARA O MESMO USUÁRIO
+CREATE UNIQUE INDEX idx_ent_carteirinha ON public.entidades (user_id, codigo_barras_carteirinha) WHERE codigo_barras_carteirinha IS NOT NULL AND codigo_barras_carteirinha <> '';
+CREATE UNIQUE INDEX idx_ent_cpf ON public.entidades (user_id, cpf) WHERE cpf IS NOT NULL AND cpf <> '';
 
 
+-- =========================================================================
+-- 3. POLÍTICAS DE SEGURANÇA RLS
+-- =========================================================================
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- Liberamos a LEITURA padrão para que o frontend possa renderizar as listas
+CREATE POLICY "Leitura Proprietario" 
+ON public.entidades FOR SELECT 
+TO authenticated 
+USING (user_id = auth.uid());
 
 
+-- =========================================================================
+-- 4. RPC: UPSERT (CRIAR/ATUALIZAR) SEGURO
+-- =========================================================================
+CREATE OR REPLACE FUNCTION public.upsert_entidade_rpc(p_payload jsonb)
+RETURNS bigint
+LANGUAGE plpgsql
+SECURITY DEFINER -- Permite a função executar as lógicas ignorando bloqueios superficiais, garantindo que ela gerencie a segurança
+SET search_path = public
+AS $$
+DECLARE
+    v_id bigint;
+    v_user_id uuid := auth.uid();
+    v_nome text;
+    v_cpf text;
+    v_email text;
+    v_tipo text;
+    v_status text;
+BEGIN
+    -- 1. Trava de Segurança (Auth)
+    IF v_user_id IS NULL THEN
+        RAISE EXCEPTION 'Acesso negado. Sessão inválida ou expirada.';
+    END IF;
 
+    -- 2. Limpeza e Sanitização Primitiva de Dados
+    v_nome := trim(p_payload->>'nome_completo');
+    v_cpf := regexp_replace(p_payload->>'cpf', '\D', '', 'g'); -- Remove tudo que não for número do CPF
+    v_email := lower(trim(p_payload->>'email'));
+    v_tipo := lower(trim(p_payload->>'tipo_entidade'));
+    v_status := lower(trim(p_payload->>'status_entidade'));
+
+    -- 3. Validações Manuais
+    IF v_nome IS NULL OR length(v_nome) = 0 THEN
+        RAISE EXCEPTION 'Nome completo é obrigatório.';
+    END IF;
+
+    IF v_tipo NOT IN ('cliente', 'fornecedor', 'colaborador') THEN
+        v_tipo := 'cliente'; -- Fallback (Plano B) em caso de lixo
+    END IF;
+
+    IF v_status NOT IN ('ativo', 'inativo') THEN
+        v_status := 'ativo';
+    END IF;
+
+    -- 4. Roteamento: INSERT ou UPDATE?
+    IF (p_payload->>'id') IS NOT NULL AND (p_payload->>'id') <> '' THEN
+        -- CAMINHO UPDATE
+        v_id := (p_payload->>'id')::bigint;
+        
+        -- Checagem Dupla: A entidade existe E pertence a quem está pedindo?
+        IF NOT EXISTS (SELECT 1 FROM public.entidades WHERE id = v_id AND user_id = v_user_id) THEN
+            RAISE EXCEPTION 'Entidade não encontrada ou violação de propriedade de dados.';
+        END IF;
+
+        UPDATE public.entidades SET
+            nome_completo = v_nome,
+            cpf = v_cpf,
+            data_nascimento = NULLIF(p_payload->>'data_nascimento', '')::date,
+            email = NULLIF(v_email, ''),
+            telefone = p_payload->>'telefone',
+            tipo_entidade = v_tipo,
+            status_entidade = v_status,
+            cep = p_payload->>'cep',
+            logradouro = p_payload->>'logradouro',
+            numero = p_payload->>'numero',
+            bairro = p_payload->>'bairro',
+            cidade = p_payload->>'cidade',
+            estado = upper(p_payload->>'estado'),
+            url_foto_avatar = p_payload->>'url_foto_avatar',
+            codigo_barras_carteirinha = p_payload->>'codigo_barras_carteirinha'
+        WHERE id = v_id AND user_id = v_user_id;
+
+    ELSE
+        -- CAMINHO INSERT
+        INSERT INTO public.entidades (
+            user_id, nome_completo, cpf, data_nascimento, email, telefone,
+            tipo_entidade, status_entidade, cep, logradouro, numero, bairro,
+            cidade, estado, url_foto_avatar, codigo_barras_carteirinha
+        ) VALUES (
+            v_user_id, v_nome, v_cpf, NULLIF(p_payload->>'data_nascimento', '')::date,
+            NULLIF(v_email, ''), p_payload->>'telefone', v_tipo, v_status,
+            p_payload->>'cep', p_payload->>'logradouro', p_payload->>'numero',
+            p_payload->>'bairro', p_payload->>'cidade', upper(p_payload->>'estado'),
+            p_payload->>'url_foto_avatar', p_payload->>'codigo_barras_carteirinha'
+        ) RETURNING id INTO v_id;
+    END IF;
+
+    -- Retorna o ID (Criado ou Atualizado) para o Frontend, se ele precisar usar
+    RETURN v_id;
+END;
+$$;
+
+
+-- =========================================================================
+-- 5. RPC: DELEÇÃO EM MASSA SEGURA
+-- =========================================================================
+CREATE OR REPLACE FUNCTION public.delete_entidades_rpc(p_ids bigint[])
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_user_id uuid := auth.uid();
+BEGIN
+    IF v_user_id IS NULL THEN
+        RAISE EXCEPTION 'Acesso negado. Sessão inválida.';
+    END IF;
+
+    -- Só deleta SE o ID da entidade estiver na lista AND pertencer ao usuário logado
+    DELETE FROM public.entidades 
+    WHERE id = ANY(p_ids) AND user_id = v_user_id;
+END;
+$$;
+
+
+-- =========================================================================
+-- 6. TRIGGER DE SINCRONIZAÇÃO DE USUÁRIOS
+-- =========================================================================
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger 
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    -- Cria um perfil básico na tabela de entidades quando um usuário se cadastra
+    INSERT INTO public.entidades (
+        user_id, 
+        nome_completo, 
+        url_foto_avatar
+    )
+    VALUES (
+        new.id,
+        coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', 'Usuário ERP'), 
+        new.raw_user_meta_data->>'avatar_url'
+    );
+    RETURN new;
+END;
+$$;
+
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW 
+    EXECUTE FUNCTION public.handle_new_user();
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# entidades/entidades.css
+```
+/* ==========================================
+   CSS ESPECÍFICO - MÓDULO DE ENTIDADES 
+============================================= */
+
+/* Exemplo: Container do Grid de Entidades */
+#ent-lista-grid {
+    transition: all 0.3s ease-in-out;
+}
+
+/* O dropzone genérico está no estilo principal. Aqui podemos sobrescrever se necessário */
+#ent-drop-foto.dragover {
+    border-color: #006c45; 
+    background-color: #ecfdf5; 
+    transform: scale(1.02);
+}
+
+/* Ajustes de scroll suave na área de listagem */
+#ent-painel-listagem {
+    scroll-behavior: smooth;
+}
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# entidades/entidades.js
+```
+// ==========================================
+// MÓDULO DE ENTIDADES (entidades/entidades.js)
+// ==========================================
+
+let ent_paginaAtual = 1;
+const ent_itensPorPagina = 10;
+let ent_totalRegistros = 0;
+
+/**
+ * FUNÇÃO DE SEGURANÇA: Previne ataques de XSS (Cross-Site Scripting)
+ * Transforma caracteres especiais de HTML em texto inofensivo antes de jogar na tela.
+ */
+function sanitizarEntrada(texto) {
+    if (!texto) return '';
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
+ * Função de inicialização exclusiva deste módulo.
+ */
+function ent_init() {
+    ent_loadDashboard();
+    ent_loadEntidades();
+    ent_configurarDropZone('ent-drop-foto', 'ent-f-foto', 'ent-nome-foto');
+}
+
+// O EventListener aguarda o DOM carregar e usa a função do navbar.js para checar a sessão
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof verificarLogin === 'function') {
+        const session = await verificarLogin(); 
+        if (session) {
+            ent_init();
+        }
+    } else {
+        console.error("Erro Crítico: Função verificarLogin não encontrada. Verifique os imports globais.");
+    }
+});
+
+// ==========================================
+// UPLOAD E ARQUIVOS
+// ==========================================
+function ent_configurarDropZone(dropId, inputId, txtId) {
+    const dropZone = document.getElementById(dropId);
+    const inputEl  = document.getElementById(inputId);
+    if (!dropZone || !inputEl) return;
+    
+    dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files?.length > 0) {
+            inputEl.files = e.dataTransfer.files;
+            ent_mostrarNomeArquivo(inputEl, txtId);
+        }
+    });
+}
+
+function ent_mostrarNomeArquivo(input, idCampoTexto) {
+    const campoTexto = document.getElementById(idCampoTexto);
+    if (input.files?.length > 0) {
+        campoTexto.style.display = 'inline-flex';
+        campoTexto.innerHTML = `<span class="material-symbols-outlined text-sm">verified</span> ${sanitizarEntrada(input.files[0].name)}`;
+    } else {
+        campoTexto.style.display = 'none';
+        campoTexto.innerHTML = '';
+    }
+}
+
+// ==========================================
+// INTEGRAÇÃO DE API EXTERNA (VIA CEP)
+// ==========================================
+async function ent_buscarCEP(cep) {
+    const limpo = cep.replace(/\D/g,'');
+    if (limpo.length !== 8) return;
+    try {
+        const res  = await fetch(`https://viacep.com.br/ws/${limpo}/json/`);
+        const data = await res.json();
+        if (!data.erro) {
+            document.getElementById('ent-f-logradouro').value = data.logradouro;
+            document.getElementById('ent-f-bairro').value     = data.bairro;
+            document.getElementById('ent-f-cidade').value     = data.localidade;
+            document.getElementById('ent-f-estado').value     = data.uf;
+            document.getElementById('ent-f-numero').focus();
+        }
+    } catch(e) { console.error("Erro ao buscar CEP", e); }
+}
+
+// ==========================================
+// ESTATÍSTICAS (DASHBOARD)
+// ==========================================
+async function ent_loadDashboard() {
+    const { data, error } = await _supabase.from('entidades').select('tipo_entidade,status_entidade');
+    if (error || !data) return;
+    
+    let clientes = 0, fornecedores = 0, inativos = 0;
+    data.forEach(e => {
+        if (e.status_entidade === 'inativo') inativos++;
+        if (e.tipo_entidade === 'cliente')   clientes++;
+        if (e.tipo_entidade === 'fornecedor') fornecedores++;
+    });
+    
+    document.getElementById('ent-dash-clientes').innerText    = clientes;
+    document.getElementById('ent-dash-fornecedores').innerText = fornecedores;
+    document.getElementById('ent-dash-inativos').innerText    = inativos;
+}
+
+// ==========================================
+// CRUD SEGURO VIA RPC (BACKEND)
+// ==========================================
+
+/**
+ * Captura os dados do formulário e envia para a RPC de segurança (upsert_entidade_rpc)
+ */
+async function ent_salvarEntidade() {
+    const btn = document.getElementById('ent-btn-salvar');
+    btn.disabled = true; btn.innerText = 'Gravando...';
+    
+    try {
+        // Coleta dos dados do formulário
+        const id         = document.getElementById('ent-f-editando-id').value;
+        const nome       = document.getElementById('ent-f-nome').value;
+        const cpf        = document.getElementById('ent-f-cpf').value;
+        const nascimento = document.getElementById('ent-f-nascimento').value;
+        const email      = document.getElementById('ent-f-email').value;
+        const telefone   = document.getElementById('ent-f-telefone').value;
+        const tipo       = document.getElementById('ent-f-tipo-entidade').value;
+        const status     = document.getElementById('ent-f-status').value;
+        const cep        = document.getElementById('ent-f-cep').value;
+        const logradouro = document.getElementById('ent-f-logradouro').value;
+        const numero     = document.getElementById('ent-f-numero').value;
+        const bairro     = document.getElementById('ent-f-bairro').value;
+        const city       = document.getElementById('ent-f-cidade').value;
+        const state      = document.getElementById('ent-f-estado').value;
+        const fileFoto   = document.getElementById('ent-f-foto').files[0];
+        
+        // Coleta do campo novo
+        const carteirinhaEl = document.getElementById('ent-f-carteirinha');
+        const carteirinhaVal = carteirinhaEl ? carteirinhaEl.value : '';
+
+        // Validação Frontend Mínima (A verdadeira está no backend)
+        if (!nome) throw new Error("O Nome Completo é obrigatório.");
+
+        let fotoUrlFinal = null;
+        if (fileFoto) {
+            // SEGURANÇA (Regra 5): Bloqueia arquivos maiores que 2MB no Frontend
+            const limiteMB = 2 * 1024 * 1024;
+            if (fileFoto.size > limiteMB) {
+                throw new Error("O arquivo excede o limite de 2MB estabelecido por segurança.");
+            }
+
+            const fileName = `avatar_${Date.now()}_${fileFoto.name}`;
+            const { error: uploadError } = await _supabase.storage.from('comprovantes').upload(`public/${fileName}`, fileFoto);
+            if (!uploadError) {
+                fotoUrlFinal = _supabase.storage.from('comprovantes').getPublicUrl(`public/${fileName}`).data.publicUrl;
+            }
+        }
+
+        // Construção do Payload JSON para a Função RPC no Banco de Dados
+        const payload = {
+            id: id || null,
+            nome_completo: nome,
+            cpf: cpf,
+            data_nascimento: nascimento,
+            email: email,
+            telefone: telefone,
+            tipo_entidade: tipo,
+            status_entidade: status,
+            cep: cep,
+            logradouro: logradouro,
+            numero: numero,
+            bairro: bairro,
+            cidade: city,
+            estado: state,
+            url_foto_avatar: fotoUrlFinal,
+            codigo_barras_carteirinha: carteirinhaVal
+        };
+
+        // Envia os dados para a função segura no Supabase
+        const { data: rpcData, error: rpcError } = await _supabase.rpc('upsert_entidade_rpc', {
+            p_payload: payload
+        });
+
+        if (rpcError) throw rpcError;
+        
+        alert("Operação realizada com sucesso pelo servidor de banco de dados.");
+
+        // Atualiza a tela após salvar
+        ent_cancelarEdicao();
+        ent_loadDashboard();
+        ent_loadEntidades();
+        ent_alternarSubAba('listagem');
+
+    } catch(error) {
+        alert(error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
+    }
+}
+
+/**
+ * Exclui múltiplos registros enviando os IDs para a RPC segura.
+ */
+async function ent_excluirSelecionados() {
+    // Busca os checkboxes marcados e converte os valores (IDs) para Números (Inteiros)
+    const ids = Array.from(document.querySelectorAll('.ent-check:checked')).map(cb => parseInt(cb.value));
+    
+    if (ids.length === 0) return alert("Selecione registros para excluir.");
+    
+    if (confirm(`Confirmar exclusão de ${ids.length} registro(s)?`)) {
+        // Envia o Array de Inteiros para o Backend realizar o Delete seguro
+        const { error } = await _supabase.rpc('delete_entidades_rpc', { p_ids: ids });
+        
+        if (!error) { 
+            alert("Registros excluídos com segurança pelo servidor."); 
+            ent_paginaAtual = 1; 
+            ent_loadDashboard(); 
+            ent_loadEntidades(); 
+        } else { 
+            alert("Erro: " + error.message); 
+        }
+    }
+}
+
+// ==========================================
+// LEITURA E PAGINAÇÃO (READ)
+// ==========================================
+async function ent_loadEntidades() {
+    const busca = document.getElementById('ent-filtro-busca').value;
+    const tipo  = document.getElementById('ent-filtro-tipo').value;
+
+    let countQuery = _supabase.from('entidades').select('*', {count:'exact', head:true});
+    if (busca) countQuery = countQuery.ilike('nome_completo', `%${busca}%`);
+    if (tipo)  countQuery = countQuery.eq('tipo_entidade', tipo);
+    
+    const { count } = await countQuery;
+    ent_totalRegistros = count || 0;
+
+    let query = _supabase.from('entidades').select('*').order('nome_completo', {ascending:true});
+    if (busca) query = query.ilike('nome_completo', `%${busca}%`);
+    if (tipo)  query = query.eq('tipo_entidade', tipo);
+    
+    const start = (ent_paginaAtual - 1) * ent_itensPorPagina;
+    query = query.range(start, start + ent_itensPorPagina - 1);
+
+    const { data, error } = await query;
+    if (error) return;
+
+    const totalPaginas = Math.ceil(ent_totalRegistros / ent_itensPorPagina);
+    document.getElementById('ent-page-indicator').innerText    = `Página ${ent_paginaAtual} de ${totalPaginas || 1}`;
+    document.getElementById('ent-pagination-info').innerText   = `Mostrando ${data.length} de ${ent_totalRegistros}`;
+    document.getElementById('ent-btn-anterior').disabled       = ent_paginaAtual === 1;
+    document.getElementById('ent-btn-proximo').disabled        = ent_paginaAtual >= totalPaginas;
+
+    const grid = document.getElementById('ent-lista-grid');
+    if (data.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 font-bold">Nenhum registro encontrado.</div>';
+        return;
+    }
+
+    grid.innerHTML = data.map(e => {
+        const statusColor  = e.status_entidade === 'ativo' ? 'bg-emerald-500' : 'bg-slate-300';
+        
+        // SEGURANÇA: Aplicação do sanitizador nos dados que vêm do banco e vão para o HTML
+        const safeNome     = sanitizarEntrada(e.nome_completo);
+        const safeEmail    = sanitizarEntrada(e.email || 'Sem e-mail');
+        const safeTel      = sanitizarEntrada(e.telefone || '---');
+        const safeTipo     = sanitizarEntrada(e.tipo_entidade);
+        const safeCart     = e.codigo_barras_carteirinha ? `<div class="mt-2 inline-flex items-center gap-1 bg-slate-100 text-slate-500 text-[9px] px-2 py-1 rounded font-mono"><i class="fas fa-barcode"></i> ${sanitizarEntrada(e.codigo_barras_carteirinha)}</div>` : '';
+        
+        const imgUrl       = e.url_foto_avatar || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(e.nome_completo);
+        const whatsappUrl  = `https://wa.me/${(e.telefone||'').replace(/\D/g,'')}`;
+        const mailtoUrl    = `mailto:${e.email}`;
+
+        return `
+        <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 shadow-sm hover:shadow-premium transition-all duration-300 flex flex-col items-center group relative">
+          <div class="absolute top-3 left-3 z-10">
+            <input type="checkbox" class="ent-check w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800" value="${e.id}">
+          </div>
+          <div class="relative mb-4">
+            <img src="${imgUrl}" class="w-20 h-20 rounded-2xl object-cover border-4 border-slate-50 dark:border-slate-700 shadow-sm">
+            <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-slate-800 ${statusColor}"></div>
+          </div>
+          <div class="text-center w-full mb-4">
+            <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">${safeTipo}</span>
+            <h4 class="font-bold text-slate-900 dark:text-white truncate px-2 mb-1" title="${safeNome}">${safeNome}</h4>
+            <p class="text-xs text-slate-400 truncate px-4">${safeEmail}</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-mono-sm">${safeTel}</p>
+            ${safeCart}
+          </div>
+          <div class="flex items-center gap-3 mt-auto pt-4 border-t border-slate-50 dark:border-slate-700 w-full justify-center">
+            <button onclick="window.open('${whatsappUrl}','_blank')" class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="WhatsApp">
+              <span class="material-symbols-outlined text-lg">chat</span>
+            </button>
+            <a href="${mailtoUrl}" class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm" title="E-mail">
+              <span class="material-symbols-outlined text-lg">mail</span>
+            </a>
+            <button onclick="ent_prepararEdicao('${e.id}')" class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-400 dark:text-slate-300 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm" title="Editar">
+              <span class="material-symbols-outlined text-lg">edit_square</span>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+// ==========================================
+// CONTROLES DE INTERFACE E FORMULÁRIO
+// ==========================================
+async function ent_prepararEdicao(id) {
+    const { data: e } = await _supabase.from('entidades').select('*').eq('id', id).single();
+    if (e) {
+        document.getElementById('ent-f-editando-id').value   = e.id;
+        document.getElementById('ent-f-nome').value          = e.nome_completo;
+        document.getElementById('ent-f-cpf').value           = e.cpf || '';
+        document.getElementById('ent-f-nascimento').value    = e.data_nascimento || '';
+        document.getElementById('ent-f-email').value         = e.email || '';
+        document.getElementById('ent-f-telefone').value      = e.telefone || '';
+        document.getElementById('ent-f-tipo-entidade').value = e.tipo_entidade;
+        document.getElementById('ent-f-status').value        = e.status_entidade;
+        document.getElementById('ent-f-cep').value           = e.cep || '';
+        document.getElementById('ent-f-logradouro').value    = e.logradouro || '';
+        document.getElementById('ent-f-numero').value        = e.numero || '';
+        document.getElementById('ent-f-bairro').value        = e.bairro || '';
+        document.getElementById('ent-f-cidade').value        = e.cidade || '';
+        document.getElementById('ent-f-estado').value        = e.estado || '';
+        document.getElementById('ent-f-foto').value          = '';
+        
+        // Povoando o novo campo
+        const inputCart = document.getElementById('ent-f-carteirinha');
+        if (inputCart) inputCart.value = e.codigo_barras_carteirinha || '';
+
+        const fotoTxt = document.getElementById('ent-nome-foto');
+        if (e.url_foto_avatar) { 
+            fotoTxt.style.display='inline-flex'; 
+            fotoTxt.innerHTML='<span class="material-symbols-outlined text-sm">image</span> Mídia anexada'; 
+        } else { 
+            fotoTxt.style.display='none'; 
+        }
+
+        document.getElementById('ent-btn-salvar').innerHTML = '<span class="material-symbols-outlined">sync</span> Atualizar Registro';
+        document.getElementById('ent-btn-cancelar').classList.remove('hidden');
+
+        ent_alternarSubAba('formulario');
+    }
+}
+
+function ent_cancelarEdicao() {
+    document.getElementById('ent-f-editando-id').value = '';
+    document.getElementById('ent-btn-salvar').innerHTML = '<span class="material-symbols-outlined">save</span> Confirmar Registro';
+    document.getElementById('ent-btn-cancelar').classList.add('hidden');
+
+    document.querySelectorAll('#ent-painel-formulario input, #ent-painel-formulario select').forEach(i => {
+        if (i.type !== 'hidden') i.value = '';
+    });
+    document.getElementById('ent-f-tipo-entidade').value = 'cliente';
+    document.getElementById('ent-f-status').value        = 'ativo';
+    document.getElementById('ent-nome-foto').style.display = 'none';
+    document.getElementById('ent-nome-foto').innerHTML   = '';
+
+    ent_alternarSubAba('listagem');
+}
+
+function ent_alternarSubAba(subAba) {
+    const painelForm  = document.getElementById('ent-painel-formulario');
+    const painelLista = document.getElementById('ent-painel-listagem');
+    const btnForm     = document.getElementById('ent-btn-formulario');
+    const btnLista    = document.getElementById('ent-btn-listagem');
+
+    const ativo   = ['bg-primary','text-white','hover:brightness-105'];
+    const inativo = ['bg-slate-200','text-slate-700','hover:bg-slate-300'];
+
+    btnForm.classList.remove(...ativo,...inativo);
+    btnLista.classList.remove(...ativo,...inativo);
+
+    if (subAba === 'formulario') {
+        painelForm.classList.remove('hidden');
+        painelLista.classList.add('hidden');
+        btnForm.classList.add(...ativo);
+        btnLista.classList.add(...inativo);
+    } else {
+        painelForm.classList.add('hidden');
+        painelLista.classList.remove('hidden');
+        btnLista.classList.add(...ativo);
+        btnForm.classList.add(...inativo);
+    }
+}
+
+function ent_mudarPagina(direcao) {
+    const nova = ent_paginaAtual + direcao;
+    const total = Math.ceil(ent_totalRegistros / ent_itensPorPagina);
+    if (nova >= 1 && (ent_totalRegistros === 0 || nova <= total)) {
+        ent_paginaAtual = nova;
+        ent_loadEntidades();
+    }
+}
+
+function ent_toggleTodosChecks(source) {
+    document.querySelectorAll('.ent-check').forEach(cb => cb.checked = source.checked);
+}
+
+function ent_limparFiltros() {
+    document.getElementById('ent-filtro-busca').value = '';
+    document.getElementById('ent-filtro-tipo').value  = '';
+    ent_paginaAtual = 1;
+    ent_loadEntidades();
+}
+
+function ent_gerarPDF() {
+    alert("Preparando PDF das entidades filtradas para download.");
+}
+
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# entidades/entidades.html
+```
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Entidades - ERP_ABP</title>
+
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <!-- CSS Modular deste Módulo (Caminho Local) -->
+    <link rel="stylesheet" href="./entidades.css"/>
+
+    <!-- Biblioteca para Leitura de Códigos de Barras/QR -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode:"class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006c45",
+                        "primary-container": "#3ecf8e"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Scripts Globais e Supabase (Caminho Global) -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../global/supabase_config.js"></script>
+</head>
+
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 font-sans min-h-screen transition-colors duration-300">
+
+    <!-- CONTAINER ONDE A NAVBAR SERÁ INJETADA PELO JAVASCRIPT GLOBAL -->
+    <div id="navbar-container"></div>
+    
+    <main class="pt-24 px-4 sm:px-8 pb-12">
+        <!-- MÓDULO: ENTIDADES -->
+        <div class="fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
+            
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 dark:text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-widest mb-1">Total de Clientes</p>
+                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="ent-dash-clientes">0</h3>
+                        </div>
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl sm:text-3xl">person_search</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 dark:text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-widest mb-1">Fornecedores</p>
+                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="ent-dash-fornecedores">0</h3>
+                        </div>
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl sm:text-3xl">local_shipping</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 dark:text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-widest mb-1">Entidades Inativas</p>
+                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white" id="ent-dash-inativos">0</h3>
+                        </div>
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl sm:text-3xl">person_off</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-navegação -->
+            <div class="flex gap-4 mb-6 flex-wrap">
+                <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 min-w-[150px] bg-primary text-white hover:brightness-105 font-bold py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-base">groups</span> Ver Entidades
+                </button>
+                <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 min-w-[150px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 font-bold py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-base">person_add</span> Nova Entidade
+                </button>
+            </div>
+
+            <!-- SUB-PAINEL: FORMULÁRIO (Atualizado com a sua diretriz) -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-10 hidden" id="ent-painel-formulario">
+                <div class="flex items-center gap-4 mb-10 pb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary text-2xl">edit_document</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Registro de Informações da Entidade</h3>
+                </div>
+                
+                <input id="ent-f-editando-id" type="hidden"/>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+                    <div class="md:col-span-2">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Nome Completo / Razão Social *</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-nome" placeholder="Ex: João da Silva ou Empresa Ltda" type="text"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CPF / CNPJ</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-cpf" placeholder="000.000.000-00" type="text"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Data Nasc. / Fundação</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-nascimento" type="date"/>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">E-mail Corporativo</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-email" placeholder="exemplo@empresa.com" type="email"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Celular / Telefone</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-telefone" placeholder="(00) 00000-0000" type="text"/>
+                    </div>
+                    
+                    <!-- NOVO CAMPO ADICIONADO: Carteirinha -->
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cód. Carteirinha</label>
+                        <input class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-carteirinha" placeholder="Bipar código..." type="text"/>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 md:col-span-2">
+                        <div>
+                            <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Categoria</label>
+                            <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20" id="ent-f-tipo-entidade">
+                                <option value="cliente">Cliente</option>
+                                <option value="fornecedor">Fornecedor</option>
+                                <option value="colaborador">Colaborador</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Status</label>
+                            <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3.5 outline-none appearance-none font-bold text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20" id="ent-f-status">
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">CEP</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-cep" onblur="ent_buscarCEP(this.value)" placeholder="00000-000" type="text"/>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Endereço</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-logradouro" placeholder="Av. Exemplo, 123" type="text"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Número</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-numero" placeholder="Nº ou Complemento" type="text"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Bairro</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-bairro" placeholder="Bairro Central" type="text"/>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Cidade</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-cidade" placeholder="Nome da Cidade" type="text"/>
+                    </div>
+                    <div>
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Estado (UF)</label>
+                        <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 outline-none transition-all dark:text-white focus:ring-2 focus:ring-primary/20" id="ent-f-estado" maxlength="2" placeholder="UF" type="text"/>
+                    </div>
+                    <div class="md:col-span-4">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-4 block uppercase tracking-widest">Mídia de Identificação</label>
+                        <div class="border-2 dashed border-slate-300 dark:border-slate-600 rounded-2xl p-8 text-center cursor-pointer bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition" id="ent-drop-foto" onclick="document.getElementById('ent-f-foto').click()">
+                            <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                <span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+                            </div>
+                            <p class="font-bold text-slate-900 dark:text-white text-lg">Arraste &amp; Solte</p>
+                            <p class="text-xs text-slate-400 mt-2">Formatos seguros permitidos: JPG, PNG. Máx 2MB.</p>
+                            <input accept="image/*" class="hidden" id="ent-f-foto" onchange="ent_mostrarNomeArquivo(this,'ent-nome-foto')" type="file"/>
+                            <p class="font-mono text-sm text-primary mt-6 font-bold flex items-center justify-center gap-2 bg-primary/5 py-2 px-4 rounded-lg inline-flex" id="ent-nome-foto" style="display:none;"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+                    <button class="flex-1 bg-primary text-white font-bold py-4 rounded-xl hover:brightness-105 transition shadow-lg flex items-center justify-center gap-3" id="ent-btn-salvar" onclick="ent_salvarEntidade()">
+                        <span class="material-symbols-outlined">save</span> Confirmar Registro
+                    </button>
+                    <button class="hidden w-full sm:w-auto px-12 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-4 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="ent-btn-cancelar" onclick="ent_cancelarEdicao()">
+                        Abortar
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUB-PAINEL: LISTAGEM -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden" id="ent-painel-listagem">
+                <div class="px-6 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">dataset</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">LISTA DE ENTIDADES</h3>
+                </div>
+                
+                <!-- Filtros -->
+                <div class="px-6 py-6 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row gap-6 items-end">
+                    <div class="flex-1 w-full">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Busca de Termos</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
+                            <input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all dark:text-white" id="ent-filtro-busca" onkeyup="if(event.key==='Enter'){ent_paginaAtual=1;ent_loadEntidades();}" placeholder="Nome ou termo..." type="text"/>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-56">
+                        <label class="font-bold text-[10px] text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-widest">Tipo de Perfil</label>
+                        <select class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-sm text-slate-700 dark:text-slate-300 outline-none focus:ring-2 focus:ring-primary/20" id="ent-filtro-tipo" onchange="ent_paginaAtual=1;ent_loadEntidades()">
+                            <option value="">Todas</option>
+                            <option value="cliente">Clientes</option>
+                            <option value="fornecedor">Fornecedores</option>
+                            <option value="colaborador">Colaboradores</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 w-full lg:w-auto">
+                        <button class="flex-1 lg:flex-none bg-primary text-white px-8 py-3 rounded-xl font-bold hover:brightness-105 transition" onclick="ent_paginaAtual=1;ent_loadEntidades()">Aplicar</button>
+                        <button class="flex-1 lg:flex-none bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-8 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition" onclick="ent_limparFiltros()">Limpar</button>
+                    </div>
+                </div>
+                
+                <!-- Barra de seleção -->
+                <div class="px-6 py-3 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <input class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary" id="ent-check-all" onclick="ent_toggleTodosChecks(this)" type="checkbox"/>
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-primary cursor-pointer" for="ent-check-all">Selecionar Todos</label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2" onclick="ent_gerarPDF()">
+                            <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
+                        </button>
+                        <button class="px-4 py-2 bg-red-50 text-red-600 font-bold text-xs rounded-lg hover:bg-red-100 transition-colors flex items-center gap-2" onclick="ent_excluirSelecionados()">
+                            <span class="material-symbols-outlined text-sm">delete</span> Excluir
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="px-6 py-2 text-[10px] font-bold uppercase text-slate-400" id="ent-pagination-info">Mostrando 0 de 0</div>
+                
+                <!-- Grid de cards -->
+                <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="ent-lista-grid"></div>
+                
+                <!-- Paginação -->
+                <div class="px-6 py-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-sm hover:bg-slate-200 disabled:opacity-30 transition" id="ent-btn-anterior" onclick="ent_mudarPagina(-1)">
+                        <span class="material-symbols-outlined text-sm">chevron_left</span> Anterior
+                    </button>
+                    <div class="text-sm font-bold text-slate-400" id="ent-page-indicator">Página 1</div>
+                    <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-sm hover:bg-slate-200 disabled:opacity-30 transition" id="ent-btn-proximo" onclick="ent_mudarPagina(1)">
+                        Próximo <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>   
+    </main>
+
+    <!-- SCRIPTS GLOBAIS E LOCAIS DA PÁGINA -->
+    <script src="../global/navbar.js"></script>
+    <script src="./entidades.js"></script>
+</body>
+</html>
+
+```
