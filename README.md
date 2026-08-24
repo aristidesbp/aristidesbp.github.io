@@ -1702,7 +1702,164 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
+# index/index.css
+```
+/* =========================================================
+   MÓDULO INICIAL (HOME) - ESTILOS (index/index.css)
+========================================================= */
+
+/* Configuração base dos ícones do Google Material Symbols */
+.material-symbols-outlined { 
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+    display: inline-block; 
+    vertical-align: middle; 
+}
+
+/* Animação suave para os cards aparecerem ao carregar a página */
+.fade-in { 
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(8px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* Ocultar barra de rolagem (padrão herdado) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# index/index.html
+```
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Home - ERP_ABP</title>
+    
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    
+    <!-- Estilos Específicos da Home (Caminho Local) -->
+    <link rel="stylesheet" href="./index.css"/>
+    
+    <!-- Tailwind CSS CDN e Configurações Globais -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006c45",
+                        "primary-container": "#3ecf8e"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Supabase SDK e Configurações Globais (Caminho alterado para a pasta global) -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../global/supabase_config.js"></script>
+</head>
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 font-sans min-h-screen transition-colors duration-300">
+
+    <!-- CONTAINER DA NAVBAR (Preenchido pelo navbar.js) -->
+    <div id="navbar-container"></div>      
+
+    <!-- CONTEÚDO DA PÁGINA (HOME) -->
+    <main class="pt-24 px-4 sm:px-8 max-w-7xl mx-auto pb-12 fade-in">
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Painel Inicial (Home)</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">Selecione abaixo o módulo que deseja acessar:</p>
+        </div>
+
+        <!-- GRADE DE MÓDULOS / LINKS COM ROTAS ATUALIZADAS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Módulo Entidades (Rota corrigida) -->
+            <a href="../entidades/entidades.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">group</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Entidades</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Gerenciamento de clientes, fornecedores e parceiros.</p>
+            </a>
+            
+            <!-- Módulo Financeiro -->
+            <a href="../financeiro/financeiro.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">payments</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Financeiro</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Controle de contas a pagar, receber e fluxo de caixa.</p>
+            </a>
+
+            <!-- Módulo Estoque -->
+            <a href="../estoque/estoque.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Estoque</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Controle de produtos, entradas, saídas e saldos.</p>
+            </a>
+
+            <!-- Módulo PDV -->
+            <a href="../pdv/pdv.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">point_of_sale</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">PDV — Frente de Caixa</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Ambiente de vendas rápidas e emissão de cupom.</p>
+            </a>
+
+            <!-- Módulo Configurações -->
+            <a href="../configuracoes/configuracoes.html" class="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary shadow-sm hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">settings</span>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Configurações</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Parâmetros do sistema, perfis e preferências.</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- IMPORTAÇÃO DOS SCRIPTS NO FINAL DA PÁGINA -->
+    <!-- Primeiro importamos a navbar.js e depois a lógica local -->
+    <script src="../global/navbar.js"></script> 
+    <script src="./index.js"></script>
+
+</body>
+</html>
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+# index/index.js
+```
+// =========================================================
+// MÓDULO INICIAL (HOME) - LÓGICA (index/index.js)
+// =========================================================
+
+/**
+ * EventListener principal do módulo Home.
+ * Aguarda o HTML carregar e a sessão ser verificada pelo arquivo global.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // A renderização da Navbar e a verificação de segurança já acontecem no global/navbar.js.
+    // Aqui, futuramente, faremos chamadas seguras (fetch com auth) 
+    // para preencher resumos financeiros ou de estoque, caso você queira criar um Dashboard!
+    
+    console.log("Módulo Home (Index) carregado com sucesso sob a nova arquitetura.");
+});
+
+```
 
 
 
