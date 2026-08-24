@@ -1343,9 +1343,11 @@ if __name__ == "__main__":
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
 
+
+* Vamos organizar as pastas por funcionalidade (cada módulo com seu próprio HTML, CSS e JS na mesma pasta). Isso se chama Feature-Based Architecture (Arquitetura Baseada em Recursos) e é o que empresas como Google e Meta usam!
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# js/supabase_config.js
+# global/supabase_config.js
 ``` 
 const supabaseUrl = 'sua_rul';
 const supabaseKey = 'sua_anon_key';
@@ -1354,227 +1356,123 @@ const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-# html/login.html
-``` 
-<!DOCTYPE html>
-<html class="light" lang="pt-br">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Login - ERP_ABP</title>
-    
-    <!-- Fontes e Ícones -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-    
-    <!-- Estilos Modularizados (Retorna uma pasta '..' para acessar 'css') -->
-    <link rel="stylesheet" href="../css/login.css"/>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#006c45",
-                        "primary-container": "#3ecf8e",
-                        "on-surface": "#191c1d",
-                        "text-muted": "#687076"
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Supabase SDK e Configurações (Retorna uma pasta '..' para acessar 'js') -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase_config.js"></script>
-</head>
-<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-surface dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-
-    <!-- Fundo Decorativo -->
-    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary-container/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <!-- Card de Login -->
-    <div class="bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-2xl shadow-xl border border-white/40 dark:border-slate-800 max-w-md w-full fade-in relative z-10 glass-card">
-        
-        <!-- Cabeçalho do Card -->
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
-                <span class="material-symbols-outlined text-primary text-4xl">groups</span>
-            </div>
-            <h2 class="text-2xl font-bold text-on-surface dark:text-white tracking-tight">ERP_ABP</h2>
-            <p class="text-text-muted dark:text-slate-400 text-sm mt-2">Faça login para acessar a plataforma</p>
-        </div>
-
-        <!-- Formulário de Entrada -->
-        <div class="space-y-6">
-            <div>
-                <label class="text-xs font-semibold text-on-surface dark:text-slate-300 mb-2 block uppercase tracking-wider">E-mail Corporativo</label>
-                <input 
-                    id="login-email" 
-                    type="email" 
-                    placeholder="usuario@empresa.com.br" 
-                    onkeyup="if(event.key==='Enter') document.getElementById('login-senha').focus()"
-                    class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white"
-                />
-            </div>
-
-            <div>
-                <label class="text-xs font-semibold text-on-surface dark:text-slate-300 mb-2 block uppercase tracking-wider">Senha de Segurança</label>
-                <div class="relative">
-                    <input 
-                        id="login-senha" 
-                        type="password" 
-                        placeholder="••••••••" 
-                        onkeyup="if(event.key==='Enter') fazerLogin()"
-                        class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white"
-                    />
-                    <button 
-                        type="button" 
-                        onclick="togglePasswordVisibility('login-senha', this)"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1"
-                    >
-                        <span class="material-symbols-outlined text-xl">visibility</span>
-                    </button>
-                </div>
-            </div>
-
-            <button 
-                id="btn-login" 
-                onclick="fazerLogin()"
-                class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/95 transition-all shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-            >
-                Autenticar Acesso
-            </button>
-        </div>
-
-        <!-- Rodapé do Card -->
-        <div class="flex items-center justify-center gap-2 mt-10 opacity-60">
-            <span class="material-symbols-outlined text-xs dark:text-slate-400">verified_user</span>
-            <p class="text-xs text-text-muted dark:text-slate-400 font-medium">Criptografia AES de 256 bits ativada.</p>
-        </div>
-    </div>
-
-    <!-- Script de Autenticação Modularizado -->
-    <script src="../js/login.js"></script>
-</body>
-</html>
-
+# global/navbar.js
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+// =================================================================
+// VARIÁVEIS GLOBAIS
+// =================================================================
+// Declarada no escopo global para que outros módulos (como Entidades) possam acessá-la
+let usuarioLogadoId = null;
 
-# js/login.html
-```
-// =========================================================
-// MÓDULO DE LOGIN - AUTENTICAÇÃO (js/login.js)
-// =========================================================
-
-/**
- * Alterna a visibilidade da senha entre texto visível e oculto.
- */
-function togglePasswordVisibility(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const icon = btn.querySelector('.material-symbols-outlined');
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.innerText = 'visibility_off';
-    } else {
-        input.type = 'password';
-        icon.innerText = 'visibility';
-    }
-}
-
-/**
- * Verifica se já existe uma sessão ativa. Se existir, pula o login.
- */
-async function verificar_login() {
-    // _supabase vem do arquivo supabase_config.js que deve ser importado antes no HTML
+// =================================================================
+// 2. VERIFICAÇÃO DE LOGIN E SESSÃO
+// =================================================================
+async function verificarLogin() {
+    // _supabase é instanciado no supabase_config.js
     const { data: { session }, error } = await _supabase.auth.getSession();
     
-    if (session && !error) {
-        // Como o login.html e index.html estão na mesma pasta (/html/), o caminho é direto
-        window.location.href = 'index.html'; 
+    // Se não houver sessão ativa, redireciona para a pasta de login
+    if (error || !session) {
+        // CORREÇÃO: Volta uma pasta (../) e entra na pasta login
+        window.location.href = '../login/login.html';
+        return null;
+    }
+    
+    // Salva o ID do usuário de forma global
+    usuarioLogadoId = session.user.id;
+    return session;
+}
+
+// Encerra a sessão no backend e redireciona para o login
+async function sairDaConta() {
+    await _supabase.auth.signOut();
+    // CORREÇÃO: Caminho atualizado para a nova estrutura de diretórios
+    window.location.href = '../login/login.html';
+}
+
+// =================================================================
+// 3. ALTERNÂNCIA DE MODO ESCURO (DARK MODE)
+// =================================================================
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDark = html.classList.toggle('dark');
+    
+    const darkIcon = document.getElementById('dark-icon');
+    const lightIcon = document.getElementById('light-icon');
+    
+    if (darkIcon && lightIcon) {
+        darkIcon.classList.toggle('hidden', isDark);
+        lightIcon.classList.toggle('hidden', !isDark);
+    }
+    
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// =================================================================
+// 4. RENDERIZAÇÃO DA NAVBAR SIMPLIFICADA
+// =================================================================
+function renderizarNavbar() {
+    const container = document.getElementById('navbar-container');
+    if (!container) {
+        console.error('Elemento #navbar-container não encontrado no HTML.');
+        return;
+    }
+
+    // CORREÇÃO: O botão "Voltar" agora aponta corretamente para a Home
+    const htmlNavbar = `
+        <header class="fixed top-0 left-0 right-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-16 sm:h-20 px-4 sm:px-8 transition-all">
+            
+            <div class="flex items-center gap-3 sm:gap-4">
+                <h2 class="font-bold text-base sm:text-xl text-slate-900 dark:text-white truncate">ERP-ABP</h2>
+                <!-- Caminho ajustado para ../index/index.html -->
+                <button onclick="window.location.href='../index/index.html'" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all cursor-pointer" title="Voltar para a página inicial">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span class="hidden sm:inline">Voltar</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-1 sm:gap-2">
+                <button class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer" id="theme-toggle" onclick="toggleDarkMode()" title="Alternar tema">
+                    <span class="material-symbols-outlined text-xl" id="dark-icon">dark_mode</span>
+                    <span class="material-symbols-outlined text-xl hidden" id="light-icon">light_mode</span>
+                </button>
+                <button title="Sair da conta" onclick="sairDaConta()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-xl">logout</span>
+                </button>
+            </div>
+        </header>
+    `;
+
+    container.innerHTML = htmlNavbar;
+
+    // Sincroniza o modo escuro salvo previamente
+    const temaSalvo = localStorage.getItem('theme');
+    const isDark = temaSalvo === 'dark' || (!temaSalvo && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) document.documentElement.classList.add('dark');
+    
+    const darkIcon = document.getElementById('dark-icon');
+    const lightIcon = document.getElementById('light-icon');
+    if (darkIcon && lightIcon) {
+        darkIcon.classList.toggle('hidden', isDark);
+        lightIcon.classList.toggle('hidden', !isDark);
     }
 }
 
-/**
- * Captura os dados do formulário e tenta autenticar via Supabase
- */
-async function fazerLogin() {
-    const email = document.getElementById('login-email').value;
-    const senha = document.getElementById('login-senha').value;
-    const btn = document.getElementById('btn-login');
-
-    if (!email || !senha) {
-        return alert("Erro: E-mail e Senha são obrigatórios.");
+// =================================================================
+// 5. INICIALIZAÇÃO CENTRALIZADA
+// =================================================================
+// Evento único: Evita chamadas duplicadas e garante a ordem lógica
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Primeiro verifica se está logado
+    const session = await verificarLogin();
+    
+    // 2. Se a sessão for válida, renderiza a interface
+    if (session) {
+        renderizarNavbar();
     }
-
-    // Feedback visual para o usuário não clicar duas vezes
-    btn.innerText = 'Autenticando...';
-    btn.disabled = true;
-
-    // Comunicação com o Backend Supabase
-    const { data, error } = await _supabase.auth.signInWithPassword({ 
-        email: email, 
-        password: senha 
-    });
-
-    if (error) {
-        alert("Falha na autenticação: Verifique suas credenciais.");
-        btn.innerText = 'Autenticar Acesso';
-        btn.disabled = false;
-    } else {
-        // Redireciona para o painel inicial em caso de sucesso
-        window.location.href = 'index.html';
-    }
-}
-
-// Quando a tela carregar, verifica imediatamente se o usuário já está logado
-document.addEventListener('DOMContentLoaded', () => {
-    verificar_login();
 });
 
-``` 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# css/login.html
-```
-/* =========================================================
-   MÓDULO DE LOGIN - ESTILOS ESPECÍFICOS (css/login.css)
-========================================================= */
-
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.fade-in {
-    animation: fadeIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.glass-card {
-    background: rgba(255, 255, 255, .8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, .3);
-}
-
-.dark .glass-card {
-    background: rgba(30, 41, 59, .8);
-    border-color: rgba(255, 255, 255, .1);
-}
 ```
 
 
