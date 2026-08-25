@@ -1342,14 +1342,9 @@ if __name__ == "__main__":
 ```
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# ABP_ERP
-## Arquitetura Feature-Based Architecture (Arquitetura Baseada em Recursos)
-* Vamos organizar as pastas por funcionalidade (cada módulo com seu próprio HTML, CSS e JS na mesma pasta).  
+# Supabase
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
@@ -1363,57 +1358,4 @@ if __name__ == "__main__":
 
 --- 
 
-## Configurar
 
-* Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
-* Authentication/Users: voçẽ pode criar um novo usuario.
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# criando tabelas
-```
--- 1. Criação da Tabela com múltiplos tipos de dados
-CREATE TABLE public.equipamentos_ti (
-    -- UUID gerado automaticamente. Mais seguro que IDs sequenciais (1, 2, 3...)
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
-    -- Texto simples
-    nome TEXT NOT NULL,
-    
-    -- Tipo numérico perfeito para dinheiro ou medidas exatas
-    preco NUMERIC(10, 2) NOT NULL,
-    
-    -- Tipo booleano (verdadeiro/falso)
-    esta_ativo BOOLEAN DEFAULT true,
-    
-    -- JSONB: permite guardar objetos estruturados, útil para dados dinâmicos
-    especificacoes JSONB DEFAULT '{}'::jsonb,
-    
-    -- Texto que guardará o caminho do arquivo no Storage
-    foto_url TEXT,
-    
-    -- Data e hora com fuso horário, preenchido automaticamente
-    criado_em TIMESTAMPTZ DEFAULT now()
-);
-
--- 2. Regra de Ouro: Habilitar Row Level Security (RLS)
--- Sem isso, qualquer um com a chave anônima poderia destruir seu banco.
-ALTER TABLE public.equipamentos_ti ENABLE ROW LEVEL SECURITY;
-
--- 3. Criação do Bucket no Supabase Storage
--- Definimos como "public: true" para que as imagens possam ser renderizadas na tag <img> do HTML posteriormente, 
--- mas a ESCRITA (upload) será travada via RLS em breve.
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('equipamentos_fotos', 'equipamentos_fotos', true)
-ON CONFLICT (id) DO NOTHING;
-
-
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# criando tabelas
-```
-
-```
