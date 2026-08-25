@@ -59,7 +59,11 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 
 6. Gosto de hospedar sites no GitHub e usar o SUPABASE (backend, pois ele tem o storage e apólices de segurança internas).
 
-7.
+7. sempre criar páginas HTML monolíticas, marcando o início e o fim de cada elemento com comentários.
+o objetivo e ter um código bem sinalizado para melhorar a manutenção, tratando cada um como componente isolado.
+
+exemplo: <!--formulario--><div id="formulário"> código </div><!--/formulário-->
+         <!--function salvar--><script> código </script><!--/function salvar-->
 
 
 # Evitar os problemas :
@@ -68,7 +72,8 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 3- evitar fetch de dados no backend sem auth
 4- evitar chaves expostas, criar indexDB para armazenadas e criptar se nescessário.
 5- evitar input sem tratar : xss, upload de qualquer arquivo, sem rate limit.
-6- utilizar tecnologia modernas do Google ai Studio como: react, vit, etc...
+
+
 ```
 
 
