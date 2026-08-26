@@ -284,11 +284,9 @@ git pull origin main
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 # APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
 ```
-# 1. Sincroniza as informações com o GitHub 
-git fetch origin
-```
-``` 
+# 1. Sincroniza as informações com o GitHub
 # 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git fetch origin
 git reset --hard origin/main
 ```
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
