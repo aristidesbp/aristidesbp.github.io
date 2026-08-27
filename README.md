@@ -58,9 +58,8 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 
 
 
-5.Regras de Programaçao:
+5. Quando o assunto for Programaçao:
 ## Sempre utilizar terminal Linux, Termux ,GitHub, google ai studios, ferramentas gratuitas e onlines  para programar.
-
 ## criar códigos bem sinalizados para melhorar a manutenção, tratando cada um como componente isolado,Exemplo:
 
          <!--formulario--><div id="formulário"> código </div><!--/formulário-->
