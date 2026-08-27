@@ -58,7 +58,10 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 
 
 
-5. Quando o assunto for Programaçao:
+5. Gerar renda, dinheiro, Frilas e renda paciva! (quem vai trabalhar e a IA)
+# Venda de info produtos.
+# serviços de traucaço, ediçao ....
+# Quando o assunto for Programaçao:
 ## Sempre utilizar terminal Linux, Termux ,GitHub, google ai studios, ferramentas gratuitas e onlines  para programar.
 ## criar códigos bem sinalizados para melhorar a manutenção, tratando cada um como componente isolado,Exemplo:
 
