@@ -1342,8 +1342,12 @@ if __name__ == "__main__":
 </html>
 ```
 
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PROJETO ERP
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 
 # Supabase
 
@@ -1357,6 +1361,191 @@ if __name__ == "__main__":
 * Senha do banco: ***********
 * Região: brasil
 
---- 
+# CRIAR TABELA
+```
+CREATE TABLE public.equipamentos_ti (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    nome text NOT NULL,
+    preco numeric NOT NULL,
+    especificacoes jsonb DEFAULT '{}'::jsonb,
+    foto_url text DEFAULT NULL,
+    esta_ativo boolean DEFAULT true,
+    criado_em timestamp with time zone DEFAULT now()
+);
+
+```
+# CRIAR STORAGE E SUAS POLITICAS
+```
+-- Criacao do bucket de fotos
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('equipamentos_fotos', 'equipamentos_fotos', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Politicas de acesso para usuarios autenticados
+CREATE POLICY "Apenas autenticados leem fotos" 
+ON storage.objects FOR SELECT TO authenticated 
+USING (bucket_id = 'equipamentos_fotos');
+
+CREATE POLICY "Apenas autenticados sobem fotos" 
+ON storage.objects FOR INSERT TO authenticated 
+WITH CHECK (bucket_id = 'equipamentos_fotos');
+
+CREATE POLICY "Apenas autenticados apagam fotos" 
+ON storage.objects FOR DELETE TO authenticated 
+USING (bucket_id = 'equipamentos_fotos');
+```
+# RLS_TABELA EQUIPAMENTOS
+```
+ALTER TABLE public.equipamentos_ti ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Apenas autenticados leem equipamentos ativos" 
+ON public.equipamentos_ti 
+FOR SELECT 
+TO authenticated 
+USING (esta_ativo = true);
+
+CREATE POLICY "Apenas autenticados inserem equipamentos" 
+ON public.equipamentos_ti 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+CREATE POLICY "Apenas autenticados atualizam equipamentos" 
+ON public.equipamentos_ti 
+FOR UPDATE 
+TO authenticated 
+USING (true) 
+WITH CHECK (true);
+
+CREATE POLICY "Apenas autenticados deletam equipamentos" 
+ON public.equipamentos_ti 
+FOR DELETE 
+TO authenticated 
+USING (true);
+```
+
+# RPC  (Remote Procedure Call, Chamada de Procedimento Remoto).
+* É uma técnica que permite ao seu aplicativo (frontend/cliente) invocar e executar uma função que reside fisicamente em outro servidor (backend/banco de dados) como se fosse uma função local.
+
+## No ecossistema do Supabase/PostgreSQL, funciona da seguinte forma:
+**Função no Servidor:**
+Em vez de mandar comandos diretos (INSERT, UPDATE) do frontend, você cria a função dentro do banco de dados (as funções PL/pgSQL).
+
+**Chamada Segura:**
+O frontend dispara apenas uma linha de comando, como supabase.rpc('adicionar_equipamento_seguro', { dados }).
+
+**Regra de Negócio Blindada:**
+O processamento, as validações de dados e a segurança rodam dentro do Postgres com privilégios controlados, impedindo que usuários mal-intencionados alterem regras via console do navegador (DevTools).
+
+
+
+
+# RPC_ADICIONAR_EQUIPAMENTO (FUNCTION NO SUPABASE)
+```
+CREATE OR REPLACE FUNCTION public.adicionar_equipamento_seguro(
+    p_nome text,
+    p_preco numeric,
+    p_especificacoes jsonb,
+    p_foto_url text DEFAULT NULL
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_novo_id uuid;
+BEGIN
+    IF p_nome IS NULL OR length(trim(p_nome)) < 3 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O nome do equipamento deve ter pelo menos 3 caracteres.';
+    END IF;
+
+    IF p_preco <= 0 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O preço deve ser maior que zero.';
+    END IF;
+
+    INSERT INTO public.equipamentos_ti (nome, preco, especificacoes, foto_url, esta_ativo)
+    VALUES (trim(p_nome), p_preco, p_especificacoes, p_foto_url, true)
+    RETURNING id INTO v_novo_id;
+
+    RETURN v_novo_id;
+END;
+$$;
+
+```
+
+# RPC_ATUALIZAR_EQUIPAMENTO (FUNCTION NO SUPABASE)
+```
+CREATE OR REPLACE FUNCTION public.atualizar_equipamento_seguro(
+    p_id uuid,
+    p_novo_nome text,
+    p_novo_preco numeric,
+    p_foto_url text DEFAULT NULL
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    IF p_novo_nome IS NULL OR length(trim(p_novo_nome)) < 3 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O nome do equipamento deve ter pelo menos 3 caracteres.';
+    END IF;
+
+    IF p_novo_preco <= 0 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O preço deve ser maior que zero.';
+    END IF;
+
+    UPDATE public.equipamentos_ti
+    SET 
+        nome = trim(p_novo_nome),
+        preco = p_novo_preco,
+        foto_url = p_foto_url
+    WHERE id = p_id AND esta_ativo = true;
+END;
+$$;
+```
+
+# RPC_DESATIVAR_EQUIPAMENTO (FUNCTION NO SUPABASE)
+```
+CREATE OR REPLACE FUNCTION public.desativar_equipamento_seguro(
+    p_id uuid
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    UPDATE public.equipamentos_ti
+    SET esta_ativo = false
+    WHERE id = p_id;
+END;
+$$;
+
+```
+
+# RPC_LIMPAR_LIXEIRA (FUNCTION NO SUPABASE)
+```
+CREATE OR REPLACE FUNCTION public.limpar_lixeira_seguro()
+RETURNS TABLE(url_da_foto text)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    RETURN QUERY
+    DELETE FROM public.equipamentos_ti
+    WHERE esta_ativo = false
+    RETURNING foto_url;
+END;
+$$;
+
+```
+
+
+
+
+
+
+
+
+
 
 
