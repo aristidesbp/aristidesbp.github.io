@@ -1568,8 +1568,1267 @@ END;
 $$;
 
 ```
+# RPC_LISTAR_LIXEIRA (FUNCTION NO SUPABASE)
+
+```
+-- =======================================================================================
+-- RPC: LISTAR LIXEIRA (Visualizar itens ocultos)
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.listar_lixeira_seguro()
+RETURNS TABLE (
+    id uuid,
+    nome text,
+    preco numeric,
+    foto_url text,
+    criado_em timestamp with time zone
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    -- Busca todos os equipamentos que estão inativos (Soft Delete)
+    RETURN QUERY
+    SELECT e.id, e.nome, e.preco, e.foto_url, e.criado_em
+    FROM public.equipamentos_ti e
+    WHERE e.esta_ativo = false
+    ORDER BY e.criado_em DESC;
+END;
+$$;
+```
+
+# RPC_RESTAURAR_EQUIPAMENTO (FUNCTION NO SUPABASE)
+
+```
+-- =======================================================================================
+-- RPC: RESTAURAR EQUIPAMENTO (Desfaz o Soft Delete)
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.restaurar_equipamento_seguro(
+    p_id uuid
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    -- Atualiza o status do equipamento de volta para 'true' (Ativo)
+    UPDATE public.equipamentos_ti
+    SET esta_ativo = true
+    WHERE id = p_id;
+END;
+$$;
+```
+
+# RPC_OUCULTAR_MULTIPOS (FUNCTION NO SUPABASE)
+
+```
+-- =======================================================================================
+-- RPC: OCULTAR MÚLTIPLOS EQUIPAMENTOS (Soft Delete em Lote)
+-- =======================================================================================
+-- O parâmetro "p_ids uuid[]" significa que ele aceita uma LISTA (Array) de IDs.
+
+CREATE OR REPLACE FUNCTION public.ocultar_multiplos_equipamentos_seguro(
+    p_ids uuid[]
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    -- Atualiza para inativo todos os itens cujo ID esteja dentro da lista fornecida
+    UPDATE public.equipamentos_ti
+    SET esta_ativo = false
+    WHERE id = ANY(p_ids);
+END;
+$$;
 
 
+```
+# credenciais.html
+
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaveiro Multi-Empresas - TI</title>
+    
+    <!--estilos-->
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; margin-bottom: 20px;}
+        input { width: 100%; padding: 10px; margin: 8px 0 15px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: bold; color: white; }
+        .btn-salvar { background: #007bff; width: 100%; font-size: 1em; padding: 12px;}
+        .btn-salvar:hover { background: #0056b3; }
+        .btn-acessar { background: #28a745; }
+        .btn-acessar:hover { background: #218838; }
+        .btn-editar { background: #ffc107; color: #212529; }
+        .btn-editar:hover { background: #e0a800; }
+        .btn-excluir { background: #dc3545; }
+        .btn-excluir:hover { background: #c82333; }
+        
+        .titulo { text-align: center; margin-bottom: 20px; color: #333; margin-top: 0;}
+        .info { background-color: #e2e3e5; color: #383d41; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px; font-size: 0.9em; }
+        
+        .item-empresa { padding: 15px; border: 1px solid #eee; border-radius: 5px; margin-bottom: 10px; background: #fafafa; }
+        .item-empresa strong { display: block; font-size: 1.1em; color: #007bff; margin-bottom: 5px;}
+        .grupo-botoes { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;}
+    </style>
+    <!--/estilos-->
+</head>
+<!--/head_config-->
+
+<body>
+    
+    <!--painel_cadastro_chaves-->
+    <div class="card">
+        <h2 class="titulo">🏢 Cadastrar Nova Empresa</h2>
+        
+        <form id="form-empresa">
+            <!-- ID oculto para sabermos se estamos criando ou editando -->
+            <input type="hidden" id="input-id">
+            
+            <label for="input-nome">Nome da Empresa:</label>
+            <input type="text" id="input-nome" placeholder="Ex: Loja do João" required>
+
+            <label for="input-url">URL do Supabase:</label>
+            <input type="text" id="input-url" placeholder="https://xyz.supabase.co" required>
+            
+            <label for="input-key">Anon Key:</label>
+            <input type="password" id="input-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX..." required>
+            
+            <button type="submit" class="btn-salvar">💾 Salvar Credenciais</button>
+        </form>
+    </div>
+    <!--/painel_cadastro_chaves-->
+
+    <!--painel_listagem_chaves-->
+    <div class="card">
+        <h2 class="titulo">🔑 Bancos de Dados Salvos</h2>
+        <div id="status" class="info">Carregando chaves locais...</div>
+        
+        <div id="lista-empresas">
+            <!-- A lista será injetada aqui pelo JavaScript -->
+        </div>
+    </div>
+    <!--/painel_listagem_chaves-->
+
+
+    <!--logica_principal_js-->
+    <script>
+        /* ================= SEGURANÇA (INDEXEDDB) ================= */
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+
+        <!--funcao_iniciarBancoDeDados-->
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(NOME_TABELA)) {
+                        db.createObjectStore(NOME_TABELA, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        <!--/funcao_iniciarBancoDeDados-->
+
+        <!--funcao_crud_empresas-->
+        // BUSCAR a lista de empresas (Array)
+        async function buscarEmpresas() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve) => {
+                const transaction = db.transaction([NOME_TABELA], 'readonly');
+                const store = transaction.objectStore(NOME_TABELA);
+                const request = store.get('lista_empresas');
+                // Se existir, devolve os dados. Se não, devolve um array vazio []
+                request.onsuccess = () => resolve(request.result ? request.result.dados : []);
+                request.onerror = () => resolve([]);
+            });
+        }
+
+        // SALVAR a lista inteira de empresas de volta no banco
+        async function salvarListaEmpresas(arrayDeEmpresas) {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readwrite');
+                const store = transaction.objectStore(NOME_TABELA);
+                // Guarda o array inteiro dentro da chave 'lista_empresas'
+                store.put({ id: 'lista_empresas', dados: arrayDeEmpresas });
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject(transaction.error);
+            });
+        }
+
+        // DEFINIR CREDENCIAL ATIVA (Usada para o Login)
+        async function definirCredencialAtiva(url, anonKey) {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readwrite');
+                const store = transaction.objectStore(NOME_TABELA);
+                // Sobrescreve a chave que o login.html e os outros arquivos usam!
+                store.put({ id: 'supabase_creds', url: url.trim(), anonKey: anonKey.trim() });
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject(transaction.error);
+            });
+        }
+        <!--/funcao_crud_empresas-->
+
+
+        /* ================= LÓGICA DE INTERFACE ================= */
+        let empresasGlobais = [];
+
+        <!--funcao_renderizarLista-->
+        async function renderizarLista() {
+            const divLista = document.getElementById('lista-empresas');
+            const statusDiv = document.getElementById('status');
+            
+            empresasGlobais = await buscarEmpresas();
+            divLista.innerHTML = ""; 
+
+            if (empresasGlobais.length === 0) {
+                statusDiv.textContent = "Nenhuma empresa cadastrada ainda.";
+                return;
+            }
+
+            statusDiv.textContent = `Você possui ${empresasGlobais.length} empresa(s) salva(s).`;
+
+            empresasGlobais.forEach((empresa) => {
+                const divItem = document.createElement('div');
+                divItem.className = 'item-empresa';
+
+                divItem.innerHTML = `
+                    <strong>${empresa.nome}</strong>
+                    <span style="font-size: 0.8em; color: #666; word-break: break-all;">URL: ${empresa.url}</span>
+                `;
+
+                const divBotoes = document.createElement('div');
+                divBotoes.className = 'grupo-botoes';
+
+                // Botão Acessar: Define a credencial ativa e envia pro Login
+                const btnAcessar = document.createElement('button');
+                btnAcessar.textContent = "🚀 Acessar";
+                btnAcessar.className = "btn-acessar";
+                btnAcessar.onclick = async () => {
+                    await definirCredencialAtiva(empresa.url, empresa.anonKey);
+                    window.location.href = 'login.html';
+                };
+
+                // Botão Editar: Preenche o formulário lá em cima
+                const btnEditar = document.createElement('button');
+                btnEditar.textContent = "✏️ Editar";
+                btnEditar.className = "btn-editar";
+                btnEditar.onclick = () => {
+                    document.getElementById('input-id').value = empresa.id;
+                    document.getElementById('input-nome').value = empresa.nome;
+                    document.getElementById('input-url').value = empresa.url;
+                    document.getElementById('input-key').value = empresa.anonKey;
+                    window.scrollTo(0, 0); // Sobe a tela para o formulário
+                };
+
+                // Botão Excluir: Remove do array e salva
+                const btnExcluir = document.createElement('button');
+                btnExcluir.textContent = "🗑️ Excluir";
+                btnExcluir.className = "btn-excluir";
+                btnExcluir.onclick = async () => {
+                    if(confirm(`Deseja realmente apagar o banco da empresa '${empresa.nome}' do seu dispositivo?`)) {
+                        // Filtra o array removendo a empresa clicada
+                        empresasGlobais = empresasGlobais.filter(e => e.id !== empresa.id);
+                        await salvarListaEmpresas(empresasGlobais);
+                        renderizarLista();
+                    }
+                };
+
+                divBotoes.appendChild(btnAcessar);
+                divBotoes.appendChild(btnEditar);
+                divBotoes.appendChild(btnExcluir);
+                divItem.appendChild(divBotoes);
+                divLista.appendChild(divItem);
+            });
+        }
+        <!--/funcao_renderizarLista-->
+
+        <!--evento_submit_formulario-->
+        document.getElementById('form-empresa').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); 
+            
+            const idDigitado = document.getElementById('input-id').value;
+            const nomeDigitado = document.getElementById('input-nome').value;
+            const urlDigitada = document.getElementById('input-url').value;
+            const keyDigitada = document.getElementById('input-key').value;
+
+            if (idDigitado) {
+                // MODO EDIÇÃO: Atualiza a empresa existente no Array
+                const index = empresasGlobais.findIndex(e => e.id === idDigitado);
+                if(index !== -1) {
+                    empresasGlobais[index] = {
+                        id: idDigitado,
+                        nome: nomeDigitado,
+                        url: urlDigitada,
+                        anonKey: keyDigitada
+                    };
+                }
+            } else {
+                // MODO CRIAÇÃO: Adiciona uma nova empresa no Array
+                const novaEmpresa = {
+                    id: Date.now().toString(), // Cria um ID único baseado na data/hora
+                    nome: nomeDigitado,
+                    url: urlDigitada,
+                    anonKey: keyDigitada
+                };
+                empresasGlobais.push(novaEmpresa);
+            }
+
+            // Salva no IndexedDB, recarrega a lista e limpa o formulário
+            await salvarListaEmpresas(empresasGlobais);
+            renderizarLista();
+            evento.target.reset();
+            document.getElementById('input-id').value = ""; // Limpa o ID oculto
+            alert("✅ Credenciais salvas com sucesso no seu dispositivo!");
+        });
+        <!--/evento_submit_formulario-->
+
+        <!--evento_onload_janela-->
+        // Ao abrir a página, apenas desenha a lista (removemos o redirecionamento automático!)
+        window.onload = () => {
+            renderizarLista();
+        };
+        <!--/evento_onload_janela-->
+
+    </script>
+    <!--/logica_principal_js-->
+</body>
+</html>
+
+```
+# login.html
+
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Seguro - Equipamentos TI</title>
+    
+    <!--estilos-->
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 90vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px;}
+        input { width: 100%; padding: 10px; margin: 10px 0 20px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 12px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .titulo { text-align: center; margin-bottom: 20px; color: #333; }
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px; font-size: 0.9em; }
+        .erro { background-color: #f8d7da; color: #721c24; }
+    </style>
+    <!--/estilos-->
+
+    <!--biblioteca_supabase-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!--/biblioteca_supabase-->
+</head>
+<!--/head_config-->
+
+<body>
+    
+    <div class="card">
+        <h2 class="titulo">🔐 Acesso ao Sistema</h2>
+        <div id="status" class="info">Verificando segurança...</div>
+
+        <!--form_login_usuario-->
+        <div id="area-login" style="display: none;">
+            <p style="font-size: 0.9em; color: #666; margin-top: 0;">Entre com suas credenciais de administrador.</p>
+            <label for="input-email">E-mail Administrativo:</label>
+            <input type="email" id="input-email" placeholder="admin@teste.com" required>
+            
+            <label for="input-senha">Senha:</label>
+            <input type="password" id="input-senha" placeholder="Sua senha secreta" required>
+            
+            <button id="btn-entrar">Fazer Login</button>
+        </div>
+        <!--/form_login_usuario-->
+    </div>
+
+    <!--logica_principal_js-->
+    <script>
+        /* ================= SEGURANÇA (INDEXEDDB) ================= */
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+        let clienteSupabase = null;
+
+        <!--funcao_iniciarBancoDeDados-->
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(NOME_TABELA)) {
+                        db.createObjectStore(NOME_TABELA, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        <!--/funcao_iniciarBancoDeDados-->
+
+        <!--funcao_recuperarCredenciais-->
+        async function recuperarCredenciais() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readonly');
+                const store = transaction.objectStore(NOME_TABELA);
+                const request = store.get('supabase_creds');
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        <!--/funcao_recuperarCredenciais-->
+
+        /* ================= AUTENTICAÇÃO (AUTH) ================= */
+
+        <!--funcao_fazerLogin-->
+        async function fazerLogin() {
+            const email = document.getElementById('input-email').value;
+            const senha = document.getElementById('input-senha').value;
+            const btnEntrar = document.getElementById('btn-entrar');
+            const statusDiv = document.getElementById('status');
+
+            if (!email || !senha) {
+                alert("Preencha e-mail e senha!");
+                return;
+            }
+
+            btnEntrar.textContent = "Autenticando...";
+            btnEntrar.disabled = true;
+
+            try {
+                const { data, error } = await clienteSupabase.auth.signInWithPassword({
+                    email: email,
+                    password: senha
+                });
+
+                if (error) throw error; 
+
+                statusDiv.textContent = "✅ Autenticado com sucesso! Entrando...";
+                statusDiv.style.backgroundColor = "#d4edda";
+                statusDiv.style.color = "#155724";
+
+                // Redireciona para o painel principal
+                setTimeout(() => {
+                    window.location.href = 'listar.html';
+                }, 1000);
+
+            } catch (erro) {
+                console.error(erro);
+                statusDiv.textContent = "❌ Erro no login: Verifique seu e-mail e senha.";
+                statusDiv.className = "info erro";
+                btnEntrar.textContent = "Fazer Login";
+                btnEntrar.disabled = false;
+            }
+        }
+        <!--/funcao_fazerLogin-->
+
+        /* ================= INICIALIZAÇÃO DA PÁGINA ================= */
+
+        <!--evento_onload_janela-->
+        window.onload = async () => {
+            const statusDiv = document.getElementById('status');
+            const areaLogin = document.getElementById('area-login');
+            const btnEntrar = document.getElementById('btn-entrar');
+
+            btnEntrar.addEventListener('click', fazerLogin);
+
+            try {
+                const creds = await recuperarCredenciais();
+                
+                // 1. Verificação Estrita: Se não tem chaves de conexão, expulsa para a configuração
+                if (!creds || !creds.url || !creds.anonKey) {
+                    window.location.href = 'credenciais_supabase_indexdb.html';
+                    return; 
+                }
+
+                // 2. Com as chaves validadas, inicializa o Supabase
+                clienteSupabase = supabase.createClient(creds.url, creds.anonKey);
+
+                // 3. O usuário já possui uma sessão ativa?
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+
+                if (session) {
+                    // Já está logado, envia diretamente para o index
+                    statusDiv.textContent = "Sessão válida encontrada! Redirecionando...";
+                    statusDiv.style.backgroundColor = "#d4edda";
+                    statusDiv.style.color = "#155724";
+                    setTimeout(() => {
+                        window.location.href = 'listar.html';
+                    }, 800);
+                } else {
+                    // Banco conectado, mas sessão vazia. Libera os campos de e-mail e senha.
+                    statusDiv.textContent = "Banco conectado. Faça login para continuar.";
+                    areaLogin.style.display = "block";
+                }
+
+            } catch (error) {
+                console.error("Erro Crítico:", error);
+                statusDiv.textContent = "❌ Erro grave no sistema.";
+                statusDiv.className = "info erro";
+            }
+        };
+        <!--/evento_onload_janela-->
+    </script>
+    <!--/logica_principal_js-->
+</body>
+</html>
+```
+# listar.html
+
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Equipamentos - Lista</title>
+    
+    <!--estilos-->
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .erro { background-color: #f8d7da; color: #721c24; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px;}
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; }
+        button:hover { background: #0056b3; }
+        
+        .btn-sucesso { background: #28a745; font-size: 1em; font-weight: bold;}
+        .btn-sucesso:hover { background: #218838; }
+        .btn-perigo { background: #dc3545; }
+        .btn-perigo:hover { background: #c82333; }
+        .btn-editar { background: #ffc107; color: #212529; }
+        .btn-editar:hover { background: #e0a800; }
+        .btn-alerta { background: #fd7e14; font-size: 1em; font-weight: bold; }
+        .btn-alerta:hover { background: #e86e04; }
+        .btn-secundario { background: #6c757d; font-size: 1em; font-weight: bold; }
+        .btn-secundario:hover { background: #5a6268; }
+        .btn-restaurar { background: #20c997; font-size: 1em; font-weight: bold; }
+        .btn-restaurar:hover { background: #1aa179; }
+        
+        /* Estilos Novos para Busca e Checkbox */
+        .input-busca { width: 100%; padding: 12px; margin-top: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
+        .barra-acoes-lote { background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; display: none; align-items: center; justify-content: space-between; border: 1px solid #ffeeba;}
+        .chk-item { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
+        
+        .item-lista { padding: 15px; border-bottom: 1px solid #eee; display: flex; flex-direction: row; gap: 15px; align-items: center;}
+        .conteudo-item { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .img-preview { max-width: 150px; border-radius: 8px; margin-top: 5px; border: 1px solid #ccc; }
+        .cabecalho-painel { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;}
+        .grupo-botoes-topo { display: flex; gap: 10px; flex-wrap: wrap;}
+        .badge-lixeira { background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;}
+    </style>
+    <!--/estilos-->
+
+    <!--biblioteca_supabase-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!--/biblioteca_supabase-->
+</head>
+<!--/head_config-->
+
+<body>
+    
+    <!--status_bar-->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div id="status" class="info" style="flex-grow: 1; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 0;">Autenticando sessão...</div>
+        <button id="btn-sair" class="btn-perigo" style="display: none;">Sair do Sistema</button>
+    </div>
+    <!--/status_bar-->
+
+    <!--lista_equipamentos_cadastrados-->
+    <div id="app" class="card" style="display: none;">
+        <div class="cabecalho-painel">
+            <h2 id="titulo-painel">Lista de Equipamentos 💻</h2>
+            
+            <div class="grupo-botoes-topo">
+                <button id="btn-ver-lixeira" class="btn-secundario">👁️ Ver Lixeira</button>
+                <button id="btn-limpar-lixeira" class="btn-alerta" style="display: none;">🧹 Esvaziar Lixeira</button>
+                <button id="btn-novo" class="btn-sucesso">➕ Novo</button>
+            </div>
+        </div>
+
+        <!--barra_de_busca-->
+        <input type="text" id="input-busca" class="input-busca" placeholder="🔍 Buscar equipamento pelo nome...">
+        <!--/barra_de_busca-->
+
+        <!--barra_acoes_lote-->
+        <div id="barra-acoes-lote" class="barra-acoes-lote">
+            <strong style="color: #856404;" id="texto-contagem-lote">0 itens selecionados</strong>
+            <button id="btn-ocultar-lote" class="btn-perigo">🗑️ Ocultar Selecionados</button>
+        </div>
+        <!--/barra_acoes_lote-->
+
+        <hr />
+        
+        <div id="lista-equipamentos">
+            <p>⏳ Carregando sistema...</p>
+        </div>
+    </div> 
+    <!--/lista_equipamentos_cadastrados-->
+
+    <!--logica_principal_js-->
+    <script>
+        /* ================= SEGURANÇA E ESTADOS ================= */
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+        let clienteSupabase = null;
+        
+        let exibindoLixeira = false; 
+        let dadosGlobaisNaMemoria = []; // Guarda os dados para o filtro funcionar rápido
+
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(NOME_TABELA)) {
+                        db.createObjectStore(NOME_TABELA, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function recuperarCredenciais() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readonly');
+                const store = transaction.objectStore(NOME_TABELA);
+                const request = store.get('supabase_creds');
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        /* ================= BANCO DE DADOS (GET / DELETE MULTIPLOS) ================= */
+
+        async function buscarEquipamentos() {
+            const divLista = document.getElementById('lista-equipamentos');
+            divLista.textContent = "Buscando dados no Supabase...";
+
+            try {
+                const { data, error } = await clienteSupabase
+                    .from('equipamentos_ti')
+                    .select('*')
+                    .eq('esta_ativo', true) 
+                    .order('criado_em', { ascending: false });
+
+                if (error) throw error;
+                
+                dadosGlobaisNaMemoria = data; // Salva na memória
+                renderizarLista(dadosGlobaisNaMemoria, false); // Desenha a tela
+
+            } catch (erro) {
+                console.error(erro);
+                divLista.textContent = "Erro ao buscar dados: " + (erro.message || JSON.stringify(erro));
+            }
+        }
+
+        async function buscarLixeira() {
+            const divLista = document.getElementById('lista-equipamentos');
+            divLista.textContent = "Buscando itens na lixeira...";
+
+            try {
+                const { data, error } = await clienteSupabase.rpc('listar_lixeira_seguro');
+                if (error) throw error;
+                
+                dadosGlobaisNaMemoria = data; // Salva na memória
+                renderizarLista(dadosGlobaisNaMemoria, true);
+
+            } catch (erro) {
+                console.error(erro);
+                divLista.textContent = "Erro ao buscar lixeira: " + (erro.message || JSON.stringify(erro));
+            }
+        }
+
+        /* ================= RENDERIZAÇÃO E FILTROS ================= */
+
+        <!--funcao_filtrarLocalmente-->
+        // Ouve a digitação no campo de busca e filtra a lista instantaneamente
+        document.getElementById('input-busca').addEventListener('input', (evento) => {
+            const textoBusca = evento.target.value.toLowerCase();
+            
+            // Filtra o array guardado na memória
+            const listaFiltrada = dadosGlobaisNaMemoria.filter((eq) => {
+                return eq.nome.toLowerCase().includes(textoBusca);
+            });
+
+            // Redesenha a lista apenas com os resultados filtrados
+            renderizarLista(listaFiltrada, exibindoLixeira);
+        });
+        <!--/funcao_filtrarLocalmente-->
+
+        <!--funcao_verificarCheckboxes-->
+        // Analisa quantas caixas estão marcadas para mostrar ou esconder a barra de ação em lote
+        function atualizarBarraAcoesLote() {
+            const checkboxes = document.querySelectorAll('.chk-item:checked');
+            const barraAcoes = document.getElementById('barra-acoes-lote');
+            const textoContagem = document.getElementById('texto-contagem-lote');
+
+            // Só mostra a barra de exclusão se estiver na lista de ATIVOS e com itens marcados
+            if (checkboxes.length > 0 && !exibindoLixeira) {
+                barraAcoes.style.display = 'flex';
+                textoContagem.textContent = `${checkboxes.length} item(ns) selecionado(s)`;
+            } else {
+                barraAcoes.style.display = 'none';
+            }
+        }
+        <!--/funcao_verificarCheckboxes-->
+
+        function renderizarLista(equipamentos, isLixeira) {
+            const divLista = document.getElementById('lista-equipamentos');
+            divLista.innerHTML = ""; 
+            
+            // Oculta a barra de lotes ao redesenhar
+            document.getElementById('barra-acoes-lote').style.display = 'none';
+
+            const btnLimparLixeira = document.getElementById('btn-limpar-lixeira');
+            if (isLixeira && equipamentos.length > 0) {
+                btnLimparLixeira.style.display = "inline-block";
+            } else {
+                btnLimparLixeira.style.display = "none";
+            }
+
+            if (equipamentos.length === 0) {
+                divLista.textContent = isLixeira ? "A lixeira está vazia." : "Nenhum equipamento cadastrado ou encontrado na busca.";
+                return;
+            }
+
+            equipamentos.forEach((eq) => {
+                const divItem = document.createElement('div');
+                divItem.className = 'item-lista';
+
+                // Novo: Adiciona o Checkbox de seleção na tela
+                if (!isLixeira) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'chk-item';
+                    checkbox.value = eq.id;
+                    checkbox.addEventListener('change', atualizarBarraAcoesLote);
+                    divItem.appendChild(checkbox);
+                }
+
+                // Conteudo do Equipamento
+                const divConteudo = document.createElement('div');
+                divConteudo.className = 'conteudo-item';
+
+                const divTitulo = document.createElement('div');
+                const titulo = document.createElement('strong');
+                titulo.textContent = eq.nome; 
+                divTitulo.appendChild(titulo);
+
+                if (isLixeira) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge-lixeira';
+                    badge.textContent = ' NA LIXEIRA';
+                    badge.style.marginLeft = '10px';
+                    divTitulo.appendChild(badge);
+                }
+
+                const precoText = document.createElement('span');
+                precoText.textContent = "Preço: R$ " + parseFloat(eq.preco).toFixed(2);
+
+                divConteudo.appendChild(divTitulo);
+                divConteudo.appendChild(precoText);
+
+                if (eq.foto_url) {
+                    const img = document.createElement('img');
+                    img.src = eq.foto_url;
+                    img.className = 'img-preview';
+                    divConteudo.appendChild(img);
+                }
+
+                const divBotoes = document.createElement('div');
+                divBotoes.style.display = 'flex';
+                divBotoes.style.gap = '10px';
+                
+                if (isLixeira) {
+                    const btnRestaurar = document.createElement('button');
+                    btnRestaurar.innerHTML = "♻️ Restaurar";
+                    btnRestaurar.className = "btn-restaurar";
+                    btnRestaurar.onclick = () => restaurarEquipamento(eq.id);
+                    divBotoes.appendChild(btnRestaurar);
+                } else {
+                    const btnEditar = document.createElement('button');
+                    btnEditar.textContent = "✏️ Editar";
+                    btnEditar.className = "btn-editar";
+                    btnEditar.onclick = () => { window.location.href = 'cadastra.html?id=' + eq.id; }; 
+                    
+                    const btnExcluir = document.createElement('button');
+                    btnExcluir.textContent = "🗑️ Ocultar";
+                    btnExcluir.className = "btn-perigo";
+                    btnExcluir.onclick = () => excluirEquipamento(eq.id); 
+                    
+                    divBotoes.appendChild(btnEditar);
+                    divBotoes.appendChild(btnExcluir);
+                }
+
+                divConteudo.appendChild(divBotoes);
+                divItem.appendChild(divConteudo);
+                divLista.appendChild(divItem);
+            });
+        }
+
+        /* ================= AÇÕES (SINGLE E MULTIPLAS) ================= */
+
+        <!--funcao_ocultarMultiplos-->
+        // Função ativada pelo botão "Ocultar Selecionados"
+        document.getElementById('btn-ocultar-lote').addEventListener('click', async () => {
+            const checkboxes = document.querySelectorAll('.chk-item:checked');
+            // Mapeia os elementos HTML para extrair apenas uma lista (array) de IDs
+            const idsSelecionados = Array.from(checkboxes).map(chk => chk.value);
+
+            if (idsSelecionados.length === 0) return;
+
+            const confirmacao = confirm(`Deseja enviar ${idsSelecionados.length} itens para a lixeira de uma só vez?`);
+            if (!confirmacao) return;
+
+            try {
+                // Chama a nossa nova RPC passando o Array de IDs
+                const { error } = await clienteSupabase.rpc('ocultar_multiplos_equipamentos_seguro', {
+                    p_ids: idsSelecionados
+                });
+
+                if (error) throw error;
+
+                alert("🗑️ Itens ocultados com sucesso!");
+                document.getElementById('input-busca').value = ""; // Limpa a busca
+                buscarEquipamentos(); // Recarrega a tela limpa
+
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro ao ocultar em lote: " + (erro.message || JSON.stringify(erro)));
+            }
+        });
+        <!--/funcao_ocultarMultiplos-->
+
+        async function excluirEquipamento(id) {
+            const confirmacao = confirm("Deseja ocultar este equipamento?");
+            if (!confirmacao) return; 
+            try {
+                const { error } = await clienteSupabase.rpc('desativar_equipamento_seguro', { p_id: id });
+                if (error) throw error;
+                alert("🗑️ Equipamento enviado para a lixeira (Oculto)!");
+                buscarEquipamentos(); 
+            } catch (erro) {
+                alert("❌ Erro ao ocultar: " + (erro.message || JSON.stringify(erro)));
+            }
+        }
+
+        async function restaurarEquipamento(id) {
+            const confirmacao = confirm("Deseja restaurar este equipamento?");
+            if (!confirmacao) return; 
+            try {
+                const { error } = await clienteSupabase.rpc('restaurar_equipamento_seguro', { p_id: id });
+                if (error) throw error;
+                alert("♻️ Equipamento restaurado com sucesso!");
+                buscarLixeira(); 
+            } catch (erro) {
+                alert("❌ Erro ao restaurar: " + (erro.message || JSON.stringify(erro)));
+            }
+        }
+
+        // ... (As funções esvaziarLixeira, navegação de botões e onload permanecem iguais ao projeto original)
+        async function esvaziarLixeira() {
+            const confirmacao = confirm("CUIDADO: Isso vai apagar DEFINITIVAMENTE todos os equipamentos ocultos e deletar as fotos deles do Storage. Deseja continuar?");
+            if (!confirmacao) return;
+
+            document.getElementById('lista-equipamentos').textContent = "🧹 Esvaziando lixeira e apagando fotos físicas... Aguarde.";
+
+            try {
+                const { data: fotosApagadas, error: erroBanco } = await clienteSupabase.rpc('limpar_lixeira_seguro');
+                if (erroBanco) throw erroBanco;
+
+                let totalFotosApagadas = 0;
+                if (fotosApagadas && fotosApagadas.length > 0) {
+                    for (const item of fotosApagadas) {
+                        if (item.url_da_foto) {
+                            const nomeLimpo = item.url_da_foto.split('/').pop().split('?')[0];
+                            const nomeDoArquivo = decodeURIComponent(nomeLimpo);
+                            const { error: erroStorage } = await clienteSupabase.storage
+                                .from('equipamentos_fotos')
+                                .remove([nomeDoArquivo]);
+                            if (!erroStorage) totalFotosApagadas++; 
+                        }
+                    }
+                }
+
+                alert(`✅ Lixeira esvaziada! ${totalFotosApagadas} foto(s) apagadas.`);
+                if(exibindoLixeira) buscarLixeira(); else buscarEquipamentos(); 
+            } catch (erro) {
+                alert("❌ Erro ao limpar a lixeira: " + (erro.message || JSON.stringify(erro)));
+                buscarEquipamentos(); 
+            }
+        }
+
+        document.getElementById('btn-novo').addEventListener('click', () => { window.location.href = 'cadastra.html'; });
+        document.getElementById('btn-limpar-lixeira').addEventListener('click', esvaziarLixeira);
+
+        document.getElementById('btn-ver-lixeira').addEventListener('click', () => {
+            exibindoLixeira = !exibindoLixeira;
+            const btn = document.getElementById('btn-ver-lixeira');
+            const titulo = document.getElementById('titulo-painel');
+            const btnNovo = document.getElementById('btn-novo');
+            document.getElementById('input-busca').value = ""; // Limpa a busca ao trocar de tela
+
+            if(exibindoLixeira) {
+                btn.textContent = "💻 Ver Ativos";
+                btn.style.backgroundColor = "#007bff";
+                btn.style.color = "white";
+                titulo.textContent = "Lixeira de Equipamentos 🗑️";
+                btnNovo.style.display = "none";
+                buscarLixeira();
+            } else {
+                btn.textContent = "👁️ Ver Lixeira";
+                btn.style.backgroundColor = "#6c757d";
+                titulo.textContent = "Lista de Equipamentos 💻";
+                btnNovo.style.display = "inline-block";
+                document.getElementById('btn-limpar-lixeira').style.display = "none";
+                buscarEquipamentos();
+            }
+        });
+
+        document.getElementById('btn-sair').addEventListener('click', async () => {
+            if (clienteSupabase) await clienteSupabase.auth.signOut();
+            window.location.href = 'login.html';
+        });
+
+        window.onload = async () => {
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+            const btnSair = document.getElementById('btn-sair'); 
+
+            try {
+                const creds = await recuperarCredenciais();
+                if (!creds || !creds.url || !creds.anonKey) {
+                    window.location.href = 'login.html';
+                    return; 
+                }
+                
+                clienteSupabase = supabase.createClient(creds.url, creds.anonKey);
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+
+                if (!session) {
+                    alert("Acesso Negado: Você precisa fazer login.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                statusDiv.textContent = "logado como: " + session.user.email;
+                statusDiv.style.backgroundColor = "transparent";
+                statusDiv.style.color = "#666";
+                
+                appDiv.style.display = "block";
+                btnSair.style.display = "block";
+                
+                buscarEquipamentos();
+
+            } catch (error) {
+                console.error(error);
+                statusDiv.textContent = "❌ Erro ao ler credenciais ou sessão.";
+                statusDiv.className = "erro";
+            }
+        };
+    </script>
+</body>
+</html>
+```
+# cadastrar.html
+
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Equipamentos - Cadastro</title>
+    
+    <!--estilos-->
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .erro { background-color: #f8d7da; color: #721c24; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px;}
+        input { width: 100%; padding: 8px; margin: 8px 0 15px 0; box-sizing: border-box; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-voltar { background: #6c757d; margin-bottom: 20px; display: inline-block;}
+        .btn-voltar:hover { background: #5a6268; }
+        .img-preview { max-width: 150px; border-radius: 8px; margin: 10px 0; border: 1px solid #ccc; display: block;}
+    </style>
+    <!--/estilos-->
+
+    <!--biblioteca_supabase-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!--/biblioteca_supabase-->
+</head>
+<!--/head_config-->
+
+<body>
+    
+    <!--status_bar-->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div id="status" class="info" style="flex-grow: 1; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 0;">Verificando sessão...</div>
+    </div>
+    <!--/status_bar-->
+
+    <!--botao_voltar-->
+    <button class="btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
+    <!--/botao_voltar-->
+
+    <!--area_formulario-->
+    <div id="app" class="card" style="display: none;">
+        <h2 id="titulo-pagina">➕ Novo Equipamento</h2>
+        
+        <!--formulario_dinamico-->
+        <form id="form-equipamento">
+            <input type="hidden" id="input-id">
+            
+            <label for="input-nome">Nome do Equipamento:</label>
+            <input type="text" id="input-nome" placeholder="Ex: Meta Quest 3S" required>
+
+            <label for="input-preco">Preço (R$):</label>
+            <input type="number" id="input-preco" step="0.01" placeholder="Ex: 2500.50" required>
+
+            <div id="area-foto-atual" style="display: none; padding: 10px; background: #f8f9fa; border-radius: 5px; margin-bottom: 10px;">
+                <label>Foto Atual (Salva no Banco):</label>
+                <img id="img-atual" class="img-preview" src="" alt="Sem foto">
+            </div>
+
+            <label for="input-foto">Foto do Equipamento (Máx 2MB):</label>
+            <input type="file" id="input-foto" accept="image/png, image/jpeg, image/webp">
+            <small style="display: block; color: #666; margin-top: -10px; margin-bottom: 15px;" id="dica-foto">
+                Para Cadastro: Escolha uma foto. Para Edição: Envie nova foto para substituir ou deixe em branco para manter a atual.
+            </small>
+
+            <button type="submit" id="btn-enviar-dados">💾 Salvar Equipamento</button>
+        </form>
+        <!--/formulario_dinamico-->
+    </div> 
+    <!--/area_formulario-->
+
+    <!--logica_principal_js-->
+    <script>
+        /* ================= SEGURANÇA E VARIÁVEIS GLOBAIS ================= */
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+        let clienteSupabase = null;
+        
+        let modoEdicao = false; 
+        let urlFotoAntiga = null;
+
+        <!--funcao_recuperarCredenciais-->
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(NOME_TABELA)) {
+                        db.createObjectStore(NOME_TABELA, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function recuperarCredenciais() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readonly');
+                const store = transaction.objectStore(NOME_TABELA);
+                const request = store.get('supabase_creds');
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        <!--/funcao_recuperarCredenciais-->
+
+        <!--funcao_gerarNomeSeguroArquivo-->
+        function gerarNomeSeguroArquivo(nomeProduto, arquivoOriginal) {
+            let nomeLimpo = nomeProduto.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            nomeLimpo = nomeLimpo.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+            const extensao = arquivoOriginal.name.split('.').pop();
+            const timestamp = Date.now();
+            return `${nomeLimpo}-${timestamp}.${extensao}`;
+        }
+        <!--/funcao_gerarNomeSeguroArquivo-->
+
+        <!--funcao_apagarFotoNoStorage-->
+        async function apagarFotoNoStorage(urlDaFoto) {
+            try {
+                const nomeLimpo = urlDaFoto.split('/').pop().split('?')[0];
+                const nomeDoArquivo = decodeURIComponent(nomeLimpo);
+                await clienteSupabase.storage.from('equipamentos_fotos').remove([nomeDoArquivo]);
+            } catch (err) {
+                console.error("Erro interno ao tentar apagar foto:", err);
+            }
+        }
+        <!--/funcao_apagarFotoNoStorage-->
+
+        /* ================= INICIALIZAÇÃO DA PÁGINA COM CHECAGEM DE SESSÃO ================= */
+
+        <!--evento_onload_janela-->
+        window.onload = async () => {
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+
+            try {
+                const creds = await recuperarCredenciais();
+                if (!creds || !creds.url || !creds.anonKey) {
+                    window.location.href = 'Login.html';
+                    return; 
+                }
+
+                clienteSupabase = supabase.createClient(creds.url, creds.anonKey);
+                
+                // NOVA SEGURANÇA: Verifica se o usuário está logado antes de abrir o cadastro
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+                if (!session) {
+                    alert("Acesso Negado: Faça login para continuar.");
+                    window.location.href = 'Login.html';
+                    return;
+                }
+
+                const parametrosUrl = new URLSearchParams(window.location.search);
+                const idEquipamento = parametrosUrl.get('id');
+
+                if (idEquipamento) {
+                    modoEdicao = true;
+                    document.getElementById('titulo-pagina').textContent = "✏️ Editar Equipamento";
+                    statusDiv.textContent = "Buscando dados do equipamento...";
+                    
+                    const { data, error } = await clienteSupabase
+                        .from('equipamentos_ti')
+                        .select('*')
+                        .eq('id', idEquipamento)
+                        .single();
+
+                    if (error) throw error;
+
+                    document.getElementById('input-id').value = data.id;
+                    document.getElementById('input-nome').value = data.nome;
+                    document.getElementById('input-preco').value = data.preco;
+                    urlFotoAntiga = data.foto_url; 
+
+                    if (data.foto_url) {
+                        document.getElementById('area-foto-atual').style.display = 'block';
+                        document.getElementById('img-atual').src = data.foto_url;
+                    }
+                }
+
+                statusDiv.textContent = "Logado como: " + session.user.email;
+                statusDiv.style.backgroundColor = "transparent";
+                statusDiv.style.color = "#666";
+                appDiv.style.display = "block";
+
+            } catch (error) {
+                console.error("Erro Crítico:", error);
+                statusDiv.textContent = "❌ Erro de autenticação.";
+                statusDiv.className = "erro";
+            }
+        };
+        <!--/evento_onload_janela-->
+
+
+        /* ================= SUBMISSÃO DO FORMULÁRIO (CREATE / UPDATE) ================= */
+
+        <!--evento_submit_formulario-->
+        document.getElementById('form-equipamento').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); 
+            
+            const btnSubmit = document.getElementById('btn-enviar-dados');
+            btnSubmit.textContent = "⏳ Processando Dados e Imagens...";
+            btnSubmit.disabled = true;
+
+            const idDigitado = document.getElementById('input-id').value;
+            const nomeDigitado = document.getElementById('input-nome').value;
+            const precoDigitado = parseFloat(document.getElementById('input-preco').value);
+            const arquivoFoto = document.getElementById('input-foto').files[0]; 
+
+            try {
+                let urlFinalDaFoto = urlFotoAntiga; 
+
+                if (arquivoFoto) {
+                    if (arquivoFoto.size > 2 * 1024 * 1024) {
+                        throw new Error("A imagem é muito grande. O limite é 2MB.");
+                    }
+
+                    if (modoEdicao && urlFotoAntiga != null) {
+                        await apagarFotoNoStorage(urlFotoAntiga);
+                    }
+
+                    const nomeUnicoSeguro = gerarNomeSeguroArquivo(nomeDigitado, arquivoFoto);
+
+                    const { error: uploadError } = await clienteSupabase.storage
+                        .from('equipamentos_fotos')
+                        .upload(nomeUnicoSeguro, arquivoFoto);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: urlData } = clienteSupabase.storage
+                        .from('equipamentos_fotos')
+                        .getPublicUrl(nomeUnicoSeguro);
+                    
+                    urlFinalDaFoto = urlData.publicUrl; 
+                }
+
+                if (modoEdicao) {
+                    const { error } = await clienteSupabase.rpc('atualizar_equipamento_seguro', {
+                        p_id: idDigitado,
+                        p_novo_nome: nomeDigitado,
+                        p_novo_preco: precoDigitado,
+                        p_foto_url: urlFinalDaFoto
+                    });
+                    if (error) throw error;
+                    alert("✅ Equipamento atualizado com sucesso!");
+                } else {
+                    const { error } = await clienteSupabase.rpc('adicionar_equipamento_seguro', {
+                        p_nome: nomeDigitado,
+                        p_preco: precoDigitado,
+                        p_especificacoes: {},
+                        p_foto_url: urlFinalDaFoto
+                    });
+                    if (error) throw error;
+                    alert("✅ Equipamento cadastrado com sucesso!");
+                }
+
+                evento.target.reset(); 
+                window.location.href = 'listar.html';
+
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro na operação: " + (erro.message || JSON.stringify(erro)));
+            } finally {
+                btnSubmit.textContent = "💾 Salvar Equipamento";
+                btnSubmit.disabled = false;
+            }
+        });
+        <!--/evento_submit_formulario-->
+    </script>
+    <!--/logica_principal_js-->
+</body>
+</html>
+
+```
 
 
 
