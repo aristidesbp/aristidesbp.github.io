@@ -1348,8 +1348,38 @@ if __name__ == "__main__":
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-
 # Supabase
+```
+# verificar versao do linux:
+cat /etc/os-release
+```
+```
+# verificar versao do docker e status do servico:
+docker --version && sudo systemctl status docker --no-pager
+```
+```
+# baixar e instalar a supabase cli diretamente em /usr/local/bin:
+curl -fsSL https://raw.githubusercontent.com/supabase/cli/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+# verificar se a instalacao foi concluida com sucesso:
+supabase --version
+```
+```
+# criar pasta para o backend local e entrar nela:
+mkdir -p ~/supabase-local && cd ~/supabase-local
+
+# inicializar a estrutura do supabase:
+supabase init
+```
+```
+# iniciar a stack completa de conteineres do supabase local:
+supabase start
+```
+```
+# iniciar a stack completa de conteineres do supabase local:
+supabase start
+```
+
 
 ## Criar conta e projeto
 * Acesse: https://supabase.com
