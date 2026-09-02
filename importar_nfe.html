@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP - Importar NF-e</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; margin: 0; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 1300px; margin: 0 auto; }
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: bold; color: white;}
+        button:hover { opacity: 0.8; }
+        
+        .btn-sucesso { background: #28a745; }
+        .btn-voltar { background: #6c757d; margin-bottom: 20px; }
+        .btn-primario { background: #007bff; width: 100%; font-size: 1.1em; margin-top: 20px; padding: 15px;}
+        
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px;}
+        
+        .area-upload { border: 2px dashed #007bff; padding: 30px; text-align: center; border-radius: 8px; background: #f8f9fa; margin-bottom: 20px;}
+        input[type="file"] { font-size: 1em; padding: 10px; cursor: pointer; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9em; }
+        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        
+        /* CSS para as caixas de edição dentro da tabela */
+        .inp-tabela { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9em; }
+        .inp-tabela:focus { border-color: #007bff; outline: none; }
+        .destaque-venda { background-color: #e8f5e9; font-weight: bold; }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div style="max-width: 1300px; margin: 0 auto;">
+        <button class="btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
+        <div id="status" class="info">Autenticando sessão...</div>
+    </div>
+
+    <div id="app" class="card" style="display: none;">
+        <h2>📥 Importação de NF-e (Produtos)</h2>
+        
+        <div class="area-upload">
+            <p>Selecione o ficheiro XML da Nota Fiscal para extrair os produtos.</p>
+            <input type="file" id="ficheiro-xml" accept=".xml">
+        </div>
+
+        <div id="area-revisao" style="display: none;">
+            <h3 style="color: #28a745;">✅ Dados Editáveis Prontos para Revisão</h3>
+            <p>Verifique ou altere os valores abaixo antes de guardar. A Margem Sugerida (30%) já foi aplicada no Preço de Venda.</p>
+            
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cód.</th>
+                            <th>EAN</th>
+                            <th>Produto</th>
+                            <th>NCM</th>
+                            <th>CEST</th>
+                            <th>CFOP</th>
+                            <th>Unid.</th>
+                            <th>Qtd.</th>
+                            <th>V. Custo (R$)</th>
+                            <th>V. Venda (30%)</th>
+                            <th>V. Total (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        <!-- Os inputs serão injetados aqui -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="btn-salvar-lote" class="btn-primario">💾 Confirmar e Salvar Produtos no Banco</button>
+        </div>
+    </div>
+
+    <script>
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+        let clienteSupabase = null;
+
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function recuperarCredenciais() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction([NOME_TABELA], 'readonly');
+                const req = tx.objectStore(NOME_TABELA).get('supabase_creds');
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        document.getElementById('ficheiro-xml').addEventListener('change', function(evento) {
+            const ficheiro = evento.target.files[0];
+            if (!ficheiro) return;
+
+            const leitor = new FileReader();
+            leitor.onload = function(e) { processarXML(e.target.result); };
+            leitor.readAsText(ficheiro);
+        });
+
+        function processarXML(xmlTexto) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlTexto, "application/xml");
+            const itens = xmlDoc.getElementsByTagName("det");
+            
+            const tbody = document.getElementById('tabela-corpo');
+            tbody.innerHTML = ""; 
+
+            if (itens.length === 0) {
+                alert("Nenhum produto encontrado neste XML.");
+                return;
+            }
+
+            for (let i = 0; i < itens.length; i++) {
+                const item = itens[i];
+                
+                const codProd = item.getElementsByTagName("cProd")[0]?.textContent || "";
+                const ean = item.getElementsByTagName("cEAN")[0]?.textContent || "";
+                const nome = item.getElementsByTagName("xProd")[0]?.textContent || "Produto Sem Nome";
+                const ncm = item.getElementsByTagName("NCM")[0]?.textContent || "";
+                const cest = item.getElementsByTagName("CEST")[0]?.textContent || "";
+                const cfop = item.getElementsByTagName("CFOP")[0]?.textContent || "";
+                const unid = item.getElementsByTagName("uCom")[0]?.textContent || "";
+                
+                const qtd = parseFloat(item.getElementsByTagName("qCom")[0]?.textContent || "0");
+                const precoCusto = parseFloat(item.getElementsByTagName("vUnCom")[0]?.textContent || "0");
+                const precoVenda = precoCusto * 1.30; // Aplica margem de lucro de 30%
+                const valorTotal = parseFloat(item.getElementsByTagName("vProd")[0]?.textContent || "0");
+
+                // Injeta uma linha HTML com inputs editáveis (Planilha Virtual)
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" class="edit-cod inp-tabela" value="${codProd}" style="min-width: 60px;"></td>
+                    <td><input type="text" class="edit-ean inp-tabela" value="${ean}" style="min-width: 120px;"></td>
+                    <td><input type="text" class="edit-nome inp-tabela" value="${nome}" style="min-width: 200px;"></td>
+                    <td><input type="text" class="edit-ncm inp-tabela" value="${ncm}" style="min-width: 80px;"></td>
+                    <td><input type="text" class="edit-cest inp-tabela" value="${cest}" style="min-width: 80px;"></td>
+                    <td><input type="text" class="edit-cfop inp-tabela" value="${cfop}" style="min-width: 60px;"></td>
+                    <td><input type="text" class="edit-unid inp-tabela" value="${unid}" style="min-width: 60px;"></td>
+                    <td><input type="number" step="any" class="edit-qtd inp-tabela" value="${qtd.toFixed(2)}" style="min-width: 70px;"></td>
+                    <td><input type="number" step="any" class="edit-custo inp-tabela" value="${precoCusto.toFixed(4)}" style="min-width: 80px;"></td>
+                    <td><input type="number" step="any" class="edit-venda inp-tabela destaque-venda" value="${precoVenda.toFixed(2)}" style="min-width: 80px;"></td>
+                    <td><input type="number" step="any" class="edit-total inp-tabela" value="${valorTotal.toFixed(2)}" style="min-width: 80px;"></td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            document.getElementById('area-revisao').style.display = "block";
+        }
+
+        document.getElementById('btn-salvar-lote').addEventListener('click', async () => {
+            const linhas = document.querySelectorAll('#tabela-corpo tr');
+            if (linhas.length === 0) return;
+
+            const btn = document.getElementById('btn-salvar-lote');
+            btn.textContent = "⏳ A gravar dados, por favor aguarde...";
+            btn.disabled = true;
+
+            // Recolhe os dados fresquinhos direto da tabela visual (respeita qualquer edição que o utilizador tenha feito)
+            const produtosProntosParaEnvio = [];
+            linhas.forEach(tr => {
+                produtosProntosParaEnvio.push({
+                    codigo_produto: tr.querySelector('.edit-cod').value,
+                    ean: tr.querySelector('.edit-ean').value,
+                    nome: tr.querySelector('.edit-nome').value,
+                    ncm: tr.querySelector('.edit-ncm').value,
+                    cest: tr.querySelector('.edit-cest').value,
+                    cfop: tr.querySelector('.edit-cfop').value,
+                    unidade_comercial: tr.querySelector('.edit-unid').value,
+                    quantidade: parseFloat(tr.querySelector('.edit-qtd').value) || 0,
+                    preco_custo: parseFloat(tr.querySelector('.edit-custo').value) || 0,
+                    preco_venda: parseFloat(tr.querySelector('.edit-venda').value) || 0,
+                    valor_total: parseFloat(tr.querySelector('.edit-total').value) || 0
+                });
+            });
+
+            try {
+                const { error } = await clienteSupabase.rpc('inserir_produtos_lote_seguro', {
+                    p_itens: produtosProntosParaEnvio
+                });
+
+                if (error) throw error;
+
+                alert("✅ Produtos importados com sucesso!");
+                window.location.href = 'listar.html'; 
+                
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro ao gravar no banco: " + (erro.message || JSON.stringify(erro)));
+                btn.textContent = "💾 Confirmar e Salvar Produtos no Banco";
+                btn.disabled = false;
+            }
+        });
+
+        window.onload = async () => {
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+            try {
+                const creds = await recuperarCredenciais();
+                if (!creds) return window.location.href = 'login.html';
+                
+                clienteSupabase = supabase.createClient(creds.url, creds.anonKey);
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+                if (!session) return window.location.href = 'login.html';
+                
+                statusDiv.textContent = `Logado de forma segura como: ${session.user.email}`;
+                statusDiv.style.backgroundColor = "transparent";
+                statusDiv.style.color = "#666";
+                appDiv.style.display = "block";
+                
+            } catch (error) {
+                statusDiv.textContent = "❌ Erro de segurança no login.";
+                statusDiv.className = "erro info";
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaveiro Multi-Empresas - TI</title>
+    
+    <!--estilos-->
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; margin-bottom: 20px;}
+        input { width: 100%; padding: 10px; margin: 8px 0 15px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: bold; color: white; }
+        .btn-salvar { background: #007bff; width: 100%; font-size: 1em; padding: 12px;}
+        .btn-salvar:hover { background: #0056b3; }
+        .btn-acessar { background: #28a745; }
+        .btn-acessar:hover { background: #218838; }
+        .btn-editar { background: #ffc107; color: #212529; }
+        .btn-editar:hover { background: #e0a800; }
+        .btn-excluir { background: #dc3545; }
+        .btn-excluir:hover { background: #c82333; }
+        
+        .titulo { text-align: center; margin-bottom: 20px; color: #333; margin-top: 0;}
+        .info { background-color: #e2e3e5; color: #383d41; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px; font-size: 0.9em; }
+        
+        .item-empresa { padding: 15px; border: 1px solid #eee; border-radius: 5px; margin-bottom: 10px; background: #fafafa; }
+        .item-empresa strong { display: block; font-size: 1.1em; color: #007bff; margin-bottom: 5px;}
+        .grupo-botoes { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;}
+    </style>
+    <!--/estilos-->
+</head>
+<!--/head_config-->
+
+<body>
+    
+    <!--painel_cadastro_chaves-->
+    <div class="card">
+        <h2 class="titulo">🏢 Cadastrar Nova Empresa</h2>
+        
+        <form id="form-empresa">
+            <!-- ID oculto para sabermos se estamos criando ou editando -->
+            <input type="hidden" id="input-id">
+            
+            <label for="input-nome">Nome da Empresa:</label>
+            <input type="text" id="input-nome" placeholder="Ex: Loja do João" required>
+
+            <label for="input-url">URL do Supabase:</label>
+            <input type="text" id="input-url" placeholder="https://xyz.supabase.co" required>
+            
+            <label for="input-key">Anon Key:</label>
+            <input type="password" id="input-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX..." required>
+            
+            <button type="submit" class="btn-salvar">💾 Salvar Credenciais</button>
+        </form>
+    </div>
+    <!--/painel_cadastro_chaves-->
+
+    <!--painel_listagem_chaves-->
+    <div class="card">
+        <h2 class="titulo">🔑 Bancos de Dados Salvos</h2>
+        <div id="status" class="info">Carregando chaves locais...</div>
+        
+        <div id="lista-empresas">
+            <!-- A lista será injetada aqui pelo JavaScript -->
+        </div>
+    </div>
+    <!--/painel_listagem_chaves-->
+
+
+    <!--logica_principal_js-->
+    <script>
+        /* ================= SEGURANÇA (INDEXEDDB) ================= */
+        const NOME_BANCO = 'SegurancaAppDB';
+        const NOME_TABELA = 'chaves_supabase';
+
+        <!--funcao_iniciarBancoDeDados-->
+        function iniciarBancoDeDados() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(NOME_BANCO, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(NOME_TABELA)) {
+                        db.createObjectStore(NOME_TABELA, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        <!--/funcao_iniciarBancoDeDados-->
+
+        <!--funcao_crud_empresas-->
+        // BUSCAR a lista de empresas (Array)
+        async function buscarEmpresas() {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve) => {
+                const transaction = db.transaction([NOME_TABELA], 'readonly');
+                const store = transaction.objectStore(NOME_TABELA);
+                const request = store.get('lista_empresas');
+                // Se existir, devolve os dados. Se não, devolve um array vazio []
+                request.onsuccess = () => resolve(request.result ? request.result.dados : []);
+                request.onerror = () => resolve([]);
+            });
+        }
+
+        // SALVAR a lista inteira de empresas de volta no banco
+        async function salvarListaEmpresas(arrayDeEmpresas) {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readwrite');
+                const store = transaction.objectStore(NOME_TABELA);
+                // Guarda o array inteiro dentro da chave 'lista_empresas'
+                store.put({ id: 'lista_empresas', dados: arrayDeEmpresas });
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject(transaction.error);
+            });
+        }
+
+        // DEFINIR CREDENCIAL ATIVA (Usada para o Login)
+        async function definirCredencialAtiva(url, anonKey) {
+            const db = await iniciarBancoDeDados();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([NOME_TABELA], 'readwrite');
+                const store = transaction.objectStore(NOME_TABELA);
+                // Sobrescreve a chave que o login.html e os outros arquivos usam!
+                store.put({ id: 'supabase_creds', url: url.trim(), anonKey: anonKey.trim() });
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject(transaction.error);
+            });
+        }
+        <!--/funcao_crud_empresas-->
+
+
+        /* ================= LÓGICA DE INTERFACE ================= */
+        let empresasGlobais = [];
+
+        <!--funcao_renderizarLista-->
+        async function renderizarLista() {
+            const divLista = document.getElementById('lista-empresas');
+            const statusDiv = document.getElementById('status');
+            
+            empresasGlobais = await buscarEmpresas();
+            divLista.innerHTML = ""; 
+
+            if (empresasGlobais.length === 0) {
+                statusDiv.textContent = "Nenhuma empresa cadastrada ainda.";
+                return;
+            }
+
+            statusDiv.textContent = `Você possui ${empresasGlobais.length} empresa(s) salva(s).`;
+
+            empresasGlobais.forEach((empresa) => {
+                const divItem = document.createElement('div');
+                divItem.className = 'item-empresa';
+
+                divItem.innerHTML = `
+                    <strong>${empresa.nome}</strong>
+                    <span style="font-size: 0.8em; color: #666; word-break: break-all;">URL: ${empresa.url}</span>
+                `;
+
+                const divBotoes = document.createElement('div');
+                divBotoes.className = 'grupo-botoes';
+
+                // Botão Acessar: Define a credencial ativa e envia pro Login
+                const btnAcessar = document.createElement('button');
+                btnAcessar.textContent = "🚀 Acessar";
+                btnAcessar.className = "btn-acessar";
+                btnAcessar.onclick = async () => {
+                    await definirCredencialAtiva(empresa.url, empresa.anonKey);
+                    window.location.href = 'login.html';
+                };
+
+                // Botão Editar: Preenche o formulário lá em cima
+                const btnEditar = document.createElement('button');
+                btnEditar.textContent = "✏️ Editar";
+                btnEditar.className = "btn-editar";
+                btnEditar.onclick = () => {
+                    document.getElementById('input-id').value = empresa.id;
+                    document.getElementById('input-nome').value = empresa.nome;
+                    document.getElementById('input-url').value = empresa.url;
+                    document.getElementById('input-key').value = empresa.anonKey;
+                    window.scrollTo(0, 0); // Sobe a tela para o formulário
+                };
+
+                // Botão Excluir: Remove do array e salva
+                const btnExcluir = document.createElement('button');
+                btnExcluir.textContent = "🗑️ Excluir";
+                btnExcluir.className = "btn-excluir";
+                btnExcluir.onclick = async () => {
+                    if(confirm(`Deseja realmente apagar o banco da empresa '${empresa.nome}' do seu dispositivo?`)) {
+                        // Filtra o array removendo a empresa clicada
+                        empresasGlobais = empresasGlobais.filter(e => e.id !== empresa.id);
+                        await salvarListaEmpresas(empresasGlobais);
+                        renderizarLista();
+                    }
+                };
+
+                divBotoes.appendChild(btnAcessar);
+                divBotoes.appendChild(btnEditar);
+                divBotoes.appendChild(btnExcluir);
+                divItem.appendChild(divBotoes);
+                divLista.appendChild(divItem);
+            });
+        }
+        <!--/funcao_renderizarLista-->
+
+        <!--evento_submit_formulario-->
+        document.getElementById('form-empresa').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); 
+            
+            const idDigitado = document.getElementById('input-id').value;
+            const nomeDigitado = document.getElementById('input-nome').value;
+            const urlDigitada = document.getElementById('input-url').value;
+            const keyDigitada = document.getElementById('input-key').value;
+
+            if (idDigitado) {
+                // MODO EDIÇÃO: Atualiza a empresa existente no Array
+                const index = empresasGlobais.findIndex(e => e.id === idDigitado);
+                if(index !== -1) {
+                    empresasGlobais[index] = {
+                        id: idDigitado,
+                        nome: nomeDigitado,
+                        url: urlDigitada,
+                        anonKey: keyDigitada
+                    };
+                }
+            } else {
+                // MODO CRIAÇÃO: Adiciona uma nova empresa no Array
+                const novaEmpresa = {
+                    id: Date.now().toString(), // Cria um ID único baseado na data/hora
+                    nome: nomeDigitado,
+                    url: urlDigitada,
+                    anonKey: keyDigitada
+                };
+                empresasGlobais.push(novaEmpresa);
+            }
+
+            // Salva no IndexedDB, recarrega a lista e limpa o formulário
+            await salvarListaEmpresas(empresasGlobais);
+            renderizarLista();
+            evento.target.reset();
+            document.getElementById('input-id').value = ""; // Limpa o ID oculto
+            alert("✅ Credenciais salvas com sucesso no seu dispositivo!");
+        });
+        <!--/evento_submit_formulario-->
+
+        <!--evento_onload_janela-->
+        // Ao abrir a página, apenas desenha a lista (removemos o redirecionamento automático!)
+        window.onload = () => {
+            renderizarLista();
+        };
+        <!--/evento_onload_janela-->
+
+    </script>
+    <!--/logica_principal_js-->
+</body>
+</html>
