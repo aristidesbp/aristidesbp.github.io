@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Produtos - Cadastro (ERP)</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; max-width: 1000px; margin: 0 auto; }
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px;}
+        .erro { background-color: #f8d7da; color: #721c24; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px;}
+        
+        .secao-form { background: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
+        .secao-titulo { font-size: 1.1em; color: #007bff; margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #007bff; padding-bottom: 5px; display: inline-block;}
+        
+        input, select { width: 100%; padding: 10px; margin: 5px 0 15px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;}
+        label { font-weight: bold; color: #333; font-size: 0.85em; }
+        
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; color: white;}
+        button:hover { opacity: 0.8; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .area-navegacao { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn-voltar { background: #6c757d; }
+        .btn-importar { background: #28a745; }
+        .btn-salvar { background: #007bff; width: 100%; font-size: 1.1em; padding: 15px; margin-top: 10px;}
+        
+        .linha-form { display: flex; gap: 15px; flex-wrap: wrap; }
+        .coluna-form { flex: 1; min-width: 200px; }
+
+        .input-group { display: flex; gap: 5px; align-items: center; margin: 5px 0 15px 0; }
+        .input-group input { margin: 0; }
+        .btn-scan { background: #17a2b8; padding: 10px; display: flex; align-items: center; justify-content: center; }
+
+        #scanner-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        #reader { width: 100%; max-width: 500px; background: white; border-radius: 8px; overflow: hidden; }
+        .img-preview { max-width: 150px; border-radius: 8px; margin: 10px 0; border: 1px solid #ccc; display: block;}
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body>
+    
+    <div id="status" class="info">Verificando sessão...</div>
+
+    <div class="area-navegacao">
+        <button class="btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
+        <button class="btn-importar" onclick="window.location.href='importar_nfe.html'">📥 Importar NF-e (XML)</button>
+    </div>
+
+    <div id="app" class="card" style="display: none;">
+        <h2 id="titulo-pagina">➕ Cadastrar Novo Produto</h2>
+        
+        <form id="form-produto">
+            <input type="hidden" id="input-id">
+            
+            <div class="secao-form">
+                <h3 class="secao-titulo">📦 Dados Gerais</h3>
+                <label for="input-nome">Nome do Produto:</label>
+                <input type="text" id="input-nome" placeholder="Ex: Cerveja Artesanal 500ml" required>
+
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-categoria">Categoria:</label>
+                        <input type="text" id="input-categoria" placeholder="Ex: Bebidas Alcoólicas">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-origem">Origem:</label>
+                        <select id="input-origem">
+                            <option value="">Selecione...</option>
+                            <option value="0 - Nacional">0 - Nacional</option>
+                            <option value="1 - Estrangeira (Importação Direta)">1 - Estrangeira (Importação Direta)</option>
+                            <option value="2 - Estrangeira (Mercado Interno)">2 - Estrangeira (Mercado Interno)</option>
+                        </select>
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-fornecedor">Fornecedor Principal:</label>
+                        <input type="text" id="input-fornecedor" placeholder="Ex: Distribuidora de Bebidas ABC">
+                    </div>
+                </div>
+            </div>
+            <div class="secao-form">
+                <h3 class="secao-titulo">💰 Preços e Estoque</h3>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-preco-custo">Preço de Custo (R$):</label>
+                        <input type="number" id="input-preco-custo" step="any" placeholder="0.00">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-preco-venda">Preço de Venda (R$):</label>
+                        <input type="number" id="input-preco-venda" step="any" placeholder="0.00" required>
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-total">Valor Total Ref. (R$):</label>
+                        <input type="number" id="input-total" step="any" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-estoque">Estoque Atual (Qtd):</label>
+                        <input type="number" id="input-estoque" step="any" value="0" required>
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-estoque-minimo">Estoque Mínimo (Alerta):</label>
+                        <input type="number" id="input-estoque-minimo" step="any" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="secao-form">
+                <h3 class="secao-titulo">🚚 Logística</h3>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-local-estoque">Local no Armazém/Estoque:</label>
+                        <input type="text" id="input-local-estoque" placeholder="Ex: Corredor B, Prateleira 4">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-local-loja">Local na Loja:</label>
+                        <input type="text" id="input-local-loja" placeholder="Ex: Vitrine Central">
+                    </div>
+                </div>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-tipo-embalagem">Tipo de Embalagem:</label>
+                        <input type="text" id="input-tipo-embalagem" placeholder="Ex: Caixa, Fardo, Unidade">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-peso">Peso Líquido (Kg):</label>
+                        <input type="number" id="input-peso" step="any" placeholder="Ex: 1.5">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-dimensoes">Tamanho/Dimensões:</label>
+                        <input type="text" id="input-dimensoes" placeholder="Ex: 10x20x5 cm">
+                    </div>
+                </div>
+            </div>
+
+            <div class="secao-form">
+                <h3 class="secao-titulo">🧾 Fiscal e Códigos</h3>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-codigo">Código Interno:</label>
+                        <input type="text" id="input-codigo" placeholder="Ex: 563657">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-ean">EAN (Código de Barras):</label>
+                        <div class="input-group">
+                            <input type="text" id="input-ean" placeholder="Ex: 7891025109884">
+                            <button type="button" id="btn-abrir-camera" class="btn-scan" title="Câmera">📷</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-ncm">NCM:</label>
+                        <input type="text" id="input-ncm" placeholder="Ex: 04061090">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-cest">CEST:</label>
+                        <input type="text" id="input-cest" placeholder="Ex: 1702404">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-cfop">CFOP:</label>
+                        <input type="text" id="input-cfop" placeholder="Ex: 5405">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-unid">Unid. Comercial:</label>
+                        <input type="text" id="input-unid" placeholder="Ex: UN, CX">
+                    </div>
+                </div>
+            </div>
+
+            <div class="secao-form">
+                <h3 class="secao-titulo">📅 Datas e Imagem</h3>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-data-compra">Data da Compra:</label>
+                        <input type="date" id="input-data-compra">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-data-vencimento">Data de Vencimento:</label>
+                        <input type="date" id="input-data-vencimento">
+                    </div>
+                </div>
+
+                <div id="area-foto-atual" style="display: none; margin-top: 15px;">
+                    <label>Foto Atual:</label>
+                    <img id="img-atual" class="img-preview" src="" alt="Sem foto">
+                </div>
+
+                <label for="input-foto" style="margin-top: 15px; display: block;">Foto do Produto (Máx 2MB):</label>
+                <input type="file" id="input-foto" accept="image/png, image/jpeg, image/webp">
+            </div>
+
+            <button type="submit" id="btn-enviar-dados" class="btn-salvar">💾 Salvar Produto</button>
+        </form>
+    </div> 
+
+    <!-- Janela Scanner -->
+    <div id="scanner-container">
+        <h3 style="color: white; margin-bottom: 15px;">Aponte para o Código de Barras</h3>
+        <div id="reader"></div>
+        <button type="button" id="btn-fechar-camera" class="btn-voltar" style="margin-top: 20px;">❌ Cancelar</button>
+    </div>
+    <!-- 1. IMPORTAÇÃO CENTRALIZADA DO BANCO DE DADOS -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        /* ================= VARIÁVEIS GLOBAIS ================= */
+        let modoEdicao = false; 
+        let urlFotoAntiga = null;
+        let html5QrCode = null; 
+
+        /* ================= FUNÇÕES UTILITÁRIAS DE FOTOS ================= */
+        function gerarNomeSeguroArquivo(nomeProduto, arquivoOriginal) {
+            let nomeLimpo = nomeProduto.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            nomeLimpo = nomeLimpo.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+            const extensao = arquivoOriginal.name.split('.').pop();
+            return `${nomeLimpo}-${Date.now()}.${extensao}`;
+        }
+
+        async function apagarFotoNoStorage(urlDaFoto) {
+            try {
+                const nomeLimpo = urlDaFoto.split('/').pop().split('?')[0];
+                const nomeDoArquivo = decodeURIComponent(nomeLimpo);
+                await clienteSupabase.storage.from('equipamentos_fotos').remove([nomeDoArquivo]);
+            } catch (err) { console.error(err); }
+        }
+
+        /* ================= LEITOR DE CÓDIGO DE BARRAS ================= */
+        document.getElementById('btn-abrir-camera').addEventListener('click', () => {
+            const scannerContainer = document.getElementById('scanner-container');
+            scannerContainer.style.display = 'flex';
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 100 } };
+            
+            html5QrCode.start({ facingMode: "environment" }, config, (codigoLido) => {
+                document.getElementById('input-ean').value = codigoLido;
+                html5QrCode.stop().then(() => scannerContainer.style.display = 'none');
+            }).catch(() => {
+                alert("Erro ao aceder à câmara.");
+                scannerContainer.style.display = 'none';
+            });
+        });
+
+        document.getElementById('btn-fechar-camera').addEventListener('click', () => {
+            if (html5QrCode) html5QrCode.stop().then(() => document.getElementById('scanner-container').style.display = 'none');
+        });
+
+        /* ================= INICIALIZAÇÃO DA PÁGINA (READ) ================= */
+        document.addEventListener('DOMContentLoaded', async () => {
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+
+            // MURALHA 1: Verifica se o ficheiro supabase_config.js foi carregado com sucesso
+            if (typeof clienteSupabase === 'undefined') {
+                statusDiv.textContent = "❌ Ficheiro supabase_config.js não encontrado.";
+                statusDiv.className = "info erro";
+                return;
+            }
+
+            try {
+                // MURALHA 2: Verifica a sessão do utilizador
+                const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+                if (sessionError || !session) {
+                    statusDiv.textContent = "Sessão expirada. Redirecionando...";
+                    return window.location.href = 'login.html';
+                }
+
+                // Lógica para carregar os dados se for uma edição (parâmetro ?id=...)
+                const parametrosUrl = new URLSearchParams(window.location.search);
+                const idProduto = parametrosUrl.get('id');
+
+                if (idProduto) {
+                    modoEdicao = true;
+                    document.getElementById('titulo-pagina').textContent = "✏️ Editar Produto";
+                    statusDiv.textContent = "Carregando dados do ERP...";
+                    
+                    const { data, error } = await clienteSupabase
+                        .from('produtos')
+                        .select('*')
+                        .eq('id', idProduto)
+                        .single();
+
+                    if (error) throw error;
+
+                    document.getElementById('input-id').value = data.id;
+                    document.getElementById('input-nome').value = data.nome || '';
+                    document.getElementById('input-categoria').value = data.categoria || '';
+                    document.getElementById('input-origem').value = data.origem || '';
+                    document.getElementById('input-fornecedor').value = data.fornecedor || '';
+                    
+                    document.getElementById('input-preco-custo').value = data.preco_custo || '';
+                    document.getElementById('input-preco-venda').value = data.preco || ''; 
+                    document.getElementById('input-total').value = data.valor_total || '';
+                    document.getElementById('input-estoque').value = data.quantidade || 0; 
+                    document.getElementById('input-estoque-minimo').value = data.estoque_minimo || 0;
+
+                    document.getElementById('input-local-estoque').value = data.local_estoque || '';
+                    document.getElementById('input-local-loja').value = data.local_loja || '';
+                    document.getElementById('input-tipo-embalagem').value = data.tipo_embalagem || '';
+                    document.getElementById('input-peso').value = data.peso_liquido || '';
+                    document.getElementById('input-dimensoes').value = data.dimensoes || '';
+
+                    document.getElementById('input-codigo').value = data.codigo_produto || '';
+                    document.getElementById('input-ean').value = data.ean || '';
+                    document.getElementById('input-ncm').value = data.ncm || '';
+                    document.getElementById('input-cest').value = data.cest || '';
+                    document.getElementById('input-cfop').value = data.cfop || '';
+                    document.getElementById('input-unid').value = data.unidade_comercial || '';
+                    
+                    document.getElementById('input-data-compra').value = data.data_compra || '';
+                    document.getElementById('input-data-vencimento').value = data.data_vencimento || '';
+
+                    urlFotoAntiga = data.foto_url; 
+                    if (data.foto_url) {
+                        document.getElementById('area-foto-atual').style.display = 'block';
+                        document.getElementById('img-atual').src = data.foto_url;
+                    }
+                }
+
+                statusDiv.textContent = "Logado como: " + session.user.email;
+                statusDiv.style.backgroundColor = "transparent";
+                statusDiv.style.color = "#666";
+                appDiv.style.display = "block";
+
+            } catch (error) {
+                statusDiv.textContent = "❌ Erro de conexão com o Banco de Dados.";
+                statusDiv.className = "info erro";
+            }
+        });
+
+        /* ================= GRAVAÇÃO DE DADOS (WRITE) ================= */
+        document.getElementById('form-produto').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); 
+            
+            const btnSubmit = document.getElementById('btn-enviar-dados');
+            btnSubmit.textContent = "⏳ Processando...";
+            btnSubmit.disabled = true;
+
+            const getStr = (id) => document.getElementById(id).value;
+            const getNum = (id) => parseFloat(document.getElementById(id).value) || 0;
+            const getDate = (id) => document.getElementById(id).value ? document.getElementById(id).value : null;
+
+            const arquivoFoto = document.getElementById('input-foto').files[0]; 
+
+            try {
+                let urlFinalDaFoto = urlFotoAntiga; 
+                if (arquivoFoto) {
+                    if (arquivoFoto.size > 2 * 1024 * 1024) throw new Error("A imagem excede 2MB. Escolha uma foto mais leve.");
+                    if (modoEdicao && urlFotoAntiga != null) await apagarFotoNoStorage(urlFotoAntiga);
+                    
+                    const nomeUnicoSeguro = gerarNomeSeguroArquivo(getStr('input-nome'), arquivoFoto);
+                    const { error: uploadError } = await clienteSupabase.storage
+                        .from('equipamentos_fotos')
+                        .upload(nomeUnicoSeguro, arquivoFoto);
+
+                    if (uploadError) throw uploadError;
+                    
+                    const { data: urlData } = clienteSupabase.storage
+                        .from('equipamentos_fotos').getPublicUrl(nomeUnicoSeguro);
+                    urlFinalDaFoto = urlData.publicUrl; 
+                }
+
+                const payload = {
+                    p_nome: getStr('input-nome'),
+                    p_preco: getNum('input-preco-venda'),
+                    p_foto_url: urlFinalDaFoto,
+                    p_codigo_produto: getStr('input-codigo'),
+                    p_ean: getStr('input-ean'),
+                    p_ncm: getStr('input-ncm'),
+                    p_cest: getStr('input-cest'),
+                    p_cfop: getStr('input-cfop'),
+                    p_unidade_comercial: getStr('input-unid'),
+                    p_quantidade: getNum('input-estoque'),
+                    p_valor_total: getNum('input-total'),
+                    p_fornecedor: getStr('input-fornecedor'),
+                    p_preco_custo: getNum('input-preco-custo'),
+                    p_estoque_minimo: getNum('input-estoque-minimo'),
+                    p_origem: getStr('input-origem'),
+                    p_local_estoque: getStr('input-local-estoque'),
+                    p_local_loja: getStr('input-local-loja'),
+                    p_tipo_embalagem: getStr('input-tipo-embalagem'),
+                    p_categoria: getStr('input-categoria'),
+                    p_peso_liquido: getNum('input-peso'),
+                    p_dimensoes: getStr('input-dimensoes'),
+                    p_data_compra: getDate('input-data-compra'),
+                    p_data_vencimento: getDate('input-data-vencimento')
+                };
+
+                if (modoEdicao) {
+                    payload.p_id = getStr('input-id');
+                    const { error } = await clienteSupabase.rpc('atualizar_produto_seguro', payload);
+                    if (error) throw error;
+                    alert("✅ Produto atualizado com sucesso!");
+                } else {
+                    const { error } = await clienteSupabase.rpc('adicionar_produto_seguro', payload);
+                    if (error) throw error;
+                    alert("✅ Produto cadastrado com sucesso!");
+                }
+
+                window.location.href = 'listar.html';
+
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro na operação: " + (erro.message || JSON.stringify(erro)));
+            } finally {
+                btnSubmit.textContent = "💾 Salvar Produto";
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

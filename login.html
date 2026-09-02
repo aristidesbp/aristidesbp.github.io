@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Seguro - ERP</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 90vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px;}
+        input { width: 100%; padding: 10px; margin: 10px 0 20px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 12px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .titulo { text-align: center; margin-bottom: 20px; color: #333; }
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px; font-size: 0.9em; }
+        .erro { background-color: #f8d7da; color: #721c24; }
+    </style>
+
+    <!-- Biblioteca Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    
+    <div class="card">
+        <h2 class="titulo">🔐 Acesso ao Sistema</h2>
+        <div id="status" class="info">Verificando segurança...</div>
+
+        <div id="area-login" style="display: none;">
+            <p style="font-size: 0.9em; color: #666; margin-top: 0;">Entre com suas credenciais de administrador.</p>
+            <label for="input-email">E-mail Administrativo:</label>
+            <input type="email" id="input-email" placeholder="admin@teste.com" required>
+            
+            <label for="input-senha">Senha:</label>
+            <input type="password" id="input-senha" placeholder="Sua senha secreta" required>
+            
+            <button id="btn-entrar">Fazer Login</button>
+        </div>
+    </div>
+
+    <!-- 1. Importa as credenciais e inicializa o clienteSupabase -->
+    <script src="supabase_config.js"></script>
+
+    <!-- 2. Lógica da Página -->
+    <script>
+        async function fazerLogin() {
+            const email = document.getElementById('input-email').value;
+            const senha = document.getElementById('input-senha').value;
+            const btnEntrar = document.getElementById('btn-entrar');
+            const statusDiv = document.getElementById('status');
+
+            if (!email || !senha) {
+                alert("Preencha e-mail e senha!");
+                return;
+            }
+
+            btnEntrar.textContent = "Autenticando...";
+            btnEntrar.disabled = true;
+
+            try {
+                // Utiliza o clienteSupabase que veio do supabase_config.js para validar os dados
+                const { data, error } = await clienteSupabase.auth.signInWithPassword({
+                    email: email,
+                    password: senha
+                });
+
+                if (error) throw error; 
+
+                statusDiv.textContent = "✅ Autenticado com sucesso! Entrando...";
+                statusDiv.style.backgroundColor = "#d4edda";
+                statusDiv.style.color = "#155724";
+
+                // Redireciona para o painel principal (onde o token recém-criado será lido)
+                setTimeout(() => {
+                    window.location.href = 'listar.html';
+                }, 1000);
+
+            } catch (erro) {
+                console.error(erro);
+                statusDiv.textContent = "❌ Erro no login: Verifique seu e-mail e senha.";
+                statusDiv.className = "info erro";
+                btnEntrar.textContent = "Fazer Login";
+                btnEntrar.disabled = false;
+            }
+        }
+
+        window.onload = async () => {
+            const statusDiv = document.getElementById('status');
+            const areaLogin = document.getElementById('area-login');
+            const btnEntrar = document.getElementById('btn-entrar');
+
+            btnEntrar.addEventListener('click', fazerLogin);
+
+            try {
+                // Verifica se o utilizador já tem uma sessão guardada (se já tinha feito login antes)
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+
+                if (session) {
+                    statusDiv.textContent = "Sessão válida encontrada! Redirecionando...";
+                    statusDiv.style.backgroundColor = "#d4edda";
+                    statusDiv.style.color = "#155724";
+                    setTimeout(() => {
+                        window.location.href = 'listar.html';
+                    }, 800);
+                } else {
+                    // Se não tiver sessão, mostra os campos para ele digitar a senha
+                    statusDiv.textContent = "Banco conectado. Faça login para continuar.";
+                    areaLogin.style.display = "block";
+                }
+
+            } catch (error) {
+                console.error("Erro Crítico:", error);
+                statusDiv.textContent = "❌ Erro grave de conexão. Verifique o ficheiro supabase_config.js.";
+                statusDiv.className = "info erro";
+            }
+        };
+    </script>
+</body>
+</html>
+
