@@ -890,7 +890,17 @@ $$;
 -- Recarrega o cache do Supabase
 NOTIFY pgrst, 'reload schema';
 
-``
+```
+# para a criação da pagina de vendas
+```
+-- Permite que clientes (anon) vejam os produtos ativos na loja
+CREATE POLICY "Leitura publica de produtos ativos" 
+ON public.produtos 
+FOR SELECT 
+TO anon 
+USING (esta_ativo = true);
+
+```
 
 
 
