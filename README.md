@@ -39,8 +39,12 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 
 
-# CÓDIGOS PARA BRICAR
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CÓDIGOS PARA BRICAR
+
+
+
 # PROMPT PARA HISTÓRICO DE CONVERSAS
 ```
 Torne-se um Agente de Suporte Técnico de Alto Nível.
