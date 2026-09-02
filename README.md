@@ -88,7 +88,7 @@ exemplo: <!--formulario--><div id="formulário"> código </div><!--/formulário-
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  CURSO DE TERMUX ( Terminal linux para android):
+# TERMUX ( Terminal linux para android):
  
 ## Download do aplicativo direto no git
 * Acesse o link oficial no Github não use da Play Store!
