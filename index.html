@@ -384,6 +384,90 @@
         function fecharCarrinho() { document.getElementById('modal-carrinho').style.display = 'none'; }
 
         /* ================= INTEGRAÇÃO COM WHATSAPP ================= */
+
+        /* ================= INTEGRAÇÃO COM BACKEND (CRIAR PEDIDO) ================= */
+        // Mantivemos o nome da função igual ao onclick do HTML, mas a lógica agora é backend-first
+        async function finalizarPedidoWhatsApp() {
+            const nome = document.getElementById('cli-nome').value.trim();
+            const endereco = document.getElementById('cli-endereco').value.trim();
+            const pagamento = document.getElementById('cli-pagamento').value;
+
+            if (!nome || !endereco) {
+                alert("Por favor, preencha o seu nome e endereço de entrega.");
+                return;
+            }
+
+            if (carrinho.length === 0) {
+                alert("O seu carrinho está vazio.");
+                return;
+            }
+
+            // Trava o botão para evitar cliques duplos e pedidos clonados
+            const btnFinalizar = document.querySelector('.btn-whatsapp');
+            btnFinalizar.textContent = "⏳ A processar pedido no estoque...";
+            btnFinalizar.disabled = true;
+
+            let valorTotalPedido = 0;
+            const itensParaBackend = carrinho.map(item => {
+                valorTotalPedido += (item.quantidade * item.preco);
+                return {
+                    id: item.id,
+                    nome: item.nome,
+                    quantidade: item.quantidade,
+                    preco: item.preco
+                };
+            });
+
+            try {
+                // Chama a RPC segura que abaterá o estoque. Se faltar estoque, o banco rejeita.
+                const { data: respostaPedido, error } = await clienteSupabase.rpc('finalizar_pedido_seguro', {
+                    p_cliente_nome: nome,
+                    p_cliente_endereco: endereco,
+                    p_forma_pagamento: pagamento,
+                    p_itens: itensParaBackend,
+                    p_valor_total: valorTotalPedido
+                });
+
+                if (error) throw error;
+
+                // Salva os dados temporariamente no navegador para a tela de Sucesso montar a mensagem
+                const dadosSucesso = {
+                    numero_pedido: respostaPedido.numero_pedido,
+                    cliente: nome,
+                    endereco: endereco,
+                    pagamento: pagamento,
+                    itens: itensParaBackend,
+                    total: valorTotalPedido
+                };
+                localStorage.setItem('pedidoRecente', JSON.stringify(dadosSucesso));
+
+                // Limpa o carrinho e redireciona
+                carrinho = [];
+                atualizarInterfaceCarrinho();
+                window.location.href = 'sucesso.html';
+
+            } catch (erro) {
+                console.error("Erro na transação:", erro);
+                alert("❌ Ocorreu um erro. É possível que o estoque de algum item tenha esgotado. Atualize a página e tente novamente.");
+                btnFinalizar.textContent = "📱 Enviar Pedido por WhatsApp";
+                btnFinalizar.disabled = false;
+            }
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+     /*   
         
         function finalizarPedidoWhatsApp() {
             const nome = document.getElementById('cli-nome').value.trim();
@@ -416,6 +500,9 @@
             window.open(linkWhatsapp, '_blank');
         }
 
+*/
+
+        
         // Executa ao carregar a página
         window.onload = carregarProdutos;
     </script>
