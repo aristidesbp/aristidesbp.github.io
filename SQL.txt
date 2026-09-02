@@ -265,3 +265,100 @@ GRANT EXECUTE ON FUNCTION public.inserir_produtos_lote_seguro TO authenticated;
 
 NOTIFY pgrst, 'reload schema';
 
+
+
+-- =======================================================================================
+-- TABELA DE CONTROLE DE VENDAS E PEDIDOS
+-- =======================================================================================
+CREATE TABLE public.vendas (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    numero_pedido SERIAL,
+    cliente_nome text NOT NULL,
+    cliente_endereco text NOT NULL,
+    forma_pagamento text NOT NULL,
+    itens jsonb NOT NULL,
+    valor_total numeric NOT NULL,
+    status text DEFAULT 'Pendente', -- Pendente, Entregue, Cancelado
+    criado_em timestamp with time zone DEFAULT now()
+);
+
+-- Ativar RLS na tabela de vendas
+ALTER TABLE public.vendas ENABLE ROW LEVEL SECURITY;
+
+-- Clientes (anon) podem inserir novos pedidos ao finalizar a compra
+CREATE POLICY "Anon_Insere_Vendas" ON public.vendas FOR INSERT TO anon WITH CHECK (true);
+
+-- Apenas funcionários logados (authenticated) podem gerir/ver o controle de vendas
+CREATE POLICY "Autenticados_Gere_Vendas" ON public.vendas FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- =======================================================================================
+-- RPC SEGURA PARA FINALIZAR PEDIDO (Gera o pedido e abate o estoque do produto)
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.finalizar_pedido_seguro(
+    p_cliente_nome text,
+    p_cliente_endereco text,
+    p_forma_pagamento text,
+    p_itens jsonb,
+    p_valor_total numeric
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+DECLARE
+    v_pedido_id uuid;
+    v_numero_pedido int;
+    item jsonb;
+    v_prod_id uuid;
+    v_qtd_comprada numeric;
+    v_estoque_atual numeric;
+BEGIN
+    -- Validações básicas de segurança
+    IF p_cliente_nome IS NULL or length(trim(p_cliente_nome)) < 2 THEN
+        RAISE EXCEPTION 'Nome do cliente inválido.';
+    END IF;
+
+    -- 1. Insere o pedido na tabela de vendas
+    INSERT INTO public.vendas (cliente_nome, cliente_endereco, forma_pagamento, itens, valor_total)
+    VALUES (trim(p_cliente_nome), trim(p_cliente_endereco), p_forma_pagamento, p_itens, p_valor_total)
+    RETURNING id, numero_pedido INTO v_pedido_id, v_numero_pedido;
+
+    -- 2. Loop para dar baixa automática no estoque de cada produto comprado
+    FOR item IN SELECT * FROM jsonb_array_elements(p_itens)
+    LOOP
+        v_prod_id := (item->>'id')::uuid;
+        v_qtd_comprada := (item->>'quantidade')::numeric;
+
+        -- Busca o estoque atual do produto
+        SELECT quantidade INTO v_estoque_atual
+        FROM public.produtos
+        WHERE id = v_prod_id AND esta_ativo = true;
+
+        IF v_estoque_atual IS NULL THEN
+            RAISE EXCEPTION 'Produto não encontrado ou inativo.';
+        END IF;
+
+        IF v_estoque_atual < v_qtd_comprada then
+            RAISE EXCEPTION 'Estoque insuficiente para o produto ID: %', v_prod_id;
+        END IF;
+
+        -- Atualiza subtraindo do estoque
+        UPDATE public.produtos
+        SET quantidade = quantidade - v_qtd_comprada
+        WHERE id = v_prod_id;
+    END LOOP;
+
+    -- Retorna um JSON com o ID e o Número do Pedido gerado
+    RETURN jsonb_build_object('id', v_pedido_id, 'numero_pedido', v_numero_pedido);
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.finalizar_pedido_seguro TO anon, authenticated;
+NOTIFY pgrst, 'reload schema';
+
+
+
+
+
+
+
