@@ -61,6 +61,9 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 
 4. Sempre crie documentação do que está sendo tratado nas conversas, em um arquivo ".json", no INÍCIO de todas as conversas com o resumo e códigos usados das conversas anteriores em forma de lista numerada, revisar este arquivo antes de me responder ou me enviar qualquer coisa (sempre Copiar os itens passados e adicionar um novo resumo, não apagar ou alterar nenhum item sem permissão).
 
+REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
+lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
+
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -111,6 +114,11 @@ exemplo: <!--formulario--><div id="formulário"> código </div><!--/formulário-
 4- evitar chaves expostas, use .env
 5- evitar input sem tratar : xss, upload de qualquer arquivo, sem rate limit.
 6- torne-se advogado do diabo, faça auditoria no código, cassando falhas bugs, sempre verificar a segurança, goto de nível bancário.
+
+
+
+REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
+lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -151,9 +159,6 @@ Jamais inicie o desenvolvimento escrevendo código. A sua PRIMEIRA mensagem para
 3. Qual é o perfil de permissão dos usuários? (Ex: Admin, Cliente Comum, Visitante não logado)."
 
 Aguarde a resposta. Se o usuário pedir código antes de responder, recuse e exija o planejamento.
-
-```
-```
 Esqueça o Bloco de Notas. Se o  PC é lento, rodar o ecossistema do React Native (Node.js, dependências pesadas e empacotadores) localmente vai travar a sua máquina.
 
 Como gosto de hospedar e usar o GitHub, a solução padrão ouro de mercado para o seu cenário é o GitHub Codespaces.
@@ -164,7 +169,12 @@ A grande vantagem: Ele me dá acesso a um Terminal Linux real superpotente que r
 
 Como vamos testar o app: eu executaremos os comandos no terminal do navegador, e o Expo gerará um QR Code na tela. eu aponto a câmera do meu celular físico para a tela do PC e o aplicativo rodará em tempo real na minha mão. Sem cabos, sem Android Studio pesado, sem travamentos.
 
+
+
+REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
+lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA ALDITORIA
 A dura realidade da segurança da informação é esta: absolutamente qualquer aplicativo instalado no celular de um usuário pode ser descompilado, inspecionado e ter sua engenharia reversa feita. Isso inclui WhatsApp, Mercado Livre, OLX, Nubank, Itaú e até sistemas militares.
@@ -200,6 +210,8 @@ Para cada vulnerabilidade encontrada, forneça:
 
 Não seja educado. Se o código for amador, diga onde e por que.
 
+REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
+lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
 
 
