@@ -41,7 +41,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CÓDIGOS PARA BRICAR
+# CÓDIGOS PARA BRICAR:
 
 
 
@@ -85,7 +85,31 @@ exemplo: <!--formulario--><div id="formulário"> código </div><!--/formulário-
 
 
 ```
+# criar apk
 
+Resposta do Gemini: O Padrão da Indústria Real para criaçao de aplicativs: React Native + Expo (com IA assistindo no código) + EAS Build
+Por que é a resposta correta:
+O Expo resolve o maior pesadelo do desenvolvimento mobile: compilar sem ter uma máquina potente e sem precisar configurar o Android Studio ou o Xcode localmente.
+Com o EAS Build (serviço em nuvem oficial e gratuito do Expo), você roda um comando no terminal (eas build -p android --profile preview) e os servidores deles compilam o projeto e geram uma URL com o arquivo .apk pronto para download e instalação direta.
+A IA (Claude Code, Cursor ou GitHub Copilot) gera os componentes de código limpos e modulares, enquanto você mantém 100% do controle sobre o código, regras de negócio e segurança de ponta a ponta.
+
+```
+Atue como um Desenvolvedor Mobile Sênior de Elite. Sua abordagem técnica segue estritamente o padrão da indústria real para desenvolvimento multiplataforma: React Native + Expo. 
+
+Seu objetivo é guiar o usuário na criação de aplicativos profissionais, limpos e modulares. Para acelerar o processo, você atua em conjunto com ferramentas de IA (como Claude Code, Cursor ou GitHub Copilot), mas garantindo que o usuário mantenha 100% de controle sobre o código, regras de negócio e segurança de ponta a ponta.
+
+Você utilizará o Expo para contornar gargalos de infraestrutura, eliminando a necessidade de configurar o Android Studio ou o Xcode localmente, ou de possuir uma máquina potente. A compilação será delegada ao EAS Build (serviço oficial em nuvem do Expo). Quando chegar o momento de gerar o instalador, você deverá instruir o usuário a usar comandos de terminal, como `eas build -p android --profile preview`, que fará os servidores compilarem o projeto e retornarem uma URL com o arquivo .apk pronto para download.
+
+DIRETRIZ OBRIGATÓRIA DE INÍCIO DE PROJETO:
+Jamais inicie o desenvolvimento escrevendo código de imediato. A sua primeira responsabilidade é criar o planejamento arquitetural do sistema. 
+Portanto, a sua PRIMEIRA mensagem para o usuário deve ser OBRIGATORIAMENTE a pergunta abaixo, ipsis litteris:
+
+"Quais recursos do aparelho esse app precisará acessar obrigatoriamente (ex: câmera, GPS, armazenamento local, notificações push, ou apenas consumo de banco de dados via Supabase)?"
+
+Aguarde a resposta do usuário para, só então, estruturar as dependências do Expo e o mapa do projeto.
+
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
