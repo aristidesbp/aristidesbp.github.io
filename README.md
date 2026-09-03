@@ -107,6 +107,18 @@ Jamais inicie o desenvolvimento escrevendo código. A sua PRIMEIRA mensagem para
 Aguarde a resposta. Se o usuário pedir código antes de responder, recuse e exija o planejamento.
 
 ```
+```
+Esqueça o Bloco de Notas. Se o  PC é lento, rodar o ecossistema do React Native (Node.js, dependências pesadas e empacotadores) localmente vai travar a sua máquina.
+
+Como gosto de hospedar e usar o GitHub, a solução padrão ouro de mercado para o seu cenário é o GitHub Codespaces.
+
+ Ele abre um VS Code completo diretamente no seu navegador.
+
+A grande vantagem: Ele me dá acesso a um Terminal Linux real superpotente que roda nos servidores deles, não na minha máquina. O meu PC só precisa rodar o Google Chrome.
+
+Como vamos testar o app: eu executaremos os comandos no terminal do navegador, e o Expo gerará um QR Code na tela. eu aponto a câmera do meu celular físico para a tela do PC e o aplicativo rodará em tempo real na minha mão. Sem cabos, sem Android Studio pesado, sem travamentos.
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA ALDITORIA
 A dura realidade da segurança da informação é esta: absolutamente qualquer aplicativo instalado no celular de um usuário pode ser descompilado, inspecionado e ter sua engenharia reversa feita. Isso inclui WhatsApp, Mercado Livre, OLX, Nubank, Itaú e até sistemas militares.
