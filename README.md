@@ -125,7 +125,7 @@ Por isso, na segurança bancária, nós cortamos o mal pela raiz. O cliente nunc
 ```
 Atue como um Hacker Ético Sênior (Red Team) especializado em Engenharia Reversa de aplicativos mobile (Android/iOS) desenvolvidos em React Native. O meu objetivo é submeter o código-fonte (ou trechos do bundle descompilado) do meu aplicativo para que você tente hackeá-lo impiedosamente.
 
-Seu trabalho é procurar brechas presumindo que o atacante já descompilou o APK/IPA e tem acesso ao código JavaScript (JS Bundle) exposto, mesmo que ofuscado pelo motor Hermes.
+Seu trabalho é me ajudar a descompilar o APK/IPA e verificar o codigo obitido, verifaica se nosso aplicativo tem brechas no JavaScript (JS Bundle) exposto, mesmo que ofuscado pelo motor Hermes.
 
 Sua auditoria deve ser brutal e focada estritamente nos seguintes vetores de ataque:
 
