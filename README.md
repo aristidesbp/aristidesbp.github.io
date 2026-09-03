@@ -67,6 +67,7 @@ Explicar o porquê da tarefa e aguardar obrigatoriamente o feedback ou resultado
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
 
 **Resposta do Gemini:** O Padrão da Indústria Real para criaçao de aplicativs: React Native + Expo (com IA assistindo no código) + EAS Build.Por que é a resposta correta:
@@ -106,6 +107,44 @@ Jamais inicie o desenvolvimento escrevendo código. A sua PRIMEIRA mensagem para
 Aguarde a resposta. Se o usuário pedir código antes de responder, recuse e exija o planejamento.
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PROMPT PARA ALDITORIA
+A dura realidade da segurança da informação é esta: absolutamente qualquer aplicativo instalado no celular de um usuário pode ser descompilado, inspecionado e ter sua engenharia reversa feita. Isso inclui WhatsApp, Mercado Livre, OLX, Nubank, Itaú e até sistemas militares.
+
+Se o código roda no hardware de terceiros, ele não é mais seu. A diferença entre um app amador e os gigantes da tecnologia não é que eles não podem ser descompilados, mas sim como eles mitigam os danos de um código exposto.
+
+Eles utilizam três camadas de blindagem que nós também implementaremos:
+
+Ofuscação de Código e Compilação em Bytecode: Empresas gigantes não enviam o código legível. No Android nativo (Java/Kotlin), usam ferramentas como ProGuard ou DexGuard. No nosso caso (React Native), ativaremos o motor Hermes. O Hermes não entrega o "JS Bundle" em texto puro; ele o compila previamente em um bytecode binário. Um hacker consegue descompilar o APK, mas em vez de ver function deletarProduto(), ele verá blocos de memória e variáveis renomeadas para letras aleatórias (a(b, c)). Isso atrasa o ataque, mas um hacker persistente ainda consegue mapear a lógica.
+
+Autoridade Absoluta do Backend (Zero Trust): É aqui que a mágica acontece. Se um hacker descompilar o Mercado Livre e encontrar a rota da API de pagamentos, ele não consegue alterar o preço do produto para 1 centavo. Por quê? Porque o aplicativo (frontend) é burro. Ele é só uma tela. A inteligência e a validação estão no servidor. O aplicativo só envia: "O usuário X quer comprar o item Y". É o backend que consulta o banco, verifica o preço real, checa o saldo e autoriza. Nós garantimos isso no Supabase através das suas Row Level Security (RLS) e Remote Procedure Calls (RPC).
+
+Separação Estratégica de Superfície de Ataque: Este é o ponto exato da sua dúvida. O aplicativo do Mercado Livre focado no consumidor final não contém o código das telas financeiras internas dos executivos da empresa, nem os comandos para deletar o banco de dados. Eles separam os binários. Se você colocar o seu painel de ERP inteiro no celular do cliente e apenas esconder o botão com um if (usuario !== admin) return null;, o hacker vai descompilar, achar o botão escondido, e ver qual é o caminho da API (Supabase RPC) responsável por deletar produtos.
+
+Por isso, na segurança bancária, nós cortamos o mal pela raiz. O cliente nunca recebe o código do administrador no aparelho dele, e vice-versa.
+```
+Atue como um Hacker Ético Sênior (Red Team) especializado em Engenharia Reversa de aplicativos mobile (Android/iOS) desenvolvidos em React Native. O meu objetivo é submeter o código-fonte (ou trechos do bundle descompilado) do meu aplicativo para que você tente hackeá-lo impiedosamente.
+
+Seu trabalho é procurar brechas presumindo que o atacante já descompilou o APK/IPA e tem acesso ao código JavaScript (JS Bundle) exposto, mesmo que ofuscado pelo motor Hermes.
+
+Sua auditoria deve ser brutal e focada estritamente nos seguintes vetores de ataque:
+
+1. VAZAMENTO DE SEGREDOS: Vasculhe o código em busca de chaves do Supabase, URLs de API, tokens JWT ou senhas que não estejam isoladas em variáveis de ambiente (.env).
+2. LÓGICA DE NEGÓCIO NO FRONTEND: Identifique se o aplicativo está calculando preços, validando permissões de usuário (ex: if (user.role === 'admin')) ou aplicando descontos do lado do cliente em vez de delegar isso ao servidor. 
+3. BYPASS DE BANCO DE DADOS: Verifique se o frontend está fazendo operações diretas de INSERT/UPDATE/DELETE no Supabase (.from('tabela').update()) em vez de usar chamadas remotas (RPC).
+4. VULNERABILIDADE OFFLINE: Analise a estrutura do banco de dados local (WatermelonDB/SQLite). Se o atacante modificar os dados locais no celular com o aparelho em modo avião (ex: mudar o preço de um item no carrinho), o backend validará essa alteração quando a internet voltar ou aceitará cegamente o dado fraudado?
+5. INJEÇÃO E XSS: Procure por inputs que não estão sendo sanitizados antes de irem para o banco ou serem renderizados na tela.
+
+Para cada vulnerabilidade encontrada, forneça:
+- O Nível de Risco (Crítico, Alto, Médio, Baixo).
+- O vetor de ataque (como o hacker exploraria isso).
+- A solução arquitetural para blindar o código (Zero Trust).
+
+Não seja educado. Se o código for amador, diga onde e por que.
+
+```
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
