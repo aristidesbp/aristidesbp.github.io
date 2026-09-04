@@ -100,19 +100,7 @@
 <body>
     <div id="toast-container"></div>
 
-    <!--cabecalho_painel-->
-    <header>
-        <div class="logo-area">
-            <span class="logo-icon">⚡</span> Gestão de Estoque
-        </div>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
-            
-            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
-            <button id="btn-sair" class="icon-btn" style="color: var(--danger-color); display: none;" title="Sair">🚪</button>
-        </div>
-    </header>
-    <!--/cabecalho_painel-->
+    
 
     <div class="container">
         <div id="status" class="info" style="margin-bottom: 20px; text-align: center;">Autenticando sessão...</div>
@@ -168,6 +156,7 @@
     </div>
     <!-- 1. IMPORTAÇÃO CENTRALIZADA DO BANCO DE DADOS -->
     <script src="supabase_config.js"></script>
+    <script src="navbar.js"></script>
 
     <script>
         /* ================= VARIÁVEIS GLOBAIS DE CONTROLO ================= */
