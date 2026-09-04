@@ -1,9 +1,9 @@
-/* [INÍCIO: CABECALHO GLOBAL ISOLADO] */
+/* [INÍCIO: NAVBAR GLOBAL E GUARDA DE SEGURANÇA] */
 (function() {
     // Escuta o carregamento da página sem interromper outros scripts
     document.addEventListener('DOMContentLoaded', async () => {
         
-        // 1. Constrói o HTML do Cabeçalho com estilos inline de segurança para não quebrar
+        // 1. Constrói o HTML do Cabeçalho com o botão de Logout (🚪)
         const headerHTML = `
             <header style="background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s; color: var(--text-main);">
                 <div style="display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold;">
@@ -13,23 +13,44 @@
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <button onclick="document.body.classList.toggle('light-theme'); localStorage.setItem('temaBevDistro', document.body.classList.contains('light-theme') ? 'light' : 'dark');" title="Alterar Tema" style="background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;">🌓</button>
                     <button onclick="window.location.href='menu.html'" title="Ir para o Menu Principal" style="background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;">🏠</button>
+                    <button id="btn-nav-sair" title="Sair do Sistema" style="background: none; border: none; color: var(--danger-color); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;">🚪</button>
                 </div>
             </header>
         `;
 
-        // 2. Injeta o cabeçalho no exato início do <body> da página
+        // Injeta o cabeçalho no início do ecrã
         document.body.insertAdjacentHTML('afterbegin', headerHTML);
 
-        // 3. Lógica Segura para buscar a Foto e Nome da Empresa
+        // 2. Lógica Segura de Logout (Destrói o token e expulsa)
+        document.getElementById('btn-nav-sair').addEventListener('click', async () => {
+            if(confirm("Deseja mesmo sair do sistema?")) {
+                if (typeof clienteSupabase !== 'undefined') {
+                    await clienteSupabase.auth.signOut();
+                }
+                localStorage.removeItem('biometriaAtiva');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // 3. ZERO TRUST: Validação de Sessão Front-end
         try {
-            // Se o supabase não existir nesta página, aborta silenciosamente para não causar erros
-            if (typeof clienteSupabase === 'undefined') return; 
+            if (typeof clienteSupabase === 'undefined') {
+                console.error("Auditoria: Ficheiro supabase_config.js ausente.");
+                window.location.href = 'login.html';
+                return; 
+            }
 
-            // Confirma a sessão (Zero Trust)
+            // Pede ao servidor para validar o bilhete de identidade do utilizador
             const { data: { session }, error: erroSessao } = await clienteSupabase.auth.getSession();
-            if (erroSessao || !session) return; 
+            
+            // SE NÃO EXISTE SESSÃO, EXPULSA IMEDIATAMENTE
+            if (erroSessao || !session) {
+                console.warn("Acesso não autorizado. A redirecionar para login.");
+                window.location.href = 'login.html';
+                return; 
+            }
 
-            // Faz o Fetch dos dados na tabela profiles
+            // 4. Injeção Dinâmica dos Dados do Perfil
             const { data: perfil, error: erroPerfil } = await clienteSupabase
                 .from('profiles')
                 .select('nome, foto_avatar')
@@ -41,7 +62,7 @@
 
             if (!erroPerfil && perfil) {
                 if (perfil.nome) {
-                    navNome.textContent = perfil.nome; // Anti-XSS ativado
+                    navNome.textContent = perfil.nome; // Texto protegido contra XSS
                 } else {
                     navNome.textContent = "Empresa (Sem Nome)";
                 }
@@ -54,10 +75,9 @@
                 navNome.textContent = "⚡ ERP BevDistro";
             }
         } catch (error) {
-            console.error("Auditoria: Falha isolada no cabeçalho global.", error);
-            document.getElementById('nav-nome-empresa').textContent = "⚡ ERP BevDistro";
+            console.error("Auditoria: Falha geral de segurança no cabeçalho.", error);
+            window.location.href = 'login.html';
         }
     });
 })();
-/* [FIM: CABECALHO GLOBAL ISOLADO] */
-
+/* [FIM: NAVBAR GLOBAL E GUARDA DE SEGURANÇA] */
