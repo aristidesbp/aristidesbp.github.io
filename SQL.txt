@@ -512,3 +512,24 @@ NOTIFY pgrst, 'reload schema';
 
 
 
+
+
+/* [INÍCIO: ADICIONAR COLUNAS AOS DADOS DA EMPRESA] */
+
+-- Adiciona as novas colunas (gavetas) à tabela profiles, caso elas ainda não existam
+ALTER TABLE public.profiles 
+ADD COLUMN IF NOT EXISTS documento text,
+ADD COLUMN IF NOT EXISTS inscricao_estadual text,
+ADD COLUMN IF NOT EXISTS endereco text,
+ADD COLUMN IF NOT EXISTS telefone text,
+ADD COLUMN IF NOT EXISTS email_contato text;
+
+-- Atualiza o cache da API do Supabase para que o JavaScript consiga enxergar as novas colunas
+NOTIFY pgrst, 'reload schema';
+
+/* [FIM: ADICIONAR COLUNAS AOS DADOS DA EMPRESA] */
+
+
+
+
+
