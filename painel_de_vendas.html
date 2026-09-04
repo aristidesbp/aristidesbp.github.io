@@ -93,24 +93,8 @@
 
 
 <body>
-    <!-- [INÍCIO: CABEÇALHO E NAVEGAÇÃO] -->
-    <header>
-        <div class="logo-area">
-            <span class="logo-icon">⚡</span> Gestão de Vendas
-        </div>
-        <div>
-        <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>    
-            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
-        </div>
-    </header>
 
-    <div class="area-navegacao">
-        <a href="listar.html" class="btn-voltar">⬅️ Voltar ao Estoque</a>
-    </div>
     
-    <div id="status-bar" class="info">Verificando segurança da sessão...</div>
-    <!-- [FIM: CABEÇALHO E NAVEGAÇÃO] -->
-
     <!-- [INÍCIO: PAINEL DE LISTAGEM DE PEDIDOS] -->
     <div class="container" id="grid-pedidos">
         <!-- Os cartões de pedidos serão injetados dinamicamente aqui -->
@@ -120,6 +104,10 @@
 
     <!-- [INÍCIO: LÓGICA JAVASCRIPT SEGURA] -->
     <script src="supabase_config.js"></script>
+    <script src="navbar.js"></script>
+
+
+    
     <script>
         /* ================= ALTERNADOR DE TEMA ================= */
         function toggleTheme() {
