@@ -57,25 +57,30 @@
         .secao-titulo { font-size: 1.3em; color: var(--text-main); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; text-align: center;}
         
         label { font-weight: bold; color: var(--text-muted); font-size: 0.9em; display: block; margin-bottom: 8px;}
-        input[type="text"], input[type="file"] { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
+        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
         input:focus { border-color: var(--accent-neon); }
-        input[type="file"] { padding: 9px; cursor: pointer; }
 
-        .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.1s, background-color 0.2s; }
+        .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.1s, background-color 0.2s; margin-top: 20px;}
         .btn-neon:hover { background: var(--accent-hover); }
         .btn-neon:active { transform: scale(0.98); }
         .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ================= ÁREA DA LOGO ================= */
+        /* ================= ÁREA DA LOGO E CÂMARA ================= */
         .area-logo-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 25px; padding: 20px; background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px dashed var(--border-color);}
         .img-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--purple-pill); background-color: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px;}
-        
-        .badge-admin { background: var(--purple-pill); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold;}
+        .badge-admin { background: var(--purple-pill); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; margin-bottom: 20px;}
+
+        .botoes-imagem { display: flex; gap: 10px; width: 100%; flex-wrap: wrap;}
+        .btn-acao-img { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9em; transition: opacity 0.2s; color: white;}
+        .btn-acao-img:hover { opacity: 0.8; }
+        .btn-camera { background-color: var(--info-color); }
+        .btn-galeria { background-color: var(--border-color); color: var(--text-main); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
 
 
 <body>
@@ -101,19 +106,28 @@
             
             <form id="form-perfil">
                 
-                <!-- Área de Exibição da Logo -->
+                <!-- Área de Exibição e Seleção da Logo -->
                 <div class="area-logo-preview">
                     <img id="img-atual" class="img-preview" src="https://via.placeholder.com/150?text=Sem+Logo" alt="Logo da Empresa">
                     <span class="badge-admin" id="badge-email">admin@empresa.com</span>
+                    
+                    <div class="botoes-imagem">
+                        <!-- Botões visuais e atraentes -->
+                        <button type="button" class="btn-acao-img btn-camera" onclick="document.getElementById('input-camera').click()">📷 Tirar Foto</button>
+                        <button type="button" class="btn-acao-img btn-galeria" onclick="document.getElementById('input-galeria').click()">📁 Galeria</button>
+                    </div>
+
+                    <!-- Inputs Reais (Estão invisíveis na tela) -->
+                    <!-- 'capture="environment"' diz ao Android/iOS para abrir a câmara traseira nativa -->
+                    <input type="file" id="input-camera" accept="image/*" capture="environment" style="display: none;" onchange="processarImagemSelecionada(event)">
+                    <!-- Entrada normal para a galeria -->
+                    <input type="file" id="input-galeria" accept="image/*" style="display: none;" onchange="processarImagemSelecionada(event)">
                 </div>
 
                 <!-- Campos de Edição -->
                 <label for="input-nome">Nome Comercial da Empresa:</label>
                 <input type="text" id="input-nome" placeholder="Ex: Bebidas Express" required>
                 
-                <label for="input-foto">Atualizar Logo (Máx 2MB - PNG/JPG/WEBP):</label>
-                <input type="file" id="input-foto" accept="image/png, image/jpeg, image/webp">
-
                 <button type="submit" id="btn-salvar" class="btn-neon">💾 Guardar Configurações</button>
             </form>
         </div>
@@ -129,6 +143,7 @@
         /* ================= VARIÁVEIS GLOBAIS ================= */
         let sessaoAtual = null;
         let urlFotoAntiga = null;
+        let arquivoFotoProntoParaUpload = null; // Guardará a foto já esmagada pelo Canvas
 
         /* ================= ALTERNADOR DE TEMA ================= */
         function toggleTheme() {
@@ -137,17 +152,84 @@
             localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
         }
 
+        /* ================= O MOTOR DE COMPRESSÃO (NÍVEL SÉNIOR) ================= */
+        // Pega numa imagem de 10MB e devolve um ficheiro optimizado de ~150KB
+        async function comprimirImagemParaUpload(arquivoOriginal) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(arquivoOriginal);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; // Tamanho máximo perfeito para logotipos
+                        const MAX_HEIGHT = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Cálculo matemático para manter as proporções da imagem sem a distorcer
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Exporta a imagem do canvas como JPEG de alta compressão (80% de qualidade)
+                        canvas.toBlob((blob) => {
+                            // Cria um novo "Ficheiro" artificial para enganar o navegador
+                            const nomeLimpo = "logo_otimizada_" + Date.now() + ".jpg";
+                            const novoArquivo = new File([blob], nomeLimpo, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            });
+                            resolve(novoArquivo);
+                        }, 'image/jpeg', 0.8);
+                    };
+                    img.onerror = (erro) => reject(erro);
+                };
+                reader.onerror = (erro) => reject(erro);
+            });
+        }
+
         /* ================= FUNÇÕES UTILITÁRIAS ================= */
-        function gerarNomeSeguroArquivo(arquivoOriginal, userId) {
-            // Usa o ID do usuário como "pasta" virtual e o timestamp para não haver colisões
-            const extensao = arquivoOriginal.name.split('.').pop();
-            return `${userId}/logo-${Date.now()}.${extensao}`;
+        // Interceta a imagem escolhida pela Câmara ou Galeria
+        async function processarImagemSelecionada(event) {
+            const arquivoBruto = event.target.files[0];
+            if (!arquivoBruto) return;
+
+            try {
+                document.getElementById('status').style.display = "block";
+                document.getElementById('status').textContent = "A otimizar a imagem, aguarde...";
+                
+                // Passa pelo espremedor mágico de tamanho
+                arquivoFotoProntoParaUpload = await comprimirImagemParaUpload(arquivoBruto);
+                
+                // Mostra a pré-visualização instantânea na tela
+                const urlTemporaria = URL.createObjectURL(arquivoFotoProntoParaUpload);
+                document.getElementById('img-atual').src = urlTemporaria;
+                
+                document.getElementById('status').style.display = "none";
+            } catch (error) {
+                console.error("Erro na compressão:", error);
+                alert("Erro ao processar a imagem da câmara. Tente novamente.");
+            }
         }
 
         async function apagarFotoNoStorage(urlDaFoto) {
             try {
-                // Tenta apagar a foto antiga para não encher o servidor de lixo
-                const nomeLimpo = urlDaFoto.split('/').slice(-2).join('/'); // Pega a "pasta/arquivo"
+                const nomeLimpo = urlDaFoto.split('/').slice(-2).join('/'); 
                 const nomeDoArquivo = decodeURIComponent(nomeLimpo.split('?')[0]);
                 await clienteSupabase.storage.from('foto_avatar').remove([nomeDoArquivo]);
             } catch (err) { console.error("Aviso: Falha ao apagar foto antiga.", err); }
@@ -174,7 +256,7 @@
                 sessaoAtual = session;
                 badgeEmail.textContent = session.user.email;
 
-                // 2. Procurar os Dados da Empresa (Perfil) no Banco
+                // 2. Procurar os Dados da Empresa no Banco
                 const { data: perfil, error: perfilError } = await clienteSupabase
                     .from('profiles')
                     .select('nome, foto_avatar')
@@ -182,10 +264,9 @@
                     .single();
 
                 if (perfilError && perfilError.code !== 'PGRST116') {
-                    throw perfilError; // Se o erro for diferente de "Não encontrou linha"
+                    throw perfilError; 
                 }
 
-                // 3. Preencher a Tela com os Dados Atuais
                 if (perfil) {
                     if (perfil.nome) document.getElementById('input-nome').value = perfil.nome;
                     if (perfil.foto_avatar) {
@@ -199,7 +280,7 @@
                 
             } catch (error) {
                 console.error("Erro ao carregar perfil:", error);
-                statusDiv.textContent = "❌ Erro ao conectar com a base de dados de Perfis.";
+                statusDiv.textContent = "❌ Erro ao conectar com a base de dados.";
                 statusDiv.className = "info erro";
             }
         });
@@ -209,54 +290,44 @@
             evento.preventDefault(); 
             
             const btnSubmit = document.getElementById('btn-salvar');
-            btnSubmit.textContent = "⏳ A gravar configurações...";
+            btnSubmit.textContent = "⏳ A gravar configurações no servidor...";
             btnSubmit.disabled = true;
 
             const novoNome = document.getElementById('input-nome').value.trim();
-            const arquivoFoto = document.getElementById('input-foto').files[0]; 
 
             try {
                 let urlFinalDaFoto = urlFotoAntiga; 
                 
-                // Processo de Upload da Nova Logo
-                if (arquivoFoto) {
-                    // Proteção de Frontend (O backend também rejeitará via RLS)
-                    if (arquivoFoto.size > 2 * 1024 * 1024) throw new Error("A imagem excede 2MB.");
-                    
-                    // Apaga a velha se existir
+                // Se houver uma foto já comprimida na variável, envia para o servidor
+                if (arquivoFotoProntoParaUpload) {
                     if (urlFotoAntiga != null) await apagarFotoNoStorage(urlFotoAntiga);
                     
-                    const nomeUnico = gerarNomeSeguroArquivo(arquivoFoto, sessaoAtual.user.id);
+                    // Coloca o ficheiro na pasta com o ID do utilizador
+                    const nomeParaServidor = `${sessaoAtual.user.id}/${arquivoFotoProntoParaUpload.name}`;
                     
-                    // Envia para o Bucket 'foto_avatar'
                     const { error: uploadError } = await clienteSupabase.storage
                         .from('foto_avatar')
-                        .upload(nomeUnico, arquivoFoto);
+                        .upload(nomeParaServidor, arquivoFotoProntoParaUpload);
 
                     if (uploadError) throw uploadError;
                     
-                    // Pega o Link Público da imagem
+                    // Busca o link final
                     const { data: urlData } = clienteSupabase.storage
-                        .from('foto_avatar').getPublicUrl(nomeUnico);
+                        .from('foto_avatar').getPublicUrl(nomeParaServidor);
                     urlFinalDaFoto = urlData.publicUrl; 
-                    
-                    // Atualiza a imagem imediatamente na tela
-                    document.getElementById('img-atual').src = urlFinalDaFoto;
                 }
 
-                // Proteção do Supabase RLS exige que a atualização seja na linha do próprio auth.uid()
+                // Salva tudo na tabela (A RLS protegerá esta transação)
                 const { error: updateError } = await clienteSupabase
                     .from('profiles')
-                    .update({ 
-                        nome: novoNome, 
-                        foto_avatar: urlFinalDaFoto 
-                    })
+                    .update({ nome: novoNome, foto_avatar: urlFinalDaFoto })
                     .eq('id', sessaoAtual.user.id);
 
                 if (updateError) throw updateError;
 
                 alert("✅ Configurações da Empresa guardadas com sucesso!");
-                urlFotoAntiga = urlFinalDaFoto; // Atualiza a referência em memória
+                urlFotoAntiga = urlFinalDaFoto; 
+                arquivoFotoProntoParaUpload = null; // Limpa a memória
 
             } catch (erro) {
                 console.error(erro);
@@ -272,4 +343,6 @@
 </html>
 
 
+    
 
+    
