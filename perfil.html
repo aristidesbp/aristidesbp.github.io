@@ -1,170 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações da Empresa - ERP BevDistro</title>
+    <title>Configurações da Empresa - ERP</title>
     
     <style>
         /* ================= DESIGN SYSTEM & THEMES ================= */
         :root {
-            --bg-color: #0b1320; 
-            --card-bg: #151f2b;  
-            --text-main: #ffffff;
-            --text-muted: #8b9eb3;
-            --accent-neon: #a4e320; 
-            --accent-hover: #8cc21a;
-            --purple-pill: #8273f6;
-            --border-color: #2a3645;
-            --danger-color: #ff4d4d;
-            --info-color: #17a2b8;
-            --success-color: #28a745;
+            --bg-color: #0b1320; --card-bg: #151f2b; --text-main: #ffffff;
+            --text-muted: #8b9eb3; --accent-neon: #a4e320; --accent-hover: #8cc21a;
+            --purple-pill: #8273f6; --border-color: #2a3645;
+            --danger-color: #ff4d4d; --info-color: #17a2b8; --success-color: #28a745;
         }
 
         .light-theme {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #6c757d;
-            --accent-neon: #28a745;
-            --accent-hover: #218838;
-            --purple-pill: #6f42c1;
-            --border-color: #e0e0e0;
-            --danger-color: #dc3545;
-            --success-color: #218838;
+            --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #1a1a1a;
+            --text-muted: #6c757d; --accent-neon: #28a745; --accent-hover: #218838;
+            --purple-pill: #6f42c1; --border-color: #e0e0e0; --danger-color: #dc3545;
         }
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
         
-        /* ================= HEADER ================= */
-        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
-        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
-        .logo-icon { color: var(--accent-neon); }
-        .header-actions { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;}
-        .icon-btn:hover { opacity: 0.7; }
-
-        /* ================= ESTRUTURA GERAL ================= */
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
-        
-        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid var(--info-color); margin-bottom: 20px;}
-        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin-bottom: 20px;}
         
-        /* ================= FORMULÁRIO ================= */
         .secao-titulo { font-size: 1.3em; color: var(--text-main); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; text-align: center;}
         
-        label { font-weight: bold; color: var(--text-muted); font-size: 0.9em; display: block; margin-bottom: 8px;}
-        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
+        label { font-weight: bold; color: var(--text-muted); font-size: 0.9em; display: block; margin-bottom: 5px;}
+        input[type="text"], input[type="email"] { width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
         input:focus { border-color: var(--accent-neon); }
 
-        .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.1s, background-color 0.2s; margin-top: 20px;}
-        .btn-neon:hover { background: var(--accent-hover); }
+        .linha-form { display: flex; gap: 15px; flex-wrap: wrap; }
+        .coluna-form { flex: 1; min-width: 250px; }
+
+        .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.1s; margin-top: 20px;}
         .btn-neon:active { transform: scale(0.98); }
         .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ================= ÁREA DA LOGO E CÂMARA ================= */
+        /* ================= ÁREA DA LOGO ================= */
         .area-logo-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 25px; padding: 20px; background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px dashed var(--border-color);}
         .img-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--purple-pill); background-color: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px;}
-        .badge-admin { background: var(--purple-pill); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; margin-bottom: 20px;}
-
+        
         .botoes-imagem { display: flex; gap: 10px; width: 100%; flex-wrap: wrap;}
-        .btn-acao-img { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9em; transition: opacity 0.2s; color: white;}
-        .btn-acao-img:hover { opacity: 0.8; }
+        .btn-acao-img { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white;}
         .btn-camera { background-color: var(--info-color); }
         .btn-galeria { background-color: var(--border-color); color: var(--text-main); }
     </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+<!-- [FIM: BLOCO 1 - HEAD E CSS] -->
 
 
-
-<body>
-
-
-        <!-- [INÍCIO: CABEÇALHO DINÂMICO] -->
-    <header>
-        <div class="logo-area">
-            <!-- A imagem da logo, inicialmente invisível -->
-            <img id="global-header-logo" src="" alt="Logo" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; display: none; border: 2px solid var(--accent-neon);">
-            <!-- O texto do nome da empresa -->
-            <span id="global-header-nome">⚡ A carregar...</span>
-        </div>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
-            <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
-        </div>
-    </header>
-    <!-- [FIM: CABEÇALHO DINÂMICO] -->
-
-
-    
-    
-
-    
+    <body>
+    <!-- O nosso navbar.js irá injetar o cabeçalho seguro aqui automaticamente -->
 
     <div class="container">
-        
-        <div id="status" class="info">A verificar integridade da sessão...</div>
-
         <!-- [INÍCIO: PAINEL DE CONFIGURAÇÃO] -->
-        <div id="app" class="card" style="display: none;">
-            <h2 class="secao-titulo">Dados da Empresa / Perfil</h2>
+        <div id="app" class="card">
+            <h2 class="secao-titulo">Dados do Emissor / Empresa</h2>
             
             <form id="form-perfil">
-                
-                <!-- Área de Exibição e Seleção da Logo -->
+                <!-- Área de Exibição e Seleção da Logo/Avatar -->
                 <div class="area-logo-preview">
-                    <img id="img-atual" class="img-preview" src="https://via.placeholder.com/150?text=Sem+Logo" alt="Logo da Empresa">
-                    <span class="badge-admin" id="badge-email">admin@empresa.com</span>
+                    <img id="img-atual" class="img-preview" src="https://via.placeholder.com/150?text=Sem+Foto" alt="Avatar">
                     
                     <div class="botoes-imagem">
-                        <!-- Botões visuais e atraentes -->
                         <button type="button" class="btn-acao-img btn-camera" onclick="document.getElementById('input-camera').click()">📷 Tirar Foto</button>
                         <button type="button" class="btn-acao-img btn-galeria" onclick="document.getElementById('input-galeria').click()">📁 Galeria</button>
                     </div>
 
-                    <!-- Inputs Reais (Estão invisíveis na tela) -->
-                    <!-- 'capture="environment"' diz ao Android/iOS para abrir a câmara traseira nativa -->
                     <input type="file" id="input-camera" accept="image/*" capture="environment" style="display: none;" onchange="processarImagemSelecionada(event)">
-                    <!-- Entrada normal para a galeria -->
                     <input type="file" id="input-galeria" accept="image/*" style="display: none;" onchange="processarImagemSelecionada(event)">
+                    <p id="status-img" style="color: var(--accent-neon); font-size: 0.85em; display: none; margin-top: 10px;"></p>
                 </div>
 
-                <!-- Campos de Edição -->
-                <label for="input-nome">Nome Comercial da Empresa:</label>
-                <input type="text" id="input-nome" placeholder="Ex: Bebidas Express" required>
+                <!-- Campos de Edição Atualizados para Pessoa Física/Jurídica -->
+                <label for="input-nome">Nome (Razão Social ou Nome Completo):</label>
+                <input type="text" id="input-nome" placeholder="Ex: Bebidas Express LTDA / João Silva" required>
                 
-                <button type="submit" id="btn-salvar" class="btn-neon">💾 Guardar Configurações</button>
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-documento">CNPJ ou CPF:</label>
+                        <input type="text" id="input-documento" placeholder="00.000.000/0000-00">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-ie">Inscrição Estadual (ou RG):</label>
+                        <input type="text" id="input-ie" placeholder="Isento / Número">
+                    </div>
+                </div>
+
+                <div class="linha-form">
+                    <div class="coluna-form">
+                        <label for="input-telefone">Telefone / WhatsApp:</label>
+                        <input type="text" id="input-telefone" placeholder="(91) 90000-0000">
+                    </div>
+                    <div class="coluna-form">
+                        <label for="input-email-contato">E-mail de Contato Público:</label>
+                        <input type="email" id="input-email-contato" placeholder="contato@empresa.com">
+                    </div>
+                </div>
+
+                <label for="input-endereco">Endereço Completo da Loja:</label>
+                <input type="text" id="input-endereco" placeholder="Ex: Av. Principal, 123, Bairro, Belém - PA">
+
+                <button type="submit" id="btn-salvar" class="btn-neon">💾 Salvar Dados da Empresa</button>
             </form>
         </div>
         <!-- [FIM: PAINEL DE CONFIGURAÇÃO] -->
-
     </div>
+<!-- [FIM: BLOCO 2 - HTML BODY] -->
 
-
-    <!-- [INÍCIO: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
+    <!-- [INÍCIO: MOTOR DE SEGURANÇA E SCRIPTS] -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase_config.js"></script>
+    
+    <!-- O nosso Guarda de Trânsito Global (Navbar) que limpa e monta o cabeçalho -->
+    <script src="navbar.js"></script>
 
     <script>
         /* ================= VARIÁVEIS GLOBAIS ================= */
         let sessaoAtual = null;
         let urlFotoAntiga = null;
-        let arquivoFotoProntoParaUpload = null; // Guardará a foto já esmagada pelo Canvas
+        let arquivoFotoProntoParaUpload = null;
 
-        /* ================= ALTERNADOR DE TEMA ================= */
-        function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
-        }
-
-        /* ================= O MOTOR DE COMPRESSÃO (NÍVEL SÉNIOR) ================= */
-        // Pega numa imagem de 10MB e devolve um ficheiro optimizado de ~150KB
+        /* ================= O MOTOR DE COMPRESSÃO (CANVAS) ================= */
         async function comprimirImagemParaUpload(arquivoOriginal) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -174,38 +133,19 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; // Tamanho máximo perfeito para logotipos
-                        const MAX_HEIGHT = 800;
-                        let width = img.width;
-                        let height = img.height;
-
-                        // Cálculo matemático para manter as proporções da imagem sem a distorcer
+                        const MAX_WIDTH = 800; const MAX_HEIGHT = 800;
+                        let width = img.width; let height = img.height;
                         if (width > height) {
-                            if (width > MAX_WIDTH) {
-                                height *= MAX_WIDTH / width;
-                                width = MAX_WIDTH;
-                            }
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                         } else {
-                            if (height > MAX_HEIGHT) {
-                                width *= MAX_HEIGHT / height;
-                                height = MAX_HEIGHT;
-                            }
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
                         }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
+                        canvas.width = width; canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-
-                        // Exporta a imagem do canvas como JPEG de alta compressão (80% de qualidade)
                         canvas.toBlob((blob) => {
-                            // Cria um novo "Ficheiro" artificial para enganar o navegador
-                            const nomeLimpo = "logo_otimizada_" + Date.now() + ".jpg";
-                            const novoArquivo = new File([blob], nomeLimpo, {
-                                type: 'image/jpeg',
-                                lastModified: Date.now()
-                            });
-                            resolve(novoArquivo);
+                            const nomeLimpo = "foto_" + Date.now() + ".jpg";
+                            resolve(new File([blob], nomeLimpo, { type: 'image/jpeg', lastModified: Date.now() }));
                         }, 'image/jpeg', 0.8);
                     };
                     img.onerror = (erro) => reject(erro);
@@ -214,27 +154,19 @@
             });
         }
 
-        /* ================= FUNÇÕES UTILITÁRIAS ================= */
-        // Interceta a imagem escolhida pela Câmara ou Galeria
         async function processarImagemSelecionada(event) {
             const arquivoBruto = event.target.files[0];
             if (!arquivoBruto) return;
-
             try {
-                document.getElementById('status').style.display = "block";
-                document.getElementById('status').textContent = "A otimizar a imagem, aguarde...";
+                const statusTxt = document.getElementById('status-img');
+                statusTxt.style.display = "block";
+                statusTxt.textContent = "⏳ A otimizar a imagem, aguarde...";
                 
-                // Passa pelo espremedor mágico de tamanho
                 arquivoFotoProntoParaUpload = await comprimirImagemParaUpload(arquivoBruto);
-                
-                // Mostra a pré-visualização instantânea na tela
-                const urlTemporaria = URL.createObjectURL(arquivoFotoProntoParaUpload);
-                document.getElementById('img-atual').src = urlTemporaria;
-                
-                document.getElementById('status').style.display = "none";
+                document.getElementById('img-atual').src = URL.createObjectURL(arquivoFotoProntoParaUpload);
+                statusTxt.style.display = "none";
             } catch (error) {
-                console.error("Erro na compressão:", error);
-                alert("Erro ao processar a imagem da câmara. Tente novamente.");
+                alert("Erro ao processar a imagem da câmara.");
             }
         }
 
@@ -243,117 +175,100 @@
                 const nomeLimpo = urlDaFoto.split('/').slice(-2).join('/'); 
                 const nomeDoArquivo = decodeURIComponent(nomeLimpo.split('?')[0]);
                 await clienteSupabase.storage.from('foto_avatar').remove([nomeDoArquivo]);
-            } catch (err) { console.error("Aviso: Falha ao apagar foto antiga.", err); }
+            } catch (err) { console.log("Aviso: Foto antiga não encontrada para apagar."); }
         }
 
-        /* ================= VERIFICAÇÃO E CARREGAMENTO DE DADOS ================= */
+        /* ================= CARREGAMENTO DE DADOS (READ) ================= */
+        // Como o navbar.js já gere a segurança e cabeçalho, aqui apenas preenchemos o formulário
         document.addEventListener('DOMContentLoaded', async () => {
-            if(localStorage.getItem('temaBevDistro') === 'light') document.body.classList.add('light-theme');
-
-            const statusDiv = document.getElementById('status');
-            const appDiv = document.getElementById('app');
-            const badgeEmail = document.getElementById('badge-email');
-            
-            if (typeof clienteSupabase === 'undefined') {
-                statusDiv.textContent = "❌ Erro Crítico: supabase_config.js ausente.";
-                statusDiv.className = "info erro"; return;
-            }
-
             try {
-                // 1. Auditoria Zero Trust: Validar Sessão
-                const { data: { session }, error } = await clienteSupabase.auth.getSession();
-                if (error || !session) return window.location.href = 'login.html';
-                
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+                if (!session) return; // O navbar.js já vai expulsar o usuário, apenas paramos a execução aqui
                 sessaoAtual = session;
-                badgeEmail.textContent = session.user.email;
 
-                // 2. Procurar os Dados da Empresa no Banco
-                const { data: perfil, error: perfilError } = await clienteSupabase
+                // Busca todos os campos recém-criados no Supabase
+                const { data: perfil } = await clienteSupabase
                     .from('profiles')
-                    .select('nome, foto_avatar')
+                    .select('nome, foto_avatar, documento, endereco, telefone, email_contato, inscricao_estadual')
                     .eq('id', session.user.id)
                     .single();
 
-                if (perfilError && perfilError.code !== 'PGRST116') {
-                    throw perfilError; 
-                }
-
                 if (perfil) {
                     if (perfil.nome) document.getElementById('input-nome').value = perfil.nome;
+                    if (perfil.documento) document.getElementById('input-documento').value = perfil.documento;
+                    if (perfil.endereco) document.getElementById('input-endereco').value = perfil.endereco;
+                    if (perfil.telefone) document.getElementById('input-telefone').value = perfil.telefone;
+                    if (perfil.email_contato) document.getElementById('input-email-contato').value = perfil.email_contato;
+                    if (perfil.inscricao_estadual) document.getElementById('input-ie').value = perfil.inscricao_estadual;
+                    
                     if (perfil.foto_avatar) {
                         document.getElementById('img-atual').src = perfil.foto_avatar;
                         urlFotoAntiga = perfil.foto_avatar;
                     }
                 }
-
-                statusDiv.style.display = "none";
-                appDiv.style.display = "block";
-                
             } catch (error) {
-                console.error("Erro ao carregar perfil:", error);
-                statusDiv.textContent = "❌ Erro ao conectar com a base de dados.";
-                statusDiv.className = "info erro";
+                console.error("Erro ao carregar dados do perfil:", error);
             }
         });
 
-        /* ================= GRAVAÇÃO SEGURA DOS DADOS ================= */
+        /* ================= GRAVAÇÃO DE DADOS (WRITE) ================= */
         document.getElementById('form-perfil').addEventListener('submit', async (evento) => {
             evento.preventDefault(); 
             
             const btnSubmit = document.getElementById('btn-salvar');
-            btnSubmit.textContent = "⏳ A gravar configurações no servidor...";
+            btnSubmit.textContent = "⏳ A gravar configurações...";
             btnSubmit.disabled = true;
-
-            const novoNome = document.getElementById('input-nome').value.trim();
 
             try {
                 let urlFinalDaFoto = urlFotoAntiga; 
                 
-                // Se houver uma foto já comprimida na variável, envia para o servidor
                 if (arquivoFotoProntoParaUpload) {
                     if (urlFotoAntiga != null) await apagarFotoNoStorage(urlFotoAntiga);
-                    
-                    // Coloca o ficheiro na pasta com o ID do utilizador
                     const nomeParaServidor = `${sessaoAtual.user.id}/${arquivoFotoProntoParaUpload.name}`;
-                    
                     const { error: uploadError } = await clienteSupabase.storage
-                        .from('foto_avatar')
-                        .upload(nomeParaServidor, arquivoFotoProntoParaUpload);
-
+                        .from('foto_avatar').upload(nomeParaServidor, arquivoFotoProntoParaUpload);
                     if (uploadError) throw uploadError;
                     
-                    // Busca o link final
-                    const { data: urlData } = clienteSupabase.storage
-                        .from('foto_avatar').getPublicUrl(nomeParaServidor);
+                    const { data: urlData } = clienteSupabase.storage.from('foto_avatar').getPublicUrl(nomeParaServidor);
                     urlFinalDaFoto = urlData.publicUrl; 
                 }
 
-                // Salva tudo na tabela (A RLS protegerá esta transação)
+                // Salva todos os campos na tabela 'profiles' de forma segura
+                const payload = { 
+                    nome: document.getElementById('input-nome').value.trim(), 
+                    foto_avatar: urlFinalDaFoto,
+                    documento: document.getElementById('input-documento').value.trim(),
+                    endereco: document.getElementById('input-endereco').value.trim(),
+                    telefone: document.getElementById('input-telefone').value.trim(),
+                    email_contato: document.getElementById('input-email-contato').value.trim(),
+                    inscricao_estadual: document.getElementById('input-ie').value.trim()
+                };
+
                 const { error: updateError } = await clienteSupabase
                     .from('profiles')
-                    .update({ nome: novoNome, foto_avatar: urlFinalDaFoto })
+                    .update(payload)
                     .eq('id', sessaoAtual.user.id);
 
                 if (updateError) throw updateError;
 
-                alert("✅ Configurações da Empresa guardadas com sucesso!");
+                alert("✅ Dados salvos com sucesso!");
                 urlFotoAntiga = urlFinalDaFoto; 
-                arquivoFotoProntoParaUpload = null; // Limpa a memória
+                arquivoFotoProntoParaUpload = null; 
+                
+                // Recarrega a página levemente para o navbar.js atualizar a foto no topo
+                window.location.reload();
 
             } catch (erro) {
                 console.error(erro);
-                alert("❌ Erro na operação: " + (erro.message || "Não foi possível guardar."));
+                alert("❌ Erro ao guardar.");
             } finally {
-                btnSubmit.textContent = "💾 Guardar Configurações";
+                btnSubmit.textContent = "💾 Salvar Dados da Empresa";
                 btnSubmit.disabled = false;
             }
         });
     </script>
-    <!-- [FIM: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
 </body>
 </html>
 
 
-    
-
-    
+        
