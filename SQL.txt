@@ -1,0 +1,426 @@
+-- =======================================================================================
+-- 1. CRIAÇÃO DA TABELA PRINCIPAL (ESTRUTURA DEFINITIVA)
+-- =======================================================================================
+CREATE TABLE public.produtos (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    nome text NOT NULL,
+    preco numeric NOT NULL,
+    preco_custo numeric DEFAULT 0,
+    foto_url text DEFAULT NULL,
+    codigo_produto text DEFAULT NULL,
+    ean text DEFAULT NULL,
+    ncm text DEFAULT NULL,
+    cest text DEFAULT NULL,
+    cfop text DEFAULT NULL,
+    unidade_comercial text DEFAULT NULL,
+    quantidade numeric DEFAULT 1,
+    valor_total numeric DEFAULT 0,
+    fornecedor text DEFAULT NULL,
+    estoque_minimo numeric DEFAULT 0,
+    origem text DEFAULT NULL,
+    local_estoque text DEFAULT NULL,
+    local_loja text DEFAULT NULL,
+    tipo_embalagem text DEFAULT NULL,
+    categoria text DEFAULT NULL,
+    peso_liquido numeric DEFAULT 0,
+    dimensoes text DEFAULT NULL,
+    data_compra date DEFAULT NULL,
+    data_vencimento date DEFAULT NULL,
+    especificacoes jsonb DEFAULT '{}'::jsonb,
+    esta_ativo boolean DEFAULT true,
+    criado_em timestamp with time zone DEFAULT now()
+);
+
+-- =======================================================================================
+-- 2. POLÍTICAS DE SEGURANÇA (RLS - ZERO TRUST)
+-- =======================================================================================
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+
+-- Funcionários logados (authenticated) veem e controlam tudo (incluindo a lixeira)
+CREATE POLICY "Autenticados_Select" ON public.produtos FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Autenticados_Insert" ON public.produtos FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Autenticados_Update" ON public.produtos FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Autenticados_Delete" ON public.produtos FOR DELETE TO authenticated USING (true);
+
+-- Clientes na Loja Pública (anon) só podem ver o que está ativo
+CREATE POLICY "Loja_Select" ON public.produtos FOR SELECT TO anon USING (esta_ativo = true);
+
+-- =======================================================================================
+-- 3. STORAGE E BLINDAGEM DE UPLOADS
+-- =======================================================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('equipamentos_fotos', 'equipamentos_fotos', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Leitura_Publica_Fotos" 
+ON storage.objects FOR SELECT USING (bucket_id = 'equipamentos_fotos');
+
+CREATE POLICY "Apenas autenticados apagam fotos" 
+ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'equipamentos_fotos');
+
+-- Blindagem contra arquivos perigosos e limite de 2MB
+CREATE POLICY "Apenas autenticados sobem fotos seguras" 
+ON storage.objects 
+FOR INSERT TO authenticated 
+WITH CHECK (
+    bucket_id = 'equipamentos_fotos' 
+    AND (storage.extension(name) = 'jpg' OR storage.extension(name) = 'png' OR storage.extension(name) = 'webp' OR storage.extension(name) = 'jpeg')
+    AND (length(COALESCE(metadata->>'size', '0')::text) < 2097152)
+);
+
+-- =======================================================================================
+-- 4. TABELA E GATILHO DE AUDITORIA (LOG DE ATIVIDADES)
+-- =======================================================================================
+CREATE TABLE public.auditoria_produtos (
+    id_auditoria uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    produto_id uuid,
+    acao text NOT NULL, 
+    dados_antigos jsonb, 
+    dados_novos jsonb,   
+    usuario_id uuid,     
+    data_hora timestamp with time zone DEFAULT now()
+);
+
+CREATE OR REPLACE FUNCTION public.registrar_auditoria()
+RETURNS TRIGGER
+SECURITY INVOKER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF (TG_OP = 'DELETE') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_antigos, usuario_id)
+        VALUES (OLD.id, 'DELETE', row_to_json(OLD)::jsonb, auth.uid());
+        RETURN OLD;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_antigos, dados_novos, usuario_id)
+        VALUES (NEW.id, 'UPDATE', row_to_json(OLD)::jsonb, row_to_json(NEW)::jsonb, auth.uid());
+        RETURN NEW;
+    ELSIF (TG_OP = 'INSERT') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_novos, usuario_id)
+        VALUES (NEW.id, 'INSERT', row_to_json(NEW)::jsonb, auth.uid());
+        RETURN NEW;
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+CREATE TRIGGER trigger_auditoria_produtos
+AFTER INSERT OR UPDATE OR DELETE ON public.produtos
+FOR EACH ROW EXECUTE FUNCTION public.registrar_auditoria();
+
+-- =======================================================================================
+-- 5. RPCs DO BACKEND (SECURITY INVOKER - EXIGE AUTENTICAÇÃO E RLS)
+-- =======================================================================================
+
+CREATE OR REPLACE FUNCTION public.adicionar_produto_seguro(
+    p_nome text, p_preco numeric, p_foto_url text DEFAULT NULL, p_codigo_produto text DEFAULT NULL,
+    p_ean text DEFAULT NULL, p_ncm text DEFAULT NULL, p_cest text DEFAULT NULL, p_cfop text DEFAULT NULL,
+    p_unidade_comercial text DEFAULT NULL, p_quantidade numeric DEFAULT 1, p_valor_total numeric DEFAULT 0,
+    p_fornecedor text DEFAULT NULL, p_preco_custo numeric DEFAULT 0, p_estoque_minimo numeric DEFAULT 0,
+    p_origem text DEFAULT NULL, p_local_estoque text DEFAULT NULL, p_local_loja text DEFAULT NULL,
+    p_tipo_embalagem text DEFAULT NULL, p_categoria text DEFAULT NULL, p_peso_liquido numeric DEFAULT 0,
+    p_dimensoes text DEFAULT NULL, p_data_compra date DEFAULT NULL, p_data_vencimento date DEFAULT NULL
+) RETURNS uuid LANGUAGE plpgsql SECURITY INVOKER AS $$
+DECLARE
+    v_novo_id uuid;
+BEGIN
+    IF p_nome IS NULL OR length(trim(p_nome)) < 3 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O nome do produto deve ter pelo menos 3 caracteres.';
+    END IF;
+    INSERT INTO public.produtos (
+        nome, preco, foto_url, codigo_produto, ean, ncm, cest, cfop, unidade_comercial, quantidade, valor_total,
+        fornecedor, preco_custo, estoque_minimo, origem, local_estoque, local_loja, tipo_embalagem, categoria,
+        peso_liquido, dimensoes, data_compra, data_vencimento, esta_ativo
+    ) VALUES (
+        trim(p_nome), p_preco, p_foto_url, p_codigo_produto, p_ean, p_ncm, p_cest, p_cfop, p_unidade_comercial, p_quantidade, p_valor_total,
+        p_fornecedor, p_preco_custo, p_estoque_minimo, p_origem, p_local_estoque, p_local_loja, p_tipo_embalagem, p_categoria,
+        p_peso_liquido, p_dimensoes, p_data_compra, p_data_vencimento, true
+    ) RETURNING id INTO v_novo_id;
+    RETURN v_novo_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.atualizar_produto_seguro(
+    p_id uuid, p_nome text, p_preco numeric, p_foto_url text DEFAULT NULL, p_codigo_produto text DEFAULT NULL,
+    p_ean text DEFAULT NULL, p_ncm text DEFAULT NULL, p_cest text DEFAULT NULL, p_cfop text DEFAULT NULL,
+    p_unidade_comercial text DEFAULT NULL, p_quantidade numeric DEFAULT 1, p_valor_total numeric DEFAULT 0,
+    p_fornecedor text DEFAULT NULL, p_preco_custo numeric DEFAULT 0, p_estoque_minimo numeric DEFAULT 0,
+    p_origem text DEFAULT NULL, p_local_estoque text DEFAULT NULL, p_local_loja text DEFAULT NULL,
+    p_tipo_embalagem text DEFAULT NULL, p_categoria text DEFAULT NULL, p_peso_liquido numeric DEFAULT 0,
+    p_dimensoes text DEFAULT NULL, p_data_compra date DEFAULT NULL, p_data_vencimento date DEFAULT NULL
+) RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    IF p_nome IS NULL OR length(trim(p_nome)) < 3 THEN
+        RAISE EXCEPTION 'Erro de Segurança: O nome do produto deve ter pelo menos 3 caracteres.';
+    END IF;
+    UPDATE public.produtos SET 
+        nome = trim(p_nome), preco = p_preco, foto_url = p_foto_url, codigo_produto = p_codigo_produto,
+        ean = p_ean, ncm = p_ncm, cest = p_cest, cfop = p_cfop, unidade_comercial = p_unidade_comercial,
+        quantidade = p_quantidade, valor_total = p_valor_total, fornecedor = p_fornecedor,
+        preco_custo = p_preco_custo, estoque_minimo = p_estoque_minimo, origem = p_origem,
+        local_estoque = p_local_estoque, local_loja = p_local_loja, tipo_embalagem = p_tipo_embalagem,
+        categoria = p_categoria, peso_liquido = p_peso_liquido, dimensoes = p_dimensoes,
+        data_compra = p_data_compra, data_vencimento = p_data_vencimento
+    WHERE id = p_id AND esta_ativo = true;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.desativar_produto_seguro(p_id uuid)
+RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    UPDATE public.produtos SET esta_ativo = false WHERE id = p_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.restaurar_produto_seguro(p_id uuid)
+RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    UPDATE public.produtos SET esta_ativo = true WHERE id = p_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.limpar_lixeira_produtos_seguro()
+RETURNS TABLE(url_da_foto text) LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    RETURN QUERY DELETE FROM public.produtos WHERE esta_ativo = false RETURNING foto_url;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.listar_lixeira_produtos_seguro()
+RETURNS TABLE (id uuid, nome text, preco numeric, foto_url text, criado_em timestamp with time zone) 
+LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    RETURN QUERY SELECT p.id, p.nome, p.preco, p.foto_url, p.criado_em FROM public.produtos p WHERE p.esta_ativo = false ORDER BY p.criado_em DESC;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.ocultar_multiplos_produtos_seguro(p_ids uuid[])
+RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
+BEGIN
+    UPDATE public.produtos SET esta_ativo = false WHERE id = ANY(p_ids);
+END;
+$$;
+
+-- 5.8. IMPORTAÇÃO XML COM LÓGICA DE UPSERT E MATEMÁTICA PROTEGIDA
+CREATE OR REPLACE FUNCTION public.inserir_produtos_lote_seguro(p_itens jsonb)
+RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
+DECLARE 
+    item jsonb;
+    v_preco_venda numeric;
+    v_preco_custo numeric;
+    v_produto_existente_id uuid;
+    v_quantidade_atual numeric;
+BEGIN
+    FOR item IN SELECT * FROM jsonb_array_elements(p_itens) LOOP
+        v_preco_custo := (item->>'preco_custo')::numeric;
+        v_preco_venda := (item->>'preco_venda')::numeric;
+        
+        -- Garante a margem mínima de 30% independente do frontend
+        IF v_preco_venda < (v_preco_custo * 1.30) THEN
+            v_preco_venda := v_preco_custo * 1.30;
+        END IF;
+
+        -- Busca duplicata
+        SELECT id, quantidade INTO v_produto_existente_id, v_quantidade_atual
+        FROM public.produtos
+        WHERE esta_ativo = true 
+          AND (
+              (item->>'ean' IS NOT NULL AND item->>'ean' <> '' AND ean = item->>'ean') 
+              OR 
+              (item->>'codigo_produto' IS NOT NULL AND item->>'codigo_produto' <> '' AND codigo_produto = item->>'codigo_produto')
+          )
+        LIMIT 1;
+
+        IF v_produto_existente_id IS NOT NULL THEN
+            UPDATE public.produtos
+            SET quantidade = v_quantidade_atual + (item->>'quantidade')::numeric,
+                preco_custo = v_preco_custo, preco = v_preco_venda        
+            WHERE id = v_produto_existente_id;
+        ELSE
+            INSERT INTO public.produtos (
+                nome, preco_custo, preco, codigo_produto, ean, ncm, cest, cfop, unidade_comercial, quantidade, valor_total, esta_ativo
+            ) VALUES (
+                item->>'nome', v_preco_custo, v_preco_venda, item->>'codigo_produto', item->>'ean', item->>'ncm', item->>'cest', 
+                item->>'cfop', item->>'unidade_comercial', (item->>'quantidade')::numeric, (item->>'valor_total')::numeric, true
+            );
+        END IF;
+        
+        v_produto_existente_id := NULL;
+        v_quantidade_atual := 0;
+    END LOOP;
+END;
+$$;
+
+-- =======================================================================================
+-- 6. GARANTIA DE DIREITOS (GRANTS) E ATUALIZAÇÃO DA API
+-- =======================================================================================
+GRANT EXECUTE ON FUNCTION public.adicionar_produto_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.atualizar_produto_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.desativar_produto_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.restaurar_produto_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.limpar_lixeira_produtos_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.listar_lixeira_produtos_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.ocultar_multiplos_produtos_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.inserir_produtos_lote_seguro TO authenticated;
+
+NOTIFY pgrst, 'reload schema';
+
+
+
+-- =======================================================================================
+-- TABELA DE CONTROLE DE VENDAS E PEDIDOS
+-- =======================================================================================
+CREATE TABLE public.vendas (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    numero_pedido SERIAL,
+    cliente_nome text NOT NULL,
+    cliente_endereco text NOT NULL,
+    forma_pagamento text NOT NULL,
+    itens jsonb NOT NULL,
+    valor_total numeric NOT NULL,
+    status text DEFAULT 'Pendente', -- Pendente, Entregue, Cancelado
+    criado_em timestamp with time zone DEFAULT now()
+);
+
+-- Ativar RLS na tabela de vendas
+ALTER TABLE public.vendas ENABLE ROW LEVEL SECURITY;
+
+-- Clientes (anon) podem inserir novos pedidos ao finalizar a compra
+CREATE POLICY "Anon_Insere_Vendas" ON public.vendas FOR INSERT TO anon WITH CHECK (true);
+
+-- Apenas funcionários logados (authenticated) podem gerir/ver o controle de vendas
+CREATE POLICY "Autenticados_Gere_Vendas" ON public.vendas FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- =======================================================================================
+-- RPC SEGURA PARA FINALIZAR PEDIDO (Gera o pedido e abate o estoque do produto)
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.finalizar_pedido_seguro(
+    p_cliente_nome text,
+    p_cliente_endereco text,
+    p_forma_pagamento text,
+    p_itens jsonb,
+    p_valor_total numeric
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+DECLARE
+    v_pedido_id uuid;
+    v_numero_pedido int;
+    item jsonb;
+    v_prod_id uuid;
+    v_qtd_comprada numeric;
+    v_estoque_atual numeric;
+BEGIN
+    -- Validações básicas de segurança
+    IF p_cliente_nome IS NULL or length(trim(p_cliente_nome)) < 2 THEN
+        RAISE EXCEPTION 'Nome do cliente inválido.';
+    END IF;
+
+    -- 1. Insere o pedido na tabela de vendas
+    INSERT INTO public.vendas (cliente_nome, cliente_endereco, forma_pagamento, itens, valor_total)
+    VALUES (trim(p_cliente_nome), trim(p_cliente_endereco), p_forma_pagamento, p_itens, p_valor_total)
+    RETURNING id, numero_pedido INTO v_pedido_id, v_numero_pedido;
+
+    -- 2. Loop para dar baixa automática no estoque de cada produto comprado
+    FOR item IN SELECT * FROM jsonb_array_elements(p_itens)
+    LOOP
+        v_prod_id := (item->>'id')::uuid;
+        v_qtd_comprada := (item->>'quantidade')::numeric;
+
+        -- Busca o estoque atual do produto
+        SELECT quantidade INTO v_estoque_atual
+        FROM public.produtos
+        WHERE id = v_prod_id AND esta_ativo = true;
+
+        IF v_estoque_atual IS NULL THEN
+            RAISE EXCEPTION 'Produto não encontrado ou inativo.';
+        END IF;
+
+        IF v_estoque_atual < v_qtd_comprada then
+            RAISE EXCEPTION 'Estoque insuficiente para o produto ID: %', v_prod_id;
+        END IF;
+
+        -- Atualiza subtraindo do estoque
+        UPDATE public.produtos
+        SET quantidade = quantidade - v_qtd_comprada
+        WHERE id = v_prod_id;
+    END LOOP;
+
+    -- Retorna um JSON com o ID e o Número do Pedido gerado
+    RETURN jsonb_build_object('id', v_pedido_id, 'numero_pedido', v_numero_pedido);
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.finalizar_pedido_seguro TO anon, authenticated;
+NOTIFY pgrst, 'reload schema';
+
+
+
+-- =======================================================================================
+-- RPC SEGURA: MARCAR PEDIDO COMO ENTREGUE
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.marcar_pedido_entregue_seguro(p_pedido_id uuid)
+RETURNS void 
+LANGUAGE plpgsql 
+SECURITY INVOKER 
+AS $$
+BEGIN
+    -- Só permite marcar como entregue se estiver Pendente (impede alterar pedidos cancelados)
+    UPDATE public.vendas 
+    SET status = 'Entregue' 
+    WHERE id = p_pedido_id AND status = 'Pendente';
+END;
+$$;
+
+-- =======================================================================================
+-- RPC SEGURA: CANCELAR PEDIDO E DEVOLVER ESTOQUE (ROLLBACK)
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.cancelar_pedido_seguro(p_pedido_id uuid)
+RETURNS void 
+LANGUAGE plpgsql 
+SECURITY INVOKER 
+AS $$
+DECLARE
+    v_status text;
+    v_itens jsonb;
+    item jsonb;
+BEGIN
+    -- 1. Captura o status e os itens do pedido de forma isolada
+    SELECT status, itens INTO v_status, v_itens 
+    FROM public.vendas 
+    WHERE id = p_pedido_id;
+
+    -- 2. Barreira de Segurança: Impede duplo cancelamento (que multiplicaria o estoque)
+    IF v_status = 'Cancelado' THEN
+        RAISE EXCEPTION 'Acesso Negado: Este pedido já foi cancelado anteriormente.';
+    END IF;
+
+    -- 3. Muda o status do pedido
+    UPDATE public.vendas SET status = 'Cancelado' WHERE id = p_pedido_id;
+
+    -- 4. Loop transacional: Devolve cada unidade cirurgicamente para a tabela de produtos
+    FOR item IN SELECT * FROM jsonb_array_elements(v_itens) 
+    LOOP
+        UPDATE public.produtos
+        SET quantidade = quantidade + (item->>'quantidade')::numeric
+        WHERE id = (item->>'id')::uuid;
+    END LOOP;
+END;
+$$;
+
+-- =======================================================================================
+-- GARANTIA DE DIREITOS DE EXECUÇÃO (Apenas funcionários logados)
+-- =======================================================================================
+GRANT EXECUTE ON FUNCTION public.marcar_pedido_entregue_seguro TO authenticated;
+GRANT EXECUTE ON FUNCTION public.cancelar_pedido_seguro TO authenticated;
+
+NOTIFY pgrst, 'reload schema';
+
+
+
+
+
+
+
