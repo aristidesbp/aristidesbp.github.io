@@ -1,104 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!--head_configuracoes-->
+<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Vendas - ERP</title>
+    <title>Painel de Vendas - ERP</title>
     
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; margin: 0; }
-        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px;}
-        .erro { background-color: #f8d7da; color: #721c24; }
-        
-        .cabecalho-painel { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; flex-wrap: wrap; gap: 10px;}
-        .btn-voltar { background: #6c757d; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none;}
-        
-        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        
-        .card-pedido { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid #ccc; display: flex; flex-direction: column; justify-content: space-between;}
-        
-        /* Status Cores */
-        .status-Pendente { border-left-color: #f39c12; }
-        .status-Entregue { border-left-color: #28a745; opacity: 0.8; }
-        .status-Cancelado { border-left-color: #dc3545; opacity: 0.6; }
+        /* ================= DESIGN SYSTEM & THEMES ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --purple-pill: #8273f6;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --warning-color: #ffc107;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+        }
 
-        .pedido-topo { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;}
-        .pedido-numero { font-size: 1.3em; font-weight: bold; color: #007bff; }
-        .pedido-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; color: white;}
-        .badge-Pendente { background: #f39c12; }
-        .badge-Entregue { background: #28a745; }
-        .badge-Cancelado { background: #dc3545; }
-        
-        .pedido-dados p { margin: 5px 0; font-size: 0.95em; color: #333; }
-        .pedido-itens { background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 10px 0; font-size: 0.9em; max-height: 150px; overflow-y: auto;}
-        
-        .pedido-total { font-size: 1.3em; font-weight: bold; color: #28a745; text-align: right; margin-bottom: 15px;}
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --purple-pill: #6f42c1;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+            --warning-color: #f39c12;
+            --success-color: #218838;
+        }
 
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
+        
+        /* ================= HEADER ================= */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+        .logo-icon { color: var(--accent-neon); }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; }
+
+        /* ================= ESTRUTURA GERAL ================= */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;}
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; margin: 20px; border: 1px solid var(--info-color); text-align: center;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        
+        .area-navegacao { margin: 20px; }
+        .btn-voltar { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block;}
+        
+        /* ================= CARTÃO DE PEDIDO ================= */
+        .card-pedido { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-left: 5px solid var(--border-color); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; transition: border-left-color 0.3s;}
+        
+        .status-Pendente { border-left-color: var(--warning-color); }
+        .status-Entregue { border-left-color: var(--success-color); opacity: 0.7; }
+        .status-Cancelado { border-left-color: var(--danger-color); opacity: 0.5; }
+
+        .pedido-topo { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px;}
+        .pedido-numero { font-size: 1.3em; font-weight: bold; color: var(--accent-neon); }
+        
+        .pedido-badge { padding: 4px 8px; border-radius: 6px; font-size: 0.8em; font-weight: bold; color: #000;}
+        .badge-Pendente { background: var(--warning-color); }
+        .badge-Entregue { background: var(--success-color); color: white;}
+        .badge-Cancelado { background: var(--danger-color); color: white;}
+        
+        .pedido-dados p { margin: 5px 0; font-size: 0.95em; color: var(--text-muted); }
+        .pedido-dados strong { color: var(--text-main); }
+        
+        .pedido-itens { background: rgba(0,0,0,0.1); padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 0.9em; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-color); color: var(--text-main);}
+        .pedido-total { font-size: 1.3em; font-weight: bold; color: var(--accent-neon); text-align: right; margin-bottom: 15px;}
+
+        /* ================= BOTÕES DE AÇÃO ================= */
         .botoes-acao { display: flex; gap: 8px; flex-wrap: wrap; }
-        .botoes-acao button { flex-grow: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; font-size: 0.9em;}
-        .btn-entregar { background: #28a745; }
-        .btn-cancelar { background: #dc3545; }
-        .btn-imprimir { background: #343a40; }
+        .botoes-acao button { flex-grow: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: transform 0.1s, opacity 0.2s;}
+        .botoes-acao button:active { transform: scale(0.98); }
+        .botoes-acao button:hover { opacity: 0.8; }
         
-        button:disabled { background: #ccc !important; cursor: not-allowed; }
+        .btn-entregar { background: var(--success-color); color: white; }
+        .btn-cancelar { background: var(--danger-color); color: white; }
+        .btn-imprimir { background: var(--purple-pill); color: white; }
+        
+        button:disabled { background: var(--border-color) !important; color: var(--text-muted) !important; cursor: not-allowed; transform: none !important;}
     </style>
     
-    <!-- Bibliotecas Necessárias -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<!--/head_configuracoes-->
+<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
 
 <body>
+    <!-- [INÍCIO: CABEÇALHO E NAVEGAÇÃO] -->
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> Gestão de Vendas
+        </div>
+        <div>
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+        </div>
+    </header>
 
-    <!--cabecalho-->
-    <div class="cabecalho-painel">
-        <h2 style="margin: 0;">📦 Controle de Vendas</h2>
+    <div class="area-navegacao">
         <a href="listar.html" class="btn-voltar">⬅️ Voltar ao Estoque</a>
     </div>
     
-    <div style="max-width: 1200px; margin: 0 auto;">
-        <div id="status-bar" class="info">Verificando segurança da sessão...</div>
-    </div>
-    <!--/cabecalho-->
+    <div id="status-bar" class="info">Verificando segurança da sessão...</div>
+    <!-- [FIM: CABEÇALHO E NAVEGAÇÃO] -->
 
-    <!--painel_listagem_pedidos-->
+    <!-- [INÍCIO: PAINEL DE LISTAGEM DE PEDIDOS] -->
     <div class="container" id="grid-pedidos">
-        <!-- Os cartões de pedidos serão injetados aqui -->
+        <!-- Os cartões de pedidos serão injetados dinamicamente aqui -->
     </div>
-    <!--/painel_listagem_pedidos-->
+    <!-- [FIM: PAINEL DE LISTAGEM DE PEDIDOS] -->
 
-    <!--scripts_logica_negocio-->
+
+    <!-- [INÍCIO: LÓGICA JAVASCRIPT SEGURA] -->
     <script src="supabase_config.js"></script>
     <script>
-        /* ================= 1. PROTEÇÃO XSS (NÍVEL BANCÁRIO) ================= */
-        // Qualquer texto que venha do cliente passa por aqui antes de ser injetado no HTML
+        /* ================= ALTERNADOR DE TEMA ================= */
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        }
+
+        /* ================= PROTEÇÃO ANTI-XSS ================= */
+        // Garantia de Nível Bancário: Impede que hackers enviem nomes falsos com <script>
         const sanitizar = (texto) => {
+            if (!texto) return '';
             const div = document.createElement('div');
             div.textContent = texto;
             return div.innerHTML;
         };
 
-        /* ================= 2. VERIFICAÇÃO DE SESSÃO ZERO TRUST ================= */
+        /* ================= VERIFICAÇÃO ZERO TRUST ================= */
         document.addEventListener('DOMContentLoaded', async () => {
+            // Herda o tema da loja
+            if(localStorage.getItem('temaBevDistro') === 'light') document.body.classList.add('light-theme');
+
             const statusBar = document.getElementById('status-bar');
             
             if (typeof clienteSupabase === 'undefined') {
                 statusBar.textContent = "❌ Erro Crítico: supabase_config.js não encontrado.";
-                statusBar.className = "info erro";
-                return;
+                statusBar.className = "info erro"; return;
             }
 
             try {
                 const { data: { session }, error } = await clienteSupabase.auth.getSession();
                 
                 if (error || !session) {
-                    statusBar.textContent = "Acesso negado. Redirecionando...";
+                    statusBar.textContent = "Acesso negado. A redirecionar para o login...";
                     return window.location.href = 'login.html';
                 }
                 
                 statusBar.style.display = "none";
-                carregarPedidos(); // Inicia o fetch apenas após validar auth
+                carregarPedidos(); 
 
             } catch (error) {
                 console.error(error);
@@ -106,13 +165,12 @@
             }
         });
 
-        /* ================= 3. BUSCAR E RENDERIZAR PEDIDOS ================= */
+        /* ================= BUSCAR E RENDERIZAR PEDIDOS ================= */
         async function carregarPedidos() {
             const grid = document.getElementById('grid-pedidos');
-            grid.innerHTML = "<p>⏳ A carregar pedidos do sistema...</p>";
+            grid.innerHTML = "<p style='text-align: center; color: var(--text-muted); grid-column: 1 / -1;'>⏳ A carregar pedidos do sistema...</p>";
 
             try {
-                // Fetch de dados (Seguro graças às políticas RLS no backend)
                 const { data: vendas, error } = await clienteSupabase
                     .from('vendas')
                     .select('*')
@@ -121,7 +179,7 @@
                 if (error) throw error;
 
                 if (vendas.length === 0) {
-                    grid.innerHTML = "<p>Nenhuma venda registrada até o momento.</p>";
+                    grid.innerHTML = "<p style='text-align: center; color: var(--text-muted); grid-column: 1 / -1;'>Nenhum pedido registado até ao momento.</p>";
                     return;
                 }
 
@@ -130,19 +188,16 @@
                 vendas.forEach(venda => {
                     const dataFormatada = new Date(venda.criado_em).toLocaleString('pt-BR');
                     
-                    // Monta a lista de itens comprados
                     let itensHTML = '';
                     venda.itens.forEach(item => {
-                        itensHTML += `<div>${item.quantidade}x ${sanitizar(item.nome)} - R$ ${(item.quantidade * item.preco).toFixed(2).replace('.', ',')}</div>`;
+                        itensHTML += `<div style="margin-bottom: 5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px;">${item.quantidade}x ${sanitizar(item.nome)} <br><small style="color: var(--accent-neon);">R$ ${(item.quantidade * item.preco).toFixed(2).replace('.', ',')}</small></div>`;
                     });
 
-                    // Define se os botões de ação estarão ativos
                     const botoesBloqueados = venda.status !== 'Pendente' ? 'disabled' : '';
 
                     const card = document.createElement('div');
                     card.className = `card-pedido status-${venda.status}`;
                     
-                    // Injeção de HTML utilizando o sanitizador
                     card.innerHTML = `
                         <div>
                             <div class="pedido-topo">
@@ -166,8 +221,8 @@
 
                         <div class="botoes-acao">
                             <button class="btn-entregar" ${botoesBloqueados} onclick="marcarEntregue('${venda.id}')">✅ Entregar</button>
-                            <button class="btn-cancelar" ${botoesBloqueados} onclick="cancelarPedido('${venda.id}')">❌ Cancelar (Estorna)</button>
-                            <button class="btn-imprimir" onclick="imprimirCupom('${encodeURIComponent(JSON.stringify(venda))}')">🖨️ Cupom</button>
+                            <button class="btn-cancelar" ${botoesBloqueados} onclick="cancelarPedido('${venda.id}')">❌ Cancelar</button>
+                            <button class="btn-imprimir" onclick="imprimirCupom('${encodeURIComponent(JSON.stringify(venda))}')">🖨️ Cupão</button>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -175,32 +230,30 @@
 
             } catch (erro) {
                 console.error(erro);
-                grid.innerHTML = "<p class='erro' style='padding: 10px;'>Erro ao carregar os pedidos.</p>";
+                grid.innerHTML = "<p class='info erro' style='grid-column: 1 / -1;'>Erro ao carregar os pedidos.</p>";
             }
         }
 
-        /* ================= 4. AÇÕES DE BACKEND VIA RPC ================= */
-        
+        /* ================= AÇÕES DE BACKEND (RPC SEGURA) ================= */
         async function marcarEntregue(idPedido) {
-            if(!confirm("Confirmar entrega deste pedido?")) return;
+            if(!confirm("Confirmar a entrega deste pedido?")) return;
             try {
                 const { error } = await clienteSupabase.rpc('marcar_pedido_entregue_seguro', { p_pedido_id: idPedido });
                 if (error) throw error;
                 alert("Pedido atualizado para Entregue!");
-                carregarPedidos(); // Recarrega a tela
+                carregarPedidos(); 
             } catch (erro) {
                 console.error(erro);
-                alert("Erro ao atualizar pedido.");
+                alert("Erro ao atualizar o pedido.");
             }
         }
 
         async function cancelarPedido(idPedido) {
-            if(!confirm("ATENÇÃO: Cancelar este pedido e devolver os itens automaticamente para o estoque?")) return;
+            if(!confirm("ATENÇÃO: Cancelar este pedido e devolver os produtos automaticamente ao stock?")) return;
             try {
-                // A RPC do backend fará a matemática do estoque. O frontend só obedece.
                 const { error } = await clienteSupabase.rpc('cancelar_pedido_seguro', { p_pedido_id: idPedido });
                 if (error) throw error;
-                alert("Pedido cancelado e produtos devolvidos ao estoque com sucesso!");
+                alert("Pedido cancelado e produtos devolvidos ao stock com sucesso!");
                 carregarPedidos(); 
             } catch (erro) {
                 console.error(erro);
@@ -208,8 +261,7 @@
             }
         }
 
-        /* ================= 5. GERADOR DE CUPOM FISCAL TÉRMICO ================= */
-        
+        /* ================= GERADOR DE CUPÃO TÉRMICO ================= */
         function imprimirCupom(vendaEncoded) {
             const venda = JSON.parse(decodeURIComponent(vendaEncoded));
             const dataVenda = new Date(venda.criado_em).toLocaleString('pt-BR');
@@ -219,24 +271,24 @@
                 const sub = (item.quantidade * item.preco).toFixed(2);
                 itensCupom += `
                     <tr>
-                        <td style="text-align: left;">${item.quantidade}x ${sanitizar(item.nome)}</td>
-                        <td style="text-align: right;">${sub}</td>
+                        <td style="text-align: left; padding: 4px 0;">${item.quantidade}x ${sanitizar(item.nome)}</td>
+                        <td style="text-align: right; padding: 4px 0;">${sub}</td>
                     </tr>
                 `;
             });
 
-            // Cria uma janela pronta para impressora térmica (largura reduzida)
             const janela = window.open('', '_blank', 'width=350,height=600');
             janela.document.write(`
                 <html>
                 <head>
-                    <title>Cupom #${venda.numero_pedido}</title>
+                    <title>Cupão #${venda.numero_pedido}</title>
                     <style>
-                        body { font-family: monospace; font-size: 12px; margin: 0; padding: 10px; width: 300px; color: #000; }
+                        /* Força o fundo branco e texto preto para impressoras térmicas */
+                        body { font-family: monospace; font-size: 12px; margin: 0; padding: 10px; width: 300px; background-color: #ffffff; color: #000000; }
                         .text-center { text-align: center; }
                         h2 { margin: 5px 0; font-size: 16px; }
                         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                        td { border-bottom: 1px dashed #000; padding: 4px 0; }
+                        td { border-bottom: 1px dashed #000; }
                         .total { font-weight: bold; font-size: 14px; text-align: right; margin-top: 10px; }
                     </style>
                 </head>
@@ -250,7 +302,7 @@
                     <strong>Data:</strong> ${dataVenda}</p>
                     <p>---------------------------------</p>
                     <p><strong>Cliente:</strong> ${sanitizar(venda.cliente_nome)}<br>
-                    <strong>Endereço:</strong> ${sanitizar(venda.cliente_endereco)}<br>
+                    <strong>Morada:</strong> ${sanitizar(venda.cliente_endereco)}<br>
                     <strong>Pagamento:</strong> ${sanitizar(venda.forma_pagamento)}</p>
                     <p>---------------------------------</p>
                     <table>
@@ -266,10 +318,12 @@
             `);
             janela.document.close();
             janela.focus();
-            // Dispara o diálogo de impressão automaticamente
             setTimeout(() => { janela.print(); }, 500);
         }
     </script>
-    <!--/scripts_logica_negocio-->
+    <!-- [FIM: LÓGICA JAVASCRIPT SEGURA] -->
 </body>
 </html>
+
+    
+    
