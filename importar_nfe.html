@@ -1,114 +1,176 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP - Importar NF-e</title>
+    <title>Importar NF-e - ERP BevDistro</title>
     
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; margin: 0; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 1300px; margin: 0 auto; }
-        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: bold; color: white;}
-        button:hover { opacity: 0.8; }
+        /* ================= DESIGN SYSTEM & THEMES ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --purple-pill: #8273f6;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --purple-pill: #6f42c1;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
         
-        .btn-sucesso { background: #28a745; }
-        .btn-voltar { background: #6c757d; margin-bottom: 20px; }
-        .btn-primario { background: #007bff; width: 100%; font-size: 1.1em; margin-top: 20px; padding: 15px;}
+        /* ================= HEADER ================= */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+        .logo-icon { color: var(--accent-neon); }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; }
         
-        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px;}
+        /* ================= ESTRUTURA E CARTÕES ================= */
+        .container { max-width: 1300px; margin: 20px auto; padding: 0 20px; }
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid var(--info-color); margin-bottom: 20px;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
         
-        .area-upload { border: 2px dashed #007bff; padding: 30px; text-align: center; border-radius: 8px; background: #f8f9fa; margin-bottom: 20px;}
-        input[type="file"] { font-size: 1em; padding: 10px; cursor: pointer; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin-bottom: 20px;}
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9em; }
-        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #007bff; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
+        .area-navegacao { margin-bottom: 20px; }
+        .btn-voltar { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;}
         
-        /* CSS para as caixas de edição dentro da tabela */
-        .inp-tabela { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9em; }
-        .inp-tabela:focus { border-color: #007bff; outline: none; }
-        .destaque-venda { background-color: #e8f5e9; font-weight: bold; }
+        .btn-primario { background: var(--purple-pill); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: opacity 0.2s;}
+        .btn-primario:hover { opacity: 0.8; }
+        .btn-primario:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ================= ÁREA DE UPLOAD E TABELA ================= */
+        .area-upload { border: 2px dashed var(--purple-pill); padding: 40px 20px; text-align: center; border-radius: 12px; background: rgba(0,0,0,0.1); margin-bottom: 20px;}
+        .area-upload p { color: var(--text-muted); margin-bottom: 15px; font-size: 1.1em; }
+        input[type="file"] { font-size: 1em; padding: 10px; cursor: pointer; color: var(--text-main); background: var(--bg-color); border-radius: 6px; border: 1px solid var(--border-color);}
+
+        .table-container { overflow-x: auto; margin-top: 20px; border-radius: 8px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 1000px;}
+        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); text-align: left; }
+        th { background-color: rgba(130, 115, 246, 0.1); color: var(--purple-pill); font-weight: bold; white-space: nowrap;}
+        
+        /* Inputs Editáveis na Tabela */
+        .inp-tabela { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95em; background: var(--bg-color); color: var(--text-main); outline: none; transition: border-color 0.2s;}
+        .inp-tabela:focus { border-color: var(--accent-neon); }
+        .destaque-venda { color: var(--accent-neon); font-weight: bold; border-color: rgba(164, 227, 32, 0.3);}
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
 
 <body>
-
-    <div style="max-width: 1300px; margin: 0 auto;">
-        <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
-
-        <button class="btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
-        <div id="status" class="info">Autenticando sessão...</div>
-    </div>
-
-    <div id="app" class="card" style="display: none;">
-        <h2>📥 Importação de NF-e (Produtos)</h2>
-        
-        <div class="area-upload">
-            <p>Selecione o ficheiro XML da Nota Fiscal para extrair os produtos.</p>
-            <input type="file" id="ficheiro-xml" accept=".xml">
+    <!-- [INÍCIO: CABEÇALHO] -->
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> Gestão de Estoque
         </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+            <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
+        </div>
+    </header>
+    <!-- [FIM: CABEÇALHO] -->
 
-        <div id="area-revisao" style="display: none;">
-            <h3 style="color: #28a745;">✅ Dados Editáveis Prontos para Revisão</h3>
-            <p>Verifique ou altere os valores abaixo antes de guardar. A Margem Sugerida (30%) já foi aplicada no Preço de Venda.</p>
+    <div class="container">
+        <div class="area-navegacao">
+            <button class="btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
+        </div>
+        
+        <div id="status" class="info">Autenticando sessão segura...</div>
+
+        <!-- [INÍCIO: PAINEL DE IMPORTAÇÃO] -->
+        <div id="app" class="card" style="display: none;">
+            <h2 style="margin-top: 0; color: var(--text-main);">📥 Importação de NF-e (Produtos)</h2>
             
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cód.</th>
-                            <th>EAN</th>
-                            <th>Produto</th>
-                            <th>NCM</th>
-                            <th>CEST</th>
-                            <th>CFOP</th>
-                            <th>Unid.</th>
-                            <th>Qtd.</th>
-                            <th>V. Custo (R$)</th>
-                            <th>V. Venda (30%)</th>
-                            <th>V. Total (R$)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-corpo">
-                        <!-- Os inputs serão injetados aqui -->
-                    </tbody>
-                </table>
+            <div class="area-upload">
+                <p>Selecione o ficheiro XML da Nota Fiscal para extrair os produtos.</p>
+                <input type="file" id="ficheiro-xml" accept=".xml">
             </div>
 
-            <button id="btn-salvar-lote" class="btn-primario">💾 Confirmar e Salvar Produtos no Banco</button>
+            <!-- Área Oculta: Tabela de Revisão -->
+            <div id="area-revisao" style="display: none;">
+                <h3 style="color: var(--accent-neon); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">✅ Dados Prontos para Revisão</h3>
+                <p style="color: var(--text-muted); font-size: 0.9em;">Verifique ou altere os valores abaixo antes de guardar. A Margem de Lucro Sugerida (30%) já foi aplicada no Preço de Venda.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cód.</th>
+                                <th>EAN</th>
+                                <th>Produto</th>
+                                <th>NCM</th>
+                                <th>CEST</th>
+                                <th>CFOP</th>
+                                <th>Unid.</th>
+                                <th>Qtd.</th>
+                                <th>V. Custo (R$)</th>
+                                <th>V. Venda (30%)</th>
+                                <th>V. Total (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-corpo">
+                            <!-- Os inputs serão injetados aqui via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="btn-salvar-lote" class="btn-primario">💾 Confirmar e Salvar Produtos no Banco</button>
+            </div>
         </div>
+        <!-- [FIM: PAINEL DE IMPORTAÇÃO] -->
     </div>
 
-    
-
-    <!-- Importação Centralizada -->
+    <!-- [INÍCIO: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
     <script src="supabase_config.js"></script>
 
     <script>
-        /* ================= VALIDAÇÃO DE SESSÃO ================= */
+        /* ================= ALTERNADOR DE TEMA ================= */
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        }
+
+        /* ================= VALIDAÇÃO ZERO TRUST DA SESSÃO ================= */
         document.addEventListener('DOMContentLoaded', async () => {
+            // Herda o tema do sistema
+            if(localStorage.getItem('temaBevDistro') === 'light') document.body.classList.add('light-theme');
+
             const statusDiv = document.getElementById('status');
             const appDiv = document.getElementById('app');
             
             if (typeof clienteSupabase === 'undefined') {
-                statusDiv.textContent = "❌ Erro: supabase_config.js não encontrado.";
-                statusDiv.className = "info erro";
-                return;
+                statusDiv.textContent = "❌ Erro: Ficheiro supabase_config.js não encontrado.";
+                statusDiv.className = "info erro"; return;
             }
 
             try {
                 const { data: { session }, error } = await clienteSupabase.auth.getSession();
                 
-                if (error || !session) {
-                    return window.location.href = 'login.html';
-                }
+                if (error || !session) return window.location.href = 'login.html';
                 
-                statusDiv.textContent = `Logado de forma segura como: ${session.user.email}`;
-                statusDiv.style.backgroundColor = "transparent";
-                statusDiv.style.color = "#666";
+                statusDiv.style.display = "none";
                 appDiv.style.display = "block";
                 
             } catch (error) {
@@ -117,7 +179,8 @@
             }
         });
 
-        /* ================= LEITURA DE XML NO FRONTEND ================= */
+        /* ================= LEITURA DO XML NO FRONTEND ================= */
+        // Processa o ficheiro sem enviar para o servidor, poupando banda e aumentando segurança
         document.getElementById('ficheiro-xml').addEventListener('change', function(evento) {
             const ficheiro = evento.target.files[0];
             if (!ficheiro) return;
@@ -136,7 +199,7 @@
             tbody.innerHTML = ""; 
 
             if (itens.length === 0) {
-                alert("Nenhum produto encontrado neste XML.");
+                alert("Nenhum produto encontrado neste ficheiro XML.");
                 return;
             }
 
@@ -153,7 +216,8 @@
                 
                 const qtd = parseFloat(item.getElementsByTagName("qCom")[0]?.textContent || "0");
                 const precoCusto = parseFloat(item.getElementsByTagName("vUnCom")[0]?.textContent || "0");
-                // A regra de lucro de 30% agora é apenas visual no frontend. O backend forçará a margem real.
+                
+                // Cálculo de ecrã (O Backend validará o limite real de 30%)
                 const precoVenda = precoCusto * 1.30; 
                 const valorTotal = parseFloat(item.getElementsByTagName("vProd")[0]?.textContent || "0");
 
@@ -177,7 +241,7 @@
             document.getElementById('area-revisao').style.display = "block";
         }
 
-        /* ================= ENVIO SEGURO PARA O BACKEND ================= */
+        /* ================= ENVIO SEGURO PARA A RPC ================= */
         document.getElementById('btn-salvar-lote').addEventListener('click', async () => {
             const linhas = document.querySelectorAll('#tabela-corpo tr');
             if (linhas.length === 0) return;
@@ -204,28 +268,27 @@
             });
 
             try {
-                // A RPC "inserir_produtos_lote_seguro" agora possui lógica de UPSERT no backend
+                // Chama a RPC Segura que executa o UPSERT Matemático no Backend
                 const { error } = await clienteSupabase.rpc('inserir_produtos_lote_seguro', {
                     p_itens: produtosProntosParaEnvio
                 });
 
                 if (error) throw error;
 
-                alert("✅ Produtos importados e consolidados com sucesso!");
+                alert("✅ Produtos importados e consolidados no stock com sucesso!");
                 window.location.href = 'listar.html'; 
                 
             } catch (erro) {
                 console.error(erro);
-                alert("❌ Erro ao gravar no banco: Verifique o log do console.");
+                alert("❌ Erro ao gravar no banco. Verifique a sua conexão.");
                 btn.textContent = "💾 Confirmar e Salvar Produtos no Banco";
                 btn.disabled = false;
             }
         });
     </script>
-
-
-
-
-
+    <!-- [FIM: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
 </body>
 </html>
+
+    
+    
