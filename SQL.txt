@@ -420,6 +420,94 @@ NOTIFY pgrst, 'reload schema';
 
 
 
+/* [INÍCIO: SQL_CRIACAO_PROFILES_E_STORAGE] */
+
+-- =======================================================================================
+-- 1. CRIAÇÃO DA TABELA PROFILES (O ESPELHO DA EMPRESA)
+-- =======================================================================================
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    nome text,
+    cargo text DEFAULT 'administrador',
+    foto_avatar text,
+    criado_em timestamp with time zone DEFAULT now()
+);
+
+-- Ativa a segurança rigorosa de linhas
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Regra 1: Qualquer utilizador com login pode ver os perfis
+CREATE POLICY "Leitura de perfis para autenticados" 
+ON public.profiles FOR SELECT TO authenticated USING (true);
+
+-- Regra 2: ZERO TRUST. Um utilizador só pode editar a linha onde o ID for exatamente igual ao seu
+CREATE POLICY "Utilizador atualiza o proprio perfil" 
+ON public.profiles FOR UPDATE TO authenticated USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+
+-- Regra 3: Permite ao utilizador inserir o seu próprio perfil (necessário para a retroatividade)
+CREATE POLICY "Utilizador insere o proprio perfil" 
+ON public.profiles FOR INSERT TO authenticated WITH CHECK (auth.uid() = id);
+
+-- =======================================================================================
+-- 2. GATILHO (TRIGGER) DE SINCRONIZAÇÃO AUTOMÁTICA
+-- =======================================================================================
+CREATE OR REPLACE FUNCTION public.sincronizar_novo_usuario()
+RETURNS TRIGGER 
+LANGUAGE plpgsql 
+SECURITY DEFINER 
+AS $$
+BEGIN
+    INSERT INTO public.profiles (id, nome)
+    VALUES (NEW.id, COALESCE(NEW.raw_user_meta_data->>'full_name', 'Nome da Empresa'));
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trigger_criar_perfil_automatico ON auth.users;
+
+CREATE TRIGGER trigger_criar_perfil_automatico
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.sincronizar_novo_usuario();
+
+-- =======================================================================================
+-- 3. CORREÇÃO RETROATIVA: CRIA O PERFIL DE QUEM JÁ TINHA CONTA
+-- =======================================================================================
+INSERT INTO public.profiles (id, nome)
+SELECT id, 'Nome da Empresa' FROM auth.users
+ON CONFLICT (id) DO NOTHING;
+
+-- =======================================================================================
+-- 4. CRIAÇÃO DO STORAGE "FOTO_AVATAR" BLINDADO
+-- =======================================================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('foto_avatar', 'foto_avatar', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Todos podem ver os avatares (necessário para o site exibir)
+CREATE POLICY "Avatares de leitura publica" 
+ON storage.objects FOR SELECT USING (bucket_id = 'foto_avatar');
+
+-- Inserção Nível Bancário: Tipos válidos, menores que 2MB
+CREATE POLICY "Upload seguro de avatar proprio" 
+ON storage.objects FOR INSERT TO authenticated 
+WITH CHECK (
+    bucket_id = 'foto_avatar' 
+    AND (storage.extension(name) IN ('jpg', 'png', 'webp', 'jpeg'))
+    AND (length(COALESCE(metadata->>'size', '0')::text) < 2097152)
+);
+
+CREATE POLICY "Atualizacao segura de avatar proprio" 
+ON storage.objects FOR UPDATE TO authenticated 
+USING (bucket_id = 'foto_avatar') WITH CHECK (bucket_id = 'foto_avatar');
+
+CREATE POLICY "Deletar avatar proprio" 
+ON storage.objects FOR DELETE TO authenticated 
+USING (bucket_id = 'foto_avatar');
+
+-- Atualiza o cache interno da API do Supabase
+NOTIFY pgrst, 'reload schema';
+
+/* [FIM: SQL_CRIACAO_PROFILES_E_STORAGE] */
 
 
 
