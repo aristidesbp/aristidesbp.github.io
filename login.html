@@ -135,7 +135,7 @@
                 
                 statusDiv.textContent = "✅ Autenticado! Entrando...";
                 statusDiv.className = "info sucesso";
-                setTimeout(() => { window.location.href = 'listar.html'; }, 1000);
+                setTimeout(() => { window.location.href = 'menu.html'; }, 1000);
             } catch (erro) {
                 console.error(erro);
                 statusDiv.textContent = "❌ Erro no login: Credenciais incorretas.";
@@ -193,7 +193,7 @@
                 if (credential) {
                     statusDiv.textContent = "✅ Identidade Confirmada!";
                     statusDiv.className = "info sucesso";
-                    setTimeout(() => { window.location.href = 'listar.html'; }, 800);
+                    setTimeout(() => { window.location.href = 'menu.html'; }, 800);
                 }
             } catch (error) {
                 console.error(error);
