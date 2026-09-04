@@ -120,6 +120,26 @@ exemplo: <!--formulario--><div id="formulário"> código </div><!--/formulário-
 REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
 lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
+# SQL PARA VERIFICAR RLS
+```
+-- [INÍCIO: EXTRACAO_POLITICAS_RLS]
+SELECT 
+    schemaname AS "Esquema", 
+    tablename AS "Tabela", 
+    policyname AS "Nome_da_Politica", 
+    roles AS "Perfis_Afetados", 
+    cmd AS "Operacao_Permitida", 
+    qual AS "Condicao_de_Leitura_USING", 
+    with_check AS "Condicao_de_Escrita_WITH_CHECK"
+FROM 
+    pg_policies 
+WHERE 
+    schemaname = 'public'
+ORDER BY 
+    tablename, cmd;
+-- [FIM: EXTRACAO_POLITICAS_RLS]
+```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
