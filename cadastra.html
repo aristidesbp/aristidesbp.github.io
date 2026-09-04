@@ -1,108 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Produto - ERP</title>
+    <title>Cadastro de Produto - ERP BevDistro</title>
     
     <style>
         /* ================= DESIGN SYSTEM & THEMES ================= */
         :root {
-            --bg-color: #0b1320; 
-            --card-bg: #151f2b;  
-            --text-main: #ffffff;
-            --text-muted: #8b9eb3;
-            --accent-neon: #a4e320; 
-            --accent-hover: #8cc21a;
-            --purple-pill: #8273f6;
-            --border-color: #2a3645;
-            --danger-color: #ff4d4d;
-            --info-color: #17a2b8;
+            --bg-color: #0b1320; --card-bg: #151f2b; --text-main: #ffffff;
+            --text-muted: #8b9eb3; --accent-neon: #a4e320; --accent-hover: #8cc21a;
+            --purple-pill: #8273f6; --border-color: #2a3645;
+            --danger-color: #ff4d4d; --info-color: #17a2b8;
         }
 
         .light-theme {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #6c757d;
-            --accent-neon: #28a745;
-            --accent-hover: #218838;
-            --purple-pill: #6f42c1;
-            --border-color: #e0e0e0;
-            --danger-color: #dc3545;
+            --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #1a1a1a;
+            --text-muted: #6c757d; --accent-neon: #28a745; --accent-hover: #218838;
+            --purple-pill: #6f42c1; --border-color: #e0e0e0; --danger-color: #dc3545;
         }
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
         
-        /* ================= HEADER ================= */
-        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
-        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
-        .logo-icon { color: var(--accent-neon); }
-        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; }
-
-        /* ================= ESTRUTURA GERAL ================= */
         .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
-        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; border: 1px solid var(--info-color); text-align: center;}
-        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin-bottom: 20px;}
         
         .area-navegacao { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .btn { padding: 12px 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: bold; transition: opacity 0.2s, transform 0.1s;}
-        .btn:hover { opacity: 0.8; }
-        .btn:active { transform: scale(0.98); }
+        .btn:hover { opacity: 0.8; } .btn:active { transform: scale(0.98); }
         .btn-voltar { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
         .btn-importar { background: var(--purple-pill); color: white; }
         .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; font-size: 1.1em; margin-top: 20px;}
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ================= FORMULÁRIO ================= */
         .secao-form { background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 20px; }
         .secao-titulo { font-size: 1.1em; color: var(--accent-neon); margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
         
         label { font-weight: bold; color: var(--text-muted); font-size: 0.85em; display: block; margin-bottom: 5px;}
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); outline: none; transition: border-color 0.2s;}
-        input:focus, select:focus { border-color: var(--accent-neon); }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); outline: none; transition: border-color 0.2s; font-family: inherit;}
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-neon); }
+        textarea { resize: vertical; min-height: 80px; }
         
         .linha-form { display: flex; gap: 15px; flex-wrap: wrap; }
         .coluna-form { flex: 1; min-width: 250px; }
-
         .input-group { display: flex; gap: 10px; align-items: flex-start; }
         .input-group input { margin-bottom: 0; }
         .btn-scan { background: var(--info-color); color: white; padding: 0 20px; height: 43px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; cursor: pointer;}
 
-        /* ================= MODAIS & IMAGENS ================= */
+        /* ================= ÁREA DA FOTO DO PRODUTO ================= */
+        .area-logo-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);}
+        /* Imagem de produto quadrada com bordas arredondadas (diferente do avatar) */
+        .img-preview { width: 150px; height: 150px; border-radius: 12px; object-fit: contain; border: 2px solid var(--border-color); background-color: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px;}
+        .botoes-imagem { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; justify-content: center;}
+        .btn-acao-img { padding: 10px 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9em; transition: opacity 0.2s; color: white;}
+        .btn-camera { background-color: var(--info-color); }
+        .btn-galeria { background-color: var(--border-color); color: var(--text-main); }
+
         #scanner-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         #reader { width: 100%; max-width: 500px; background: white; border-radius: 12px; overflow: hidden; }
-        .img-preview { max-width: 150px; border-radius: 8px; margin: 10px 0; border: 1px solid var(--border-color); display: block; object-fit: contain; background: var(--bg-color);}
     </style>
-
-    <!-- Bibliotecas Obrigatórias -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
-<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
-
-
-<body>
+<!-- [FIM: BLOCO 1 - HEAD E CSS] -->
 
 
 
+    <body>
+    <!-- Navbar.js injetará o cabeçalho seguro e dinâmico aqui automaticamente -->
 
-        
+    <div class="container">
+        <div class="area-navegacao">
+            <button class="btn btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
+            <button class="btn btn-importar" onclick="window.location.href='importar_nfe.html'">📥 Importar NF-e (XML)</button>
+        </div>
 
-    <!-- [INÍCIO: FORMULÁRIO DE CADASTRO] -->
-        <div id="app" class="card" style="display: none;">
+        <div id="app" class="card">
             <h2 id="titulo-pagina" style="margin-top: 0;">➕ Cadastrar Novo Produto</h2>
             
             <form id="form-produto">
                 <input type="hidden" id="input-id">
                 
+                <!-- FOTO NO TOPO COM COMPRESSÃO -->
+                <div class="secao-form">
+                    <h3 class="secao-titulo">📸 Imagem do Produto</h3>
+                    <div class="area-logo-preview">
+                        <img id="img-atual" class="img-preview" src="https://via.placeholder.com/150?text=Sem+Foto" alt="Produto">
+                        <div class="botoes-imagem">
+                            <button type="button" class="btn-acao-img btn-camera" onclick="document.getElementById('input-camera-produto').click()">📷 Câmera (Foto)</button>
+                            <button type="button" class="btn-acao-img btn-galeria" onclick="document.getElementById('input-galeria-produto').click()">📁 Arquivo</button>
+                        </div>
+                        <input type="file" id="input-camera-produto" accept="image/*" capture="environment" style="display: none;" onchange="processarImagemSelecionada(event)">
+                        <input type="file" id="input-galeria-produto" accept="image/*" style="display: none;" onchange="processarImagemSelecionada(event)">
+                        <p id="status-img" style="color: var(--accent-neon); font-size: 0.85em; display: none; margin-top: 10px;"></p>
+                    </div>
+                </div>
+
                 <div class="secao-form">
                     <h3 class="secao-titulo">📦 Dados Gerais</h3>
                     <label for="input-nome">Nome do Produto:</label>
                     <input type="text" id="input-nome" placeholder="Ex: Cerveja Artesanal IPA 500ml" required>
+
+                    <!-- NOVO CAMPO: DESCRIÇÃO -->
+                    <label for="input-descricao">Descrição / Detalhes:</label>
+                    <textarea id="input-descricao" placeholder="Escreva os detalhes, ingredientes ou especificações técnicas do produto..."></textarea>
 
                     <div class="linha-form">
                         <div class="coluna-form">
@@ -114,8 +113,7 @@
                             <select id="input-origem">
                                 <option value="">Selecione...</option>
                                 <option value="0 - Nacional">0 - Nacional</option>
-                                <option value="1 - Estrangeira (Importação Direta)">1 - Estrangeira (Importação Direta)</option>
-                                <option value="2 - Estrangeira (Mercado Interno)">2 - Estrangeira (Mercado Interno)</option>
+                                <option value="1 - Estrangeira">1 - Estrangeira</option>
                             </select>
                         </div>
                         <div class="coluna-form">
@@ -136,10 +134,6 @@
                             <label for="input-preco-venda">Preço de Venda (R$):</label>
                             <input type="number" id="input-preco-venda" step="any" placeholder="0.00" required>
                         </div>
-                        <div class="coluna-form">
-                            <label for="input-total">Valor Total Ref. (R$):</label>
-                            <input type="number" id="input-total" step="any" placeholder="0.00">
-                        </div>
                     </div>
                     <div class="linha-form">
                         <div class="coluna-form">
@@ -154,194 +148,138 @@
                 </div>
 
                 <div class="secao-form">
-                    <h3 class="secao-titulo">🚚 Logística</h3>
+                    <h3 class="secao-titulo">🧾 Códigos de Barras e Logística</h3>
                     <div class="linha-form">
-                        <div class="coluna-form">
-                            <label for="input-local-estoque">Local no Armazém/Estoque:</label>
-                            <input type="text" id="input-local-estoque" placeholder="Ex: Corredor B, Prateleira 4">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-local-loja">Local na Loja:</label>
-                            <input type="text" id="input-local-loja" placeholder="Ex: Geladeira 2">
-                        </div>
-                    </div>
-                    <div class="linha-form">
-                        <div class="coluna-form">
-                            <label for="input-tipo-embalagem">Tipo de Embalagem:</label>
-                            <input type="text" id="input-tipo-embalagem" placeholder="Ex: Unidade, Fardo, Caixa">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-peso">Peso Líquido (Kg):</label>
-                            <input type="number" id="input-peso" step="any" placeholder="Ex: 0.5">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-dimensoes">Tamanho/Dimensões:</label>
-                            <input type="text" id="input-dimensoes" placeholder="Ex: 10x20x5 cm">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="secao-form">
-                    <h3 class="secao-titulo">🧾 Fiscal e Códigos</h3>
-                    <div class="linha-form">
-                        <div class="coluna-form">
-                            <label for="input-codigo">Código Interno:</label>
-                            <input type="text" id="input-codigo" placeholder="Ex: 563657">
-                        </div>
                         <div class="coluna-form">
                             <label for="input-ean">EAN (Código de Barras):</label>
                             <div class="input-group">
                                 <input type="text" id="input-ean" placeholder="Ex: 7891025109884">
-                                <button type="button" id="btn-abrir-camera" class="btn-scan" title="Ligar Câmera">📷</button>
+                                <button type="button" id="btn-abrir-camera" class="btn-scan" title="Ligar Câmera">📷 Ler EAN</button>
                             </div>
                         </div>
+                        <div class="coluna-form">
+                            <label for="input-codigo">Código Interno:</label>
+                            <input type="text" id="input-codigo" placeholder="Ex: 563657">
+                        </div>
                     </div>
+                    <!-- Campos fiscais ocultos para brevidade no visual (NCM, CEST, etc. podem ser adicionados no backend) -->
                     <div class="linha-form">
-                        <div class="coluna-form">
-                            <label for="input-ncm">NCM:</label>
-                            <input type="text" id="input-ncm" placeholder="Ex: 22030000">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-cest">CEST:</label>
-                            <input type="text" id="input-cest" placeholder="Ex: 0300100">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-cfop">CFOP:</label>
-                            <input type="text" id="input-cfop" placeholder="Ex: 5102">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-unid">Unid. Comercial:</label>
-                            <input type="text" id="input-unid" placeholder="Ex: UN, CX, L">
-                        </div>
+                        <div class="coluna-form"><label>NCM:</label><input type="text" id="input-ncm"></div>
+                        <div class="coluna-form"><label>Unid. Comercial:</label><input type="text" id="input-unid"></div>
                     </div>
-                </div>
-
-                <div class="secao-form">
-                    <h3 class="secao-titulo">📅 Datas e Imagem</h3>
-                    <div class="linha-form">
-                        <div class="coluna-form">
-                            <label for="input-data-compra">Data da Compra:</label>
-                            <input type="date" id="input-data-compra">
-                        </div>
-                        <div class="coluna-form">
-                            <label for="input-data-vencimento">Data de Validade/Vencimento:</label>
-                            <input type="date" id="input-data-vencimento">
-                        </div>
-                    </div>
-
-                    <div id="area-foto-atual" style="display: none; margin-top: 15px;">
-                        <label>Foto Atual:</label>
-                        <img id="img-atual" class="img-preview" src="" alt="Sem foto">
-                    </div>
-
-                    <label for="input-foto" style="margin-top: 15px; display: block;">Foto do Produto (Máx 2MB):</label>
-                    <input type="file" id="input-foto" accept="image/png, image/jpeg, image/webp" style="padding: 9px;">
                 </div>
 
                 <button type="submit" id="btn-enviar-dados" class="btn btn-neon">💾 Salvar Produto</button>
             </form>
         </div> 
     </div>
-    <!-- [FIM: FORMULÁRIO DE CADASTRO] -->
 
-    <!-- [INÍCIO: MODAL SCANNER] -->
+    <!-- Modal do Scanner de Código de Barras -->
     <div id="scanner-container">
         <h3 style="color: white; margin-bottom: 15px;">Aponte para o Código de Barras</h3>
         <div id="reader"></div>
         <button type="button" id="btn-fechar-camera" class="btn" style="background: var(--danger-color); color: white; margin-top: 20px; padding: 15px 30px;">❌ Cancelar</button>
     </div>
-    <!-- [FIM: MODAL SCANNER] -->
-    <!-- [INÍCIO: LÓGICA JAVASCRIPT SEGURA] -->
+<!-- [FIM: BLOCO 2 - HTML BODY] -->
+
+
+            <!-- Bibliotecas Obrigatórias -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+    <!-- Scripts de Segurança e Navegação Globais -->
     <script src="supabase_config.js"></script>
     <script src="navbar.js"></script>
 
-    
     <script>
         /* ================= VARIÁVEIS GLOBAIS ================= */
         let modoEdicao = false; 
         let urlFotoAntiga = null;
+        let arquivoFotoProntoParaUpload = null;
         let html5QrCode = null; 
 
-        /* ================= ALTERNADOR DE TEMA ================= */
-        function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        /* ================= COMPRESSÃO DE IMAGENS DO PRODUTO ================= */
+        async function comprimirImagemParaUpload(arquivoOriginal) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(arquivoOriginal);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; const MAX_HEIGHT = 800;
+                        let width = img.width; let height = img.height;
+                        if (width > height) {
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        } else {
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob((blob) => {
+                            const nomeLimpo = "produto_" + Date.now() + ".jpg";
+                            resolve(new File([blob], nomeLimpo, { type: 'image/jpeg', lastModified: Date.now() }));
+                        }, 'image/jpeg', 0.8);
+                    };
+                    img.onerror = (e) => reject(e);
+                };
+                reader.onerror = (e) => reject(e);
+            });
         }
 
-        /* ================= FUNÇÕES UTILITÁRIAS DE FOTOS ================= */
-        function gerarNomeSeguroArquivo(nomeProduto, arquivoOriginal) {
-            let nomeLimpo = nomeProduto.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            nomeLimpo = nomeLimpo.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-            const extensao = arquivoOriginal.name.split('.').pop();
-            return `${nomeLimpo}-${Date.now()}.${extensao}`;
+        async function processarImagemSelecionada(event) {
+            const arquivoBruto = event.target.files[0];
+            if (!arquivoBruto) return;
+            try {
+                const statusTxt = document.getElementById('status-img');
+                statusTxt.style.display = "block";
+                statusTxt.textContent = "⏳ A otimizar a imagem para o banco de dados...";
+                
+                arquivoFotoProntoParaUpload = await comprimirImagemParaUpload(arquivoBruto);
+                document.getElementById('img-atual').src = URL.createObjectURL(arquivoFotoProntoParaUpload);
+                statusTxt.style.display = "none";
+            } catch (error) {
+                alert("Erro ao processar a imagem da câmara.");
+            }
         }
 
         async function apagarFotoNoStorage(urlDaFoto) {
             try {
-                const nomeLimpo = urlDaFoto.split('/').pop().split('?')[0];
-                const nomeDoArquivo = decodeURIComponent(nomeLimpo);
+                const nomeDoArquivo = decodeURIComponent(urlDaFoto.split('/').pop().split('?')[0]);
                 await clienteSupabase.storage.from('equipamentos_fotos').remove([nomeDoArquivo]);
-            } catch (err) { console.error("Aviso: Falha ao tentar limpar foto órfã.", err); }
+            } catch (err) { console.log("Aviso: Limpeza de foto órfã falhou."); }
         }
 
-        /* ================= LEITOR DE CÓDIGO DE BARRAS ================= */
+        /* ================= LEITOR DE CÓDIGO DE BARRAS (EAN) ================= */
         document.getElementById('btn-abrir-camera').addEventListener('click', () => {
             const scannerContainer = document.getElementById('scanner-container');
             scannerContainer.style.display = 'flex';
             html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 100 } };
-            
-            html5QrCode.start({ facingMode: "environment" }, config, (codigoLido) => {
+            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 100 } }, (codigoLido) => {
                 document.getElementById('input-ean').value = codigoLido;
                 html5QrCode.stop().then(() => scannerContainer.style.display = 'none');
             }).catch(() => {
-                alert("Erro ao aceder à câmara. Verifique as permissões do navegador.");
-                scannerContainer.style.display = 'none';
+                alert("Erro ao aceder à câmara."); scannerContainer.style.display = 'none';
             });
         });
-
         document.getElementById('btn-fechar-camera').addEventListener('click', () => {
             if (html5QrCode) html5QrCode.stop().then(() => document.getElementById('scanner-container').style.display = 'none');
         });
 
         /* ================= INICIALIZAÇÃO DA PÁGINA (READ) ================= */
         document.addEventListener('DOMContentLoaded', async () => {
-            // Herda o tema do sistema
-            if(localStorage.getItem('temaBevDistro') === 'light') document.body.classList.add('light-theme');
+            // A verificação de sessão é feita pelo navbar.js. Aqui focamos apenas nos dados.
+            const parametrosUrl = new URLSearchParams(window.location.search);
+            const idProduto = parametrosUrl.get('id');
 
-            const statusDiv = document.getElementById('status');
-            const appDiv = document.getElementById('app');
-
-            if (typeof clienteSupabase === 'undefined') {
-                statusDiv.textContent = "❌ Ficheiro supabase_config.js não encontrado.";
-                statusDiv.className = "info erro";
-                return;
-            }
-
-            try {
-                // Validação Zero Trust de Sessão
-                const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
-                if (sessionError || !session) {
-                    statusDiv.textContent = "Sessão expirada. Redirecionando...";
-                    return window.location.href = 'login.html';
-                }
-
-                // Lógica de Preenchimento para Edição
-                const parametrosUrl = new URLSearchParams(window.location.search);
-                const idProduto = parametrosUrl.get('id');
-
-                if (idProduto) {
-                    modoEdicao = true;
-                    document.getElementById('titulo-pagina').textContent = "✏️ Editar Produto";
-                    statusDiv.textContent = "A carregar dados do ERP...";
-                    
-                    const { data, error } = await clienteSupabase
-                        .from('produtos')
-                        .select('*')
-                        .eq('id', idProduto)
-                        .single();
-
+            if (idProduto) {
+                modoEdicao = true;
+                document.getElementById('titulo-pagina').textContent = "✏️ Editar Produto";
+                
+                try {
+                    const { data, error } = await clienteSupabase.from('produtos').select('*').eq('id', idProduto).single();
                     if (error) throw error;
 
                     document.getElementById('input-id').value = data.id;
@@ -349,78 +287,62 @@
                     document.getElementById('input-categoria').value = data.categoria || '';
                     document.getElementById('input-origem').value = data.origem || '';
                     document.getElementById('input-fornecedor').value = data.fornecedor || '';
-                    
                     document.getElementById('input-preco-custo').value = data.preco_custo || '';
                     document.getElementById('input-preco-venda').value = data.preco || ''; 
-                    document.getElementById('input-total').value = data.valor_total || '';
                     document.getElementById('input-estoque').value = data.quantidade || 0; 
                     document.getElementById('input-estoque-minimo').value = data.estoque_minimo || 0;
-
-                    document.getElementById('input-local-estoque').value = data.local_estoque || '';
-                    document.getElementById('input-local-loja').value = data.local_loja || '';
-                    document.getElementById('input-tipo-embalagem').value = data.tipo_embalagem || '';
-                    document.getElementById('input-peso').value = data.peso_liquido || '';
-                    document.getElementById('input-dimensoes').value = data.dimensoes || '';
-
                     document.getElementById('input-codigo').value = data.codigo_produto || '';
                     document.getElementById('input-ean').value = data.ean || '';
                     document.getElementById('input-ncm').value = data.ncm || '';
-                    document.getElementById('input-cest').value = data.cest || '';
-                    document.getElementById('input-cfop').value = data.cfop || '';
                     document.getElementById('input-unid').value = data.unidade_comercial || '';
                     
-                    document.getElementById('input-data-compra').value = data.data_compra || '';
-                    document.getElementById('input-data-vencimento').value = data.data_vencimento || '';
+                    // Tratamento do novo campo Descrição (dentro do JSONB)
+                    if (data.especificacoes && data.especificacoes.descricao) {
+                        document.getElementById('input-descricao').value = data.especificacoes.descricao;
+                    }
 
                     urlFotoAntiga = data.foto_url; 
                     if (data.foto_url) {
-                        document.getElementById('area-foto-atual').style.display = 'block';
                         document.getElementById('img-atual').src = data.foto_url;
                     }
+                } catch (error) {
+                    console.error("Erro ao puxar dados do produto", error);
                 }
-
-                statusDiv.style.display = "none";
-                appDiv.style.display = "block";
-
-            } catch (error) {
-                statusDiv.textContent = "❌ Erro de conexão com o Banco de Dados.";
-                statusDiv.className = "info erro";
             }
         });
 
         /* ================= GRAVAÇÃO DE DADOS (WRITE) ================= */
         document.getElementById('form-produto').addEventListener('submit', async (evento) => {
             evento.preventDefault(); 
-            
             const btnSubmit = document.getElementById('btn-enviar-dados');
-            btnSubmit.textContent = "⏳ A processar...";
+            btnSubmit.textContent = "⏳ A processar no Servidor...";
             btnSubmit.disabled = true;
 
             const getStr = (id) => document.getElementById(id).value;
             const getNum = (id) => parseFloat(document.getElementById(id).value) || 0;
-            const getDate = (id) => document.getElementById(id).value ? document.getElementById(id).value : null;
-
-            const arquivoFoto = document.getElementById('input-foto').files[0]; 
 
             try {
                 let urlFinalDaFoto = urlFotoAntiga; 
                 
-                // Validação e Envio de Imagem Segura
-                if (arquivoFoto) {
-                    if (arquivoFoto.size > 2 * 1024 * 1024) throw new Error("A imagem excede 2MB. Escolha uma foto mais leve.");
+                // Validação e Envio da Imagem Comprimida
+                if (arquivoFotoProntoParaUpload) {
                     if (modoEdicao && urlFotoAntiga != null) await apagarFotoNoStorage(urlFotoAntiga);
                     
-                    const nomeUnicoSeguro = gerarNomeSeguroArquivo(getStr('input-nome'), arquivoFoto);
+                    // Usa o timestamp para garantir um nome único no Storage
+                    const nomeUnicoSeguro = `produto_${Date.now()}.jpg`;
                     const { error: uploadError } = await clienteSupabase.storage
                         .from('equipamentos_fotos')
-                        .upload(nomeUnicoSeguro, arquivoFoto);
+                        .upload(nomeUnicoSeguro, arquivoFotoProntoParaUpload);
 
                     if (uploadError) throw uploadError;
-                    
-                    const { data: urlData } = clienteSupabase.storage
-                        .from('equipamentos_fotos').getPublicUrl(nomeUnicoSeguro);
+                    const { data: urlData } = clienteSupabase.storage.from('equipamentos_fotos').getPublicUrl(nomeUnicoSeguro);
                     urlFinalDaFoto = urlData.publicUrl; 
                 }
+
+                // Cria o payload da descrição no formato JSONB esperado pelo banco
+                const especificacoesJSON = {
+                    descricao: getStr('input-descricao')
+                };
 
                 const payload = {
                     p_nome: getStr('input-nome'),
@@ -429,49 +351,40 @@
                     p_codigo_produto: getStr('input-codigo'),
                     p_ean: getStr('input-ean'),
                     p_ncm: getStr('input-ncm'),
-                    p_cest: getStr('input-cest'),
-                    p_cfop: getStr('input-cfop'),
                     p_unidade_comercial: getStr('input-unid'),
                     p_quantidade: getNum('input-estoque'),
-                    p_valor_total: getNum('input-total'),
                     p_fornecedor: getStr('input-fornecedor'),
                     p_preco_custo: getNum('input-preco-custo'),
                     p_estoque_minimo: getNum('input-estoque-minimo'),
                     p_origem: getStr('input-origem'),
-                    p_local_estoque: getStr('input-local-estoque'),
-                    p_local_loja: getStr('input-local-loja'),
-                    p_tipo_embalagem: getStr('input-tipo-embalagem'),
                     p_categoria: getStr('input-categoria'),
-                    p_peso_liquido: getNum('input-peso'),
-                    p_dimensoes: getStr('input-dimensoes'),
-                    p_data_compra: getDate('input-data-compra'),
-                    p_data_vencimento: getDate('input-data-vencimento')
+                    p_especificacoes: especificacoesJSON // AQUI VAI A DESCRIÇÃO!
                 };
 
-                // Despacha para RPC Nível Bancário
+                // AUDITORIA: ATENÇÃO AQUI! 
+                // Se a sua RPC "adicionar_produto_seguro" não aceitar "p_especificacoes", o Supabase vai rejeitar o envio.
                 if (modoEdicao) {
                     payload.p_id = getStr('input-id');
                     const { error } = await clienteSupabase.rpc('atualizar_produto_seguro', payload);
                     if (error) throw error;
-                    alert("✅ Produto atualizado com sucesso!");
                 } else {
                     const { error } = await clienteSupabase.rpc('adicionar_produto_seguro', payload);
                     if (error) throw error;
-                    alert("✅ Produto cadastrado com sucesso!");
                 }
 
+                alert("✅ Produto gravado com sucesso no estoque!");
                 window.location.href = 'listar.html';
 
             } catch (erro) {
                 console.error(erro);
-                alert("❌ Erro na operação: " + (erro.message || "Verifique os dados e tente novamente."));
+                alert("❌ Erro: " + (erro.message || "O Backend rejeitou a transação. Verifique se as RPCs aceitam 'p_especificacoes'."));
             } finally {
                 btnSubmit.textContent = "💾 Salvar Produto";
                 btnSubmit.disabled = false;
             }
         });
     </script>
-    <!-- [FIM: LÓGICA JAVASCRIPT SEGURA] -->
 </body>
 </html>
+
 
