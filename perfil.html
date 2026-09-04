@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações da Empresa - ERP BevDistro</title>
+    
+    <style>
+        /* ================= DESIGN SYSTEM & THEMES ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --purple-pill: #8273f6;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --info-color: #17a2b8;
+            --success-color: #28a745;
+        }
+
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --purple-pill: #6f42c1;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+            --success-color: #218838;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
+        
+        /* ================= HEADER ================= */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+        .logo-icon { color: var(--accent-neon); }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;}
+        .icon-btn:hover { opacity: 0.7; }
+
+        /* ================= ESTRUTURA GERAL ================= */
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid var(--info-color); margin-bottom: 20px;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin-bottom: 20px;}
+        
+        /* ================= FORMULÁRIO ================= */
+        .secao-titulo { font-size: 1.3em; color: var(--text-main); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; text-align: center;}
+        
+        label { font-weight: bold; color: var(--text-muted); font-size: 0.9em; display: block; margin-bottom: 8px;}
+        input[type="text"], input[type="file"] { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
+        input:focus { border-color: var(--accent-neon); }
+        input[type="file"] { padding: 9px; cursor: pointer; }
+
+        .btn-neon { background: var(--accent-neon); color: #000; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.1s, background-color 0.2s; }
+        .btn-neon:hover { background: var(--accent-hover); }
+        .btn-neon:active { transform: scale(0.98); }
+        .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ================= ÁREA DA LOGO ================= */
+        .area-logo-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 25px; padding: 20px; background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px dashed var(--border-color);}
+        .img-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--purple-pill); background-color: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px;}
+        
+        .badge-admin { background: var(--purple-pill); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold;}
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
+
+<body>
+    <!-- [INÍCIO: CABEÇALHO] -->
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> Gestão de Empresa
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+            <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
+        </div>
+    </header>
+    <!-- [FIM: CABEÇALHO] -->
+
+    <div class="container">
+        
+        <div id="status" class="info">A verificar integridade da sessão...</div>
+
+        <!-- [INÍCIO: PAINEL DE CONFIGURAÇÃO] -->
+        <div id="app" class="card" style="display: none;">
+            <h2 class="secao-titulo">Dados da Empresa / Perfil</h2>
+            
+            <form id="form-perfil">
+                
+                <!-- Área de Exibição da Logo -->
+                <div class="area-logo-preview">
+                    <img id="img-atual" class="img-preview" src="https://via.placeholder.com/150?text=Sem+Logo" alt="Logo da Empresa">
+                    <span class="badge-admin" id="badge-email">admin@empresa.com</span>
+                </div>
+
+                <!-- Campos de Edição -->
+                <label for="input-nome">Nome Comercial da Empresa:</label>
+                <input type="text" id="input-nome" placeholder="Ex: Bebidas Express" required>
+                
+                <label for="input-foto">Atualizar Logo (Máx 2MB - PNG/JPG/WEBP):</label>
+                <input type="file" id="input-foto" accept="image/png, image/jpeg, image/webp">
+
+                <button type="submit" id="btn-salvar" class="btn-neon">💾 Guardar Configurações</button>
+            </form>
+        </div>
+        <!-- [FIM: PAINEL DE CONFIGURAÇÃO] -->
+
+    </div>
+
+
+    <!-- [INÍCIO: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        /* ================= VARIÁVEIS GLOBAIS ================= */
+        let sessaoAtual = null;
+        let urlFotoAntiga = null;
+
+        /* ================= ALTERNADOR DE TEMA ================= */
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        }
+
+        /* ================= FUNÇÕES UTILITÁRIAS ================= */
+        function gerarNomeSeguroArquivo(arquivoOriginal, userId) {
+            // Usa o ID do usuário como "pasta" virtual e o timestamp para não haver colisões
+            const extensao = arquivoOriginal.name.split('.').pop();
+            return `${userId}/logo-${Date.now()}.${extensao}`;
+        }
+
+        async function apagarFotoNoStorage(urlDaFoto) {
+            try {
+                // Tenta apagar a foto antiga para não encher o servidor de lixo
+                const nomeLimpo = urlDaFoto.split('/').slice(-2).join('/'); // Pega a "pasta/arquivo"
+                const nomeDoArquivo = decodeURIComponent(nomeLimpo.split('?')[0]);
+                await clienteSupabase.storage.from('foto_avatar').remove([nomeDoArquivo]);
+            } catch (err) { console.error("Aviso: Falha ao apagar foto antiga.", err); }
+        }
+
+        /* ================= VERIFICAÇÃO E CARREGAMENTO DE DADOS ================= */
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(localStorage.getItem('temaBevDistro') === 'light') document.body.classList.add('light-theme');
+
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+            const badgeEmail = document.getElementById('badge-email');
+            
+            if (typeof clienteSupabase === 'undefined') {
+                statusDiv.textContent = "❌ Erro Crítico: supabase_config.js ausente.";
+                statusDiv.className = "info erro"; return;
+            }
+
+            try {
+                // 1. Auditoria Zero Trust: Validar Sessão
+                const { data: { session }, error } = await clienteSupabase.auth.getSession();
+                if (error || !session) return window.location.href = 'login.html';
+                
+                sessaoAtual = session;
+                badgeEmail.textContent = session.user.email;
+
+                // 2. Procurar os Dados da Empresa (Perfil) no Banco
+                const { data: perfil, error: perfilError } = await clienteSupabase
+                    .from('profiles')
+                    .select('nome, foto_avatar')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (perfilError && perfilError.code !== 'PGRST116') {
+                    throw perfilError; // Se o erro for diferente de "Não encontrou linha"
+                }
+
+                // 3. Preencher a Tela com os Dados Atuais
+                if (perfil) {
+                    if (perfil.nome) document.getElementById('input-nome').value = perfil.nome;
+                    if (perfil.foto_avatar) {
+                        document.getElementById('img-atual').src = perfil.foto_avatar;
+                        urlFotoAntiga = perfil.foto_avatar;
+                    }
+                }
+
+                statusDiv.style.display = "none";
+                appDiv.style.display = "block";
+                
+            } catch (error) {
+                console.error("Erro ao carregar perfil:", error);
+                statusDiv.textContent = "❌ Erro ao conectar com a base de dados de Perfis.";
+                statusDiv.className = "info erro";
+            }
+        });
+
+        /* ================= GRAVAÇÃO SEGURA DOS DADOS ================= */
+        document.getElementById('form-perfil').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); 
+            
+            const btnSubmit = document.getElementById('btn-salvar');
+            btnSubmit.textContent = "⏳ A gravar configurações...";
+            btnSubmit.disabled = true;
+
+            const novoNome = document.getElementById('input-nome').value.trim();
+            const arquivoFoto = document.getElementById('input-foto').files[0]; 
+
+            try {
+                let urlFinalDaFoto = urlFotoAntiga; 
+                
+                // Processo de Upload da Nova Logo
+                if (arquivoFoto) {
+                    // Proteção de Frontend (O backend também rejeitará via RLS)
+                    if (arquivoFoto.size > 2 * 1024 * 1024) throw new Error("A imagem excede 2MB.");
+                    
+                    // Apaga a velha se existir
+                    if (urlFotoAntiga != null) await apagarFotoNoStorage(urlFotoAntiga);
+                    
+                    const nomeUnico = gerarNomeSeguroArquivo(arquivoFoto, sessaoAtual.user.id);
+                    
+                    // Envia para o Bucket 'foto_avatar'
+                    const { error: uploadError } = await clienteSupabase.storage
+                        .from('foto_avatar')
+                        .upload(nomeUnico, arquivoFoto);
+
+                    if (uploadError) throw uploadError;
+                    
+                    // Pega o Link Público da imagem
+                    const { data: urlData } = clienteSupabase.storage
+                        .from('foto_avatar').getPublicUrl(nomeUnico);
+                    urlFinalDaFoto = urlData.publicUrl; 
+                    
+                    // Atualiza a imagem imediatamente na tela
+                    document.getElementById('img-atual').src = urlFinalDaFoto;
+                }
+
+                // Proteção do Supabase RLS exige que a atualização seja na linha do próprio auth.uid()
+                const { error: updateError } = await clienteSupabase
+                    .from('profiles')
+                    .update({ 
+                        nome: novoNome, 
+                        foto_avatar: urlFinalDaFoto 
+                    })
+                    .eq('id', sessaoAtual.user.id);
+
+                if (updateError) throw updateError;
+
+                alert("✅ Configurações da Empresa guardadas com sucesso!");
+                urlFotoAntiga = urlFinalDaFoto; // Atualiza a referência em memória
+
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro na operação: " + (erro.message || "Não foi possível guardar."));
+            } finally {
+                btnSubmit.textContent = "💾 Guardar Configurações";
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
+    <!-- [FIM: LÓGICA DE NEGÓCIO E SEGURANÇA] -->
+</body>
+</html>
+
+
+
