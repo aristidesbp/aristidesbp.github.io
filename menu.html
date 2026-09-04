@@ -75,18 +75,7 @@
 
 
 <body>
-    <!-- [INÍCIO: CABEÇALHO] -->
-    <header>
-        <div class="logo-area">
-            <span class="logo-icon">⚡</span> ERP BevDistro
-        </div>
-        <div class="header-actions">
-            <!-- Botão de alterar cor e botão de sair -->
-            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
-            <button class="icon-btn" onclick="fazerLogout()" title="Sair do Sistema" style="color: var(--danger-color);">🚪</button>
-        </div>
-    </header>
-    <!-- [FIM: CABEÇALHO] -->
+    
 
     <div class="container">
         
@@ -141,6 +130,8 @@
 
     <!-- [INÍCIO: LÓGICA DE SEGURANÇA E SESSÃO] -->
     <script src="supabase_config.js"></script>
+    <script src="navbar.js"></script>
+    
     <script>
         /* ================= ALTERNADOR DE TEMA ================= */
         // Lê a preferência do telemóvel e pinta a tela de claro ou escuro
