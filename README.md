@@ -139,7 +139,47 @@ ORDER BY
     tablename, cmd;
 -- [FIM: EXTRACAO_POLITICAS_RLS]
 ```
+# SQL PARA VERIFICAR AS FUNCTIONS (RPC)
+```
+-- [INÍCIO: EXTRACAO_FUNCTIONS_RPC]
+SELECT 
+    p.proname AS "Nome_da_Funcao",
+    pg_get_function_arguments(p.oid) AS "Argumentos",
+    t.typname AS "Tipo_Retorno",
+    CASE 
+        WHEN p.prosecdef THEN 'SECURITY DEFINER (Alerta de Risco)' 
+        ELSE 'SECURITY INVOKER (Normal)' 
+    END AS "Contexto_de_Seguranca",
+    p.prosrc AS "Codigo_Fonte"
+FROM 
+    pg_proc p
+JOIN 
+    pg_namespace n ON p.pronamespace = n.oid
+JOIN 
+    pg_type t ON p.prorettype = t.oid
+WHERE 
+    n.nspname = 'public';
+-- [FIM: EXTRACAO_FUNCTIONS_RPC]
 
+```
+# SQL PARA VERIFICAR AS Triggers (Gatilhos)
+```
+-- [INÍCIO: EXTRACAO_TRIGGERS]
+SELECT 
+    event_object_table AS "Tabela_Alvo",
+    trigger_name AS "Nome_do_Gatilho",
+    action_timing AS "Momento_de_Execucao",
+    event_manipulation AS "Evento_Gatilho_CRUD",
+    action_statement AS "Funcao_Executada"
+FROM 
+    information_schema.triggers
+WHERE 
+    trigger_schema = 'public'
+ORDER BY 
+    event_object_table;
+-- [FIM: EXTRACAO_TRIGGERS]
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
