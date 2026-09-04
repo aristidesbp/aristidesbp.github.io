@@ -86,26 +86,11 @@
 
 
 <body>
-    <!-- [INÍCIO: CABEÇALHO E NAVEGAÇÃO] -->
-    <header>
-        <div class="logo-area">
-            <span class="logo-icon">⚡</span> Gestão de Estoque
-        </div>
-        <div>
-            <button class="icon-btn" onclick="window.location.href='menu.html'" title="Ir para o Menu Principal">🏠</button>
 
-            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
-        </div>
-    </header>
 
-    <div class="container">
-        <div id="status" class="info">Autenticando sessão segura...</div>
 
-        <div class="area-navegacao">
-            <button class="btn btn-voltar" onclick="window.location.href='listar.html'">⬅️ Voltar para Lista</button>
-            <button class="btn btn-importar" onclick="window.location.href='importar_nfe.html'">📥 Importar NF-e (XML)</button>
-        </div>
-    <!-- [FIM: CABEÇALHO E NAVEGAÇÃO] -->
+
+        
 
     <!-- [INÍCIO: FORMULÁRIO DE CADASTRO] -->
         <div id="app" class="card" style="display: none;">
@@ -268,6 +253,9 @@
     <!-- [FIM: MODAL SCANNER] -->
     <!-- [INÍCIO: LÓGICA JAVASCRIPT SEGURA] -->
     <script src="supabase_config.js"></script>
+    <script src="navbar.js"></script>
+
+    
     <script>
         /* ================= VARIÁVEIS GLOBAIS ================= */
         let modoEdicao = false; 
