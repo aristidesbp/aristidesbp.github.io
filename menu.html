@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal - ERP BevDistro</title>
+    
+    <style>
+        /* ================= DESIGN SYSTEM & THEMES ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --purple-pill: #8273f6;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --info-color: #17a2b8;
+        }
+
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --purple-pill: #6f42c1;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
+        
+        /* ================= HEADER ================= */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+        .logo-icon { color: var(--accent-neon); }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;}
+        .icon-btn:hover { opacity: 0.7; }
+
+        /* ================= ESTRUTURA GERAL ================= */
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .boas-vindas { text-align: center; margin-bottom: 30px; }
+        .boas-vindas h1 { margin: 0 0 10px 0; color: var(--text-main); }
+        .boas-vindas p { margin: 0; color: var(--text-muted); }
+        
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid var(--info-color); margin-bottom: 20px;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+
+        /* ================= GRELHA DE CARTÕES (DASHBOARD) ================= */
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        
+        .card-menu { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px 20px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
+        
+        /* Efeito de interatividade ao passar o dedo/rato */
+        .card-menu:hover, .card-menu:active { border-color: var(--accent-neon); transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+        
+        .card-icone { font-size: 3em; margin-bottom: 15px; }
+        .card-titulo { font-size: 1.2em; font-weight: bold; margin-bottom: 8px; color: var(--accent-neon);}
+        .card-desc { font-size: 0.9em; color: var(--text-muted); margin: 0;}
+    </style>
+
+    <!-- Importação do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
+
+
+
+<body>
+    <!-- [INÍCIO: CABEÇALHO] -->
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> ERP BevDistro
+        </div>
+        <div class="header-actions">
+            <!-- Botão de alterar cor e botão de sair -->
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+            <button class="icon-btn" onclick="fazerLogout()" title="Sair do Sistema" style="color: var(--danger-color);">🚪</button>
+        </div>
+    </header>
+    <!-- [FIM: CABEÇALHO] -->
+
+    <div class="container">
+        
+        <div id="status" class="info">A validar a sua segurança...</div>
+
+        <!-- [INÍCIO: PAINEL PRINCIPAL] -->
+        <div id="app" style="display: none;">
+            <div class="boas-vindas">
+                <h1>Painel Administrativo</h1>
+                <p id="texto-usuario">Bem-vindo(a) ao centro de comando.</p>
+            </div>
+
+            <!-- Grelha de Navegação -->
+            <div class="grid-menu">
+                
+                <a href="listar.html" class="card-menu">
+                    <div class="card-icone">📦</div>
+                    <div class="card-titulo">Gestão de Estoque</div>
+                    <p class="card-desc">Visualize, edite ou oculte todos os produtos cadastrados.</p>
+                </a>
+
+                <a href="cadastra.html" class="card-menu">
+                    <div class="card-icone">➕</div>
+                    <div class="card-titulo">Cadastrar Produto</div>
+                    <p class="card-desc">Adicione novos produtos manualmente com leitor de código de barras.</p>
+                </a>
+
+                <a href="importar_nfe.html" class="card-menu">
+                    <div class="card-icone">📥</div>
+                    <div class="card-titulo">Importar NF-e</div>
+                    <p class="card-desc">Carregue um ficheiro XML para cadastrar produtos em lote automaticamente.</p>
+                </a>
+
+                <a href="painel_vendas.html" class="card-menu">
+                    <div class="card-icone">🛒</div>
+                    <div class="card-titulo">Painel de Vendas</div>
+                    <p class="card-desc">Faça a gestão dos pedidos, imprima cupões e controle entregas.</p>
+                </a>
+
+                <a href="perfil.html" class="card-menu">
+                    <div class="card-icone">👤</div>
+                    <div class="card-titulo">Meu Perfil</div>
+                    <p class="card-desc">Atualize a sua foto de avatar e os seus dados pessoais (Em breve).</p>
+                </a>
+
+            </div>
+        </div>
+        <!-- [FIM: PAINEL PRINCIPAL] -->
+
+    </div>
+
+
+    <!-- [INÍCIO: LÓGICA DE SEGURANÇA E SESSÃO] -->
+    <script src="supabase_config.js"></script>
+    <script>
+        /* ================= ALTERNADOR DE TEMA ================= */
+        // Lê a preferência do telemóvel e pinta a tela de claro ou escuro
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        }
+
+        /* ================= FUNÇÃO DE LOGOUT (SAIR) ================= */
+        // Destrói o token de segurança de forma irreversível e manda para o login
+        async function fazerLogout() {
+            if(confirm("Deseja mesmo sair do sistema?")) {
+                await clienteSupabase.auth.signOut();
+                localStorage.removeItem('biometriaAtiva'); // Limpa também a flag biométrica
+                window.location.href = 'login.html';
+            }
+        }
+
+        /* ================= VERIFICADOR ZERO TRUST ================= */
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Aplica o tema visual guardado
+            if(localStorage.getItem('temaBevDistro') === 'light') {
+                document.body.classList.add('light-theme');
+            }
+
+            const statusDiv = document.getElementById('status');
+            const appDiv = document.getElementById('app');
+            const textoUsuario = document.getElementById('texto-usuario');
+
+            // Barreira 1: Falta de configuração
+            if (typeof clienteSupabase === 'undefined') {
+                statusDiv.textContent = "❌ Erro Crítico: O ficheiro de configuração do banco (supabase_config.js) está ausente.";
+                statusDiv.className = "info erro";
+                return;
+            }
+
+            try {
+                // Barreira 2: Pedido oficial ao servidor do Supabase para confirmar quem é o utilizador
+                const { data: { session }, error } = await clienteSupabase.auth.getSession();
+                
+                // Se não houver token assinado, expulsa o utilizador imediatamente
+                if (error || !session) {
+                    statusDiv.textContent = "Acesso Negado. Sessão expirada ou não encontrada. A redirecionar...";
+                    statusDiv.className = "info erro";
+                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                    return;
+                }
+                
+                // Sucesso! Esconde a barra de carregamento, mostra o painel e escreve o e-mail no topo
+                statusDiv.style.display = "none";
+                appDiv.style.display = "block";
+                textoUsuario.textContent = `Logado de forma segura como: ${session.user.email}`;
+
+            } catch (error) {
+                console.error("Falha no sistema de auditoria:", error);
+                statusDiv.textContent = "❌ Erro ao conectar com a Base de Dados de Segurança.";
+                statusDiv.className = "info erro";
+            }
+        });
+    </script>
+    <!-- [FIM: LÓGICA DE SEGURANÇA E SESSÃO] -->
+</body>
+</html>
+
+
+
+
+
