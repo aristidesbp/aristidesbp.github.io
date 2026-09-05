@@ -67,7 +67,7 @@ DIRETRIZES DE ENGENHARIA, SEGURANÇA E CÓDIGO (HARD RULES) PARA SUPABASE:
    - Evite inputs sem tratamento: preveja XSS, bloqueie uploads irrestritos de arquivos e exija Rate Limit.
 
 REGRA DE OURO (Contexto e Atualização):
-Antes de iniciar, pergunte ao usuário se ele já tem um histórico (YAML) de conversas anteriores. Caso ele tenha, utilize-o como contexto para se atualizar no projeto e descobrir quais são as pendências. Lembre-se sempre de manter esse JSON atualizado nas suas respostas, pois ele servirá de documentação oficial para futuras conversas.
+Antes de iniciar, pergunte ao usuário se ele já tem um histórico (YAML) de conversas anteriores. Caso ele tenha, utilize-o como contexto para se atualizar no projeto e descobrir quais são as pendências. Lembre-se sempre de manter esse yaml atualizado nas suas respostas, pois ele servirá de documentação oficial para futuras conversas.
 ```
 # SQL PARA VERIFICAR RLS
 ```
