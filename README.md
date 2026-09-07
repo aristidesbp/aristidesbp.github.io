@@ -66,37 +66,6 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 
 
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-# 🚀 Fluxo de Desenvolvimento: Google AI Studio ➡️ GitHub ➡️ GitHub Codespaces (Geração de APK)
-
-Este documento descreve o fluxo de trabalho para criar a estrutura inicial de um aplicativo utilizando a inteligência artificial do **Google AI Studio**, versioná-lo no **GitHub** e utilizar o **GitHub Codespaces** para configurar o ambiente, instalar pacotes e compilar o projeto (gerando, por exemplo, o arquivo APK de um app mobile).
-
----
-
-## Passo 1: Criação do Código no Google AI Studio
-1. Acesse o **Google AI Studio** e utilize os modelos de IA para conversar, planejar e gerar o código-fonte do seu aplicativo (seja em React Native, Flutter, Expo ou outra tecnologia compatível).
-2. Peça para a IA estruturar os arquivos principais do projeto (por exemplo, `App.js`, `package.json`, telas e componentes).
-3. Copie os códigos gerados ou utilize as opções de exportação disponíveis para salvá-los no seu computador temporariamente.
-
-## Passo 2: Publicação no GitHub
-1. Acesse o seu perfil no **GitHub** e crie um **Novo Repositório** (deixe-o público ou privado, conforme sua preferência).
-2. Você pode enviar os arquivos criados de duas formas:
-   - **Opção A (Via Web):** Clique em "upload an existing file" na página do repositório e arraste os arquivos gerados pelo Google AI Studio.
-   - **Opção B (Via Atalho):** Pressione a tecla `.` (ponto) no teclado enquanto estiver na página do repositório para abrir o `github.dev`, cole os códigos nos arquivos correspondentes e faça o commit.
-
-## Passo 3: Abertura no GitHub Codespaces (Ambiente Linux Dedicado)
-1. Com o código já no seu repositório do GitHub, vá até a página principal do projeto.
-2. Clique no botão verde **`<> Code`**, vá até a aba **Codespaces** e clique em **`Create codespace on main`**.
-3. O GitHub vai iniciar uma máquina virtual Linux dedicada com o VS Code na nuvem para você.
-
-## Passo 4: Instalação de Pacotes e Geração do APK
-1. Assim que o Codespaces carregar, abra o **Terminal integrado** (atalho `` Ctrl + ` `` ou `Ctrl + Shift + P` e digite *Terminal*).
-2. Como o Codespaces possui acesso total ao terminal Linux e permissões de root/usuário, instale os pacotes e dependências necessários do seu projeto (por exemplo, rodando `npm install`, `flutter pub get`, etc.).
-3. Configure as ferramentas de compilação necessárias para o seu framework (como o SDK do Android se estiver compilando nativamente).
-4. Execute o comando de build do seu aplicativo (ex: `npx expo build:android`, `flutter build apk` ou comandos equivalentes da ferramenta escolhida).
-5. Após o término da compilação, o arquivo **APK** será gerado dentro do ambiente do Codespaces, bastando clicar com o botão direito nele no explorador de arquivos à esquerda e selecionar **Download** para baixá-lo diretamente para o seu dispositivo.
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PAGINAS MONOLOTICAS
 ```
@@ -276,7 +245,52 @@ REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso 
 lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
 
+```
+Revisa este código atrás de cinco falhas de segurança. Antes de começar, detecte a stack do projeto (linguagem, framework, ORM/query builder, mecanismo de auth, frontend, arquivos de deploy como Docker/CI/Helm/Terraform) e adapte cada categoria ao equivalente dessa stack:
 
+1. BANCO SEM TRANCA (isolamento de inquilino/dono) — em Supabase é RLS ausente; em APIs próprias são queries de listagem/busca/agregação/relatório/exportação que não filtram pelo usuário autenticado ou pela organização/workspace/tenant ao qual ele pertence. Identifique primeiro QUAL é o mecanismo de isolamento do projeto (RLS, middleware de tenant, filtro manual por user_id, etc.) e aponte onde ele está ausente ou furado.
+
+2. PERMISSÃO DEFINIDA NO NAVEGADOR — operações privilegiadas (admin, configurações, gestão de usuários, ações de escrita) em que o frontend esconde a UI por papel (isAdmin, canEdit, role...) mas o servidor NÃO faz a verificação equivalente. Cruze cada gate de papel do frontend com o endpoint correspondente e confirme se o backend valida o privilégio em toda rota sensível.
+
+3. IDOR — rotas que buscam, alteram ou deletam um objeto por ID (path, query ou body) sem verificar se o objeto pertence ao usuário/tenant do chamador. Percorra sistematicamente TODOS os handlers de rota do backend, não amostras.
+
+4. CHAVES EXPOSTAS (hardcode) — API keys, tokens, senhas, segredos de assinatura (JWT, webhooks), chaves privadas e credenciais padrão embutidos no código-fonte, configs, docker-compose, charts, CI, scripts e documentação. Atenção especial a defaults públicos que viram segredo real se não forem sobrescritos (ex: ${VAR:-valor-default}) e à ausência de validação de startup que rejeite esses defaults. Verifique também o histórico git por segredos commitados e o bundle do frontend por chaves embutidas.
+
+5. INPUTS SEM TRATAMENTO (XSS) — no frontend: innerHTML/dangerouslySetInnerHTML/equivalentes do framework (v-html, [innerHTML], dangerouslySet...), renderização de markdown/HTML sem sanitização, URLs controladas por usuário em href/src (javascript:), eval/new Function. No backend: input do usuário entrando em HTML de e-mails, templates ou respostas sem escape. Verifique se existe lib de sanitização no projeto e se ela é aplicada nos pontos encontrados.
+
+REGRAS DA AUDITORIA:
+- Reporte apenas achados verificados no código real. Nada de especulação. Para cada achado: caminho do arquivo, número(s) exato(s) da linha, trecho do código, por que é explorável e severidade (crítica/alta/média/baixa/informativa).
+- Liste arquivo por arquivo, linha por linha.
+- Registre também o que foi verificado e está CORRETO (ex: "router X valida posse em todos os handlers") — isso vira a seção de pontos fortes e prova a cobertura da auditoria.
+- Quando a categoria não se aplicar à stack (ex: projeto sem frontend), diga isso explicitamente em vez de forçar achados.
+- Note condições de explorabilidade (feature flags, config insegura necessária, etc.).
+
+DEPOIS DA AUDITORIA, gere um RELATÓRIO EM PDF, visualmente amigável, em pt-BR, salvo em docs/security-audit/relatorio-auditoria-seguranca.pdf, contendo:
+
+a) Capa: título "Relatório de Auditoria de Segurança — <nome do projeto>", data, escopo auditado e nota metodológica (como cada categoria foi mapeada para a stack detectada).
+b) Resumo executivo: total de achados por severidade, gráfico de rosca por severidade e gráfico de barras por categoria. Paleta: crítica #B91C1C, alta #EA580C, média #D97706, baixa #2563EB, ponto forte #059669.
+c) Pontos fortes (o que está protegido, com evidência) e pontos fracos (os riscos centrais).
+d) Tabela de achados detalhados por categoria: Severidade | Arquivo:linha | Descrição, com chip de severidade colorido.
+e) Recomendações priorizadas (P1, P2, P3...).
+f) AO FINAL DO PDF, uma seção "ISSUES PARA O GITHUB": para cada achado acionável, o texto COMPLETO de uma issue em Markdown, pronto para copiar e colar, dentro de um bloco delimitado (ex: entre --- ISSUE n --- e --- FIM ISSUE n ---). Cada issue deve conter:
+- Título no formato "[Segurança] <descrição curta da falha>"
+- Labels sugeridas: security + severidade
+- Descrição do problema e por que é explorável
+- Evidência: arquivo:linha com trecho de código
+- Impacto
+- Sugestão de correção
+- Critérios de aceite (checklist verificável)
+Agrupe achados triviais relacionados numa issue única quando fizer sentido (ex: vários defaults de segredo no mesmo tema), para não gerar spam de issues.
+
+GERAÇÃO DO PDF — REGRAS TÉCNICAS:
+- Não instale nada globalmente. Use ambiente isolado (venv Python com reportlab+matplotlib, ou ferramenta equivalente da stack local; se houver navegador headless/wkhtmltopdf/pandoc disponível, HTML→PDF também vale).
+- Deixe o script gerador em docs/security-audit/ para regerar o relatório depois.
+- Verifique o PDF gerado: número de páginas, renderização dos gráficos e legibilidade das tabelas (rasterize as páginas se possível). Corrija defeitos visuais antes de entregar.
+- Páginas A4, margens ~2cm, cabeçalho/rodapé com nome do relatório e número de página.
+
+Me entregue ao final: o relatório em PDF, a lista de achados no chat (arquivo por arquivo, linha por linha) e o caminho de todos os arquivos gerados.
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
