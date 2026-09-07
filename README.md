@@ -36,14 +36,33 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
 * 📚 **cursos gratis certificado**[santanderopenacademy.com](https://www.santanderopenacademy.com/pt_br/sites/courses/tech.html)
 
+
 ## ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
 
-- [GitHub Codespaces](https://github.com/features/codespaces) — Ambiente de desenvolvimento completo na nuvem baseado no VS Code com máquina virtual dedicada.
-- [github.dev](https://github.dev) — Editor web leve acionado instantaneamente pelo atalho `.` (ponto) em qualquer repositório.
-- [Google Project IDX](https://idx.dev/) — Ambiente completo em nuvem do Google baseado em contêineres Linux com suporte a IA.
-- [StackBlitz](https://stackblitz.com/) — Ambiente com WebContainers e terminal bash integrado rodando direto no navegador com alta velocidade.
-- [CodeSandbox](https://codesandbox.io/) — Plataforma de desenvolvimento com DevBoxes, suporte a contêineres e colaboração em tempo real.
+- [GitHub Codespaces](https://github.com/features/codespaces)
+  - **Preço:** Gratuito com cota mensal (120 horas de núcleo para contas pessoais no plano gratuito); após o limite, opera no modelo pago (*pay-as-you-go*).
+  - **O que faz:** Oferece uma máquina virtual Linux dedicada na nuvem com a experiência completa do VS Code, terminal completo, suporte a extensões e contêineres personalizados (`devcontainer.json`). É ideal para rodar projetos pesados direto do navegador ou do app desktop.
+  - **Pacotes e Terminal:** Possui acesso completo a um terminal Linux dedicado e permite instalar livremente qualquer pacote ou dependência (via `apt`, `npm`, `pip`, etc.).
 
+- [github.dev](https://github.dev)
+  - **Preço:** Totalmente gratuito e ilimitado.
+  - **O que faz:** É um editor web leve acionado instantaneamente ao pressionar a tecla `.` (ponto) em qualquer repositório do GitHub. Perfeito para inspeções e correções rápidas de código sem gastar horas de máquina virtual.
+  - **Pacotes e Terminal:** Não possui terminal Linux e não executa comandos de instalação de pacotes (focado estritamente na edição de arquivos).
+
+- [Google Project IDX](https://idx.dev/)
+  - **Preço:** Gratuito (oferece planos e acessos individuais voltados para desenvolvedores).
+  - **O que faz:** Ambiente de desenvolvimento na nuvem criado pelo Google, construído sobre o VS Code. Usa contêineres Linux, oferece terminal completo, suporte a múltiplos frameworks e ferramentas avançadas de inteligência artificial integradas.
+  - **Pacotes e Terminal:** Possui um terminal Linux integrado com permissões para instalar pacotes, bibliotecas e configurar o ambiente de desenvolvimento.
+
+- [StackBlitz](https://stackblitz.com/)
+  - **Preço:** Gratuito para projetos públicos e pessoais, com opções de planos pagos (*Pro*) para equipes e projetos privados.
+  - **O que faz:** Roda um ambiente Linux e Node.js completo diretamente dentro do navegador usando tecnologia WebAssembly (WebContainers). Inicializa quase instantaneamente e conta com um terminal bash totalmente funcional, sem depender de máquinas virtuais na nuvem tradicionais.
+  - **Pacotes e Terminal:** Possui um terminal bash funcional (via navegador) com suporte direto à instalação de pacotes via gerenciadores como o `npm`.
+
+- [CodeSandbox](https://codesandbox.io/)
+  - **Preço:** Possui plano gratuito para prototipagem e projetos públicos, com planos pagos focados em colaboração avançada e recursos profissionais.
+  - **O que faz:** Fornece ambientes chamados *DevBoxes*, permitindo rodar aplicações completas com um terminal Linux integrado, suporte a contêineres e colaboração em tempo real com outras pessoas.
+  - **Pacotes e Terminal:** Possui um terminal Linux integrado que permite instalar pacotes e dependências normalmente dentro do contêiner da DevBox.
 
 
 
