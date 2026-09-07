@@ -244,6 +244,8 @@ Não seja educado. Se o código for amador, diga onde e por que.
 REGRA DE OURO: pergunte ao usuario se ele ja tem um hitorico de conversas, caso ele tenha utilize ela como contexto apara se atualizar no projeto e descobrir quais as pendencias.
 lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentação do projeto para oura converça.
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PROMPT PARA ALDITORIA 2 (MANO)
 
 ```
 Revisa este código atrás de cinco falhas de segurança. Antes de começar, detecte a stack do projeto (linguagem, framework, ORM/query builder, mecanismo de auth, frontend, arquivos de deploy como Docker/CI/Helm/Terraform) e adapte cada categoria ao equivalente dessa stack:
