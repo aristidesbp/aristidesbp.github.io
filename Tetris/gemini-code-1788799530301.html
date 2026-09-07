@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <title>Tetris Humano VR - Calistenia</title>
+    <!-- Importa a biblioteca A-Frame (WebXR) -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      
+      <!-- 1. GERENCIADOR DE RECURSOS (Áudios, Texturas) -->
+      <a-assets>
+        <!-- Áudio de fundo. Para deixar o treino com a sua cara, substitua o link 'src' por um arquivo MP3 local de uma música pop bem animada da Marina Sena, por exemplo, para dar ritmo! -->
+        <audio id="musicaTreino" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto" loop></audio>
+      </a-assets>
+
+      <!-- 2. REPRODUTOR DE SOM -->
+      <!-- O som tocará automaticamente. Em alguns navegadores VR, o som só sai após o primeiro clique na tela (Enter VR). -->
+      <a-sound src="#musicaTreino" autoplay="true" loop="true" volume="0.6"></a-sound>
+
+      <!-- 3. AMBIENTE (Chão e Fundo) -->
+      <!-- Um chão comprido (depth 40) para simular uma esteira infinita de treino -->
+      <a-plane position="0 0 -10" rotation="-90 0 0" width="10" height="40" color="#111111"></a-plane>
+      <a-sky color="#050505"></a-sky>
+
+      <!-- 4. A PAREDE DO TETRIS (Obstáculo) -->
+      <!-- A parede começa na posição Z = -20 (longe na frente) e vai até Z = 5 (atrás de você). -->
+      <!-- A propriedade 'animation' cuida do movimento linear. 'dur: 4000' significa que a viagem leva 4 segundos. -->
+      <a-box position="0 1.5 -20" width="5" height="3" depth="0.2" color="#00FFFF" opacity="0.7"
+             animation="property: position; to: 0 1.5 5; dur: 4000; easing: linear; loop: true">
+      </a-box>
+
+      <!-- 5. O JOGADOR (Câmera do VR) -->
+      <!-- A posição Y (1.6) simula a altura média da cabeça de um jogador em pé -->
+      <a-camera position="0 1.6 0"></a-camera>
+
+    </a-scene>
+  </body>
+</html>
