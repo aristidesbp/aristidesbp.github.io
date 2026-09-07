@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <title>Tetris Humano VR - Calistenia</title>
+    <!-- Importa a biblioteca A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  </head>
+  <body>
+    
+    <a-scene>
+      <!-- 1. RECURSOS E ÁUDIO -->
+      <a-assets>
+        <audio id="musicaTreino" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto" loop></audio>
+      </a-assets>
+
+      <!-- 2. CONTROLES DO META QUEST -->
+      <!-- Habilita feixes de laser nos controles para você poder clicar no botão flutuante -->
+      <a-entity laser-controls="hand: left" raycaster="objects: .interativo"></a-entity>
+      <a-entity laser-controls="hand: right" raycaster="objects: .interativo"></a-entity>
+
+      <!-- 3. O JOGADOR (Câmera) -->
+      <a-camera position="0 1.6 0">
+        <!-- Cursor de backup caso você jogue sem os controles na mão -->
+        <a-cursor raycaster="objects: .interativo" color="#FF0000"></a-cursor>
+      </a-camera>
+
+      <!-- 4. AMBIENTE -->
+      <a-plane position="0 0 -10" rotation="-90 0 0" width="10" height="40" color="#111111"></a-plane>
+      <a-sky id="ceu" color="#050505"></a-sky>
+
+      <!-- 5. INTERFACE 3D (Textos e Botão) -->
+      <!-- O texto das vidas flutuando no alto -->
+      <a-text id="textoVidas" value="Vidas: 20" position="0 2.8 -4" align="center" color="#FFFFFF" width="6"></a-text>
+      
+      <!-- O botão Iniciar Jogo (A classe 'interativo' diz ao laser que ele é clicável) -->
+      <a-entity id="btnIniciar" class="interativo" position="0 1.5 -4" 
+                geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1" 
+                material="color: #EF2D5E" 
+                text="value: INICIAR; align: center; zOffset: 0.06; width: 5">
+      </a-entity>
+
+      <!-- 6. A PAREDE DE AGACHAMENTO (Obstáculo com buraco) -->
+      <!-- Começa invisível e bem distante -->
+      <a-entity id="parede" position="0 0 -20" visible="false">
+        <!-- Pilar Esquerdo -->
+        <a-box position="-1.5 1.5 0" width="1" height="3" depth="0.2" color="#00FFFF" opacity="0.8"></a-box>
+        <!-- Pilar Direito -->
+        <a-box position="1.5 1.5 0" width="1" height="3" depth="0.2" color="#00FFFF" opacity="0.8"></a-box>
+        <!-- Viga Superior (A parte de baixo dela fica na altura de 1.5m. Você precisa agachar para passar sem bater) -->
+        <a-box position="0 2.0 0" width="2" height="1" depth="0.2" color="#00FFFF" opacity="0.8"></a-box>
+      </a-entity>
+
+    </a-scene>
+
+    <!-- 7. LÓGICA DO JOGO (O "Cérebro" do Sensor e Animação) -->
+    <script>
+      let jogoAtivo = false;
+      let vidas = 20;
+      let paredeZ = -20; // Posição inicial de profundidade da parede
+      let velocidadeParede = 0.06; // Controla a velocidade que ela vem
+      let verificouColisao = false; // Impede que tire várias vidas na mesma parede
+
+      // Capturando os elementos do HTML para o JavaScript controlar
+      const parede = document.getElementById('parede');
+      const btnIniciar = document.getElementById('btnIniciar');
+      const textoVidas = document.getElementById('textoVidas');
+      const ceu = document.getElementById('ceu');
+      const musica = document.getElementById('musicaTreino');
+      const camera = document.querySelector('a-camera').object3D; // Pega as coordenadas X, Y, Z da cabeça
+
+      // Evento: Quando o jogador clicar com o controle no botão flutuante
+      btnIniciar.addEventListener('click', function() {
+        jogoAtivo = true;
+        btnIniciar.setAttribute('visible', 'false'); // Esconde o botão
+        parede.setAttribute('visible', 'true');      // Mostra a parede
+        musica.play();                               // Toca a música
+      });
+
+      // LOOP DO JOGO: Roda continuamente verificando posições (60 vezes por segundo)
+      function loopDoJogo() {
+        requestAnimationFrame(loopDoJogo);
+        
+        if (!jogoAtivo) return; // Se não clicou em iniciar, a parede não anda
+
+        // 1. Move a parede em direção ao jogador
+        paredeZ += velocidadeParede;
+        parede.setAttribute('position', `0 0 ${paredeZ}`);
+
+        // 2. SENSOR DE COLISÃO (Quando a parede passa pelo jogador, entre Z = -0.5 e Z = 0.5)
+        if (paredeZ > -0.5 && paredeZ < 0.5 && !verificouColisao) {
+          
+          let alturaCabeca = camera.position.y; // Posição Y da sua cabeça (headset)
+          let posicaoLateral = camera.position.x; // Posição X (se você desviou para os lados)
+
+          // REGRA DO AGACHAMENTO: A viga superior termina em 1.5m. Se sua cabeça estiver acima de 1.3m, bateu!
+          // Também verificamos se você bateu nas colunas laterais (posicaoLateral)
+          if (alturaCabeca > 1.3 || posicaoLateral < -1 || posicaoLateral > 1) {
+            
+            vidas--; // Perde uma vida
+            textoVidas.setAttribute('value', `Vidas: ${vidas}`);
+            
+            // Efeito visual de dano: O céu pisca em vermelho e volta para preto
+            ceu.setAttribute('color', '#FF0000');
+            setTimeout(() => ceu.setAttribute('color', '#050505'), 200);
+
+            // Verifica se morreu
+            if (vidas <= 0) {
+              textoVidas.setAttribute('value', 'FIM DE JOGO!');
+              jogoAtivo = false;
+              musica.pause();
+            }
+          }
+          
+          verificouColisao = true; // Marca que já testou essa parede para não descontar vida duplicada
+        }
+
+        // 3. RECICLAGEM DA PAREDE (Quando ela passar totalmente de você, Z > 5)
+        if (paredeZ > 5) {
+          paredeZ = -20; // Joga a parede lá para trás de novo
+          verificouColisao = false; // Prepara o sensor para a próxima colisão
+        }
+      }
+
+      // Inicia o motor do loop
+      loopDoJogo();
+    </script>
+  </body>
+</html>
