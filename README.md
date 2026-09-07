@@ -36,8 +36,15 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
 * 📚 **cursos gratis certificado**[santanderopenacademy.com](https://www.santanderopenacademy.com/pt_br/sites/courses/tech.html)
 
+## ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
+```
+- [GitHub Codespaces](https://github.com/features/codespaces) — Ambiente de desenvolvimento completo na nuvem baseado no VS Code com máquina virtual dedicada.
+- [github.dev](https://github.dev) — Editor web leve acionado instantaneamente pelo atalho `.` (ponto) em qualquer repositório.
+- [Google Project IDX](https://idx.dev/) — Ambiente completo em nuvem do Google baseado em contêineres Linux com suporte a IA.
+- [StackBlitz](https://stackblitz.com/) — Ambiente com WebContainers e terminal bash integrado rodando direto no navegador com alta velocidade.
+- [CodeSandbox](https://codesandbox.io/) — Plataforma de desenvolvimento com DevBoxes, suporte a contêineres e colaboração em tempo real.
 
-
+```
 
 
 
