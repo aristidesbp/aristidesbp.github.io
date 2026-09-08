@@ -335,6 +335,9 @@ pkg install curl -y
 ```
 pkg install tree -y
 ```
+```
+pkg install openssh
+```
 
 # CODIGOS BASICOS
 ```
