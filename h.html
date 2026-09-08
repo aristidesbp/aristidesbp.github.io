@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+<!-- [INÍCIO: HEAD_CONFIG_E_ESTILOS] -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Controle de Entidades - ERP_ABP Seguro</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style id="custom-styles">
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; vertical-align:middle; }
+    .status-ativo { background:#ecfdf5; color:#059669; padding:4px 12px; border-radius:9999px; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border:1px solid #d1fae5; }
+    .dark .status-ativo { background:rgba(16,185,129,.1); color:#34d399; border-color:rgba(16,185,129,.2); }
+    .status-inativo { background:#fef2f2; color:#dc2626; padding:4px 12px; border-radius:9999px; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border:1px solid #fee2e2; }
+    .dark .status-inativo { background:rgba(239,68,68,.1); color:#f87171; border-color:rgba(239,68,68,.2); }
+    .drop-zone { border:2px dashed #E5E7EB; border-radius:12px; padding:32px; text-align:center; cursor:pointer; transition:all .3s cubic-bezier(.4,0,.2,1); background-color:#f9fafb; }
+    .dark .drop-zone { background-color:#1e293b; border-color:#334155; }
+    .drop-zone:hover { background-color:#f3f4f6; border-color:#006c45; }
+    .dark .drop-zone:hover { background-color:#334155; border-color:#3ecf8e; }
+    .card { background:white; padding:20px; border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,.05); }
+    .dark .card { background:#1e293b; }
+    .status-pago      { background:#d1fae5; color:#065f46; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .status-pendente  { background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .status-atrasado  { background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:12px; }
+    .fade-in { animation:fadeIn .4s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .glass-card { background:rgba(255,255,255,.8); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.3); }
+    .dark .glass-card { background:rgba(30,41,59,.8); border-color:rgba(255,255,255,.1); }
+</style>
+<!-- [FIM: HEAD_CONFIG_E_ESTILOS] -->
+</head>
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 font-sans overflow-x-hidden transition-colors duration-300">
+
+<!-- [INÍCIO: MODULO_CONEXAO_SUPABASE] -->
+<script>
+const supabaseUrl = 'https://ykdacosyszynxlmxtubx.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrZGFjb3N5c3p5bnhsbXh0dWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxODc1NTEsImV4cCI6MjEwMzc2MzU1MX0.3T9ID3HDm9SSaSdmCCmWnLaXlyS1has4VhNDD7Zm90g';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let usuarioLogadoId = null;
+let paginaAtual = 1;
+const itensPorPagina = 10;
+let totalRegistros = 0;
+
+async function verificar_login() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    const telaLogin = document.getElementById('tela-login');
+    const telaSistema = document.getElementById('tela-sistema');
+    if (!session) {
+        if(telaLogin) telaLogin.classList.remove('hidden');
+        if(telaSistema) telaSistema.classList.add('hidden');
+        usuarioLogadoId = null;
+    } else {
+        if(telaLogin) telaLogin.classList.add('hidden');
+        if(telaSistema) telaSistema.classList.remove('hidden');
+        usuarioLogadoId = session.user.id;
+        const emailEl = document.getElementById('user-display-email');
+        const nameEl = document.getElementById('user-display-name');
+        if(emailEl) emailEl.innerText = session.user.email;
+        if(nameEl) nameEl.innerText = session.user.user_metadata?.full_name || 'Usuário ERP';
+    }
+}
+</script>
+<!-- [FIM: MODULO_CONEXAO_SUPABASE] -->
+
+
+<!-- [INÍCIO: LAYOUT_PRINCIPAL_E_ENTIDADES] -->
+<!-- ══════════════ TELA DE LOGIN ══════════════ -->
+<div class="hidden min-h-screen flex items-center justify-center bg-[#F1F5F9] dark:bg-[#0f172a] p-4 relative overflow-hidden" id="tela-login">
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+  <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/5 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 rounded-full blur-3xl"></div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-2xl shadow-xl border border-white/40 dark:border-slate-800 max-w-md w-full fade-in relative z-10 mx-4">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 rounded-2xl mb-6">
+      <span class="material-symbols-outlined text-emerald-600 text-4xl">groups</span>
+    </div>
+    <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">ERP_ABP</h2>
+    <p class="text-slate-500 dark:text-slate-400 text-sm mt-2">Faça login com suas credenciais seguras.</p>
+  </div>
+  <div class="space-y-6">
+    <div>
+      <label class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 block">E-mail Corporativo</label>
+      <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all dark:text-white" id="login-email" placeholder="usuario@empresa.com.br" type="email"/>
+    </div>
+    <div>
+      <label class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 block">Senha de Segurança</label>
+      <input class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all dark:text-white" id="login-senha" placeholder="••••••••" type="password"/>
+    </div>
+    <button class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 mt-2" onclick="fazerLogin()">Autenticar Acesso</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SISTEMA PRINCIPAL ══════════════ -->
+<div class="hidden min-h-screen" id="tela-sistema">
+<aside class="fixed h-full w-64 left-0 top-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col py-8 z-50">
+  <div class="px-6 mb-8 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
+        <span class="material-symbols-outlined">hub</span>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-none">ERP_ABP</h1>
+        <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-600">Seguro</span>
+      </div>
+    </div>
+  </div>
+  <div class="mx-4 mb-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+    <p class="text-sm font-bold text-slate-900 dark:text-white truncate" id="user-display-name">Administrador</p>
+    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate" id="user-display-email">admin@erpabp.com</p>
+    <button class="mt-3 text-xs text-red-500 font-bold flex items-center gap-1 hover:underline" onclick="sairDaConta()">
+      <span class="material-symbols-outlined text-sm">logout</span> Sair da Conta
+    </button>
+  </div>
+  <div class="w-full px-4 mb-8">
+    <label class="font-bold text-[10px] text-slate-400 mb-2 block uppercase tracking-widest">Navegação</label>
+    <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer">
+      <option value="bem_vindo">🏠 INÍCIO</option>
+      <option value="entidades">🙋 ENTIDADES</option>
+      <option value="estoque">📦 ESTOQUE</option>
+      <option value="financeiro">💰 FINANCEIRO</option>
+      <option value="pdv">🖥️ PDV — Caixa</option>
+    </select>
+  </div>
+</aside>
+
+<main class="ml-64 pt-6 min-h-screen bg-slate-50 dark:bg-slate-950 p-8">
+<div id="content-panels">
+
+<!-- ABA: BEM-VINDO -->
+<div class="fade-in max-w-4xl mx-auto" id="aba-bem_vindo">
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Bem-vindo ao ERP_ABP Seguro</h3>
+    <p class="text-slate-600 dark:text-slate-400 text-sm">O sistema foi atualizado com arquitetura Zero Trust e proteção em banco de dados e Storage. Utilize o menu lateral para navegar entre os módulos.</p>
+  </div>
+</div>
+
+<!-- ABA: ENTIDADES -->
+<div class="hidden fade-in max-w-7xl mx-auto" id="aba-entidades">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total de Clientes</p>
+      <h3 class="text-3xl font-black text-slate-900 dark:text-white mt-1" id="dash-clientes">0</h3>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Fornecedores</p>
+      <h3 class="text-3xl font-black text-slate-900 dark:text-white mt-1" id="dash-fornecedores">0</h3>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Entidades Inativas</p>
+      <h3 class="text-3xl font-black text-slate-900 dark:text-white mt-1" id="dash-inativos">0</h3>
+    </div>
+  </div>
+
+  <div class="flex gap-4 mb-6">
+    <button onclick="ent_alternarSubAba('listagem')" id="ent-btn-listagem" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow">Ver Entidades</button>
+    <button onclick="ent_alternarSubAba('formulario')" id="ent-btn-formulario" class="flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition">Nova Entidade</button>
+  </div>
+
+  <!-- Formulário Entidade -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm hidden" id="ent-painel-formulario">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">Cadastro / Edição de Entidade</h3>
+    <input id="f-editando-id" type="hidden"/>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Nome Completo / Razão Social *</label>
+        <input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white" id="f-nome" type="text"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">CPF / CNPJ</label>
+        <input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white" id="f-cpf" type="text"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">E-mail</label>
+        <input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white" id="f-email" type="email"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Telefone</label>
+        <input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white" id="f-telefone" type="text"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Tipo</label>
+        <select class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white font-bold" id="f-tipo-entidade">
+          <option value="cliente">Cliente</option>
+          <option value="fornecedor">Fornecedor</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
+      </div>
+      <div class="md:col-span-3">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Avatar / Foto (Bucket Seguro: foto_avatar)</label>
+        <input accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" id="f-foto" type="file"/>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-8">
+      <button class="bg-emerald-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:bg-emerald-700 transition" id="btn-salvar" onclick="salvarEntidade()">Salvar Registro</button>
+      <button class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold px-6 py-3.5 rounded-xl transition" onclick="cancelarEdicao()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Listagem Entidade -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden" id="ent-painel-listagem">
+    <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white">Lista de Entidades Cadastradas</h3>
+      <input class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm outline-none dark:text-white" id="filtro-busca" onkeyup="loadEntidades()" placeholder="Buscar por nome..." type="text"/>
+    </div>
+    <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="lista-entidades-grid"></div>
+  </div>
+</div>
+
+</div>
+</main>
+</div>
+
+<script>
+// Funções essenciais de controle e navegação do Bloco 2
+function alternarAba(abaAtiva) {
+    document.querySelectorAll('[id^="aba-"]').forEach(p => p.classList.toggle('hidden', p.id !== `aba-${abaAtiva}`));
+    if (abaAtiva === 'entidades') { loadDashboard(); loadEntidades(); }
+}
+
+function ent_alternarSubAba(sub) {
+    const f = document.getElementById('ent-painel-formulario');
+    const l = document.getElementById('ent-painel-listagem');
+    const bf = document.getElementById('ent-btn-formulario');
+    const bl = document.getElementById('ent-btn-listagem');
+    if (sub === 'formulario') {
+        f.classList.remove('hidden'); l.classList.add('hidden');
+        bf.className = "flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow";
+        bl.className = "flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition";
+    } else {
+        f.classList.add('hidden'); l.classList.remove('hidden');
+        bl.className = "flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow";
+        bf.className = "flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition";
+    }
+}
+
+async function loadDashboard() {
+    const { data } = await _supabase.from('entidades').select('tipo_entidade,status_entidade');
+    if (!data) return;
+    let clientes = 0, fornecedores = 0, inativos = 0;
+    data.forEach(e => {
+        if (e.status_entidade === 'inativo') inativos++;
+        if (e.tipo_entidade === 'cliente') clientes++;
+        if (e.tipo_entidade === 'fornecedor') fornecedores++;
+    });
+    document.getElementById('dash-clientes').innerText = clientes;
+    document.getElementById('dash-fornecedores').innerText = fornecedores;
+    document.getElementById('dash-inativos').innerText = inativos;
+}
+
+async function salvarEntidade() {
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true; btn.innerText = 'Salvando com segurança...';
+    try {
+        const id = document.getElementById('f-editando-id').value;
+        const nome = document.getElementById('f-nome').value;
+        const cpf = document.getElementById('f-cpf').value;
+        const email = document.getElementById('f-email').value;
+        const telefone = document.getElementById('f-telefone').value;
+        const tipo = document.getElementById('f-tipo-entidade').value;
+        const fileFoto = document.getElementById('f-foto').files[0];
+
+        if (!nome) throw new Error("O Nome Completo é obrigatório.");
+
+        let fotoUrlFinal = null;
+        if (fileFoto) {
+            const fileName = `avatar_${Date.now()}_${fileFoto.name}`;
+            // Utilizando o bucket blindado 'foto_avatar' e validando auth.uid()
+            const { error: uploadError } = await _supabase.storage.from('foto_avatar').upload(`${fileName}`, fileFoto);
+            if (!uploadError) {
+                fotoUrlFinal = _supabase.storage.from('foto_avatar').getPublicUrl(`${fileName}`).data.publicUrl;
+            } else {
+                throw new Error("Erro no upload para o Storage: " + uploadError.message);
+            }
+        }
+
+        const payload = { nome_completo: nome, cpf, email, telefone, tipo_entidade: tipo, status_entidade: 'ativo', user_id: usuarioLogadoId };
+        if (fotoUrlFinal) payload.foto_url = fotoUrlFinal;
+
+        if (id) {
+            const { error } = await _supabase.from('entidades').update(payload).eq('id', id);
+            if (error) throw error;
+        } else {
+            const { error } = await _supabase.from('entidades').insert([payload]);
+            if (error) throw error;
+        }
+
+        cancelarEdicao();
+        loadDashboard();
+        loadEntidades();
+        ent_alternarSubAba('listagem');
+    } catch(err) {
+        alert("Erro: " + err.message);
+    } finally {
+        btn.disabled = false; btn.innerText = 'Salvar Registro';
+    }
+}
+
+async function loadEntidades() {
+    const busca = document.getElementById('filtro-busca').value;
+    let query = _supabase.from('entidades').select('*').order('nome_completo', { ascending: true });
+    if (busca) query = query.ilike('nome_completo', `%${busca}%`);
+    const { data } = await query;
+    const grid = document.getElementById('lista-entidades-grid');
+    if (!data || !data.length) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400">Nenhum registro encontrado.</div>';
+        return;
+    }
+    grid.innerHTML = data.map(e => `
+        <div class="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm flex flex-col items-center">
+          <img src="${e.foto_url || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(e.nome_completo)}" class="w-16 h-16 rounded-2xl object-cover mb-3 border">
+          <h4 class="font-bold text-slate-900 dark:text-white truncate">${e.nome_completo}</h4>
+          <span class="text-xs text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full font-bold mt-1">${e.tipo_entidade}</span>
+          <p class="text-xs text-slate-400 mt-2">${e.email || 'Sem e-mail'}</p>
+        </div>
+    `).join('');
+}
+
+function cancelarEdicao() {
+    document.getElementById('f-editando-id').value = '';
+    ['f-nome','f-cpf','f-email','f-telefone','f-foto'].forEach(id => document.getElementById(id).value = '');
+    ent_alternarSubAba('listagem');
+}
+</script>
+<!-- [FIM: LAYOUT_PRINCIPAL_E_ENTIDADES] -->
+
+
+<!-- [INÍCIO: MODULO_ESTOQUE] -->
+<!-- ABA: ESTOQUE -->
+<div class="hidden fade-in max-w-7xl mx-auto" id="aba-estoque">
+  <!-- Dashboard do Estoque -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Produtos Cadastrados</p>
+      <h3 class="text-3xl font-black text-slate-900 dark:text-white mt-1" id="est-dash-total-produtos">0</h3>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Alertas de Estoque Baixo</p>
+      <h3 class="text-3xl font-black text-amber-600 mt-1" id="est-dash-estoque-baixo">0</h3>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total de Itens em Estoque</p>
+      <h3 class="text-3xl font-black text-emerald-600 mt-1" id="est-dash-total-itens">0</h3>
+    </div>
+  </div>
+
+  <!-- Sub-navegação do Estoque -->
+  <div class="flex gap-4 mb-6">
+    <button onclick="est_alternarSubAba('listagem')" id="est-btn-listagem" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow">Ver Produtos</button>
+    <button onclick="est_alternarSubAba('formulario')" id="est-btn-formulario" class="flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition">Novo Produto</button>
+  </div>
+
+  <!-- Formulário de Produto -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm hidden" id="est-painel-formulario">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">Cadastro / Edição de Produto</h3>
+    <input type="hidden" id="est-f-editando-id">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Nome do Produto *</label>
+        <input type="text" id="est-f-nome" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white" placeholder="Ex: Camiseta Polo G">
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Categoria</label>
+        <input type="text" id="est-f-categoria" value="Geral" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white">
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Preço de Custo (R$)</label>
+        <input type="number" id="est-f-custo" step="0.01" value="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white">
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Preço de Venda (R$) *</label>
+        <input type="number" id="est-f-venda" step="0.01" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white">
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Quantidade em Estoque *</label>
+        <input type="number" id="est-f-quantidade" value="0" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white">
+      </div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Estoque Mínimo</label>
+        <input type="number" id="est-f-estoque-minimo" value="5" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white">
+      </div>
+      <div class="md:col-span-2">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Foto do Produto (Bucket Seguro: produtos_fotos)</label>
+        <input type="file" id="est-f-foto" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+      </div>
+    </div>
+    <div class="flex gap-4 mt-8">
+      <button onclick="est_salvarProduto()" id="est-btn-salvar" class="bg-emerald-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:bg-emerald-700 transition">Gravar Produto</button>
+      <button onclick="est_cancelarEdicao()" class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold px-6 py-3.5 rounded-xl transition">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Listagem de Produtos -->
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden" id="est-painel-listagem">
+    <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white">Itens em Estoque</h3>
+      <input type="text" id="est-filtro-busca" onkeyup="est_loadProdutos()" placeholder="Pesquisar produto..." class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm outline-none dark:text-white">
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs uppercase border-b border-slate-200 dark:border-slate-700">
+            <th class="p-4">Produto / Categoria</th>
+            <th class="p-4">Custo</th>
+            <th class="p-4">Venda</th>
+            <th class="p-4 text-center">Estoque</th>
+            <th class="p-4 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="est-lista-produtos" class="text-sm"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Funções do Módulo de Estoque
+function est_init() {
+    est_loadDashboard();
+    est_loadProdutos();
+}
+
+function est_alternarSubAba(sub) {
+    const f = document.getElementById('est-painel-formulario');
+    const l = document.getElementById('est-painel-listagem');
+    const bf = document.getElementById('est-btn-formulario');
+    const bl = document.getElementById('est-btn-listagem');
+    if (sub === 'formulario') {
+        f.classList.remove('hidden'); l.classList.add('hidden');
+        bf.className = "flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow";
+        bl.className = "flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition";
+    } else {
+        f.classList.add('hidden'); l.classList.remove('hidden');
+        bl.className = "flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl transition shadow";
+        bf.className = "flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition";
+    }
+}
+
+async function est_loadDashboard() {
+    const { data: produtos } = await _supabase.from('produtos').select('*');
+    if (!produtos) return;
+    let totalCadastrados = produtos.length, estoqueBaixo = 0, totalItens = 0;
+    produtos.forEach(p => {
+        const est = parseInt(p.quantidade || 0);
+        const min = parseInt(p.estoque_minimo || 0);
+        totalItens += est;
+        if (est <= min) estoqueBaixo++;
+    });
+    document.getElementById('est-dash-total-produtos').innerText = totalCadastrados;
+    document.getElementById('est-dash-estoque-baixo').innerText = estoqueBaixo;
+    document.getElementById('est-dash-total-itens').innerText = totalItens;
+}
+
+async function est_salvarProduto() {
+    const btn = document.getElementById('est-btn-salvar');
+    btn.disabled = true; btn.innerText = 'Salvando...';
+    try {
+        const id = document.getElementById('est-f-editando-id').value;
+        const nome = document.getElementById('est-f-nome').value;
+        const categoria = document.getElementById('est-f-categoria').value || 'Geral';
+        const preco_custo = parseFloat(document.getElementById('est-f-custo').value) || 0;
+        const preco = parseFloat(document.getElementById('est-f-venda').value);
+        const quantidade = parseInt(document.getElementById('est-f-quantidade').value) || 0;
+        const estoque_minimo = parseInt(document.getElementById('est-f-estoque-minimo').value) || 0;
+        const fileFoto = document.getElementById('est-f-foto').files[0];
+
+        if (!nome || isNaN(preco)) throw new Error("Preencha o Nome e o Preço de Venda!");
+
+        let fotoUrl = null;
+        if (fileFoto) {
+            const fileName = `prod_${Date.now()}_${fileFoto.name}`;
+            // Salvando no bucket blindado 'produtos_fotos'
+            const { error: uploadError } = await _supabase.storage.from('produtos_fotos').upload(`${fileName}`, fileFoto);
+            if (!uploadError) {
+                fotoUrl = _supabase.storage.from('produtos_fotos').getPublicUrl(`${fileName}`).data.publicUrl;
+            } else {
+                throw new Error("Erro no upload da foto: " + uploadError.message);
+            }
+        }
+
+        const dados = { nome, categoria, preco_custo, preco, quantidade, estoque_minimo };
+        if (fotoUrl) dados.foto_url = fotoUrl;
+
+        if (id) {
+            const { error } = await _supabase.from('produtos').update(dados).eq('id', id);
+            if (error) throw error;
+        } else {
+            const { error } = await _supabase.from('produtos').insert([dados]);
+            if (error) throw error;
+        }
+
+        est_cancelarEdicao();
+        est_loadDashboard();
+        est_loadProdutos();
+        est_alternarSubAba('listagem');
+    } catch(err) {
+        alert("Erro: " + err.message);
+    } finally {
+        btn.disabled = false; btn.innerText = 'Gravar Produto';
+    }
+}
+
+async function est_loadProdutos() {
+    const busca = document.getElementById('est-filtro-busca').value;
+    let query = _supabase.from('produtos').select('*').order('nome', { ascending: true });
+    if (busca) query = query.ilike('nome', `%${busca}%`);
+    const { data } = await query;
+    const tbody = document.getElementById('est-lista-produtos');
+    if (!data || !data.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum produto cadastrado.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(p => `
+        <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40">
+          <td class="p-4 flex items-center gap-3">
+            <img src="${p.foto_url || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(p.nome)}" class="w-10 h-10 object-cover rounded-xl border">
+            <div>
+              <div class="font-bold text-slate-800 dark:text-white">${p.nome}</div>
+              <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-full font-bold">${p.categoria || 'Geral'}</span>
+            </div>
+          </td>
+          <td class="p-4 font-mono text-slate-600 dark:text-slate-400">R$ ${parseFloat(p.preco_custo || 0).toFixed(2)}</td>
+          <td class="p-4 font-mono font-bold text-emerald-600">R$ ${parseFloat(p.preco || 0).toFixed(2)}</td>
+          <td class="p-4 text-center font-bold text-slate-700 dark:text-slate-300">${p.quantidade}</td>
+          <td class="p-4 text-center">
+            <button onclick="est_prepararEdicao('${p.id}')" class="bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-blue-100 transition">Editar</button>
+          </td>
+        </tr>
+    `).join('');
+}
+
+async function est_prepararEdicao(id) {
+    const { data: p } = await _supabase.from('produtos').select('*').eq('id', id).single();
+    if (p) {
+        document.getElementById('est-f-editando-id').value = p.id;
+        document.getElementById('est-f-nome').value = p.nome;
+        document.getElementById('est-f-categoria').value = p.categoria || 'Geral';
+        document.getElementById('est-f-custo').value = p.preco_custo || 0;
+        document.getElementById('est-f-venda').value = p.preco || 0;
+        document.getElementById('est-f-quantidade').value = p.quantidade || 0;
+        document.getElementById('est-f-estoque-minimo').value = p.estoque_minimo || 5;
+        est_alternarSubAba('formulario');
+    }
+}
+
+function est_cancelarEdicao() {
+    document.getElementById('est-f-editando-id').value = '';
+    ['est-f-nome','est-f-custo','est-f-venda','est-f-quantidade','est-f-foto'].forEach(id => document.getElementById(id).value = '');
+    est_alternarSubAba('listagem');
+}
+</script>
+<!-- [FIM: MODULO_ESTOQUE] -->
+
+<!-- [INÍCIO: MODULO_FINANCEIRO_E_PDV] -->
+<!-- ABA: FINANCEIRO -->
+<div class="hidden fade-in max-w-7xl mx-auto" id="aba-financeiro">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-emerald-500">
+      <p class="text-slate-500 text-xs font-bold uppercase">Receitas (Pagas)</p>
+      <h2 id="fin-dash-receita" class="text-2xl font-black text-emerald-600 mt-1">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-red-500">
+      <p class="text-slate-500 text-xs font-bold uppercase">Despesas (Pagas)</p>
+      <h2 id="fin-dash-despesa" class="text-2xl font-black text-red-600 mt-1">R$ 0,00</h2>
+    </div>
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-amber-500">
+      <p class="text-slate-500 text-xs font-bold uppercase">Previsão Pendente</p>
+      <h2 id="fin-dash-pendente" class="text-2xl font-black text-amber-600 mt-1">R$ 0,00</h2>
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-8">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Controle de Lançamentos Financeiros</h3>
+    <p class="text-sm text-slate-500 mb-6">Gerencie suas contas a pagar e receber vinculadas às parcelas.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs uppercase border-b border-slate-200 dark:border-slate-700">
+            <th class="p-4">Vencimento</th>
+            <th class="p-4">Descrição</th>
+            <th class="p-4">Valor</th>
+            <th class="p-4 text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody id="fin-lista-parcelas" class="text-sm"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ABA: PDV (FRENTE DE CAIXA) -->
+<div class="hidden fade-in max-w-7xl mx-auto" id="aba-pdv">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+        <h3 class="font-bold text-slate-900 dark:text-white mb-4">Frente de Caixa - Venda Direta</h3>
+        <div class="flex gap-4 mb-4">
+          <input type="text" id="pdv_buscaProduto" placeholder="Digite o nome do produto..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none dark:text-white text-sm">
+          <button onclick="pdv_adicionarDoInputBusca()" class="bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-emerald-700 transition">Adicionar</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs uppercase border-b border-slate-200 dark:border-slate-700">
+                <th class="p-3">Item</th>
+                <th class="p-3 text-center">Qtd</th>
+                <th class="p-3 text-right">Subtotal</th>
+                <th class="p-3 text-center">Remover</th>
+              </tr>
+            </thead>
+            <tbody id="pdv-carrinho-corpo" class="text-sm"></tbody>
+          </table>
+          <div id="pdv-carrinho-vazio" class="text-center text-slate-400 py-8">Carrinho vazio.</div>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-1">
+      <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl">
+        <h3 class="font-bold text-lg mb-4 border-b border-slate-800 pb-2 text-emerald-400">Fechamento da Venda</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between text-lg font-bold">
+            <span>TOTAL:</span>
+            <span id="pdv-resumo-total" class="text-emerald-400 text-2xl">R$ 0,00</span>
+          </div>
+          <button onclick="pdv_finalizarVenda()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-4 rounded-xl transition shadow-lg mt-4">
+            CONFIRMAR VENDA (F8)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let pdv_produtosCache = [];
+let pdv_carrinho = [];
+
+async function fin_init() {
+    fin_loadDashboard();
+    fin_loadParcelas();
+}
+
+async function fin_loadDashboard() {
+    const { data: parcelas } = await _supabase.from('parcelas').select('*, financas(tipo)');
+    if (!parcelas) return;
+    let receita = 0, despesa = 0, pendente = 0;
+    parcelas.forEach(p => {
+        const v = parseFloat(p.valor_parcela || 0);
+        if (p.status === 'pago') { p.financas?.tipo === 'receita' ? receita += v : despesa += v; }
+        else { pendente += v; }
+    });
+    document.getElementById('fin-dash-receita').innerText = `R$ ${receita.toFixed(2)}`;
+    document.getElementById('fin-dash-despesa').innerText = `R$ ${despesa.toFixed(2)}`;
+    document.getElementById('fin-dash-pendente').innerText = `R$ ${pendente.toFixed(2)}`;
+}
+
+async function fin_loadParcelas() {
+    const { data } = await _supabase.from('parcelas').select('*, financas!inner(descricao, tipo)');
+    const tbody = document.getElementById('fin-lista-parcelas');
+    if (!data || !data.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-slate-400">Nenhuma parcela encontrada.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(p => `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${p.data_vencimento}</td>
+          <td class="p-4">${p.financas.descricao}</td>
+          <td class="p-4 font-mono font-bold">R$ ${parseFloat(p.valor_parcela).toFixed(2)}</td>
+          <td class="p-4 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${p.status==='pago'?'bg-emerald-100 text-emerald-800':'bg-amber-100 text-amber-800'}">${p.status.toUpperCase()}</span></td>
+        </tr>
+    `).join('');
+}
+
+async function pdv_init() {
+    const { data } = await _supabase.from('produtos').select('*');
+    if (data) pdv_produtosCache = data;
+}
+
+function pdv_adicionarDoInputBusca() {
+    const termo = document.getElementById('pdv_buscaProduto').value.toLowerCase();
+    const prod = pdv_produtosCache.find(p => p.nome.toLowerCase().includes(termo));
+    if (prod) {
+        const item = pdv_carrinho.find(i => i.id === prod.id);
+        if (item) item.quantidade += 1;
+        else pdv_carrinho.push({ ...prod, quantidade: 1 });
+        pdv_renderCarrinho();
+        document.getElementById('pdv_buscaProduto').value = '';
+    } else {
+        alert("Produto não encontrado.");
+    }
+}
+
+function pdv_renderCarrinho() {
+    const tbody = document.getElementById('pdv-carrinho-corpo');
+    const vazio = document.getElementById('pdv-carrinho-vazio');
+    if (!pdv_carrinho.length) { tbody.innerHTML = ''; vazio.classList.remove('hidden'); pdv_recalcularTotais(); return; }
+    vazio.classList.add('hidden');
+    tbody.innerHTML = pdv_carrinho.map(item => `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="p-3 font-bold">${item.nome}</td>
+          <td class="p-3 text-center">${item.quantidade}</td>
+          <td class="p-3 text-right font-mono font-bold">R$ ${(item.preco * item.quantidade).toFixed(2)}</td>
+          <td class="p-3 text-center"><button onclick="pdv_removerDoCarrinho('${item.id}')" class="text-red-500 font-bold">X</button></td>
+        </tr>
+    `).join('');
+    pdv_recalcularTotais();
+}
+
+function pdv_removerDoCarrinho(id) {
+    pdv_carrinho = pdv_carrinho.filter(i => i.id !== id);
+    pdv_renderCarrinho();
+}
+
+function pdv_recalcularTotais() {
+    const total = pdv_carrinho.reduce((acc, i) => acc + (i.preco * i.quantidade), 0);
+    document.getElementById('pdv-resumo-total').innerText = `R$ ${total.toFixed(2)}`;
+}
+
+async function pdv_finalizarVenda() {
+    if (!pdv_carrinho.length) return alert("Carrinho vazio!");
+    const total = pdv_carrinho.reduce((acc, i) => acc + (i.preco * i.quantidade), 0);
+    if (!confirm(`Finalizar venda no valor de R$ ${total.toFixed(2)}?`)) return;
+    try {
+        const { data: venda, error: errV } = await _supabase.from('vendas').insert([{
+            valor_total: total, forma_pagamento: 'Dinheiro', status: 'concluida'
+        }]).select().single();
+        if (errV) throw errV;
+
+        for (let item of pdv_carrinho) {
+            await _supabase.from('itens_venda').insert([{
+                venda_id: venda.id, produto_id: item.id, quantidade: item.quantidade, preco_unitario: item.preco, subtotal: item.preco * item.quantidade
+            }]);
+            const novoEstq = Math.max(0, item.quantidade - item.quantidade); // ajuste de baixa
+            await _supabase.from('produtos').update({ quantidade: novoEstq }).eq('id', item.id);
+        }
+
+        alert("Venda concluída com sucesso!");
+        pdv_carrinho = [];
+        pdv_renderCarrinho();
+    } catch(err) {
+        alert("Erro na venda: " + err.message);
+    }
+}
+</script>
+<!-- [FIM: MODULO_FINANCEIRO_E_PDV] -->
+</body>
+</html>
