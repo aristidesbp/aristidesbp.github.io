@@ -338,6 +338,56 @@ pkg install tree -y
 ```
 pkg install openssh
 ```
+```
+pkg install nmap
+# O principal escaneador de redes e mapeador de portas vulneráveis."
+```
+```
+pkg install tcpdump
+# "Ferramenta para capturar e analisar pacotes de rede/tráfego."
+```
+```
+pkg install tshark
+# "Versão de terminal do poderoso Wireshark."
+```
+```
+pkg install macchanger
+# "Ferramenta para camuflar o endereço MAC do adaptador de rede."
+```
+```
+pkg install openssh
+# "Instala ferramentas SSH. Permite invadir remotamente, administrar o celular pelo PC ou transferir arquivos via SCP/SFTP de forma criptografada."
+```
+```
+pkg install netcat-openbsd
+# "O 'canivete suíço' das redes, usado para abrir portas e criar Reverse Shells (Backdoors)."
+```
+```
+pkg install wget
+# Realiza downloads rápidos de arquivos direto no terminal."
+```
+```
+pkg install curl
+# Interage com páginas web, servidores e APIs pelo terminal."
+    forca_bruta:
+```
+```
+pkg install hydra
+# Ferramenta rápida para ataques de força bruta em logins de rede (FTP, SSH, etc)."
+```
+```   
+pkg install nano
+# Editor de textos simples e amigável para alterar códigos dentro do terminal."
+```
+```
+pkg install zip unzip
+# Compacta e descompacta arquivos zip."
+```
+```
+pkg install tar
+# Extrai pacotes e arquivos compactados nativos do Linux."
+```
+
 
 # CODIGOS BASICOS
 ```
