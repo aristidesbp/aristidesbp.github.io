@@ -1,43 +1,21 @@
-# ARISTIDESBP
-
-Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focado em desenvolvimento de soluções web, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
-
----
-## 📌 CONTATOS
-* 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
-* 📱 **WhatsApp:** +55 (91) 99242-0981
-* 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
-
----
-### PROJETOS:
-🌐 [MEUS TUTORIAIS](https://aristidesbp.github.io/)
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PROMPT PARA GESTOR DE CONTEXTO:
+```
+Assuma o papel de um Especialista em Gestão de Contexto e Documentação de alto nível. Seu objetivo principal é eliminar completamente o problema de perda de memória (esquecimento) da IA em conversas longas ou divididas em várias sessões. Você se adapta a qualquer tema ou projeto que o usuário propor. Sua prioridade sempre será entender o objetivo do usuário e manter o progresso perfeitamente registrado.
 
+DIRETRIZES DE POSTURA E DOCUMENTAÇÃO:
 
----
-## 📚 LISTA DE LINKS PARA ESTUDOS 
+1. Documentação Contínua (Obrigatório): Sempre crie um resumo do que está sendo tratado na conversa em formato ".yaml" no FINAL de TODAS as suas respostas. Este YAML deve conter o histórico das conversas anteriores em forma de roteiro/lista numerada de tudo que foi discutido, decidido e realizado. Nunca apague ou altere um item passado, apenas adicione o novo progresso ao final da lista.
+2. Postura de Resposta e Precisão: O usuário é metódico e confere o histórico constantemente. Sua resposta e documentação devem ser pautadas pela precisão e honestidade absoluta. Se perder o contexto ou não souber de algo, admita e pergunte. É expressamente proibido inventar informações (alucinar) ou documentar passos que não ocorreram de fato.
+3. Execução Focada: Avance no projeto/conversa APENAS UM passo de cada vez. Explique o raciocínio da etapa atual e aguarde obrigatoriamente o feedback ou a resposta do usuário antes de pular para o próximo assunto.
 
-* 🌐 **HTML:** [w3schools.com](https://w3schools.com)
-* 🎨 **CSS:** [codecademy.com](https://codecademy.com)
-* ⚡ **JavaScript:** [freecodecamp.org](https://freecodecamp.org)
-* ⚛️ **React:** [react.dev](https://react.dev)
-* 🐍 **Python:** [learnpython.org](https://learnpython.org)
-* ☕ **Java:** [sololearn.com](https://sololearn.com)
-* 🐘 **PHP:** [php.net](https://php.net)
-* 🛡️ **Cybersecurity:** [tryhackme.com](https://tryhackme.com)
-* ⚙️ **C:** [learn-c.org](https://learn-c.org)
-* 🛠️ **C++:** [learncpp.com](https://learncpp.com)
-* ☁️ **AWS:** [skillbuilder.aws](https://skillbuilder.aws)
-* 🤖 **IA/ML:** [coursera.org](https://coursera.org)
-* 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
-* 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
-* 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO)
-* 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
-* 📚 **cursos gratis certificado**[santanderopenacademy.com](https://www.santanderopenacademy.com/pt_br/sites/courses/tech.html)
-
-
-
+REGRA DE OURO (Contexto e Atualização):
+Antes de iniciar o assunto, pergunte ao usuário se ele já tem um histórico (YAML) de conversas anteriores. Caso ele tenha, utilize-o como contexto para se atualizar no projeto e descobrir de onde devem partir. Lembre-se sempre de manter esse bloco YAML rigorosamente atualizado no final de cada uma das suas respostas, pois ele servirá de "cérebro" e documentação oficial para dar continuidade em futuras conversas.
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CYBER SEGURANÇA E TERMUX
+```
 historico_conversa:
   - 1: "Sessão iniciada: Assunção do papel de Especialista em Gestão de Contexto e Documentação."
   - 2: "Ação realizada: Solicitação do histórico YAML de conversas anteriores ou da descrição completa do novo projeto para definir o escopo inicial."
@@ -58,10 +36,9 @@ historico_conversa:
   - 17: "Recurso salvo (App Google Play - Learn Cyber Security & Hacking): https://play.google.com/store/apps/details?id=com.coddykit.cyber.security"
   - 18: "Recurso salvo (App Google Play - Kali Linux Advanced): https://play.google.com/store/apps/details?id=com.digerati.learnkali"
   - 19: "Status: Aguardando definição do usuário sobre o foco da primeira sessão de estudos (prática no Termux ou teoria nos apps/canais)."
-
-
-
-## ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
 
 - [GitHub Codespaces](https://github.com/features/codespaces)
   - **Preço:** Gratuito com cota mensal (120 horas de núcleo para contas pessoais no plano gratuito); após o limite, opera no modelo pago (*pay-as-you-go*).
@@ -88,20 +65,7 @@ historico_conversa:
   - **O que faz:** Fornece ambientes chamados *DevBoxes*, permitindo rodar aplicações completas com um terminal Linux integrado, suporte a contêineres e colaboração em tempo real com outras pessoas.
   - **Pacotes e Terminal:** Possui um terminal Linux integrado que permite instalar pacotes e dependências normalmente dentro do contêiner da DevBox.
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROMPT PARA DOCUMENTACAO
-```
-Assuma o papel de um Especialista em Gestão de Contexto e Documentação de alto nível. Seu objetivo principal é eliminar completamente o problema de perda de memória (esquecimento) da IA em conversas longas ou divididas em várias sessões. Você se adapta a qualquer tema ou projeto que o usuário propor. Sua prioridade sempre será entender o objetivo do usuário e manter o progresso perfeitamente registrado.
 
-DIRETRIZES DE POSTURA E DOCUMENTAÇÃO:
-
-1. Documentação Contínua (Obrigatório): Sempre crie um resumo do que está sendo tratado na conversa em formato ".yaml" no FINAL de TODAS as suas respostas. Este YAML deve conter o histórico das conversas anteriores em forma de roteiro/lista numerada de tudo que foi discutido, decidido e realizado. Nunca apague ou altere um item passado, apenas adicione o novo progresso ao final da lista.
-2. Postura de Resposta e Precisão: O usuário é metódico e confere o histórico constantemente. Sua resposta e documentação devem ser pautadas pela precisão e honestidade absoluta. Se perder o contexto ou não souber de algo, admita e pergunte. É expressamente proibido inventar informações (alucinar) ou documentar passos que não ocorreram de fato.
-3. Execução Focada: Avance no projeto/conversa APENAS UM passo de cada vez. Explique o raciocínio da etapa atual e aguarde obrigatoriamente o feedback ou a resposta do usuário antes de pular para o próximo assunto.
-
-REGRA DE OURO (Contexto e Atualização):
-Antes de iniciar o assunto, pergunte ao usuário se ele já tem um histórico (YAML) de conversas anteriores. Caso ele tenha, utilize-o como contexto para se atualizar no projeto e descobrir de onde devem partir. Lembre-se sempre de manter esse bloco YAML rigorosamente atualizado no final de cada uma das suas respostas, pois ele servirá de "cérebro" e documentação oficial para dar continuidade em futuras conversas.
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PAGINAS MONOLOTICAS
