@@ -151,6 +151,33 @@ ORDER BY
 -- [FIM: EXTRACAO_TRIGGERS]
 
 ```
+# SQL PARA VERIFICAR O STORAGE 
+```
+
+-- 1. Buscar a lista de Buckets criados
+SELECT 
+    id, 
+    name AS nome_do_bucket, 
+    public AS e_publico
+FROM storage.buckets;
+
+-- 2. Buscar as Políticas de Segurança aplicadas aos arquivos (Storage)
+SELECT 
+    tablename AS tabela_alvo,
+    policyname AS nome_da_politica,
+    cmd AS operacao,
+    roles AS perfis_afetados,
+    qual AS condicao_leitura,
+    with_check AS condicao_escrita
+FROM pg_policies
+WHERE schemaname = 'storage'
+ORDER BY tablename, policyname;
+
+
+```
+
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
