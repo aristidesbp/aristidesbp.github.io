@@ -335,6 +335,12 @@ pkg install curl -y
 ```
 pkg install tree -y
 ```
+
+# CODIGOS BASICOS
+```
+# limpar tela
+clear
+```
 ```
 # ver as pastas do diretorio
 ls
@@ -397,7 +403,8 @@ clear
 # como apagar pasta/arquivos/projetos
 rm -rf nome_da_pasta
 ```
-# 🟥🟥🟥 COMO BAIXAR MIDIAS COM TERMUX 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO BAIXAR MIDIAS COM TERMUX 
 ```
 pkg update && pkg upgrade
 pkg install python ffmpeg
@@ -409,8 +416,8 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
 
 ```
 
-
-# 🟥🟥🟥 TERMUX+ GIT+ GITHUB
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TERMUX+ GIT+ GITHUB
 ```
 # verificar se o git está instalado 
 git --version
@@ -530,8 +537,8 @@ git push origin main
 
 ```
   
-
-# 🟥🟥🟥 CRIANDO UM SERVIDOR PYTHON 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO UM SERVIDOR PYTHON 
 # Passo 1: Instalar o Python3
  * INSTALAR o Termux  (CONFIGURAR E ATUALIZAR)
  * Navegue até a pasta onde seus arquivos estão 
@@ -573,8 +580,8 @@ python3 -m http.server 3000
 ip addr show wlan0
 ```
 
-
-# 🟥🟥🟥 COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO INSTALAR SISTEMA OPERACIONAL LINUX NO ANDROIDE 
 * usaremos para compilar projetos do Google AI Studio
 ## instalar linux (terminal basico)
 ```
@@ -738,8 +745,8 @@ cp -r .output/public dist && ls -la dist
 ls -la dist/assets
 ```
 
-
-# 🟥🟥🟥 COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO TER UMA IA OFFLINE NO CELULAR (Termux + Linux + Ollama)
 ## instalar buscador
 ```
 # instalando o buscador
