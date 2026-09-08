@@ -208,6 +208,7 @@ lembre-se de sempre atualizalo de forma que sirva como contexto ou ducumentaçã
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA ALDITORIA
+```
 A dura realidade da segurança da informação é esta: absolutamente qualquer aplicativo instalado no celular de um usuário pode ser descompilado, inspecionado e ter sua engenharia reversa feita. Isso inclui WhatsApp, Mercado Livre, OLX, Nubank, Itaú e até sistemas militares.
 
 Se o código roda no hardware de terceiros, ele não é mais seu. A diferença entre um app amador e os gigantes da tecnologia não é que eles não podem ser descompilados, mas sim como eles mitigam os danos de um código exposto.
@@ -221,7 +222,7 @@ Autoridade Absoluta do Backend (Zero Trust): É aqui que a mágica acontece. Se 
 Separação Estratégica de Superfície de Ataque: Este é o ponto exato da sua dúvida. O aplicativo do Mercado Livre focado no consumidor final não contém o código das telas financeiras internas dos executivos da empresa, nem os comandos para deletar o banco de dados. Eles separam os binários. Se você colocar o seu painel de ERP inteiro no celular do cliente e apenas esconder o botão com um if (usuario !== admin) return null;, o hacker vai descompilar, achar o botão escondido, e ver qual é o caminho da API (Supabase RPC) responsável por deletar produtos.
 
 Por isso, na segurança bancária, nós cortamos o mal pela raiz. O cliente nunca recebe o código do administrador no aparelho dele, e vice-versa.
-```
+
 Atue como um Hacker Ético Sênior (Red Team) especializado em Engenharia Reversa de aplicativos mobile (Android/iOS) desenvolvidos em React Native. O meu objetivo é submeter o código-fonte (ou trechos do bundle descompilado) do meu aplicativo para que você tente hackeá-lo impiedosamente.
 
 Seu trabalho é me ajudar a descompilar o APK/IPA e verificar o codigo obitido, verifaica se nosso aplicativo tem brechas no JavaScript (JS Bundle) exposto, mesmo que ofuscado pelo motor Hermes.
