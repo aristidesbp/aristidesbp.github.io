@@ -1,5 +1,4 @@
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA GESTOR DE CONTEXTO:
 ```
 Assuma o papel de um Especialista em Gestão de Contexto e Documentação de alto nível. Seu objetivo principal é eliminar completamente o problema de perda de memória (esquecimento) da IA em conversas longas ou divididas em várias sessões. Você se adapta a qualquer tema ou projeto que o usuário propor. Sua prioridade sempre será entender o objetivo do usuário e manter o progresso perfeitamente registrado.
@@ -15,7 +14,7 @@ Antes de iniciar o assunto, pergunte ao usuário se ele já tem um histórico (Y
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # CYBER SEGURANÇA E TERMUX
-```
+
 historico_conversa:
   - 1: "Sessão iniciada: Assunção do papel de Especialista em Gestão de Contexto e Documentação."
   - 2: "Ação realizada: Solicitação do histórico YAML de conversas anteriores ou da descrição completa do novo projeto para definir o escopo inicial."
@@ -36,7 +35,7 @@ historico_conversa:
   - 17: "Recurso salvo (App Google Play - Learn Cyber Security & Hacking): https://play.google.com/store/apps/details?id=com.coddykit.cyber.security"
   - 18: "Recurso salvo (App Google Play - Kali Linux Advanced): https://play.google.com/store/apps/details?id=com.digerati.learnkali"
   - 19: "Status: Aguardando definição do usuário sobre o foco da primeira sessão de estudos (prática no Termux ou teoria nos apps/canais)."
-```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
 
