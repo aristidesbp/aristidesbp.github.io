@@ -176,7 +176,68 @@ ORDER BY tablename, policyname;
 
 
 ```
+# Completo
+```
+-- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
+-- Este script consulta os metadados do PostgreSQL para criar um raio-x do seu schema 'public'
 
+WITH tables_info AS (
+    -- Busca todas as tabelas públicas e junta as suas colunas em uma lista
+    SELECT jsonb_agg(jsonb_build_object(
+        'tabela', t.table_name,
+        'colunas', (
+            SELECT jsonb_agg(c.column_name || ' (' || c.data_type || ')')
+            FROM information_schema.columns c
+            WHERE c.table_name = t.table_name AND c.table_schema = 'public'
+        )
+    )) AS dados
+    FROM information_schema.tables t
+    WHERE t.table_schema = 'public'
+),
+rls_info AS (
+    -- Busca todas as regras de segurança RLS (Row Level Security)
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'tabela', tablename,
+        'politica', policyname,
+        'comando', cmd,
+        'roles', roles,
+        'condicao', qual
+    )), '[]'::jsonb) AS dados
+    FROM pg_policies
+    WHERE schemaname = 'public'
+),
+rpc_info AS (
+    -- Busca todas as Funções (RPCs) criadas no schema público
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'funcao', p.proname,
+        'argumentos', pg_get_function_arguments(p.oid),
+        'retorno', pg_get_function_result(p.oid)
+    )), '[]'::jsonb) AS dados
+    FROM pg_proc p
+    JOIN pg_namespace n ON p.pronamespace = n.oid
+    WHERE n.nspname = 'public'
+),
+triggers_info AS (
+    -- Busca todos os Triggers (gatilhos) atrelados às tabelas
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'tabela', event_object_table,
+        'trigger', trigger_name,
+        'evento', event_manipulation,
+        'tempo', action_timing
+    )), '[]'::jsonb) AS dados
+    FROM information_schema.triggers
+    WHERE trigger_schema = 'public'
+)
+-- Compila todas as informações acima em um único objeto JSON formatado
+SELECT jsonb_pretty(jsonb_build_object(
+    '1_tabelas', (SELECT dados FROM tables_info),
+    '2_rls_politicas', (SELECT dados FROM rls_info),
+    '3_funcoes_rpc', (SELECT dados FROM rpc_info),
+    '4_gatilhos_triggers', (SELECT dados FROM triggers_info)
+)) AS relatorio_completo;
+
+-- [FIM: EXTRATOR_DE_SCHEMA_SUPABASE]
+``` 
 
 
 
