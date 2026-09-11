@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Meu ERP - Frontend Modular</title>
+    
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Arquivo CSS Modularizado -->
+    <link rel="stylesheet" href="app.css"/>
+
+
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<style>
+/* [INÍCIO: ESTILOS GERAIS E CUSTOMIZADOS] */
+.material-symbols-outlined { 
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+    display: inline-block; 
+    vertical-align: middle; 
+}
+
+/* Ocultar barra de rolagem mantendo a funcionalidade */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Animações e Efeitos */
+.fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(8px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+.glass-card { 
+    background: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(8px); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+}
+.dark .glass-card { 
+    background: rgba(30, 41, 59, 0.8); 
+    border-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* Transições suaves para a navegação mobile */
+#mobile-overlay { transition: opacity 0.3s ease; }
+aside { transition: transform 0.3s ease-in-out; }
+/* [FIM: ESTILOS GERAIS E CUSTOMIZADOS] */
+
+
+</style>
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+</head>
+<body class="bg-[#F8FAFC] dark:bg-[#0f172a] text-on-surface dark:text-slate-200 font-body-md transition-colors duration-300 overflow-x-hidden">
+
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+
+    <!-- Opcional: Tela de Login ficará aqui no futuro -->
+    
+    <!-- [INÍCIO: SISTEMA PRINCIPAL] -->
+    <div id="tela-sistema" class="min-h-screen">
+        <!-- Overlay Mobile -->
+        <div class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden transition-opacity" id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
+        <!-- [INÍCIO: SIDEBAR (MENU LATERAL)] -->
+        <aside class="fixed h-full w-[260px] left-0 top-0 bg-white dark:bg-slate-900 border-r border-[#E2E8F0] dark:border-slate-800 flex flex-col py-8 z-[60] -translate-x-full lg:translate-x-0 transition-transform" id="sidebar">
+            <div class="px-6 mb-8 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white">hub</span>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-none">ERP_ABP</h1>
+                        <span class="text-[10px] uppercase font-bold tracking-[0.1em] text-primary">Gestão</span>
+                    </div>
+                </div>
+                <button class="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" onclick="toggleMobileSidebar()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <!-- Navegação Mobile (Select) -->
+            <div class="w-full mb-8 px-4 lg:hidden">
+                <label for="select-aba" class="font-bold text-[10px] text-slate-500 mb-2 block uppercase">Painel Ativo</label>
+                <select id="select-aba" onchange="alternarAba(this.value)" class="w-full bg-white dark:bg-slate-800 border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                    <option value="bem_vindo">🏠 INÍCIO</option>
+                    <option value="entidades">🙋 ENTIDADES</option>
+                    <option value="estoque">📦 ESTOQUE</option>
+                </select>
+            </div>
+
+            <!-- Navegação Desktop (Botões) - Apenas exemplos para a base -->
+            <nav class="hidden lg:flex flex-col px-4 space-y-2">
+                <button onclick="alternarAba('bem_vindo')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
+                    <span class="material-symbols-outlined">home</span> Início
+                </button>
+                <button onclick="alternarAba('entidades')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
+                    <span class="material-symbols-outlined">groups</span> Entidades
+                </button>
+                <button onclick="alternarAba('estoque')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
+                    <span class="material-symbols-outlined">inventory_2</span> Estoque
+                </button>
+            </nav>
+        </aside>
+        <!-- [FIM: SIDEBAR (MENU LATERAL)] -->
+
+        <!-- [INÍCIO: HEADER (CABEÇALHO)] -->
+        <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E2E8F0] dark:border-slate-800 flex justify-between items-center h-20 px-4 sm:px-8">
+            <div class="flex items-center gap-4">
+                <button class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all" onclick="toggleMobileSidebar()">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Meu Painel</h2>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-6">
+                <!-- Botão Modo Escuro -->
+                <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" id="theme-toggle" onclick="toggleDarkMode()">
+                    <span class="material-symbols-outlined" id="dark-icon">dark_mode</span>
+                    <span class="material-symbols-outlined hidden" id="light-icon">light_mode</span>
+                </button>
+            </div>
+        </header>
+        <!-- [FIM: HEADER (CABEÇALHO)] -->
+
+        <!-- [INÍCIO: CONTEÚDO PRINCIPAL (MAIN)] -->
+        <main class="lg:ml-[260px] pt-20 min-h-screen">
+            <div class="p-4 sm:p-8 max-w-[1440px] mx-auto" id="content-panels">
+                
+                <!-- ABA: BEM VINDO -->
+                <div id="aba-bem_vindo" class="fade-in max-w-5xl mx-auto">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Seja Bem-vindo ao Novo Sistema!</h3>
+                        <p class="text-slate-500 dark:text-slate-400 mt-2">Sua base modular foi configurada com sucesso.</p>
+                    </div>
+                </div>
+
+                <!-- ABA: ENTIDADES (Placeholder para a próxima etapa) -->
+                <div id="aba-entidades" class="hidden fade-in max-w-5xl mx-auto">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border p-6 shadow-sm">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Módulo de Entidades (Em breve)</h3>
+                    </div>
+                </div>
+
+                <!-- ABA: ESTOQUE (Placeholder para a próxima etapa) -->
+                <div id="aba-estoque" class="hidden fade-in max-w-5xl mx-auto">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border p-6 shadow-sm">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Módulo de Estoque (Em breve)</h3>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        <!-- [FIM: CONTEÚDO PRINCIPAL (MAIN)] -->
+    </div>
+    <!-- [FIM: SISTEMA PRINCIPAL] -->
+
+    <!-- Carrega o script após o HTML ser desenhado -->
+    <script src="app.js"></script>
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+<script>
+// [INÍCIO: CONFIGURAÇÃO DO TAILWIND]
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                primary: "#006c45",
+                "primary-container": "#3ecf8e",
+                "text-muted": "#687076",
+                "on-surface": "#191c1d"
+            },
+            fontFamily: {
+                "body-md": ["Inter"],
+                "headline-md": ["Inter"]
+            },
+            spacing: {
+                "sidebar-width": "260px"
+            }
+        }
+    }
+};
+// [FIM: CONFIGURAÇÃO DO TAILWIND]
+
+// [INÍCIO: CONFIGURAÇÃO SUPABASE E ESTADO GLOBAL]
+// ATENÇÃO: Substitua pelas chaves do seu NOVO banco de dados Supabase blindado!
+const supabaseUrl = 'SUA_URL_DO_SUPABASE_AQUI';
+const supabaseKey = 'SUA_CHAVE_ANON_DO_SUPABASE_AQUI';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let usuarioLogadoId = null;
+// [FIM: CONFIGURAÇÃO SUPABASE E ESTADO GLOBAL]
+
+// [INÍCIO: LÓGICA DE INTERFACE (DARK MODE E SIDEBAR)]
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    const isVisible = sidebar.classList.contains('translate-x-0');
+    
+    if (isVisible) {
+        sidebar.classList.replace('translate-x-0', '-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    } else {
+        sidebar.classList.replace('-translate-x-full', 'translate-x-0');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDark = html.classList.toggle('dark');
+    document.getElementById('dark-icon').classList.toggle('hidden', isDark);
+    document.getElementById('light-icon').classList.toggle('hidden', !isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// Verifica o tema salvo ao carregar a página
+if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById('dark-icon')?.classList.add('hidden');
+        document.getElementById('light-icon')?.classList.remove('hidden');
+    });
+}
+// [FIM: LÓGICA DE INTERFACE (DARK MODE E SIDEBAR)]
+
+// [INÍCIO: LÓGICA DE NAVEGAÇÃO ENTRE ABAS]
+function alternarAba(abaAtiva) {
+    // Atualiza o select mobile se existir
+    const selectAba = document.getElementById('select-aba');
+    if (selectAba) selectAba.value = abaAtiva;
+
+    // Esconde todas as abas e mostra apenas a ativa
+    document.querySelectorAll('[id^="aba-"]').forEach(painel => {
+        painel.classList.toggle('hidden', painel.id !== `aba-${abaAtiva}`);
+    });
+
+    // Lógica futura: disparar inicialização de dados dependendo da aba
+    console.log(`Navegou para a aba: ${abaAtiva}`);
+}
+// [FIM: LÓGICA DE NAVEGAÇÃO ENTRE ABAS]
+
+// [INÍCIO: INICIALIZAÇÃO DO SISTEMA]
+document.addEventListener('DOMContentLoaded', () => {
+    // Por enquanto, forçamos a inicialização na aba de boas-vindas
+    // Em etapas futuras, conectaremos isso ao login do Supabase
+    alternarAba('bem_vindo');
+});
+// [FIM: INICIALIZAÇÃO DO SISTEMA]
+
+
+
+</script>
+<!--🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥-->
+</body>
+</html>
+
