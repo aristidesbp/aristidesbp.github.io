@@ -237,6 +237,37 @@ SELECT jsonb_pretty(jsonb_build_object(
 )) AS relatorio_completo;
 
 -- [FIM: EXTRATOR_DE_SCHEMA_SUPABASE]
+
+
+
+
+-- [INÍCIO: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
+-- Este script busca as políticas de segurança RLS aplicadas aos arquivos (storage.objects)
+
+WITH storage_policies AS (
+    -- Passo 1: Separamos e renomeamos as colunas da tabela de políticas do Postgres
+    SELECT
+        policyname AS nome_da_politica,
+        cmd AS acao_permitida, -- Pode ser SELECT, INSERT, UPDATE, DELETE
+        roles AS papeis_permitidos, -- Quem pode fazer isso (ex: authenticated, anon)
+        qual AS condicao -- Qual a regra lógica para permitir
+    FROM pg_policies
+    WHERE schemaname = 'storage' AND tablename = 'objects'
+)
+-- Passo 2: Juntamos tudo em um formato JSON. 
+SELECT COALESCE(
+    jsonb_pretty(jsonb_agg(jsonb_build_object(
+        'politica', nome_da_politica,
+        'acao', acao_permitida,
+        'roles', papeis_permitidos,
+        'condicao', condicao
+    ))), 
+    '[]'::text
+) AS relatorio_seguranca_storage
+FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os dados.
+
+-- [FIM: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
+
 ``` 
 
 
