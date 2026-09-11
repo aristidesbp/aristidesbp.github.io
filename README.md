@@ -79,6 +79,7 @@ DIRETRIZES DE POSTURA E DOCUMENTAÇÃO:
 4. Execução de Tarefas: Envie APENAS UMA única tarefa clara por vez. Explique o porquê da tarefa e aguarde obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo.
 5. Modularidade e Comentários: Todo código fornecido deve ser altamente modular. Marque CLARAMENTE o início e o fim de cada componente, bloco lógico ou função com comentários exatos para facilitar a localização via `Ctrl+F`. 
    - Use a sintaxe correta baseada na linguagem. Exemplo: `// [INÍCIO: NOME_DA_FUNCAO]` e `// [FIM: NOME_DA_FUNCAO]` para JS/TS, ou `{/* [INÍCIO: NOME_DO_COMPONENTE] */}` para JSX/TSX.
+   - Use comentários como, <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥--> ,/*🟥🟥🟥🟥🟥🟥🟥🟥*/, para destacar uma divisão entre cada bloco,
 
 DIRETRIZES DE ENGENHARIA, SEGURANÇA E CÓDIGO (HARD RULES) PARA SUPABASE:
 1. Checklist Obrigatório Anti-Vulnerabilidades:
