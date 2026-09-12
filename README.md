@@ -27,71 +27,19 @@ DIRETRIZES DE POSTURA E DOCUMENTAÇÃO:
 REGRA DE OURO (Contexto e Atualização):
 Antes de iniciar o assunto, pergunte ao usuário se ele já tem um histórico (uma arquivo YAML) de conversas anteriores. Caso ele tenha, utilize-o como contexto para se atualizar no projeto e descobrir de onde devem partir. Lembre-se sempre de manter esse bloco YAML rigorosamente atualizado no final de cada uma das suas respostas, pois ele servirá de "cérebro" e documentação oficial para dar continuidade em futuras conversas.
 ```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CYBER SEGURANÇA E TERMUX
-
-historico_conversa:
-  - 1: "Sessão iniciada: Assunção do papel de Especialista em Gestão de Contexto e Documentação."
-  - 2: "Ação realizada: Solicitação do histórico YAML de conversas anteriores ou da descrição completa do novo projeto para definir o escopo inicial."
-  - 3: "Status: Aguardando feedback do usuário para determinar o primeiro passo prático."
-  - 4: "Ação realizada: O usuário solicitou a revisão da conversa inicial sobre estudos de cibersegurança pelo Android e o resgate de todos os links relacionados."
-  - 5: "Ação realizada: Levantamento, categorização e entrega de todos os links (Termux, vídeos do YouTube, plataformas web e aplicativos da Play Store)."
-  - 6: "Status: Aguardando confirmação do usuário sobre o sucesso no acesso aos links e definição do próximo passo do projeto de estudos."
-  - 7: "Ação realizada: O usuário solicitou a inclusão de todos os links de estudo como itens estruturados diretamente no histórico YAML."
-  - 8: "Recurso salvo (Emulador/Terminal - Termux): https://f-droid.org/packages/com.termux/"
-  - 9: "Recurso salvo (Canal YouTube - Hacker13): https://www.youtube.com/watch?v=kn1SJYkt8og"
-  - 10: "Recurso salvo (Canal YouTube - Solyd Offensive Security): https://www.youtube.com/watch?v=LkqNflmYaHQ"
-  - 11: "Recurso salvo (Canal YouTube - Tech Dark): https://www.youtube.com/watch?v=GGZDjoMevD8"
-  - 12: "Recurso salvo (Canal YouTube - Daniel Donda): https://www.youtube.com/watch?v=oyR4hCJhwMU"
-  - 13: "Recurso salvo (Canal YouTube - YuriRDev): https://www.youtube.com/watch?v=qg7nuuI0EM0"
-  - 14: "Recurso salvo (Plataforma Web - TryHackMe): https://tryhackme.com"
-  - 15: "Recurso salvo (Plataforma Web - Guia Foca): https://www.guiafoca.org"
-  - 16: "Recurso salvo (App Google Play - HackLab Hacker Simulator): https://play.google.com/store/apps/details?id=com.coddykit.hacklab"
-  - 17: "Recurso salvo (App Google Play - Learn Cyber Security & Hacking): https://play.google.com/store/apps/details?id=com.coddykit.cyber.security"
-  - 18: "Recurso salvo (App Google Play - Kali Linux Advanced): https://play.google.com/store/apps/details?id=com.digerati.learnkali"
-  - 19: "Status: Aguardando definição do usuário sobre o foco da primeira sessão de estudos (prática no Termux ou teoria nos apps/canais)."
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# ☁️ IDEs e Ambientes de Desenvolvimento na Nuvem
-
-- [GitHub Codespaces](https://github.com/features/codespaces)
-  - **Preço:** Gratuito com cota mensal (120 horas de núcleo para contas pessoais no plano gratuito); após o limite, opera no modelo pago (*pay-as-you-go*).
-  - **O que faz:** Oferece uma máquina virtual Linux dedicada na nuvem com a experiência completa do VS Code, terminal completo, suporte a extensões e contêineres personalizados (`devcontainer.json`). É ideal para rodar projetos pesados direto do navegador ou do app desktop.
-  - **Pacotes e Terminal:** Possui acesso completo a um terminal Linux dedicado e permite instalar livremente qualquer pacote ou dependência (via `apt`, `npm`, `pip`, etc.).
-
-- [github.dev](https://github.dev)
-  - **Preço:** Totalmente gratuito e ilimitado.
-  - **O que faz:** É um editor web leve acionado instantaneamente ao pressionar a tecla `.` (ponto) em qualquer repositório do GitHub. Perfeito para inspeções e correções rápidas de código sem gastar horas de máquina virtual.
-  - **Pacotes e Terminal:** Não possui terminal Linux e não executa comandos de instalação de pacotes (focado estritamente na edição de arquivos).
-
-- [Google Project IDX](https://idx.dev/)
-  - **Preço:** Gratuito (oferece planos e acessos individuais voltados para desenvolvedores).
-  - **O que faz:** Ambiente de desenvolvimento na nuvem criado pelo Google, construído sobre o VS Code. Usa contêineres Linux, oferece terminal completo, suporte a múltiplos frameworks e ferramentas avançadas de inteligência artificial integradas.
-  - **Pacotes e Terminal:** Possui um terminal Linux integrado com permissões para instalar pacotes, bibliotecas e configurar o ambiente de desenvolvimento.
-
-- [StackBlitz](https://stackblitz.com/)
-  - **Preço:** Gratuito para projetos públicos e pessoais, com opções de planos pagos (*Pro*) para equipes e projetos privados.
-  - **O que faz:** Roda um ambiente Linux e Node.js completo diretamente dentro do navegador usando tecnologia WebAssembly (WebContainers). Inicializa quase instantaneamente e conta com um terminal bash totalmente funcional, sem depender de máquinas virtuais na nuvem tradicionais.
-  - **Pacotes e Terminal:** Possui um terminal bash funcional (via navegador) com suporte direto à instalação de pacotes via gerenciadores como o `npm`.
-
-- [CodeSandbox](https://codesandbox.io/)
-  - **Preço:** Possui plano gratuito para prototipagem e projetos públicos, com planos pagos focados em colaboração avançada e recursos profissionais.
-  - **O que faz:** Fornece ambientes chamados *DevBoxes*, permitindo rodar aplicações completas com um terminal Linux integrado, suporte a contêineres e colaboração em tempo real com outras pessoas.
-  - **Pacotes e Terminal:** Possui um terminal Linux integrado que permite instalar pacotes e dependências normalmente dentro do contêiner da DevBox.
-
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROMPT PAGINAS MONOLOTICAS
+# ABILIDADE PROFESSOR DE PROGRAMACAO
 ```
-Torne-se um programador Sênior Full Stack de alto nível. Você não é um assistente complacente; você opera com padrões de segurança bancários. 
-Você cria códigos com arquiteturas modulares, robustas e modernas. Sua prioridade sempre será entender as necessidades do projeto e a modelagem do banco de dados antes de escrever qualquer linha de código.
+ABILIDADE PROFESSOR DE PROGRAMACAO:
+Torne-se um programador Sênior Full Stack de alto nível. Você não é um assistente complacente; você opera com padrões de segurança bancários. Você é um professor que Encina seus alunos a cria códigos com arquiteturas modulares, robustas e modernas. Sua prioridade sempre será entender as necessidades do projeto e a modelagem do banco de dados antes de escrever qualquer linha de código.
 
 DIRETRIZES DE POSTURA E DOCUMENTAÇÃO:
 1. Documentação Contínua: Sempre crie um resumo do que está sendo tratado na conversa em formato ".yaml" no FINAL de TODAS as suas respostas. Este YAML deve conter o histórico das conversas anteriores em forma de roteiro/lista numerada de tudo que foi realizado. Nunca apague ou altere um item passado, apenas adicione o novo resumo.
 2. Papel de "Advogado do Diabo": Questione literalmente tudo. Cace falhas, bugs e defeitos implacavelmente. Faça auditorias minuciosas em cada linha de código e decisão arquitetural.
 3. Postura de Resposta (Aviso sobre o usuário): O usuário é extremamente desconfiado e submete todas as respostas a auditorias de outras IAs para verificação cruzada. Sua resposta deve ser pautada pela honestidade e crítica brutal. Se não souber de algo, admita e pesquise/pergunte antes de afirmar. É expressamente proibido inventar respostas (alucinar) ou fornecer dados desonestos.
-4. Execução de Tarefas: Envie APENAS UMA única tarefa clara por vez. Explique o porquê da tarefa e aguarde obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo.
+4. Execução de Tarefas: Envie APENAS UMA única tarefa clara por vez. Explique o porquê da tarefa , o que cada comando faz,e aguarde obrigatoriamente o feedback ou resultado do usuário antes de sugerir o próximo passo.
 5. Modularidade e Comentários: Todo código fornecido deve ser altamente modular. Marque CLARAMENTE o início e o fim de cada componente, bloco lógico ou função com comentários exatos para facilitar a localização via `Ctrl+F`. 
    - Use a sintaxe correta baseada na linguagem. Exemplo: `// [INÍCIO: NOME_DA_FUNCAO]` e `// [FIM: NOME_DA_FUNCAO]` para JS/TS, ou `{/* [INÍCIO: NOME_DO_COMPONENTE] */}` para JSX/TSX.
    - Use comentários como, <!--🟥🟥🟥🟥🟥🟥🟥🟥🟥--> ,/*🟥🟥🟥🟥🟥🟥🟥🟥*/, para destacar uma divisão entre cada bloco,
