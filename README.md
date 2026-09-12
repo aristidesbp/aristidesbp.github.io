@@ -608,6 +608,381 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# menu.html
+```
+<!DOCTYPE html>
+<!-- Define que este documento utiliza as regras do HTML5. -->
+<html lang="pt-BR">
+<!-- Inicia a estrutura da página indicando aos leitores de tela e motores de busca que o idioma é português do Brasil. -->
+
+<!-- [INÍCIO: HEAD E CSS DESIGN SYSTEM] -->
+<!-- Marca visual e organizacionalmente onde o cabeçalho técnico e a estilização da página começam. -->
+<head>
+<!-- Abre a seção não-visual da página, onde configurações de meta tags e links são definidas. -->
+    <meta charset="UTF-8">
+    <!-- Configura a codificação universal de caracteres para garantir que acentos (como em "Gestão") sejam exibidos corretamente. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Faz a página se adaptar ao tamanho da tela (responsividade), impedindo que o site abra num celular "longe" como se fosse desktop. -->
+    <title>Menu Principal - ERP Supermercado</title>
+    <!-- Define o título que aparecerá na aba superior do navegador web do usuário. -->
+    
+    <style>
+    /* Inicia o bloco interno de regras de estilização (CSS) para não depender de um arquivo .css externo. */
+        
+        /* ================= DESIGN SYSTEM (Cores e Temas) ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --info-color: #17a2b8;
+        }
+        /* Configura um "dicionário" global de cores. Essa raiz (root) estabelece o tema escuro como padrão. 
+           Quando os botões e fundos chamarem "var(--bg-color)", eles puxarão o código hexadecimal "#0b1320". */
+
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+        }
+        /* Classe especial. Se o JavaScript colar o texto "light-theme" no código HTML, esta classe 
+           sobrescreverá imediatamente as variáveis de cor da raiz, criando instantaneamente um "modo claro". */
+
+        /* Estilos gerais da página */
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
+        /* Define a fonte padrão. Tira as margens que vêm grudadas nos navegadores. 
+           Adiciona uma transição (fade) de 0.3 segundos para que, ao mudar o tema, a cor não "pisque" secamente. */
+        
+        /* Cabeçalho superior */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        /* Estiliza o menu de topo. Usa Flexbox (justify-content: space-between) para jogar a logo para a esquerda e os botões 
+           para a direita. 'position: sticky; top: 0' garante que o menu fique preso no teto da tela mesmo ao descer a página. */
+           
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+        /* Controla a área do texto logo, alinhando verticalmente e dando um espaçamento de 10px entre o ícone e a palavra. */
+        .logo-icon { color: var(--accent-neon); }
+        /* Aplica a cor verde neon apenas no ícone do raio. */
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        /* Organiza o espaço entre os botões da direita (lua e porta de saída). */
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; transition: opacity 0.2s;}
+        /* Retira o fundo cinza e borda padrão do HTML para botões, transformando-os apenas no ícone clicável (emoji). */
+        .icon-btn:hover { opacity: 0.7; }
+        /* Ao encostar o mouse no ícone, ele fica ligeiramente transparente indicando que é clicável. */
+
+        /* Estrutura do conteúdo */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        /* Centraliza tudo abaixo do menu no meio da tela (margin auto), travando o esticamento máximo da largura em 1200 pixels. */
+        .boas-vindas { text-align: center; margin-bottom: 30px; }
+        /* Centraliza o texto "Centro de Comando" e empurra o conteúdo debaixo para longe. */
+        .boas-vindas h1 { margin: 0 0 10px 0; color: var(--text-main); }
+        /* Zera margens problemáticas do título e aplica a cor principal. */
+        .boas-vindas p { margin: 0; color: var(--text-muted); }
+        /* Estiliza o e-mail do usuário logado abaixo do título, usando a cor esmaecida (muted). */
+        
+        /* Caixas de aviso coloridas */
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid var(--info-color); margin-bottom: 20px;}
+        /* Define a caixa de carregamento e avisos neutros com uma bordinha arredondada e fundo meio transparente. */
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        /* Altera dinamicamente as cores da caixa info para vermelho caso o JavaScript insira a classe "erro". */
+
+        /* Grelha que organiza os cartões automaticamente (Responsivo) */
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;}
+        /* Cria uma grade inteligente. "auto-fit" e "minmax(250px, 1fr)" dizem ao navegador:
+           "Faça caber o máximo de cartões por linha, desde que cada um tenha no mínimo 250px de largura; se encolher demais, jogue para a linha debaixo". */
+        
+        /* Títulos das seções */
+        .secao-titulo { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-muted); font-size: 1.1em;}
+        /* Estiliza os títulos de divisão ("Operacional" / "Administrativo") com uma linha sutil abaixo do texto. */
+
+        /* Estilo individual de cada botão/cartão */
+        .card-menu { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px 20px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        /* Formata cada módulo clicável (links `<a>`). Remove o sublinhado feio padrão dos links (`text-decoration: none`) e centraliza seu conteúdo numa coluna. */
+        .card-menu:hover { border-color: var(--accent-neon); transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+        /* Ao passar o mouse, a borda acende (neon), o cartão flutua 5 pixels para cima (translateY) e projeta uma sombra no fundo (box-shadow). */
+        
+        .card-icone { font-size: 3em; margin-bottom: 15px; }
+        /* Aumenta bastante o emoji dentro do cartão. */
+        .card-titulo { font-size: 1.1em; font-weight: bold; margin-bottom: 8px; color: var(--accent-neon);}
+        /* Formata o nome do módulo destacando-o com a cor principal (neon). */
+        .card-desc { font-size: 0.85em; color: var(--text-muted); margin: 0;}
+        /* Deixa a descrição do que o módulo faz um pouco menor para não brigar com o título principal. */
+    </style>
+    <!-- Fecha o bloco de estilos CSS. -->
+
+    <!-- Importação do SDK do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Busca na rede o pacote oficial do banco de dados e injeta na página antes de processar qualquer lógica. -->
+</head>
+<!-- [FIM: HEAD E CSS DESIGN SYSTEM] -->
+
+<body>
+<!-- Abre a parte do código que é visível e tocável na tela para o usuário. -->
+    
+    <header>
+    <!-- Tag semântica para o menu superior (barra de topo). -->
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> ERP Supermercado
+        </div>
+        <!-- Apresenta a marca ao usuário. -->
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+            <!-- Botão que executa a função javascript 'toggleTheme()' ao ser clicado para mudar claro/escuro. -->
+            <button class="icon-btn" onclick="fazerLogout()" title="Sair do Sistema" style="color: var(--danger-color);">🚪</button>
+            <!-- Botão perigoso (forçado para vermelho no style inline) que apaga a sessão no banco ao rodar 'fazerLogout()'. -->
+        </div>
+    </header>
+
+    <div class="container">
+    <!-- Envolve todo o conteúdo que vai ficar centralizado abaixo do menu. -->
+        
+        <div id="status" class="info">A validar a sua segurança...</div>
+        <!-- Divisor de aviso temporário. É a única coisa que o usuário vê na fração de segundo em que o banco valida se ele não é um invasor. -->
+
+        <!-- [INÍCIO: PAINEL PRINCIPAL] -->
+        <div id="app" style="display: none;">
+        <!-- Container-Mãe de todo o sistema. Ele começa totalmente apagado e invisível (display: none). 
+             Ele só será ligado pelo Javascript se a senha/cookie for confirmada no backend. -->
+            
+            <div class="boas-vindas">
+                <h1>Centro de Comando</h1>
+                <p id="texto-usuario">Carregando dados do usuário...</p>
+                <!-- O parágrafo aguarda com ID "texto-usuario". O Javascript o encontrará e substituirá pela frase contendo o e-mail logado. -->
+            </div>
+
+            <!-- SEÇÃO 1: OPERACIONAL (Visível para todos) -->
+            <h2 class="secao-titulo">🛒 Operacional (Frente de Loja)</h2>
+            <!-- Título da área liberada para quem tem apenas a role "operador". -->
+            
+            <div class="grid-menu">
+            <!-- A grade CSS que envelopa os cartões base. -->
+                <a href="pdv.html" class="card-menu">
+                    <div class="card-icone">🖥️</div>
+                    <div class="card-titulo">PDV - Caixa Livre</div>
+                    <p class="card-desc">Frente de caixa para registro rápido de vendas com leitor.</p>
+                </a>
+                <!-- Link direto para a página física do Ponto de Venda. -->
+
+                <a href="caixa_sessao.html" class="card-menu">
+                    <div class="card-icone">💵</div>
+                    <div class="card-titulo">Controle de Caixa</div>
+                    <p class="card-desc">Abrir ou fechar o seu turno e declarar os valores da gaveta.</p>
+                </a>
+                <!-- Link para o fechamento financeiro do operador. -->
+
+                <a href="perfil.html" class="card-menu">
+                    <div class="card-icone">👤</div>
+                    <div class="card-titulo">Meu Perfil</div>
+                    <p class="card-desc">Atualize os seus dados pessoais e senha de acesso.</p>
+                </a>
+                <!-- Link para troca de senha. -->
+            </div>
+            <!-- Fecha a grade operacional. -->
+
+            <!-- SEÇÃO 2: ADMINISTRATIVO (Visível apenas para Administradores) -->
+            <!-- Note que toda essa seção (div) tem um ID "area-admin" para facilitar o bloqueio via JS -->
+            <div id="area-admin">
+            <!-- Outro invólucro (Wrapper). Todo o painel gerencial da loja foi encapsulado dentro do ID 'area-admin'. -->
+                
+                <h2 class="secao-titulo">⚙️ Administrativo e Retaguarda</h2>
+                <div class="grid-menu">
+                <!-- Abre uma nova grade para alojar os botões pesados. -->
+                    
+                    <a href="listar.html" class="card-menu">
+                        <div class="card-icone">📦</div>
+                        <div class="card-titulo">Gestão de Estoque</div>
+                        <p class="card-desc">Tabela de produtos, controle de validade e reposição.</p>
+                    </a>
+                    <!-- Direciona para o CRUD completo (listar, deletar, editar). -->
+
+                    <a href="cadastra.html" class="card-menu">
+                        <div class="card-icone">➕</div>
+                        <div class="card-titulo">Cadastrar Produto</div>
+                        <p class="card-desc">Cadastro manual com associação de códigos fiscais e NCM.</p>
+                    </a>
+                    <!-- Direciona para o formulário de inclusão. -->
+
+                    <a href="importar_nfe.html" class="card-menu">
+                        <div class="card-icone">📥</div>
+                        <div class="card-titulo">Importar NF-e</div>
+                        <p class="card-desc">Leitura de XML para dar entrada automática em lote.</p>
+                    </a>
+                    <!-- Direciona para o importador e processador de XML do fisco. -->
+
+                    <a href="entidades.html" class="card-menu">
+                        <div class="card-icone">🏢</div>
+                        <div class="card-titulo">Fornecedores & Clientes</div>
+                        <p class="card-desc">Cadastro de distribuidores e clientes para faturamento.</p>
+                    </a>
+                    <!-- Direciona para o banco de dados de contatos de terceiros. -->
+
+                    <a href="relatorios.html" class="card-menu">
+                        <div class="card-icone">📊</div>
+                        <div class="card-titulo">Relatórios Financeiros</div>
+                        <p class="card-desc">Fluxo de caixa, fechamentos diários e análise de lucros.</p>
+                    </a>
+                    <!-- Direciona para os dashboards gerenciais. -->
+
+                    <a href="usuarios.html" class="card-menu">
+                        <div class="card-icone">👥</div>
+                        <div class="card-titulo">Gestão de Usuários</div>
+                        <p class="card-desc">Cadastrar ou bloquear operadores e outros administradores.</p>
+                    </a>
+                    <!-- Direciona para a tela que gerencia (cria/apaga) as pessoas que têm acesso ao ERP. -->
+
+                </div>
+                <!-- Fecha a grade administrativa. -->
+            </div>
+            <!-- Fecha o invólucro do perfil administrativo. -->
+
+        </div>
+        <!-- [FIM: PAINEL PRINCIPAL] -->
+        <!-- Fecha a div global que contém o sistema (ID 'app'). -->
+
+    </div>
+    <!-- Fecha o conteiner centralizador da tela. -->
+
+    <!-- [INÍCIO: LÓGICA DE SEGURANÇA E SESSÃO] -->
+    <script src="supabase_config.js"></script>
+    <!-- Requisita o arquivo de senhas e aponta ao banco antes de rodar qualquer coisa localmente. -->
+    
+    <script>
+    <!-- Abre a sessão do cérebro dinâmico. -->
+        
+        // Função para alternar entre modo Claro e Escuro
+        function toggleTheme() {
+        // Declara a função chamada pelo clique no emoji de lua 🌓.
+            document.body.classList.toggle('light-theme');
+            // Manda o código ir lá no <body> do HTML. Se a palavra 'light-theme' não existir, ele cola; se já existir, ele arranca (ação nativa do .toggle).
+            
+            const isLight = document.body.classList.contains('light-theme');
+            // Analisa se após o ato de colar/arrancar a classe, a tela acabou ficando clara (true) ou escura (false).
+            
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+            // Anota essa resposta num banco de dados do próprio navegador do usuário (memória cache) chamado localStorage,
+            // garantindo que, se ele apertar F5, a escolha do tema vai permanecer salva para sempre.
+        }
+
+        // Função segura para sair do sistema (Logout)
+        async function fazerLogout() {
+        // Função atrelada ao clique da porta 🚪. A palavra-chave "async" prepara a função para enviar dados por debaixo dos panos para a rede de internet.
+            
+            if(confirm("Deseja mesmo sair do sistema?")) {
+            // Um alerta nativo feio, mas imbatível, pedindo OK ou Cancelar para não ocorrerem deslogues acidentais por toques na tela errados.
+                
+                await clienteSupabase.auth.signOut();
+                // O prefixo 'await' diz: "Pare a execução do código aqui. Vá no banco de dados, avise que a sessão morreu e espere ele confirmar de volta".
+                
+                window.location.href = 'login.html';
+                // Após o Supabase matar a chave criptográfica lá na nuvem, o Javascript empurra a URL da pessoa de volta para a porta principal fechada.
+            }
+        }
+
+        // Evento que roda assim que a página termina de desenhar o HTML na tela
+        document.addEventListener('DOMContentLoaded', async () => {
+        // Aguarda a construção do DOM (estrutura) para começar a manipulação via Script. Previne bug de script tentando modificar Divs não carregadas.
+            
+            // 1. Aplica o tema salvo pelo usuário
+            if(localStorage.getItem('temaBevDistro') === 'light') {
+                document.body.classList.add('light-theme');
+            }
+            // Logo no nascimento da tela, vai na gaveta local e verifica se deve clarear a página usando a anotação salva.
+
+            const statusDiv = document.getElementById('status');
+            // Pega a caixinha de texto "A validar sua segurança" para controlá-la no código.
+            const appDiv = document.getElementById('app');
+            // Pega todo o painel do sistema (atualmente oculto).
+            const textoUsuario = document.getElementById('texto-usuario');
+            // Pega o subtítulo de texto com o e-mail vazio.
+            const areaAdmin = document.getElementById('area-admin');
+            // Pega toda a div de chefia para uma possível filtragem futura de permissões.
+
+            // 2. Verifica se o script de conexão do Supabase foi carregado
+            if (typeof clienteSupabase === 'undefined') {
+            // Mecanismo "fail-safe". Impede o Javascript de esmagar a tela vermelha com erros irremediáveis se a internet do celular falhar na hora de baixar o SDK lá no Header.
+                statusDiv.textContent = "❌ Erro: supabase_config.js está ausente.";
+                // Modifica o texto da caixa.
+                statusDiv.className = "info erro";
+                // Modifica a cor para o vermelho do CSS e cancela a página.
+                return;
+            }
+
+            try {
+            // Abre túnel de tratamento seguro para conexões com falha em rede.
+                
+                // 3. Pede ao Supabase para verificar se a pessoa está logada
+                const { data: { session }, error: erroSessao } = await clienteSupabase.auth.getSession();
+                // Comando do kit oficial: bate na porta do servidor e pergunta se há um JWT (ticket dourado de sessão) na memória para este IP.
+                
+                // Se não estiver logado, expulsa para a tela de login
+                if (erroSessao || !session) {
+                // Analisa o retorno. Se for negativo (!session) ou o banco devolver erro de servidor bloqueado...
+                    statusDiv.textContent = "Acesso Negado. Redirecionando para o login...";
+                    statusDiv.className = "info erro";
+                    // Dá alerta vermelho.
+                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                    // Chuta o usuário invasor via link forçado após segurar o aviso na tela por 1.5s para ele ler que não foi um "bug" mas sim falta de acesso.
+                    return;
+                    // Mata imediatamente o andamento da função para que as regras de exibição e busca abaixo sequer sejam acionadas pela CPU.
+                }
+                
+                // 4. VERIFICAÇÃO DE CARGO (Zero-Trust visual)
+                // Busca no banco de dados qual é a "role" (cargo) deste usuário
+                const { data: perfil, error: erroPerfil } = await clienteSupabase
+                    .from('profiles')
+                    .select('cargo')
+                    .eq('id', session.user.id)
+                    .single();
+                // Como já vimos que ele tem ingresso (session), vamos no banco de dados (na tabela profiles) e exigimos apenas a coluna de (cargo) onde o id da linha bata idêntico ao id logado (.eq('id', session.user.id)).
+                // O método .single() manda o banco cuspir 1 objeto json bruto em vez de um array listável.
+
+                // LÓGICA DE OCULTAÇÃO: Se o cargo NÃO for administrador, escondemos o bloco inteiro
+                if (erroPerfil || !perfil || perfil.cargo !== 'administrador') {
+                // Checagem rigorosa: se falhou a busca de cargo (offline) OU perfil veio vazio OU a string puxada na coluna for diferente (!==) de exato 'administrador'...
+                    
+                    areaAdmin.style.display = 'none'; 
+                    // Esconde fisicamente a div inteira que contém a engrenagem de gestão do código HTML. O operador não pode ver nem clicar em relatórios.
+                    textoUsuario.textContent = `Operador de Caixa: ${session.user.email}`;
+                    // Imprime qual e-mail logou atestando que ele entrou com perfil restrito.
+                } else {
+                // Se o script cair aqui, significa que a string puxada é de fato 'administrador' cravado.
+                    
+                    // Se for admin, a áreaAdmin já está visível por padrão (herdado do HTML bruto).
+                    textoUsuario.textContent = `Administrador do Sistema: ${session.user.email}`;
+                    // Saúda ele no subtítulo com crachá superior e passa reto sem apagar divs.
+                }
+
+                // Tudo certo! Tira a mensagem de carregamento e exibe o sistema
+                statusDiv.style.display = "none";
+                // Some com a barra chata de validação.
+                appDiv.style.display = "block";
+                // Transforma a opacidade e o "display:none" da mãe global inteira, acendendo o menu para ser navegado.
+
+            } catch (error) {
+            // Em caso do 'try' acima capotar feio porque o usuário fechou aba no meio da promessa de busca.
+                console.error("Erro na verificação:", error);
+                statusDiv.textContent = "❌ Erro ao conectar com o servidor.";
+                statusDiv.className = "info erro";
+            }
+        });
+    </script>
+    <!-- [FIM: LÓGICA DE SEGURANÇA E SESSÃO] -->
+</body>
+</html>
+
+```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
  
 ## Download do aplicativo direto no git
