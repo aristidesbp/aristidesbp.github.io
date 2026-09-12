@@ -979,7 +979,102 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </html>
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# criação da tabela e entidades no Supabase 
+```
+-- [INÍCIO: RECONSTRUCAO_TABELA_ENTIDADES]
+-- Marca o início do script de reconstrução da tabela de entidades (clientes e fornecedores).
 
+
+-- 1. DESTRUIR TABELA ANTIGA E SUAS DEPENDÊNCIAS
+-- (CUIDADO: Isso apagará todos os dados existentes de clientes/fornecedores)
+DROP TABLE IF EXISTS public.entidades CASCADE;
+-- O comando 'DROP TABLE' deleta a tabela fisicamente do disco do banco de dados.
+-- O modificador 'IF EXISTS' previne que o script gere um erro fatal caso a tabela já tenha sido apagada.
+-- O esquema 'public.' garante que a exclusão ocorra no escopo principal do Supabase.
+-- O modificador 'CASCADE' é uma ação agressiva: ele força o banco a excluir automaticamente qualquer view ou chave estrangeira que dependa desta tabela para existir.
+
+-- 2. CRIAR NOVA TABELA BLINDADA
+CREATE TABLE public.entidades (
+-- Inicia a instrução para forjar uma tabela completamente nova chamada 'entidades' no esquema 'public'.
+    
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    -- Cria a coluna 'id' com o tipo UUID (Identificador Único Universal de 36 caracteres). 
+    -- 'PRIMARY KEY' diz que este é o identificador mestre da linha, impossível de repetir.
+    -- 'DEFAULT gen_random_uuid()' automatiza a criação do ID sem que a sua API precise enviar um ao inserir novos dados.
+    
+    tipo TEXT NOT NULL,
+    -- Coluna 'tipo' para definir se é "cliente" ou "fornecedor". Tipo TEXT. 
+    -- A trava 'NOT NULL' impede que um cadastro seja salvo com esse campo em branco.
+    
+    nome TEXT NOT NULL,
+    -- Coluna de texto para o nome ou razão social. Também com preenchimento obrigatório no banco ('NOT NULL').
+    
+    -- [SEGURANÇA: ADVOGADO DO DIABO] - UNIQUE impede dois clientes com o mesmo CNPJ/CPF
+    documento TEXT UNIQUE, 
+    -- Coluna 'documento'. A restrição estrutural 'UNIQUE' instrui o motor do PostgreSQL a varrer toda a tabela antes de salvar. Se alguém tentar inserir um CPF/CNPJ que já está cadastrado em outra linha, o banco rejeita a transação bloqueando fraudes.
+    
+    telefone TEXT,
+    -- Coluna simples para telefone. Como não tem restrições adicionais, ela aceita valores vazios (NULL).
+    
+    -- [SEGURANÇA: ADVOGADO DO DIABO] - UNIQUE impede duplicação de e-mails
+    email TEXT UNIQUE,     
+    -- Coluna 'email'. O selo 'UNIQUE' atua da mesma forma que no documento, impedindo a duplicação de contas e contatos.
+    
+    -- Novo campo solicitado
+    url_foto_avata TEXT,   
+    -- A nova coluna que criamos para armazenar o link (URL) vindo do Storage do Supabase onde a foto de perfil da pessoa está hospedada.
+    
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    -- Coluna de auditoria de tempo. Registra a data e a hora exatas (com fuso horário amarrado ao UTC global) em que a linha foi criada usando a função interna 'now()'. Não pode ficar vazia ('NOT NULL').
+);
+-- Fecha o escopo de criação de colunas da tabela.
+
+-- 3. HABILITAR SEGURANÇA EM NÍVEL DE LINHA (RLS - PADRÃO BANCÁRIO)
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+-- Este é o escudo primário do Supabase. Sem ativar o 'ROW LEVEL SECURITY', qualquer pessoa que descubra a API Key do seu frontend poderia listar ou apagar todo o cadastro de clientes. Ao ativar, o acesso padrão passa a ser "Nenhum Acesso".
+
+-- 4. RECRIAR POLÍTICA DE LEITURA
+-- (Apenas usuários logados podem ver a lista de clientes/fornecedores)
+CREATE POLICY "Leitura_Geral_Entidades" 
+-- Cria uma política e a batiza com um nome descritivo para aparecer no painel do Supabase.
+ON public.entidades 
+-- Amarra a aplicação dessa política exclusivamente na tabela 'entidades'.
+FOR SELECT 
+-- Indica que essa regra controla apenas as requisições de leitura ('SELECT').
+TO authenticated 
+-- Restringe a política: apenas usuários que possuem um token de login válido ('authenticated') entram no filtro. Usuários anônimos são barrados aqui.
+USING (true);
+-- A cláusula 'USING (true)' diz que, se o cara estiver logado (passou na regra de cima), o banco retorna todas as linhas de clientes para ele ler.
+
+-- 5. RECRIAR POLÍTICA DE MODIFICAÇÃO
+-- (Apenas Administradores podem Inserir/Atualizar/Deletar entidades)
+CREATE POLICY "Admin_Modifica_Entidades" 
+-- Cria a política para controlar quem altera os dados da tabela.
+ON public.entidades 
+-- Aplica na tabela 'entidades'.
+FOR ALL 
+-- 'FOR ALL' é um atalho poderoso. Ele cria um guarda-chuva protegendo operações de INSERT (criar), UPDATE (editar) e DELETE (apagar) de uma só vez.
+TO authenticated 
+-- Exige conexão via token de login.
+USING (
+-- O bloco 'USING' avalia uma condição matemática/lógica antes de permitir o ato destrutivo.
+    EXISTS (
+    -- A função 'EXISTS' verifica se a consulta embutida abaixo dela devolve pelo menos um resultado verdadeiro.
+        SELECT 1 FROM profiles 
+        -- A consulta espiona a tabela auxiliar 'profiles' (onde estão os cargos).
+        WHERE profiles.id = auth.uid() AND profiles.cargo = 'administrador'
+        -- [A TRAVA CRÍTICA]: O banco cruza o ID do cara que apertou o botão na tela (auth.uid()) com o ID gravado no banco de dados, e EXIGE que a coluna 'cargo' esteja escrita estritamente como 'administrador'. Se for 'operador', a tentativa de modificar o cliente falha silenciosamente a nível de hardware.
+    )
+);
+-- Fecha a instrução da política.
+
+
+-- [FIM: RECONSTRUCAO_TABELA_ENTIDADES]
+-- Marca o final das instruções de tradução para este arquivo.
+
+
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
