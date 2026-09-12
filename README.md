@@ -73,91 +73,7 @@ exemplo 2:
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SQL PARA VERIFICAR RLS
-```
--- [INÍCIO: EXTRACAO_POLITICAS_RLS]
-SELECT 
-    schemaname AS "Esquema", 
-    tablename AS "Tabela", 
-    policyname AS "Nome_da_Politica", 
-    roles AS "Perfis_Afetados", 
-    cmd AS "Operacao_Permitida", 
-    qual AS "Condicao_de_Leitura_USING", 
-    with_check AS "Condicao_de_Escrita_WITH_CHECK"
-FROM 
-    pg_policies 
-WHERE 
-    schemaname = 'public'
-ORDER BY 
-    tablename, cmd;
--- [FIM: EXTRACAO_POLITICAS_RLS]
-```
-# SQL PARA VERIFICAR AS FUNCTIONS (RPC)
-```
--- [INÍCIO: EXTRACAO_FUNCTIONS_RPC]
-SELECT 
-    p.proname AS "Nome_da_Funcao",
-    pg_get_function_arguments(p.oid) AS "Argumentos",
-    t.typname AS "Tipo_Retorno",
-    CASE 
-        WHEN p.prosecdef THEN 'SECURITY DEFINER (Alerta de Risco)' 
-        ELSE 'SECURITY INVOKER (Normal)' 
-    END AS "Contexto_de_Seguranca",
-    p.prosrc AS "Codigo_Fonte"
-FROM 
-    pg_proc p
-JOIN 
-    pg_namespace n ON p.pronamespace = n.oid
-JOIN 
-    pg_type t ON p.prorettype = t.oid
-WHERE 
-    n.nspname = 'public';
--- [FIM: EXTRACAO_FUNCTIONS_RPC]
-
-```
-# SQL PARA VERIFICAR AS Triggers (Gatilhos)
-```
--- [INÍCIO: EXTRACAO_TRIGGERS]
-SELECT 
-    event_object_table AS "Tabela_Alvo",
-    trigger_name AS "Nome_do_Gatilho",
-    action_timing AS "Momento_de_Execucao",
-    event_manipulation AS "Evento_Gatilho_CRUD",
-    action_statement AS "Funcao_Executada"
-FROM 
-    information_schema.triggers
-WHERE 
-    trigger_schema = 'public'
-ORDER BY 
-    event_object_table;
--- [FIM: EXTRACAO_TRIGGERS]
-
-```
-# SQL PARA VERIFICAR O STORAGE 
-```
-
--- 1. Buscar a lista de Buckets criados
-SELECT 
-    id, 
-    name AS nome_do_bucket, 
-    public AS e_publico
-FROM storage.buckets;
-
--- 2. Buscar as Políticas de Segurança aplicadas aos arquivos (Storage)
-SELECT 
-    tablename AS tabela_alvo,
-    policyname AS nome_da_politica,
-    cmd AS operacao,
-    roles AS perfis_afetados,
-    qual AS condicao_leitura,
-    with_check AS condicao_escrita
-FROM pg_policies
-WHERE schemaname = 'storage'
-ORDER BY tablename, policyname;
-
-
-```
-# Completo
+# SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
 ```
 -- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
 -- Este script consulta os metadados do PostgreSQL para criar um raio-x do seu schema 'public'
@@ -220,7 +136,8 @@ SELECT jsonb_pretty(jsonb_build_object(
 -- [FIM: EXTRATOR_DE_SCHEMA_SUPABASE]
 
 
-
+```
+```
 
 -- [INÍCIO: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
 -- Este script busca as políticas de segurança RLS aplicadas aos arquivos (storage.objects)
