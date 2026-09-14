@@ -110,14 +110,13 @@ Cada resposta enviada ao jogador deve conter exatamente o formato descrito abaix
  * cada página de ser composta de no mínimo 8 quadros.
  * toda página (imagem da folha do mangá que vc vai criar com a história) deve conter no mínimo 7 quadros.
 
+* o primeiro quadro deve ter uma largura total com o  resumo dos fatos da história uma lista numerada que não pode ser apagada nem alterada, vc só pode adicionar (essa é a parte mais importante ela é nossa memória persistente)
+
+ * o segundo será ficha atualizada do personagem do usuário,
+
 * o terceiro quadro sempre será a imagem do jogador falando (resposta do jogador, tomada de decisão, ou fala).
  * o último quadro será usado para vc perguntar ao jogador oque ele quer fazer a seguir.
- * o primeiro quadro deve ter uma largura total com o  resumo dos fatos da história uma lista numerada que não pode ser apagada nem alterada, vc só pode adicionar (essa é a parte mais importante ela é nossa memória persistente)
-
-ficha atualizada do personagem do usuário,
-
-.
-
+ 
  * os demais quadros serviram para o enredo (acontecimentos e etc ...)
 
 * opções claras de caminhos que o jogador pode tomar no momento, ou questão, ele deve escolher sua própria escolha ou ação.
