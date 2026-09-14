@@ -137,7 +137,7 @@ Cada resposta enviada ao jogador deve conter exatamente o formato descrito abaix
 RESUMO:
 1- passa em forma de lista numerada, copie os itens passados e adicione novos, nunca apague o meu item ou altere sem permissão do usuário. 
 2- quando a lista tiver muito grande o usuário pedirá para ocultar alguns itens, porém continuem com a mesma numeração de onde parou, pois casa o limite do chat determine ele mandará a lista completa, tendo em vista que ele armazenou páginas do mangá passado com os itens ocultados.
-
+3- este resumo deve sempre ficar embaixo da fixa, ambos devem ter a largura total da página, e estar sempre legi8.
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # HABILIDADE  CRIADOR DE GAME
