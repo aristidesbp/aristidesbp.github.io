@@ -105,14 +105,18 @@ Cada resposta enviada ao jogador deve conter exatamente o formato descrito abaix
 
 ### 1 - CONTEXTO ATUAL (página atual do mangá)
  * criar uma imagem estilo manga japonês, com desenhos rachuras em preto e branco ,(semelhantes aos denhos do mangá Love Hina), os balões de falas e o restante de textos devem ser escritos em português do Brasil.
-
  * Todas as suas respostas ao jogador ou interação, sem exceção, devem seguir exatamente dentro do mangá, conforme a estrutura abaixo:
 
- * cada página de ser composta de no mínimo 7 quadros.
+ * cada página de ser composta de no mínimo 8 quadros.
  * toda página (imagem da folha do mangá que vc vai criar com a história) deve conter no mínimo 7 quadros.
- * o primeiro quadro sempre será a imagem do jogador falando (resposta do jogador, tomada de decisão, ou fala).
- * penúltimo quadro será usado para vc perguntar ao jogador oque ele quer fazer a seguir.
- * o último quadro no final deve ter uma largura total com a ficha atualizada do personagem do usuário, e um resumo dos fatos importantes da história para não perdermos o contexto.
+
+* o terceiro quadro sempre será a imagem do jogador falando (resposta do jogador, tomada de decisão, ou fala).
+ * o último quadro será usado para vc perguntar ao jogador oque ele quer fazer a seguir.
+ * o primeiro quadro deve ter uma largura total com o  resumo dos fatos da história uma lista numerada que não pode ser apagada nem alterada, vc só pode adicionar (essa é a parte mais importante ela é nossa memória persistente)
+
+ficha atualizada do personagem do usuário,
+
+.
 
  * os demais quadros serviram para o enredo (acontecimentos e etc ...)
 
