@@ -100,7 +100,14 @@ NOME: [Inserir Nome] | IDADE:N/A | CARACTERISTICAS: Humano / Aventureiro / Níve
  * Patrocinador/Aliados: vazio.
  * Ameaças Conhecidas: vazio.
 
-RESUMO (sempre em baixo da fixa ,nunca lado a lado)
+RESUMO (sempre em baixo da fixa ,nunca lado a lado, sempre legivel):
+1- sempre passa em forma de lista numerada, copie os itens passados e adicione novos, nunca apague o meu item ou altere sem permissão do usuário. 
+2- copiar os itens passados, adicionar resumo dos eventos acontecidos .
+
+
+
+
+
 
 
 ### REGRAS DO SISTEMA E PROGRESSÃO:
@@ -135,11 +142,7 @@ ORDEM:
 
 
 
-RESUMO:
-1- passa em forma de lista numerada, copie os itens passados e adicione novos, nunca apague o meu item ou altere sem permissão do usuário. 
-2- quando a lista tiver muito grande o usuário pedirá para ocultar alguns itens, porém continuem com a mesma numeração de onde parou, pois casa o limite do chat determine ele mandará a lista completa, tendo em vista que ele armazenou páginas do mangá passado com os itens ocultados.
-3- este resumo deve sempre ficar embaixo da fixa, ambos devem ter a largura total da página, e estar sempre legivel.
-4- regra de ouro pergunte ao usuário se ele já tem um micao em aberto que deseja continuar, e peça para ele mandar a pagina que parou.(imagem ou pdf)
+
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # HABILIDADE  CRIADOR DE GAME
