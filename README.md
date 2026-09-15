@@ -126,7 +126,7 @@ Será apenas através  de Textos, o mestre do jogo narra história, envolvente,e
  * o ÚLTIMO (6) quadro será usado para vc perguntar ao jogador oque ele quer fazer a seguir.
  * os demais quadros serviram para o enredo (acontecimentos e etc ...)
 
-2- PAGINA DE backup:
+2- PAGINA DE backup ou status:
 * a cada 5 páginas criadas, ou quando notar que os tokens estão acabando.faça uma página de backup,
 * a página será começa com faixa do personagem, embaixo o resumo, embaixo imagens de ambientes e personagens, um em baixo  do outro com nome identificando.
 * essa é a pagina mais importante ela é nossa memória persistente, deve ter um registro impecável para servir de contexto suficiente para continuação da história.
@@ -141,7 +141,7 @@ Será apenas através  de Textos, o mestre do jogo narra história, envolvente,e
 
 2- montar o estilo de jogo 
 - qual o tipo de história ele quer jogar?
-- se tem alguma referência (cite exemplos de mangas ou animes)
+- se tem alguma referência (cite exemplos de mangas ou animes/ generos)
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
