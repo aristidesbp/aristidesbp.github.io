@@ -1,40 +1,98 @@
-
+<!-- [INÍCIO: SISTEMA DE CÓPIA E ESTILIZAÇÃO DO GITHUB PAGES] -->
 <style>
-/* [INÍCIO: ESTILO BASE DA PÁGINA E CÓDIGOS] */
+  /* 1. Força o fundo da página a ser claro, ignorando o modo noturno do celular */
+  body {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    font-family: Arial, sans-serif;
+  }
 
-body {
-    background-color: #ffffff; /* Fundo principal claro da página */
-    color: #333333; /* Texto padrão escuro para leitura confortável */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; /* Fontes modernas */
-}
-
-/* Estilo para os blocos GRANDES de código (quando você usa 3 crases) */
-pre {
-    background-color: #f6f8fa; /* Fundo cinza claro idêntico ao oficial do GitHub */
-    border-radius: 6px; /* Bordas levemente arredondadas */
-    padding: 16px; /* Espaço interno para o código não grudar nas bordas */
-    overflow: auto; /* Cria uma barra de rolagem se o código for muito largo para a tela do celular */
-    border: 1px solid #d0d7de; /* Uma linha de contorno bem fina e elegante */
-}
-
-/* Estilo para as letras e palavras do código (code) */
-code {
-    background-color: rgba(175, 184, 193, 0.2); /* Fundo sutil para marcações rápidas na mesma linha */
-    color: #24292f; /* Letra escura legível que se destaca no fundo cinza */
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; /* Fonte de programação (largura fixa) */
-    padding: 0.2em 0.4em;
+  /* 2. Estilo da caixa principal do código */
+  pre {
+    background-color: #f6f8fa !important; /* Fundo cinza claro */
+    border: 1px solid #d0d7de !important; /* Bordinha suave */
     border-radius: 6px;
-    font-size: 85%;
-}
+    padding: 40px 16px 16px 16px !important; /* Espaço extra no topo (40px) para caber o botão */
+    position: relative; /* Essencial: permite posicionar o botão solto dentro da caixa */
+    overflow: auto; /* Barra de rolagem caso o código seja longo */
+  }
 
-/* Ajuste fino: Tira o fundo duplo quando a tag 'code' está dentro do bloco grande 'pre' */
-pre code {
-    background-color: transparent; 
-    padding: 0;
-}
+  /* 3. Estilo do texto dentro da caixa */
+  pre code {
+    color: #24292f !important; /* Texto escuro e legível */
+    background: transparent !important;
+  }
 
-/* [FIM: ESTILO BASE DA PÁGINA E CÓDIGOS] */
+  /* 4. Estilo visual do Botão de Copiar */
+  .btn-copiar {
+    position: absolute; /* Deixa o botão "flutuando" */
+    top: 8px; /* Distância do teto da caixa */
+    right: 8px; /* Distância da parede direita da caixa */
+    background-color: #ffffff;
+    color: #24292f;
+    border: 1px solid rgba(27, 31, 36, 0.15);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  /* 5. Estilo de sucesso (Quando o usuário clica e copia) */
+  .btn-copiar.copiado {
+    background-color: #2da44e !important; /* Fica verde */
+    color: #ffffff !important;
+    border-color: #2da44e !important;
+  }
 </style>
+
+<script>
+  // 6. Aguarda o HTML da página carregar completamente para executar a lógica
+  document.addEventListener("DOMContentLoaded", function() {
+    
+    // Procura na página todas as tags <pre> (que são os blocos grandes de código)
+    var blocosDeCodigo = document.querySelectorAll("pre");
+
+    // Para cada bloco de código encontrado, faremos o seguinte:
+    blocosDeCodigo.forEach(function(bloco) {
+      
+      // Cria virtualmente o elemento de botão
+      var botao = document.createElement("button");
+      botao.className = "btn-copiar"; // Aplica o estilo CSS criado acima
+      botao.innerText = "📋 Copiar";
+
+      // Cria a regra: O que acontece quando o botão for clicado?
+      botao.addEventListener("click", function() {
+        
+        // Entra no bloco, procura a tag <code> e extrai o texto escrito dentro dela
+        var codigo = bloco.querySelector("code").innerText;
+
+        // Chama a API de área de transferência do celular/navegador para salvar o texto
+        navigator.clipboard.writeText(codigo).then(function() {
+            
+          // Se der certo, muda o visual do botão para dar feedback ao usuário
+          botao.innerText = "✅ Copiado!";
+          botao.classList.add("copiado");
+
+          // Aguarda 2 segundos (2000 milissegundos) e volta o botão ao estado normal
+          setTimeout(function() {
+            botao.innerText = "📋 Copiar";
+            botao.classList.remove("copiado");
+          }, 2000);
+          
+        }).catch(function(err) {
+          // Se o navegador bloquear a cópia, exibe um erro
+          console.error("Erro ao copiar: ", err);
+          botao.innerText = "❌ Erro";
+        });
+      });
+
+      // Finalmente, injeta o botão fisicamente dentro do bloco de código na tela
+      bloco.appendChild(botao);
+    });
+  });
+</script>
+<!-- [FIM: SISTEMA DE CÓPIA E ESTILIZAÇÃO DO GITHUB PAGES] -->
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
