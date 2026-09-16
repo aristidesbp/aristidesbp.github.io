@@ -1,3 +1,42 @@
+
+<style>
+/* [INÍCIO: ESTILO BASE DA PÁGINA E CÓDIGOS] */
+
+body {
+    background-color: #ffffff; /* Fundo principal claro da página */
+    color: #333333; /* Texto padrão escuro para leitura confortável */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; /* Fontes modernas */
+}
+
+/* Estilo para os blocos GRANDES de código (quando você usa 3 crases) */
+pre {
+    background-color: #f6f8fa; /* Fundo cinza claro idêntico ao oficial do GitHub */
+    border-radius: 6px; /* Bordas levemente arredondadas */
+    padding: 16px; /* Espaço interno para o código não grudar nas bordas */
+    overflow: auto; /* Cria uma barra de rolagem se o código for muito largo para a tela do celular */
+    border: 1px solid #d0d7de; /* Uma linha de contorno bem fina e elegante */
+}
+
+/* Estilo para as letras e palavras do código (code) */
+code {
+    background-color: rgba(175, 184, 193, 0.2); /* Fundo sutil para marcações rápidas na mesma linha */
+    color: #24292f; /* Letra escura legível que se destaca no fundo cinza */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; /* Fonte de programação (largura fixa) */
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-size: 85%;
+}
+
+/* Ajuste fino: Tira o fundo duplo quando a tag 'code' está dentro do bloco grande 'pre' */
+pre code {
+    background-color: transparent; 
+    padding: 0;
+}
+
+/* [FIM: ESTILO BASE DA PÁGINA E CÓDIGOS] */
+</style>
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # UPANDO A IA COM SKILLS:
 ```
