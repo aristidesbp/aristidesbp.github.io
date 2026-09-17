@@ -1,5 +1,5 @@
 
-
+sudo dpkg-reconfigure locales
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # UPANDO A IA COM SKILLS:
 ```
