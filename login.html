@@ -181,7 +181,7 @@
                 // Analisa o retorno. Se for 'true' (o usuário já está conectado via cookies passados)...
                     mostrarStatus("Sessão válida! Redirecionando...", "sucesso");
                     // Oculta o formulário, acende a caixa em verde.
-                    setTimeout(() => { window.location.href = 'menu.html'; }, 800);
+                    setTimeout(() => { window.location.href = 'index.html'; }, 800);
                     // O 'setTimeout' aguarda exatos 800 milissegundos para então forçar a URL do navegador saltar para o 'menu.html', pulando inteiramente o login.
                 } else {
                 // Caso não possua sessão. O cliente é novo no sistema.
@@ -237,7 +237,7 @@
                 // Devolve a visibilidade para a caixa de mensagens.
                 mostrarStatus("✅ Autenticado! Entrando...", "sucesso");
                 // Preenche ela com uma frase amigável, tingindo-a de verde usando o método auxiliar lá do fundo.
-                setTimeout(() => { window.location.href = 'menu.html'; }, 1000);
+                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
                 // Mantém a notificação visível por 1000 ms e só então muda a rota para 'menu.html', finalizando o fluxo.
             } catch (erro) {
             // Em caso de rejeição da senha.
