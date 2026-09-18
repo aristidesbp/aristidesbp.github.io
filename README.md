@@ -1,5 +1,47 @@
+# ARISTIDESBP
 
-sudo dpkg-reconfigure locales
+Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focado em desenvolvimento de soluções web, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
+
+---
+## 📌 CONTATOS
+* 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
+* 📱 **WhatsApp:** +55 (91) 99242-0981
+* 🌐 **GitHub:** [ENTRAR](https://github.com/aristidesbp)
+
+---
+### PROJETOS:
+🌐 [MEUS TUTORIAIS](https://aristidesbp.github.io/)
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+
+---
+## 📚 LISTA DE LINKS PARA ESTUDOS 
+
+* 🌐 **HTML:** [w3schools.com](https://w3schools.com)
+* 🎨 **CSS:** [codecademy.com](https://codecademy.com)
+* ⚡ **JavaScript:** [freecodecamp.org](https://freecodecamp.org)
+* ⚛️ **React:** [react.dev](https://react.dev)
+* 🐍 **Python:** [learnpython.org](https://learnpython.org)
+* ☕ **Java:** [sololearn.com](https://sololearn.com)
+* 🐘 **PHP:** [php.net](https://php.net)
+* 🛡️ **Cybersecurity:** [tryhackme.com](https://tryhackme.com)
+* ⚙️ **C:** [learn-c.org](https://learn-c.org)
+* 🛠️ **C++:** [learncpp.com](https://learncpp.com)
+* ☁️ **AWS:** [skillbuilder.aws](https://skillbuilder.aws)
+* 🤖 **IA/ML:** [coursera.org](https://coursera.org)
+* 🌿 **Git:** [learngitbranching.js.org](https://learngitbranching.js.org)
+* 📊 **SQL:** [sqlbolt.com](https://sqlbolt.com)
+* 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO)
+* 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
+
+
+
+
+
+
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # UPANDO A IA COM SKILLS:
 ```
