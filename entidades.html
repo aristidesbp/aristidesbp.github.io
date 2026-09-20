@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entidades - ERP Supermercado</title>
+    
+    <!-- 1. Importação do SDK do Supabase (O motor do banco de dados) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* === DESIGN SYSTEM BÁSICO === */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); padding-bottom: 50px; }
+        
+        /* Cabeçalho de Navegação */
+        header { background-color: var(--bg-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .logo-area { font-size: 1.2em; font-weight: bold; color: var(--text-main); text-decoration: none;}
+        .logo-area span { color: var(--accent-neon); }
+        
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        
+        /* Título e Botão Superior */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;}
+        
+        /* Estilização de Botões */
+        .btn-neon { background: var(--accent-neon); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-neon:hover { background: var(--accent-hover); }
+        .btn-perigo { background: transparent; color: var(--danger-color); border: 1px solid var(--danger-color); padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .btn-perigo:hover { background: var(--danger-color); color: #fff; }
+        .btn-editar { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-right: 5px;}
+        .btn-editar:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
+
+        /* Estilização da Tabela de Dados */
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: rgba(0,0,0,0.2); color: var(--text-muted); font-size: 0.9em; text-transform: uppercase; }
+        
+        /* Etiquetas Visuais para o Tipo (Cliente/Fornecedor) */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        .badge.cliente { background: rgba(23, 162, 184, 0.2); color: #17a2b8; }
+        .badge.fornecedor { background: rgba(164, 227, 32, 0.2); color: var(--accent-neon); }
+        .badge.funcionario { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+
+        /* A Janela Modal (Invisível por padrão) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: var(--card-bg); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid var(--border-color); }
+        .modal h3 { margin-top: 0; color: var(--accent-neon); }
+        .modal input, .modal select { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: #fff; box-sizing: border-box;}
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-cancelar { background: transparent; color: var(--text-muted); border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Menu Superior -->
+    <header>
+        <a href="index.html" class="logo-area"><span>⚡</span> ERP SaaS</a>
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none;">⬅ Voltar ao Painel</a>
+    </header>
+
+    <!-- Área Principal -->
+    <div class="container">
+        
+        <div class="page-header">
+            <h2>Gestão de Entidades</h2>
+            <!-- Este botão aciona o JavaScript para mostrar a janela modal -->
+            <button class="btn-neon" onclick="abrirModal()">+ Nova Entidade</button>
+        </div>
+
+        <div id="status-msg" style="color: var(--accent-neon); margin-bottom: 15px;">A verificar segurança e carregar dados...</div>
+
+        <!-- Tabela Vazia (O JavaScript vai preencher as linhas 'tr' aqui dentro) -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Documento</th>
+                    <th>Contacto</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-corpo">
+                <!-- Conteúdo dinâmico -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- JANELA MODAL DE CADASTRO / EDIÇÃO -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3 id="modal-titulo">Cadastrar Entidade</h3>
+            
+            <!-- Guardamos o ID secretamente aqui quando estamos a editar um registo existente -->
+            <input type="hidden" id="input-id">
+            
+            <label>Tipo:</label>
+            <select id="input-tipo">
+                <option value="cliente">Cliente</option>
+                <option value="fornecedor">Fornecedor</option>
+                <option value="funcionario">Funcionário</option>
+            </select>
+
+            <label>Nome Completo / Razão Social:</label>
+            <input type="text" id="input-nome" placeholder="Ex: João Silva">
+
+            <label>Documento (CPF/CNPJ):</label>
+            <input type="text" id="input-documento" placeholder="Apenas números">
+
+            <label>Telefone:</label>
+            <input type="text" id="input-telefone" placeholder="(91) 90000-0000">
+
+            <label>E-mail:</label>
+            <input type="email" id="input-email" placeholder="contato@email.com">
+
+            <div class="modal-actions">
+                <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-neon" onclick="salvarEntidade()">Salvar Registo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Importação do Ficheiro de Configuração Local -->
+    <script src="supabase_config.js"></script>
+    
+    <script>
+        // [INÍCIO: LÓGICA JAVASCRIPT]
+        
+        // --- 1. VERIFICAÇÃO DE SEGURANÇA (RBAC) ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Pergunta ao banco: "Quem está logado?"
+            const { data: { session }, error } = await clienteSupabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'login.html'; return;
+            }
+
+            // Pergunta ao banco: "Este utilizador é administrador?"
+            const { data: perfil } = await clienteSupabase
+                .from('profiles')
+                .select('cargo')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!perfil || perfil.cargo !== 'administrador') {
+                alert("Acesso Negado: Apenas administradores podem gerir entidades.");
+                window.location.href = 'index.html'; return;
+            }
+
+            // Se for admin, manda carregar a tabela!
+            carregarEntidades();
+        });
+
+        // --- 2. LER DADOS (Read) ---
+        async function carregarEntidades() {
+            const tabelaCorpo = document.getElementById('tabela-corpo');
+            const statusMsg = document.getElementById('status-msg');
+
+            // Graças ao nosso RLS Multi-Tenant, o '.select('*')' traz APENAS os clientes da nossa empresa!
+            const { data, error } = await clienteSupabase
+                .from('entidades')
+                .select('*')
+                .order('criado_em', { ascending: false });
+
+            if (error) {
+                statusMsg.innerText = "Erro ao buscar dados.";
+                statusMsg.style.color = "red";
+                console.error(error);
+                return;
+            }
+
+            tabelaCorpo.innerHTML = ''; // Limpa a tabela
+            statusMsg.innerText = "";   // Remove o aviso de carregamento
+
+            if (data.length === 0) {
+                tabelaCorpo.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhuma entidade cadastrada.</td></tr>';
+                return;
+            }
+
+            // Preenche a tabela com os dados
+            data.forEach(entidade => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${entidade.nome}</strong></td>
+                    <td><span class="badge ${entidade.tipo}">${entidade.tipo.toUpperCase()}</span></td>
+                    <td>${entidade.documento || '--'}</td>
+                    <td>${entidade.telefone || '--'} <br> <small style="color: gray;">${entidade.email || ''}</small></td>
+                    <td>
+                        <!-- Envia os dados para o formulário caso o utilizador queira editar -->
+                        <button class="btn-editar" onclick="prepararEdicao('${entidade.id}', '${entidade.nome}', '${entidade.tipo}', '${entidade.documento}', '${entidade.telefone}', '${entidade.email}')">✏️</button>
+                        <button class="btn-perigo" onclick="deletarEntidade('${entidade.id}')">🗑️</button>
+                    </td>
+                `;
+                tabelaCorpo.appendChild(tr);
+            });
+        }
+
+        // --- 3. CONTROLO DO FORMULÁRIO (Modal) ---
+        function abrirModal() {
+            document.getElementById('modal').style.display = 'flex';
+            // Esvazia os campos para um novo cadastro
+            document.getElementById('input-id').value = '';
+            document.getElementById('input-nome').value = '';
+            document.getElementById('input-documento').value = '';
+            document.getElementById('input-telefone').value = '';
+            document.getElementById('input-email').value = '';
+            document.getElementById('modal-titulo').innerText = 'Cadastrar Nova Entidade';
+        }
+
+        function fecharModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function prepararEdicao(id, nome, tipo, documento, telefone, email) {
+            // Preenche os campos com os dados antigos para edição
+            document.getElementById('input-id').value = id;
+            document.getElementById('input-nome').value = nome;
+            document.getElementById('input-tipo').value = tipo;
+            document.getElementById('input-documento').value = documento !== 'null' ? documento : '';
+            document.getElementById('input-telefone').value = telefone !== 'null' ? telefone : '';
+            document.getElementById('input-email').value = email !== 'null' ? email : '';
+            
+            document.getElementById('modal-titulo').innerText = 'Editar Entidade';
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // --- 4. GRAVAR DADOS (Create / Update) ---
+        async function salvarEntidade() {
+            const id = document.getElementById('input-id').value;
+            const nome = document.getElementById('input-nome').value.trim();
+            const tipo = document.getElementById('input-tipo').value;
+            const documento = document.getElementById('input-documento').value.trim();
+            const telefone = document.getElementById('input-telefone').value.trim();
+            const email = document.getElementById('input-email').value.trim();
+
+            if (!nome) { alert("O nome é obrigatório!"); return; }
+
+            // ZERO TRUST: Repara que não enviamos a empresa_id! O nosso Trigger no Supabase faz isso por nós.
+            const dadosSalvar = {
+                nome: nome,
+                tipo: tipo,
+                documento: documento || null,
+                telefone: telefone || null,
+                email: email || null
+            };
+
+            let erroOperacao = null;
+
+            if (id) {
+                // ATUALIZAR (UPDATE)
+                const { error } = await clienteSupabase.from('entidades').update(dadosSalvar).eq('id', id);
+                erroOperacao = error;
+            } else {
+                // INSERIR NOVO (INSERT)
+                const { error } = await clienteSupabase.from('entidades').insert([dadosSalvar]);
+                erroOperacao = error;
+            }
+
+            if (erroOperacao) {
+                alert("Erro ao salvar: " + erroOperacao.message);
+                return;
+            }
+
+            fecharModal();
+            carregarEntidades(); // Atualiza a tabela imediatamente
+        }
+
+        // --- 5. APAGAR DADOS (Delete) ---
+        async function deletarEntidade(id) {
+            if (confirm("Tem a certeza que deseja apagar este registo permanentemente?")) {
+                const { error } = await clienteSupabase.from('entidades').delete().eq('id', id);
+
+                if (error) {
+                    alert("Erro ao apagar: " + error.message);
+                } else {
+                    carregarEntidades(); // Atualiza a tabela imediatamente
+                }
+            }
+        }
+        // [FIM: LÓGICA JAVASCRIPT]
+    </script>
+</body>
+</html>
+
+
