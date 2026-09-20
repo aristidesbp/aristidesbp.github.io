@@ -35,7 +35,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 📊 **SUPABASE:** [https://sqlbolt.com](https://www.youtube.com/watch?v=9Hj4eZE7n00&list=PL4ZwkMMhwaqIem09eRINhc2fjfaM_t2OO)
 * 🎨 **GERAR QUALQUER TIPO DE IMAGEM** [perchance.org](https://perchance.org/ai-text-to-image-generator)
 * 🎨 **DUCKDUCKGO-IA** [duckduckgo.com](https://duckduckgo.com/))
-
+*  **fluxograma***(https://mermaid.live/edit)
 
 
 
