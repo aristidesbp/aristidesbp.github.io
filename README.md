@@ -246,6 +246,7 @@ DIRETRIZES DE EXECUÇÃO:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 🗺️ Panorama Geral da Solução: O Motor de Autenticação SaaS Completo
 Para que o teu sistema de login, registo e isolamento de empresas funcione na perfeição, precisamos de construir um "Motor SaaS" composto por 5 peças fundamentais, executadas exatamente nesta ordem:
 * Tabela empresas (A Raiz): Onde ficam guardados os dados dos teus clientes (os donos dos supermercados).
@@ -487,6 +488,70 @@ $$;
 
 ```
 
+# FUNCTIONS ZERO
+```
+
+-- [INÍCIO: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
+
+-- 1. Ativa a extensão de criptografia (Necessária para encriptar a senha do novo utilizador)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- 2. Cria a Função RPC
+CREATE OR REPLACE FUNCTION public.criar_funcionario_saas(
+    p_email text,
+    p_senha text,
+    p_nome text,
+    p_cargo text
+) RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER -- Permite que a função interaja com a auth.users em segurança
+AS $$
+DECLARE
+    v_admin_empresa_id uuid;
+    v_admin_cargo text;
+    v_novo_user_id uuid;
+BEGIN
+    -- ZERO TRUST: Passo 1 - Identificar o Administrador que fez o pedido
+    SELECT empresa_id, cargo INTO v_admin_empresa_id, v_admin_cargo
+    FROM public.profiles
+    WHERE id = auth.uid();
+
+    -- ZERO TRUST: Passo 2 - Bloquear intrusos
+    IF v_admin_cargo <> 'administrador' THEN
+        RAISE EXCEPTION 'Acesso Negado: Apenas administradores podem criar utilizadores.';
+    END IF;
+
+    IF v_admin_empresa_id IS NULL THEN
+        RAISE EXCEPTION 'Erro de Segurança: Administrador sem empresa vinculada.';
+    END IF;
+
+    -- Passo 3 - Criar o utilizador na tabela secreta encriptando a senha
+    -- (Isto evita o bug de logout do frontend)
+    INSERT INTO auth.users (
+        instance_id, id, aud, role, email, encrypted_password, 
+        email_confirmed_at, raw_app_meta_data, raw_user_meta_data, 
+        created_at, updated_at
+    ) VALUES (
+        '00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 
+        p_email, crypt(p_senha, gen_salt('bf')), -- Encripta a senha com bcrypt
+        now(), '{"provider":"email","providers":["email"]}', '{}', 
+        now(), now()
+    ) RETURNING id INTO v_novo_user_id;
+
+    -- Passo 4 - O nosso Trigger já criou a linha no 'profiles' automaticamente!
+    -- Só precisamos de a atualizar com a Empresa do chefe e o Cargo.
+    UPDATE public.profiles
+    SET nome = p_nome,
+        cargo = p_cargo,
+        empresa_id = v_admin_empresa_id
+    WHERE id = v_novo_user_id;
+
+END;
+$$;
+
+-- [FIM: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # supabase_config.js
