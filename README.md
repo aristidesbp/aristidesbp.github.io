@@ -1368,6 +1368,64 @@ USING (empresa_id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = 
 
 
 ```
+
+# STORAGE: BOLETOS E COMPROMANTES
+
+```
+-- [INÍCIO: CONFIGURACAO_DUPLO_STORAGE_CORRIGIDO]
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+-- Comando que acede à tabela de pastas (buckets) do Supabase e declara as colunas que vamos preencher.
+
+VALUES
+-- Inicia a lista de valores a inserir.
+
+('boletos_storage', 'boletos_storage', true, 2097152, ARRAY['image/jpeg', 'image/png', 'image/webp', 'application/pdf']::text[]),
+-- Cria a 1ª pasta 'boletos_storage'. 'true' a torna pública para leitura. '2097152' é o limite exato de 2MB em bytes. O ARRAY define os únicos 4 formatos permitidos.
+
+('comprovantes_storage', 'comprovantes_storage', true, 2097152, ARRAY['image/jpeg', 'image/png', 'image/webp', 'application/pdf']::text[])
+-- Cria a 2ª pasta 'comprovantes_storage' com as exatas mesmas regras restritas de tamanho e formato.
+
+ON CONFLICT (id) DO UPDATE
+-- Se o banco detetar que uma pasta com este nome já existe (conflito), em vez de dar erro, ele converte a ação numa atualização.
+
+SET file_size_limit = EXCLUDED.file_size_limit, allowed_mime_types = EXCLUDED.allowed_mime_types;
+-- Pega nos valores rejeitados (EXCLUDED) e injeta-os na pasta existente, atualizando assim as tuas regras de 2MB e extensões.
+
+
+-- AQUI FOI REMOVIDA A LINHA QUE CAUSOU O ERRO (ALTER TABLE...)
+
+
+DROP POLICY IF EXISTS "Uploads autenticados boletos e comprovantes" ON storage.objects;
+-- Limpa tentativas anteriores de criar esta regra, evitando duplicação.
+
+DROP POLICY IF EXISTS "Gerir proprios ficheiros" ON storage.objects;
+-- Limpa tentativas anteriores da regra de gestão.
+
+
+CREATE POLICY "Uploads autenticados boletos e comprovantes" ON storage.objects
+-- Cria a nova regra de entrada (Upload) diretamente na tabela de arquivos do sistema.
+
+FOR INSERT TO authenticated
+-- Trava a regra: só se aplica ao comando INSERT (upload) e só permite utilizadores que fizeram login (authenticated).
+
+WITH CHECK (bucket_id IN ('boletos_storage', 'comprovantes_storage'));
+-- Condição final: o upload só passa se o destino for exatamente uma destas duas pastas.
+
+
+CREATE POLICY "Gerir proprios ficheiros" ON storage.objects
+-- Cria a nova regra de manipulação (Visualizar, Atualizar, Apagar).
+
+FOR ALL TO authenticated
+-- Liberta todos os comandos (SELECT, UPDATE, DELETE) mas apenas para utilizadores logados.
+
+USING (bucket_id IN ('boletos_storage', 'comprovantes_storage') AND auth.uid() = owner);
+-- A chave de segurança Zero Trust: O utilizador só pode mexer no arquivo se este estiver nas pastas corretas E se o ID do utilizador (auth.uid()) for igual ao dono (owner) que fez o envio original.
+
+-- [FIM: CONFIGURACAO_DUPLO_STORAGE_CORRIGIDO]
+
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
 
