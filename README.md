@@ -241,6 +241,15 @@ DIRETRIZES DE EXECUÇÃO:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🗺️ Panorama Geral da Solução: O Motor de Autenticação SaaS Completo
+Para que o teu sistema de login, registo e isolamento de empresas funcione na perfeição, precisamos de construir um "Motor SaaS" composto por 5 peças fundamentais, executadas exatamente nesta ordem:
+* Tabela empresas (A Raiz): Onde ficam guardados os dados dos teus clientes (os donos dos supermercados).
+* Tabela profiles (O Espelho): A tabela pública onde guardamos o nome, o cargo e a qual empresa_id o utilizador pertence.
+* Segurança (RLS): Ativamos os bloqueios de segurança (Zero Trust) em ambas as tabelas.
+* Robô Copiador (Trigger): A função que fica à escuta da tabela secreta do Supabase (auth.users) e cria automaticamente um perfil vazio na tua tabela profiles sempre que alguém se regista.
+* A Função de Registo (RPC criar_conta_saas): O código que o teu ecrã de Login vai chamar. Ela tem poderes de administrador para criar a empresa e promover o novo cliente a "Administrador" desse ambiente.
+
+
 # SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
 ```
 -- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
@@ -339,8 +348,24 @@ FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os 
 ``` 
 
 
+# COMO APAGAR TABELAS
+```
+-- [INÍCIO: LIMPEZA_TOTAL_AUTENTICACAO]
 
+-- 1. Apagar as tabelas antigas e TODAS as suas dependências (CASCADE)
+-- O CASCADE garante que chaves estrangeiras e políticas de RLS antigas também desaparecem.
+DROP TABLE IF EXISTS public.profiles CASCADE;
+DROP TABLE IF EXISTS public.empresas CASCADE;
 
+-- 2. Apagar as funções antigas que criámos
+DROP FUNCTION IF EXISTS public.criar_conta_saas(text, text) CASCADE;
+DROP FUNCTION IF EXISTS public.espelhar_novo_utilizador() CASCADE;
+
+-- 3. Apagar o gatilho (trigger) antigo da tabela secreta auth.users
+DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
+
+-- [FIM: LIMPEZA_TOTAL_AUTENTICACAO]
+```
 
 
 
