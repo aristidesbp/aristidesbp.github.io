@@ -1426,6 +1426,148 @@ USING (bucket_id IN ('boletos_storage', 'comprovantes_storage') AND auth.uid() =
 
 
 ```
+# RPC 
+
+```
+-- [INÍCIO: RPC_GERAR_LANCAMENTO_FINANCEIRO]
+
+CREATE OR REPLACE FUNCTION public.gerar_lancamento_financeiro(
+-- Cria a função ou substitui se ela já existir, definindo o nome público.
+    
+    p_descricao text,
+    -- Parâmetro: O nome da conta (ex: Aluguel).
+    p_valor_total numeric,
+    -- Parâmetro: O valor financeiro total da operação.
+    p_tipo text,
+    -- Parâmetro: Deve ser obrigatoriamente 'receita' ou 'despesa'.
+    p_num_parcelas integer,
+    -- Parâmetro: A quantidade de vezes que a conta será dividida.
+    p_categoria text,
+    -- Parâmetro: Categoria para relatórios.
+    p_status_lancamento text,
+    -- Parâmetro: Status inicial ('aberto', 'finalizado', etc).
+    p_entidade_id uuid,
+    -- Parâmetro: O ID do Cliente ou Fornecedor (pode ser nulo).
+    p_recorrencia text,
+    -- Parâmetro: Regra de repetição ('1' para mensal, '3' para trimestral, 'diario').
+    p_data_vencimento_inicial date,
+    -- Parâmetro: A data limite da primeira parcela.
+    p_data_pagamento date,
+    -- Parâmetro: A data em que foi pago (nulo se ainda estiver pendente).
+    p_codigo_barra text,
+    -- Parâmetro: O número do código de barras lido pela câmara.
+    p_boleto_url text,
+    -- Parâmetro: O link do ficheiro PDF no bucket boletos_storage.
+    p_comprovante_url text
+    -- Parâmetro: O link do ficheiro PDF no bucket comprovantes_storage.
+) RETURNS void
+-- Define que esta função não devolve dados (void), apenas executa ações no banco.
+LANGUAGE plpgsql
+-- Define a linguagem interna do PostgreSQL usada para programar a função.
+SECURITY DEFINER
+-- [ZERO TRUST] A função é executada com os privilégios do criador, permitindo ignorar o RLS internamente para gravar os dados de forma orquestrada, garantindo que o frontend não precisa de permissão direta de escrita nas tabelas.
+AS $$
+-- Marca o início do bloco de código principal.
+DECLARE
+-- Abre a secção onde declaramos variáveis locais e temporárias.
+    v_empresa_id uuid;
+    -- Variável temporária para guardar a empresa do utilizador logado.
+    v_financa_id uuid;
+    -- Variável temporária para guardar o ID do cabeçalho acabado de criar.
+    v_valor_parcela numeric(10,2);
+    -- Variável temporária para guardar o valor exato de cada fração.
+    v_cliente_id uuid := NULL;
+    -- Variável temporária para o ID do cliente (começa vazia).
+    v_fornecedor_id uuid := NULL;
+    -- Variável temporária para o ID do fornecedor (começa vazia).
+    v_data_venc_atual date;
+    -- Variável temporária que vai calcular as datas dos meses seguintes.
+    v_status_parcela text;
+    -- Variável temporária para o status (pago ou pendente).
+    i integer;
+    -- Variável usada como contador para o nosso loop (laço de repetição).
+BEGIN
+-- Inicia as operações da função.
+
+    SELECT empresa_id INTO v_empresa_id FROM public.profiles WHERE id = auth.uid();
+    -- Procura o perfil do utilizador que fez o pedido e guarda o ID da empresa dele na variável 'v_empresa_id'.
+
+    IF v_empresa_id IS NULL THEN
+    -- Verifica se, por algum erro, o utilizador não tem empresa.
+        RAISE EXCEPTION 'Acesso Negado: Utilizador sem empresa vinculada.';
+        -- Se não tiver empresa, a função aborta imediatamente e cospe este erro por questões de segurança.
+    END IF;
+
+    IF p_tipo = 'receita' THEN
+    -- Avalia se o lançamento é uma entrada de dinheiro.
+        v_cliente_id := p_entidade_id;
+        -- Se for receita, o ID da entidade é atribuído ao campo de Clientes.
+    ELSIF p_tipo = 'despesa' THEN
+    -- Se não for receita, avalia se é uma saída de dinheiro.
+        v_fornecedor_id := p_entidade_id;
+        -- Se for despesa, o ID da entidade é atribuído ao campo de Fornecedores.
+    END IF;
+
+    v_valor_parcela := round((p_valor_total / p_num_parcelas), 2);
+    -- A matemática é feita no servidor: divide o total pelas parcelas e arredonda (round) para duas casas decimais, evitando dízimas infinitas.
+
+    INSERT INTO public.financeiro (
+    -- Abre o comando para inserir o cabeçalho principal no banco.
+        empresa_id, cliente_id, fornecedor_id, descricao, valor_total, tipo, num_parcelas, categoria, status_lancamento
+        -- Define exatamente quais colunas vão receber os dados.
+    ) VALUES (
+    -- Indica que a seguir vêm os valores.
+        v_empresa_id, v_cliente_id, v_fornecedor_id, p_descricao, p_valor_total, p_tipo, p_num_parcelas, p_categoria, p_status_lancamento
+        -- Passa as variáveis e os parâmetros recebidos.
+    ) RETURNING id INTO v_financa_id;
+    -- Insere e, imediatamente a seguir, captura o ID gerado pelo banco e guarda-o em 'v_financa_id' para usarmos nas parcelas.
+
+    IF p_data_pagamento IS NOT NULL THEN
+    -- Verifica se o utilizador já informou que pagou (data preenchida).
+        v_status_parcela := 'pago';
+        -- Se sim, a parcela nasce com o status pago.
+    ELSE
+    -- Caso contrário (não pagou ainda).
+        v_status_parcela := 'pendente';
+        -- A parcela nasce com o status pendente.
+    END IF;
+
+    FOR i IN 1..p_num_parcelas LOOP
+    -- Inicia um laço de repetição (loop) que vai de 1 até ao número total de parcelas.
+        
+        IF p_recorrencia = 'diario' THEN
+        -- Verifica se o utilizador escolheu pagar todos os dias.
+            v_data_venc_atual := p_data_vencimento_inicial + ((i - 1) * interval '1 day');
+            -- Se for diário, pega na data inicial e soma X dias (usando a função interval do PostgreSQL).
+        ELSE
+        -- Caso contrário (é mensal, trimestral, etc).
+            v_data_venc_atual := p_data_vencimento_inicial + ((i - 1) * CAST(p_recorrencia AS integer) * interval '1 month');
+            -- Pega na data inicial e soma a quantidade de meses (ex: i=2, recorrencia=3, soma 3 meses). A função CAST transforma o texto ('1', '3') em número matemático.
+        END IF;
+
+        INSERT INTO public.parcelas (
+        -- Abre o comando para inserir os dados na tabela filha (parcelas).
+            empresa_id, financa_id, num_parcela, valor_parcela, data_vencimento, data_pagamento, status, codigo_barra, boleto_url, comprovante_url
+            -- Define as colunas que a prestação vai ter.
+        ) VALUES (
+        -- Prepara-se para enviar os valores.
+            v_empresa_id, v_financa_id, i, v_valor_parcela, v_data_venc_atual, p_data_pagamento, v_status_parcela, p_codigo_barra, p_boleto_url, p_comprovante_url
+            -- Injeta a empresa, o ID do cabeçalho que gerámos acima (v_financa_id), o número da prestação (i), o valor, a data calculada e os links do Storage.
+        );
+        -- Fecha a inserção da parcela.
+
+    END LOOP;
+    -- Termina a volta do loop e regressa ao início se ainda faltarem parcelas, senão avança.
+
+END;
+-- Finaliza as operações lógicas.
+$$;
+-- Fecha a definição do bloco de código.
+
+-- [FIM: RPC_GERAR_LANCAMENTO_FINANCEIRO]
+
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROMPT PARA CRIAR APPS
 
