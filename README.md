@@ -239,11 +239,104 @@ DIRETRIZES DE EXECUÇÃO:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
+```
+-- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
+-- Este script consulta os metadados do PostgreSQL para criar um raio-x do seu schema 'public'
+
+WITH tables_info AS (
+    -- Busca todas as tabelas públicas e junta as suas colunas em uma lista
+    SELECT jsonb_agg(jsonb_build_object(
+        'tabela', t.table_name,
+        'colunas', (
+            SELECT jsonb_agg(c.column_name || ' (' || c.data_type || ')')
+            FROM information_schema.columns c
+            WHERE c.table_name = t.table_name AND c.table_schema = 'public'
+        )
+    )) AS dados
+    FROM information_schema.tables t
+    WHERE t.table_schema = 'public'
+),
+rls_info AS (
+    -- Busca todas as regras de segurança RLS (Row Level Security)
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'tabela', tablename,
+        'politica', policyname,
+        'comando', cmd,
+        'roles', roles,
+        'condicao', qual
+    )), '[]'::jsonb) AS dados
+    FROM pg_policies
+    WHERE schemaname = 'public'
+),
+rpc_info AS (
+    -- Busca todas as Funções (RPCs) criadas no schema público
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'funcao', p.proname,
+        'argumentos', pg_get_function_arguments(p.oid),
+        'retorno', pg_get_function_result(p.oid)
+    )), '[]'::jsonb) AS dados
+    FROM pg_proc p
+    JOIN pg_namespace n ON p.pronamespace = n.oid
+    WHERE n.nspname = 'public'
+),
+triggers_info AS (
+    -- Busca todos os Triggers (gatilhos) atrelados às tabelas
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'tabela', event_object_table,
+        'trigger', trigger_name,
+        'evento', event_manipulation,
+        'tempo', action_timing
+    )), '[]'::jsonb) AS dados
+    FROM information_schema.triggers
+    WHERE trigger_schema = 'public'
+)
+-- Compila todas as informações acima em um único objeto JSON formatado
+SELECT jsonb_pretty(jsonb_build_object(
+    '1_tabelas', (SELECT dados FROM tables_info),
+    '2_rls_politicas', (SELECT dados FROM rls_info),
+    '3_funcoes_rpc', (SELECT dados FROM rpc_info),
+    '4_gatilhos_triggers', (SELECT dados FROM triggers_info)
+)) AS relatorio_completo;
+
+-- [FIM: EXTRATOR_DE_SCHEMA_SUPABASE]
 
 
+```
 
+# Verificar storage 
+```
 
+-- [INÍCIO: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
+-- Este script busca as políticas de segurança RLS aplicadas aos arquivos (storage.objects)
+
+WITH storage_policies AS (
+    -- Passo 1: Separamos e renomeamos as colunas da tabela de políticas do Postgres
+    SELECT
+        policyname AS nome_da_politica,
+        cmd AS acao_permitida, -- Pode ser SELECT, INSERT, UPDATE, DELETE
+        roles AS papeis_permitidos, -- Quem pode fazer isso (ex: authenticated, anon)
+        qual AS condicao -- Qual a regra lógica para permitir
+    FROM pg_policies
+    WHERE schemaname = 'storage' AND tablename = 'objects'
+)
+-- Passo 2: Juntamos tudo em um formato JSON. 
+SELECT COALESCE(
+    jsonb_pretty(jsonb_agg(jsonb_build_object(
+        'politica', nome_da_politica,
+        'acao', acao_permitida,
+        'roles', papeis_permitidos,
+        'condicao', condicao
+    ))), 
+    '[]'::text
+) AS relatorio_seguranca_storage
+FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os dados.
+
+-- [FIM: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
+
+``` 
 
 
 
@@ -927,102 +1020,7 @@ if (typeof supabase !== 'undefined') {
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
-```
--- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
--- Este script consulta os metadados do PostgreSQL para criar um raio-x do seu schema 'public'
 
-WITH tables_info AS (
-    -- Busca todas as tabelas públicas e junta as suas colunas em uma lista
-    SELECT jsonb_agg(jsonb_build_object(
-        'tabela', t.table_name,
-        'colunas', (
-            SELECT jsonb_agg(c.column_name || ' (' || c.data_type || ')')
-            FROM information_schema.columns c
-            WHERE c.table_name = t.table_name AND c.table_schema = 'public'
-        )
-    )) AS dados
-    FROM information_schema.tables t
-    WHERE t.table_schema = 'public'
-),
-rls_info AS (
-    -- Busca todas as regras de segurança RLS (Row Level Security)
-    SELECT COALESCE(jsonb_agg(jsonb_build_object(
-        'tabela', tablename,
-        'politica', policyname,
-        'comando', cmd,
-        'roles', roles,
-        'condicao', qual
-    )), '[]'::jsonb) AS dados
-    FROM pg_policies
-    WHERE schemaname = 'public'
-),
-rpc_info AS (
-    -- Busca todas as Funções (RPCs) criadas no schema público
-    SELECT COALESCE(jsonb_agg(jsonb_build_object(
-        'funcao', p.proname,
-        'argumentos', pg_get_function_arguments(p.oid),
-        'retorno', pg_get_function_result(p.oid)
-    )), '[]'::jsonb) AS dados
-    FROM pg_proc p
-    JOIN pg_namespace n ON p.pronamespace = n.oid
-    WHERE n.nspname = 'public'
-),
-triggers_info AS (
-    -- Busca todos os Triggers (gatilhos) atrelados às tabelas
-    SELECT COALESCE(jsonb_agg(jsonb_build_object(
-        'tabela', event_object_table,
-        'trigger', trigger_name,
-        'evento', event_manipulation,
-        'tempo', action_timing
-    )), '[]'::jsonb) AS dados
-    FROM information_schema.triggers
-    WHERE trigger_schema = 'public'
-)
--- Compila todas as informações acima em um único objeto JSON formatado
-SELECT jsonb_pretty(jsonb_build_object(
-    '1_tabelas', (SELECT dados FROM tables_info),
-    '2_rls_politicas', (SELECT dados FROM rls_info),
-    '3_funcoes_rpc', (SELECT dados FROM rpc_info),
-    '4_gatilhos_triggers', (SELECT dados FROM triggers_info)
-)) AS relatorio_completo;
-
--- [FIM: EXTRATOR_DE_SCHEMA_SUPABASE]
-
-
-```
-# Verificar storage 
-```
-
--- [INÍCIO: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
--- Este script busca as políticas de segurança RLS aplicadas aos arquivos (storage.objects)
-
-WITH storage_policies AS (
-    -- Passo 1: Separamos e renomeamos as colunas da tabela de políticas do Postgres
-    SELECT
-        policyname AS nome_da_politica,
-        cmd AS acao_permitida, -- Pode ser SELECT, INSERT, UPDATE, DELETE
-        roles AS papeis_permitidos, -- Quem pode fazer isso (ex: authenticated, anon)
-        qual AS condicao -- Qual a regra lógica para permitir
-    FROM pg_policies
-    WHERE schemaname = 'storage' AND tablename = 'objects'
-)
--- Passo 2: Juntamos tudo em um formato JSON. 
-SELECT COALESCE(
-    jsonb_pretty(jsonb_agg(jsonb_build_object(
-        'politica', nome_da_politica,
-        'acao', acao_permitida,
-        'roles', papeis_permitidos,
-        'condicao', condicao
-    ))), 
-    '[]'::text
-) AS relatorio_seguranca_storage
-FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os dados.
-
--- [FIM: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
-
-``` 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # criação da tabela e entidades no Supabase 
