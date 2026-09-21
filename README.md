@@ -583,26 +583,16 @@ if (typeof supabase !== 'undefined') {
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # login.html
 ```
+
 <!DOCTYPE html>
-<!-- Define o tipo de documento como HTML5, informando ao navegador quais padrões seguir ao renderizar a página. -->
 <html lang="pt-BR">
-<!-- Inicia o documento HTML e especifica que o idioma do conteúdo é o Português do Brasil. -->
 <head>
-<!-- Abre a tag <head>, a seção técnica e invisível da página onde alocamos metadados, estilos CSS e links externos. -->
-    
     <meta charset="UTF-8">
-    <!-- Força a codificação de caracteres para UTF-8, garantindo que acentuações (á, ê, ção) não quebrem na tela. -->
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Configura a janela de exibição (viewport) para manter as proporções reais em dispositivos móveis. É crucial para o design responsivo. -->
-    
-    <title>Login Seguro - BevDistro</title>
-    <!-- Define o texto que aparecerá na aba superior do navegador. -->
+    <title>Acesso SaaS - ERP</title>
     
     <style>
-        /* [INÍCIO: DESIGN SYSTEM] */
-        /* Marca o início do bloco CSS contendo todas as regras visuais da página. */
-        
+        /* === DESIGN SYSTEM === */
         :root {
             --bg-color: #0b1320; 
             --card-bg: #151f2b;  
@@ -614,7 +604,6 @@ if (typeof supabase !== 'undefined') {
             --danger-color: #ff4d4d;
             --info-color: #17a2b8;
         }
-        /* Declara variáveis CSS globais de cores na pseudo-classe :root. Esta paleta padronizada forma o "Modo Escuro" padrão do sistema. */
 
         .light-theme {
             --bg-color: #f4f7f6;
@@ -626,233 +615,219 @@ if (typeof supabase !== 'undefined') {
             --border-color: #e0e0e0;
             --danger-color: #dc3545;
         }
-        /* Classe que, quando injetada na página, sobrescreve as variáveis do :root para transformar a interface no "Modo Claro". */
 
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; transition: background-color 0.3s, color 0.3s; }
-        /* Aplica tipografia padrão. Usa Flexbox (display: flex) para centralizar perfeitamente o formulário no meio da tela que ocupará 100% de sua altura (100vh). */
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s, color 0.3s; padding: 20px; box-sizing: border-box;}
         
-        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; margin: 20px;}
-        /* Estiliza o contêiner branco/escuro principal: aplica espaçamento interno (padding), cantos curvados (border-radius) e limita a largura máxima a 400px para não deformar em telas grandes. */
-        
-        /* [NOTA: A CLASSE .btn-voltar FOI REMOVIDA DESTE CSS A PEDIDO DO USUÁRIO] */
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; }
         
         .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
-        /* Modifica o layout do cabeçalho do login, alinhando em uma coluna flexível com uma pequena lacuna (gap) entre o ícone e o texto. */
-        
         .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
-        /* Aumenta a fonte do ícone (raio) e aplica a cor de destaque neon. */
 
         .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color);}
-        /* Cria a base visual dos banners de notificação (balões) do sistema com fundo com baixa opacidade. */
-        
         .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        /* Variante visual que tinge o banner de notificação para a paleta de erro (vermelho). */
-        
         .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
-        /* Variante visual que tinge o banner de notificação para a paleta de sucesso (neon verde). */
 
         label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
-        /* Configura o texto (rótulo) que fica acima de cada campo de digitação: tamanho menor, em negrito, empurrando o campo de input para a linha debaixo (display: block). */
-        
         input { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
-        /* Estiliza os campos para e-mail e senha. Eles preenchem 100% da largura, ganham respiro interno, remoção das bordas rústicas e transição fluída (transition) nas cores. */
-        
         input:focus { border-color: var(--accent-neon); }
-        /* Quando o usuário clica dentro da caixa para digitar (focus), a borda é iluminada na cor neon, indicando seleção ativa. */
         
         .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s, background-color 0.2s; }
-        /* Cria o botão sólido e vibrante "Entrar", aplicando transições mecânicas sutis de aumento/diminuição ao ser clicado. */
-        
         .btn-neon:hover { background: var(--accent-hover); }
-        /* Ao passar o mouse por cima do botão (sem clicar), a cor muda levemente (escurece/clareia dependendo do tema). */
-        
         .btn-neon:active { transform: scale(0.98); }
-        /* Aperta virtualmente o botão reduzindo a escala em 2% na hora do clique contínuo (efeito haptic visual). */
-        
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        /* Altera o estado do botão para semitransparente (opacidade de 50%) e cursor cortado caso ele receba um bloqueio via JavaScript (durante o carregamento do login). */
-        
-        /* [FIM: DESIGN SYSTEM] */
+
+        /* Estilo para alternar entre os formulários */
+        .link-alternar { display: block; text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.9em; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .link-alternar:hover { color: var(--accent-neon); text-decoration: underline; }
     </style>
 
-    <!-- Importação do SDK do Supabase -->
+    <!-- Importação do motor do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Importa o kit oficial do Supabase via rede de entrega rápida de conteúdo (CDN). Isso fornece acesso aos comandos de autenticação no frontend. -->
 </head>
 
 <body>
     
-    <!-- [INÍCIO: CARTÃO DE LOGIN] -->
     <div class="card">
-    <!-- A tag container onde todos os elementos do login serão agrupados. -->
-        
-        <!-- [O BOTÃO btn-voltar FOI EXCLUÍDO DAQUI] -->
-        
         <h2 class="titulo">
-        <!-- Título H2 hierárquico com a classe de formatação do CSS. -->
             <span class="logo-icon">⚡</span> 
-            <!-- Um sub-elemento isolado apenas para o ícone herdar a cor neon especial. -->
-            Acesso Restrito
+            <span id="texto-titulo">Acesso ao Sistema</span>
         </h2>
         
-        <!-- Mensagens dinâmicas do sistema -->
+        <!-- O Semáforo de Avisos -->
         <div id="status" class="info">Verificando segurança...</div>
-        <!-- Esta div atua como um semáforo; seu conteúdo e cor serão manipulados em tempo real pelo Javascript para mostrar avisos de rede ou autenticação. -->
 
-        <!-- Formulário limpo apenas com E-mail e Senha -->
+        <!-- ========================================== -->
+        <!-- FORMULÁRIO 1: LOGIN (Entrar no ERP)        -->
+        <!-- ========================================== -->
         <div id="area-login" style="display: none;">
-        <!-- Um invólucro para esconder ou mostrar (display) os campos de entrada. Começa invisível por padrão para forçar o sistema a auditar a sessão antes. -->
+            <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 0; text-align: center; margin-bottom: 20px;">Insira suas credenciais de acesso.</p>
             
-            <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 0; text-align: center; margin-bottom: 20px;">Insira suas credenciais de administrador.</p>
-            <!-- Uma frase auxiliar para orientar qual perfil deve logar. -->
+            <label for="input-email-login">E-mail Registado:</label>
+            <input type="email" id="input-email-login" placeholder="admin@empresa.com" required>
             
-            <label for="input-email">E-mail Administrativo:</label>
-            <!-- Rótulo amarrado (por meio do 'for') ao ID do campo de e-mail por questões de semântica e acessibilidade. -->
-            <input type="email" id="input-email" placeholder="admin@bevdistro.com" required>
-            <!-- Campo de entrada do tipo 'email' para que o navegador exija um '@' e o símbolo de '.'. -->
-            
-            <label for="input-senha">Senha:</label>
-            <!-- Rótulo amarrado ao campo de senha. -->
-            <input type="password" id="input-senha" placeholder="••••••••" required>
-            <!-- Campo de entrada do tipo 'password' que oculta nativamente os caracteres grafados para proteção visual (ombro surfer). -->
+            <label for="input-senha-login">Senha:</label>
+            <input type="password" id="input-senha-login" placeholder="••••••••" required>
             
             <button id="btn-entrar" class="btn-neon">Entrar no ERP</button>
-            <!-- O acionador principal. Ele possui o ID 'btn-entrar', pelo qual o JS criará uma escuta de clique. -->
+
+            <a class="link-alternar" onclick="alternarTelas('registo')">Não tem conta? <strong>Crie o seu SaaS grátis</strong></a>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FORMULÁRIO 2: REGISTO (Onboarding SaaS)    -->
+        <!-- ========================================== -->
+        <div id="area-registo" style="display: none;">
+            <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 0; text-align: center; margin-bottom: 20px;">Registe a sua empresa e comece a usar.</p>
+            
+            <label for="input-nome-empresa">Nome da Empresa (Sua Loja):</label>
+            <input type="text" id="input-nome-empresa" placeholder="Ex: Supermercado Central" required>
+
+            <label for="input-cnpj">CNPJ ou NIF (Opcional):</label>
+            <input type="text" id="input-cnpj" placeholder="Apenas números">
+
+            <label for="input-email-registo">Seu E-mail (Será o Administrador):</label>
+            <input type="email" id="input-email-registo" placeholder="dono@empresa.com" required>
+            
+            <label for="input-senha-registo">Crie uma Senha Forte:</label>
+            <input type="password" id="input-senha-registo" placeholder="Mínimo 6 caracteres" required>
+            
+            <button id="btn-registar" class="btn-neon">Criar Minha Empresa</button>
+
+            <a class="link-alternar" onclick="alternarTelas('login')">Já tem uma conta? <strong>Faça Login</strong></a>
         </div>
 
     </div>
-    <!-- [FIM: CARTÃO DE LOGIN] -->
 
-    <!-- [INÍCIO: LÓGICA DE AUTENTICAÇÃO] -->
+    <!-- Importação das tuas chaves do banco de dados -->
     <script src="supabase_config.js"></script>
-    <!-- Importa o arquivo externo de configuração, fazendo com que o cliente do banco (credenciais) esteja pronto antes da execução da lógica a seguir. -->
     
     <script>
-    <!-- Inicia o bloco de lógica dinâmica (cérebro) do arquivo HTML via JavaScript. -->
-        
-        // 1. Aplica o tema salvo (Claro ou Escuro)
-        if(localStorage.getItem('temaBevDistro') === 'light') {
-        // Interroga a memória local do navegador (localStorage) para ver se o valor da chave 'temaBevDistro' é igual a 'light'.
-            document.body.classList.add('light-theme');
-            // Se for verdadeiro, ele anexa a classe de claridade na base (body) do HTML em tempo de execução.
-        }
+        // Mantém o tema claro se o utilizador tiver escolhido anteriormente
+        if(localStorage.getItem('temaBevDistro') === 'light') { document.body.classList.add('light-theme'); }
 
         const statusDiv = document.getElementById('status');
-        // Captura o elemento da caixa de balões pelo seu ID e o aloja na variável local 'statusDiv' para rápido acesso nas modificações futuras.
-        
         const areaLogin = document.getElementById('area-login');
-        // Captura o elemento que embrulha o formulário e o aloja na variável 'areaLogin'.
+        const areaRegisto = document.getElementById('area-registo');
+        const textoTitulo = document.getElementById('texto-titulo');
 
-        // 2. INICIALIZADOR ZERO TRUST (Verifica a sessão atual ao abrir a página)
-        window.addEventListener('DOMContentLoaded', async () => {
-        // Cria um ouvinte que aguarda (DOM-Content-Loaded) o navegador terminar de montar todo o layout (CSS/HTML) e então executa a função anonima assíncrona.
-            
-            if (typeof clienteSupabase === 'undefined') {
-            // Verifica, de forma segura e sem gerar quebras severas, se a instância criada lá no arquivo 'supabase_config.js' falhou.
-                mostrarStatus("❌ Erro Crítico: supabase_config.js não encontrado.", "erro");
-                // Caso afirmativo, pinta a tela com aviso vermelho.
-                return;
-                // Encerra imediatamente a função, impedindo os demais comandos abaixo de quebrarem a página.
+        // Função Didática: Facilita a exibição de mensagens de erro ou sucesso
+        function mostrarStatus(mensagem, tipo) {
+            statusDiv.textContent = mensagem;
+            statusDiv.className = `info ${tipo}`;
+            statusDiv.style.display = "block";
+        }
+
+        // Função Didática: Alterna a visualização entre Login e Registo
+        function alternarTelas(tela) {
+            statusDiv.style.display = "none"; // Limpa avisos da tela anterior
+            if (tela === 'registo') {
+                areaLogin.style.display = "none";
+                areaRegisto.style.display = "block";
+                textoTitulo.textContent = "Nova Empresa SaaS";
+            } else {
+                areaRegisto.style.display = "none";
+                areaLogin.style.display = "block";
+                textoTitulo.textContent = "Acesso ao Sistema";
             }
+        }
 
+        // ==========================================
+        // VERIFICAÇÃO INICIAL (Zero Trust)
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof clienteSupabase === 'undefined') {
+                mostrarStatus("❌ Erro Crítico: supabase_config.js não encontrado.", "erro"); return;
+            }
             try {
-            // Cria um bloco de tentativa e captura. Tenta rodar comandos suscetíveis a erro de internet (requisição ao banco).
-                
-                // Solicita ao servidor para validar a sessão
+                // Pergunta ao servidor se já existe uma sessão ativa
                 const { data: { session }, error } = await clienteSupabase.auth.getSession();
-                // O prefixo 'await' segura a execução desta linha enquanto vai até o servidor Supabase perguntar se existe um JWT ativo. Desestrutura o retorno e extrai a 'sessão'.
-                
                 if (session) {
-                // Analisa o retorno. Se for 'true' (o usuário já está conectado via cookies passados)...
                     mostrarStatus("Sessão válida! Redirecionando...", "sucesso");
-                    // Oculta o formulário, acende a caixa em verde.
-                    setTimeout(() => { window.location.href = 'menu.html'; }, 800);
-                    // O 'setTimeout' aguarda exatos 800 milissegundos para então forçar a URL do navegador saltar para o 'menu.html', pulando inteiramente o login.
+                    setTimeout(() => { window.location.href = 'index.html'; }, 800);
                 } else {
-                // Caso não possua sessão. O cliente é novo no sistema.
-                    // Sem sessão: oculta os avisos e exibe o formulário
+                    // Sem sessão: Mostra o formulário de Login por padrão
                     statusDiv.style.display = "none";
-                    // Esconde a balão de verificação, desativando seu block CSS.
                     areaLogin.style.display = "block";
-                    // Traz para a tela o bloco de e-mail e senha ocultos lá do início do HTML, permitindo interação.
                 }
             } catch (error) {
-            // Entra neste bloco somente se o 'try' acionar algum erro técnico inesperado (servidor offline).
-                console.error("Erro na validação de sessão:", error);
-                // Gera o despejo da falha real e silenciosa no F12 do desenvolvedor para debug.
                 mostrarStatus("❌ Erro grave de conexão.", "erro");
-                // Informa um erro amigável ao usuário.
             }
         });
 
-        // 3. FUNÇÃO DE LOGIN VIA SENHA
+        // ==========================================
+        // AÇÃO 1: EXECUTAR O LOGIN
+        // ==========================================
         document.getElementById('btn-entrar').addEventListener('click', async () => {
-        // Encontra o botão entrar e acopla a ele um vigia de ações ('click'). Quando tocado, dispara essa função anônima.
-            
-            const email = document.getElementById('input-email').value.trim();
-            // Extrai o conteúdo digitado no e-mail. A função `.trim()` corta impiedosamente espaços invisíveis (ex: digitar barra de espaço sem querer no fim da palavra) evitando bugs banais.
-            
-            const senha = document.getElementById('input-senha').value;
-            // Extrai a senha exata em tempo real no momento do clique.
-            
-            const btnEntrar = document.getElementById('btn-entrar');
-            // Captura o próprio botão para poder manipulá-lo no decorrer do carregamento.
+            const email = document.getElementById('input-email-login').value.trim();
+            const senha = document.getElementById('input-senha-login').value;
+            const btn = document.getElementById('btn-entrar');
 
             if (!email || !senha) { alert("Por favor, preencha o e-mail e a senha!"); return; }
-            // Checagem primária no front. Se faltar e-mail OU senha (!), cospe um alerta invasivo nativo e corta a execução (`return`), evitando poluir a API com requisições inúteis.
 
-            // Trava o botão para evitar duplos cliques
-            btnEntrar.textContent = "Autenticando..."; 
-            // Mostra o andamento diretamente no botão do usuário para evitar ansiedade.
-            btnEntrar.disabled = true;
-            // Bloqueia a chave de interação nativa do botão, impedindo clique duplo gerador de duplicação ou travamento.
+            btn.textContent = "Autenticando..."; btn.disabled = true;
 
             try {
-            // Abre o bloco de transação segura para consultar e bater as credenciais na nuvem.
-                
-                // Tenta fazer o login no Supabase
+                // Envia as credenciais para o Supabase
                 const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
-                // Passa as credenciais diretamente à API de autenticação do provedor, esperando uma resposta (falha na senha ou sucesso).
-                
                 if (error) throw error; 
-                // Se a variável 'error' vier carregada (não vazia), force o código a interromper e pular (lançar/throw) para o bloco 'catch'.
                 
-                // Sucesso: Redireciona para o menu
-                statusDiv.style.display = "block";
-                // Devolve a visibilidade para a caixa de mensagens.
                 mostrarStatus("✅ Autenticado! Entrando...", "sucesso");
-                // Preenche ela com uma frase amigável, tingindo-a de verde usando o método auxiliar lá do fundo.
-                setTimeout(() => { window.location.href = 'menu.html'; }, 1000);
-                // Mantém a notificação visível por 1000 ms e só então muda a rota para 'menu.html', finalizando o fluxo.
+                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
             } catch (erro) {
-            // Em caso de rejeição da senha.
-                console.error(erro);
-                // Grava o erro de credenciais no painel do administrador (F12).
-                statusDiv.style.display = "block";
-                // Abre a área de aviso.
                 mostrarStatus("❌ Erro no login: Credenciais incorretas.", "erro");
-                // Dispara o alerta vermelho de credenciais.
-                
-                // Destrava o botão para o usuário tentar novamente
-                btnEntrar.textContent = "Entrar no ERP"; 
-                // Retorna o texto original para restabelecer o formulário.
-                btnEntrar.disabled = false;
-                // Devolve a reatividade e o clique (false para disabled) para ele apagar a senha e tentar novamente.
+                btn.textContent = "Entrar no ERP"; btn.disabled = false;
             }
         });
 
-        // Função auxiliar para mudar a cor e o texto do aviso
-        function mostrarStatus(mensagem, tipo) {
-        // Inicializa uma função utilitária reaproveitável, recebendo argumentos de entrada: o string de texto, e o string de tipo css (sucesso/erro).
-            statusDiv.textContent = mensagem;
-            // Esvazia e preenche agressivamente o miolo de texto da div com a frase providenciada via parâmetro.
-            statusDiv.className = `info ${tipo}`;
-            // Refaz a amarração das classes CSS via interpolação. Ex: Torna a classe final um 'info erro' ou 'info sucesso', mudando assim as propriedades de cor definidas lá em cima no <style>.
-        }
+        // ==========================================
+        // AÇÃO 2: REGISTAR EMPRESA E UTILIZADOR (RPC)
+        // ==========================================
+        document.getElementById('btn-registar').addEventListener('click', async () => {
+            const empresa = document.getElementById('input-nome-empresa').value.trim();
+            const cnpj = document.getElementById('input-cnpj').value.trim();
+            const email = document.getElementById('input-email-registo').value.trim();
+            const senha = document.getElementById('input-senha-registo').value;
+            const btn = document.getElementById('btn-registar');
+
+            if (!empresa || !email || !senha) { alert("Preencha Nome da Empresa, E-mail e Senha!"); return; }
+            if (senha.length < 6) { alert("A senha deve ter pelo menos 6 caracteres."); return; }
+
+            btn.textContent = "A criar ambiente SaaS..."; 
+            btn.disabled = true;
+            mostrarStatus("⏳ A criar conta e a configurar empresa...", "info");
+
+            try {
+                // 1. Cria a identidade do utilizador no sistema de autenticação
+                const { data: authData, error: authError } = await clienteSupabase.auth.signUp({ 
+                    email: email, 
+                    password: senha 
+                });
+
+                if (authError) throw new Error("Erro na autenticação: " + authError.message);
+
+                // 2. Chama a RPC segura no PostgreSQL para criar a estrutura da Empresa
+                const { error: rpcError } = await clienteSupabase.rpc('criar_conta_saas', {
+                    p_nome_empresa: empresa,
+                    p_cnpj: cnpj || 'N/A'
+                });
+
+                if (rpcError) throw new Error("Erro ao gerar empresa SaaS: " + rpcError.message);
+
+                // 3. Sucesso! Redireciona para o Painel de Controlo
+                mostrarStatus("✅ Empresa criada com sucesso! A entrar no painel...", "sucesso");
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+
+            } catch (erro) {
+                console.error(erro);
+                mostrarStatus(`❌ ${erro.message}`, "erro");
+                btn.textContent = "Criar Minha Empresa"; 
+                btn.disabled = false;
+            }
+        });
     </script>
-    <!-- [FIM: LÓGICA DE AUTENTICAÇÃO] -->
 </body>
 </html>
+
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
