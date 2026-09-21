@@ -1566,6 +1566,127 @@ $$;
 
 -- [FIM: RPC_GERAR_LANCAMENTO_FINANCEIRO]
 
+```
+```
+// [INÍCIO: JS_LANCAMENTO_FINANCEIRO_SAAS]
+
+async function fin_gerarLancamentoCompleto() {
+// Inicia a função assíncrona que será chamada quando o utilizador clicar em "Gravar Lançamento".
+
+    const btn = document.getElementById('fin-btn-salvar');
+    // Captura o botão de salvar para podermos manipulá-lo.
+    
+    btn.disabled = true; 
+    btn.innerText = 'Processando no Servidor...';
+    // Bloqueia o botão e muda o texto para evitar que o utilizador clique duas vezes e duplique a conta.
+
+    try {
+    // Abre um bloco de tentativa. Se qualquer erro ocorrer aqui dentro, o código salta imediatamente para o 'catch'.
+
+        const desc = document.getElementById('fin-f-desc').value.trim();
+        const valorInput = parseFloat(document.getElementById('fin-f-valor').value);
+        const tipo = document.getElementById('fin-f-tipo').value;
+        const categoria = document.getElementById('fin-f-categoria').value || 'Geral';
+        const statusLanc = document.getElementById('fin-f-status').value;
+        const qtd = parseInt(document.getElementById('fin-f-parcelas').value) || 1;
+        const recorrencia = document.getElementById('fin-f-recorrencia').value;
+        const dataVenc = document.getElementById('fin-f-vencimento').value;
+        const dataPag = document.getElementById('fin-f-data-pagamento').value || null;
+        const entidadeId = document.getElementById('fin-f-entidade-id').value || null;
+        const barras = document.getElementById('fin-f-barras').value.trim();
+        // Recolhe todos os valores digitados no formulário. O '.trim()' remove espaços em branco acidentais.
+
+        if (!desc || !valorInput || !dataVenc) {
+            throw new Error("Preencha os campos obrigatórios: Descrição, Valor e Data de Vencimento!");
+        }
+        // Trava de validação frontend: Se faltar o básico, dispara um erro e aborta a operação.
+
+        const fileBoleto = document.getElementById('fin-f-boleto').files[0];
+        const fileComp = document.getElementById('fin-f-comprovante').files[0];
+        // Captura os ficheiros físicos (se existirem) que o utilizador anexou nos campos de input 'file'.
+
+        let boletoUrl = null;
+        let comprovanteUrl = null;
+        // Prepara as variáveis que vão guardar os links públicos gerados pelo Supabase. Começam vazias.
+
+        const limiteTamanho = 2 * 1024 * 1024; // 2MB em bytes
+        // Define o limite rígido de tamanho alinhado com as regras do nosso banco de dados.
+
+        const uploadFile = async (file, bucketName, prefix) => {
+        // Cria uma micro-função interna apenas para lidar com o envio de ficheiros.
+            
+            if (file.size > limiteTamanho) {
+                throw new Error(`O ficheiro ${file.name} ultrapassa o limite de 2MB!`);
+            }
+            // Advogado do Diabo em ação: Bloqueia ficheiros gigantes antes mesmo de tentar gastar internet.
+
+            const fileName = `${prefix}_${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+            // Cria um nome de ficheiro à prova de falhas: Prefixo + Carimbo de Tempo + Nome Original (trocando espaços por '_').
+
+            const { error } = await clienteSupabase.storage.from(bucketName).upload(fileName, file);
+            // Envia efetivamente o ficheiro para o bucket específico passado no parâmetro.
+
+            if (error) throw new Error(`Erro ao enviar anexo: ${error.message}`);
+            // Se o Supabase rejeitar (por exemplo, se for um ficheiro .exe), aborta a operação.
+
+            const { data } = clienteSupabase.storage.from(bucketName).getPublicUrl(fileName);
+            return data.publicUrl;
+            // Se der sucesso, pede ao Supabase o link público do ficheiro e devolve-o para ser salvo na tabela.
+        };
+
+        if (fileBoleto) {
+            boletoUrl = await uploadFile(fileBoleto, 'boletos_storage', 'bol');
+        }
+        // Se houver um boleto anexado, chama a micro-função direcionando-o para a pasta 'boletos_storage'.
+
+        if (fileComp) {
+            comprovanteUrl = await uploadFile(fileComp, 'comprovantes_storage', 'comp');
+        }
+        // Se houver um comprovante anexado, chama a micro-função direcionando-o para a pasta 'comprovantes_storage'.
+
+        const { error: rpcError } = await clienteSupabase.rpc('gerar_lancamento_financeiro', {
+        // [ZERO TRUST] Em vez de usar '.insert()', chamamos a nossa função segura no backend.
+            p_descricao: desc,
+            p_valor_total: valorInput,
+            p_tipo: tipo,
+            p_num_parcelas: qtd,
+            p_categoria: categoria,
+            p_status_lancamento: statusLanc,
+            p_entidade_id: entidadeId,
+            p_recorrencia: recorrencia,
+            p_data_vencimento_inicial: dataVenc,
+            p_data_pagamento: dataPag,
+            p_codigo_barra: barras,
+            p_boleto_url: boletoUrl,
+            p_comprovante_url: comprovanteUrl
+        });
+        // Passamos as nossas variáveis limpas e as URLs do Storage (se existirem) como parâmetros exatos da função.
+
+        if (rpcError) throw new Error(`Erro no Servidor: ${rpcError.message}`);
+        // Se a nossa RPC devolver um erro (ex: Utilizador sem empresa), abortamos a operação.
+
+        alert("Lançamento registado com sucesso!");
+        // Informa o utilizador da vitória.
+
+        fin_cancelarEdicao();
+        fin_loadParcelas();
+        fin_loadDashboard();
+        fin_alternarSubAba('listagem');
+        // Chama as tuas funções antigas de interface para limpar o formulário e atualizar os gráficos e tabelas.
+
+    } catch (error) {
+    // Se o 'throw new Error' for acionado em qualquer lugar acima, o código cai aqui.
+        alert(error.message);
+        // Exibe o erro exato na tela para o utilizador corrigir.
+    } finally {
+    // Este bloco executa sempre, quer tenha dado erro ou sucesso.
+        btn.disabled = false; 
+        btn.innerHTML = '<i class="fas fa-save"></i> Gravar Lançamento';
+        // Destrava o botão e devolve-lhe o texto/ícone original para que possa ser usado novamente.
+    }
+}
+
+// [FIM: JS_LANCAMENTO_FINANCEIRO_SAAS]
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
