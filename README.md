@@ -371,7 +371,96 @@ DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 -- [FIM: LIMPEZA_TOTAL_AUTENTICACAO]
 ```
 
+# TABELA EMPRESA E PROFILES
+```
+-- [INÍCIO: MOTOR_AUTENTICACAO_SAAS_COMPLETO]
 
+-- ==============================================================================
+-- 1. CRIAR A TABELA MÃE (TENANTS / EMPRESAS)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.empresas (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    nome_fantasia text NOT NULL,
+    cnpj text,
+    plano_assinatura text DEFAULT 'gratis',
+    esta_ativa boolean DEFAULT true,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ==============================================================================
+-- 2. CRIAR A TABELA ESPELHO (PROFILES / UTILIZADORES)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    email text,
+    nome text,
+    cargo text DEFAULT 'operador', 
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ==============================================================================
+-- 3. ATIVAR SEGURANÇA ZERO TRUST (RLS)
+-- ==============================================================================
+ALTER TABLE public.empresas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- ==============================================================================
+-- 4. O ROBÔ COPIADOR: GATILHO PARA A TABELA SECRETA AUTH.USERS
+-- ==============================================================================
+CREATE OR REPLACE FUNCTION public.espelhar_novo_utilizador()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  -- Copia o ID e Email do sistema de autenticação para a nossa tabela pública
+  INSERT INTO public.profiles (id, email)
+  VALUES (NEW.id, NEW.email)
+  ON CONFLICT (id) DO UPDATE 
+  SET email = EXCLUDED.email;
+  
+  RETURN NEW;
+END;
+$$;
+
+-- Remove o gatilho antigo (se existir) e cria o novo
+DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users;
+
+CREATE TRIGGER tr_novo_utilizador_auth
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION public.espelhar_novo_utilizador();
+
+-- ==============================================================================
+-- 5. A FUNÇÃO DE ONBOARDING SAAS (RPC PARA O FRONTEND DE LOGIN)
+-- ==============================================================================
+CREATE OR REPLACE FUNCTION public.criar_conta_saas(
+    p_nome_empresa text,
+    p_cnpj text
+) RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER -- Ignora o RLS momentaneamente para poder criar a primeira empresa
+AS $$
+DECLARE
+    v_empresa_id uuid;
+BEGIN
+    -- 5.1. Cria a nova empresa com os dados fornecidos pelo utilizador
+    INSERT INTO public.empresas (nome_fantasia, cnpj, plano_assinatura)
+    VALUES (p_nome_empresa, p_cnpj, 'gratis')
+    RETURNING id INTO v_empresa_id;
+
+    -- 5.2. Atualiza o perfil do utilizador (que o Robô acabou de criar) 
+    -- com o cargo de chefe e vincula-o à nova empresa.
+    INSERT INTO public.profiles (id, cargo, empresa_id)
+    VALUES (auth.uid(), 'administrador', v_empresa_id)
+    ON CONFLICT (id) DO UPDATE
+    SET cargo = 'administrador', empresa_id = v_empresa_id;
+END;
+$$;
+
+-- [FIM: MOTOR_AUTENTICACAO_SAAS_COMPLETO]
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
