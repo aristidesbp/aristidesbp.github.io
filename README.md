@@ -1206,98 +1206,165 @@ if (typeof supabase !== 'undefined') {
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# criação da tabela e entidades no Supabase 
+# SQL DAS TABELAS CLIENTES E FORNECEDORES 
 ```
--- [INÍCIO: RECONSTRUCAO_TABELA_ENTIDADES]
--- Marca o início do script de reconstrução da tabela de entidades (clientes e fornecedores).
+-- [INÍCIO: TABELAS_ENTIDADES_SAAS]
 
-
--- 1. DESTRUIR TABELA ANTIGA E SUAS DEPENDÊNCIAS
--- (CUIDADO: Isso apagará todos os dados existentes de clientes/fornecedores)
-DROP TABLE IF EXISTS public.entidades CASCADE;
--- O comando 'DROP TABLE' deleta a tabela fisicamente do disco do banco de dados.
--- O modificador 'IF EXISTS' previne que o script gere um erro fatal caso a tabela já tenha sido apagada.
--- O esquema 'public.' garante que a exclusão ocorra no escopo principal do Supabase.
--- O modificador 'CASCADE' é uma ação agressiva: ele força o banco a excluir automaticamente qualquer view ou chave estrangeira que dependa desta tabela para existir.
-
--- 2. CRIAR NOVA TABELA BLINDADA
-CREATE TABLE public.entidades (
--- Inicia a instrução para forjar uma tabela completamente nova chamada 'entidades' no esquema 'public'.
-    
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    -- Cria a coluna 'id' com o tipo UUID (Identificador Único Universal de 36 caracteres). 
-    -- 'PRIMARY KEY' diz que este é o identificador mestre da linha, impossível de repetir.
-    -- 'DEFAULT gen_random_uuid()' automatiza a criação do ID sem que a sua API precise enviar um ao inserir novos dados.
-    
-    tipo TEXT NOT NULL,
-    -- Coluna 'tipo' para definir se é "cliente" ou "fornecedor". Tipo TEXT. 
-    -- A trava 'NOT NULL' impede que um cadastro seja salvo com esse campo em branco.
-    
-    nome TEXT NOT NULL,
-    -- Coluna de texto para o nome ou razão social. Também com preenchimento obrigatório no banco ('NOT NULL').
-    
-    -- [SEGURANÇA: ADVOGADO DO DIABO] - UNIQUE impede dois clientes com o mesmo CNPJ/CPF
-    documento TEXT UNIQUE, 
-    -- Coluna 'documento'. A restrição estrutural 'UNIQUE' instrui o motor do PostgreSQL a varrer toda a tabela antes de salvar. Se alguém tentar inserir um CPF/CNPJ que já está cadastrado em outra linha, o banco rejeita a transação bloqueando fraudes.
-    
-    telefone TEXT,
-    -- Coluna simples para telefone. Como não tem restrições adicionais, ela aceita valores vazios (NULL).
-    
-    -- [SEGURANÇA: ADVOGADO DO DIABO] - UNIQUE impede duplicação de e-mails
-    email TEXT UNIQUE,     
-    -- Coluna 'email'. O selo 'UNIQUE' atua da mesma forma que no documento, impedindo a duplicação de contas e contatos.
-    
-    -- Novo campo solicitado
-    url_foto_avata TEXT,   
-    -- A nova coluna que criamos para armazenar o link (URL) vindo do Storage do Supabase onde a foto de perfil da pessoa está hospedada.
-    
-    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-    -- Coluna de auditoria de tempo. Registra a data e a hora exatas (com fuso horário amarrado ao UTC global) em que a linha foi criada usando a função interna 'now()'. Não pode ficar vazia ('NOT NULL').
+-- ==========================================================
+-- 1. TABELA: CLIENTES
+-- ==========================================================
+CREATE TABLE IF NOT EXISTS public.clientes (
+-- Cria o cadastro de clientes isolado por empresa.
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE NOT NULL,
+    nome text NOT NULL,
+    cpf_cnpj text,
+    telefone text,
+    email text,
+    limite_credito numeric(10,2) DEFAULT 0.00,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
--- Fecha o escopo de criação de colunas da tabela.
 
--- 3. HABILITAR SEGURANÇA EM NÍVEL DE LINHA (RLS - PADRÃO BANCÁRIO)
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
--- Este é o escudo primário do Supabase. Sem ativar o 'ROW LEVEL SECURITY', qualquer pessoa que descubra a API Key do seu frontend poderia listar ou apagar todo o cadastro de clientes. Ao ativar, o acesso padrão passa a ser "Nenhum Acesso".
-
--- 4. RECRIAR POLÍTICA DE LEITURA
--- (Apenas usuários logados podem ver a lista de clientes/fornecedores)
-CREATE POLICY "Leitura_Geral_Entidades" 
--- Cria uma política e a batiza com um nome descritivo para aparecer no painel do Supabase.
-ON public.entidades 
--- Amarra a aplicação dessa política exclusivamente na tabela 'entidades'.
-FOR SELECT 
--- Indica que essa regra controla apenas as requisições de leitura ('SELECT').
-TO authenticated 
--- Restringe a política: apenas usuários que possuem um token de login válido ('authenticated') entram no filtro. Usuários anônimos são barrados aqui.
-USING (true);
--- A cláusula 'USING (true)' diz que, se o cara estiver logado (passou na regra de cima), o banco retorna todas as linhas de clientes para ele ler.
-
--- 5. RECRIAR POLÍTICA DE MODIFICAÇÃO
--- (Apenas Administradores podem Inserir/Atualizar/Deletar entidades)
-CREATE POLICY "Admin_Modifica_Entidades" 
--- Cria a política para controlar quem altera os dados da tabela.
-ON public.entidades 
--- Aplica na tabela 'entidades'.
-FOR ALL 
--- 'FOR ALL' é um atalho poderoso. Ele cria um guarda-chuva protegendo operações de INSERT (criar), UPDATE (editar) e DELETE (apagar) de uma só vez.
-TO authenticated 
--- Exige conexão via token de login.
-USING (
--- O bloco 'USING' avalia uma condição matemática/lógica antes de permitir o ato destrutivo.
-    EXISTS (
-    -- A função 'EXISTS' verifica se a consulta embutida abaixo dela devolve pelo menos um resultado verdadeiro.
-        SELECT 1 FROM profiles 
-        -- A consulta espiona a tabela auxiliar 'profiles' (onde estão os cargos).
-        WHERE profiles.id = auth.uid() AND profiles.cargo = 'administrador'
-        -- [A TRAVA CRÍTICA]: O banco cruza o ID do cara que apertou o botão na tela (auth.uid()) com o ID gravado no banco de dados, e EXIGE que a coluna 'cargo' esteja escrita estritamente como 'administrador'. Se for 'operador', a tentativa de modificar o cliente falha silenciosamente a nível de hardware.
-    )
+-- ==========================================================
+-- 2. TABELA: FORNECEDORES
+-- ==========================================================
+CREATE TABLE IF NOT EXISTS public.fornecedores (
+-- Cria o cadastro de fornecedores (B2B) isolado por empresa.
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE NOT NULL,
+    razao_social text NOT NULL,
+    nome_fantasia text,
+    cnpj text,
+    telefone text,
+    email text,
+    website text,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
--- Fecha a instrução da política.
 
+-- ==========================================================
+-- 3. SEGURANÇA ZERO TRUST (RLS)
+-- ==========================================================
+ALTER TABLE public.clientes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.fornecedores ENABLE ROW LEVEL SECURITY;
 
--- [FIM: RECONSTRUCAO_TABELA_ENTIDADES]
--- Marca o final das instruções de tradução para este arquivo.
+CREATE POLICY "Acesso Clientes Tenant" ON public.clientes
+FOR ALL TO authenticated
+USING (empresa_id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
+-- Política: O utilizador só pode interagir com os clientes da sua própria empresa.
+
+CREATE POLICY "Acesso Fornecedores Tenant" ON public.fornecedores
+FOR ALL TO authenticated
+USING (empresa_id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
+-- Política: O utilizador só pode interagir com os fornecedores da sua própria empresa.
+
+-- [FIM: TABELAS_ENTIDADES_SAAS]
+
+```
+# SQL DAS TABLAS FINANCEIRO E PARCELAS
+```
+-- [INÍCIO: TABELAS_FINANCEIRO_SAAS]
+
+-- ==========================================================
+-- 1. TABELA MÃE: FINANCEIRO (O cabeçalho do lançamento)
+-- ==========================================================
+CREATE TABLE IF NOT EXISTS public.financeiro (
+-- Cria a tabela 'financeiro' para guardar os cabeçalhos das contas, apenas se não existir.
+
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    -- Gera um ID único e complexo (UUID) para cada lançamento.
+
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE NOT NULL,
+    -- [ZERO TRUST] Vincula a conta à Empresa do SaaS. Se a empresa for apagada, as contas desaparecem junto.
+
+    cliente_id uuid REFERENCES public.clientes(id) ON DELETE SET NULL,
+    -- Se for uma receita, liga ao cliente. Se o cliente for apagado, mantém a conta, mas deixa este campo vazio (SET NULL).
+
+    fornecedor_id uuid REFERENCES public.fornecedores(id) ON DELETE SET NULL,
+    -- Se for uma despesa, liga ao fornecedor. 
+
+    descricao text NOT NULL,
+    -- Guarda o nome da conta (ex: Conta de Luz, Venda de Mercadoria). É obrigatório (NOT NULL).
+
+    valor_total numeric(10,2) NOT NULL,
+    -- Guarda o valor total em formato financeiro (até 99.999.999,99).
+
+    tipo text NOT NULL CHECK (tipo IN ('receita', 'despesa')),
+    -- Trava o banco de dados: só aceita as palavras exatas 'receita' ou 'despesa'. Evita erros de digitação.
+
+    num_parcelas integer DEFAULT 1,
+    -- Por padrão, toda a conta tem pelo menos 1 parcela (pagamento à vista).
+
+    categoria text DEFAULT 'Geral',
+    -- Define a categoria para os relatórios (ex: Custos Fixos, Impostos).
+
+    status_lancamento text DEFAULT 'aberto' CHECK (status_lancamento IN ('aberto', 'finalizado', 'cancelado')),
+    -- Trava de status do cabeçalho da conta.
+
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+    -- Regista o dia e hora exatos em que a conta foi criada no sistema.
+);
+
+-- ==========================================================
+-- 2. TABELA FILHA: PARCELAS (As frações do pagamento)
+-- ==========================================================
+CREATE TABLE IF NOT EXISTS public.parcelas (
+-- Cria a tabela onde os vencimentos e comprovantes de cada fração vão morar.
+
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    -- Gera um ID único para a parcela.
+
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE NOT NULL,
+    -- [ZERO TRUST] Vincula a parcela diretamente à Empresa para tornar a filtragem de segurança ultrarrápida.
+
+    financa_id uuid REFERENCES public.financeiro(id) ON DELETE CASCADE NOT NULL,
+    -- Liga esta parcela ao lançamento Pai. Se o lançamento Pai for cancelado/apagado, as parcelas somem (CASCADE).
+
+    num_parcela integer NOT NULL,
+    -- Guarda o número da prestação (Ex: 1, 2, 3...).
+
+    valor_parcela numeric(10,2) NOT NULL,
+    -- Valor fracionado desta prestação específica.
+
+    data_vencimento date NOT NULL,
+    -- Data limite para pagar/receber. Usamos 'date' porque não precisamos da hora.
+
+    data_pagamento date,
+    -- Quando foi efetivamente pago. Fica vazio até o pagamento ocorrer.
+
+    status text DEFAULT 'pendente' CHECK (status IN ('pendente', 'pago', 'cancelado')),
+    -- Trava de status específica da parcela.
+
+    codigo_barra text,
+    -- Onde a nossa futura câmara do celular vai salvar o código numérico.
+
+    boleto_url text,
+    -- Link do Storage do Supabase onde o PDF do boleto vai ficar armazenado.
+
+    comprovante_url text,
+    -- Link do Storage do Supabase onde o PDF do recibo vai ficar armazenado.
+
+    atualizado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+    -- Regista a hora da última modificação (útil para auditoria).
+);
+
+-- ==========================================================
+-- 3. SEGURANÇA DE NÍVEL BANCÁRIO (RLS)
+-- ==========================================================
+ALTER TABLE public.financeiro ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.parcelas ENABLE ROW LEVEL SECURITY;
+-- Liga o cadeado principal: a partir de agora, ninguém lê nada sem uma Política (Policy) explícita.
+
+CREATE POLICY "Acesso Financeiro Tenant" ON public.financeiro
+FOR ALL TO authenticated
+USING (empresa_id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
+-- Política: O utilizador só pode ver, inserir ou editar lançamentos financeiros se o 'empresa_id' do lançamento for IGUAL ao 'empresa_id' do perfil dele.
+
+CREATE POLICY "Acesso Parcelas Tenant" ON public.parcelas
+FOR ALL TO authenticated
+USING (empresa_id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
+-- Política: Aplica exatamente a mesma regra de blindagem para a tabela de parcelas.
+
+-- [FIM: TABELAS_FINANCEIRO_SAAS]
 
 
 ```
