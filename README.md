@@ -39,8 +39,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR SISTEMA OPERACIONAL KALI LINUX NO ANDROIDE 
-* usaremos para compilar projetos do Google AI Studio
+# COMO INSTALAR KALI NO ANDROIDE 
 ## instalar linux (terminal basico)
 ```
 # atualiza e instala o instalador
