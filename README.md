@@ -90,15 +90,55 @@ nethunter
 sudo apt update
 ```
 ```
+# Adiciona o servidor DNS da Google (8.8.8.8) ao ficheiro de rede do sistema
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 ```
 ```
+# Tenta descarregar as listas de atualização de novo
+sudo apt update
 ```
 ```
+# Instala todas as atualizações pendentes no sistema (install the package)
+# O '-y' serve para confirmar automaticamente a instalação
+sudo apt upgrade -y
 ```
 ```
+# Verifica e exibe as informações detalhadas do sistema operativo instalado
+cat /etc/os-release
 ```
 ```
+# Encerra a sessão atual do Kali Linux e regressa ao Termux
+exit
 ```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
