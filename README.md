@@ -166,9 +166,14 @@ mkdir /sdcard/Download/filmes
 ```
 # 3. Move o arquivo renomeado para a pasta criada
 mv filme.webm /sdcard/Download/filmes/
-
 ```
 ```
+# 1. Navega (entra) na pasta 'filmes' que você acabou de criar
+cd /sdcard/Download/filmes
+```
+```
+# 2. Lista os arquivos que estão dentro dessa pasta atual
+ls
 
 ```
 ```
