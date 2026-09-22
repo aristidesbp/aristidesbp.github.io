@@ -153,6 +153,26 @@ yt-dlp -f "137+140" "LINK"
 # Baixa o vídeo limitando a resolução máxima a 720p
 yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "link_do_video"
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# KALI- ARQUIVOS E DIRETORIOS
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
