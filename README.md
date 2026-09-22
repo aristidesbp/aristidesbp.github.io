@@ -38,7 +38,48 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 *  **fluxograma***(https://mermaid.live/edit)
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# COMO INSTALAR SISTEMA OPERACIONAL KALI LINUX NO ANDROIDE 
+* usaremos para compilar projetos do Google AI Studio
+## instalar linux (terminal basico)
+```
+# instalador do Linux
+pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# Baixa e instala o Ubuntu (versão..)
+proot-distro install ubuntu:versão..
+```
+```
+# ENTRANDO NO  LUNUX UBUNTU:
+proot-distro login ubuntu
+```
+```
+# verificar acesso as pastas do celular
+ls /sdcard
+```
+```
+# apagar pasta
+rm -rf nome_da_pasta
+```
+```
+# movendo para pasta de downloads do celular
+mv nome_da_pasta /sdcard/Download/
 
+```
+```
+# atualizar 
+sudo apt update 
+sudo apt upgrade -y
+```
+``` 
+# verificar informações do sistema instalado 
+cat /etc/os-release
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # IA COM AVATA INTERATIVO EM MANGA
@@ -2041,7 +2082,7 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GITHUB : BAIXAR E ENVIAR ARQUIVOS 
+#  GIT E GITHUB (REPOSITO)
 
 ```
 # clonar um repositório
@@ -2145,48 +2186,7 @@ python3 -m http.server 3000
 ip addr show wlan0
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR SISTEMA OPERACIONAL KALI LINUX NO ANDROIDE 
-* usaremos para compilar projetos do Google AI Studio
-## instalar linux (terminal basico)
-```
-# instalador do Linux
-pkg install proot-distro
-```
-```
-# verificar iso disponível
-proot-distro list
-```
-```
-# Baixa e instala o Ubuntu (versão..)
-proot-distro install ubuntu:versão..
-```
-```
-# ENTRANDO NO  LUNUX UBUNTU:
-proot-distro login ubuntu
-```
-```
-# verificar acesso as pastas do celular
-ls /sdcard
-```
-```
-# apagar pasta
-rm -rf nome_da_pasta
-```
-```
-# movendo para pasta de downloads do celular
-mv nome_da_pasta /sdcard/Download/
 
-```
-```
-# atualizar 
-sudo apt update 
-sudo apt upgrade -y
-```
-``` 
-# verificar informações do sistema instalado 
-cat /etc/os-release
-```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # rodando local Google ai Studio 
