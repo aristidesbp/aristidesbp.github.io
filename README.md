@@ -43,28 +43,32 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * usaremos para compilar projetos do Google AI Studio
 ## instalar linux (terminal basico)
 ```
-# instalador do Linux
-pkg install proot-distro
+# atualiza e instala o instalador
+pkg update && pkg install proot-distro
 ```
 ```
 # verificar iso disponível
 proot-distro list
 ```
 ```
-# Baixa e instala o Ubuntu (versão..)
-proot-distro install ubuntu:versão..
+# Instala a ferramenta 'wget', usada para baixar arquivos da internet direto no terminal.
+# O '-y' confirma a instalação automaticamente.
+pkg install wget -y
+
 ```
 ```
-# ENTRANDO NO  LUNUX UBUNTU:
-proot-distro login ubuntu
+# Instala a ferramenta 'wget', que serve para baixar arquivos da internet direto no terminal.
+# O '-y' no final confirma a instalação automaticamente.
+pkg install wget -y
 ```
 ```
-# verificar acesso as pastas do celular
-ls /sdcard
+# Descarrega o script oficial de instalação do Kali NetHunter da internet
+# O '-O' (letra O maiúscula) guarda o ficheiro com o nome 'install-nethunter-termux'
+wget -O install-nethunter-termux https://offs.ec/2MceZWr
 ```
 ```
-# apagar pasta
-rm -rf nome_da_pasta
+# Dá permissão de execução ('+x') ao ficheiro que acabámos de descarregar
+chmod +x install-nethunter-termux
 ```
 ```
 # movendo para pasta de downloads do celular
@@ -72,14 +76,30 @@ mv nome_da_pasta /sdcard/Download/
 
 ```
 ```
-# atualizar 
-sudo apt update 
-sudo apt upgrade -y
+# Executa o script de instalação do Kali NetHunter
+# Digite "n" e pressione "Enter".
+./install-nethunter-termux
 ```
 ``` 
-# verificar informações do sistema instalado 
-cat /etc/os-release
+# Inicia a interface de linha de comando do Kali NetHunter
+nethunter
 ```
+```
+# Atualiza a lista de repositórios e ferramentas do sistema
+# A senha padrão é kali (tudo em letras minúsculas)
+sudo apt update
+```
+```
+```
+```
+```
+```
+```
+```
+```
+```
+```
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # IA COM AVATA INTERATIVO EM MANGA
