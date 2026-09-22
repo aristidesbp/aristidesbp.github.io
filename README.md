@@ -133,12 +133,16 @@ python3 -m pip install --upgrade yt-dlp --break-system-packages
 yt-dlp --version
 ```
 ```
-
+# Baixa o ficheiro juntando automaticamente o melhor vídeo e o melhor áudio
+yt-dlp "LINK"
 ```
 ```
-
+# O '-x' extrai o áudio e '--audio-format mp3' converte o ficheiro final
+yt-dlp -x --audio-format mp3 "LINK"
 ```
 ```
+# O '-F' (maiúsculo) não descarrega o vídeo, apenas lista as opções (resoluções, formatos, tamanho)
+yt-dlp -F "LINK"
 
 ```
 
