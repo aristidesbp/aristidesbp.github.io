@@ -156,6 +156,16 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "link_do_video"
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # KALI- ARQUIVOS E DIRETORIOS
 ```
+# 1. Altera o nome do arquivo longo para um mais simples
+mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
+```
+```
+# 2. Cria a pasta 'filmes' dentro do armazenamento do celular
+mkdir /sdcard/Download/filmes
+```
+```
+# 3. Move o arquivo renomeado para a pasta criada
+mv filme.webm /sdcard/Download/filmes/
 
 ```
 ```
