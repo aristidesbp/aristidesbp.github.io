@@ -39,7 +39,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR KALI NO ANDROIDE 
+# KALI NO ANDROIDE 
 ## instalar linux (terminal basico)
 ```
 # atualiza e instala o instalador
@@ -111,7 +111,7 @@ exit
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# COMO INSTALAR yt-dlp NO KALI
+# KALI- COMO INSTALAR yt-dlp 
 ```
 # Instala a ferramenta yt-dlp e confirma automaticamente com o '-y'
 sudo apt install yt-dlp -y
