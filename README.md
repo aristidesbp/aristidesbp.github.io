@@ -164,6 +164,10 @@ ls
 ls -a
 ```
 ```
+# Lista todo o conteúdo da raiz do sistema operacional
+ls /
+```
+```
 # 1. Altera o nome do arquivo longo para um mais simples
 mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
 ```
