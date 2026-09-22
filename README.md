@@ -40,6 +40,30 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # KALI NO ANDROIDE 
+## TERMUX ( Terminal linux para android):
+ 
+## Download do aplicativo direto no git
+* Acesse o link oficial no Github não use da Play Store!
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
+```
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
+```
+```
+# comando para atualizar o termux:
+pkg update && pkg upgrade -y
+```
+```
+# comando para autorizar o uso de pastas do celular
+termux-setup-storage
+```
+```
+# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
+
+dpkg --configure -a
+```
 ## instalar linux (terminal basico)
 ```
 # atualiza e instala o instalador
