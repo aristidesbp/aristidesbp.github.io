@@ -156,6 +156,14 @@ yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "link_do_video"
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # KALI- ARQUIVOS E DIRETORIOS
 ```
+# Lista os arquivos que estão dentro dessa pasta atual
+ls
+```
+```
+# Lista os arquivos ocultos que estão dentro dessa pasta atual
+ls -a
+```
+```
 # 1. Altera o nome do arquivo longo para um mais simples
 mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
 ```
@@ -171,11 +179,7 @@ mv filme.webm /sdcard/Download/filmes/
 # 1. Navega (entra) na pasta 'filmes' que você acabou de criar
 cd /sdcard/Download/filmes
 ```
-```
-# 2. Lista os arquivos que estão dentro dessa pasta atual
-ls
 
-```
 ```
 
 ```
