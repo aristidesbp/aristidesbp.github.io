@@ -113,31 +113,24 @@ exit
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO INSTALAR yt-dlp NO KALI
 ```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-
+# Instala a ferramenta yt-dlp e confirma automaticamente com o '-y'
+sudo apt install yt-dlp -y
 ```
 ```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-
-```
-# COMO INSTALAR
+yt-dlp --version
 ```
 ```
-
+# Instala o Python 3, o gestor de pacotes pip e o conversor multimédia FFmpeg
+# O '-y' confirma a instalação automaticamente
+sudo apt install python3 python3-pip ffmpeg -y
 ```
 ```
-
+# Atualiza o yt-dlp para a versão mais recente diretamente da fonte oficial do Python
+# A flag '--break-system-packages' é obrigatória no Kali Rolling para permitir a instalação via pip
+python3 -m pip install --upgrade yt-dlp --break-system-packages
 ```
 ```
-
-```
-```
-
-```
-```
-
+yt-dlp --version
 ```
 ```
 
