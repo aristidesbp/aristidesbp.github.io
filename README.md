@@ -202,18 +202,7 @@ mv filme.webm /sdcard/Download/filmes/
 cd /sdcard/Download/filmes
 ```
 
-```
 
-```
-```
-
-```
-```
-
-```
-```
-
-```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
