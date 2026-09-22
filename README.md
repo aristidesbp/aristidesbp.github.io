@@ -168,6 +168,24 @@ ls -a
 ls /
 ```
 ```
+# 1. Entrar em uma pasta específica (usando o caminho completo)
+cd /sdcard/Download/filmes
+```
+```
+# 2. Voltar UMA pasta para trás (se estiver em 'filmes', volta para 'Download')
+# Preste atenção no espaço entre o 'cd' e os dois pontos '..'
+cd ..
+```
+```
+# 3. Voltar instantaneamente para a sua pasta inicial pessoal (o ~)
+# Digitar apenas 'cd' sem nada na frente faz exatamente a mesma coisa
+cd ~
+```
+```
+# 4. Ir direto para a raiz do sistema (onde tudo começa, e onde está o sdcard)
+cd /
+```
+```
 # 1. Altera o nome do arquivo longo para um mais simples
 mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
 ```
