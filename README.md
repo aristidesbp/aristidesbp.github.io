@@ -143,9 +143,12 @@ yt-dlp -x --audio-format mp3 "LINK"
 ```
 # O '-F' (maiúsculo) não descarrega o vídeo, apenas lista as opções (resoluções, formatos, tamanho)
 yt-dlp -F "LINK"
-
 ```
-
+```
+# Depois de usar o comando -F, podes escolher exatamente o que descarregar.
+# Exemplo: Junta o ID do vídeo (ex: 137) com o ID do áudio (ex: 140)
+yt-dlp -f "137+140" "LINK"
+```
 
 
 
