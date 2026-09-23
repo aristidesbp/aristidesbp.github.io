@@ -18,7 +18,7 @@
 
 * Authentication/URL Configuration & Redirect URLs: coloque a url do seu site (http://aristidesbp.github.io)
 * Authentication/Users: voçẽ pode criar um novo usuario.
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # SQL DA PRIMEIRA TABELA "entidades" (USUARIO ESPELHO / COMPLETO e FUNCIONANDO)
 ``` 
@@ -131,7 +131,7 @@ WITH CHECK (
 );
 
 ``` 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # EXEMPLO DE SQL PARA CRIAR TABELAS 
 ```
@@ -301,6 +301,7 @@ CREATE TABLE public.itens_venda (
   CONSTRAINT itens_venda_produto_id_fkey FOREIGN KEY (produto_id) REFERENCES public.produtos(id)
 );
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # EXEMPLO DE COMO CRIAR AS FUNÇÕES
 ```
 -- =========================================================================
@@ -442,7 +443,7 @@ CREATE EVENT TRIGGER rls_auto_enable
   EXECUTE FUNCTION public.rls_auto_enable_procedure();
 
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # EXEMPLO DE COMO APAGAR UMA FUNÇÃO
 
 ```
@@ -454,7 +455,7 @@ CREATE EVENT TRIGGER rls_auto_enable
 -- também seja removido, evitando erros de objetos dependentes.
 DROP FUNCTION IF EXISTS public.rls_auto_enable() CASCADE;
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # EXEMPLO DE PROMPT PARA CRIAR VIEWS
 ```
@@ -521,6 +522,7 @@ CREATE TABLE public.avaliacoes (
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # RESPOSTA
 ```
 -- =========================================================================
@@ -569,7 +571,7 @@ GROUP BY
     c.id, 
     u.id;
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # srl apolicies
 ```
 -- =========================================================================
@@ -676,7 +678,7 @@ USING ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) )
 WITH CHECK ( venda_id IN (SELECT id FROM public.vendas WHERE user_id = auth.uid()) );
 ```
 
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # INSERINDO DADOS EM USUARIOS
 ```
 INSERT INTO public.entidades (id, nome, role)
@@ -689,7 +691,7 @@ ON CONFLICT (id) DO UPDATE
 SET role = EXCLUDED.role, nome = EXCLUDED.nome;  
  
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # UPDATE
 ```
 UPDATE public.entidades
@@ -932,6 +934,7 @@ tailwind.config = {
   </div>
 </div>
 ```
+# script global
 ```
 
 <script>
@@ -1104,6 +1107,7 @@ function ent_alternarSubAba(subAba) {
 </script>
 
 ```
+# configurações 
 ```
 <!-- ════════════ ABA: CONFIGURAÇÕES ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-configuracoes">
@@ -1201,6 +1205,10 @@ function ent_alternarSubAba(subAba) {
 
   </div>
 </div>
+
+```
+# script configurações 
+```
 <script>
 // ==========================================
 // ESCOPO GLOBAL DA APLICAÇÃO (app.js)
@@ -1371,6 +1379,7 @@ function ent_alternarSubAba(subAba) {
 </script>
 
 ```
+# estoque 
 ```
 <!-- ════════════ ABA: ESTOQUE ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-estoque">
@@ -1515,7 +1524,9 @@ function ent_alternarSubAba(subAba) {
     </div>
   </div>
 </div>
-
+```
+# script estoque 
+```
 <script>
 // ==========================================
 // MÓDULO DE ESTOQUE (estoque.js)
@@ -1918,6 +1929,7 @@ async function est_excluirSelecionados() {
 
 
 ```
+# entidades 
 ```
 <!-- ════════════ ABA: ENTIDADES (CORRIGIDA com sub-abas) ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-entidades">
@@ -2128,7 +2140,9 @@ async function est_excluirSelecionados() {
   </div>
 
 </div><!-- fim aba-entidades -->
-
+```
+# script entodades
+```
 <script>
 // ── Inicialização ─────────────────────────────────────────────────────
 function init() {
@@ -2408,6 +2422,7 @@ function limparFiltros() {
 </script>
 
 ```
+# financeiro 
 ```
 <!-- ════════════ ABA: FINANCEIRO ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-financeiro">
@@ -2854,6 +2869,7 @@ function fin_mostrarNomeArquivo(input, idCampo) {
 </script>
 
 ```
+# pdv
 ```
 <!-- ════════════ ABA: PDV ════════════ -->
 <div class="hidden fade-in max-w-7xl mx-auto px-4" id="aba-pdv">
