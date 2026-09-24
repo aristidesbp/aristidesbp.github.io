@@ -165,6 +165,250 @@ if (typeof supabase !== 'undefined') {
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# login.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso - Sistema</title>
+    
+    <style>
+        /* [INÍCIO: ESTILOS CSS] Design moderno com suporte ao botão de ver senha */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --info-color: #17a2b8;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box;}
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; }
+        .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
+        .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
+        .info { padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid transparent;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
+        .info-msg { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); border-color: var(--info-color); }
+        label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; }
+        input:focus { border-color: var(--accent-neon); }
+        
+        /* Grupo de Input com o botão do "olhinho" */
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group input { margin-bottom: 0; padding-right: 45px; }
+        .btn-senha { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.2em; padding: 0; }
+        .btn-senha:hover { color: var(--accent-neon); }
+
+        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; }
+        .btn-neon:hover { background: var(--accent-hover); }
+        .link-alternar { display: block; text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.9em; cursor: pointer; text-decoration: none; }
+        .link-alternar:hover { color: var(--accent-neon); text-decoration: underline; }
+        /* [FIM: ESTILOS CSS] */
+    </style>
+
+    <!-- Importação do motor oficial do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    
+    <div class="card">
+        <h2 class="titulo">
+            <span class="logo-icon">⚡</span> 
+            <span id="texto-titulo">Acesso ao Sistema</span>
+        </h2>
+        
+        <!-- Caixa de Status para mensagens dinâmicas -->
+        <div id="status" class="info info-msg" style="display: none;"></div>
+
+        <!-- ========================================== -->
+        <!-- FORMULÁRIO 1: LOGIN NATIVO                 -->
+        <!-- ========================================== -->
+        <div id="area-login">
+            <label for="input-email-login">E-mail:</label>
+            <input type="email" id="input-email-login" placeholder="seu@email.com" required style="margin-bottom: 20px;">
+            
+            <label for="input-senha-login">Senha:</label>
+            <div class="input-group">
+                <input type="password" id="input-senha-login" placeholder="••••••••" required>
+                <button type="button" class="btn-senha" onclick="toggleSenha('input-senha-login', this)">👁️</button>
+            </div>
+            
+            <button id="btn-entrar" class="btn-neon">Entrar</button>
+
+            <a class="link-alternar" onclick="alternarTelas('registo')">Não tem conta? <strong>Criar conta</strong></a>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FORMULÁRIO 2: REGISTO NATIVO               -->
+        <!-- ========================================== -->
+        <div id="area-registo" style="display: none;">
+            <label for="input-nome-empresa">Nome da Empresa / Projeto:</label>
+            <input type="text" id="input-nome-empresa" placeholder="Ex: Minha Empresa" required style="margin-bottom: 20px;">
+
+            <label for="input-email-registo">E-mail:</label>
+            <input type="email" id="input-email-registo" placeholder="seu@email.com" required style="margin-bottom: 20px;">
+            
+            <label for="input-senha-registo">Senha:</label>
+            <div class="input-group">
+                <input type="password" id="input-senha-registo" placeholder="Mínimo 6 caracteres" required>
+                <button type="button" class="btn-senha" onclick="toggleSenha('input-senha-registo', this)">👁️</button>
+            </div>
+            
+            <button id="btn-registar" class="btn-neon">Registar</button>
+
+            <a class="link-alternar" onclick="alternarTelas('login')">Já tem conta? <strong>Fazer Login</strong></a>
+        </div>
+    </div>
+
+    <!-- Importação das credenciais do Supabase -->
+    <script src="supabase_config.js"></script>
+    
+    <script>
+        // [INÍCIO: LÓGICA DE INTERFACE]
+        const statusDiv = document.getElementById('status');
+        const areaLogin = document.getElementById('area-login');
+        const areaRegisto = document.getElementById('area-registo');
+        const textoTitulo = document.getElementById('texto-titulo');
+
+        // Função para exibir alertas visuais formatados
+        function mostrarStatus(mensagem, tipo) {
+            statusDiv.textContent = mensagem;
+            statusDiv.className = `info ${tipo}`;
+            statusDiv.style.display = "block";
+        }
+
+        // Função para alternar entre as telas de login e registo
+        function alternarTelas(tela) {
+            statusDiv.style.display = "none";
+            if (tela === 'registo') {
+                areaLogin.style.display = "none";
+                areaRegisto.style.display = "block";
+                textoTitulo.textContent = "Criar Nova Conta";
+            } else {
+                areaRegisto.style.display = "none";
+                areaLogin.style.display = "block";
+                textoTitulo.textContent = "Acesso ao Sistema";
+            }
+        }
+
+        // Função Didática: Alterna a visibilidade da senha (o "olhinho")
+        function toggleSenha(idInput, botao) {
+            const input = document.getElementById(idInput);
+            if (input.type === "password") {
+                input.type = "text";
+                botao.textContent = "🙈"; // Altera o ícone para indicar senha visível
+            } else {
+                input.type = "password";
+                botao.textContent = "👁️"; // Retorna ao ícone padrão
+            }
+        }
+        // [FIM: LÓGICA DE INTERFACE]
+
+        // [INÍCIO: VERIFICAÇÃO DE SESSÃO]
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof clienteSupabase === 'undefined') {
+                mostrarStatus("❌ Erro: Arquivo supabase_config.js não carregado.", "erro"); 
+                return;
+            }
+            try {
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+                if (session) {
+                    mostrarStatus("Sessão ativa encontrada! Redirecionando...", "sucesso");
+                    setTimeout(() => { window.location.href = 'index.html'; }, 800);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar sessão:", error);
+            }
+        });
+        // [FIM: VERIFICAÇÃO DE SESSÃO]
+
+        // [INÍCIO: AUTENTICAÇÃO - LOGIN NATIVO]
+        document.getElementById('btn-entrar').addEventListener('click', async () => {
+            const email = document.getElementById('input-email-login').value.trim();
+            const senha = document.getElementById('input-senha-login').value;
+            const btn = document.getElementById('btn-entrar');
+
+            if (!email || !senha) {
+                alert("Preencha o e-mail e a senha.");
+                return;
+            }
+
+            btn.textContent = "A entrar...";
+            btn.disabled = true;
+
+            const { error } = await clienteSupabase.auth.signInWithPassword({ 
+                email: email, 
+                password: senha 
+            });
+
+            if (error) {
+                mostrarStatus("❌ Erro no login: " + error.message, "erro");
+                btn.textContent = "Entrar";
+                btn.disabled = false;
+            } else {
+                mostrarStatus("✅ Login efetuado com sucesso! Redirecionando...", "sucesso");
+                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+            }
+        });
+        // [FIM: AUTENTICAÇÃO - LOGIN NATIVO]
+
+        // [INÍCIO: AUTENTICAÇÃO - REGISTO NATIVO COM NOME DO PROJETO]
+        document.getElementById('btn-registar').addEventListener('click', async () => {
+            const empresa = document.getElementById('input-nome-empresa').value.trim();
+            const email = document.getElementById('input-email-registo').value.trim();
+            const senha = document.getElementById('input-senha-registo').value;
+            const btn = document.getElementById('btn-registar');
+
+            if (!empresa || !email || !senha) {
+                alert("Preencha todos os campos obrigatórios.");
+                return;
+            }
+
+            if (senha.length < 6) {
+                alert("A senha precisa ter pelo menos 6 caracteres.");
+                return;
+            }
+
+            btn.textContent = "A criar conta...";
+            btn.disabled = true;
+            mostrarStatus("⏳ A registar utilizador...", "info-msg");
+
+            // Utiliza o signUp nativo salvando o nome da empresa nos metadados do utilizador
+            const { error } = await clienteSupabase.auth.signUp({ 
+                email: email, 
+                password: senha,
+                options: {
+                    data: {
+                        nome_empresa: empresa // Armazena nativamente sem precisar de tabelas customizadas
+                    }
+                }
+            });
+
+            if (error) {
+                mostrarStatus("❌ Erro no registo: " + error.message, "erro");
+                btn.textContent = "Registar";
+                btn.disabled = false;
+            } else {
+                mostrarStatus("✅ Conta criada com sucesso! Verifique seu e-mail se necessário.", "sucesso");
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+        });
+        // [FIM: AUTENTICAÇÃO - REGISTO NATIVO]
+    </script>
+</body>
+</html>
+
+
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PASSO 4
 # CRIAR TABELA
 ```
@@ -510,256 +754,6 @@ DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 ```
 
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# login.html
-```
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso SaaS - ERP</title>
-    
-    <style>
-        /* === DESIGN SYSTEM === */
-        :root {
-            --bg-color: #0b1320; 
-            --card-bg: #151f2b;  
-            --text-main: #ffffff;
-            --text-muted: #8b9eb3;
-            --accent-neon: #a4e320; 
-            --accent-hover: #8cc21a;
-            --border-color: #2a3645;
-            --danger-color: #ff4d4d;
-            --info-color: #17a2b8;
-        }
-
-        .light-theme {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #6c757d;
-            --accent-neon: #28a745;
-            --accent-hover: #218838;
-            --border-color: #e0e0e0;
-            --danger-color: #dc3545;
-        }
-
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s, color 0.3s; padding: 20px; box-sizing: border-box;}
-        
-        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; }
-        
-        .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
-        .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
-
-        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color);}
-        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
-
-        label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; transition: border-color 0.2s;}
-        input:focus { border-color: var(--accent-neon); }
-        
-        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s, background-color 0.2s; }
-        .btn-neon:hover { background: var(--accent-hover); }
-        .btn-neon:active { transform: scale(0.98); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Estilo para alternar entre os formulários */
-        .link-alternar { display: block; text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.9em; cursor: pointer; text-decoration: none; transition: color 0.2s; }
-        .link-alternar:hover { color: var(--accent-neon); text-decoration: underline; }
-    </style>
-
-    <!-- Importação do motor do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-
-<body>
-    
-    <div class="card">
-        <h2 class="titulo">
-            <span class="logo-icon">⚡</span> 
-            <span id="texto-titulo">Acesso ao Sistema</span>
-        </h2>
-        
-        <!-- O Semáforo de Avisos -->
-        <div id="status" class="info">Verificando segurança...</div>
-
-        <!-- ========================================== -->
-        <!-- FORMULÁRIO 1: LOGIN (Entrar no ERP)        -->
-        <!-- ========================================== -->
-        <div id="area-login" style="display: none;">
-            <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 0; text-align: center; margin-bottom: 20px;">Insira suas credenciais de acesso.</p>
-            
-            <label for="input-email-login">E-mail Registado:</label>
-            <input type="email" id="input-email-login" placeholder="admin@empresa.com" required>
-            
-            <label for="input-senha-login">Senha:</label>
-            <input type="password" id="input-senha-login" placeholder="••••••••" required>
-            
-            <button id="btn-entrar" class="btn-neon">Entrar no ERP</button>
-
-            <a class="link-alternar" onclick="alternarTelas('registo')">Não tem conta? <strong>Crie o seu SaaS grátis</strong></a>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- FORMULÁRIO 2: REGISTO (Onboarding SaaS)    -->
-        <!-- ========================================== -->
-        <div id="area-registo" style="display: none;">
-            <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 0; text-align: center; margin-bottom: 20px;">Registe a sua empresa e comece a usar.</p>
-            
-            <label for="input-nome-empresa">Nome da Empresa (Sua Loja):</label>
-            <input type="text" id="input-nome-empresa" placeholder="Ex: Supermercado Central" required>
-
-            <label for="input-cnpj">CNPJ ou NIF (Opcional):</label>
-            <input type="text" id="input-cnpj" placeholder="Apenas números">
-
-            <label for="input-email-registo">Seu E-mail (Será o Administrador):</label>
-            <input type="email" id="input-email-registo" placeholder="dono@empresa.com" required>
-            
-            <label for="input-senha-registo">Crie uma Senha Forte:</label>
-            <input type="password" id="input-senha-registo" placeholder="Mínimo 6 caracteres" required>
-            
-            <button id="btn-registar" class="btn-neon">Criar Minha Empresa</button>
-
-            <a class="link-alternar" onclick="alternarTelas('login')">Já tem uma conta? <strong>Faça Login</strong></a>
-        </div>
-
-    </div>
-
-    <!-- Importação das tuas chaves do banco de dados -->
-    <script src="supabase_config.js"></script>
-    
-    <script>
-        // Mantém o tema claro se o utilizador tiver escolhido anteriormente
-        if(localStorage.getItem('temaBevDistro') === 'light') { document.body.classList.add('light-theme'); }
-
-        const statusDiv = document.getElementById('status');
-        const areaLogin = document.getElementById('area-login');
-        const areaRegisto = document.getElementById('area-registo');
-        const textoTitulo = document.getElementById('texto-titulo');
-
-        // Função Didática: Facilita a exibição de mensagens de erro ou sucesso
-        function mostrarStatus(mensagem, tipo) {
-            statusDiv.textContent = mensagem;
-            statusDiv.className = `info ${tipo}`;
-            statusDiv.style.display = "block";
-        }
-
-        // Função Didática: Alterna a visualização entre Login e Registo
-        function alternarTelas(tela) {
-            statusDiv.style.display = "none"; // Limpa avisos da tela anterior
-            if (tela === 'registo') {
-                areaLogin.style.display = "none";
-                areaRegisto.style.display = "block";
-                textoTitulo.textContent = "Nova Empresa SaaS";
-            } else {
-                areaRegisto.style.display = "none";
-                areaLogin.style.display = "block";
-                textoTitulo.textContent = "Acesso ao Sistema";
-            }
-        }
-
-        // ==========================================
-        // VERIFICAÇÃO INICIAL (Zero Trust)
-        // ==========================================
-        window.addEventListener('DOMContentLoaded', async () => {
-            if (typeof clienteSupabase === 'undefined') {
-                mostrarStatus("❌ Erro Crítico: supabase_config.js não encontrado.", "erro"); return;
-            }
-            try {
-                // Pergunta ao servidor se já existe uma sessão ativa
-                const { data: { session }, error } = await clienteSupabase.auth.getSession();
-                if (session) {
-                    mostrarStatus("Sessão válida! Redirecionando...", "sucesso");
-                    setTimeout(() => { window.location.href = 'index.html'; }, 800);
-                } else {
-                    // Sem sessão: Mostra o formulário de Login por padrão
-                    statusDiv.style.display = "none";
-                    areaLogin.style.display = "block";
-                }
-            } catch (error) {
-                mostrarStatus("❌ Erro grave de conexão.", "erro");
-            }
-        });
-
-        // ==========================================
-        // AÇÃO 1: EXECUTAR O LOGIN
-        // ==========================================
-        document.getElementById('btn-entrar').addEventListener('click', async () => {
-            const email = document.getElementById('input-email-login').value.trim();
-            const senha = document.getElementById('input-senha-login').value;
-            const btn = document.getElementById('btn-entrar');
-
-            if (!email || !senha) { alert("Por favor, preencha o e-mail e a senha!"); return; }
-
-            btn.textContent = "Autenticando..."; btn.disabled = true;
-
-            try {
-                // Envia as credenciais para o Supabase
-                const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
-                if (error) throw error; 
-                
-                mostrarStatus("✅ Autenticado! Entrando...", "sucesso");
-                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
-            } catch (erro) {
-                mostrarStatus("❌ Erro no login: Credenciais incorretas.", "erro");
-                btn.textContent = "Entrar no ERP"; btn.disabled = false;
-            }
-        });
-
-        // ==========================================
-        // AÇÃO 2: REGISTAR EMPRESA E UTILIZADOR (RPC)
-        // ==========================================
-        document.getElementById('btn-registar').addEventListener('click', async () => {
-            const empresa = document.getElementById('input-nome-empresa').value.trim();
-            const cnpj = document.getElementById('input-cnpj').value.trim();
-            const email = document.getElementById('input-email-registo').value.trim();
-            const senha = document.getElementById('input-senha-registo').value;
-            const btn = document.getElementById('btn-registar');
-
-            if (!empresa || !email || !senha) { alert("Preencha Nome da Empresa, E-mail e Senha!"); return; }
-            if (senha.length < 6) { alert("A senha deve ter pelo menos 6 caracteres."); return; }
-
-            btn.textContent = "A criar ambiente SaaS..."; 
-            btn.disabled = true;
-            mostrarStatus("⏳ A criar conta e a configurar empresa...", "info");
-
-            try {
-                // 1. Cria a identidade do utilizador no sistema de autenticação
-                const { data: authData, error: authError } = await clienteSupabase.auth.signUp({ 
-                    email: email, 
-                    password: senha 
-                });
-
-                if (authError) throw new Error("Erro na autenticação: " + authError.message);
-
-                // 2. Chama a RPC segura no PostgreSQL para criar a estrutura da Empresa
-                const { error: rpcError } = await clienteSupabase.rpc('criar_conta_saas', {
-                    p_nome_empresa: empresa,
-                    p_cnpj: cnpj || 'N/A'
-                });
-
-                if (rpcError) throw new Error("Erro ao gerar empresa SaaS: " + rpcError.message);
-
-                // 3. Sucesso! Redireciona para o Painel de Controlo
-                mostrarStatus("✅ Empresa criada com sucesso! A entrar no painel...", "sucesso");
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-
-            } catch (erro) {
-                console.error(erro);
-                mostrarStatus(`❌ ${erro.message}`, "erro");
-                btn.textContent = "Criar Minha Empresa"; 
-                btn.disabled = false;
-            }
-        });
-    </script>
-</body>
-</html>
-
-
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # menu.html
 ```
