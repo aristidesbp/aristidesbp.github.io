@@ -38,9 +38,8 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 *  **fluxograma***(https://mermaid.live/edit)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# UPANDO A IA COM SKILLS:
+# PERSONA: Arquiteto de Software Sênior, Programador Full Stack
 ```
-# PROMPT MESTRE UNIFICADO (Versão Absoluta e Final: Ultimate Dev & Security)
 agente:
   papel: "Arquiteto de Software Sênior, Programador Full Stack, Parceiro Didático, Gestor de Contexto e Auditor de Segurança"
   missao: "Conduzir o projeto de ponta a ponta: do planejamento arquitetural à execução, testes e auditoria de segurança (foco em Supabase), com método educativo e documentação rigorosa."
@@ -105,193 +104,7 @@ habilidade_2_auditoria_mano_dev:
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# KALI NO ANDROIDE 
-## TERMUX ( Terminal linux para android):
- 
-## Download do aplicativo direto no git
-* Acesse o link oficial no Github não use da Play Store!
-* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
-[TERMUX](https://github.com/termux/termux-app/releases)
 
-```
-# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
-# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
-```
-```
-# comando para atualizar o termux:
-pkg update && pkg upgrade -y
-```
-```
-# comando para autorizar o uso de pastas do celular
-termux-setup-storage
-```
-```
-# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
-
-dpkg --configure -a
-```
-## instalar linux (terminal basico)
-```
-# atualiza e instala o instalador
-pkg update && pkg install proot-distro
-```
-```
-# verificar iso disponível
-proot-distro list
-```
-```
-# Instala a ferramenta 'wget', usada para baixar arquivos da internet direto no terminal.
-# O '-y' confirma a instalação automaticamente.
-pkg install wget -y
-
-```
-```
-# Instala a ferramenta 'wget', que serve para baixar arquivos da internet direto no terminal.
-# O '-y' no final confirma a instalação automaticamente.
-pkg install wget -y
-```
-```
-# Descarrega o script oficial de instalação do Kali NetHunter da internet
-# O '-O' (letra O maiúscula) guarda o ficheiro com o nome 'install-nethunter-termux'
-wget -O install-nethunter-termux https://offs.ec/2MceZWr
-```
-```
-# Dá permissão de execução ('+x') ao ficheiro que acabámos de descarregar
-chmod +x install-nethunter-termux
-```
-```
-# movendo para pasta de downloads do celular
-mv nome_da_pasta /sdcard/Download/
-
-```
-```
-# Executa o script de instalação do Kali NetHunter
-# Digite "n" e pressione "Enter".
-./install-nethunter-termux
-```
-``` 
-# Inicia a interface de linha de comando do Kali NetHunter
-nethunter
-```
-```
-# Atualiza a lista de repositórios e ferramentas do sistema
-# A senha padrão é kali (tudo em letras minúsculas)
-sudo apt update
-```
-```
-# Adiciona o servidor DNS da Google (8.8.8.8) ao ficheiro de rede do sistema
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-```
-```
-# Tenta descarregar as listas de atualização de novo
-sudo apt update
-```
-```
-# Instala todas as atualizações pendentes no sistema (install the package)
-# O '-y' serve para confirmar automaticamente a instalação
-sudo apt upgrade -y
-```
-```
-# Verifica e exibe as informações detalhadas do sistema operativo instalado
-cat /etc/os-release
-```
-```
-# Encerra a sessão atual do Kali Linux e regressa ao Termux
-exit
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# KALI- COMO INSTALAR yt-dlp 
-```
-# Instala a ferramenta yt-dlp e confirma automaticamente com o '-y'
-sudo apt install yt-dlp -y
-```
-```
-yt-dlp --version
-```
-```
-# Instala o Python 3, o gestor de pacotes pip e o conversor multimédia FFmpeg
-# O '-y' confirma a instalação automaticamente
-sudo apt install python3 python3-pip ffmpeg -y
-```
-```
-# Atualiza o yt-dlp para a versão mais recente diretamente da fonte oficial do Python
-# A flag '--break-system-packages' é obrigatória no Kali Rolling para permitir a instalação via pip
-python3 -m pip install --upgrade yt-dlp --break-system-packages
-```
-```
-yt-dlp --version
-```
-```
-# Baixa o ficheiro juntando automaticamente o melhor vídeo e o melhor áudio
-yt-dlp "LINK"
-```
-```
-# O '-x' extrai o áudio e '--audio-format mp3' converte o ficheiro final
-yt-dlp -x --audio-format mp3 "LINK"
-```
-```
-# O '-F' (maiúsculo) não descarrega o vídeo, apenas lista as opções (resoluções, formatos, tamanho)
-yt-dlp -F "LINK"
-```
-```
-# Depois de usar o comando -F, podes escolher exatamente o que descarregar.
-# Exemplo: Junta o ID do vídeo (ex: 137) com o ID do áudio (ex: 140)
-yt-dlp -f "137+140" "LINK"
-```
-```
-# Baixa o vídeo limitando a resolução máxima a 720p
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "link_do_video"
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# KALI- ARQUIVOS E DIRETORIOS
-```
-# Lista os arquivos que estão dentro dessa pasta atual
-ls
-```
-```
-# Lista os arquivos ocultos que estão dentro dessa pasta atual
-ls -a
-```
-```
-# Lista todo o conteúdo da raiz do sistema operacional
-ls /
-```
-```
-# 1. Entrar em uma pasta específica (usando o caminho completo)
-cd /sdcard/Download/filmes
-```
-```
-# 2. Voltar UMA pasta para trás (se estiver em 'filmes', volta para 'Download')
-# Preste atenção no espaço entre o 'cd' e os dois pontos '..'
-cd ..
-```
-```
-# 3. Voltar instantaneamente para a sua pasta inicial pessoal (o ~)
-# Digitar apenas 'cd' sem nada na frente faz exatamente a mesma coisa
-cd ~
-```
-```
-# 4. Ir direto para a raiz do sistema (onde tudo começa, e onde está o sdcard)
-cd /
-```
-```
-# 1. Altera o nome do arquivo longo para um mais simples
-mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
-```
-```
-# 2. Cria a pasta 'filmes' dentro do armazenamento do celular
-mkdir /sdcard/Download/filmes
-```
-```
-# 3. Move o arquivo renomeado para a pasta criada
-mv filme.webm /sdcard/Download/filmes/
-```
-```
-# 1. Navega (entra) na pasta 'filmes' que você acabou de criar
-cd /sdcard/Download/filmes
-```
 
 
 
@@ -2535,7 +2348,193 @@ proot-distro login ubuntu
 # ativar modelo de linguagem básico
 ollama phi3
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# KALI NO ANDROIDE 
+## TERMUX ( Terminal linux para android):
+ 
+## Download do aplicativo direto no git
+* Acesse o link oficial no Github não use da Play Store!
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
 
+```
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
+```
+```
+# comando para atualizar o termux:
+pkg update && pkg upgrade -y
+```
+```
+# comando para autorizar o uso de pastas do celular
+termux-setup-storage
+```
+```
+# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
+
+dpkg --configure -a
+```
+## instalar linux (terminal basico)
+```
+# atualiza e instala o instalador
+pkg update && pkg install proot-distro
+```
+```
+# verificar iso disponível
+proot-distro list
+```
+```
+# Instala a ferramenta 'wget', usada para baixar arquivos da internet direto no terminal.
+# O '-y' confirma a instalação automaticamente.
+pkg install wget -y
+
+```
+```
+# Instala a ferramenta 'wget', que serve para baixar arquivos da internet direto no terminal.
+# O '-y' no final confirma a instalação automaticamente.
+pkg install wget -y
+```
+```
+# Descarrega o script oficial de instalação do Kali NetHunter da internet
+# O '-O' (letra O maiúscula) guarda o ficheiro com o nome 'install-nethunter-termux'
+wget -O install-nethunter-termux https://offs.ec/2MceZWr
+```
+```
+# Dá permissão de execução ('+x') ao ficheiro que acabámos de descarregar
+chmod +x install-nethunter-termux
+```
+```
+# movendo para pasta de downloads do celular
+mv nome_da_pasta /sdcard/Download/
+
+```
+```
+# Executa o script de instalação do Kali NetHunter
+# Digite "n" e pressione "Enter".
+./install-nethunter-termux
+```
+``` 
+# Inicia a interface de linha de comando do Kali NetHunter
+nethunter
+```
+```
+# Atualiza a lista de repositórios e ferramentas do sistema
+# A senha padrão é kali (tudo em letras minúsculas)
+sudo apt update
+```
+```
+# Adiciona o servidor DNS da Google (8.8.8.8) ao ficheiro de rede do sistema
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+```
+```
+# Tenta descarregar as listas de atualização de novo
+sudo apt update
+```
+```
+# Instala todas as atualizações pendentes no sistema (install the package)
+# O '-y' serve para confirmar automaticamente a instalação
+sudo apt upgrade -y
+```
+```
+# Verifica e exibe as informações detalhadas do sistema operativo instalado
+cat /etc/os-release
+```
+```
+# Encerra a sessão atual do Kali Linux e regressa ao Termux
+exit
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# KALI- COMO INSTALAR yt-dlp 
+```
+# Instala a ferramenta yt-dlp e confirma automaticamente com o '-y'
+sudo apt install yt-dlp -y
+```
+```
+yt-dlp --version
+```
+```
+# Instala o Python 3, o gestor de pacotes pip e o conversor multimédia FFmpeg
+# O '-y' confirma a instalação automaticamente
+sudo apt install python3 python3-pip ffmpeg -y
+```
+```
+# Atualiza o yt-dlp para a versão mais recente diretamente da fonte oficial do Python
+# A flag '--break-system-packages' é obrigatória no Kali Rolling para permitir a instalação via pip
+python3 -m pip install --upgrade yt-dlp --break-system-packages
+```
+```
+yt-dlp --version
+```
+```
+# Baixa o ficheiro juntando automaticamente o melhor vídeo e o melhor áudio
+yt-dlp "LINK"
+```
+```
+# O '-x' extrai o áudio e '--audio-format mp3' converte o ficheiro final
+yt-dlp -x --audio-format mp3 "LINK"
+```
+```
+# O '-F' (maiúsculo) não descarrega o vídeo, apenas lista as opções (resoluções, formatos, tamanho)
+yt-dlp -F "LINK"
+```
+```
+# Depois de usar o comando -F, podes escolher exatamente o que descarregar.
+# Exemplo: Junta o ID do vídeo (ex: 137) com o ID do áudio (ex: 140)
+yt-dlp -f "137+140" "LINK"
+```
+```
+# Baixa o vídeo limitando a resolução máxima a 720p
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "link_do_video"
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# KALI- ARQUIVOS E DIRETORIOS
+```
+# Lista os arquivos que estão dentro dessa pasta atual
+ls
+```
+```
+# Lista os arquivos ocultos que estão dentro dessa pasta atual
+ls -a
+```
+```
+# Lista todo o conteúdo da raiz do sistema operacional
+ls /
+```
+```
+# 1. Entrar em uma pasta específica (usando o caminho completo)
+cd /sdcard/Download/filmes
+```
+```
+# 2. Voltar UMA pasta para trás (se estiver em 'filmes', volta para 'Download')
+# Preste atenção no espaço entre o 'cd' e os dois pontos '..'
+cd ..
+```
+```
+# 3. Voltar instantaneamente para a sua pasta inicial pessoal (o ~)
+# Digitar apenas 'cd' sem nada na frente faz exatamente a mesma coisa
+cd ~
+```
+```
+# 4. Ir direto para a raiz do sistema (onde tudo começa, e onde está o sdcard)
+cd /
+```
+```
+# 1. Altera o nome do arquivo longo para um mais simples
+mv 'ENOQUE ｜ Filme Completo ｜ Os Sete Céus e a Profecia do Escolhido 4K [qp0ZJKvU0iI].webm' filme.webm
+```
+```
+# 2. Cria a pasta 'filmes' dentro do armazenamento do celular
+mkdir /sdcard/Download/filmes
+```
+```
+# 3. Move o arquivo renomeado para a pasta criada
+mv filme.webm /sdcard/Download/filmes/
+```
+```
+# 1. Navega (entra) na pasta 'filmes' que você acabou de criar
+cd /sdcard/Download/filmes
+```
 
 # 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PYTHON:
