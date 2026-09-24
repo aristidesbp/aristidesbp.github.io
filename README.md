@@ -151,6 +151,188 @@ if (typeof supabase !== 'undefined') {
 
 ```
 
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PASSO 4
+# EXECUTAR OS SQL NO EDITOR DE CODIGO DO SUPABASE
+```
+
+-- [INÍCIO: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
+
+-- ==============================================================================
+-- FASE 1: DEMOLIÇÃO (Limpar o terreno de tentativas anteriores)
+-- O 'CASCADE' garante que tudo o que dependia destas tabelas é apagado junto.
+-- ==============================================================================
+DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
+DROP FUNCTION IF EXISTS public.espelhar_novo_utilizador() CASCADE;
+DROP FUNCTION IF EXISTS public.criar_conta_saas(text, text) CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
+DROP TABLE IF EXISTS public.empresas CASCADE;
+
+-- ==============================================================================
+-- FASE 2: CONSTRUÇÃO DA FUNDAÇÃO (Tabelas)
+-- ==============================================================================
+-- 2.1. Cria a tabela das Empresas (Tenants)
+CREATE TABLE public.empresas (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    nome_fantasia text NOT NULL,
+    cnpj text,
+    plano_assinatura text DEFAULT 'gratis',
+    esta_ativa boolean DEFAULT true,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2.2. Cria a tabela dos Perfis (Espelho do auth.users)
+CREATE TABLE public.profiles (
+    id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    email text,
+    nome text,
+    cargo text DEFAULT 'operador', 
+    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE,
+    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ==============================================================================
+-- FASE 3: BLINDAGEM ZERO TRUST (RLS e Políticas)
+-- ==============================================================================
+ALTER TABLE public.empresas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- O utilizador só pode ler os dados do seu PRÓPRIO perfil
+CREATE POLICY "Leitura do proprio perfil" ON public.profiles
+FOR SELECT TO authenticated
+USING (id = auth.uid());
+
+-- O utilizador só pode ler a empresa que está vinculada ao seu perfil
+CREATE POLICY "Leitura da propria empresa" ON public.empresas
+FOR SELECT TO authenticated
+USING (id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
+
+-- ==============================================================================
+-- FASE 4: AUTOMAÇÃO (Gatilho de Espelhamento)
+-- ==============================================================================
+CREATE OR REPLACE FUNCTION public.espelhar_novo_utilizador()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email)
+  VALUES (NEW.id, NEW.email)
+  ON CONFLICT (id) DO UPDATE 
+  SET email = EXCLUDED.email;
+  
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER tr_novo_utilizador_auth
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION public.espelhar_novo_utilizador();
+
+-- ==============================================================================
+-- FASE 5: ONBOARDING SAAS (RPC Segura para o Frontend)
+-- ==============================================================================
+CREATE OR REPLACE FUNCTION public.criar_conta_saas(
+    p_nome_empresa text,
+    p_cnpj text
+) RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER 
+AS $$
+DECLARE
+    v_empresa_id uuid;
+    v_empresa_atual uuid;
+BEGIN
+    -- TRAVA DE SEGURANÇA: Bloqueia se o utilizador já tiver uma empresa
+    SELECT empresa_id INTO v_empresa_atual FROM public.profiles WHERE id = auth.uid();
+    
+    IF v_empresa_atual IS NOT NULL THEN
+        RAISE EXCEPTION 'Acesso Negado: Este utilizador já pertence a uma empresa SaaS e não pode criar outra.';
+    END IF;
+
+    -- Cria a nova empresa
+    INSERT INTO public.empresas (nome_fantasia, cnpj, plano_assinatura)
+    VALUES (p_nome_empresa, p_cnpj, 'gratis')
+    RETURNING id INTO v_empresa_id;
+
+    -- Atualiza o perfil do utilizador para chefe e vincula à nova empresa
+    UPDATE public.profiles
+    SET cargo = 'administrador', 
+        empresa_id = v_empresa_id
+    WHERE id = auth.uid();
+END;
+$$;
+
+-- [FIM: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
+
+```
+# FUNCTIONS ZERO
+```
+
+-- [INÍCIO: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
+
+-- 1. Ativa a extensão de criptografia (Necessária para encriptar a senha do novo utilizador)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- 2. Cria a Função RPC
+CREATE OR REPLACE FUNCTION public.criar_funcionario_saas(
+    p_email text,
+    p_senha text,
+    p_nome text,
+    p_cargo text
+) RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER -- Permite que a função interaja com a auth.users em segurança
+AS $$
+DECLARE
+    v_admin_empresa_id uuid;
+    v_admin_cargo text;
+    v_novo_user_id uuid;
+BEGIN
+    -- ZERO TRUST: Passo 1 - Identificar o Administrador que fez o pedido
+    SELECT empresa_id, cargo INTO v_admin_empresa_id, v_admin_cargo
+    FROM public.profiles
+    WHERE id = auth.uid();
+
+    -- ZERO TRUST: Passo 2 - Bloquear intrusos
+    IF v_admin_cargo <> 'administrador' THEN
+        RAISE EXCEPTION 'Acesso Negado: Apenas administradores podem criar utilizadores.';
+    END IF;
+
+    IF v_admin_empresa_id IS NULL THEN
+        RAISE EXCEPTION 'Erro de Segurança: Administrador sem empresa vinculada.';
+    END IF;
+
+    -- Passo 3 - Criar o utilizador na tabela secreta encriptando a senha
+    -- (Isto evita o bug de logout do frontend)
+    INSERT INTO auth.users (
+        instance_id, id, aud, role, email, encrypted_password, 
+        email_confirmed_at, raw_app_meta_data, raw_user_meta_data, 
+        created_at, updated_at
+    ) VALUES (
+        '00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 
+        p_email, crypt(p_senha, gen_salt('bf')), -- Encripta a senha com bcrypt
+        now(), '{"provider":"email","providers":["email"]}', '{}', 
+        now(), now()
+    ) RETURNING id INTO v_novo_user_id;
+
+    -- Passo 4 - O nosso Trigger já criou a linha no 'profiles' automaticamente!
+    -- Só precisamos de a atualizar com a Empresa do chefe e o Cargo.
+    UPDATE public.profiles
+    SET nome = p_nome,
+        cargo = p_cargo,
+        empresa_id = v_admin_empresa_id
+    WHERE id = v_novo_user_id;
+
+END;
+$$;
+
+-- [FIM: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
+
+```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
@@ -268,186 +450,6 @@ DROP FUNCTION IF EXISTS public.espelhar_novo_utilizador() CASCADE;
 DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 
 -- [FIM: LIMPEZA_TOTAL_AUTENTICACAO]
-```
-
-# TABELA EMPRESA E PROFILES
-```
-
--- [INÍCIO: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
-
--- ==============================================================================
--- FASE 1: DEMOLIÇÃO (Limpar o terreno de tentativas anteriores)
--- O 'CASCADE' garante que tudo o que dependia destas tabelas é apagado junto.
--- ==============================================================================
-DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
-DROP FUNCTION IF EXISTS public.espelhar_novo_utilizador() CASCADE;
-DROP FUNCTION IF EXISTS public.criar_conta_saas(text, text) CASCADE;
-DROP TABLE IF EXISTS public.profiles CASCADE;
-DROP TABLE IF EXISTS public.empresas CASCADE;
-
--- ==============================================================================
--- FASE 2: CONSTRUÇÃO DA FUNDAÇÃO (Tabelas)
--- ==============================================================================
--- 2.1. Cria a tabela das Empresas (Tenants)
-CREATE TABLE public.empresas (
-    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    nome_fantasia text NOT NULL,
-    cnpj text,
-    plano_assinatura text DEFAULT 'gratis',
-    esta_ativa boolean DEFAULT true,
-    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- 2.2. Cria a tabela dos Perfis (Espelho do auth.users)
-CREATE TABLE public.profiles (
-    id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-    email text,
-    nome text,
-    cargo text DEFAULT 'operador', 
-    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE,
-    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- ==============================================================================
--- FASE 3: BLINDAGEM ZERO TRUST (RLS e Políticas)
--- ==============================================================================
-ALTER TABLE public.empresas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
--- O utilizador só pode ler os dados do seu PRÓPRIO perfil
-CREATE POLICY "Leitura do proprio perfil" ON public.profiles
-FOR SELECT TO authenticated
-USING (id = auth.uid());
-
--- O utilizador só pode ler a empresa que está vinculada ao seu perfil
-CREATE POLICY "Leitura da propria empresa" ON public.empresas
-FOR SELECT TO authenticated
-USING (id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
-
--- ==============================================================================
--- FASE 4: AUTOMAÇÃO (Gatilho de Espelhamento)
--- ==============================================================================
-CREATE OR REPLACE FUNCTION public.espelhar_novo_utilizador()
-RETURNS trigger
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email)
-  VALUES (NEW.id, NEW.email)
-  ON CONFLICT (id) DO UPDATE 
-  SET email = EXCLUDED.email;
-  
-  RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER tr_novo_utilizador_auth
-AFTER INSERT ON auth.users
-FOR EACH ROW
-EXECUTE FUNCTION public.espelhar_novo_utilizador();
-
--- ==============================================================================
--- FASE 5: ONBOARDING SAAS (RPC Segura para o Frontend)
--- ==============================================================================
-CREATE OR REPLACE FUNCTION public.criar_conta_saas(
-    p_nome_empresa text,
-    p_cnpj text
-) RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER 
-AS $$
-DECLARE
-    v_empresa_id uuid;
-    v_empresa_atual uuid;
-BEGIN
-    -- TRAVA DE SEGURANÇA: Bloqueia se o utilizador já tiver uma empresa
-    SELECT empresa_id INTO v_empresa_atual FROM public.profiles WHERE id = auth.uid();
-    
-    IF v_empresa_atual IS NOT NULL THEN
-        RAISE EXCEPTION 'Acesso Negado: Este utilizador já pertence a uma empresa SaaS e não pode criar outra.';
-    END IF;
-
-    -- Cria a nova empresa
-    INSERT INTO public.empresas (nome_fantasia, cnpj, plano_assinatura)
-    VALUES (p_nome_empresa, p_cnpj, 'gratis')
-    RETURNING id INTO v_empresa_id;
-
-    -- Atualiza o perfil do utilizador para chefe e vincula à nova empresa
-    UPDATE public.profiles
-    SET cargo = 'administrador', 
-        empresa_id = v_empresa_id
-    WHERE id = auth.uid();
-END;
-$$;
-
--- [FIM: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
-
-```
-
-# FUNCTIONS ZERO
-```
-
--- [INÍCIO: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
-
--- 1. Ativa a extensão de criptografia (Necessária para encriptar a senha do novo utilizador)
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
--- 2. Cria a Função RPC
-CREATE OR REPLACE FUNCTION public.criar_funcionario_saas(
-    p_email text,
-    p_senha text,
-    p_nome text,
-    p_cargo text
-) RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER -- Permite que a função interaja com a auth.users em segurança
-AS $$
-DECLARE
-    v_admin_empresa_id uuid;
-    v_admin_cargo text;
-    v_novo_user_id uuid;
-BEGIN
-    -- ZERO TRUST: Passo 1 - Identificar o Administrador que fez o pedido
-    SELECT empresa_id, cargo INTO v_admin_empresa_id, v_admin_cargo
-    FROM public.profiles
-    WHERE id = auth.uid();
-
-    -- ZERO TRUST: Passo 2 - Bloquear intrusos
-    IF v_admin_cargo <> 'administrador' THEN
-        RAISE EXCEPTION 'Acesso Negado: Apenas administradores podem criar utilizadores.';
-    END IF;
-
-    IF v_admin_empresa_id IS NULL THEN
-        RAISE EXCEPTION 'Erro de Segurança: Administrador sem empresa vinculada.';
-    END IF;
-
-    -- Passo 3 - Criar o utilizador na tabela secreta encriptando a senha
-    -- (Isto evita o bug de logout do frontend)
-    INSERT INTO auth.users (
-        instance_id, id, aud, role, email, encrypted_password, 
-        email_confirmed_at, raw_app_meta_data, raw_user_meta_data, 
-        created_at, updated_at
-    ) VALUES (
-        '00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 
-        p_email, crypt(p_senha, gen_salt('bf')), -- Encripta a senha com bcrypt
-        now(), '{"provider":"email","providers":["email"]}', '{}', 
-        now(), now()
-    ) RETURNING id INTO v_novo_user_id;
-
-    -- Passo 4 - O nosso Trigger já criou a linha no 'profiles' automaticamente!
-    -- Só precisamos de a atualizar com a Empresa do chefe e o Cargo.
-    UPDATE public.profiles
-    SET nome = p_nome,
-        cargo = p_cargo,
-        empresa_id = v_admin_empresa_id
-    WHERE id = v_novo_user_id;
-
-END;
-$$;
-
--- [FIM: RPC_CRIACAO_FUNCIONARIOS_ZERO_TRUST]
-
 ```
 
 
