@@ -39,7 +39,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PASSO 1
-# COPIAR PROMPT EM UMA IA
+# CRIAR AGENTE DE IA
 ```
 agente:
   papel: "Arquiteto de Software Sênior, Programador Full Stack, Parceiro Didático, Gestor de Contexto e Auditor de Segurança"
@@ -124,7 +124,7 @@ Escolha:(exemplo)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PASSO 3
-# CRIAR O ARQUIVO DE CONFIGURAÇÃO: supabase_config.js
+# CRIAR  supabase_config.js
 ```
 /* ======= CONFIGURAÇÕES INICIAIS ================= */
 
@@ -166,118 +166,163 @@ if (typeof supabase !== 'undefined') {
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PASSO 4
-# EXECUTAR OS SQL NO EDITOR DE CODIGO DO SUPABASE
+# CRIAR TABELA
 ```
 
--- [INÍCIO: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
+-- ============================================================================
+-- ARQUITETURA DE PRODUTOS EVOLUÍDA: ZERO TRUST & TIMESTAMPS BLINDADOS
+-- ============================================================================
 
--- ==============================================================================
--- FASE 1: DEMOLIÇÃO (Limpar o terreno de tentativas anteriores)
--- O 'CASCADE' garante que tudo o que dependia destas tabelas é apagado junto.
--- ==============================================================================
-DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
-DROP FUNCTION IF EXISTS public.espelhar_novo_utilizador() CASCADE;
-DROP FUNCTION IF EXISTS public.criar_conta_saas(text, text) CASCADE;
-DROP TABLE IF EXISTS public.profiles CASCADE;
-DROP TABLE IF EXISTS public.empresas CASCADE;
-
--- ==============================================================================
--- FASE 2: CONSTRUÇÃO DA FUNDAÇÃO (Tabelas)
--- ==============================================================================
--- 2.1. Cria a tabela das Empresas (Tenants)
-CREATE TABLE public.empresas (
-    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    nome_fantasia text NOT NULL,
-    cnpj text,
-    plano_assinatura text DEFAULT 'gratis',
-    esta_ativa boolean DEFAULT true,
-    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- 2.2. Cria a tabela dos Perfis (Espelho do auth.users)
-CREATE TABLE public.profiles (
-    id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-    email text,
-    nome text,
-    cargo text DEFAULT 'operador', 
-    empresa_id uuid REFERENCES public.empresas(id) ON DELETE CASCADE,
-    criado_em timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- ==============================================================================
--- FASE 3: BLINDAGEM ZERO TRUST (RLS e Políticas)
--- ==============================================================================
-ALTER TABLE public.empresas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
--- O utilizador só pode ler os dados do seu PRÓPRIO perfil
-CREATE POLICY "Leitura do proprio perfil" ON public.profiles
-FOR SELECT TO authenticated
-USING (id = auth.uid());
-
--- O utilizador só pode ler a empresa que está vinculada ao seu perfil
-CREATE POLICY "Leitura da propria empresa" ON public.empresas
-FOR SELECT TO authenticated
-USING (id = (SELECT empresa_id FROM public.profiles WHERE profiles.id = auth.uid()));
-
--- ==============================================================================
--- FASE 4: AUTOMAÇÃO (Gatilho de Espelhamento)
--- ==============================================================================
-CREATE OR REPLACE FUNCTION public.espelhar_novo_utilizador()
-RETURNS trigger
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email)
-  VALUES (NEW.id, NEW.email)
-  ON CONFLICT (id) DO UPDATE 
-  SET email = EXCLUDED.email;
-  
-  RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER tr_novo_utilizador_auth
-AFTER INSERT ON auth.users
-FOR EACH ROW
-EXECUTE FUNCTION public.espelhar_novo_utilizador();
-
--- ==============================================================================
--- FASE 5: ONBOARDING SAAS (RPC Segura para o Frontend)
--- ==============================================================================
-CREATE OR REPLACE FUNCTION public.criar_conta_saas(
-    p_nome_empresa text,
-    p_cnpj text
-) RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER 
-AS $$
-DECLARE
-    v_empresa_id uuid;
-    v_empresa_atual uuid;
-BEGIN
-    -- TRAVA DE SEGURANÇA: Bloqueia se o utilizador já tiver uma empresa
-    SELECT empresa_id INTO v_empresa_atual FROM public.profiles WHERE id = auth.uid();
+-- [INÍCIO: 1. CRIAÇÃO DA TABELA]
+CREATE TABLE public.produtos (
+    -- Prevenção IDOR
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     
-    IF v_empresa_atual IS NOT NULL THEN
-        RAISE EXCEPTION 'Acesso Negado: Este utilizador já pertence a uma empresa SaaS e não pode criar outra.';
+    -- Isolamento de Inquilino (Tenant Isolation)
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    
+    -- Anti-DoS: Limites rigorosos de tamanho de texto
+    -- (Nota: Validação Anti-XSS rigorosa deve ser feita na camada de API/Frontend para não quebrar uso de símbolos matemáticos)
+    nome TEXT NOT NULL CHECK (char_length(nome) >= 3 AND char_length(nome) <= 255),
+    descricao TEXT CHECK (char_length(descricao) <= 2000),
+    
+    -- Lógica Financeira: Evita valores negativos e overflow numérico
+    preco NUMERIC(10, 2) NOT NULL CHECK (preco >= 0 AND preco < 10000000),
+    
+    -- Soft Delete
+    deleted_at TIMESTAMPTZ,
+    
+    -- Timestamps
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- [FIM: 1. CRIAÇÃO DA TABELA]
+
+
+-- [INÍCIO: 2. ÍNDICES DE ALTA PERFORMANCE]
+CREATE INDEX idx_produtos_user_updated ON public.produtos(user_id, updated_at);
+CREATE INDEX idx_produtos_ativos ON public.produtos(user_id) WHERE deleted_at IS NULL;
+-- [FIM: 2. ÍNDICES DE ALTA PERFORMANCE]
+
+
+-- [INÍCIO: 3. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
+
+-- 3.1: Proteção Total no momento do INSERT
+CREATE OR REPLACE FUNCTION public.protect_timestamps_on_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- O banco de dados assume o controlo absoluto das datas na criação.
+    -- Ignora qualquer data falsa que o frontend ou utilizador tente enviar no JSON.
+    NEW.created_at = now();
+    NEW.updated_at = now();
+    NEW.deleted_at = NULL; -- Garante que nenhum produto já nasce deletado
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_produto_insert
+    BEFORE INSERT ON public.produtos
+    FOR EACH ROW
+    EXECUTE FUNCTION public.protect_timestamps_on_insert();
+
+-- 3.2: Proteção Total no momento do UPDATE (Anti-viagem no tempo)
+CREATE OR REPLACE FUNCTION public.protect_timestamps_on_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Força a atualização do timestamp
+    NEW.updated_at = now();
+    
+    -- Impede que um utilizador espertinho altere a data de criação no futuro
+    NEW.created_at = OLD.created_at;
+
+    -- Se o utilizador estiver a tentar fazer o Soft Delete (enviou um valor em deleted_at)
+    IF NEW.deleted_at IS NOT NULL THEN
+        -- Forçamos que a data de exclusão seja exatamente AGORA, ignorando datas falsas do passado/futuro
+        NEW.deleted_at = now();
     END IF;
 
-    -- Cria a nova empresa
-    INSERT INTO public.empresas (nome_fantasia, cnpj, plano_assinatura)
-    VALUES (p_nome_empresa, p_cnpj, 'gratis')
-    RETURNING id INTO v_empresa_id;
-
-    -- Atualiza o perfil do utilizador para chefe e vincula à nova empresa
-    UPDATE public.profiles
-    SET cargo = 'administrador', 
-        empresa_id = v_empresa_id
-    WHERE id = auth.uid();
+    RETURN NEW;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
--- [FIM: MOTOR_SAAS_LIMPEZA_E_RECONSTRUCAO]
+CREATE TRIGGER on_produto_updated
+    BEFORE UPDATE ON public.produtos
+    FOR EACH ROW
+    EXECUTE FUNCTION public.protect_timestamps_on_update();
+
+-- [FIM: 3. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
+
+
+-- [INÍCIO: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+
+-- 4.1 LEITURA
+CREATE POLICY "Usuários veem próprios produtos ativos"
+ON public.produtos FOR SELECT TO authenticated
+USING (auth.uid() = user_id AND deleted_at IS NULL);
+
+-- 4.2 INSERÇÃO
+CREATE POLICY "Usuários inserem próprios produtos"
+ON public.produtos FOR INSERT TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+-- 4.3 ATUALIZAÇÃO
+CREATE POLICY "Usuários atualizam próprios produtos ativos"
+ON public.produtos FOR UPDATE TO authenticated
+USING (auth.uid() = user_id AND deleted_at IS NULL)
+WITH CHECK (auth.uid() = user_id);
+
+-- DELEÇÃO FÍSICA PROPOSITADAMENTE OMITIDA (Soft delete apenas).
+-- [FIM: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+
+
+
+
+-- ============================================================================
+-- ATUALIZAÇÃO DE SEGURANÇA: IMUTABILIDADE DE TENANT E FIREWALL ANTI-XSS
+-- ============================================================================
+
+-- [INÍCIO: PASSO A - CORREÇÃO DA MUTABILIDADE DO USER_ID]
+-- Atualizamos a função do trigger para garantir que o dono nunca mude.
+CREATE OR REPLACE FUNCTION public.protect_timestamps_on_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- 1. Força a atualização do timestamp
+    NEW.updated_at = now();
+    
+    -- 2. Impede que um utilizador espertinho altere a data de criação
+    NEW.created_at = OLD.created_at;
+
+    -- 3. [NOVO] BLINDAGEM DE INQUILINO (TENANT):
+    -- Impede a transferência de propriedade (IDOR de atualização). 
+    -- Se alguém tentar enviar um JSON com um user_id diferente, o banco ignora e mantém o dono original.
+    NEW.user_id = OLD.user_id;
+
+    -- 4. Proteção do Soft Delete
+    IF NEW.deleted_at IS NOT NULL THEN
+        NEW.deleted_at = now();
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+-- [FIM: PASSO A - CORREÇÃO DA MUTABILIDADE DO USER_ID]
+
+
+-- [INÍCIO: PASSO B - FIREWALL ANTI-XSS NO BANCO DE DADOS]
+-- Adicionamos constraints (regras) nas colunas de texto para barrar payloads malignos.
+-- A expressão regular (!~*) bloqueia: tags script, iframes, protocolos javascript: e manipuladores de eventos (ex: onerror=, onload=)
+-- NOTA DIDÁTICA: O uso de símbolos matemáticos isolados (ex: 2 < 3) continua funcionando perfeitamente!
+
+ALTER TABLE public.produtos 
+ADD CONSTRAINT produtos_nome_anti_xss 
+CHECK (nome !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
+
+ALTER TABLE public.produtos 
+ADD CONSTRAINT produtos_descricao_anti_xss 
+CHECK (descricao !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
+-- [FIM: PASSO B - FIREWALL ANTI-XSS NO BANCO DE DADOS]
+
 
 ```
 # FUNCTIONS ZERO
