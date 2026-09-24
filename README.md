@@ -38,7 +38,8 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 *  **fluxograma***(https://mermaid.live/edit)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PERSONA: Arquiteto de Software Sênior, Programador Full Stack
+# PASSO 1
+# COPIAR PROMPT EM UMA IA
 ```
 agente:
   papel: "Arquiteto de Software Sênior, Programador Full Stack, Parceiro Didático, Gestor de Contexto e Auditor de Segurança"
@@ -105,8 +106,25 @@ habilidade_2_auditoria_mano_dev:
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PASSO 2
+# CRIAR UMA CONTA E PROJETO NO SUPABASE:
 
-# supabase_config.js
+Criar conta e projeto
+
+    Acesse: https://supabase.com
+    Crie uma conta
+    Clique em New Project
+
+Escolha:(exemplo)
+
+    Nome do projeto: erp_abp
+    Senha do banco: ***********
+    Região: brasil
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# PASSO 3
+# CRIAR O ARQUIVO DE CONFIGURAÇÃO: supabase_config.js
 ```
 /* ======= CONFIGURAÇÕES INICIAIS ================= */
 // [INÍCIO: CONFIGURAÇÃO SUPABASE]
