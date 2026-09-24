@@ -106,14 +106,34 @@ habilidade_2_auditoria_mano_dev:
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
-🗺️ Panorama Geral da Solução: O Motor de Autenticação SaaS Completo
-Para que o teu sistema de login, registo e isolamento de empresas funcione na perfeição, precisamos de construir um "Motor SaaS" composto por 5 peças fundamentais, executadas exatamente nesta ordem:
-* Tabela empresas (A Raiz): Onde ficam guardados os dados dos teus clientes (os donos dos supermercados).
-* Tabela profiles (O Espelho): A tabela pública onde guardamos o nome, o cargo e a qual empresa_id o utilizador pertence.
-* Segurança (RLS): Ativamos os bloqueios de segurança (Zero Trust) em ambas as tabelas.
-* Robô Copiador (Trigger): A função que fica à escuta da tabela secreta do Supabase (auth.users) e cria automaticamente um perfil vazio na tua tabela profiles sempre que alguém se regista.
-* A Função de Registo (RPC criar_conta_saas): O código que o teu ecrã de Login vai chamar. Ela tem poderes de administrador para criar a empresa e promover o novo cliente a "Administrador" desse ambiente.
+# supabase_config.js
+```
+/* ======= CONFIGURAÇÕES INICIAIS ================= */
+// [INÍCIO: CONFIGURAÇÃO SUPABASE]
+// Marca o início lógico do bloco responsável por fazer a conexão matriz com a base de dados.
 
+const SUPABASE_URL = 'https://ctdkeqltveymtqmtspyu.supabase.co';
+// Define a URL do teu projeto Supabase.
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZGtlcWx0dmV5bXRxbXRzcHl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMjk1NTUsImV4cCI6MjEwMzkwNTU1NX0.ka_jrnDtrOhfPr7_TAl63Z7nyRZeocy2rrkHSLQBOe4';
+// Define a chave criptográfica anónima/pública.
+
+// Variável global para armazenar o cliente do Supabase
+let clienteSupabase;
+
+// Verificação de segurança: Confirma se o objeto 'supabase' existe no navegador
+if (typeof supabase !== 'undefined') {
+    clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log("✅ Conexão com o Supabase inicializada com sucesso.");
+} else {
+    console.error("❌ Erro Crítico: A biblioteca do Supabase não foi carregada. Verifica a tua ligação à internet ou a tag <script> no HTML.");
+}
+
+// [FIM: CONFIGURAÇÃO SUPABASE]
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
 ```
@@ -412,33 +432,7 @@ $$;
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase_config.js
-```
-/* ======= CONFIGURAÇÕES INICIAIS ================= */
-// [INÍCIO: CONFIGURAÇÃO SUPABASE]
-// Marca o início lógico do bloco responsável por fazer a conexão matriz com a base de dados.
 
-const SUPABASE_URL = 'https://ctdkeqltveymtqmtspyu.supabase.co';
-// Define a URL do teu projeto Supabase.
-
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZGtlcWx0dmV5bXRxbXRzcHl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMjk1NTUsImV4cCI6MjEwMzkwNTU1NX0.ka_jrnDtrOhfPr7_TAl63Z7nyRZeocy2rrkHSLQBOe4';
-// Define a chave criptográfica anónima/pública.
-
-// Variável global para armazenar o cliente do Supabase
-let clienteSupabase;
-
-// Verificação de segurança: Confirma se o objeto 'supabase' existe no navegador
-if (typeof supabase !== 'undefined') {
-    clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log("✅ Conexão com o Supabase inicializada com sucesso.");
-} else {
-    console.error("❌ Erro Crítico: A biblioteca do Supabase não foi carregada. Verifica a tua ligação à internet ou a tag <script> no HTML.");
-}
-
-// [FIM: CONFIGURAÇÃO SUPABASE]
-
-```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # login.html
 ```
