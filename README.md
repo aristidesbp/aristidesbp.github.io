@@ -121,8 +121,8 @@ habilidade_2_auditoria_mano_dev:
 
 
 ```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 # CRIAR UMA CONTA E PROJETO NO SUPABASE:
 
 Criar conta e projeto
@@ -391,7 +391,8 @@ FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os 
 -- [FIM: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
 
 ``` 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+
 
 # COMO APAGAR TABELAS
 ```
