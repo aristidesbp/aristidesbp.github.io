@@ -6,9 +6,7 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
----
-### PROJETO:
-🌐 [GITHUB-PAGES](https://aristidesbp.github.io/)
+* 🌐 [GITHUB-PAGES](https://aristidesbp.github.io/index.html)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
