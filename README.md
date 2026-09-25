@@ -484,6 +484,41 @@ CHECK (descricao !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|o
 -- [FIM: PASSO B - FIREWALL ANTI-XSS NO BANCO DE DADOS]
 
 ```
+```
+/*🟥
+SQL: Atualização da Tabela Produtos (Inclusão de Estoque, Logística, EAN e Imagens)
+🟥*/
+
+ALTER TABLE public.produtos
+    -- 1. SECÇÃO: IMAGEM
+    ADD COLUMN imagem_url TEXT,
+    
+    -- 2. SECÇÃO: CÓDIGOS E DATAS
+    ADD COLUMN ean TEXT CHECK (char_length(ean) <= 50),
+    ADD COLUMN data_compra DATE,
+    ADD COLUMN data_vencimento DATE,
+    
+    -- 3. SECÇÃO: DADOS GERAIS
+    ADD COLUMN categoria TEXT CHECK (char_length(categoria) <= 100),
+    ADD COLUMN origem TEXT CHECK (origem IN ('0 - Nacional', '1 - Estrangeira', 'Selecione...')),
+    
+    -- 4. SECÇÃO: PREÇOS E ESTOQUE
+    -- Nota: A coluna 'preco' já existe (usaremos como Preço de Venda). Adicionamos o de Custo.
+    ADD COLUMN preco_custo NUMERIC(10, 2) DEFAULT 0,
+    ADD COLUMN estoque_atual INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN estoque_minimo INTEGER NOT NULL DEFAULT 0,
+    
+    -- 5. SECÇÃO: LOGÍSTICA E ARMAZENAMENTO
+    ADD COLUMN peso NUMERIC(10, 3), -- Permite até 3 casas decimais (ex: 1.500 kg)
+    ADD COLUMN dimensoes TEXT CHECK (char_length(dimensoes) <= 100),
+    ADD COLUMN localizacao_loja TEXT CHECK (char_length(localizacao_loja) <= 100),
+    ADD COLUMN localizacao_estoque TEXT CHECK (char_length(localizacao_estoque) <= 100);
+
+-- ÍNDICE DE ALTA PERFORMANCE PARA O LEITOR DE CÓDIGO DE BARRAS
+-- Garante que quando a câmara capturar um EAN, o banco encontre o produto instantaneamente dentro do teu inquilino (user_id).
+CREATE INDEX idx_produtos_user_ean ON public.produtos(user_id, ean);
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # manifest.js
