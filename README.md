@@ -252,6 +252,84 @@ DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 
 -- [FIM: LIMPEZA_TOTAL_AUTENTICACAO]
 ```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TABELA ENTIDADES
+```
+-- ============================================================================
+-- CRIAÇÃO DA TABELA: ENTIDADES (Padrão Zero Trust & Auditoria)
+-- ============================================================================
+
+-- [INÍCIO: 1. CRIAÇÃO DA TABELA]
+CREATE TABLE public.entidades (
+    -- Prevenção IDOR (Identificador único e aleatório)
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    
+    -- Isolamento de Inquilino: Garante que o contacto pertence apenas ao utilizador logado
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    
+    -- Categorização restrita (Impede inserção de tipos inválidos)
+    tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'colaborador')),
+    
+    -- Dados da Entidade (Com limites de segurança Anti-DoS)
+    nome TEXT NOT NULL CHECK (char_length(nome) >= 3 AND char_length(nome) <= 255),
+    documento TEXT CHECK (char_length(documento) <= 50), -- CPF ou CNPJ
+    telefone TEXT CHECK (char_length(telefone) <= 20),
+    email TEXT CHECK (char_length(email) <= 255),
+    observacoes TEXT CHECK (char_length(observacoes) <= 2000),
+    
+    -- Controle de Soft Delete e Timestamps
+    deleted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- [FIM: 1. CRIAÇÃO DA TABELA]
+
+
+-- [INÍCIO: 2. ÍNDICES DE ALTA PERFORMANCE]
+-- Otimiza as buscas, pois o sistema vai filtrar constantemente pelo dono e pelo estado "ativo"
+CREATE INDEX idx_entidades_user_updated ON public.entidades(user_id, updated_at);
+CREATE INDEX idx_entidades_ativos ON public.entidades(user_id) WHERE deleted_at IS NULL;
+-- [FIM: 2. ÍNDICES DE ALTA PERFORMANCE]
+
+
+-- [INÍCIO: 3. BLINDAGEM DE ESTADOS E TIMESTAMPS]
+-- Reaproveitamos as tuas funções de segurança existentes para blindar esta nova tabela
+CREATE TRIGGER on_entidade_insert
+    BEFORE INSERT ON public.entidades
+    FOR EACH ROW
+    EXECUTE FUNCTION public.protect_timestamps_on_insert();
+
+CREATE TRIGGER on_entidade_updated
+    BEFORE UPDATE ON public.entidades
+    FOR EACH ROW
+    EXECUTE FUNCTION public.protect_timestamps_on_update();
+-- [FIM: 3. BLINDAGEM DE ESTADOS E TIMESTAMPS]
+
+
+-- [INÍCIO: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+
+-- 4.1 LEITURA: O utilizador só vê os seus próprios contactos que não estão na lixeira
+CREATE POLICY "Usuários veem próprias entidades ativas"
+ON public.entidades FOR SELECT TO authenticated
+USING (auth.uid() = user_id AND deleted_at IS NULL);
+
+-- 4.2 INSERÇÃO: O utilizador só pode inserir contactos no seu próprio nome
+CREATE POLICY "Usuários inserem próprias entidades"
+ON public.entidades FOR INSERT TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+-- 4.3 ATUALIZAÇÃO: O utilizador só pode atualizar os seus contactos ativos
+CREATE POLICY "Usuários atualizam próprias entidades ativas"
+ON public.entidades FOR UPDATE TO authenticated
+USING (auth.uid() = user_id AND deleted_at IS NULL)
+WITH CHECK (auth.uid() = user_id);
+-- [FIM: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+
+```
+
+
 # TABELA PRODUTOS 
 ```
 -- ============================================================================
