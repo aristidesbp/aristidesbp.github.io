@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Supermercado</title>
+    
+    <!-- 1. Habilita a instalação como aplicativo (PWA) -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- 2. Importa o design completo -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- 3. Importa o motor do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    
+    <!-- É AQUI DENTRO QUE O APP.JS VAI INJETAR TODA A INTERFACE -->
+    <div id="app-root">
+        <p style="text-align: center; margin-top: 50px; color: #a4e320;">A iniciar o sistema...</p>
+    </div>
+
+    <!-- 4. Importa o nosso cérebro unificado (Console + Banco + Lógica) -->
+    <script src="app.js"></script>
+</body>
+</html>

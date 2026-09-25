@@ -1,0 +1,52 @@
+/* ================= DESIGN SYSTEM (Cores e Temas) ================= */
+:root {
+    --bg-color: #0b1320; 
+    --card-bg: #151f2b;  
+    --text-main: #ffffff;
+    --text-muted: #8b9eb3;
+    --accent-neon: #a4e320; 
+    --accent-hover: #8cc21a;
+    --border-color: #2a3645;
+    --danger-color: #ff4d4d;
+    --info-color: #17a2b8;
+}
+
+.light-theme {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #6c757d;
+    --accent-neon: #28a745;
+    --accent-hover: #218838;
+    --border-color: #e0e0e0;
+    --danger-color: #dc3545;
+}
+
+/* Estrutura Base */
+body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px; }
+#app-root { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+
+/* Cabeçalho (Header) */
+header { background-color: var(--bg-color); padding: 15px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px;}
+.logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
+.logo-icon { color: var(--accent-neon); }
+.header-actions { display: flex; gap: 15px; align-items: center; }
+.icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; }
+
+/* Cartões e Elementos Visuais */
+.card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); margin-bottom: 20px; box-sizing: border-box; }
+.titulo { text-align: center; margin-bottom: 20px; color: var(--accent-neon); font-size: 1.5em; font-weight: bold;}
+
+/* Formulários */
+label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--text-muted); font-size: 0.9em;}
+input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); box-sizing: border-box; outline: none; }
+input:focus { border-color: var(--accent-neon); }
+
+/* Botões */
+.btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; margin-bottom: 15px;}
+.btn-neon:hover { background: var(--accent-hover); }
+.btn-secundario { width: 100%; padding: 14px; background: transparent; color: var(--accent-neon); border: 1px solid var(--accent-neon); border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; }
+
+/* Lista de Produtos */
+ul { list-style-type: none; padding: 0; margin: 0; }
+li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold;}
