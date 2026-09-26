@@ -178,9 +178,6 @@ const estadoProdutos = {
     idEmEdicao: null // Se for 'null', vai Cadastrar. Se tiver um ID, vai Editar.
 };
 
-// CSS de Interface limpo (Sem variáveis dinâmicas para evitar Erros de Sintaxe)
-const cssProdutos = '<style>.btn-acao{padding:8px 12px; border:none; border-radius:4px; font-weight:bold; cursor:pointer; color:white;} .btn-verde{background:#28a745;} .btn-amarelo{background:#ffc107; color:#333;} .btn-vermelho{background:#dc3545;} .btn-cinza{background:#6c757d;} .toast{position:fixed; top:20px; right:20px; padding:15px; color:white; border-radius:5px; font-weight:bold; z-index:9999;}</style>';
-
 
 
 /*🟥 5.1 FORMULÁRIO PRODUTOS (Desenho da Interface) 🟥*/
