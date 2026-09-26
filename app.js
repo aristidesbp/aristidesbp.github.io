@@ -809,14 +809,8 @@ function limparFormularioProdutos() {
 
 
 
-
-
-
-
-
-
 /*🟥 =================================================================
-   5.5 DELETAR PRODUTOS (Soft Delete, Restauração e Limpeza de Lixeira)
+   5.5 DELETAR PRODUTOS (Soft Delete, Restauração e Limpeza de Lixeira com Storage)
 ================================================================= 🟥*/
 
 // 1. Utilitário de Notificações Visuais (Toast flutuante)
@@ -830,10 +824,8 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
     
     container.appendChild(toast);
     
-    // Animação de entrada
     setTimeout(() => toast.classList.add('mostrar'), 10);
     
-    // Remove do ecrã após 3 segundos
     setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => toast.remove(), 300); 
@@ -843,9 +835,8 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
 // 2. Ação: Ocultar (Soft Delete) um único produto
 async function deletarProduto(id) {
     if(confirm("Mover este produto para a lixeira?")) {
-        const dataIso = new Date().toISOString(); // Gera a data exata do momento
+        const dataIso = new Date().toISOString();
         
-        // Atualiza apenas a coluna deleted_at, mantendo o histórico intacto
         const { error } = await clienteSupabase.from('produtos').update({ deleted_at: dataIso }).eq('id', id);
         
         if(!error) {
@@ -860,7 +851,6 @@ async function deletarProduto(id) {
 
 // 3. Ação: Restaurar um único produto da lixeira
 async function restaurarProduto(id) {
-    // Define a coluna deleted_at novamente como nula, devolvendo o produto aos ativos
     const { error } = await clienteSupabase.from('produtos').update({ deleted_at: null }).eq('id', id);
     
     if(!error) {
@@ -872,7 +862,7 @@ async function restaurarProduto(id) {
     }
 }
 
-// 4. Ações Globais: Lote e Esvaziar Lixeira
+// 4. Ações Globais: Lote e Esvaziar Lixeira com Remoção no Storage
 document.addEventListener('click', async function(e) {
     
     // 4.1 Ocultar Selecionados (Soft Delete em Lote)
@@ -883,7 +873,6 @@ document.addEventListener('click', async function(e) {
         if(confirm(`Mover ${selecionados.length} produto(s) para a lixeira?`)) {
             const dataIso = new Date().toISOString();
             
-            // O operador .in() atualiza vários IDs simultaneamente na base de dados
             const { error } = await clienteSupabase.from('produtos').update({ deleted_at: dataIso }).in('id', selecionados);
             
             if(!error) {
@@ -898,23 +887,62 @@ document.addEventListener('click', async function(e) {
         }
     }
 
-    // 4.2 Esvaziar Lixeira (Hard Delete)
+    // 4.2 Esvaziar Lixeira (Hard Delete na Tabela + Limpeza de Arquivos no Storage)
     if (e.target && e.target.id === 'btn-limpar-lixeira') {
-        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira permanentemente. Tem a certeza absoluta?")) {
+        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira e as suas fotos permanentemente. Tem a certeza absoluta?")) {
             
-            // Apaga definitivamente qualquer produto que não tenha o 'deleted_at' vazio
-            const { error } = await clienteSupabase.from('produtos').delete().not('deleted_at', 'is', null);
+            const btnLimpar = document.getElementById('btn-limpar-lixeira');
+            const textoOriginal = btnLimpar.textContent;
             
-            if(!error) {
-                mostrarToast("Lixeira esvaziada permanentemente!", "sucesso");
-                if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
-            } else {
+            btnLimpar.textContent = "A limpar fotos...";
+            btnLimpar.disabled = true;
+
+            try {
+                // PASSO A: Buscar imagens de produtos marcados na lixeira
+                const { data: produtosNaLixeira } = await clienteSupabase
+                    .from('produtos')
+                    .select('imagem_url')
+                    .not('deleted_at', 'is', null)
+                    .not('imagem_url', 'is', null);
+
+                // PASSO B: Extrair identificadores e deletar do Storage
+                if (produtosNaLixeira && produtosNaLixeira.length > 0) {
+                    const arquivosParaApagar = produtosNaLixeira.map(p => {
+                        const partesDaUrl = p.imagem_url.split('/');
+                        return partesDaUrl[partesDaUrl.length - 1]; 
+                    });
+
+                    if (arquivosParaApagar.length > 0) {
+                        await clienteSupabase.storage.from('storage_produtos').remove(arquivosParaApagar);
+                    }
+                }
+
+                btnLimpar.textContent = "A apagar dados...";
+
+                // PASSO C: Deletar registros da tabela
+                const { error } = await clienteSupabase.from('produtos').delete().not('deleted_at', 'is', null);
+                
+                if(!error) {
+                    mostrarToast("Lixeira e fotos esvaziadas!", "sucesso");
+                    if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
+                } else {
+                    throw error;
+                }
+
+            } catch (erro) {
                 mostrarToast("Erro ao esvaziar lixeira.", "erro");
-                console.error(error);
+                console.error("Erro na limpeza total:", erro);
+            } finally {
+                btnLimpar.textContent = textoOriginal;
+                btnLimpar.disabled = false;
             }
         }
     }
 });
+
+
+
+
 
 
 
