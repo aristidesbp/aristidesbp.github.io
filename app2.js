@@ -402,19 +402,19 @@ function desenharModuloProdutos(emailDoOperador) {
 
 
 /*🟥 =================================================================
-   5.2 LISTAGEM PRODUTOS (Busca, Renderização e Ações Visuais)
+   5.2 LISTAGEM PRODUTOS (Busca, Renderização Responsiva)
 ================================================================= 🟥*/
 
-async  {
+async function carregarListagemProdutos() {
     const divLista = document.getElementById('lista-produtos-dinamica');
     if (!divLista) return; // Proteção caso o ecrã não esteja montado
 
- 
+    const inputBusca = document.getElementById('input-busca-lista');
     const termoBusca = inputBusca ? inputBusca.value.trim() : '';
     
     divLista.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-weight:bold; padding:20px;">A procurar no banco de dados...</p>';
 
-    // 
+    // Oculta a barra de ações em lote por defeito ao recarregar a lista
     const barraLote = document.getElementById('barra-acoes-lote');
     const chkTodos = document.getElementById('chk-selecionar-todos');
     if (barraLote) barraLote.style.display = 'none';
@@ -455,14 +455,11 @@ async  {
     if(areaSelecionar) areaSelecionar.style.display = estadoProdutos.exibindoLixeira ? "none" : "flex";
     if(btnLimparLixeira) btnLimparLixeira.style.display = estadoProdutos.exibindoLixeira ? "inline-block" : "none";
 
-    // 4. DESENHO DOS CARTÕES (100% Seguro contra erros de Sintaxe)
+    // 4. DESENHO DOS CARTÕES (Com CSS Responsivo Inline)
     data.forEach(p => {
         const item = document.createElement('div');
-        item.style.padding = '15px';
-        item.style.borderBottom = '1px solid var(--border-color)';
-        item.style.display = 'flex';
-        item.style.gap = '15px';
-        item.style.alignItems = 'center';
+        // Alinhamento flex-start garante que a imagem e a checkbox fiquem no topo
+        item.style.cssText = 'padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; gap: 12px; align-items: flex-start;';
 
         // Checkbox de Seleção (Apenas em itens ativos)
         if (!estadoProdutos.exibindoLixeira) {
@@ -470,9 +467,8 @@ async  {
             checkbox.type = 'checkbox';
             checkbox.className = 'chk-item';
             checkbox.value = p.id;
-            checkbox.style.transform = 'scale(1.5)';
-            checkbox.style.marginRight = '10px';
-            checkbox.style.cursor = 'pointer';
+            // flex-shrink: 0 impede que a checkbox amasse em telas pequenas
+            checkbox.style.cssText = 'transform: scale(1.4); margin-top: 5px; cursor: pointer; flex-shrink: 0;';
             checkbox.addEventListener('change', atualizarBarraAcoesLote);
             item.appendChild(checkbox);
         }
@@ -481,21 +477,17 @@ async  {
         const fotoUrl = p.imagem_url ? p.imagem_url : 'https://via.placeholder.com/60?text=Sem+Foto';
         const img = document.createElement('img');
         img.src = fotoUrl;
-        img.style.width = '60px';
-        img.style.height = '60px';
-        img.style.objectFit = 'cover';
-        img.style.borderRadius = '5px';
-        img.style.border = '1px solid var(--border-color)';
+        img.style.cssText = 'width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color); flex-shrink: 0;';
         item.appendChild(img);
 
-        // Bloco Central: Informações
+        // Bloco Central: Informações (Ocupa o resto do espaço disponível)
         const divConteudo = document.createElement('div');
-        divConteudo.style.flexGrow = '1';
-        divConteudo.style.display = 'flex';
-        divConteudo.style.flexDirection = 'column';
-        divConteudo.style.gap = '6px';
+        // min-width: 0 resolve bugs de transbordo de texto no flexbox
+        divConteudo.style.cssText = 'flex-grow: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0;';
 
+        // Título e Badges (Envolvem em telas pequenas)
         const divTitulo = document.createElement('div');
+        divTitulo.style.cssText = 'display: flex; flex-wrap: wrap; gap: 6px; align-items: center;';
         
         const titulo = document.createElement('strong');
         titulo.textContent = p.nome;
@@ -505,11 +497,7 @@ async  {
         // Badge de Estoque
         const badgeEstoque = document.createElement('span');
         badgeEstoque.textContent = 'Estoque: ' + (p.estoque_atual || 0);
-        badgeEstoque.style.marginLeft = '10px';
-        badgeEstoque.style.padding = '3px 8px';
-        badgeEstoque.style.borderRadius = '4px';
-        badgeEstoque.style.fontSize = '0.8em';
-        badgeEstoque.style.color = 'white';
+        badgeEstoque.style.cssText = 'padding: 3px 8px; border-radius: 4px; font-size: 0.8em; color: white; white-space: nowrap;';
         badgeEstoque.style.background = (p.estoque_atual <= (p.estoque_minimo || 0)) ? '#dc3545' : '#17a2b8';
         divTitulo.appendChild(badgeEstoque);
 
@@ -517,12 +505,7 @@ async  {
         if (estadoProdutos.exibindoLixeira) {
             const badgeLixeira = document.createElement('span');
             badgeLixeira.textContent = 'NA LIXEIRA';
-            badgeLixeira.style.marginLeft = '10px';
-            badgeLixeira.style.padding = '3px 8px';
-            badgeLixeira.style.borderRadius = '4px';
-            badgeLixeira.style.fontSize = '0.8em';
-            badgeLixeira.style.color = 'white';
-            badgeLixeira.style.background = '#dc3545';
+            badgeLixeira.style.cssText = 'padding: 3px 8px; border-radius: 4px; font-size: 0.8em; color: white; background: #dc3545; white-space: nowrap;';
             divTitulo.appendChild(badgeLixeira);
         }
 
@@ -539,40 +522,37 @@ async  {
         if (p.categoria) {
             const catText = document.createElement('span');
             catText.textContent = 'Categoria: ' + p.categoria;
-            catText.style.fontSize = '0.85em';
-            catText.style.color = 'var(--text-muted)';
+            catText.style.cssText = 'font-size: 0.85em; color: var(--text-muted); word-wrap: break-word;';
             divConteudo.appendChild(catText);
         }
 
-        item.appendChild(divConteudo);
-
-        // Bloco Direito: Botões de Ação
+        // Bloco Inferior: Botões de Ação DENTRO do conteúdo
         const zonaBotoes = document.createElement('div');
-        zonaBotoes.style.display = 'flex';
-        zonaBotoes.style.gap = '8px';
+        zonaBotoes.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;';
         
         if (estadoProdutos.exibindoLixeira) {
             const btnRestaurar = document.createElement('button');
             btnRestaurar.textContent = '♻️ Restaurar';
-            btnRestaurar.style.cssText = 'background:#20c997; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer;';
+            btnRestaurar.style.cssText = 'background:#20c997; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 120px;';
             btnRestaurar.onclick = () => { if(typeof restaurarProduto === 'function') restaurarProduto(p.id); else alert("Aguarde a Etapa 5.5!"); };
             zonaBotoes.appendChild(btnRestaurar);
         } else {
             const btnEditar = document.createElement('button');
             btnEditar.textContent = '✏️ Editar';
-            btnEditar.style.cssText = 'background:#ffc107; color:#212529; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer;';
+            btnEditar.style.cssText = 'background:#ffc107; color:#212529; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 90px;';
             btnEditar.onclick = () => { if(typeof prepararEdicaoProduto === 'function') prepararEdicaoProduto(p); else alert("Aguarde a Etapa 5.4!"); };
             
             const btnDeletar = document.createElement('button');
             btnDeletar.textContent = '🗑️ Ocultar';
-            btnDeletar.style.cssText = 'background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer;';
+            btnDeletar.style.cssText = 'background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 90px;';
             btnDeletar.onclick = () => { if(typeof deletarProduto === 'function') deletarProduto(p.id); else alert("Aguarde a Etapa 5.5!"); };
 
             zonaBotoes.appendChild(btnEditar);
             zonaBotoes.appendChild(btnDeletar);
         }
 
-        item.appendChild(zonaBotoes);
+        divConteudo.appendChild(zonaBotoes);
+        item.appendChild(divConteudo);
         divLista.appendChild(item);
     });
 }
@@ -625,6 +605,12 @@ document.addEventListener('change', function(e) {
         atualizarBarraAcoesLote();
     }
 });
+        
+
+
+
+
+
 
 
 
