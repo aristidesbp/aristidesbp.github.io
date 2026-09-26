@@ -164,45 +164,26 @@ function desenharMenuPrincipal(emailDoOperador) {
 
 
 
-/*🟥 
-5. MÓDULO DE PRODUTOS (Formulário, Busca Inteligente, Listagem Avançada e Soft Delete)
-🟥*/ 
+/*🟥 =================================================================
+   PARTE 5: MÓDULO DE PRODUTOS (ARQUITETURA MODULAR)
+================================================================= 🟥*/
 
+// Objeto Global para partilhar o estado entre as funções do módulo 5
+const estadoProdutos = {
+    exibindoLixeira: false,
+    arquivoParaUpload: null,
+    mapaFornecedores: {},
+    idEmEdicao: null // Se for 'null', vai Cadastrar. Se tiver um ID, vai Editar.
+};
+
+// CSS de Interface limpo (Sem variáveis dinâmicas para evitar Erros de Sintaxe)
+const cssProdutos = '<style>.btn-acao{padding:8px 12px; border:none; border-radius:4px; font-weight:bold; cursor:pointer; color:white;} .btn-verde{background:#28a745;} .btn-amarelo{background:#ffc107; color:#333;} .btn-vermelho{background:#dc3545;} .btn-cinza{background:#6c757d;} .toast{position:fixed; top:20px; right:20px; padding:15px; color:white; border-radius:5px; font-weight:bold; z-index:9999;}</style>';
+
+
+/*🟥 5.1 FORMULÁRIO PRODUTOS (Desenho da Interface) 🟥*/
 function desenharModuloProdutos(emailDoOperador) {
-    // 1. INJEÇÃO DE CSS ESPECÍFICO PARA A LISTAGEM E TOASTS
-    const estilosListagem = `
-        <style>
-            .info-status { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; display: none; }
-            .btn-sucesso { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            .btn-perigo { background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            .btn-editar { background: #ffc107; color: #212529; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            .btn-alerta { background: #fd7e14; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            .btn-secundario { background: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            .btn-restaurar { background: #20c997; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-            
-            .area-busca { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
-            .input-busca { flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-main); }
-            
-            .barra-acoes-lote { background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px; display: none; align-items: center; justify-content: space-between; border: 1px solid #ffeeba; }
-            .chk-item { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
-            
-            .item-lista { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: row; gap: 15px; align-items: center;}
-            .conteudo-item { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
-            .cabecalho-painel { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;}
-            .grupo-botoes-topo { display: flex; gap: 10px; flex-wrap: wrap;}
-            .badge-lixeira { background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px;}
-            .badge-estoque { background: #17a2b8; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px;}
-            
-            #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-            .toast { padding: 15px 20px; border-radius: 5px; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2); opacity: 0; transform: translateX(100%); transition: all 0.3s ease; }
-            .toast.mostrar { opacity: 1; transform: translateX(0); }
-            .toast-sucesso { background-color: #28a745; }
-            .toast-erro { background-color: #dc3545; }
-        </style>
-        <div id="toast-container"></div>
-    `;
-
-    appRoot.innerHTML = estilosListagem + `
+    // 1. Injeção do Layout Base (Menu, Abas e Estrutura)
+    appRoot.innerHTML = cssProdutos + `
         <header>
             <div class="logo-area">
                 <button id="btn-voltar-menu" class="icon-btn" style="margin-right: 10px;">⬅️</button>
@@ -214,285 +195,317 @@ function desenharModuloProdutos(emailDoOperador) {
         </header>
 
         <div class="tabs-menu">
-            <button id="aba-btn-cadastro" class="tab-btn active">📝 Registar</button>
+            <button id="aba-btn-cadastro" class="tab-btn active">📝 Formulário</button>
             <button id="aba-btn-lista" class="tab-btn">🛒 Inventário</button>
         </div>
 
-        <!-- ================= ABA 1: CADASTRO ================= -->
+        <!-- ABA DE FORMULÁRIO -->
         <div id="aba-conteudo-cadastro" class="tab-content active card">
-            <div class="titulo">Cadastrar Produto</div>
+            <h2 id="titulo-formulario" class="titulo">Cadastrar Novo Produto</h2>
             
-            <label style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; color: var(--accent-neon);">📸 Imagem do Produto</label>
+            <label>📸 Imagem do Produto</label>
             <div style="text-align: center; margin-bottom: 15px;">
-                <img id="img-preview" src="https://via.placeholder.com/200?text=Sem+Foto" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px dashed var(--border-color); object-fit: cover;">
+                <img id="img-preview" src="https://via.placeholder.com/200?text=Sem+Foto" style="max-width: 200px; border-radius: 8px; border: 2px dashed var(--border-color); object-fit: cover;">
             </div>
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <label for="prod-imagem-camera" class="btn-neon" style="text-align: center; flex: 1; cursor: pointer; margin-bottom: 0;">📷 Tirar Foto</label>
+                <label for="prod-imagem-camera" class="btn-acao btn-verde" style="flex:1; text-align:center;">📷 Câmera</label>
                 <input type="file" id="prod-imagem-camera" accept="image/*" capture="environment" style="display: none;">
-                <label for="prod-imagem-galeria" class="btn-secundario" style="text-align: center; flex: 1; cursor: pointer; margin-bottom: 0;">📁 Galeria</label>
+                <label for="prod-imagem-galeria" class="btn-acao btn-cinza" style="flex:1; text-align:center;">📁 Galeria</label>
                 <input type="file" id="prod-imagem-galeria" accept="image/*" style="display: none;">
             </div>
-            <p id="info-foto" style="font-size: 0.8em; color: var(--text-muted); text-align: center; margin-top: -10px; margin-bottom: 15px;">Nenhuma imagem selecionada</p>
+            <p id="info-foto" style="text-align: center; font-size: 0.8em; margin-top:-10px;">Nenhuma imagem selecionada</p>
 
-            <label style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; color: var(--accent-neon);">🧾 Códigos e Datas</label>
             <label>EAN (Código de Barras)</label>
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="prod-ean" placeholder="Ex: 7891025109884" style="margin-bottom: 0;">
-                <button id="btn-scan-ean" class="btn-neon" style="width: auto; margin-bottom: 0; padding: 0 20px;" title="Ler Código">📷</button>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
-                <div><label>Data de Compra</label><input type="date" id="prod-data-compra"></div>
-                <div><label>Data de Vencimento</label><input type="date" id="prod-data-vencimento"></div>
+                <input type="text" id="prod-ean" style="margin: 0;">
+                <button id="btn-scan-ean" class="btn-acao btn-verde">📷</button>
             </div>
 
-            <label style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; color: var(--accent-neon);">📦 Dados Gerais</label>
             <label>Nome do Produto *</label>
-            <input type="text" id="prod-nome" placeholder="Ex: Cerveja Artesanal 500ml">
-            <label>Descrição do Produto</label>
-            <textarea id="prod-descricao" rows="3" placeholder="Detalhes adicionais..." style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-family: inherit; resize: vertical;"></textarea>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
-                <div><label>Categoria</label><input type="text" id="prod-categoria" placeholder="Ex: Bebidas"></div>
-                <div>
-                    <label>Fornecedor</label>
-                    <input list="lista-fornecedores" id="prod-fornecedor" placeholder="Digite para buscar...">
-                    <datalist id="lista-fornecedores"></datalist>
-                </div>
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label>Origem</label>
-                <select id="prod-origem" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); outline: none;">
-                    <option value="Selecione...">Selecione...</option>
-                    <option value="0 - Nacional">0 - Nacional</option>
-                    <option value="1 - Estrangeira">1 - Estrangeira</option>
-                </select>
-            </div>
+            <input type="text" id="prod-nome">
+            
+            <label>Descrição</label>
+            <textarea id="prod-descricao" rows="2" style="width: 100%; margin-bottom: 15px;"></textarea>
 
-            <label style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; color: var(--accent-neon);">💰 Preços e Estoque</label>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
-                <div><label>Preço de Custo (R$)</label><input type="number" id="prod-custo" placeholder="0.00" step="0.01"></div>
-                <div><label>Preço de Venda (R$) *</label><input type="number" id="prod-preco" placeholder="0.00" step="0.01"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div><label>Preço Venda (R$) *</label><input type="number" id="prod-preco" step="0.01"></div>
+                <div><label>Preço Custo (R$)</label><input type="number" id="prod-custo" step="0.01"></div>
                 <div><label>Estoque Atual</label><input type="number" id="prod-estoque" value="0"></div>
                 <div><label>Estoque Mínimo</label><input type="number" id="prod-estoque-min" value="0"></div>
+                <div><label>Categoria</label><input type="text" id="prod-categoria"></div>
+                <div><label>Fornecedor</label><input list="lista-fornecedores" id="prod-fornecedor"><datalist id="lista-fornecedores"></datalist></div>
+                <div><label>Validade</label><input type="date" id="prod-data-vencimento"></div>
+                <div><label>Compra</label><input type="date" id="prod-data-compra"></div>
             </div>
-
-            <label style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; color: var(--accent-neon);">🚚 Logística e Armazenamento</label>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
-                <div><label>Peso (kg)</label><input type="number" id="prod-peso" placeholder="Ex: 1.5" step="0.001"></div>
-                <div><label>Dimensões (LxAxP)</label><input type="text" id="prod-dimensoes" placeholder="Ex: 20x15x10 cm"></div>
-                <div><label>Localização na Loja</label><input type="text" id="prod-loc-loja" placeholder="Ex: Corredor 3"></div>
-                <div><label>Localização no Estoque</label><input type="text" id="prod-loc-estoque" placeholder="Ex: Palete 4"></div>
-            </div>
-
-            <button id="btn-salvar-produto" class="btn-neon" style="margin-top: 15px;">💾 Guardar Produto Completo</button>
+            
+            <button id="btn-salvar-produto" class="btn-acao btn-verde" style="width:100%; padding:15px; font-size:1.1em;">💾 Salvar Produto</button>
+            <button id="btn-cancelar-edicao" class="btn-acao btn-cinza" style="width:100%; padding:15px; margin-top:10px; display:none;">❌ Cancelar Edição</button>
         </div>
 
-        <!-- ================= ABA 2: LISTAGEM E LIXEIRA ================= -->
+        <!-- ABA DE LISTAGEM -->
         <div id="aba-conteudo-lista" class="tab-content card">
-            
-            <div id="status-lixeira" class="info-status">Lixeira de Produtos 🗑️ (Itens Ocultos)</div>
-
-            <div class="cabecalho-painel">
-                <h2 id="titulo-painel" style="margin: 0;">Lista de Produtos 📦</h2>
-                <div class="grupo-botoes-topo">
-                    <button id="btn-ver-lixeira" class="btn-secundario">👁️ Ver Lixeira</button>
-                    <button id="btn-limpar-lixeira" class="btn-alerta" style="display: none;">🧹 Esvaziar Lixeira</button>
-                </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom:15px;">
+                <h2 id="titulo-lista">📦 Ativos</h2>
+                <button id="btn-ver-lixeira" class="btn-acao btn-cinza">🗑️ Lixeira</button>
             </div>
-
-            <div class="area-busca">
-                <input type="text" id="input-busca-lista" class="input-busca" placeholder="🔍 Buscar por Nome ou EAN...">
-                <button type="button" id="btn-buscar-lista" class="btn-neon" style="width: auto; margin-bottom: 0;">Buscar</button>
-            </div>
-            
-            <div id="barra-acoes-lote" class="barra-acoes-lote">
-                <strong style="color: #856404;" id="texto-contagem-lote">0 itens selecionados</strong>
-                <button id="btn-ocultar-lote" class="btn-perigo">🗑️ Ocultar Selecionados</button>
-            </div>
-
-            <div id="area-selecionar-todos" style="padding: 10px 15px; background: var(--bg-color); border-radius: 5px; margin-bottom: 15px; display: none; align-items: center; border: 1px solid var(--border-color);">
-                <input type="checkbox" id="chk-selecionar-todos" style="transform: scale(1.5); margin-right: 15px; cursor: pointer;">
-                <label for="chk-selecionar-todos" style="cursor: pointer; font-weight: bold; user-select: none;">Selecionar todos visíveis</label>
-            </div>
-
-            <div id="lista-produtos-dinamica">
-                <div style="text-align: center; color: var(--text-muted); padding: 20px;">A carregar dados...</div>
-            </div>
+            <input type="text" id="input-busca" placeholder="🔍 Buscar por nome ou EAN..." style="width:100%; margin-bottom:15px;">
+            <div id="lista-renderizada">A carregar...</div>
         </div>
     `;
 
-    // -------------------------------------------------------------------------
-    // LÓGICA DE ESTADO E UTILITÁRIOS DA LISTAGEM
-    // -------------------------------------------------------------------------
-    let exibindoLixeira = false;
+    // 2. Controlos de Navegação e Interface
+    document.getElementById('btn-voltar-menu').onclick = () => desenharMenuPrincipal(emailDoOperador);
+    document.getElementById('aba-btn-cadastro').onclick = () => alternarAba('cadastro');
+    document.getElementById('aba-btn-lista').onclick = () => { alternarAba('lista'); carregarListagemProdutos(); };
+    document.getElementById('btn-scan-ean').onclick = () => abrirLeitorCodigoBarras('prod-ean');
 
-    function mostrarToast(mensagem, tipo = 'sucesso') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${tipo}`;
-        toast.textContent = mensagem;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('mostrar'), 10);
-        setTimeout(() => {
-            toast.classList.remove('mostrar');
-            setTimeout(() => toast.remove(), 300); 
-        }, 3000);
+    // 3. Pré-visualização de Foto
+    const atualizarFoto = (e) => {
+        if (e.target.files.length > 0) {
+            estadoProdutos.arquivoParaUpload = e.target.files[0];
+            document.getElementById('info-foto').textContent = '✅ ' + estadoProdutos.arquivoParaUpload.name;
+            document.getElementById('img-preview').src = URL.createObjectURL(estadoProdutos.arquivoParaUpload);
+        }
+    };
+    document.getElementById('prod-imagem-camera').onchange = atualizarFoto;
+    document.getElementById('prod-imagem-galeria').onchange = atualizarFoto;
+
+    // 4. Delegação do Botão Salvar (Verifica se é Cadastro ou Edição)
+    document.getElementById('btn-salvar-produto').onclick = submeterFormulario;
+    
+    document.getElementById('btn-cancelar-edicao').onclick = () => {
+        limparFormularioProdutos();
+        alternarAba('lista');
+    };
+
+    // 5. Inicializações
+    carregarFornecedores();
+    carregarListagemProdutos();
+}
+
+
+/*🟥 5.2 LISTAGEM PRODUTOS (Busca e Renderização) 🟥*/
+async function carregarListagemProdutos() {
+    const divLista = document.getElementById('lista-renderizada');
+    const termoBusca = document.getElementById('input-busca').value.trim();
+    divLista.innerHTML = '<p style="text-align:center;">A buscar dados...</p>';
+
+    // Consulta condicional (Ativos ou Lixeira)
+    let query = clienteSupabase.from('produtos').select('*').order('created_at', { ascending: false });
+    if (estadoProdutos.exibindoLixeira) {
+        query = query.not('deleted_at', 'is', null);
+    } else {
+        query = query.is('deleted_at', null);
     }
 
-    // -------------------------------------------------------------------------
-    // MOTOR DE BUSCA E RENDERIZAÇÃO DA LISTA
-    // -------------------------------------------------------------------------
-    async function carregarListagemProdutos() {
-        const divLista = document.getElementById('lista-produtos-dinamica');
-        const termoBusca = document.getElementById('input-busca-lista').value.trim();
-        divLista.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">A procurar no banco de dados...</div>';
+    if (termoBusca) query = query.or('nome.ilike.%' + termoBusca + '%,ean.ilike.%' + termoBusca + '%');
+
+    const { data, error } = await query;
+
+    if (error) return divLista.innerHTML = '<p>Erro ao buscar dados.</p>';
+    if (!data || data.length === 0) return divLista.innerHTML = '<p style="text-align:center;">Nenhum produto encontrado.</p>';
+
+    divLista.innerHTML = ''; // Limpa antes de desenhar
+    data.forEach(p => {
+        const item = document.createElement('div');
+        item.style.cssText = 'padding:15px; border-bottom:1px solid #ccc; display:flex; gap:10px; align-items:center;';
         
-        document.getElementById('barra-acoes-lote').style.display = 'none';
-        document.getElementById('chk-selecionar-todos').checked = false;
+        const fotoUrl = p.imagem_url ? p.imagem_url : 'https://via.placeholder.com/60?text=Sem+Foto';
+        
+        // Estrutura do Cartão
+        item.innerHTML = `
+            <img src="${fotoUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:5px;">
+            <div style="flex-grow:1;">
+                <strong style="font-size:1.1em;">${p.nome}</strong><br>
+                <span style="color:#28a745; font-weight:bold;">R$ ${p.preco}</span> | Estoque: ${p.estoque_atual}
+            </div>
+        `;
 
-        // Monta a consulta ao banco de dados baseada no estado da Lixeira
-        let query = clienteSupabase.from('produtos').select('*').order('created_at', { ascending: false });
+        // Zona de Botões (Edição e Exclusão dependem do estado da lixeira)
+        const zonaBotoes = document.createElement('div');
+        zonaBotoes.style.display = 'flex';
+        zonaBotoes.style.flexDirection = 'column';
+        zonaBotoes.style.gap = '5px';
 
-        if (exibindoLixeira) {
-            query = query.not('deleted_at', 'is', null); // Busca itens apagados (Soft Delete)
+        if (estadoProdutos.exibindoLixeira) {
+            const btnRestaurar = document.createElement('button');
+            btnRestaurar.className = 'btn-acao btn-verde';
+            btnRestaurar.textContent = '♻️ Restaurar';
+            btnRestaurar.onclick = () => restaurarProduto(p.id);
+            zonaBotoes.appendChild(btnRestaurar);
         } else {
-            query = query.is('deleted_at', null); // Busca itens ativos
-        }
-
-        // Adiciona filtro de busca se o utilizador digitou algo
-        if (termoBusca) {
-            query = query.or(`nome.ilike.%${termoBusca}%,ean.ilike.%${termoBusca}%`);
-        }
-
-        const { data: produtos, error } = await query;
-
-        divLista.innerHTML = ''; 
-        if (error) {
-            mostrarToast("Erro ao carregar dados.", "erro");
-            return divLista.innerHTML = "<div style='padding:20px;'>Erro de conexão.</div>";
-        }
-        
-        if (!produtos || produtos.length === 0) {
-            const msgVazia = exibindoLixeira ? "A lixeira está vazia. 🌟" : "Nenhum resultado encontrado.";
-            document.getElementById('area-selecionar-todos').style.display = "none";
-            document.getElementById('btn-limpar-lixeira').style.display = "none";
-            return divLista.innerHTML = `<div style='padding:20px; text-align:center;'>${msgVazia}</div>`;
-        }
-
-        // Controla visibilidade de botões em lote
-        document.getElementById('area-selecionar-todos').style.display = (!exibindoLixeira) ? "flex" : "none";
-        document.getElementById('btn-limpar-lixeira').style.display = (exibindoLixeira) ? "inline-block" : "none";
-
-        // Cria o HTML para cada produto retornado
-        produtos.forEach((eq) => {
-            const divItem = document.createElement('div');
-            divItem.className = 'item-lista';
-
-            // Checkbox para seleção em lote (apenas para produtos ativos)
-            if (!exibindoLixeira) {
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'chk-item';
-                checkbox.value = eq.id;
-                checkbox.addEventListener('change', atualizarBarraAcoesLote);
-                divItem.appendChild(checkbox);
-            }
-
-            const divConteudo = document.createElement('div');
-            divConteudo.className = 'conteudo-item';
-
-            // Título e Badges
-            const divTitulo = document.createElement('div');
-            const titulo = document.createElement('strong');
-            titulo.textContent = eq.nome; 
-            divTitulo.appendChild(titulo);
-
-            const badgeEstoque = document.createElement('span');
-            badgeEstoque.className = 'badge-estoque';
-            badgeEstoque.textContent = `Estoque: ${eq.estoque_atual}`;
-            if (eq.estoque_atual <= eq.estoque_minimo) badgeEstoque.style.background = '#dc3545'; // Alerta vermelho
-            divTitulo.appendChild(badgeEstoque);
-
-            if (exibindoLixeira) {
-                const badge = document.createElement('span');
-                badge.className = 'badge-lixeira';
-                badge.textContent = ' NA LIXEIRA';
-                divTitulo.appendChild(badge);
-            }
-
-            // Preço e Categoria
-            const precoText = document.createElement('span');
-            precoText.style.color = "var(--accent-neon)";
-            precoText.style.fontWeight = "bold";
-            precoText.textContent = "R$ " + parseFloat(eq.preco || 0).toFixed(2);
-            divConteudo.appendChild(divTitulo);
-            divConteudo.appendChild(precoText);
+            const btnEditar = document.createElement('button');
+            btnEditar.className = 'btn-acao btn-amarelo';
+            btnEditar.textContent = '✏️ Editar';
+            btnEditar.onclick = () => prepararEdicaoProduto(p);
             
-            if (eq.categoria) {
-                const catText = document.createElement('span');
-                catText.style.fontSize = "0.85em";
-                catText.style.color = "var(--text-muted)";
-                catText.textContent = "Categoria: " + eq.categoria;
-                divConteudo.appendChild(catText);
-            }
+            const btnDeletar = document.createElement('button');
+            btnDeletar.className = 'btn-acao btn-vermelho';
+            btnDeletar.textContent = '🗑️ Ocultar';
+            btnDeletar.onclick = () => deletarProduto(p.id);
 
-            // Miniatura da Imagem
-            if (eq.imagem_url) {
-                const img = document.createElement('img');
-                img.src = eq.imagem_url;
-                img.style.maxWidth = "80px";
-                img.style.borderRadius = "8px";
-                img.style.marginTop = "5px";
-                divConteudo.appendChild(img);
-            }
+            zonaBotoes.appendChild(btnEditar);
+            zonaBotoes.appendChild(btnDeletar);
+        }
 
-            // Botões de Ação Dinâmicos
-            const divBotoes = document.createElement('div');
-            divBotoes.style.display = 'flex';
-            divBotoes.style.gap = '10px';
-            divBotoes.style.marginTop = '10px';
-            
-            if (exibindoLixeira) {
-                // Ação: Restaurar da Lixeira
-                const btnRestaurar = document.createElement('button');
-                btnRestaurar.innerHTML = "♻️ Restaurar";
-                btnRestaurar.className = "btn-restaurar";
-                btnRestaurar.onclick = async () => {
-                    const { error } = await clienteSupabase.from('produtos').update({ deleted_at: null }).eq('id', eq.id);
-                    if(!error) { mostrarToast("Produto restaurado!", "sucesso"); carregarListagemProdutos(); }
-                    else mostrarToast("Erro ao restaurar", "erro");
-                };
-                divBotoes.appendChild(btnRestaurar);
-            } else {
-                // Ação: Ocultar (Soft Delete)
-                const btnExcluir = document.createElement('button');
-                btnExcluir.innerHTML = "🗑️ Ocultar";
-                btnExcluir.className = "btn-perigo";
-                btnExcluir.onclick = async () => {
-                    if(confirm("Mover este produto para a lixeira?")) {
-                        const { error } = await clienteSupabase.from('produtos').update({ deleted_at: new Date().toISOString() }).eq('id', eq.id);
-                        if(!error) { mostrarToast("Movido para a lixeira!", "sucesso"); carregarListagemProdutos(); }
-                        else mostrarToast("Erro ao excluir", "erro");
-                    }
-                }; 
-                divBotoes.appendChild(btnExcluir);
-            }
+        item.appendChild(zonaBotoes);
+        divLista.appendChild(item);
+    });
+}
 
-            divConteudo.appendChild(divBotoes);
-            divItem.appendChild(divConteudo);
-            divLista.appendChild(divItem);
+// Botão Alternar Lixeira / Ativos
+document.addEventListener('click', function(e) {
+    if(e.target && e.target.id === 'btn-ver-lixeira'){
+        estadoProdutos.exibindoLixeira = !estadoProdutos.exibindoLixeira;
+        document.getElementById('titulo-lista').textContent = estadoProdutos.exibindoLixeira ? '🗑️ Lixeira' : '📦 Ativos';
+        e.target.textContent = estadoProdutos.exibindoLixeira ? '📦 Voltar aos Ativos' : '🗑️ Lixeira';
+        carregarListagemProdutos();
+    }
+});
+document.addEventListener('keyup', function(e) {
+    if(e.target && e.target.id === 'input-busca') carregarListagemProdutos();
+});
+
+
+/*🟥 5.3 CADASTRAR PRODUTOS (Lógica de Inserção) 🟥*/
+async function submeterFormulario() {
+    const nome = document.getElementById('prod-nome').value.trim();
+    const preco = parseFloat(document.getElementById('prod-preco').value);
+    
+    if(!nome || isNaN(preco)) return alert("Nome e Preço de Venda são obrigatórios.");
+    document.getElementById('btn-salvar-produto').textContent = 'A processar...';
+
+    // Se houver foto nova, faz o upload primeiro
+    let novaImagemUrl = null;
+    if (estadoProdutos.arquivoParaUpload) {
+        const nomeArquivo = 'prod_' + Date.now() + '.jpg';
+        novaImagemUrl = await comprimirEUploadImagem(estadoProdutos.arquivoParaUpload, 'storage_produtos', nomeArquivo);
+    }
+
+    // Coleta os dados limpos
+    const idFornecedor = estadoProdutos.mapaFornecedores[document.getElementById('prod-fornecedor').value.trim()] || null;
+    
+    const payload = {
+        nome: nome,
+        descricao: document.getElementById('prod-descricao').value.trim() || null,
+        fornecedor_id: idFornecedor,
+        preco: preco,
+        preco_custo: parseFloat(document.getElementById('prod-custo').value) || 0,
+        estoque_atual: parseInt(document.getElementById('prod-estoque').value) || 0,
+        estoque_minimo: parseInt(document.getElementById('prod-estoque-min').value) || 0,
+        ean: document.getElementById('prod-ean').value.trim() || null,
+        categoria: document.getElementById('prod-categoria').value.trim() || null,
+        data_compra: document.getElementById('prod-data-compra').value || null,
+        data_vencimento: document.getElementById('prod-data-vencimento').value || null
+    };
+
+    // Apenas substitui a imagem se o utilizador enviou uma foto nova
+    if (novaImagemUrl) payload.imagem_url = novaImagemUrl;
+
+    // Roteamento: Insert ou Update?
+    if (estadoProdutos.idEmEdicao) {
+        await executarEdicaoNoBanco(payload);
+    } else {
+        await executarCadastroNoBanco(payload);
+    }
+}
+
+async function executarCadastroNoBanco(payload) {
+    const { error } = await clienteSupabase.from('produtos').insert([payload]);
+    if (error) { alert("Erro ao cadastrar."); console.error(error); } 
+    else { alert("Sucesso!"); limparFormularioProdutos(); alternarAba('lista'); carregarListagemProdutos(); }
+    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
+}
+
+
+/*🟥 5.4 EDITAR PRODUTOS (Lógica de Atualização) 🟥*/
+function prepararEdicaoProduto(produto) {
+    // 1. Muda o estado global para modo "Edição"
+    estadoProdutos.idEmEdicao = produto.id;
+    
+    // 2. Preenche os campos com os dados do banco
+    document.getElementById('prod-nome').value = produto.nome || '';
+    document.getElementById('prod-descricao').value = produto.descricao || '';
+    document.getElementById('prod-preco').value = produto.preco || '';
+    document.getElementById('prod-custo').value = produto.preco_custo || '';
+    document.getElementById('prod-estoque').value = produto.estoque_atual || '0';
+    document.getElementById('prod-estoque-min').value = produto.estoque_minimo || '0';
+    document.getElementById('prod-ean').value = produto.ean || '';
+    document.getElementById('prod-categoria').value = produto.categoria || '';
+    
+    if(produto.data_compra) document.getElementById('prod-data-compra').value = produto.data_compra;
+    if(produto.data_vencimento) document.getElementById('prod-data-vencimento').value = produto.data_vencimento;
+
+    // Tratamento reverso do Fornecedor (Pega o ID e busca o Nome no dicionário)
+    let nomeFornecedor = '';
+    for (let nome in estadoProdutos.mapaFornecedores) {
+        if (estadoProdutos.mapaFornecedores[nome] === produto.fornecedor_id) nomeFornecedor = nome;
+    }
+    document.getElementById('prod-fornecedor').value = nomeFornecedor;
+
+    // Mostra a foto atual no Preview
+    document.getElementById('img-preview').src = produto.imagem_url ? produto.imagem_url : 'https://via.placeholder.com/200?text=Sem+Foto';
+
+    // 3. Altera o visual do formulário
+    document.getElementById('titulo-formulario').textContent = '✏️ Editando: ' + produto.nome;
+    document.getElementById('btn-salvar-produto').textContent = '🔄 Atualizar Produto';
+    document.getElementById('btn-cancelar-edicao').style.display = 'block';
+
+    // 4. Transporta o utilizador para a aba do formulário
+    alternarAba('cadastro');
+}
+
+async function executarEdicaoNoBanco(payload) {
+    const { error } = await clienteSupabase.from('produtos').update(payload).eq('id', estadoProdutos.idEmEdicao);
+    if (error) { alert("Erro ao atualizar."); console.error(error); } 
+    else { alert("Atualizado com sucesso!"); limparFormularioProdutos(); alternarAba('lista'); carregarListagemProdutos(); }
+    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
+}
+
+
+/*🟥 5.5 DELETAR PRODUTOS (Soft Delete e Restauração) 🟥*/
+async function deletarProduto(id) {
+    if(confirm("Mover este produto para a lixeira?")) {
+        // Envia a data atual para ocultar o produto sem apagar a linha fisicamente
+        const { error } = await clienteSupabase.from('produtos').update({ deleted_at: new Date().toISOString() }).eq('id', id);
+        if(!error) carregarListagemProdutos();
+        else alert("Erro ao mover para a lixeira.");
+    }
+}
+
+async function restaurarProduto(id) {
+    const { error } = await clienteSupabase.from('produtos').update({ deleted_at: null }).eq('id', id);
+    if(!error) carregarListagemProdutos();
+    else alert("Erro ao restaurar.");
+}
+
+// Utilitário de Limpeza
+function limparFormularioProdutos() {
+    estadoProdutos.idEmEdicao = null;
+    estadoProdutos.arquivoParaUpload = null;
+    document.querySelectorAll('#aba-conteudo-cadastro input, #aba-conteudo-cadastro textarea').forEach(el => el.value = '');
+    document.getElementById('prod-estoque').value = '0';
+    document.getElementById('prod-estoque-min').value = '0';
+    document.getElementById('info-foto').textContent = 'Nenhuma imagem selecionada';
+    document.getElementById('img-preview').src = 'https://via.placeholder.com/200?text=Sem+Foto';
+    document.getElementById('titulo-formulario').textContent = 'Cadastrar Novo Produto';
+    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
+    document.getElementById('btn-cancelar-edicao').style.display = 'none';
+}
+
+// Utilitário de Fornecedores
+async function carregarFornecedores() {
+    const { data } = await clienteSupabase.from('entidades').select('id, nome').eq('tipo', 'fornecedor').is('deleted_at', null);
+    if (data) {
+        const datalist = document.getElementById('lista-fornecedores');
+        datalist.innerHTML = '';
+        data.forEach(f => {
+            estadoProdutos.mapaFornecedores[f.nome] = f.id;
+            const op = document.createElement('option');
+            op.value = f.nome; datalist.appendChild(op);
         });
     }
-
-    // -------------------------------------------------------------------------
-    // LÓGICA DE AÇÕES EM LOTE E LIXEIRA
-    // -------------------------------------------------------------------------
-    function atualizarBarraAcoesLote() {
-        const checkboxes = document.querySelectorAll('.chk-item:checked');
-        const barraAcoe
-
-
-
-
+}
 
 
 
