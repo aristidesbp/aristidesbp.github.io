@@ -716,51 +716,130 @@ async function executarEdicaoNoBanco(payload) {
 }
 
 
-/*🟥 5.5 DELETAR PRODUTOS (Soft Delete e Restauração) 🟥*/
+
+/*🟥 =================================================================
+   5.5 DELETAR PRODUTOS E GESTÃO DA LIXEIRA (Soft & Hard Delete)
+================================================================= 🟥*/
+
+// -----------------------------------------------------------------------------
+// SISTEMA DE NOTIFICAÇÕES VISUAIS (Toasts)
+// -----------------------------------------------------------------------------
+function mostrarToast(mensagem, tipo = 'sucesso') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${tipo}`;
+    toast.textContent = mensagem;
+    
+    container.appendChild(toast);
+    
+    // Pequeno atraso para a animação de entrada funcionar
+    setTimeout(() => toast.classList.add('mostrar'), 10);
+    
+    // Remove automaticamente após 3 segundos
+    setTimeout(() => {
+        toast.classList.remove('mostrar');
+        setTimeout(() => toast.remove(), 300); 
+    }, 3000);
+}
+
+// -----------------------------------------------------------------------------
+// AÇÕES INDIVIDUAIS (Botões dos Cartões)
+// -----------------------------------------------------------------------------
+
+// Oculta um único produto enviando a data atual para a coluna 'deleted_at'
 async function deletarProduto(id) {
     if(confirm("Mover este produto para a lixeira?")) {
-        // Envia a data atual para ocultar o produto sem apagar a linha fisicamente
-        const { error } = await clienteSupabase.from('produtos').update({ deleted_at: new Date().toISOString() }).eq('id', id);
-        if(!error) carregarListagemProdutos();
-        else alert("Erro ao mover para a lixeira.");
+        const dataIso = new Date().toISOString(); // Gera a data/hora exata
+        
+        const { error } = await clienteSupabase
+            .from('produtos')
+            .update({ deleted_at: dataIso })
+            .eq('id', id);
+        
+        if(!error) {
+            mostrarToast("Produto movido para a lixeira!", "sucesso");
+            carregarListagemProdutos(); // Atualiza a lista automaticamente
+        } else {
+            mostrarToast("Erro ao ocultar produto.", "erro");
+            console.error("Erro na exclusão:", error);
+        }
     }
 }
 
+// Restaura um produto limpando a coluna 'deleted_at' (definindo como nulo)
 async function restaurarProduto(id) {
-    const { error } = await clienteSupabase.from('produtos').update({ deleted_at: null }).eq('id', id);
-    if(!error) carregarListagemProdutos();
-    else alert("Erro ao restaurar.");
-}
-
-// Utilitário de Limpeza
-function limparFormularioProdutos() {
-    estadoProdutos.idEmEdicao = null;
-    estadoProdutos.arquivoParaUpload = null;
-    document.querySelectorAll('#aba-conteudo-cadastro input, #aba-conteudo-cadastro textarea').forEach(el => el.value = '');
-    document.getElementById('prod-estoque').value = '0';
-    document.getElementById('prod-estoque-min').value = '0';
-    document.getElementById('info-foto').textContent = 'Nenhuma imagem selecionada';
-    document.getElementById('img-preview').src = 'https://via.placeholder.com/200?text=Sem+Foto';
-    document.getElementById('titulo-formulario').textContent = 'Cadastrar Novo Produto';
-    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
-    document.getElementById('btn-cancelar-edicao').style.display = 'none';
-}
-
-// Utilitário de Fornecedores
-async function carregarFornecedores() {
-    const { data } = await clienteSupabase.from('entidades').select('id, nome').eq('tipo', 'fornecedor').is('deleted_at', null);
-    if (data) {
-        const datalist = document.getElementById('lista-fornecedores');
-        datalist.innerHTML = '';
-        data.forEach(f => {
-            estadoProdutos.mapaFornecedores[f.nome] = f.id;
-            const op = document.createElement('option');
-            op.value = f.nome; datalist.appendChild(op);
-        });
+    const { error } = await clienteSupabase
+        .from('produtos')
+        .update({ deleted_at: null })
+        .eq('id', id);
+        
+    if(!error) {
+        mostrarToast("Produto restaurado com sucesso!", "sucesso");
+        carregarListagemProdutos();
+    } else {
+        mostrarToast("Erro ao restaurar produto.", "erro");
+        console.error("Erro na restauração:", error);
     }
 }
 
+// -----------------------------------------------------------------------------
+// AÇÕES GLOBAIS E EM LOTE
+// -----------------------------------------------------------------------------
+document.addEventListener('click', async function(e) {
+    
+    // Ação: Ocultar Múltiplos Produtos (Lote)
+    if (e.target && e.target.id === 'btn-ocultar-lote') {
+        const checkboxes = document.querySelectorAll('.chk-item:checked');
+        const selecionados = Array.from(checkboxes).map(cb => cb.value); // Recolhe todos os IDs
+        
+        if(selecionados.length === 0) return;
+        
+        if(confirm(`Tem certeza que deseja mover ${selecionados.length} produto(s) para a lixeira?`)) {
+            const dataIso = new Date().toISOString();
+            
+            // O operador .in() do Supabase é poderoso: atualiza todos os IDs da lista de uma vez
+            const { error } = await clienteSupabase
+                .from('produtos')
+                .update({ deleted_at: dataIso })
+                .in('id', selecionados);
+            
+            if(!error) {
+                mostrarToast(`${selecionados.length} produto(s) ocultado(s)!`, "sucesso");
+                
+                // Desmarca a checkbox mestre para não ficar bloqueada
+                const chkTodos = document.getElementById('chk-selecionar-todos');
+                if(chkTodos) chkTodos.checked = false;
+                
+                carregarListagemProdutos();
+            } else {
+                mostrarToast("Erro ao ocultar em lote.", "erro");
+                console.error("Erro em lote:", error);
+            }
+        }
+    }
 
+    // Ação: Esvaziar Lixeira Permanentemente (Hard Delete)
+    if (e.target && e.target.id === 'btn-limpar-lixeira') {
+        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira permanentemente e não poderá ser desfeito. Tem a certeza absoluta?")) {
+            
+            // Apaga definitivamente qualquer produto que não tenha o 'deleted_at' vazio
+            const { error } = await clienteSupabase
+                .from('produtos')
+                .delete()
+                .not('deleted_at', 'is', null);
+            
+            if(!error) {
+                mostrarToast("Lixeira esvaziada permanentemente!", "sucesso");
+                carregarListagemProdutos();
+            } else {
+                mostrarToast("Erro ao esvaziar lixeira.", "erro");
+                console.error("Erro ao limpar lixeira:", error);
+            }
+        }
+    }
+});
 
 
 
