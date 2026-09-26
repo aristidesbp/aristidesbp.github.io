@@ -716,14 +716,11 @@ async function executarEdicaoNoBanco(payload) {
 }
 
 
-
 /*🟥 =================================================================
-   5.5 DELETAR PRODUTOS E GESTÃO DA LIXEIRA (Soft & Hard Delete)
+   5.5 DELETAR PRODUTOS (Soft Delete, Restauração e Limpeza de Lixeira)
 ================================================================= 🟥*/
 
-// -----------------------------------------------------------------------------
-// SISTEMA DE NOTIFICAÇÕES VISUAIS (Toasts)
-// -----------------------------------------------------------------------------
+// 1. Utilitário de Notificações Visuais (Toast flutuante)
 function mostrarToast(mensagem, tipo = 'sucesso') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -734,108 +731,87 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
     
     container.appendChild(toast);
     
-    // Pequeno atraso para a animação de entrada funcionar
+    // Animação de entrada
     setTimeout(() => toast.classList.add('mostrar'), 10);
     
-    // Remove automaticamente após 3 segundos
+    // Remove do ecrã após 3 segundos
     setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => toast.remove(), 300); 
     }, 3000);
 }
 
-// -----------------------------------------------------------------------------
-// AÇÕES INDIVIDUAIS (Botões dos Cartões)
-// -----------------------------------------------------------------------------
-
-// Oculta um único produto enviando a data atual para a coluna 'deleted_at'
+// 2. Ação: Ocultar (Soft Delete) um único produto
 async function deletarProduto(id) {
     if(confirm("Mover este produto para a lixeira?")) {
-        const dataIso = new Date().toISOString(); // Gera a data/hora exata
+        const dataIso = new Date().toISOString(); // Gera a data exata do momento
         
-        const { error } = await clienteSupabase
-            .from('produtos')
-            .update({ deleted_at: dataIso })
-            .eq('id', id);
+        // Atualiza apenas a coluna deleted_at, mantendo o histórico intacto
+        const { error } = await clienteSupabase.from('produtos').update({ deleted_at: dataIso }).eq('id', id);
         
         if(!error) {
-            mostrarToast("Produto movido para a lixeira!", "sucesso");
-            carregarListagemProdutos(); // Atualiza a lista automaticamente
+            mostrarToast("Movido para a lixeira!", "sucesso");
+            if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
         } else {
-            mostrarToast("Erro ao ocultar produto.", "erro");
-            console.error("Erro na exclusão:", error);
+            mostrarToast("Erro ao mover para a lixeira.", "erro");
+            console.error(error);
         }
     }
 }
 
-// Restaura um produto limpando a coluna 'deleted_at' (definindo como nulo)
+// 3. Ação: Restaurar um único produto da lixeira
 async function restaurarProduto(id) {
-    const { error } = await clienteSupabase
-        .from('produtos')
-        .update({ deleted_at: null })
-        .eq('id', id);
-        
+    // Define a coluna deleted_at novamente como nula, devolvendo o produto aos ativos
+    const { error } = await clienteSupabase.from('produtos').update({ deleted_at: null }).eq('id', id);
+    
     if(!error) {
         mostrarToast("Produto restaurado com sucesso!", "sucesso");
-        carregarListagemProdutos();
+        if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
     } else {
-        mostrarToast("Erro ao restaurar produto.", "erro");
-        console.error("Erro na restauração:", error);
+        mostrarToast("Erro ao restaurar.", "erro");
+        console.error(error);
     }
 }
 
-// -----------------------------------------------------------------------------
-// AÇÕES GLOBAIS E EM LOTE
-// -----------------------------------------------------------------------------
+// 4. Ações Globais: Lote e Esvaziar Lixeira
 document.addEventListener('click', async function(e) {
     
-    // Ação: Ocultar Múltiplos Produtos (Lote)
+    // 4.1 Ocultar Selecionados (Soft Delete em Lote)
     if (e.target && e.target.id === 'btn-ocultar-lote') {
-        const checkboxes = document.querySelectorAll('.chk-item:checked');
-        const selecionados = Array.from(checkboxes).map(cb => cb.value); // Recolhe todos os IDs
-        
+        const selecionados = Array.from(document.querySelectorAll('.chk-item:checked')).map(cb => cb.value);
         if(selecionados.length === 0) return;
         
-        if(confirm(`Tem certeza que deseja mover ${selecionados.length} produto(s) para a lixeira?`)) {
+        if(confirm(`Mover ${selecionados.length} produto(s) para a lixeira?`)) {
             const dataIso = new Date().toISOString();
             
-            // O operador .in() do Supabase é poderoso: atualiza todos os IDs da lista de uma vez
-            const { error } = await clienteSupabase
-                .from('produtos')
-                .update({ deleted_at: dataIso })
-                .in('id', selecionados);
+            // O operador .in() atualiza vários IDs simultaneamente na base de dados
+            const { error } = await clienteSupabase.from('produtos').update({ deleted_at: dataIso }).in('id', selecionados);
             
             if(!error) {
                 mostrarToast(`${selecionados.length} produto(s) ocultado(s)!`, "sucesso");
-                
-                // Desmarca a checkbox mestre para não ficar bloqueada
                 const chkTodos = document.getElementById('chk-selecionar-todos');
                 if(chkTodos) chkTodos.checked = false;
-                
-                carregarListagemProdutos();
+                if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
             } else {
-                mostrarToast("Erro ao ocultar em lote.", "erro");
-                console.error("Erro em lote:", error);
+                mostrarToast("Erro na exclusão em lote.", "erro");
+                console.error(error);
             }
         }
     }
 
-    // Ação: Esvaziar Lixeira Permanentemente (Hard Delete)
+    // 4.2 Esvaziar Lixeira (Hard Delete)
     if (e.target && e.target.id === 'btn-limpar-lixeira') {
-        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira permanentemente e não poderá ser desfeito. Tem a certeza absoluta?")) {
+        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira permanentemente. Tem a certeza absoluta?")) {
             
             // Apaga definitivamente qualquer produto que não tenha o 'deleted_at' vazio
-            const { error } = await clienteSupabase
-                .from('produtos')
-                .delete()
-                .not('deleted_at', 'is', null);
+            const { error } = await clienteSupabase.from('produtos').delete().not('deleted_at', 'is', null);
             
             if(!error) {
                 mostrarToast("Lixeira esvaziada permanentemente!", "sucesso");
-                carregarListagemProdutos();
+                if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
             } else {
                 mostrarToast("Erro ao esvaziar lixeira.", "erro");
-                console.error("Erro ao limpar lixeira:", error);
+                console.error(error);
             }
         }
     }
