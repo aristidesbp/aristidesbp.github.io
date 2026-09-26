@@ -398,13 +398,14 @@ function desenharModuloProdutos(emailDoOperador) {
 
 
 
+
 /*🟥 =================================================================
-   5.2 LISTAGEM PRODUTOS (Busca, Renderização Responsiva)
+   5.2 LISTAGEM PRODUTOS (Busca e Renderização Responsiva Mobile-First)
 ================================================================= 🟥*/
 
 async function carregarListagemProdutos() {
     const divLista = document.getElementById('lista-produtos-dinamica');
-    if (!divLista) return; // Proteção caso o ecrã não esteja montado
+    if (!divLista) return; // Proteção: aborta se a aba ainda não existir no HTML
 
     const inputBusca = document.getElementById('input-busca-lista');
     const termoBusca = inputBusca ? inputBusca.value.trim() : '';
@@ -417,11 +418,11 @@ async function carregarListagemProdutos() {
     if (barraLote) barraLote.style.display = 'none';
     if (chkTodos) chkTodos.checked = false;
 
-    // 1. CONSTRUÇÃO DA CONSULTA (Ativos vs Lixeira)
+    // 1. CONSTRUÇÃO DA CONSULTA SUPABASE (Lixeira vs Ativos)
     let query = clienteSupabase.from('produtos').select('*').order('created_at', { ascending: false });
     
     if (estadoProdutos.exibindoLixeira) {
-        query = query.not('deleted_at', 'is', null); // Produtos na lixeira
+        query = query.not('deleted_at', 'is', null); // Produtos na lixeira (Soft Delete)
     } else {
         query = query.is('deleted_at', null); // Produtos ativos
     }
@@ -431,126 +432,132 @@ async function carregarListagemProdutos() {
     }
 
     const { data, error } = await query;
-
     divLista.innerHTML = ''; 
 
-    // 2. TRATAMENTO DE ERROS E LISTA VAZIA
+    // 2. TRATAMENTO DE ERROS E RESPOSTAS VAZIAS
     if (error) {
         return divLista.innerHTML = '<p style="text-align:center; color:#dc3545; padding:20px;">Erro ao buscar dados do Supabase.</p>';
     }
 
     if (!data || data.length === 0) {
         const msg = estadoProdutos.exibindoLixeira ? "A lixeira está vazia. 🌟" : "Nenhum produto encontrado.";
-        document.getElementById('area-selecionar-todos').style.display = "none";
-        document.getElementById('btn-limpar-lixeira').style.display = "none";
+        const areaSelecionar = document.getElementById('area-selecionar-todos');
+        const btnLimpar = document.getElementById('btn-limpar-lixeira');
+        if (areaSelecionar) areaSelecionar.style.display = "none";
+        if (btnLimpar) btnLimpar.style.display = "none";
         return divLista.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">' + msg + '</p>';
     }
 
-    // 3. ATUALIZAÇÃO VISUAL DOS BOTÕES DO TOPO
+    // 3. ATUALIZAÇÃO VISUAL DOS BOTÕES GLOBAIS
     const areaSelecionar = document.getElementById('area-selecionar-todos');
     const btnLimparLixeira = document.getElementById('btn-limpar-lixeira');
     if(areaSelecionar) areaSelecionar.style.display = estadoProdutos.exibindoLixeira ? "none" : "flex";
     if(btnLimparLixeira) btnLimparLixeira.style.display = estadoProdutos.exibindoLixeira ? "inline-block" : "none";
 
-    // 4. DESENHO DOS CARTÕES (Com CSS Responsivo Inline)
+    // 4. DESENHO DOS CARTÕES (Arquitetura Flexbox Mobile-First Duas Linhas)
     data.forEach(p => {
         const item = document.createElement('div');
-        // Alinhamento flex-start garante que a imagem e a checkbox fiquem no topo
-        item.style.cssText = 'padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; gap: 12px; align-items: flex-start;';
+        // O container principal é uma coluna que agrupa as "Duas Linhas"
+        item.style.cssText = 'padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box;';
 
-        // Checkbox de Seleção (Apenas em itens ativos)
+        /* --- LINHA 1: Checkbox, Foto e Informações --- */
+        const linhaInfo = document.createElement('div');
+        linhaInfo.style.cssText = 'display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; overflow: hidden;';
+
+        // Checkbox Protegida (Isolada num div para não amassar)
         if (!estadoProdutos.exibindoLixeira) {
+            const containerChk = document.createElement('div');
+            containerChk.style.cssText = 'display: flex; align-items: center; justify-content: center; width: 25px; flex-shrink: 0;';
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'chk-item';
             checkbox.value = p.id;
-            // flex-shrink: 0 impede que a checkbox amasse em telas pequenas
-            checkbox.style.cssText = 'transform: scale(1.4); margin-top: 5px; cursor: pointer; flex-shrink: 0;';
+            checkbox.style.cssText = 'transform: scale(1.5); cursor: pointer; margin: 0;';
             checkbox.addEventListener('change', atualizarBarraAcoesLote);
-            item.appendChild(checkbox);
+            containerChk.appendChild(checkbox);
+            linhaInfo.appendChild(containerChk);
         }
 
-        // Miniatura da Imagem
+        // Miniatura da Imagem (Blindada contra distorções)
         const fotoUrl = p.imagem_url ? p.imagem_url : 'https://via.placeholder.com/60?text=Sem+Foto';
         const img = document.createElement('img');
         img.src = fotoUrl;
         img.style.cssText = 'width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color); flex-shrink: 0;';
-        item.appendChild(img);
+        linhaInfo.appendChild(img);
 
-        // Bloco Central: Informações (Ocupa o resto do espaço disponível)
-        const divConteudo = document.createElement('div');
-        // min-width: 0 resolve bugs de transbordo de texto no flexbox
-        divConteudo.style.cssText = 'flex-grow: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0;';
+        // Bloco de Textos (Ocupa o espaço restante e corta textos grandes)
+        const divTextos = document.createElement('div');
+        divTextos.style.cssText = 'flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; overflow: hidden;';
 
-        // Título e Badges (Envolvem em telas pequenas)
-        const divTitulo = document.createElement('div');
-        divTitulo.style.cssText = 'display: flex; flex-wrap: wrap; gap: 6px; align-items: center;';
+        // Nome do Produto + Badges
+        const divTopoTexto = document.createElement('div');
+        divTopoTexto.style.cssText = 'display: flex; flex-wrap: wrap; gap: 6px; align-items: center;';
         
         const titulo = document.createElement('strong');
         titulo.textContent = p.nome;
-        titulo.style.fontSize = '1.1em';
-        divTitulo.appendChild(titulo);
+        // Text-overflow com ellipsis garante que nomes longos ficam com "..."
+        titulo.style.cssText = 'font-size: 1.05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;';
+        divTopoTexto.appendChild(titulo);
 
-        // Badge de Estoque
         const badgeEstoque = document.createElement('span');
-        badgeEstoque.textContent = 'Estoque: ' + (p.estoque_atual || 0);
-        badgeEstoque.style.cssText = 'padding: 3px 8px; border-radius: 4px; font-size: 0.8em; color: white; white-space: nowrap;';
+        badgeEstoque.textContent = 'Est: ' + (p.estoque_atual || 0);
+        badgeEstoque.style.cssText = 'padding: 2px 6px; border-radius: 4px; font-size: 0.75em; color: white; font-weight: bold; white-space: nowrap;';
         badgeEstoque.style.background = (p.estoque_atual <= (p.estoque_minimo || 0)) ? '#dc3545' : '#17a2b8';
-        divTitulo.appendChild(badgeEstoque);
+        divTopoTexto.appendChild(badgeEstoque);
 
-        // Badge de Lixeira (Se aplicável)
         if (estadoProdutos.exibindoLixeira) {
             const badgeLixeira = document.createElement('span');
-            badgeLixeira.textContent = 'NA LIXEIRA';
-            badgeLixeira.style.cssText = 'padding: 3px 8px; border-radius: 4px; font-size: 0.8em; color: white; background: #dc3545; white-space: nowrap;';
-            divTitulo.appendChild(badgeLixeira);
+            badgeLixeira.textContent = 'LIXEIRA';
+            badgeLixeira.style.cssText = 'padding: 2px 6px; border-radius: 4px; font-size: 0.75em; color: white; background: #dc3545; font-weight: bold; white-space: nowrap;';
+            divTopoTexto.appendChild(badgeLixeira);
         }
-
-        divConteudo.appendChild(divTitulo);
+        divTextos.appendChild(divTopoTexto);
 
         // Preço
         const spanPreco = document.createElement('span');
         spanPreco.textContent = 'R$ ' + parseFloat(p.preco || 0).toFixed(2);
-        spanPreco.style.color = 'var(--accent-neon)';
-        spanPreco.style.fontWeight = 'bold';
-        divConteudo.appendChild(spanPreco);
+        spanPreco.style.cssText = 'color: var(--accent-neon); font-weight: bold; font-size: 1.1em; line-height: 1;';
+        divTextos.appendChild(spanPreco);
 
-        // Categoria e Fornecedor
+        // Categoria
         if (p.categoria) {
-            const catText = document.createElement('span');
-            catText.textContent = 'Categoria: ' + p.categoria;
-            catText.style.cssText = 'font-size: 0.85em; color: var(--text-muted); word-wrap: break-word;';
-            divConteudo.appendChild(catText);
+            const spanCat = document.createElement('span');
+            spanCat.textContent = p.categoria;
+            spanCat.style.cssText = 'font-size: 0.85em; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+            divTextos.appendChild(spanCat);
         }
 
-        // Bloco Inferior: Botões de Ação DENTRO do conteúdo
-        const zonaBotoes = document.createElement('div');
-        zonaBotoes.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;';
+        linhaInfo.appendChild(divTextos);
+        item.appendChild(linhaInfo); // Junta a Linha 1 ao Cartão
+
+        /* --- LINHA 2: Botões de Ação (Abaixo do Texto) --- */
+        const linhaBotoes = document.createElement('div');
+        linhaBotoes.style.cssText = 'display: flex; gap: 10px; width: 100%; margin-top: 4px;';
         
         if (estadoProdutos.exibindoLixeira) {
             const btnRestaurar = document.createElement('button');
             btnRestaurar.textContent = '♻️ Restaurar';
-            btnRestaurar.style.cssText = 'background:#20c997; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 120px;';
+            btnRestaurar.style.cssText = 'flex: 1; background: #20c997; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;';
             btnRestaurar.onclick = () => { if(typeof restaurarProduto === 'function') restaurarProduto(p.id); else alert("Aguarde a Etapa 5.5!"); };
-            zonaBotoes.appendChild(btnRestaurar);
+            linhaBotoes.appendChild(btnRestaurar);
         } else {
             const btnEditar = document.createElement('button');
             btnEditar.textContent = '✏️ Editar';
-            btnEditar.style.cssText = 'background:#ffc107; color:#212529; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 90px;';
+            btnEditar.style.cssText = 'flex: 1; background: #ffc107; color: #212529; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;';
             btnEditar.onclick = () => { if(typeof prepararEdicaoProduto === 'function') prepararEdicaoProduto(p); else alert("Aguarde a Etapa 5.4!"); };
             
             const btnDeletar = document.createElement('button');
             btnDeletar.textContent = '🗑️ Ocultar';
-            btnDeletar.style.cssText = 'background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; flex: 1; text-align: center; min-width: 90px;';
+            btnDeletar.style.cssText = 'flex: 1; background: #dc3545; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;';
             btnDeletar.onclick = () => { if(typeof deletarProduto === 'function') deletarProduto(p.id); else alert("Aguarde a Etapa 5.5!"); };
 
-            zonaBotoes.appendChild(btnEditar);
-            zonaBotoes.appendChild(btnDeletar);
+            linhaBotoes.appendChild(btnEditar);
+            linhaBotoes.appendChild(btnDeletar);
         }
 
-        divConteudo.appendChild(zonaBotoes);
-        item.appendChild(divConteudo);
-        divLista.appendChild(item);
+        item.appendChild(linhaBotoes); // Junta a Linha 2 ao Cartão
+        
+        divLista.appendChild(item); // Imprime o Cartão no Ecrã
     });
 }
 
@@ -570,9 +577,9 @@ function atualizarBarraAcoesLote() {
     }
 }
 
-// Ouvintes de Clique Globais Seguros
+// Remover listeners duplicados limpando referências antigas não é possível com funções anónimas nativas.
+// Usamos verificação de ID para garantir que o evento só age nos botões corretos globalmente.
 document.addEventListener('click', function(e) {
-    // Alternar entre Lixeira e Ativos
     if (e.target && e.target.id === 'btn-ver-lixeira') {
         estadoProdutos.exibindoLixeira = !estadoProdutos.exibindoLixeira;
         
@@ -588,13 +595,11 @@ document.addEventListener('click', function(e) {
         carregarListagemProdutos();
     }
     
-    // Botão de Buscar (Lupa)
     if (e.target && e.target.id === 'btn-buscar-lista') {
         carregarListagemProdutos();
     }
 });
 
-// Evento de Selecionar Todos os Checkboxes
 document.addEventListener('change', function(e) {
     if (e.target && e.target.id === 'chk-selecionar-todos') {
         const checkboxes = document.querySelectorAll('.chk-item');
@@ -602,8 +607,6 @@ document.addEventListener('change', function(e) {
         atualizarBarraAcoesLote();
     }
 });
-        
-
 
 
 
