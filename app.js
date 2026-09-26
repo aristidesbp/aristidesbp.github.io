@@ -164,34 +164,6 @@ function desenharMenuPrincipal(emailDoOperador) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*🟥 
 5. MÓDULO DE PRODUTOS (Formulário, Busca Inteligente, Listagem Avançada e Soft Delete)
 🟥*/ 
@@ -201,20 +173,22 @@ function desenharModuloProdutos(emailDoOperador) {
     const estilosListagem = `
         <style>
             .info-status { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; display: none; }
-            .btn-sucesso { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; } border-radius: 4px; cursor: pointer; font-weight: bold; }
+            .btn-sucesso { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+            .btn-perigo { background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+            .btn-editar { background: #ffc107; color: #212529; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
             .btn-alerta { background: #fd7e14; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
             .btn-secundario { background: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
             .btn-restaurar { background: #20c997; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
             
             .area-busca { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
-            .input-busca { fmain); }
+            .input-busca { flex-grow: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-main); }
             
             .barra-acoes-lote { background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px; display: none; align-items: center; justify-content: space-between; border: 1px solid #ffeeba; }
             .chk-item { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
             
             .item-lista { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: row; gap: 15px; align-items: center;}
             .conteudo-item { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
-            .cabecalho-painel { display: flex; justify-content: space-between; align-items: center;
+            .cabecalho-painel { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;}
             .grupo-botoes-topo { display: flex; gap: 10px; flex-wrap: wrap;}
             .badge-lixeira { background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px;}
             .badge-estoque { background: #17a2b8; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px;}
@@ -346,7 +320,17 @@ function desenharModuloProdutos(emailDoOperador) {
         </div>
     `;
 
-    // 
+    // -------------------------------------------------------------------------
+    // LÓGICA DE ESTADO E UTILITÁRIOS DA LISTAGEM
+    // -------------------------------------------------------------------------
+    let exibindoLixeira = false;
+
+    function mostrarToast(mensagem, tipo = 'sucesso') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${tipo}`;
+        toast.textContent = mensagem;
+        container.appendChild(toast);
         setTimeout(() => toast.classList.add('mostrar'), 10);
         setTimeout(() => {
             toast.classList.remove('mostrar');
@@ -369,14 +353,14 @@ function desenharModuloProdutos(emailDoOperador) {
         let query = clienteSupabase.from('produtos').select('*').order('created_at', { ascending: false });
 
         if (exibindoLixeira) {
-            query = query.not('deleted_at', 'is', null); // Busca itensapagados (Soft Delete)
+            query = query.not('deleted_at', 'is', null); // Busca itens apagados (Soft Delete)
         } else {
             query = query.is('deleted_at', null); // Busca itens ativos
         }
 
         // Adiciona filtro de busca se o utilizador digitou algo
         if (termoBusca) {
-            query = query.or(\`nome.ilike.%\${termoBusca}%,ean.ilike.%\${termoBusca}%\`);
+            query = query.or(`nome.ilike.%${termoBusca}%,ean.ilike.%${termoBusca}%`);
         }
 
         const { data: produtos, error } = await query;
@@ -391,10 +375,8 @@ function desenharModuloProdutos(emailDoOperador) {
             const msgVazia = exibindoLixeira ? "A lixeira está vazia. 🌟" : "Nenhum resultado encontrado.";
             document.getElementById('area-selecionar-todos').style.display = "none";
             document.getElementById('btn-limpar-lixeira').style.display = "none";
-            return divLista.innerHTML = \`<div style='padding:20px; text-align:center;'>\${msgVazia}</div>\`;
+            return divLista.innerHTML = `<div style='padding:20px; text-align:center;'>${msgVazia}</div>`;
         }
-
-        cacheProdutosRenderizados = produtos;
 
         // Controla visibilidade de botões em lote
         document.getElementById('area-selecionar-todos').style.display = (!exibindoLixeira) ? "flex" : "none";
@@ -426,7 +408,7 @@ function desenharModuloProdutos(emailDoOperador) {
 
             const badgeEstoque = document.createElement('span');
             badgeEstoque.className = 'badge-estoque';
-            badgeEstoque.textContent = \`Estoque: \${eq.estoque_atual}\`;
+            badgeEstoque.textContent = `Estoque: ${eq.estoque_atual}`;
             if (eq.estoque_atual <= eq.estoque_minimo) badgeEstoque.style.background = '#dc3545'; // Alerta vermelho
             divTitulo.appendChild(badgeEstoque);
 
@@ -506,181 +488,13 @@ function desenharModuloProdutos(emailDoOperador) {
     // -------------------------------------------------------------------------
     function atualizarBarraAcoesLote() {
         const checkboxes = document.querySelectorAll('.chk-item:checked');
-        const barraAcoes = document.getElementById('barra-acoes-lote');
-        if (checkboxes.length > 0 && !exibindoLixeira) {
-            barraAcoes.style.display = 'flex';
-            document.getElementById('texto-contagem-lote').textContent = \`\${checkboxes.length} item(ns) selecionado(s)\`;
-        } else {
-            barraAcoes.style.display = 'none';
-        }
-    }
+        const barraAcoe
 
-    document.getElementById('chk-selecionar-todos').addEventListener('change', (e) => {
-        const checkboxes = document.querySelectorAll('.chk-item');
-        checkboxes.forEach(chk => chk.checked = e.target.checked);
-        atualizarBarraAcoesLote();
-    });
 
-    // Ocultar em Lote (Múltiplos Soft Deletes)
-    document.getElementById('btn-ocultar-lote').addEventListener('click', async () => {
-        const selecionados = Array.from(document.querySelectorAll('.chk-item:checked')).map(cb => cb.value);
-        if(selecionados.length === 0) return;
-        
-        if(confirm(\`Mover \${selecionados.length} produto(s) para a lixeira?\`)) {
-            // Usa o operador .in() para atualizar vários IDs de uma vez
-            const { error } = await clienteSupabase.from('produtos').update({ deleted_at: new Date().toISOString() }).in('id', selecionados);
-            if(!error) {
-                mostrarToast(\`\${selecionados.length} itens ocultados!\`, "sucesso");
-                document.getElementById('chk-selecionar-todos').checked = false;
-                carregarListagemProdutos();
-            } else {
-                mostrarToast("Erro na exclusão em lote.", "erro");
-            }
-        }
-    });
 
-    // Alternar Visualização da Lixeira
-    document.getElementById('btn-ver-lixeira').addEventListener('click', () => {
-        exibindoLixeira = !exibindoLixeira;
-        const btn = document.getElementById('btn-ver-lixeira');
-        const titulo = document.getElementById('titulo-painel');
-        const statusLixeira = document.getElementById('status-lixeira');
 
-        if(exibindoLixeira) {
-            btn.textContent = "📦 Ver Ativos";
-            btn.className = "btn-sucesso";
-            titulo.textContent = "Lixeira de Produtos";
-            statusLixeira.style.display = "block";
-            document.getElementById('input-busca-lista').value = ''; // Limpa busca
-        } else {
-            btn.textContent = "👁️ Ver Lixeira";
-            btn.className = "btn-secundario";
-            titulo.textContent = "Lista de Produtos 📦";
-            statusLixeira.style.display = "none";
-        }
-        carregarListagemProdutos();
-    });
 
-    // Esvaziar Lixeira Permanentemente (Hard Delete)
-    document.getElementById('btn-limpar-lixeira').addEventListener('click', async () => {
-        if(confirm("ATENÇÃO: Isto apagará os itens da lixeira permanentemente. Tem a certeza?")) {
-            // Deleta do banco de dados onde deleted_at não é nulo
-            const { error } = await clienteSupabase.from('produtos').delete().not('deleted_at', 'is', null);
-            if(!error) {
-                mostrarToast("Lixeira esvaziada com sucesso!", "sucesso");
-                carregarListagemProdutos();
-            } else {
-                mostrarToast("Erro ao esvaziar lixeira.", "erro");
-            }
-        }
-    });
 
-    // Evento do Botão de Busca
-    document.getElementById('btn-buscar-lista').addEventListener('click', () => {
-        carregarListagemProdutos();
-    });
-
-    // -------------------------------------------------------------------------
-    // RESTANTE DO CÓDIGO (Cadastro, Dicionário de Fornecedores, Upload) 
-    // Mantido intacto da tua versão anterior
-    // -------------------------------------------------------------------------
-    
-    let mapaFornecedores = {}; 
-    async function carregarFornecedoresParaDropdown() {
-        const datalist = document.getElementById('lista-fornecedores');
-        const { data: fornecedores, error } = await clienteSupabase
-            .from('entidades').select('id, nome').eq('tipo', 'fornecedor').is('deleted_at', null);
-        if (!error && fornecedores) {
-            datalist.innerHTML = ''; 
-            fornecedores.forEach(f => {
-                mapaFornecedores[f.nome] = f.id; 
-                const option = document.createElement('option');
-                option.value = f.nome; datalist.appendChild(option);
-            });
-        }
-    }
-    carregarFornecedoresParaDropdown();
-
-    document.getElementById('btn-voltar-menu').onclick = () => desenharMenuPrincipal(emailDoOperador);
-    document.getElementById('aba-btn-cadastro').onclick = () => alternarAba('cadastro');
-    document.getElementById('aba-btn-lista').onclick = () => {
-        alternarAba('lista');
-        carregarListagemProdutos(); 
-    };
-
-    document.getElementById('btn-scan-ean').onclick = () => abrirLeitorCodigoBarras('prod-ean');
-
-    let arquivoParaUpload = null;
-    const atualizarInfoFoto = (evento) => {
-        if (evento.target.files.length > 0) {
-            arquivoParaUpload = evento.target.files[0];
-            document.getElementById('info-foto').textContent = \`✅ Foto selecionada: \${arquivoParaUpload.name}\`;
-            document.getElementById('info-foto').style.color = "var(--accent-neon)";
-            document.getElementById('img-preview').src = URL.createObjectURL(arquivoParaUpload);
-        }
-    };
-    document.getElementById('prod-imagem-camera').addEventListener('change', atualizarInfoFoto);
-    document.getElementById('prod-imagem-galeria').addEventListener('change', atualizarInfoFoto);
-
-    document.getElementById('btn-salvar-produto').onclick = async () => {
-        const nome = document.getElementById('prod-nome').value.trim();
-        const preco = parseFloat(document.getElementById('prod-preco').value);
-        if(!nome || isNaN(preco)) return alert("Os campos Nome e Preço de Venda são obrigatórios.");
-
-        const btnSalvar = document.getElementById('btn-salvar-produto');
-        btnSalvar.textContent = "A processar..."; btnSalvar.disabled = true;
-
-        let imagemUrl = null;
-        if (arquivoParaUpload) {
-            btnSalvar.textContent = "A comprimir e enviar foto...";
-            const nomeArquivo = \`prod_\${Date.now()}_\${Math.floor(Math.random() * 1000)}.jpg\`;
-            imagemUrl = await comprimirEUploadImagem(arquivoParaUpload, 'storage_produtos', nomeArquivo);
-        }
-
-        btnSalvar.textContent = "A guardar no banco de dados...";
-        const nomeFornecedorDigitado = document.getElementById('prod-fornecedor').value.trim();
-        const idDoFornecedor = mapaFornecedores[nomeFornecedorDigitado] || null;
-        const origemSelecionada = document.getElementById('prod-origem').value;
-        
-        const payloadDoBanco = { 
-            nome: nome, descricao: document.getElementById('prod-descricao').value.trim() || null, 
-            fornecedor_id: idDoFornecedor, preco: preco,
-            preco_custo: parseFloat(document.getElementById('prod-custo').value) || 0,
-            estoque_atual: parseInt(document.getElementById('prod-estoque').value) || 0,
-            estoque_minimo: parseInt(document.getElementById('prod-estoque-min').value) || 0,
-            ean: document.getElementById('prod-ean').value.trim() || null,
-            categoria: document.getElementById('prod-categoria').value.trim() || null,
-            origem: origemSelecionada !== 'Selecione...' ? origemSelecionada : null,
-            data_compra: document.getElementById('prod-data-compra').value || null,
-            data_vencimento: document.getElementById('prod-data-vencimento').value || null,
-            peso: parseFloat(document.getElementById('prod-peso').value) || null,
-            dimensoes: document.getElementById('prod-dimensoes').value.trim() || null,
-            localizacao_loja: document.getElementById('prod-loc-loja').value.trim() || null,
-            localizacao_estoque: document.getElementById('prod-loc-estoque').value.trim() || null,
-            imagem_url: imagemUrl
-        };
-
-        const { error } = await clienteSupabase.from('produtos').insert([payloadDoBanco]);
-
-        if (error) { 
-            mostrarToast("Erro ao cadastrar.", "erro"); console.error(error);
-        } else {
-            mostrarToast("Produto guardado!", "sucesso");
-            document.getElementById('prod-nome').value = ''; document.getElementById('prod-descricao').value = ''; 
-            document.getElementById('prod-fornecedor').value = ''; document.getElementById('prod-preco').value = '';
-            document.getElementById('prod-custo').value = ''; document.getElementById('prod-estoque').value = '0';
-            document.getElementById('prod-estoque-min').value = '0'; document.getElementById('prod-ean').value = '';
-            document.getElementById('prod-categoria').value = ''; document.getElementById('prod-origem').value = 'Selecione...';
-            document.getElementById('prod-data-compra').value = ''; document.getElementById('prod-data-vencimento').value = '';
-            document.getElementById('prod-peso').value = ''; document.getElementById('prod-dimensoes').value = '';
-            document.getElementById('prod-loc-loja').value = ''; document.getElementById('prod-loc-estoque').value = '';
-            arquivoParaUpload = null; document.getElementById('info-foto').textContent = "Nenhuma imagem selecionada";
-            document.getElementById('img-preview').src = "https://via.placeholder.com/200?text=Sem+Foto";
-            document.getElementById('aba-btn-lista').click();
-        }
-        btnSalvar.textContent = "💾 Guardar Produto Completo"; btnSalvar.disabled = false;
-    };
-}
 
 
 
