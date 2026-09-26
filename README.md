@@ -604,6 +604,10 @@ li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-rad
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERP Supermercado</title>
+
+   <!-- Biblioteca do Leitor de Código de Barras (Versão Fixa para Segurança) -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
     
     <!-- 1. Habilita a instalação como aplicativo (PWA) -->
     <link rel="manifest" href="manifest.json">
@@ -625,6 +629,7 @@ li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-rad
     <script src="app.js"></script>
 </body>
 </html>
+
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
