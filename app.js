@@ -611,109 +611,208 @@ document.addEventListener('change', function(e) {
 
 
 
+/*🟥 =================================================================
+   5.3 e 5.4 CADASTRAR, EDITAR E LIMPAR PRODUTOS
+================================================================= 🟥*/
 
-
-
-
-
-
-
-
-
-/*🟥 5.3 CADASTRAR PRODUTOS (Lógica de Inserção) 🟥*/
 async function submeterFormulario() {
     const nome = document.getElementById('prod-nome').value.trim();
     const preco = parseFloat(document.getElementById('prod-preco').value);
+    const btnSalvar = document.getElementById('btn-salvar-produto');
     
-    if(!nome || isNaN(preco)) return alert("Nome e Preço de Venda são obrigatórios.");
-    document.getElementById('btn-salvar-produto').textContent = 'A processar...';
-
-    // Se houver foto nova, faz o upload primeiro
-    let novaImagemUrl = null;
-    if (estadoProdutos.arquivoParaUpload) {
-        const nomeArquivo = 'prod_' + Date.now() + '.jpg';
-        novaImagemUrl = await comprimirEUploadImagem(estadoProdutos.arquivoParaUpload, 'storage_produtos', nomeArquivo);
+    // Validação inicial
+    if(!nome || isNaN(preco)) {
+        if (typeof mostrarToast === 'function') mostrarToast("Nome e Preço de Venda são obrigatórios!", "erro");
+        else alert("Nome e Preço de Venda são obrigatórios.");
+        return;
     }
-
-    // Coleta os dados limpos
-    const idFornecedor = estadoProdutos.mapaFornecedores[document.getElementById('prod-fornecedor').value.trim()] || null;
     
-    const payload = {
-        nome: nome,
-        descricao: document.getElementById('prod-descricao').value.trim() || null,
-        fornecedor_id: idFornecedor,
-        preco: preco,
-        preco_custo: parseFloat(document.getElementById('prod-custo').value) || 0,
-        estoque_atual: parseInt(document.getElementById('prod-estoque').value) || 0,
-        estoque_minimo: parseInt(document.getElementById('prod-estoque-min').value) || 0,
-        ean: document.getElementById('prod-ean').value.trim() || null,
-        categoria: document.getElementById('prod-categoria').value.trim() || null,
-        data_compra: document.getElementById('prod-data-compra').value || null,
-        data_vencimento: document.getElementById('prod-data-vencimento').value || null
-    };
+    // Bloqueia o botão para evitar cliques duplos (cadastros duplicados)
+    btnSalvar.textContent = 'A processar...';
+    btnSalvar.disabled = true;
 
-    // Apenas substitui a imagem se o utilizador enviou uma foto nova
-    if (novaImagemUrl) payload.imagem_url = novaImagemUrl;
+    try {
+        // 1. Upload de Imagem (Apenas se o utilizador escolheu uma FOTO NOVA)
+        let novaImagemUrl = null;
+        if (estadoProdutos.arquivoParaUpload) {
+            btnSalvar.textContent = "A enviar foto...";
+            const nomeArquivo = 'prod_' + Date.now() + '.jpg';
+            novaImagemUrl = await comprimirEUploadImagem(estadoProdutos.arquivoParaUpload, 'storage_produtos', nomeArquivo);
+        }
 
-    // Roteamento: Insert ou Update?
-    if (estadoProdutos.idEmEdicao) {
-        await executarEdicaoNoBanco(payload);
-    } else {
-        await executarCadastroNoBanco(payload);
+        btnSalvar.textContent = "A guardar no banco...";
+
+        // 2. Coleta de Dados do Formulário
+        const nomeFornecedorDigitado = document.getElementById('prod-fornecedor').value.trim();
+        const idFornecedor = estadoProdutos.mapaFornecedores[nomeFornecedorDigitado] || null;
+        const origemSelecionada = document.getElementById('prod-origem').value;
+        
+        const payload = {
+            nome: nome,
+            descricao: document.getElementById('prod-descricao').value.trim() || null,
+            fornecedor_id: idFornecedor,
+            preco: preco,
+            preco_custo: parseFloat(document.getElementById('prod-custo').value) || 0,
+            estoque_atual: parseInt(document.getElementById('prod-estoque').value) || 0,
+            estoque_minimo: parseInt(document.getElementById('prod-estoque-min').value) || 0,
+            ean: document.getElementById('prod-ean').value.trim() || null,
+            categoria: document.getElementById('prod-categoria').value.trim() || null,
+            origem: origemSelecionada !== 'Selecione...' ? origemSelecionada : null,
+            data_compra: document.getElementById('prod-data-compra').value || null,
+            data_vencimento: document.getElementById('prod-data-vencimento').value || null,
+            peso: parseFloat(document.getElementById('prod-peso').value) || null,
+            dimensoes: document.getElementById('prod-dimensoes').value.trim() || null,
+            localizacao_loja: document.getElementById('prod-loc-loja').value.trim() || null,
+            localizacao_estoque: document.getElementById('prod-loc-estoque').value.trim() || null
+        };
+
+        // Só injeta a URL se houver foto nova, preservando a antiga na edição
+        if (novaImagemUrl) {
+            payload.imagem_url = novaImagemUrl;
+        }
+
+        // 3. Roteamento Inteligente: Editando ou Cadastrando?
+        if (estadoProdutos.idEmEdicao) {
+            const { error } = await clienteSupabase.from('produtos').update(payload).eq('id', estadoProdutos.idEmEdicao);
+            if (error) throw error;
+            if (typeof mostrarToast === 'function') mostrarToast("Produto atualizado com sucesso!", "sucesso");
+        } else {
+            const { error } = await clienteSupabase.from('produtos').insert([payload]);
+            if (error) throw error;
+            if (typeof mostrarToast === 'function') mostrarToast("Produto cadastrado com sucesso!", "sucesso");
+        }
+
+        // 4. Sucesso: Limpeza e transição
+        limparFormularioProdutos();
+        alternarAba('lista');
+        if (typeof carregarListagemProdutos === 'function') carregarListagemProdutos();
+
+    } catch (erro) {
+        console.error("Erro na submissão:", erro);
+        if (typeof mostrarToast === 'function') mostrarToast("Erro ao processar. Verifique o console.", "erro");
+    } finally {
+        // 5. Garantia Absoluta: O botão é SEMPRE desbloqueado no final
+        btnSalvar.textContent = '💾 Salvar Produto';
+        btnSalvar.disabled = false;
     }
 }
 
-async function executarCadastroNoBanco(payload) {
-    const { error } = await clienteSupabase.from('produtos').insert([payload]);
-    if (error) { alert("Erro ao cadastrar."); console.error(error); } 
-    else { alert("Sucesso!"); limparFormularioProdutos(); alternarAba('lista'); carregarListagemProdutos(); }
-    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
-}
-
-
-/*🟥 5.4 EDITAR PRODUTOS (Lógica de Atualização) 🟥*/
 function prepararEdicaoProduto(produto) {
-    // 1. Muda o estado global para modo "Edição"
+    // 1. Ativa o Modo Edição
     estadoProdutos.idEmEdicao = produto.id;
     
-    // 2. Preenche os campos com os dados do banco
-    document.getElementById('prod-nome').value = produto.nome || '';
-    document.getElementById('prod-descricao').value = produto.descricao || '';
-    document.getElementById('prod-preco').value = produto.preco || '';
-    document.getElementById('prod-custo').value = produto.preco_custo || '';
-    document.getElementById('prod-estoque').value = produto.estoque_atual || '0';
-    document.getElementById('prod-estoque-min').value = produto.estoque_minimo || '0';
-    document.getElementById('prod-ean').value = produto.ean || '';
-    document.getElementById('prod-categoria').value = produto.categoria || '';
-    
-    if(produto.data_compra) document.getElementById('prod-data-compra').value = produto.data_compra;
-    if(produto.data_vencimento) document.getElementById('prod-data-vencimento').value = produto.data_vencimento;
+    // 2. Preenche os campos de texto e números dinamicamente
+    const camposTexto = {
+        'prod-nome': produto.nome,
+        'prod-descricao': produto.descricao,
+        'prod-preco': produto.preco,
+        'prod-custo': produto.preco_custo,
+        'prod-estoque': produto.estoque_atual,
+        'prod-estoque-min': produto.estoque_minimo,
+        'prod-ean': produto.ean,
+        'prod-categoria': produto.categoria,
+        'prod-peso': produto.peso,
+        'prod-dimensoes': produto.dimensoes,
+        'prod-loc-loja': produto.localizacao_loja,
+        'prod-loc-estoque': produto.localizacao_estoque,
+        'prod-data-compra': produto.data_compra,
+        'prod-data-vencimento': produto.data_vencimento
+    };
 
-    // Tratamento reverso do Fornecedor (Pega o ID e busca o Nome no dicionário)
+    for (const [id, valor] of Object.entries(camposTexto)) {
+        const el = document.getElementById(id);
+        if (el) el.value = valor !== null && valor !== undefined ? valor : '';
+    }
+
+    // Preenche Select (Origem)
+    const elOrigem = document.getElementById('prod-origem');
+    if (elOrigem) elOrigem.value = produto.origem || 'Selecione...';
+
+    // Tratamento Reverso do Fornecedor (ID para Nome)
     let nomeFornecedor = '';
     for (let nome in estadoProdutos.mapaFornecedores) {
         if (estadoProdutos.mapaFornecedores[nome] === produto.fornecedor_id) nomeFornecedor = nome;
     }
     document.getElementById('prod-fornecedor').value = nomeFornecedor;
 
-    // Mostra a foto atual no Preview
+    // Mostra a foto atual
     document.getElementById('img-preview').src = produto.imagem_url ? produto.imagem_url : 'https://via.placeholder.com/200?text=Sem+Foto';
 
-    // 3. Altera o visual do formulário
+    // 3. Altera a Interface Visual
     document.getElementById('titulo-formulario').textContent = '✏️ Editando: ' + produto.nome;
     document.getElementById('btn-salvar-produto').textContent = '🔄 Atualizar Produto';
     document.getElementById('btn-cancelar-edicao').style.display = 'block';
 
-    // 4. Transporta o utilizador para a aba do formulário
+    // 4. Previne duplicidade de upload
+    estadoProdutos.arquivoParaUpload = null;
+    document.getElementById('info-foto').textContent = 'Mantendo foto original (Selecione outra para alterar)';
+    document.getElementById('info-foto').style.color = "var(--text-muted)";
+
+    // Vai para a aba do formulário
     alternarAba('cadastro');
 }
 
-async function executarEdicaoNoBanco(payload) {
-    const { error } = await clienteSupabase.from('produtos').update(payload).eq('id', estadoProdutos.idEmEdicao);
-    if (error) { alert("Erro ao atualizar."); console.error(error); } 
-    else { alert("Atualizado com sucesso!"); limparFormularioProdutos(); alternarAba('lista'); carregarListagemProdutos(); }
-    document.getElementById('btn-salvar-produto').textContent = '💾 Salvar Produto';
+// A Vassoura Digital: Limpeza completa do sistema
+function limparFormularioProdutos() {
+    try {
+        // Zera Variáveis de Roteamento
+        estadoProdutos.idEmEdicao = null;
+        estadoProdutos.arquivoParaUpload = null;
+        
+        // Zera todos os inputs básicos
+        const idsParaLimpar = [
+            'prod-nome', 'prod-descricao', 'prod-fornecedor', 'prod-preco', 'prod-custo', 
+            'prod-ean', 'prod-categoria', 'prod-data-compra', 'prod-data-vencimento', 
+            'prod-peso', 'prod-dimensoes', 'prod-loc-loja', 'prod-loc-estoque',
+            'prod-imagem-camera', 'prod-imagem-galeria'
+        ];
+        
+        idsParaLimpar.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+
+        // Restaura Valores Padrão (Select e Números)
+        const elOrigem = document.getElementById('prod-origem');
+        if (elOrigem) elOrigem.value = 'Selecione...';
+        
+        const elEstAtual = document.getElementById('prod-estoque');
+        if (elEstAtual) elEstAtual.value = '0';
+        
+        const elEstMin = document.getElementById('prod-estoque-min');
+        if (elEstMin) elEstMin.value = '0';
+        
+        // Restaura Preview de Imagem
+        const info = document.getElementById('info-foto');
+        if(info) { info.textContent = 'Nenhuma imagem selecionada'; info.style.color = 'var(--text-muted)'; }
+        
+        const prev = document.getElementById('img-preview');
+        if(prev) prev.src = 'https://via.placeholder.com/200?text=Sem+Foto';
+
+        // Restaura Interface para Cadastro
+        const titulo = document.getElementById('titulo-formulario');
+        if(titulo) titulo.textContent = 'Cadastrar Novo Produto';
+        
+        const btnSalvar = document.getElementById('btn-salvar-produto');
+        if(btnSalvar) { btnSalvar.textContent = '💾 Salvar Produto'; btnSalvar.disabled = false; }
+        
+        const btnCancelar = document.getElementById('btn-cancelar-edicao');
+        if(btnCancelar) btnCancelar.style.display = 'none';
+
+    } catch (err) {
+        console.error("Erro na limpeza do formulário:", err);
+    }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 /*🟥 =================================================================
