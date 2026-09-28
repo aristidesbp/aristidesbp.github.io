@@ -2271,6 +2271,25 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 # Altere a URL do repositório de HTTPS para SSH com o comando:
 git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
 ```
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+#BAIXAR MÍDIAS
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+```
+```
+
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+```
+
+
+
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  GIT E GITHUB (REPOSITO)
 
