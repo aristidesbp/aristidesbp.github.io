@@ -332,53 +332,80 @@ USING (auth.uid() = user_id);
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TABELA PRODUTOS 
 ```
--- ============================================================================
--- ARQUITETURA DE PRODUTOS EVOLUÍDA: ZERO TRUST & TIMESTAMPS BLINDADOS
+
+ -- ============================================================================
+-- ARQUITETURA DE PRODUTOS V2: ZERO TRUST, ANTI-XSS & LOGÍSTICA COMPLETA
 -- ============================================================================
 
--- [INÍCIO: 1. CRIAÇÃO DA TABELA]
+-- [INÍCIO: 1. LIMPEZA SEGURA]
+DROP TABLE IF EXISTS public.produtos CASCADE;
+-- [FIM: 1. LIMPEZA SEGURA]
+
+-- [INÍCIO: 2. CRIAÇÃO DA TABELA COMPLETA]
 CREATE TABLE public.produtos (
-    -- Prevenção IDOR
+    -- Identificação e Segurança
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
-    -- Isolamento de Inquilino (Tenant Isolation)
     user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     
-    -- Anti-DoS: Limites rigorosos de tamanho de texto
-    -- (Nota: Validação Anti-XSS rigorosa deve ser feita na camada de API/Frontend para não quebrar uso de símbolos matemáticos)
-    nome TEXT NOT NULL CHECK (char_length(nome) >= 3 AND char_length(nome) <= 255),
-    descricao TEXT CHECK (char_length(descricao) <= 2000),
+    -- Dados Básicos
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    categoria TEXT,
+    origem TEXT,
+    ean TEXT,
+    imagem_url TEXT,
     
-    -- Lógica Financeira: Evita valores negativos e overflow numérico
-    preco NUMERIC(10, 2) NOT NULL CHECK (preco >= 0 AND preco < 10000000),
+    -- Financeiro
+    preco NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    preco_custo NUMERIC(10, 2) DEFAULT 0,
     
-    -- Soft Delete
+    -- Estoque e Logística
+    estoque_atual INTEGER DEFAULT 0,
+    estoque_minimo INTEGER DEFAULT 0,
+    peso NUMERIC(10, 3),
+    dimensoes TEXT,
+    localizacao_loja TEXT,
+    localizacao_estoque TEXT,
+    
+    -- Datas de Negócio e Relacionamentos
+    data_compra DATE,
+    data_vencimento DATE,
+    fornecedor_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
+    
+    -- Controle de Estado e Timestamps
     deleted_at TIMESTAMPTZ,
-    
-    -- Timestamps
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
--- [FIM: 1. CRIAÇÃO DA TABELA]
+-- [FIM: 2. CRIAÇÃO DA TABELA COMPLETA]
 
 
--- [INÍCIO: 2. ÍNDICES DE ALTA PERFORMANCE]
+-- [INÍCIO: 3. ÍNDICES DE ALTA PERFORMANCE]
 CREATE INDEX idx_produtos_user_updated ON public.produtos(user_id, updated_at);
 CREATE INDEX idx_produtos_ativos ON public.produtos(user_id) WHERE deleted_at IS NULL;
--- [FIM: 2. ÍNDICES DE ALTA PERFORMANCE]
+-- [FIM: 3. ÍNDICES DE ALTA PERFORMANCE]
 
 
--- [INÍCIO: 3. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
+-- [INÍCIO: 4. REGRAS DE NEGÓCIO INQUEBRÁVEIS E ANTI-XSS]
+ALTER TABLE public.produtos 
+-- Bloqueio de valores nocivos aos cálculos
+ADD CONSTRAINT precos_positivos CHECK (preco >= 0 AND preco_custo >= 0),
+ADD CONSTRAINT estoques_positivos CHECK (estoque_atual >= 0 AND estoque_minimo >= 0),
+ADD CONSTRAINT peso_positivo CHECK (peso >= 0 OR peso IS NULL),
+ADD CONSTRAINT nome_tamanho CHECK (char_length(TRIM(nome)) >= 3 AND char_length(nome) <= 255),
+-- Firewall Anti-XSS no Banco de Dados
+ADD CONSTRAINT produtos_nome_anti_xss CHECK (nome !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)'),
+ADD CONSTRAINT produtos_descricao_anti_xss CHECK (descricao !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
+-- [FIM: 4. REGRAS DE NEGÓCIO INQUEBRÁVEIS E ANTI-XSS]
 
--- 3.1: Proteção Total no momento do INSERT
+
+-- [INÍCIO: 5. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
 CREATE OR REPLACE FUNCTION public.protect_timestamps_on_insert()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- O banco de dados assume o controlo absoluto das datas na criação.
-    -- Ignora qualquer data falsa que o frontend ou utilizador tente enviar no JSON.
     NEW.created_at = now();
     NEW.updated_at = now();
-    NEW.deleted_at = NULL; -- Garante que nenhum produto já nasce deletado
+    NEW.deleted_at = NULL; 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -388,22 +415,16 @@ CREATE TRIGGER on_produto_insert
     FOR EACH ROW
     EXECUTE FUNCTION public.protect_timestamps_on_insert();
 
--- 3.2: Proteção Total no momento do UPDATE (Anti-viagem no tempo)
 CREATE OR REPLACE FUNCTION public.protect_timestamps_on_update()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Força a atualização do timestamp
     NEW.updated_at = now();
-    
-    -- Impede que um utilizador espertinho altere a data de criação no futuro
     NEW.created_at = OLD.created_at;
-
-    -- Se o utilizador estiver a tentar fazer o Soft Delete (enviou um valor em deleted_at)
+    NEW.user_id = OLD.user_id; -- Impede roubo de registo (IDOR)
+    
     IF NEW.deleted_at IS NOT NULL THEN
-        -- Forçamos que a data de exclusão seja exatamente AGORA, ignorando datas falsas do passado/futuro
         NEW.deleted_at = now();
     END IF;
-
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -412,111 +433,33 @@ CREATE TRIGGER on_produto_updated
     BEFORE UPDATE ON public.produtos
     FOR EACH ROW
     EXECUTE FUNCTION public.protect_timestamps_on_update();
+-- [FIM: 5. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
 
--- [FIM: 3. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
 
-
--- [INÍCIO: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+-- [INÍCIO: 6. RLS ZERO TRUST COM LIXEIRA E HARD DELETE]
 ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
 
--- 4.1 LEITURA
-CREATE POLICY "Usuários veem próprios produtos ativos"
-ON public.produtos FOR SELECT TO authenticated
-USING (auth.uid() = user_id AND deleted_at IS NULL);
+CREATE POLICY "Leitura Produtos" 
+ON public.produtos FOR SELECT 
+TO authenticated 
+USING (auth.uid() = user_id);
 
--- 4.2 INSERÇÃO
-CREATE POLICY "Usuários inserem próprios produtos"
-ON public.produtos FOR INSERT TO authenticated
+CREATE POLICY "Insercao Produtos" 
+ON public.produtos FOR INSERT 
+TO authenticated 
 WITH CHECK (auth.uid() = user_id);
 
--- 4.3 ATUALIZAÇÃO
-CREATE POLICY "Usuários atualizam próprios produtos ativos"
-ON public.produtos FOR UPDATE TO authenticated
-USING (auth.uid() = user_id AND deleted_at IS NULL)
+CREATE POLICY "Edicao Produtos" 
+ON public.produtos FOR UPDATE 
+TO authenticated 
+USING (auth.uid() = user_id) 
 WITH CHECK (auth.uid() = user_id);
 
--- DELEÇÃO FÍSICA PROPOSITADAMENTE OMITIDA (Soft delete apenas).
--- [FIM: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
-
--- ============================================================================
--- ATUALIZAÇÃO DE SEGURANÇA: IMUTABILIDADE DE TENANT E FIREWALL ANTI-XSS
--- ============================================================================
-
--- [INÍCIO: PASSO A - CORREÇÃO DA MUTABILIDADE DO USER_ID]
--- Atualizamos a função do trigger para garantir que o dono nunca mude.
-CREATE OR REPLACE FUNCTION public.protect_timestamps_on_update()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- 1. Força a atualização do timestamp
-    NEW.updated_at = now();
-    
-    -- 2. Impede que um utilizador espertinho altere a data de criação
-    NEW.created_at = OLD.created_at;
-
-    -- 3. [NOVO] BLINDAGEM DE INQUILINO (TENANT):
-    -- Impede a transferência de propriedade (IDOR de atualização). 
-    -- Se alguém tentar enviar um JSON com um user_id diferente, o banco ignora e mantém o dono original.
-    NEW.user_id = OLD.user_id;
-
-    -- 4. Proteção do Soft Delete
-    IF NEW.deleted_at IS NOT NULL THEN
-        NEW.deleted_at = now();
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
--- [FIM: PASSO A - CORREÇÃO DA MUTABILIDADE DO USER_ID]
-
-
--- [INÍCIO: PASSO B - FIREWALL ANTI-XSS NO BANCO DE DADOS]
--- Adicionamos constraints (regras) nas colunas de texto para barrar payloads malignos.
--- A expressão regular (!~*) bloqueia: tags script, iframes, protocolos javascript: e manipuladores de eventos (ex: onerror=, onload=)
--- NOTA DIDÁTICA: O uso de símbolos matemáticos isolados (ex: 2 < 3) continua funcionando perfeitamente!
-
-ALTER TABLE public.produtos 
-ADD CONSTRAINT produtos_nome_anti_xss 
-CHECK (nome !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
-
-ALTER TABLE public.produtos 
-ADD CONSTRAINT produtos_descricao_anti_xss 
-CHECK (descricao !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
--- [FIM: PASSO B - FIREWALL ANTI-XSS NO BANCO DE DADOS]
-
-```
-```
-/*🟥
-SQL: Atualização da Tabela Produtos (Inclusão de Estoque, Logística, EAN e Imagens)
-🟥*/
-
-ALTER TABLE public.produtos
-    -- 1. SECÇÃO: IMAGEM
-    ADD COLUMN imagem_url TEXT,
-    
-    -- 2. SECÇÃO: CÓDIGOS E DATAS
-    ADD COLUMN ean TEXT CHECK (char_length(ean) <= 50),
-    ADD COLUMN data_compra DATE,
-    ADD COLUMN data_vencimento DATE,
-    
-    -- 3. SECÇÃO: DADOS GERAIS
-    ADD COLUMN categoria TEXT CHECK (char_length(categoria) <= 100),
-    ADD COLUMN origem TEXT CHECK (origem IN ('0 - Nacional', '1 - Estrangeira', 'Selecione...')),
-    
-    -- 4. SECÇÃO: PREÇOS E ESTOQUE
-    -- Nota: A coluna 'preco' já existe (usaremos como Preço de Venda). Adicionamos o de Custo.
-    ADD COLUMN preco_custo NUMERIC(10, 2) DEFAULT 0,
-    ADD COLUMN estoque_atual INTEGER NOT NULL DEFAULT 0,
-    ADD COLUMN estoque_minimo INTEGER NOT NULL DEFAULT 0,
-    
-    -- 5. SECÇÃO: LOGÍSTICA E ARMAZENAMENTO
-    ADD COLUMN peso NUMERIC(10, 3), -- Permite até 3 casas decimais (ex: 1.500 kg)
-    ADD COLUMN dimensoes TEXT CHECK (char_length(dimensoes) <= 100),
-    ADD COLUMN localizacao_loja TEXT CHECK (char_length(localizacao_loja) <= 100),
-    ADD COLUMN localizacao_estoque TEXT CHECK (char_length(localizacao_estoque) <= 100);
-
--- ÍNDICE DE ALTA PERFORMANCE PARA O LEITOR DE CÓDIGO DE BARRAS
--- Garante que quando a câmara capturar um EAN, o banco encontre o produto instantaneamente dentro do teu inquilino (user_id).
-CREATE INDEX idx_produtos_user_ean ON public.produtos(user_id, ean);
+CREATE POLICY "Exclusao Produtos" 
+ON public.produtos FOR DELETE 
+TO authenticated 
+USING (auth.uid() = user_id);
+-- [FIM: 6. RLS ZERO TRUST COM LIXEIRA E HARD DELETE]
 
 ```
 
