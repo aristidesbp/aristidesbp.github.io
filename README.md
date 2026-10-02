@@ -259,44 +259,38 @@ DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 # TABELA ENTIDADES
 ```
 -- ============================================================================
--- CRIAÇÃO DA TABELA: ENTIDADES (Padrão Zero Trust & Auditoria)
+-- CRIAÇÃO DA TABELA: ENTIDADES (Segurança Máxima + Funcionalidade Completa)
 -- ============================================================================
 
--- [INÍCIO: 1. CRIAÇÃO DA TABELA]
+-- 1. APAGAR TABELA ANTIGA (Limpeza para aplicar nova estrutura)
+DROP TABLE IF EXISTS public.entidades CASCADE;
+
+-- 2. CRIAÇÃO DA TABELA (Com todos os campos e proteções físicas)
 CREATE TABLE public.entidades (
-    -- Prevenção IDOR (Identificador único e aleatório)
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
-    -- Isolamento de Inquilino: Garante que o contacto pertence apenas ao utilizador logado
     user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     
-    -- Categorização restrita (Impede inserção de tipos inválidos)
     tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'colaborador')),
-    
-    -- Dados da Entidade (Com limites de segurança Anti-DoS)
-    nome TEXT NOT NULL CHECK (char_length(nome) >= 3 AND char_length(nome) <= 255),
-    documento TEXT CHECK (char_length(documento) <= 50), -- CPF ou CNPJ
+    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3 AND char_length(nome) <= 255),
+    documento TEXT CHECK (char_length(documento) <= 50),
     telefone TEXT CHECK (char_length(telefone) <= 20),
     email TEXT CHECK (char_length(email) <= 255),
     observacoes TEXT CHECK (char_length(observacoes) <= 2000),
     
-    -- Controle de Soft Delete e Timestamps
+    -- Os novos campos que haviam desaparecido
+    codigo_barras TEXT,
+    avatar_url TEXT,
+    
     deleted_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
--- [FIM: 1. CRIAÇÃO DA TABELA]
 
-
--- [INÍCIO: 2. ÍNDICES DE ALTA PERFORMANCE]
--- Otimiza as buscas, pois o sistema vai filtrar constantemente pelo dono e pelo estado "ativo"
+-- 3. ÍNDICES DE ALTA PERFORMANCE
 CREATE INDEX idx_entidades_user_updated ON public.entidades(user_id, updated_at);
 CREATE INDEX idx_entidades_ativos ON public.entidades(user_id) WHERE deleted_at IS NULL;
--- [FIM: 2. ÍNDICES DE ALTA PERFORMANCE]
 
-
--- [INÍCIO: 3. BLINDAGEM DE ESTADOS E TIMESTAMPS]
--- Reaproveitamos as tuas funções de segurança existentes para blindar esta nova tabela
+-- 4. BLINDAGEM DE ESTADOS E TIMESTAMPS (Mantendo os teus triggers originais)
 CREATE TRIGGER on_entidade_insert
     BEFORE INSERT ON public.entidades
     FOR EACH ROW
@@ -306,28 +300,31 @@ CREATE TRIGGER on_entidade_updated
     BEFORE UPDATE ON public.entidades
     FOR EACH ROW
     EXECUTE FUNCTION public.protect_timestamps_on_update();
--- [FIM: 3. BLINDAGEM DE ESTADOS E TIMESTAMPS]
 
-
--- [INÍCIO: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+-- 5. RLS (ROW LEVEL SECURITY) CORRIGIDO PARA A LIXEIRA FUNCIONAR
 ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
 
--- 4.1 LEITURA: O utilizador só vê os seus próprios contactos que não estão na lixeira
-CREATE POLICY "Usuários veem próprias entidades ativas"
+-- 5.1 LEITURA MESTRA: Permite ver ativos e lixeira (O JavaScript faz o filtro no ecrã)
+CREATE POLICY "Leitura Entidades" 
 ON public.entidades FOR SELECT TO authenticated
-USING (auth.uid() = user_id AND deleted_at IS NULL);
+USING (auth.uid() = user_id);
 
--- 4.2 INSERÇÃO: O utilizador só pode inserir contactos no seu próprio nome
-CREATE POLICY "Usuários inserem próprias entidades"
+-- 5.2 INSERÇÃO: Apenas cria no próprio nome
+CREATE POLICY "Insercao Entidades" 
 ON public.entidades FOR INSERT TO authenticated
 WITH CHECK (auth.uid() = user_id);
 
--- 4.3 ATUALIZAÇÃO: O utilizador só pode atualizar os seus contactos ativos
-CREATE POLICY "Usuários atualizam próprias entidades ativas"
+-- 5.3 EDIÇÃO MESTRA: Permite editar, ocultar (Soft Delete) e restaurar
+CREATE POLICY "Edicao Entidades" 
 ON public.entidades FOR UPDATE TO authenticated
-USING (auth.uid() = user_id AND deleted_at IS NULL)
+USING (auth.uid() = user_id) 
 WITH CHECK (auth.uid() = user_id);
--- [FIM: 4. RLS ZERO TRUST COM SOFT DELETE SEGURO]
+
+-- 5.4 EXCLUSÃO FÍSICA: Necessário para o botão "Esvaziar Lixeira"
+CREATE POLICY "Exclusao Entidades" 
+ON public.entidades FOR DELETE TO authenticated
+USING (auth.uid() = user_id);
+
 
 ```
 
