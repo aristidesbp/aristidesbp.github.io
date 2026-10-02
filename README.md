@@ -201,6 +201,7 @@ SELECT jsonb_pretty(jsonb_build_object(
 
 ```
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Verificar storage 
 ```
 
@@ -234,6 +235,7 @@ FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os 
 ``` 
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # COMO APAGAR TABELAS
 ```
 -- [INÍCIO: LIMPEZA_TOTAL_AUTENTICACAO]
@@ -330,6 +332,7 @@ WITH CHECK (auth.uid() = user_id);
 ```
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TABELA PRODUTOS 
 ```
 -- ============================================================================
