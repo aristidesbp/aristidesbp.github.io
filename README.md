@@ -458,7 +458,7 @@ function desenharMenuPrincipal(emailDoOperador) {
 // Dá a partida na aplicação[span_7](start_span)[span_7](end_span)
 iniciarApp();
 
-⚠️⚠️⚠️⚠️ FIM DO CÓDIGO QUE SERÁ APAGADO ⚠️⚠️⚠️⚠️
+/*⚠️⚠️⚠️⚠️ FIM DO CÓDIGO QUE SERÁ APAGADO ⚠️⚠️⚠️⚠️*/
 ```
 ## Atualizar o index.html (Dependência do Leitor de Códigos)
 O seu módulo de produtos precisa da câmara para ler códigos de barras (EAN) e crachás. Para isso funcionar, abra o seu index.html e adicione a biblioteca html5-qrcode logo abaixo do script do Supabase:
