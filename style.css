@@ -88,3 +88,23 @@ li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-rad
 /* Mostra o conteúdo apenas quando tem a classe 'active' */
 .tab-content.active { display: block; }
 
+
+
+/* Adicionar ao final do style.css */
+.card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    filter: grayscale(100%);
+    border: 1px dashed var(--text-muted);
+}
+.badge-fidelidade {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    background: #ffc107;
+    color: #000;
+    font-weight: bold;
+    margin-left: 8px;
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.4);
+}
+
