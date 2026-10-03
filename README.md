@@ -835,6 +835,26 @@ input:focus { border-color: var(--accent-neon); }
 /* Lista de Produtos */
 ul { list-style-type: none; padding: 0; margin: 0; }
 li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold;}
+/* Adicionar ao final do style.css */
+.card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    filter: grayscale(100%);
+    border: 1px dashed var(--text-muted);
+}
+.badge-fidelidade {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    background: #ffc107;
+    color: #000;
+    font-weight: bold;
+    margin-left: 8px;
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.4);
+}
+
+
+
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # index.html
