@@ -462,6 +462,18 @@ function desenharMenuPrincipal(emailDoOperador) {
 iniciarApp();
 
 /*⚠️⚠️⚠️⚠️ FIM DO CÓDIGO QUE SERÁ APAGADO ⚠️⚠️⚠️⚠️*/
+
+
+/* [INÍCIO: BOTÃO TEMA GLOBAL E INICIALIZAÇÃO] */
+const btnTemaGlobal = document.createElement('button');
+btnTemaGlobal.textContent = '🌓 Tema';
+btnTemaGlobal.style.cssText = `position: fixed; bottom: 10px; right: 110px; padding: 10px 15px; background: #444; color: white; border: 1px solid #666; border-radius: 5px; font-weight: bold; cursor: pointer; z-index: 10000; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
+btnTemaGlobal.onclick = () => document.body.classList.toggle('light-theme');
+document.body.appendChild(btnTemaGlobal);
+
+// Dá a partida na aplicação
+iniciarApp();
+
 ```
 ## Atualizar o index.html (Dependência do Leitor de Códigos)
 O seu módulo de produtos precisa da câmara para ler códigos de barras (EAN) e crachás. Para isso funcionar, abra o seu index.html e adicione a biblioteca html5-qrcode logo abaixo do script do Supabase:
