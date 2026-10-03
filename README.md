@@ -119,7 +119,7 @@ habilidade_2_auditoria_mano_dev:
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # O PROJETO 
-
+```
 🏗️ BLUEPRINT MASTER: ERP SUPERMERCADO 10K
 Arquitetura Zero Trust | Multi-Caixa | Entidades| Financeiro (recebimento,boletos, parcelamentos ,etc...)|Pdv|Entragas|Emissão cupom e NF-e|Cartão fidelidade|Integração Balança | RH & Financeiro. Proteção blindada nível bancário.
 
@@ -138,7 +138,7 @@ fin_contas: O motor do "Fiado" e boletos. Liga-se a Entidades.
 est_movimentacoes: O extrato bancário dos teus produtos. Regista toda a entrada e saída.
 log_entregas: Gestão da frota de entregadores. Liga-se à Venda e ao Entregador (entidades).
 
-
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # CRIAR UMA CONTA E PROJETO NO SUPABASE:
