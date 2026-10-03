@@ -179,8 +179,12 @@ Escolha:(exemplo)
     <title>ERP SPA Autenticação</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <!-- Motor do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Motor do Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Motor do Leitor de Código de Barras (NOVO) -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 </head>
 <body>
     <!-- O palco onde o JavaScript vai injetar as telas -->
@@ -303,6 +307,50 @@ input {
     font-size: 1.2em;
     color: var(--text-muted);
 }
+
+/* --- COMPONENTES DOS MÓDULOS (ABAS E TOASTS) --- */
+.tabs-menu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+.tab-btn.active {
+    background: var(--accent-neon);
+    color: #000;
+    border-color: var(--accent-neon);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.toast {
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.toast.mostrar { opacity: 1; transform: translateX(0); }
+.toast-sucesso { background: #28a745; }
+.toast-erro { background: #dc3545; }
+.toast-info { background: #17a2b8; }
+
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; font-size: 1.2em; }
+
+
 ```
 ## app.js
 ```
@@ -479,438 +527,6 @@ function desenharMenuPrincipal(emailDoOperador) {
 iniciarApp();
 
 ```
-## Atualizar o index.html (Dependência do Leitor de Códigos)
-O seu módulo de produtos precisa da câmara para ler códigos de barras (EAN) e crachás. Para isso funcionar, abra o seu index.html e adicione a biblioteca html5-qrcode logo abaixo do script do Supabase:
-```
-<!-- Motor do Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Motor do Leitor de Código de Barras (NOVO) -->
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-```
-## Adicionar as novas regras no style.css
-O seu JavaScript antigo utiliza classes para os separadores (Tabs) e notificações (Toasts) que não existiam no nosso CSS base. Copie e cole isto no final do seu ficheiro style.css:
-```
-/* --- COMPONENTES DOS MÓDULOS (ABAS E TOASTS) --- */
-.tabs-menu {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-.tab-btn {
-    flex: 1;
-    padding: 12px;
-    background: var(--card-bg);
-    color: var(--text-muted);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-.tab-btn.active {
-    background: var(--accent-neon);
-    color: #000;
-    border-color: var(--accent-neon);
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-.toast {
-    padding: 15px 25px;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.toast.mostrar { opacity: 1; transform: translateX(0); }
-.toast-sucesso { background: #28a745; }
-.toast-erro { background: #dc3545; }
-.toast-info { background: #17a2b8; }
-
-.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; font-size: 1.2em; }
-```
-
-## Injetar os Módulos no app.js
-Aqui está o código corrigido. Você deve fazer duas coisas no seu app.js:
-Apague a função desenharMenuPrincipal atual (a tela de boas-vindas simples).
-Cole todo o código abaixo no final do seu app.js. Cada bloco está isolado e pronto para funcionar.
-```
-/* ==========================================================================
-   🟥 MÓDULOS DO SISTEMA (PRODUTOS, ENTIDADES E GLOBAIS)
-   ========================================================================== */
-
-/* [INÍCIO: UTILITÁRIOS GLOBAIS (TOAST, UPLOAD E SCANNER)] */
-// Container Global de Toasts (Fixado na tela)
-const toastContainer = document.createElement('div');
-toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; pointer-events: none;';
-document.body.appendChild(toastContainer);
-
-window.mostrarToast = function(mensagem, tipo = 'sucesso') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${tipo}`; toast.textContent = mensagem;
-    toastContainer.appendChild(toast);
-    setTimeout(() => toast.classList.add('mostrar'), 10);
-    setTimeout(() => { toast.classList.remove('mostrar'); setTimeout(() => toast.remove(), 300); }, 3000);
-}
-
-// Upload de Imagens com Compressão
-window.comprimirEUploadImagem = async function(arquivoOriginal, nomeBucket, caminhoNomeArquivo) {
-    if (!arquivoOriginal) return null;
-    const blobComprimido = await new Promise((resolve) => {
-        const leitor = new FileReader();
-        leitor.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                let w = img.width, h = img.height;
-                if (w > h && w > 800) { h *= 800 / w; w = 800; } else if (h > 800) { w *= 800 / h; h = 800; }
-                canvas.width = w; canvas.height = h;
-                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.7); 
-            };
-            img.src = e.target.result;
-        };
-        leitor.readAsDataURL(arquivoOriginal);
-    });
-    
-    console.log(`Enviando imagem para bucket: ${nomeBucket}`);
-    const { error } = await clienteSupabase.storage.from(nomeBucket).upload(caminhoNomeArquivo, blobComprimido, { cacheControl: '3600', upsert: true });
-    if (error) {
-        console.error("Erro no upload da imagem:", error);
-        return null;
-    }
-    return clienteSupabase.storage.from(nomeBucket).getPublicUrl(caminhoNomeArquivo).data.publicUrl;
-}
-
-// Modal Global do Scanner de Código de Barras
-const scannerModal = document.createElement('div');
-scannerModal.style.cssText = `display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; flex-direction: column; justify-content: center; align-items: center;`;
-scannerModal.innerHTML = `<h3 style="color: white; margin-bottom: 20px;">Aponte para o Código</h3><div id="area-leitor-camera" style="width: 100%; max-width: 400px; background: white; border-radius: 8px; margin-bottom: 20px;"></div><button id="btn-fechar-scanner" style="padding: 12px 25px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">❌ Cancelar</button>`;
-document.body.appendChild(scannerModal);
-let instanciaLeitor = null;
-
-window.abrirLeitorCodigoBarras = function(idDoInputDestino) {
-    if (typeof Html5Qrcode === 'undefined') return alert("Erro: Biblioteca Html5Qrcode ausente no index.html.");
-    scannerModal.style.display = 'flex';
-    instanciaLeitor = new Html5Qrcode("area-leitor-camera");
-    instanciaLeitor.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 120 } }, (codigo) => {
-        document.getElementById(idDoInputDestino).value = codigo; fecharScanner();
-        mostrarToast("Código lido com sucesso!");
-    }, () => {}).catch((err) => { console.error(err); alert("Erro de câmara."); fecharScanner(); });
-}
-document.getElementById('btn-fechar-scanner').addEventListener('click', fecharScanner);
-function fecharScanner() { if (instanciaLeitor) { instanciaLeitor.stop().then(() => scannerModal.style.display = 'none'); } else scannerModal.style.display = 'none'; }
-/* [FIM: UTILITÁRIOS GLOBAIS] */
-
-```
-#### [INÍCIO: NOVO MENU PRINCIPAL (DASHBOARD)]
-```
-/* [INÍCIO: NOVO MENU PRINCIPAL (DASHBOARD)] */
-window.desenharMenuPrincipal = function(emailDoOperador) {
-    appRoot.innerHTML = `
-        <header>
-            <div class="logo-area">
-                <span style="font-size: 1.5em; color: var(--accent-neon);">⚡</span> 
-                <div>
-                    <div>Centro de Comando ERP</div>
-                    <div style="font-size: 0.7em; color: var(--text-muted); font-weight: normal;">${emailDoOperador}</div>
-                </div>
-            </div>
-            <button id="btn-sair" class="btn-secundario" style="margin-bottom: 20px; color: #ff4444; border-color: #ff4444;">🚪 Encerrar Sessão</button>
-        </header>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
-            <div class="card" id="card-produtos" style="text-align: center; cursor: pointer; padding: 20px; transition: transform 0.2s;">
-                <div style="font-size: 3em; margin-bottom: 10px;">📦</div>
-                <h3 style="color: var(--accent-neon); margin: 0 0 5px 0;">Catálogo</h3>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin: 0;">Produtos e Balança</p>
-            </div>
-
-            <div class="card" id="card-entidades" style="text-align: center; cursor: pointer; padding: 20px; transition: transform 0.2s;">
-                <div style="font-size: 3em; margin-bottom: 10px;">🏢</div>
-                <h3 style="color: var(--accent-neon); margin: 0 0 5px 0;">Entidades</h3>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin: 0;">Pessoas e Fidelidade</p>
-            </div>
-
-            <div class="card" onclick="mostrarToast('Módulo em desenvolvimento!', 'info')" style="text-align: center; padding: 20px; opacity: 0.5;">
-                <div style="font-size: 3em; margin-bottom: 10px;">🛒</div>
-                <h3 style="color: var(--text-main); margin: 0 0 5px 0;">PDV</h3>
-                <p style="font-size: 0.8em; margin: 0;">Frente de Caixa</p>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('btn-sair').onclick = async () => {
-        if(confirm("Deseja encerrar a sessão?")) { await clienteSupabase.auth.signOut(); iniciarApp(); }
-    };
-    document.getElementById('card-produtos').onclick = () => desenharModuloProdutos(emailDoOperador);
-    document.getElementById('card-entidades').onclick = () => desenharModuloEntidades(emailDoOperador);
-}
-/* [FIM: NOVO MENU PRINCIPAL] */
-```
-####  [INÍCIO: MÓDULO DE PRODUTOS]
-```
-
-/* [INÍCIO: MÓDULO DE PRODUTOS] */
-const estadoProdutos = { exibindoLixeira: false, arquivoParaUpload: null, idEmEdicao: null };
-
-window.desenharModuloProdutos = function(emailDoOperador) {
-    appRoot.innerHTML = `
-        <header class="logo-area">
-            <button id="btn-voltar-menu" class="btn-secundario" style="width: auto; padding: 5px 15px;">⬅️</button>
-            <div><div>📦 Catálogo</div><div style="font-size: 0.7em; color: var(--text-muted);">Gestor de Produtos</div></div>
-        </header>
-
-        <div class="tabs-menu">
-            <button id="aba-btn-cadastro" class="tab-btn active">📝 Formulário</button>
-            <button id="aba-btn-lista" class="tab-btn">🛒 Inventário</button>
-        </div>
-
-        <!-- ABA FORMULÁRIO -->
-        <div id="aba-conteudo-cadastro" class="tab-content active card">
-            <h2 id="titulo-formulario" class="titulo">Novo Produto</h2>
-            
-            <div style="text-align: center; margin-bottom: 15px;"><img id="img-preview" src="https://via.placeholder.com/200?text=Sem+Foto" style="max-width: 150px; border-radius: 8px; border: 1px dashed var(--border-color);"></div>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <label for="prod-imagem-camera" class="btn-neon" style="flex: 1; text-align: center; cursor: pointer;">📷 Câmera</label>
-                <input type="file" id="prod-imagem-camera" accept="image/*" capture="environment" style="display: none;">
-                <label for="prod-imagem-galeria" class="btn-secundario" style="flex: 1; text-align: center; cursor: pointer;">📁 Galeria</label>
-                <input type="file" id="prod-imagem-galeria" accept="image/*" style="display: none;">
-            </div>
-            <p id="info-foto" style="text-align: center; font-size: 0.8em; color: var(--accent-neon); margin-top: -10px;">Nenhuma imagem nova</p>
-
-            <label>Código EAN</label>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="prod-ean" placeholder="Ex: 7891025109884" style="margin-bottom: 0;">
-                <button onclick="abrirLeitorCodigoBarras('prod-ean')" class="btn-neon" style="width: auto; margin-bottom: 0;">📷</button>
-            </div>
-
-            <label>Nome do Produto *</label><input type="text" id="prod-nome" placeholder="Ex: Picanha">
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><label>Preço Venda</label><input type="number" id="prod-preco" placeholder="0.00" step="0.01"></div>
-                <div><label>Estoque</label><input type="number" id="prod-estoque" value="0"></div>
-            </div>
-
-            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 15px 0;">
-                <input type="checkbox" id="prod-pesavel" style="width: 20px; height: 20px; margin: 0;"> Produto de Balança (Granel)
-            </label>
-            
-            <button id="btn-salvar-produto" class="btn-neon" style="margin-top: 10px;">💾 Salvar Produto</button>
-            <button id="btn-cancelar-edicao" class="btn-secundario" style="display: none; margin-top: 10px;">❌ Cancelar Edição</button>
-        </div>
-
-        <!-- ABA LISTA -->
-        <div id="aba-conteudo-lista" class="tab-content card">
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="input-busca-lista" placeholder="🔍 Buscar nome ou EAN..." style="flex-grow: 1; margin: 0;">
-                <button id="btn-buscar-lista" class="btn-neon" style="width: auto; margin: 0;">Buscar</button>
-            </div>
-            <div id="lista-produtos-dinamica"></div>
-        </div>
-    `;
-
-    document.getElementById('btn-voltar-menu').onclick = () => desenharMenuPrincipal(emailDoOperador);
-    
-    // Controles de Abas
-    const setAba = (aba) => {
-        document.getElementById('aba-btn-cadastro').classList.toggle('active', aba === 'cadastro');
-        document.getElementById('aba-btn-lista').classList.toggle('active', aba === 'lista');
-        document.getElementById('aba-conteudo-cadastro').classList.toggle('active', aba === 'cadastro');
-        document.getElementById('aba-conteudo-lista').classList.toggle('active', aba === 'lista');
-        if(aba === 'lista') carregarListagemProdutos();
-    };
-    document.getElementById('aba-btn-cadastro').onclick = () => setAba('cadastro');
-    document.getElementById('aba-btn-lista').onclick = () => setAba('lista');
-    document.getElementById('btn-buscar-lista').onclick = () => carregarListagemProdutos();
-
-    // Controle de Imagem
-    const atualizarFoto = (e) => {
-        if (e.target.files.length > 0) {
-            estadoProdutos.arquivoParaUpload = e.target.files[0];
-            document.getElementById('info-foto').textContent = '✅ Imagem carregada';
-            document.getElementById('img-preview').src = URL.createObjectURL(estadoProdutos.arquivoParaUpload);
-        }
-    };
-    document.getElementById('prod-imagem-camera').addEventListener('change', atualizarFoto);
-    document.getElementById('prod-imagem-galeria').addEventListener('change', atualizarFoto);
-
-    // Salvar Produto
-    document.getElementById('btn-salvar-produto').onclick = async () => {
-        const nome = document.getElementById('prod-nome').value.trim();
-        const preco = parseFloat(document.getElementById('prod-preco').value);
-        const btnSalvar = document.getElementById('btn-salvar-produto');
-        
-        if(!nome || isNaN(preco)) return mostrarToast("Nome e Preço são obrigatórios!", "erro");
-        btnSalvar.textContent = 'A processar...'; btnSalvar.disabled = true;
-
-        try {
-            let novaImagemUrl = null;
-            if (estadoProdutos.arquivoParaUpload) {
-                mostrarToast("Enviando imagem...", "info");
-                novaImagemUrl = await comprimirEUploadImagem(estadoProdutos.arquivoParaUpload, 'storage_produtos', 'prod_' + Date.now() + '.jpg');
-            }
-
-            const payload = {
-                nome: nome,
-                preco: preco,
-                estoque_atual: parseFloat(document.getElementById('prod-estoque').value) || 0,
-                ean: document.getElementById('prod-ean').value.trim() || null,
-                is_pesavel: document.getElementById('prod-pesavel').checked
-            };
-            if (novaImagemUrl) payload.imagem_url = novaImagemUrl;
-
-            if (estadoProdutos.idEmEdicao) {
-                await clienteSupabase.from('produtos').update(payload).eq('id', estadoProdutos.idEmEdicao);
-                mostrarToast("Atualizado com sucesso!");
-            } else {
-                await clienteSupabase.from('produtos').insert([payload]);
-                mostrarToast("Cadastrado com sucesso!");
-            }
-
-            estadoProdutos.idEmEdicao = null; estadoProdutos.arquivoParaUpload = null;
-            setAba('lista');
-        } catch (erro) {
-            console.error(erro); mostrarToast("Erro ao processar.", "erro");
-        } finally {
-            btnSalvar.textContent = '💾 Salvar Produto'; btnSalvar.disabled = false;
-        }
-    };
-}
-
-async function carregarListagemProdutos() {
-    const divLista = document.getElementById('lista-produtos-dinamica');
-    const termo = document.getElementById('input-busca-lista').value.trim();
-    divLista.innerHTML = '<p style="text-align:center;">Buscando...</p>';
-
-    let query = clienteSupabase.from('produtos').select('*').is('deleted_at', null).order('created_at', { ascending: false });
-    if (termo) query = query.or(`nome.ilike.%${termo}%,ean.ilike.%${termo}%`);
-
-    const { data, error } = await query;
-    divLista.innerHTML = ''; 
-    if (error) return divLista.innerHTML = '<p style="color:#dc3545;">Erro na busca.</p>';
-    if (!data.length) return divLista.innerHTML = '<p>Nenhum produto encontrado.</p>';
-
-    data.forEach(p => {
-        const item = document.createElement('div');
-        item.style.cssText = 'padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px;';
-        
-        const imgUrl = p.imagem_url ? p.imagem_url : 'https://via.placeholder.com/50';
-        item.innerHTML = `
-            <img src="${imgUrl}" style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover;">
-            <div style="flex-grow: 1; overflow: hidden;">
-                <strong style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.nome}</strong>
-                <span style="color: var(--accent-neon); font-weight: bold;">R$ ${p.preco.toFixed(2)}</span> | Est: ${p.estoque_atual}
-            </div>
-            <button onclick="deletarProduto('${p.id}')" class="btn-secundario" style="width: auto; padding: 8px; border-color: #dc3545; color: #dc3545;">🗑️</button>
-        `;
-        divLista.appendChild(item);
-    });
-}
-
-window.deletarProduto = async function(id) {
-    if(confirm("Apagar este produto?")) {
-        await clienteSupabase.from('produtos').update({ deleted_at: new Date().toISOString() }).eq('id', id);
-        mostrarToast("Produto removido!"); carregarListagemProdutos();
-    }
-}
-/* [FIM: MÓDULO DE PRODUTOS] */
-```
-#### [INÍCIO: MÓDULO DE ENTIDADES]
-```
-
-/* [INÍCIO: MÓDULO DE ENTIDADES] */
-const estadoEntidades = { arquivoParaUpload: null, idEmEdicao: null };
-
-window.desenharModuloEntidades = function(emailDoOperador) {
-    appRoot.innerHTML = `
-        <header class="logo-area">
-            <button id="btn-voltar-menu-ent" class="btn-secundario" style="width: auto; padding: 5px 15px;">⬅️</button>
-            <div><div>🏢 Entidades</div><div style="font-size: 0.7em; color: var(--text-muted);">Pessoas e Empresas</div></div>
-        </header>
-
-        <div class="tabs-menu">
-            <button id="aba-btn-cadastro-ent" class="tab-btn active">📝 Registar</button>
-            <button id="aba-btn-lista-ent" class="tab-btn">👥 Contactos</button>
-        </div>
-
-        <div id="aba-conteudo-cadastro-ent" class="tab-content active card">
-            <label>Tipo *</label>
-            <select id="ent-tipo" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color);">
-                <option value="cliente">Cliente</option>
-                <option value="fornecedor">Fornecedor</option>
-                <option value="funcionario">Funcionário</option>
-            </select>
-
-            <label>Nome Completo / Empresa *</label>
-            <input type="text" id="ent-nome" placeholder="Ex: João Silva">
-            
-            <label>Telefone</label>
-            <input type="text" id="ent-telefone" placeholder="(00) 00000-0000">
-            
-            <button id="btn-salvar-entidade" class="btn-neon">💾 Salvar Entidade</button>
-        </div>
-
-        <div id="aba-conteudo-lista-ent" class="tab-content card">
-            <div id="lista-entidades-dinamica"></div>
-        </div>
-    `;
-
-    document.getElementById('btn-voltar-menu-ent').onclick = () => desenharMenuPrincipal(emailDoOperador);
-    
-    const setAbaEnt = (aba) => {
-        document.getElementById('aba-btn-cadastro-ent').classList.toggle('active', aba === 'cadastro');
-        document.getElementById('aba-btn-lista-ent').classList.toggle('active', aba === 'lista');
-        document.getElementById('aba-conteudo-cadastro-ent').classList.toggle('active', aba === 'cadastro');
-        document.getElementById('aba-conteudo-lista-ent').classList.toggle('active', aba === 'lista');
-        if(aba === 'lista') carregarListagemEntidades();
-    };
-    document.getElementById('aba-btn-cadastro-ent').onclick = () => setAbaEnt('cadastro');
-    document.getElementById('aba-btn-lista-ent').onclick = () => setAbaEnt('lista');
-
-    document.getElementById('btn-salvar-entidade').onclick = async () => {
-        const nome = document.getElementById('ent-nome').value.trim();
-        if(!nome || nome.length < 3) return mostrarToast("Nome inválido.", "erro");
-        
-        try {
-            await clienteSupabase.from('entidades').insert([{
-                tipo: document.getElementById('ent-tipo').value,
-                nome: nome,
-                telefone: document.getElementById('ent-telefone').value.trim() || null
-            }]);
-            mostrarToast("Entidade cadastrada!");
-            document.getElementById('ent-nome').value = '';
-            document.getElementById('ent-telefone').value = '';
-            setAbaEnt('lista');
-        } catch (erro) { mostrarToast("Erro ao salvar.", "erro"); }
-    };
-}
-    async function carregarListagemEntidades() {
-    const divLista = document.getElementById('lista-entidades-dinamica');
-    divLista.innerHTML = '<p>A carregar...</p>';
-    const { data, error } = await clienteSupabase.from('entidades').select('*').is('deleted_at', null).order('created_at', { ascending: false });
-    
-    divLista.innerHTML = '';
-    if (error || !data.length) return divLista.innerHTML = '<p>Nenhuma entidade.</p>';
-
-    data.forEach(ent => {
-        const item = document.createElement('div');
-        item.style.cssText = 'padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;';
-        item.innerHTML = `
-            <div>
-                <strong>${ent.nome}</strong> <span style="font-size:0.7em; background:#444; padding:2px 5px; border-radius:4px;">${ent.tipo}</span>
-                <div style="font-size:0.8em; color:var(--text-muted);">${ent.telefone || 'Sem telefone'}</div>
-            </div>
-        `;
-        divLista.appendChild(item);
-    });
-}
-/* [FIM: MÓDULO DE ENTIDADES]*/
-```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
