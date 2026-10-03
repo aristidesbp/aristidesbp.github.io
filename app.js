@@ -26,7 +26,7 @@ console.log = function(...args) { originalLog.apply(console, args); espelharNoEc
 console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
 
 // Configuração Supabase
-const SUPABASE_URL = 'https://gxbderrxvplxzwvantkn.supabase.co';
+const SUPABASE_URL = 'https://gxbderrxvplxzwvantkn.supabase.co/rest/v1/';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmRlcnJ4dnBseHp3dmFudGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTA2MjcsImV4cCI6MjEwNTc4NjYyN30.3YbSndiN-OBFZcOish7MWOu9sO6byPsWDQV74_XbjC4';
 let clienteSupabase;
 if (typeof supabase !== 'undefined') {
