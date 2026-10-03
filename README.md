@@ -144,6 +144,320 @@ Escolha:(exemplo)
     Senha do banco: ***********
     Região: brasil
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TELA DE LOGIN (ARQUIVOS PADRÃO)
+## manifest.json
+```
+{
+  "name": "ERP Base",
+  "short_name": "ERP",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/00ff00/000000?text=ERP",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/00ff00/000000?text=ERP",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+```
+## index.html 
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ERP SPA Autenticação</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <!-- Motor do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- O palco onde o JavaScript vai injetar as telas -->
+    <div id="app-root"></div>
+    <script src="app.js"></script>
+</body>
+</html>
+```
+## style.css
+```
+:root {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent-neon: #00ffcc;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+}
+
+/* Tema Claro Dinâmico */
+body.light-theme {
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --accent-neon: #007bff;
+    --border-color: #dddddd;
+    --input-bg: #f9f9f9;
+}
+
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.titulo {
+    font-size: 1.5em;
+    color: var(--accent-neon);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
+    color: var(--text-main);
+    box-sizing: border-box;
+}
+
+.btn-neon {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-neon);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.btn-secundario {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Container para alinhar input de senha e o botão de olhinho */
+.input-senha-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.btn-olho {
+    position: absolute;
+    right: 10px;
+    top: 38%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: var(--text-muted);
+}
+```
+## app.js
+```
+/*🟥 APP.JS - NÚCLEO SPA: AUTENTICAÇÃO E TEMA 🟥*/
+
+/* [INÍCIO: CONSOLE ESPELHO] - Mantido para depuração mobile */
+const consoleContainer = document.createElement('div');
+consoleContainer.style.cssText = `position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px;`;
+const toggleBtn = document.createElement('button');
+toggleBtn.textContent = '🛠️ Console';
+toggleBtn.style.cssText = `position: fixed; bottom: 10px; right: 10px; padding: 10px 15px; background: #2980b9; color: white; border: none; border-radius: 5px; font-weight: bold; z-index: 10000;`;
+document.body.appendChild(consoleContainer);
+document.body.appendChild(toggleBtn);
+toggleBtn.addEventListener('click', () => { consoleContainer.style.display = consoleContainer.style.display === 'none' ? 'block' : 'none'; });
+
+const originalLog = console.log;
+const originalError = console.error;
+function espelharNoEcra(tipo, cor, argumentos) {
+    const linha = document.createElement('div');
+    linha.style.color = cor; linha.style.marginBottom = '5px'; linha.style.borderBottom = '1px solid #333';
+    linha.textContent = `[${tipo}] ${Array.from(argumentos).map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ')}`;
+    consoleContainer.appendChild(linha);
+    consoleContainer.scrollTop = consoleContainer.scrollHeight;
+}
+console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
+console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
+/* [FIM: CONSOLE ESPELHO] */
+
+/* [INÍCIO: CONFIGURAÇÃO SUPABASE] */
+const SUPABASE_URL = 'https://gxbderrxvplxzwvantkn.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmRlcnJ4dnBseHp3dmFudGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTA2MjcsImV4cCI6MjEwNTc4NjYyN30.3YbSndiN-OBFZcOish7MWOu9sO6byPsWDQV74_XbjC4';
+let clienteSupabase;
+if (typeof supabase !== 'undefined') {
+    clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.error("Supabase não carregado. Verifique o index.html.");
+}
+/* [FIM: CONFIGURAÇÃO SUPABASE] */
+
+/* [INÍCIO: ROTEAMENTO PRINCIPAL] */
+const appRoot = document.getElementById('app-root');
+
+// Função mestre que decide qual tela mostrar[span_3](start_span)[span_3](end_span)
+async function iniciarApp() {
+    const { data: { session } } = await clienteSupabase.auth.getSession();
+    if (session) desenharMenuPrincipal(session.user.email);
+    else desenharLogin();
+}
+/* [FIM: ROTEAMENTO PRINCIPAL] */
+
+/* [INÍCIO: TELA DE LOGIN E REGISTRO] */
+function desenharLogin() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh;">
+            <div class="titulo">⚡ Acesso Seguro</div>
+            
+            <div id="area-login">
+                <label>E-mail</label>
+                <input type="email" id="login-email" placeholder="seu@email.com">
+                
+                <label>Senha</label>
+                <div class="input-senha-container">
+                    <input type="password" id="login-senha" placeholder="••••••••">
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('login-senha', this)">👁️</button>
+                </div>
+
+                <button id="btn-entrar" class="btn-neon">Entrar</button>
+                <button id="btn-ir-registo" class="btn-secundario">Criar Nova Conta</button>
+            </div>
+
+            <div id="area-registo" style="display: none;">
+                <label>Novo E-mail</label>
+                <input type="email" id="reg-email" placeholder="novo@email.com">
+                
+                <label>Criar Senha</label>
+                <div class="input-senha-container">
+                    <input type="password" id="reg-senha" placeholder="Mínimo 6 caracteres">
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('reg-senha', this)">👁️</button>
+                </div>
+
+                <button id="btn-registar" class="btn-neon">Concluir Registo</button>
+                <button id="btn-voltar-login" class="btn-secundario">Voltar ao Login</button>
+            </div>
+        </div>
+    `;
+
+    // Lógica de alternar entre telas de login e registro[span_4](start_span)[span_4](end_span)
+    document.getElementById('btn-ir-registo').onclick = () => { document.getElementById('area-login').style.display = 'none'; document.getElementById('area-registo').style.display = 'block'; };
+    document.getElementById('btn-voltar-login').onclick = () => { document.getElementById('area-registo').style.display = 'none'; document.getElementById('area-login').style.display = 'block'; };
+
+    // Autenticação Supabase[span_5](start_span)[span_5](end_span)
+    document.getElementById('btn-entrar').onclick = async () => {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-senha').value;
+        if(!email || !password) return alert("Preencha todos os campos.");
+        const { error } = await clienteSupabase.auth.signInWithPassword({ email, password });
+        if (error) alert("Erro: " + error.message);
+        else iniciarApp(); 
+    };
+
+    document.getElementById('btn-registar').onclick = async () => {
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-senha').value;
+        if(!email || !password) return alert("Preencha todos os campos.");
+        const { error } = await clienteSupabase.auth.signUp({ email, password });
+        if (error) alert("Erro: " + error.message);
+        else { alert("Conta criada! Confirme o email ou faça login."); document.getElementById('btn-voltar-login').click(); }
+    };
+}
+
+// Função utilitária para o "Olhinho"
+window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
+    const input = document.getElementById(idInput);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btnOlho.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        btnOlho.textContent = '👁️';
+    }
+};
+/* [FIM: TELA DE LOGIN E REGISTRO] */
+
+/* [INÍCIO: TELA LOGADA (ONDE FICA O BOTÃO DE TEMA)] */
+function desenharMenuPrincipal(emailDoOperador) {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">Bem-vindo!</div>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Logado como:<br><strong>${emailDoOperador}</strong></p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                <button id="btn-tema" class="btn-secundario" style="width: auto; padding: 10px 20px;" title="Alternar Tema Claro/Escuro">🌓 Mudar Tema</button>
+            </div>
+
+            <button id="btn-sair" class="btn-secundario" style="color: #ff4444; border-color: #ff4444;">🚪 Encerrar Sessão</button>
+        </div>
+    `;
+
+    // Alternar tema alterando classe no body[span_6](start_span)[span_6](end_span)
+    document.getElementById('btn-tema').onclick = () => document.body.classList.toggle('light-theme');
+    
+    document.getElementById('btn-sair').onclick = async () => {
+        if(confirm("Deseja encerrar a sessão?")) { 
+            await clienteSupabase.auth.signOut(); 
+            iniciarApp(); 
+        }
+    };
+}
+/* [FIM: TELA LOGADA] */
+
+// Dá a partida na aplicação[span_7](start_span)[span_7](end_span)
+iniciarApp();
+```
+
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
