@@ -582,7 +582,9 @@ document.getElementById('btn-fechar-scanner').addEventListener('click', fecharSc
 function fecharScanner() { if (instanciaLeitor) { instanciaLeitor.stop().then(() => scannerModal.style.display = 'none'); } else scannerModal.style.display = 'none'; }
 /* [FIM: UTILITÁRIOS GLOBAIS] */
 
-
+```
+#### [INÍCIO: NOVO MENU PRINCIPAL (DASHBOARD)]
+```
 /* [INÍCIO: NOVO MENU PRINCIPAL (DASHBOARD)] */
 window.desenharMenuPrincipal = function(emailDoOperador) {
     appRoot.innerHTML = `
@@ -625,7 +627,9 @@ window.desenharMenuPrincipal = function(emailDoOperador) {
     document.getElementById('card-entidades').onclick = () => desenharModuloEntidades(emailDoOperador);
 }
 /* [FIM: NOVO MENU PRINCIPAL] */
-
+```
+####  [INÍCIO: MÓDULO DE PRODUTOS]
+```
 
 /* [INÍCIO: MÓDULO DE PRODUTOS] */
 const estadoProdutos = { exibindoLixeira: false, arquivoParaUpload: null, idEmEdicao: null };
@@ -791,7 +795,9 @@ window.deletarProduto = async function(id) {
     }
 }
 /* [FIM: MÓDULO DE PRODUTOS] */
-
+```
+#### [INÍCIO: MÓDULO DE ENTIDADES]
+```
 
 /* [INÍCIO: MÓDULO DE ENTIDADES] */
 const estadoEntidades = { arquivoParaUpload: null, idEmEdicao: null };
