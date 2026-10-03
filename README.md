@@ -308,14 +308,32 @@ input {
 ```
 /*🟥 APP.JS - NÚCLEO SPA: AUTENTICAÇÃO E TEMA 🟥*/
 
-/* [INÍCIO: CONSOLE ESPELHO] - Mantido para depuração mobile */
-const consoleContainer = document.createElement('div');
-consoleContainer.style.cssText = `position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px;`;
+/* [INÍCIO: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] - Mantido para depuração mobile */
+const ferramentasContainer = document.createElement('div');
+ferramentasContainer.style.cssText = `position: fixed; bottom: 10px; right: 10px; display: flex; gap: 10px; z-index: 10000;`;
+
+const btnSairGlobal = document.createElement('button');
+btnSairGlobal.textContent = '🚪 Sair';
+btnSairGlobal.style.cssText = `padding: 10px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); display: none;`;
+
+const btnTemaGlobal = document.createElement('button');
+btnTemaGlobal.textContent = '🌓 Tema';
+btnTemaGlobal.style.cssText = `padding: 10px 15px; background: #444; color: white; border: 1px solid #666; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
+btnTemaGlobal.onclick = () => document.body.classList.toggle('light-theme');
+
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '🛠️ Console';
-toggleBtn.style.cssText = `position: fixed; bottom: 10px; right: 10px; padding: 10px 15px; background: #2980b9; color: white; border: none; border-radius: 5px; font-weight: bold; z-index: 10000;`;
+toggleBtn.style.cssText = `padding: 10px 15px; background: #2980b9; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
+
+const consoleContainer = document.createElement('div');
+consoleContainer.style.cssText = `position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px; box-shadow: 0px -2px 10px rgba(0,0,0,0.5);`;
+
+ferramentasContainer.appendChild(btnSairGlobal);
+ferramentasContainer.appendChild(btnTemaGlobal);
+ferramentasContainer.appendChild(toggleBtn);
 document.body.appendChild(consoleContainer);
-document.body.appendChild(toggleBtn);
+document.body.appendChild(ferramentasContainer);
+
 toggleBtn.addEventListener('click', () => { consoleContainer.style.display = consoleContainer.style.display === 'none' ? 'block' : 'none'; });
 
 const originalLog = console.log;
@@ -329,7 +347,10 @@ function espelharNoEcra(tipo, cor, argumentos) {
 }
 console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
 console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
-/* [FIM: CONSOLE ESPELHO] */
+
+// Teste inicial do Console
+console.log("🚀 Sistema Iniciado. Console operante!");
+/* [FIM: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] */
 
 /*⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️ cuidado com /rest/v1/ , não deve ter!*/
 /* [INÍCIO: CONFIGURAÇÃO SUPABASE] */
@@ -348,12 +369,25 @@ if (typeof supabase !== 'undefined') {
 /* [INÍCIO: ROTEAMENTO PRINCIPAL] */
 const appRoot = document.getElementById('app-root');
 
-// Função mestre que decide qual tela mostrar[span_3](start_span)[span_3](end_span)
+// Função mestre que decide qual tela mostrar
 async function iniciarApp() {
     const { data: { session } } = await clienteSupabase.auth.getSession();
-    if (session) desenharMenuPrincipal(session.user.email);
-    else desenharLogin();
+    if (session) {
+        btnSairGlobal.style.display = 'block'; // Mostra botão sair
+        desenharMenuPrincipal(session.user.email);
+    } else {
+        btnSairGlobal.style.display = 'none'; // Esconde botão sair
+        desenharLogin();
+    }
 }
+
+// Controle do botão sair global
+btnSairGlobal.onclick = async () => {
+    if(confirm("Deseja encerrar a sessão?")) { 
+        await clienteSupabase.auth.signOut(); 
+        iniciarApp(); 
+    }
+};
 /* [FIM: ROTEAMENTO PRINCIPAL] */
 
 /* [INÍCIO: TELA DE LOGIN E REGISTRO] */
@@ -392,11 +426,9 @@ function desenharLogin() {
         </div>
     `;
 
-    // Lógica de alternar entre telas de login e registro[span_4](start_span)[span_4](end_span)
     document.getElementById('btn-ir-registo').onclick = () => { document.getElementById('area-login').style.display = 'none'; document.getElementById('area-registo').style.display = 'block'; };
     document.getElementById('btn-voltar-login').onclick = () => { document.getElementById('area-registo').style.display = 'none'; document.getElementById('area-login').style.display = 'block'; };
 
-    // Autenticação Supabase[span_5](start_span)[span_5](end_span)
     document.getElementById('btn-entrar').onclick = async () => {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-senha').value;
@@ -416,7 +448,6 @@ function desenharLogin() {
     };
 }
 
-// Função utilitária para o "Olhinho"
 window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
     const input = document.getElementById(idInput);
     if (input.type === 'password') {
@@ -431,45 +462,18 @@ window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
 
 /*⚠️⚠️⚠️⚠️ INÍCIO DO CÓDIGO QUE SERÁ APAGADO E SUBSTITUÍDO ⚠️⚠️⚠️⚠️*/
 
-/* [INÍCIO: TELA LOGADA (ONDE FICA O BOTÃO DE TEMA)] */
+/* [INÍCIO: TELA LOGADA (BOAS-VINDAS)] */
 function desenharMenuPrincipal(emailDoOperador) {
     appRoot.innerHTML = `
         <div class="card" style="margin-top: 10vh; text-align: center;">
             <div class="titulo">Bem-vindo!</div>
             <p style="color: var(--text-muted); margin-bottom: 20px;">Logado como:<br><strong>${emailDoOperador}</strong></p>
-            
-            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                <button id="btn-tema" class="btn-secundario" style="width: auto; padding: 10px 20px;" title="Alternar Tema Claro/Escuro">🌓 Mudar Tema</button>
-            </div>
-
-            <button id="btn-sair" class="btn-secundario" style="color: #ff4444; border-color: #ff4444;">🚪 Encerrar Sessão</button>
         </div>
     `;
-
-    // Alternar tema alterando classe no body[span_6](start_span)[span_6](end_span)
-    document.getElementById('btn-tema').onclick = () => document.body.classList.toggle('light-theme');
-    
-    document.getElementById('btn-sair').onclick = async () => {
-        if(confirm("Deseja encerrar a sessão?")) { 
-            await clienteSupabase.auth.signOut(); 
-            iniciarApp(); 
-        }
-    };
 }
 /* [FIM: TELA LOGADA] */
 
-// Dá a partida na aplicação[span_7](start_span)[span_7](end_span)
-iniciarApp();
-
 /*⚠️⚠️⚠️⚠️ FIM DO CÓDIGO QUE SERÁ APAGADO ⚠️⚠️⚠️⚠️*/
-
-
-/* [INÍCIO: BOTÃO TEMA GLOBAL E INICIALIZAÇÃO] */
-const btnTemaGlobal = document.createElement('button');
-btnTemaGlobal.textContent = '🌓 Tema';
-btnTemaGlobal.style.cssText = `position: fixed; bottom: 10px; right: 110px; padding: 10px 15px; background: #444; color: white; border: 1px solid #666; border-radius: 5px; font-weight: bold; cursor: pointer; z-index: 10000; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
-btnTemaGlobal.onclick = () => document.body.classList.toggle('light-theme');
-document.body.appendChild(btnTemaGlobal);
 
 // Dá a partida na aplicação
 iniciarApp();
