@@ -456,8 +456,59 @@ function desenharMenuPrincipal(emailDoOperador) {
 // Dá a partida na aplicação[span_7](start_span)[span_7](end_span)
 iniciarApp();
 ```
+## Atualizar o index.html (Dependência do Leitor de Códigos)
+O seu módulo de produtos precisa da câmara para ler códigos de barras (EAN) e crachás. Para isso funcionar, abra o seu index.html e adicione a biblioteca html5-qrcode logo abaixo do script do Supabase:
+```
+<!-- Motor do Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Motor do Leitor de Código de Barras (NOVO) -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+```
+## Adicionar as novas regras no style.css
+O seu JavaScript antigo utiliza classes para os separadores (Tabs) e notificações (Toasts) que não existiam no nosso CSS base. Copie e cole isto no final do seu ficheiro style.css:
+```
+/* --- COMPONENTES DOS MÓDULOS (ABAS E TOASTS) --- */
+.tabs-menu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+.tab-btn.active {
+    background: var(--accent-neon);
+    color: #000;
+    border-color: var(--accent-neon);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
+.toast {
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.toast.mostrar { opacity: 1; transform: translateX(0); }
+.toast-sucesso { background: #28a745; }
+.toast-erro { background: #dc3545; }
+.toast-info { background: #17a2b8; }
 
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; font-size: 1.2em; }
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
