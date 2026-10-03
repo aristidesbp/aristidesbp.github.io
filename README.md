@@ -118,6 +118,28 @@ habilidade_2_auditoria_mano_dev:
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# O PROJETO 
+
+🏗️ BLUEPRINT MASTER: ERP SUPERMERCADO 10K
+Arquitetura Zero Trust | Multi-Caixa | Entidades| Financeiro (recebimento,boletos, parcelamentos ,etc...)|Pdv|Entragas|Emissão cupom e NF-e|Cartão fidelidade|Integração Balança | RH & Financeiro. Proteção blindada nível bancário.
+
+📚 As 11 Tabelas Necessárias para o ERP Completo
+Para que o sistema seja modular e inquebrável, estas são as 11 tabelas exatas e as suas relações:
+
+entidades: A base humana (Clientes, Fornecedores, Funcionários).
+produtos: A base de mercadorias (com integração de balança).
+rh_contratos: Liga-se a entidades para definir quem é Gerente ou Operador de Caixa.
+pdv_terminais: O registo das máquinas físicas (Caixa 01, Caixa 02).
+pdv_turnos: Liga um Operador (entidades) a um Terminal (pdv_terminais) para controlar o dinheiro da gaveta.
+pdv_vendas: O cabeçalho do cupão fiscal. Liga-se ao Turno e ao Cliente (entidades).
+pdv_itens_venda: As linhas do cupão. Liga-se à Venda e ao Produto.
+fin_pagamentos_venda: Regista como a venda foi paga (PIX, Dinheiro, etc.). Liga-se à Venda e ao Turno.
+fin_contas: O motor do "Fiado" e boletos. Liga-se a Entidades.
+est_movimentacoes: O extrato bancário dos teus produtos. Regista toda a entrada e saída.
+log_entregas: Gestão da frota de entregadores. Liga-se à Venda e ao Entregador (entidades).
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # CRIAR UMA CONTA E PROJETO NO SUPABASE:
 
@@ -462,7 +484,283 @@ USING (auth.uid() = user_id);
 -- [FIM: 6. RLS ZERO TRUST COM LIXEIRA E HARD DELETE]
 
 ```
+# SQL completo 
+```
+-- ============================================================================
+-- 🏗️️ ERP SUPERMERCADO 10K - SCRIPT MESTRE DE ARQUITETURA DE BACKEND
+-- ============================================================================
 
+-- 🧹 1. LIMPEZA TOTAL (Cuidado: Apaga toda a estrutura pública atual)
+DROP TABLE IF EXISTS public.log_entregas CASCADE;
+DROP TABLE IF EXISTS public.est_movimentacoes CASCADE;
+DROP TABLE IF EXISTS public.fin_contas CASCADE;
+DROP TABLE IF EXISTS public.fin_pagamentos_venda CASCADE;
+DROP TABLE IF EXISTS public.pdv_itens_venda CASCADE;
+DROP TABLE IF EXISTS public.pdv_vendas CASCADE;
+DROP TABLE IF EXISTS public.pdv_turnos CASCADE;
+DROP TABLE IF EXISTS public.rh_folha_pagamento CASCADE;
+DROP TABLE IF EXISTS public.rh_contratos CASCADE;
+DROP TABLE IF EXISTS public.pdv_terminais CASCADE;
+DROP TABLE IF EXISTS public.produtos CASCADE;
+DROP TABLE IF EXISTS public.entidades CASCADE;
+
+-- ============================================================================
+-- 📦 2. CRIAÇÃO DAS TABELAS MESTRAS (FUNDAÇÃO)
+-- ============================================================================
+
+-- 2.1 ENTIDADES (Clientes, Fornecedores, Funcionários)
+CREATE TABLE public.entidades (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'colaborador', 'entregador')),
+    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3),
+    documento TEXT CHECK (char_length(documento) <= 50),
+    telefone TEXT,
+    email TEXT,
+    observacoes TEXT,
+    codigo_barras TEXT, -- Crachá ou Cartão Fidelidade
+    avatar_url TEXT,
+    pontos_fidelidade INTEGER DEFAULT 0 CHECK (pontos_fidelidade >= 0), -- Fidelidade Integrada
+    deleted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT anti_xss_nome CHECK (nome !~* '(<script|<iframe|javascript:)')
+);
+
+-- 2.2 PRODUTOS (Catálogo do Supermercado)
+CREATE TABLE public.produtos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3),
+    descricao TEXT,
+    categoria TEXT,
+    origem TEXT,
+    ean TEXT,
+    codigo_balanca VARCHAR(6) UNIQUE, -- Integração Toledo/Filizola
+    is_pesavel BOOLEAN DEFAULT false,
+    imagem_url TEXT,
+    preco NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (preco >= 0),
+    preco_custo NUMERIC(10, 2) DEFAULT 0 CHECK (preco_custo >= 0),
+    estoque_atual NUMERIC(10, 3) DEFAULT 0, 
+    estoque_minimo NUMERIC(10, 3) DEFAULT 0,
+    peso NUMERIC(10, 3) CHECK (peso >= 0 OR peso IS NULL),
+    dimensoes TEXT,
+    localizacao_loja TEXT,
+    localizacao_estoque TEXT,
+    fornecedor_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
+    deleted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================================
+-- 🧑‍💼 3. MÓDULO DE RECURSOS HUMANOS (RH)
+-- ============================================================================
+
+CREATE TABLE public.rh_contratos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    entidade_id UUID NOT NULL REFERENCES public.entidades(id) ON DELETE CASCADE,
+    cargo TEXT NOT NULL,
+    salario_base NUMERIC(10, 2) NOT NULL CHECK (salario_base >= 0),
+    data_admissao DATE NOT NULL,
+    status TEXT CHECK (status IN ('ativo', 'ferias', 'desligado')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================================
+-- 🛒 4. MÓDULO DE FRENTE DE CAIXA (PDV) E FISCAL
+-- ============================================================================
+
+-- 4.1 TERMINAIS (As máquinas físicas)
+CREATE TABLE public.pdv_terminais (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    nome TEXT NOT NULL,
+    numero_serie TEXT UNIQUE,
+    ativo BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 4.2 TURNOS (Abertura e Fecho de Caixa)
+CREATE TABLE public.pdv_turnos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    terminal_id UUID NOT NULL REFERENCES public.pdv_terminais(id),
+    operador_id UUID NOT NULL REFERENCES public.entidades(id),
+    saldo_abertura NUMERIC(10, 2) NOT NULL CHECK (saldo_abertura >= 0),
+    saldo_fechamento NUMERIC(10, 2),
+    status TEXT NOT NULL CHECK (status IN ('aberto', 'fechado')),
+    aberto_em TIMESTAMPTZ NOT NULL DEFAULT now(),
+    fechado_em TIMESTAMPTZ
+);
+CREATE UNIQUE INDEX idx_turno_unico ON public.pdv_turnos(terminal_id) WHERE status = 'aberto';
+
+-- 4.3 VENDAS (Cabeçalho do Cupom Fiscal)
+CREATE TABLE public.pdv_vendas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    turno_id UUID NOT NULL REFERENCES public.pdv_turnos(id),
+    cliente_id UUID REFERENCES public.entidades(id),
+    total_bruto NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    total_desconto NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    total_liquido NUMERIC(10, 2) GENERATED ALWAYS AS (total_bruto - total_desconto) STORED,
+    status TEXT NOT NULL CHECK (status IN ('pendente', 'concluida', 'cancelada')),
+    -- Dados Fiscais / NFe
+    cpf_na_nota TEXT,
+    chave_nfe TEXT UNIQUE,
+    numero_recibo TEXT UNIQUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 4.4 ITENS DA VENDA
+CREATE TABLE public.pdv_itens_venda (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
+    produto_id UUID NOT NULL REFERENCES public.produtos(id),
+    quantidade NUMERIC(10, 3) NOT NULL CHECK (quantidade > 0),
+    preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario >= 0),
+    subtotal NUMERIC(10, 2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED
+);
+
+-- ============================================================================
+-- 💰 5. MÓDULO FINANCEIRO
+-- ============================================================================
+
+-- 5.1 PAGAMENTOS DA VENDA
+CREATE TABLE public.fin_pagamentos_venda (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
+    turno_id UUID NOT NULL REFERENCES public.pdv_turnos(id),
+    metodo TEXT NOT NULL CHECK (metodo IN ('dinheiro', 'pix', 'debito', 'credito', 'fiado', 'vale_alimentacao')),
+    valor_pago NUMERIC(10, 2) NOT NULL CHECK (valor_pago > 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 5.2 CONTAS A RECEBER E PAGAR (Gestão de Fiado e Boletos)
+CREATE TABLE public.fin_contas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    entidade_id UUID NOT NULL REFERENCES public.entidades(id),
+    venda_id UUID REFERENCES public.pdv_vendas(id),
+    tipo TEXT NOT NULL CHECK (tipo IN ('pagar', 'receber')),
+    descricao TEXT NOT NULL,
+    valor NUMERIC(10, 2) NOT NULL CHECK (valor > 0),
+    data_vencimento DATE NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('aberto', 'pago', 'cancelado')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================================
+-- 🚚 6. LOGÍSTICA E ESTOQUE
+-- ============================================================================
+
+-- 6.1 MOVIMENTAÇÕES DE ESTOQUE (Extrato de Auditoria)
+CREATE TABLE public.est_movimentacoes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    produto_id UUID NOT NULL REFERENCES public.produtos(id),
+    venda_id UUID REFERENCES public.pdv_vendas(id),
+    tipo TEXT NOT NULL CHECK (tipo IN ('entrada_compra', 'saida_venda', 'quebra', 'ajuste')),
+    quantidade NUMERIC(10, 3) NOT NULL, 
+    observacao TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 6.2 ENTREGAS (Gestão de Frota)
+CREATE TABLE public.log_entregas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
+    venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
+    entregador_id UUID REFERENCES public.entidades(id),
+    endereco_completo TEXT NOT NULL,
+    taxa_entrega NUMERIC(10, 2) DEFAULT 0,
+    status TEXT NOT NULL CHECK (status IN ('preparacao', 'em_rota', 'entregue', 'devolvido')),
+    hora_saida TIMESTAMPTZ,
+    hora_chegada TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================================
+-- 🧠 7. O CÉREBRO: GATILHOS (TRIGGERS) E AUTOMAÇÃO
+-- ============================================================================
+
+-- 7.1 AUTOMAÇÃO DE ESTOQUE: A base de dados gere o stock sozinha
+CREATE OR REPLACE FUNCTION public.automacao_estoque_pdv()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.est_movimentacoes (user_id, produto_id, venda_id, tipo, quantidade, observacao)
+    VALUES (NEW.user_id, NEW.produto_id, NEW.venda_id, 'saida_venda', -NEW.quantidade, 'Baixa automática do PDV');
+    
+    UPDATE public.produtos 
+    SET estoque_atual = estoque_atual - NEW.quantidade, updated_at = now()
+    WHERE id = NEW.produto_id;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_venda_item_inserido
+    AFTER INSERT ON public.pdv_itens_venda
+    FOR EACH ROW EXECUTE FUNCTION public.automacao_estoque_pdv();
+
+-- 7.2 AUTOMAÇÃO DE FIDELIDADE
+CREATE OR REPLACE FUNCTION public.automacao_fidelidade()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status = 'concluida' AND OLD.status != 'concluida' AND NEW.cliente_id IS NOT NULL THEN
+        UPDATE public.entidades 
+        SET pontos_fidelidade = pontos_fidelidade + FLOOR(NEW.total_liquido)
+        WHERE id = NEW.cliente_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_venda_concluida
+    AFTER UPDATE ON public.pdv_vendas
+    FOR EACH ROW EXECUTE FUNCTION public.automacao_fidelidade();
+
+-- 7.3 IMUTABILIDADE FISCAL
+CREATE OR REPLACE FUNCTION public.blindagem_fiscal_venda()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF OLD.status = 'concluida' AND NEW.status != 'cancelada' THEN
+        RAISE EXCEPTION 'FRAUDE BLOQUEADA: Vendas concluídas não podem ser alteradas.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_alteracao_venda
+    BEFORE UPDATE ON public.pdv_vendas
+    FOR EACH ROW EXECUTE FUNCTION public.blindagem_fiscal_venda();
+
+-- ============================================================================
+-- 🛡️ 8. SEGURANÇA ZERO TRUST (ROW LEVEL SECURITY EM TODAS AS TABELAS)
+-- ============================================================================
+
+-- Aplicação do RLS Dinâmico em todas as tabelas (Impede o erro 42501 e isola inquilinos)
+DO $$ 
+DECLARE
+    t_name text;
+BEGIN
+    FOR t_name IN 
+        SELECT tablename FROM pg_tables WHERE schemaname = 'public'
+    LOOP
+        EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY;', t_name);
+        EXECUTE format('DROP POLICY IF EXISTS "Acesso Total Dono" ON public.%I;', t_name);
+        EXECUTE format('CREATE POLICY "Acesso Total Dono" ON public.%I FOR ALL TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);', t_name);
+    END LOOP;
+END $$;
+
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # manifest.js
 ```
