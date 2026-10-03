@@ -366,7 +366,7 @@ function desenharLogin() {
                 <label>Senha</label>
                 <div class="input-senha-container">
                     <input type="password" id="login-senha" placeholder="••••••••">
-                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('login-senha', this)">👁️</button>
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('login-senha', this)">🔒</button>
                 </div>
 
                 <button id="btn-entrar" class="btn-neon">Entrar</button>
@@ -380,7 +380,7 @@ function desenharLogin() {
                 <label>Criar Senha</label>
                 <div class="input-senha-container">
                     <input type="password" id="reg-senha" placeholder="Mínimo 6 caracteres">
-                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('reg-senha', this)">👁️</button>
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('reg-senha', this)">🔒</button>
                 </div>
 
                 <button id="btn-registar" class="btn-neon">Concluir Registo</button>
@@ -418,10 +418,10 @@ window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
     const input = document.getElementById(idInput);
     if (input.type === 'password') {
         input.type = 'text';
-        btnOlho.textContent = '🙈';
+        btnOlho.textContent = '🔓';
     } else {
         input.type = 'password';
-        btnOlho.textContent = '👁️';
+        btnOlho.textContent = '🔒';
     }
 };
 /* [FIM: TELA DE LOGIN E REGISTRO] */
@@ -461,7 +461,7 @@ iniciarApp();
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SQL PARA VERIFICAR TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
+# SQL PARA VERIFICAR SE EXISTE TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
 ```
 -- [INÍCIO: EXTRATOR_DE_SCHEMA_SUPABASE]
 -- Este script consulta os metadados do PostgreSQL para criar um raio-x do seu schema 'public'
