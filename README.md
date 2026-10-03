@@ -45,7 +45,7 @@ Ativar Modos: TRUTHMODE, REDTEAM, UNLEARN, 80/20 e LINDYMODE.
 Arquivos obrigatória:
 1. manifest.json (O Instalador PWA): 
 É o bilhete de identidade da tua aplicação. A sua única responsabilidade é comunicar com o sistema operativo do telemóvel (Android/iOS) para lhe dizer o nome do ERP, qual o ícone a apresentar e as cores de fundo. É este ficheiro que permite que o navegador ofereça a opção de "Instalar" ou "Adicionar ao ecrã inicial", garantindo que o sistema abre sem a barra de endereços, como uma app real.
-2. index2.html (A Casca ou Esqueleto): 
+2. index.html (A Casca ou Esqueleto): 
 É o único ficheiro HTML que o navegador vai carregar. A sua responsabilidade é preparar o terreno: ele importa o design (style.css), avisa que é um PWA (manifest.json), carrega o motor da base de dados e disponibiliza uma "tela em branco" (<div id="app-root">). Ele não contém formulários, textos longos nem botões; funciona apenas como o palco onde o JavaScript vai atuar.
 3. style.css (O Design System): 
 É o responsável exclusivo pela estética e responsividade da aplicação. Ele centraliza todas as regras visuais (cores neon, tema escuro, tema claro, cantos arredondados dos cartões e estrutura dos botões). Ao isolar o design neste ficheiro, garantimos que qualquer novo ecrã ou formulário criado no futuro herda automaticamente um aspeto profissional e padronizado, sem precisarmos de misturar estilos com a lógica.
