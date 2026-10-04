@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BevDistro - Bebidas</title>
+    
+    <style>
+        /* ================= DESIGN SYSTEM & THEMES ================= */
+        :root {
+            --bg-color: #0b1320; /* Fundo escuro profundo */
+            --card-bg: #151f2b;  /* Fundo dos cartões */
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; /* Verde Neon do botão */
+            --accent-hover: #8cc21a;
+            --purple-pill: #8273f6; /* Roxo da categoria ativa */
+            --header-bg: #0b1320;
+            --border-color: #2a3645;
+        }
+
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --purple-pill: #6f42c1;
+            --header-bg: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 80px;}
+        
+        /* ================= HEADER & TOP BAR ================= */
+        header { background-color: var(--header-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: background-color 0.3s;}
+        
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.4em; font-weight: bold; }
+        .logo-icon { color: var(--accent-neon); }
+        
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; position: relative; }
+        .icon-btn-circle { background: var(--purple-pill); color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; border: none; cursor: pointer;}
+        
+        .badge-cart { position: absolute; top: -5px; right: -8px; background: var(--accent-neon); color: #000; font-size: 0.5em; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;}
+
+        /* ================= BUSCA E BANNER ================= */
+        .search-container { padding: 15px 20px; display: flex; gap: 10px; }
+        .search-box { flex-grow: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 30px; display: flex; align-items: center; padding: 5px 15px; }
+        .search-box input { background: transparent; border: none; color: var(--text-main); width: 100%; padding: 10px; outline: none; font-size: 1em;}
+        .search-box input::placeholder { color: var(--text-muted); }
+        .search-box button { background: none; border: none; color: var(--text-muted); font-size: 1.2em; cursor: pointer;}
+
+        .banner-promocional { margin: 0 20px; background: linear-gradient(135deg, #1e2a38 0%, #0b1320 100%); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; border: 1px solid var(--border-color);}
+        .banner-tag { background: var(--accent-neon); color: #000; padding: 4px 8px; font-size: 0.7em; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 10px;}
+        .banner-titulo { margin: 0 0 5px 0; font-size: 1.2em; font-weight: bold; }
+        .banner-texto { margin: 0; font-size: 0.9em; color: var(--text-muted); max-width: 60%;}
+
+        /* ================= CATEGORIAS ================= */
+        .categoria-container { padding: 20px; }
+        .select-categoria { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 20px; border-radius: 30px; font-size: 1em; width: 100%; outline: none; appearance: none; font-weight: bold;}
+
+        /* ================= GRELHA DE PRODUTOS ================= */
+        .secao-titulo { margin: 0 20px 15px 20px; font-size: 1.1em; font-weight: normal;}
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 0 20px; }
+        
+        .produto-card { background: var(--card-bg); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; position: relative; border: 1px solid var(--border-color);}
+        .badge-categoria { background: rgba(255,255,255,0.1); color: var(--text-muted); font-size: 0.7em; padding: 3px 8px; border-radius: 12px; position: absolute; top: 15px; left: 15px;}
+        
+        .produto-img { width: 100%; height: 120px; object-fit: contain; margin: 25px 0 10px 0; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));}
+        .produto-nome { font-size: 0.95em; font-weight: bold; margin: 0 0 5px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .produto-unidade { font-size: 0.75em; color: var(--text-muted); margin-bottom: 15px;}
+        
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto;}
+        .produto-preco { color: var(--accent-neon); font-size: 1.1em; font-weight: bold; }
+        .btn-add-neon { background: var(--accent-neon); color: #000; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1.4em; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s;}
+        .btn-add-neon:active { transform: scale(0.9); background: var(--accent-hover);}
+
+        /* ================= MODAIS & UTILITÁRIOS ================= */
+        #modal-carrinho, #scanner-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: flex-end;}
+        .carrinho-conteudo { background: var(--bg-color); width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 25px; max-height: 85vh; overflow-y: auto; color: var(--text-main);}
+        .carrinho-cabecalho { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;}
+        .btn-fechar { background: none; border: none; font-size: 1.5em; cursor: pointer; color: var(--text-main);}
+        
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: var(--card-bg); padding: 10px; border-radius: 8px;}
+        .item-info strong { display: block; font-size: 0.9em; }
+        .item-info small { color: var(--accent-neon); font-weight: bold;}
+        .item-acoes { display: flex; align-items: center; gap: 10px; }
+        .btn-qtd { background: rgba(255,255,255,0.1); color: var(--text-main); border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;}
+        
+        .total-carrinho { font-size: 1.5em; font-weight: bold; color: var(--accent-neon); margin: 20px 0; text-align: right;}
+        
+        .form-entrega { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);}
+        .form-entrega input, .form-entrega select { width: 100%; padding: 12px; margin: 5px 0 15px 0; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-main); }
+        
+        .btn-finalizar { background-color: var(--accent-neon); color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1em;}
+        #reader-loja { width: 100%; max-width: 500px; background: white; border-radius: 8px; overflow: hidden; margin: 20px;}
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <!--cabecalho-->
+    <header>
+        <div class="logo-area">
+            <span class="logo-icon">⚡</span> BevDistro
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Alterar Tema">🌓</button>
+            <button class="icon-btn" onclick="abrirCarrinho()">
+                🛒 <span class="badge-cart" id="contador-carrinho">0</span>
+            </button>
+            <button class="icon-btn-circle" onclick="window.location.href='login.html'">👤</button>
+        </div>
+    </header>
+    <!--/cabecalho-->
+
+    <!--busca_e_scan-->
+    <div class="search-container">
+        <div class="search-box">
+            <span style="color: var(--text-muted);">🔍</span>
+            <input type="text" id="input-busca-loja" placeholder="Buscar bebidas..." oninput="filtrarProdutos()">
+            <button type="button" onclick="abrirScanner()" title="Ler Código de Barras">📷</button>
+        </div>
+    </div>
+    <!--/busca_e_scan-->
+
+    <!--banner_destaque-->
+    <div class="banner-promocional">
+        <span class="banner-tag">OFERTA ESPECIAL</span>
+        <h3 class="banner-titulo">Ofertas Geladas</h3>
+        <p class="banner-texto">Até 30% OFF em cervejas e destilados selecionados.</p>
+    </div>
+    <!--/banner_destaque-->
+
+    <!--filtro_categorias-->
+    <div class="categoria-container">
+        <select id="select-categoria" class="select-categoria" onchange="filtrarProdutos()">
+            <option value="">Todas as Categorias</option>
+            <!-- Injetado via JS -->
+        </select>
+    </div>
+    <!--/filtro_categorias-->
+
+    <!--vitrine_produtos-->
+    <h3 class="secao-titulo">Destaques</h3>
+    <div id="status-loja" style="padding: 0 20px; color: var(--text-muted);">A carregar catálogo...</div>
+    <div id="grid-produtos" class="grid-produtos">
+        <!-- Cards Injetados via JS -->
+    </div>
+    <!--/vitrine_produtos-->
+
+    <!--modal_carrinho-->
+    <div id="modal-carrinho">
+        <div class="carrinho-conteudo">
+            <div class="carrinho-cabecalho">
+                <h2 style="margin:0;">Seu Pedido</h2>
+                <button class="btn-fechar" onclick="fecharCarrinho()">✖</button>
+            </div>
+            
+            <div id="lista-carrinho">
+                <p style="text-align: center; color: var(--text-muted);">O seu carrinho está vazio.</p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button onclick="limparCarrinho()" id="btn-limpar" style="display: none; background: transparent; color: #dc3545; border: none; font-weight: bold; cursor: pointer;">🗑️ Limpar</button>
+                <div class="total-carrinho" id="total-carrinho">Total: R$ 0,00</div>
+            </div>
+
+            <div class="form-entrega" id="area-entrega" style="display: none;">
+                <h3 style="margin-top:0;">📍 Dados de Entrega</h3>
+                <label>Seu Nome:</label>
+                <input type="text" id="cli-nome" placeholder="Ex: João Silva" required>
+                
+                <label>Endereço Completo:</label>
+                <input type="text" id="cli-endereco" placeholder="Ex: Rua, Número, Bairro" required>
+                
+                <label>Forma de Pagamento:</label>
+                <select id="cli-pagamento">
+                    <option value="PIX">PIX</option>
+                    <option value="Dinheiro">Dinheiro (Precisa de troco)</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito (Máquina)</option>
+                    <option value="Cartão de Débito">Cartão de Débito (Máquina)</option>
+                </select>
+
+                <button class="btn-finalizar" onclick="finalizarPedidoCheckout()">
+                    Finalizar e Enviar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--/modal_carrinho-->
+
+    <!--modal_scanner-->
+    <div id="scanner-modal">
+        <div class="carrinho-conteudo" style="display: flex; flex-direction: column; align-items: center;">
+            <h3 style="margin-top:0;">Aponte para o Código</h3>
+            <div id="reader-loja"></div>
+            <button class="btn-finalizar" style="background: #dc3545; color: white; margin-top: 15px;" onclick="fecharScanner()">Cancelar</button>
+        </div>
+    </div>
+    <!--/modal_scanner-->
+    <!-- Conexão com o Supabase Centralizada -->
+    <script src="supabase_config.js"></script>
+
+    <script>
+        /* ================= VARIÁVEIS GLOBAIS ================= */
+        let carrinho = [];
+        let todosProdutos = []; 
+        let html5QrCode = null;
+
+        /* ================= ALTERNADOR DE TEMA ================= */
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('temaBevDistro', isLight ? 'light' : 'dark');
+        }
+
+        /* ================= CARREGAMENTO DE DADOS ================= */
+        async function carregarProdutos() {
+            // Verifica a preferência de tema salva
+            if(localStorage.getItem('temaBevDistro') === 'light') {
+                document.body.classList.add('light-theme');
+            }
+
+            const statusDiv = document.getElementById('status-loja');
+            
+            try {
+                // A REGRA NÃO MUDA: Só pega produtos ativos e com estoque > 0
+                const { data: produtos, error } = await clienteSupabase
+                    .from('produtos')
+                    .select('*')
+                    .eq('esta_ativo', true)
+                    .gt('quantidade', 0) 
+                    .order('nome', { ascending: true });
+
+                if (error) throw error;
+
+                if (produtos.length === 0) {
+                    statusDiv.textContent = "Nenhum produto disponível no momento.";
+                    return;
+                }
+
+                statusDiv.style.display = 'none';
+                todosProdutos = produtos; 
+                
+                extrairCategorias(produtos); 
+                renderizarGrade(produtos);   
+
+            } catch (erro) {
+                console.error(erro);
+                statusDiv.textContent = "Erro ao carregar o catálogo. Verifique sua conexão.";
+            }
+        }
+
+        function extrairCategorias(produtos) {
+            const categoriasUnicas = [...new Set(produtos.map(p => p.categoria).filter(c => c))];
+            const select = document.getElementById('select-categoria');
+            categoriasUnicas.sort().forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+
+        function filtrarProdutos() {
+            const termoBusca = document.getElementById('input-busca-loja').value.toLowerCase().trim();
+            const categoriaSelecionada = document.getElementById('select-categoria').value;
+
+            const produtosFiltrados = todosProdutos.filter(prod => {
+                const matchTexto = 
+                    (prod.nome && prod.nome.toLowerCase().includes(termoBusca)) ||
+                    (prod.ean && prod.ean.toLowerCase().includes(termoBusca)) ||
+                    (prod.codigo_produto && prod.codigo_produto.toLowerCase().includes(termoBusca));
+                const matchCategoria = categoriaSelecionada === "" || prod.categoria === categoriaSelecionada;
+                return matchTexto && matchCategoria;
+            });
+            renderizarGrade(produtosFiltrados);
+        }
+
+        /* ================= O NOVO DESIGN DO CARD NO JS ================= */
+        function renderizarGrade(listaProdutos) {
+            const grid = document.getElementById('grid-produtos');
+            grid.innerHTML = '';
+
+            if (listaProdutos.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">Nenhum produto encontrado.</p>';
+                return;
+            }
+
+            listaProdutos.forEach(prod => {
+                const fotoUrl = prod.foto_url || 'https://via.placeholder.com/250x200?text=S/Foto';
+                const preco = parseFloat(prod.preco).toFixed(2).replace('.', ',');
+                const categoria = prod.categoria || 'Diversos';
+                const unidade = prod.unidade_comercial || 'Unidade';
+
+                const card = document.createElement('div');
+                card.className = 'produto-card';
+                // HTML Injetado 100% igual ao design escuro da imagem
+                card.innerHTML = `
+                    <span class="badge-categoria">${categoria}</span>
+                    <img src="${fotoUrl}" class="produto-img" alt="${prod.nome}">
+                    <div class="produto-nome">${prod.nome}</div>
+                    <div class="produto-unidade">${unidade}</div>
+                    
+                    <div class="card-footer">
+                        <div class="produto-preco">R$ ${preco}</div>
+                        <button class="btn-add-neon" onclick="adicionarAoCarrinho('${prod.id}', '${prod.nome}', ${prod.preco})">+</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* ================= FUNCIONAMENTO DO CARRINHO ================= */
+        function adicionarAoCarrinho(id, nome, preco) {
+            const itemExistente = carrinho.find(item => item.id === id);
+            if (itemExistente) { itemExistente.quantidade++; } 
+            else { carrinho.push({ id, nome, preco, quantidade: 1 }); }
+            atualizarInterfaceCarrinho();
+        }
+
+        function alterarQuantidade(id, delta) {
+            const item = carrinho.find(item => item.id === id);
+            if (item) {
+                item.quantidade += delta;
+                if (item.quantidade <= 0) carrinho = carrinho.filter(i => i.id !== id);
+                atualizarInterfaceCarrinho();
+            }
+        }
+
+        function limparCarrinho() {
+            if(confirm("Remover todos os itens?")) { carrinho = []; atualizarInterfaceCarrinho(); }
+        }
+
+        function atualizarInterfaceCarrinho() {
+            const lista = document.getElementById('lista-carrinho');
+            const totalDiv = document.getElementById('total-carrinho');
+            const areaEntrega = document.getElementById('area-entrega');
+            const contador = document.getElementById('contador-carrinho');
+            const btnLimpar = document.getElementById('btn-limpar');
+            
+            lista.innerHTML = '';
+            let total = 0; let totalItens = 0;
+
+            if (carrinho.length === 0) {
+                lista.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Carrinho vazio.</p>';
+                areaEntrega.style.display = 'none'; btnLimpar.style.display = 'none';
+                totalDiv.textContent = 'Total: R$ 0,00'; contador.textContent = '0';
+                return;
+            }
+
+            carrinho.forEach(item => {
+                total += item.preco * item.quantidade;
+                totalItens += item.quantidade;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item-carrinho';
+                itemDiv.innerHTML = `
+                    <div class="item-info">
+                        <strong>${item.nome}</strong>
+                        <small>R$ ${item.preco.toFixed(2).replace('.', ',')} x ${item.quantidade}</small>
+                    </div>
+                    <div class="item-acoes">
+                        <button class="btn-qtd" onclick="alterarQuantidade('${item.id}', -1)">-</button>
+                        <span>${item.quantidade}</span>
+                        <button class="btn-qtd" onclick="alterarQuantidade('${item.id}', 1)">+</button>
+                    </div>
+                `;
+                lista.appendChild(itemDiv);
+            });
+
+            totalDiv.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+            contador.textContent = totalItens;
+            areaEntrega.style.display = 'block'; btnLimpar.style.display = 'block';
+        }
+
+        function abrirCarrinho() { document.getElementById('modal-carrinho').style.display = 'flex'; }
+        function fecharCarrinho() { document.getElementById('modal-carrinho').style.display = 'none'; }
+
+        /* ================= SCANNER DE BARRAS ================= */
+        function abrirScanner() {
+            const modalScanner = document.getElementById('scanner-modal');
+            modalScanner.style.display = 'flex';
+            html5QrCode = new Html5Qrcode("reader-loja");
+            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 100 } }, (codigo) => {
+                document.getElementById('input-busca-loja').value = codigo;
+                fecharScanner(); filtrarProdutos();
+            }).catch(err => { alert("Erro de câmara."); fecharScanner(); });
+        }
+        function fecharScanner() {
+            if (html5QrCode) html5QrCode.stop().then(() => { document.getElementById('scanner-modal').style.display = 'none'; });
+            else document.getElementById('scanner-modal').style.display = 'none';
+        }
+
+        /* ================= CHECKOUT SEGURO VIA BACKEND ================= */
+        async function finalizarPedidoCheckout() {
+            const nome = document.getElementById('cli-nome').value.trim();
+            const endereco = document.getElementById('cli-endereco').value.trim();
+            const pagamento = document.getElementById('cli-pagamento').value;
+
+            if (!nome || !endereco) { alert("Preencha nome e endereço."); return; }
+            if (carrinho.length === 0) return;
+
+            const btnFinalizar = document.querySelector('.btn-finalizar');
+            btnFinalizar.textContent = "⏳ Registrando Pedido...";
+            btnFinalizar.disabled = true;
+
+            let valorTotalPedido = 0;
+            const itensParaBackend = carrinho.map(item => {
+                valorTotalPedido += (item.quantidade * item.preco);
+                return { id: item.id, nome: item.nome, quantidade: item.quantidade, preco: item.preco };
+            });
+
+            try {
+                // A CHAVE DE OURO: Continua mandando para o Supabase e abatendo o estoque
+                const { data: respostaPedido, error } = await clienteSupabase.rpc('finalizar_pedido_seguro', {
+                    p_cliente_nome: nome, p_cliente_endereco: endereco, p_forma_pagamento: pagamento,
+                    p_itens: itensParaBackend, p_valor_total: valorTotalPedido
+                });
+
+                if (error) throw error;
+
+                const dadosSucesso = {
+                    numero_pedido: respostaPedido.numero_pedido, cliente: nome, endereco: endereco,
+                    pagamento: pagamento, itens: itensParaBackend, total: valorTotalPedido
+                };
+                localStorage.setItem('pedidoRecente', JSON.stringify(dadosSucesso));
+
+                carrinho = [];
+                window.location.href = 'sucesso.html';
+
+            } catch (erro) {
+                console.error(erro);
+                alert("❌ Erro. É possível que o estoque de algum item tenha esgotado.");
+                btnFinalizar.textContent = "Finalizar e Enviar Pedido";
+                btnFinalizar.disabled = false;
+            }
+        }
+
+        window.onload = carregarProdutos;
+    </script>
+</body>
+</html>

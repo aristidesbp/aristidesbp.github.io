@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--head_config-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Confirmado - Depósito de Bebidas</title>
+    
+    <style>
+        :root {
+            --cor-primaria: #f39c12; 
+            --cor-fundo: #f8f9fa;
+            --cor-texto: #333;
+        }
+        
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--cor-fundo); color: var(--cor-texto); display: flex; flex-direction: column; align-items: center; padding: 20px;}
+        
+        .card-sucesso { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 600px; text-align: center; margin-top: 20px;}
+        
+        .icone-sucesso { font-size: 4em; margin-bottom: 10px; }
+        .titulo-sucesso { color: #28a745; margin-top: 0; }
+        
+        .numero-pedido { background: #e9ecef; padding: 15px; border-radius: 6px; font-size: 1.5em; font-weight: bold; letter-spacing: 2px; color: #495057; margin: 20px 0; }
+        
+        .resumo-box { text-align: left; background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #dee2e6; margin-bottom: 20px; font-size: 0.95em; }
+        .resumo-box h3 { margin-top: 0; color: var(--cor-primaria); border-bottom: 1px solid #dee2e6; padding-bottom: 10px; }
+        .linha-resumo { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 5px;}
+        .total-resumo { font-size: 1.2em; font-weight: bold; color: #28a745; text-align: right; margin-top: 15px; }
+        
+        .btn-whatsapp { background-color: #25D366; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .btn-whatsapp:hover { background-color: #1ebe57; }
+        
+        .btn-voltar { display: block; margin-top: 20px; color: #6c757d; text-decoration: none; font-weight: bold; }
+        .btn-voltar:hover { text-decoration: underline; color: #343a40;}
+    </style>
+</head>
+<!--/head_config-->
+
+<body>
+
+    <!--mensagem_sucesso-->
+    <div class="card-sucesso">
+        <div class="icone-sucesso">✅</div>
+        <h2 class="titulo-sucesso">Pedido Registrado!</h2>
+        <p>O seu pedido já foi reservado no nosso estoque. Anote o número do seu pedido:</p>
+        
+        <div class="numero-pedido" id="display-numero-pedido">#00000</div>
+    <!--/mensagem_sucesso-->
+
+    <!--resumo_pedido-->
+        <div class="resumo-box">
+            <h3>Resumo da Compra</h3>
+            <div id="lista-itens-resumo">
+                <!-- Itens serão injetados aqui -->
+            </div>
+            <div class="total-resumo" id="display-total">R$ 0,00</div>
+            
+            <h3 style="margin-top: 20px;">Entrega</h3>
+            <p><strong>Nome:</strong> <span id="display-nome"></span></p>
+            <p><strong>Endereço:</strong> <span id="display-endereco"></span></p>
+            <p><strong>Pagamento:</strong> <span id="display-pagamento"></span></p>
+        </div>
+    <!--/resumo_pedido-->
+
+    <!--acao_whatsapp-->
+        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Para concluir, envie os detalhes do pedido para o nosso WhatsApp e agilize a entrega!</p>
+        <button class="btn-whatsapp" onclick="enviarWhatsApp()">📱 Confirmar no WhatsApp</button>
+        
+        <a href="index.html" class="btn-voltar" onclick="limparSessao()">⬅️ Voltar para a Loja</a>
+    </div>
+    <!--/acao_whatsapp-->
+
+    <!--script_recuperar_dados-->
+    <script>
+        const NUMERO_WHATSAPP = '5591992420981'; 
+        let dadosPedido = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Tenta recuperar os dados temporários gravados na etapa anterior
+            const pedidoSalvo = localStorage.getItem('pedidoRecente');
+            
+            // 2. Barreira de Segurança: Se não houver pedido, expulsa para a loja
+            if (!pedidoSalvo) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            dadosPedido = JSON.parse(pedidoSalvo);
+
+            // 3. Renderização Segura (Evitando XSS com textContent)
+            document.getElementById('display-numero-pedido').textContent = `#${String(dadosPedido.numero_pedido).padStart(5, '0')}`;
+            document.getElementById('display-nome').textContent = dadosPedido.cliente;
+            document.getElementById('display-endereco').textContent = dadosPedido.endereco;
+            document.getElementById('display-pagamento').textContent = dadosPedido.pagamento;
+            document.getElementById('display-total').textContent = `Total: R$ ${dadosPedido.total.toFixed(2).replace('.', ',')}`;
+
+            const listaHTML = document.getElementById('lista-itens-resumo');
+            dadosPedido.itens.forEach(item => {
+                const subtotal = item.quantidade * item.preco;
+                
+                const linha = document.createElement('div');
+                linha.className = 'linha-resumo';
+                
+                const spanNome = document.createElement('span');
+                spanNome.textContent = `${item.quantidade}x ${item.nome}`;
+                
+                const spanPreco = document.createElement('span');
+                spanPreco.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+                
+                linha.appendChild(spanNome);
+                linha.appendChild(spanPreco);
+                listaHTML.appendChild(linha);
+            });
+        });
+
+        // 4. Lógica de Envio para WhatsApp
+        function enviarWhatsApp() {
+            if (!dadosPedido) return;
+
+            let mensagem = `*NOVO PEDIDO RECEBIDO!* 📦\n`;
+            mensagem += `Número do Pedido: *#${String(dadosPedido.numero_pedido).padStart(5, '0')}*\n\n`;
+            
+            mensagem += `*ITENS DO PEDIDO:*\n`;
+            dadosPedido.itens.forEach(item => {
+                const subtotal = item.quantidade * item.preco;
+                mensagem += `▪️ ${item.quantidade}x ${item.nome} - R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            });
+
+            mensagem += `\n💰 *VALOR TOTAL: R$ ${dadosPedido.total.toFixed(2).replace('.', ',')}*\n\n`;
+            mensagem += `*DADOS DE ENTREGA:*\n`;
+            mensagem += `Nome: ${dadosPedido.cliente}\n`;
+            mensagem += `Endereço: ${dadosPedido.endereco}\n`;
+            mensagem += `Pagamento: ${dadosPedido.pagamento}\n`;
+
+            const linkWhatsapp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+            window.open(linkWhatsapp, '_blank');
+        }
+
+        // Limpa os rastros do pedido ao voltar para a loja
+        function limparSessao() {
+            localStorage.removeItem('pedidoRecente');
+        }
+    </script>
+    <!--/script_recuperar_dados-->
+
+</body>
+</html>
