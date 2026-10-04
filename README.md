@@ -169,6 +169,7 @@ Escolha:(exemplo)
   ]
 }
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## index.html 
 ```
 <!DOCTYPE html>
@@ -193,6 +194,7 @@ Escolha:(exemplo)
 </body>
 </html>
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## style.css
 ```
 :root {
@@ -352,6 +354,7 @@ input {
 
 
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ## app.js
 ```
 /*🟥 APP.JS - NÚCLEO SPA: AUTENTICAÇÃO E TEMA 🟥*/
