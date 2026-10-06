@@ -129,6 +129,76 @@ log_entregas: Gestão da frota de entregadores. Liga-se à Venda e ao Entregador
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# INTALANDO O SUPABASE NO LINUX (PARA USO LOCAL)
+### Panorama Geral da Solução
+* Docker Engine: Será o motor que vai hospedar os serviços do Supabase na sua máquina.
+* Supabase CLI: É a ferramenta oficial para inicializar projetos, iniciar os containers locais e gerenciar as migrações (mudanças no banco de dados) de forma versionada.
+* Fluxo: Instalaremos as dependências, iniciaremos o motor do Docker, e faremos o setup do seu primeiro projeto Supabase.
+
+### Instruções de Implementação
+Abra o seu terminal no Kali Linux e siga os blocos abaixo, um por vez.
+### Passo 1: Instalar o Docker e Docker Compose
+* Se você já tem o Docker rodando no Kali, pode pular esta etapa. Caso contrário, execute o script abaixo.
+```
+# [INÍCIO: INSTALACAO_DOCKER]
+
+# 1. Atualiza a lista de pacotes do sistema
+sudo apt update
+
+# 2. Instala o Docker e a versão autônoma do Docker Compose
+sudo apt install -y docker.io docker-compose
+
+# 3. Habilita o serviço do Docker para iniciar junto com o sistema e o inicia agora
+sudo systemctl enable docker --now
+
+# 4. Adiciona o seu usuário atual ao grupo 'docker' 
+# (Isso evita que você precise digitar 'sudo' em todos os comandos do Supabase/Docker)
+sudo usermod -aG docker $USER
+
+# 5. Aplica a permissão de grupo imediatamente no terminal atual
+newgrp docker
+
+# [FIM: INSTALACAO_DOCKER]
+```
+### Passo 2: Instalar a Supabase CLI
+* A maneira mais universal e fácil de instalar a CLI do Supabase no Linux é através do gerenciador de pacotes do Node.js (npm), pois ele gerencia as atualizações de forma muito simples.
+```
+# [INÍCIO: INSTALACAO_SUPABASE_CLI]
+
+# 1. Instala o Node.js e o npm (caso o seu Kali ainda não tenha)
+sudo apt install -y npm
+
+# 2. Instala a Supabase CLI globalmente (-g) no seu sistema
+sudo npm install -g supabase
+
+# 3. Verifica se a instalação foi bem-sucedida verificando a versão
+supabase -v
+
+# [FIM: INSTALACAO_SUPABASE_CLI]
+```
+### Passo 3: Inicializar seu Primeiro Projeto
+* Agora vamos criar a pasta do seu projeto de código e iniciar o Supabase local.
+* Após o comando supabase start terminar (pode demorar alguns minutos na primeira vez para baixar as imagens), o terminal exibirá as credenciais locais, incluindo o Studio URL (geralmente [http://127.0.0.1:54323](http://127.0.0.1:54323)), o API URL e a chave secreta (service_role key).
+* Você pode abrir o Studio URL no seu navegador para acessar a interface visual do seu banco de dados rodando direto do seu Kali!
+```
+# [INÍCIO: INICIALIZACAO_PROJETO_SUPABASE]
+
+# 1. Crie a pasta do seu projeto e entre nela (substitua pelo nome do seu projeto)
+mkdir meu-projeto-supabase
+cd meu-projeto-supabase
+
+# 2. Inicializa a estrutura do Supabase no diretório
+# (Isso criará uma pasta chamada 'supabase' com arquivos de configuração)
+supabase init
+
+# 3. Faz o download das imagens Docker e inicia todos os serviços locais do Supabase
+supabase start
+
+# [FIM: INICIALIZACAO_PROJETO_SUPABASE]
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 # CRIAR UMA CONTA E PROJETO NO SUPABASE:
 
