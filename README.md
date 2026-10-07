@@ -1586,7 +1586,12 @@ if __name__ == "__main__":
 </body>
 </html>
 ```
-
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # O PROJETO 
@@ -1597,17 +1602,28 @@ Arquitetura Zero Trust | Multi-Caixa | Entidades| Financeiro (recebimento,boleto
 📚 As 11 Tabelas Necessárias para o ERP Completo
 Para que o sistema seja modular e inquebrável, estas são as 11 tabelas exatas e as suas relações:
 
-entidades: A base humana (Clientes, Fornecedores, Funcionários).
-produtos: A base de mercadorias (com integração de balança).
-rh_contratos: Liga-se a entidades para definir quem é Gerente ou Operador de Caixa.
-pdv_terminais: O registo das máquinas físicas (Caixa 01, Caixa 02).
-pdv_turnos: Liga um Operador (entidades) a um Terminal (pdv_terminais) para controlar o dinheiro da gaveta.
-pdv_vendas: O cabeçalho do cupão fiscal. Liga-se ao Turno e ao Cliente (entidades).
-pdv_itens_venda: As linhas do cupão. Liga-se à Venda e ao Produto.
-fin_pagamentos_venda: Regista como a venda foi paga (PIX, Dinheiro, etc.). Liga-se à Venda e ao Turno.
-fin_contas: O motor do "Fiado" e boletos. Liga-se a Entidades.
-est_movimentacoes: O extrato bancário dos teus produtos. Regista toda a entrada e saída.
-log_entregas: Gestão da frota de entregadores. Liga-se à Venda e ao Entregador (entidades).
+* entidades: A base humana (Clientes, Fornecedores, Funcionários).
+
+foto_avatar
+codigo_de_barra
+nome_completo
+telefone
+email
+endereco_completo
+relacionamento
+status
+bio
+
+
+* rh_contratos: Liga-se a entidades para definir quem é Gerente ou Operador de Caixa.
+* pdv_terminais: O registo das máquinas físicas (Caixa 01, Caixa 02).
+* pdv_turnos: Liga um Operador (entidades) a um Terminal (pdv_terminais) para controlar o dinheiro da gaveta.
+* pdv_vendas: O cabeçalho do cupão fiscal. Liga-se ao Turno e ao Cliente (entidades).
+* pdv_itens_venda: As linhas do cupão. Liga-se à Venda e ao Produto.
+* fin_pagamentos_venda: Regista como a venda foi paga (PIX, Dinheiro, etc.). Liga-se à Venda e ao Turno.
+* fin_contas: O motor do "Fiado" e boletos. Liga-se a Entidades.
+* est_movimentacoes: O extrato bancário dos teus produtos. Regista toda a entrada e saída.
+* log_entregas: Gestão da frota de entregadores. Liga-se à Venda e ao Entregador (entidades).
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
