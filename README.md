@@ -110,7 +110,7 @@ habilidade_2_auditoria_mano_dev:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
  
-## Download do aplicativo direto no git
+## Download do aplicativo direto no github
 * Acesse o link oficial no Github não use da Play Store!
 * em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
 [TERMUX](https://github.com/termux/termux-app/releases)
@@ -134,7 +134,7 @@ dpkg --configure -a
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-## EXEMPLO DE COMO INSTALE AS FERRAMENTAS  NO TERMUX
+# EXEMPLO DE COMO INSTALE AS FERRAMENTAS  NO TERMUX
 ```
 pkg install git -y
 ```
@@ -273,9 +273,22 @@ rm -rf nome_da_pasta
 ```
 
 
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BAIXANDO MÍDIAS COM TERMUX
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+```
+```
+
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+```
+
+
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX+ GIT+ GITHUB
+# GIT+ GITHUB (TERMUX)
 ```
 # verificar se o git está instalado 
 git --version
@@ -335,25 +348,8 @@ git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
 ```
 
 
-
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#BAIXAR MÍDIAS
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-```
-```
-
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-```
-
-
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GIT E GITHUB (REPOSITO)
+#  GIT CLONE (REPOSITO)
 
 ```
 # clonar um repositório
@@ -460,7 +456,7 @@ ip addr show wlan0
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# rodando local Google ai Studio 
+# GOODLE AI STUDIO
 ```
 # limpar dependencias corrompidas e listar diretorio
 cd /root/erp && rm -rf node_modules package-lock.json && ls -la
@@ -501,8 +497,9 @@ npm run build
 # sair do Linux 
 exit
 ```
+
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# RODANDO LOCAL LOVABLE
+# LOVABLE
 ```
 # Verifica as versões instaladas do Node.js, NPM e Bun no sistema
 node -v; npm -v; bun -v
