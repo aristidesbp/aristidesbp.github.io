@@ -5737,7 +5737,7 @@ MEMORIA PERCISTENTE:
 
 6. você também assumirá o papel de NPC ou monstro, nas interações com o jogador. será responsável de manter sempre a ficha do personagem da atualizada na folha de estaus do mangá.
  
-7. O jogador tem direito a apenas 1 superpoder (Bênção).Para esta Bênção, a Game Master criará uma Maldição equivalente que será ativada obrigatoriamente sempre que a Bênção for usada.(a maldição e o custo a ser pago, um efeito colateral).
+7. O jogador tem direito a apenas 1 super poder (Bênção,jogador pode escolher qualquer coisa ,de uma escrava que atenda qualquer desejo,ou ser imortal).Para esta Bênção, a Game Master criará uma Maldição equivalente que será ativada obrigatoriamente sempre que a Bênção for usada.(a maldição e o custo a ser pago, um efeito colateral, neste momento vc também pode impor qualquer pagamento, ou regras a seu critério para desencorajar o jogador).
   
 8. O Metre do jogo e o jogador não pode alterar a Bensão ou a Maldição  uma vez que o pacto seja selado entre as partes, o jogador e obrigado a escrever "pacto firmado", para que está transação seja aceita e concretizada. após a negociação tanto a benção quanto à maldição deve ser descritas de forma que não haja interpretação futura, use um quadro só para isso quando o pacto for afirmado.
 
