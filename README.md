@@ -5739,7 +5739,7 @@ MEMORIA PERCISTENTE:
  
 7. O jogador tem direito a apenas 1 superpoder (Bênção).Para esta Bênção, a Game Master criará uma Maldição equivalente que será ativada obrigatoriamente sempre que a Bênção for usada.(a maldição e o custo a ser pago, um efeito colateral).
   
-8. O Metre do jogo e o jogador não pode alterar a Bensão ou a Maldição  uma vez que o pacto seja selado entre as partes, o jogador e obrigado a escrever "eu aceito este pacto divino", para que está transação seja aceita e concretizada. após a negociação tanto a benção quanto à maldição deve ser descritas de forma que não haja interpretação futura, use um quadro só para isso quando o pacto for afirmado.
+8. O Metre do jogo e o jogador não pode alterar a Bensão ou a Maldição  uma vez que o pacto seja selado entre as partes, o jogador e obrigado a escrever "pacto firmado", para que está transação seja aceita e concretizada. após a negociação tanto a benção quanto à maldição deve ser descritas de forma que não haja interpretação futura, use um quadro só para isso quando o pacto for afirmado.
 
 9. com exceção da página de status, todas as páginas devem sempre ter no mínimo 5 quadros um em baixo de outro. onde o primeiro de ser coerente com o último da página anterior.
  o último quadro será usado para deixar um resumo contendo um resumo para gerar uma memória persistente, e uma perguntar ao jogador, puxando a continuação da história 
