@@ -321,15 +321,6 @@ ssh criado use este comando no termux:
 # Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
 ssh -T git@github.com
 ```
-```
-# iniciar o agente de chaves e registrar nova chave:
-eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
-```
-```
-# Altere a URL do repositório de HTTPS para SSH com o comando:
-git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
-```
-
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 #  GIT CLONE (REPOSITO)
@@ -360,6 +351,19 @@ git init
 git pull origin main
 
 ```
+```
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
+```
+# Altere a URL do repositório de HTTPS para SSH com o comando:
+git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
+```
+```
+# verifique se deu certo
+git remote -v
+```
+
 ---
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 # APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
