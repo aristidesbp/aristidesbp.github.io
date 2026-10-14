@@ -374,6 +374,20 @@ git fetch origin
 git reset --hard origin/main
 ```
 # ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# BUSCANDO O COMMIT ESPECÍFICO 
+```
+# buscar texto
+git log --grep="texto_a_ser_buscado" --oneline
+```
+```
+# comando para viajar no tempo (detached HEAD,observador)
+git checkout c93e2865
+```
+```
+# voltar para o presente 
+git checkout main
+```
+
 ---
 # 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
 ```
