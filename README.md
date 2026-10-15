@@ -2222,220 +2222,17 @@ DROP TRIGGER IF EXISTS tr_novo_utilizador_auth ON auth.users CASCADE;
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TABELA ENTIDADES
+# SQL COMPLETO
 ```
 -- ============================================================================
--- CRIAÇÃO DA TABELA: ENTIDADES (Segurança Máxima + Funcionalidade Completa)
+-- 🌟 ERP SUPERMERCADO 10K - SCRIPT DEFINITIVO REAL (100% DOS MÓDULOS)
 -- ============================================================================
 
--- 1. APAGAR TABELA ANTIGA (Limpeza para aplicar nova estrutura)
-DROP TABLE IF EXISTS public.entidades CASCADE;
-
--- 2. CRIAÇÃO DA TABELA (Com todos os campos e proteções físicas)
-CREATE TABLE public.entidades (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    
-    tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'colaborador')),
-    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3 AND char_length(nome) <= 255),
-    documento TEXT CHECK (char_length(documento) <= 50),
-    telefone TEXT CHECK (char_length(telefone) <= 20),
-    email TEXT CHECK (char_length(email) <= 255),
-    observacoes TEXT CHECK (char_length(observacoes) <= 2000),
-    
-    -- Os novos campos que haviam desaparecido
-    codigo_barras TEXT,
-    avatar_url TEXT,
-    
-    deleted_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- 3. ÍNDICES DE ALTA PERFORMANCE
-CREATE INDEX idx_entidades_user_updated ON public.entidades(user_id, updated_at);
-CREATE INDEX idx_entidades_ativos ON public.entidades(user_id) WHERE deleted_at IS NULL;
-
--- 4. BLINDAGEM DE ESTADOS E TIMESTAMPS (Mantendo os teus triggers originais)
-CREATE TRIGGER on_entidade_insert
-    BEFORE INSERT ON public.entidades
-    FOR EACH ROW
-    EXECUTE FUNCTION public.protect_timestamps_on_insert();
-
-CREATE TRIGGER on_entidade_updated
-    BEFORE UPDATE ON public.entidades
-    FOR EACH ROW
-    EXECUTE FUNCTION public.protect_timestamps_on_update();
-
--- 5. RLS (ROW LEVEL SECURITY) CORRIGIDO PARA A LIXEIRA FUNCIONAR
-ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
-
--- 5.1 LEITURA MESTRA: Permite ver ativos e lixeira (O JavaScript faz o filtro no ecrã)
-CREATE POLICY "Leitura Entidades" 
-ON public.entidades FOR SELECT TO authenticated
-USING (auth.uid() = user_id);
-
--- 5.2 INSERÇÃO: Apenas cria no próprio nome
-CREATE POLICY "Insercao Entidades" 
-ON public.entidades FOR INSERT TO authenticated
-WITH CHECK (auth.uid() = user_id);
-
--- 5.3 EDIÇÃO MESTRA: Permite editar, ocultar (Soft Delete) e restaurar
-CREATE POLICY "Edicao Entidades" 
-ON public.entidades FOR UPDATE TO authenticated
-USING (auth.uid() = user_id) 
-WITH CHECK (auth.uid() = user_id);
-
--- 5.4 EXCLUSÃO FÍSICA: Necessário para o botão "Esvaziar Lixeira"
-CREATE POLICY "Exclusao Entidades" 
-ON public.entidades FOR DELETE TO authenticated
-USING (auth.uid() = user_id);
-
-
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TABELA PRODUTOS 
-```
-
- -- ============================================================================
--- ARQUITETURA DE PRODUTOS V2: ZERO TRUST, ANTI-XSS & LOGÍSTICA COMPLETA
 -- ============================================================================
-
--- [INÍCIO: 1. LIMPEZA SEGURA]
-DROP TABLE IF EXISTS public.produtos CASCADE;
--- [FIM: 1. LIMPEZA SEGURA]
-
--- [INÍCIO: 2. CRIAÇÃO DA TABELA COMPLETA]
-CREATE TABLE public.produtos (
-    -- Identificação e Segurança
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    
-    -- Dados Básicos
-    nome TEXT NOT NULL,
-    descricao TEXT,
-    categoria TEXT,
-    origem TEXT,
-    ean TEXT,
-    imagem_url TEXT,
-    
-    -- Financeiro
-    preco NUMERIC(10, 2) NOT NULL DEFAULT 0,
-    preco_custo NUMERIC(10, 2) DEFAULT 0,
-    
-    -- Estoque e Logística
-    estoque_atual INTEGER DEFAULT 0,
-    estoque_minimo INTEGER DEFAULT 0,
-    peso NUMERIC(10, 3),
-    dimensoes TEXT,
-    localizacao_loja TEXT,
-    localizacao_estoque TEXT,
-    
-    -- Datas de Negócio e Relacionamentos
-    data_compra DATE,
-    data_vencimento DATE,
-    fornecedor_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
-    
-    -- Controle de Estado e Timestamps
-    deleted_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
--- [FIM: 2. CRIAÇÃO DA TABELA COMPLETA]
-
-
--- [INÍCIO: 3. ÍNDICES DE ALTA PERFORMANCE]
-CREATE INDEX idx_produtos_user_updated ON public.produtos(user_id, updated_at);
-CREATE INDEX idx_produtos_ativos ON public.produtos(user_id) WHERE deleted_at IS NULL;
--- [FIM: 3. ÍNDICES DE ALTA PERFORMANCE]
-
-
--- [INÍCIO: 4. REGRAS DE NEGÓCIO INQUEBRÁVEIS E ANTI-XSS]
-ALTER TABLE public.produtos 
--- Bloqueio de valores nocivos aos cálculos
-ADD CONSTRAINT precos_positivos CHECK (preco >= 0 AND preco_custo >= 0),
-ADD CONSTRAINT estoques_positivos CHECK (estoque_atual >= 0 AND estoque_minimo >= 0),
-ADD CONSTRAINT peso_positivo CHECK (peso >= 0 OR peso IS NULL),
-ADD CONSTRAINT nome_tamanho CHECK (char_length(TRIM(nome)) >= 3 AND char_length(nome) <= 255),
--- Firewall Anti-XSS no Banco de Dados
-ADD CONSTRAINT produtos_nome_anti_xss CHECK (nome !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)'),
-ADD CONSTRAINT produtos_descricao_anti_xss CHECK (descricao !~* '(<script|<iframe|<object|<embed|<link|<style|javascript:|on[a-z]+\s*=)');
--- [FIM: 4. REGRAS DE NEGÓCIO INQUEBRÁVEIS E ANTI-XSS]
-
-
--- [INÍCIO: 5. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
-CREATE OR REPLACE FUNCTION public.protect_timestamps_on_insert()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.created_at = now();
-    NEW.updated_at = now();
-    NEW.deleted_at = NULL; 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER on_produto_insert
-    BEFORE INSERT ON public.produtos
-    FOR EACH ROW
-    EXECUTE FUNCTION public.protect_timestamps_on_insert();
-
-CREATE OR REPLACE FUNCTION public.protect_timestamps_on_update()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = now();
-    NEW.created_at = OLD.created_at;
-    NEW.user_id = OLD.user_id; -- Impede roubo de registo (IDOR)
-    
-    IF NEW.deleted_at IS NOT NULL THEN
-        NEW.deleted_at = now();
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER on_produto_updated
-    BEFORE UPDATE ON public.produtos
-    FOR EACH ROW
-    EXECUTE FUNCTION public.protect_timestamps_on_update();
--- [FIM: 5. BLINDAGEM ABSOLUTA DE ESTADOS E TIMESTAMPS]
-
-
--- [INÍCIO: 6. RLS ZERO TRUST COM LIXEIRA E HARD DELETE]
-ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Leitura Produtos" 
-ON public.produtos FOR SELECT 
-TO authenticated 
-USING (auth.uid() = user_id);
-
-CREATE POLICY "Insercao Produtos" 
-ON public.produtos FOR INSERT 
-TO authenticated 
-WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Edicao Produtos" 
-ON public.produtos FOR UPDATE 
-TO authenticated 
-USING (auth.uid() = user_id) 
-WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Exclusao Produtos" 
-ON public.produtos FOR DELETE 
-TO authenticated 
-USING (auth.uid() = user_id);
--- [FIM: 6. RLS ZERO TRUST COM LIXEIRA E HARD DELETE]
-
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# SQL completo 
-```
+-- 🧹 [PASSO 1] LIMPEZA TOTAL MASTER RESET
 -- ============================================================================
--- 🏗️️ ERP SUPERMERCADO 10K - SCRIPT MESTRE DE ARQUITETURA DE BACKEND
--- ============================================================================
-
--- 🧹 1. LIMPEZA TOTAL (Cuidado: Apaga toda a estrutura pública atual)
+DROP VIEW IF EXISTS public.vitrine CASCADE;
+DROP TABLE IF EXISTS public.auditoria_produtos CASCADE;
 DROP TABLE IF EXISTS public.log_entregas CASCADE;
 DROP TABLE IF EXISTS public.est_movimentacoes CASCADE;
 DROP TABLE IF EXISTS public.fin_contas CASCADE;
@@ -2443,237 +2240,237 @@ DROP TABLE IF EXISTS public.fin_pagamentos_venda CASCADE;
 DROP TABLE IF EXISTS public.pdv_itens_venda CASCADE;
 DROP TABLE IF EXISTS public.pdv_vendas CASCADE;
 DROP TABLE IF EXISTS public.pdv_turnos CASCADE;
-DROP TABLE IF EXISTS public.rh_folha_pagamento CASCADE;
 DROP TABLE IF EXISTS public.rh_contratos CASCADE;
 DROP TABLE IF EXISTS public.pdv_terminais CASCADE;
 DROP TABLE IF EXISTS public.produtos CASCADE;
 DROP TABLE IF EXISTS public.entidades CASCADE;
 
 -- ============================================================================
--- 📦 2. CRIAÇÃO DAS TABELAS MESTRAS (FUNDAÇÃO)
+-- 📦 [PASSO 2] ENTIDADES BASE E RECURSOS HUMANOS
 -- ============================================================================
 
--- 2.1 ENTIDADES (Clientes, Fornecedores, Funcionários)
 CREATE TABLE public.entidades (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'colaborador', 'entregador')),
-    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3),
-    documento TEXT CHECK (char_length(documento) <= 50),
+    tipo TEXT NOT NULL CHECK (tipo IN ('cliente', 'fornecedor', 'funcionario', 'entregador', 'empresa')),
+    nome_completo TEXT NOT NULL,
+    tipo_documento VARCHAR(4),
+    numero_documento TEXT,
     telefone TEXT,
     email TEXT,
-    observacoes TEXT,
-    codigo_barras TEXT, -- Crachá ou Cartão Fidelidade
-    avatar_url TEXT,
-    pontos_fidelidade INTEGER DEFAULT 0 CHECK (pontos_fidelidade >= 0), -- Fidelidade Integrada
-    deleted_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT anti_xss_nome CHECK (nome !~* '(<script|<iframe|javascript:)')
+    endereco_completo TEXT,
+    foto_url TEXT,
+    pontos_fidelidade INTEGER DEFAULT 0,
+    status VARCHAR DEFAULT 'ativo',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-
--- 2.2 PRODUTOS (Catálogo do Supermercado)
-CREATE TABLE public.produtos (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    nome TEXT NOT NULL CHECK (char_length(TRIM(nome)) >= 3),
-    descricao TEXT,
-    categoria TEXT,
-    origem TEXT,
-    ean TEXT,
-    codigo_balanca VARCHAR(6) UNIQUE, -- Integração Toledo/Filizola
-    is_pesavel BOOLEAN DEFAULT false,
-    imagem_url TEXT,
-    preco NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (preco >= 0),
-    preco_custo NUMERIC(10, 2) DEFAULT 0 CHECK (preco_custo >= 0),
-    estoque_atual NUMERIC(10, 3) DEFAULT 0, 
-    estoque_minimo NUMERIC(10, 3) DEFAULT 0,
-    peso NUMERIC(10, 3) CHECK (peso >= 0 OR peso IS NULL),
-    dimensoes TEXT,
-    localizacao_loja TEXT,
-    localizacao_estoque TEXT,
-    fornecedor_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
-    deleted_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- ============================================================================
--- 🧑‍💼 3. MÓDULO DE RECURSOS HUMANOS (RH)
--- ============================================================================
 
 CREATE TABLE public.rh_contratos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     entidade_id UUID NOT NULL REFERENCES public.entidades(id) ON DELETE CASCADE,
+    auth_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL, 
     cargo TEXT NOT NULL,
-    salario_base NUMERIC(10, 2) NOT NULL CHECK (salario_base >= 0),
-    data_admissao DATE NOT NULL,
-    status TEXT CHECK (status IN ('ativo', 'ferias', 'desligado')),
+    salario_base NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    data_admissao DATE NOT NULL DEFAULT CURRENT_DATE,
+    status TEXT DEFAULT 'ativo',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================================
+-- 🛒 [PASSO 3] CATÁLOGO, AUDITORIA E VITRINE SEGURA
+-- ============================================================================
+
+CREATE TABLE public.produtos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    codigo_barras TEXT UNIQUE,
+    sku TEXT UNIQUE,
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    categoria TEXT,
+    foto_url TEXT,
+    
+    preco_venda NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    preco_custo NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    estoque_atual NUMERIC(10, 3) DEFAULT 0, 
+    estoque_minimo NUMERIC(10, 3) DEFAULT 0,
+    unidade_comercial VARCHAR(4) NOT NULL,
+    tipo_embalagem TEXT,
+    peso_liquido NUMERIC(10, 3) DEFAULT 0,
+    dimensoes TEXT,
+    
+    local_estoque TEXT,
+    local_loja TEXT,
+    data_compra DATE,
+    data_vencimento DATE,
+    
+    ncm VARCHAR(8),
+    cest VARCHAR(7),
+    cfop_padrao VARCHAR(4),
+    origem_mercadoria INTEGER DEFAULT 0,
+    aliquota_icms NUMERIC(5,2) DEFAULT 0,
+    
+    fornecedor_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
+    especificacoes JSONB,
+    esta_ativo BOOLEAN DEFAULT true,
+    visivel_vitrine BOOLEAN DEFAULT false, -- Lente para o E-commerce
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE public.auditoria_produtos (
+    id_auditoria UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    produto_id UUID NOT NULL,
+    acao TEXT NOT NULL,
+    dados_antigos JSONB,
+    dados_novos JSONB,
+    usuario_id UUID,
+    data_hora TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- A VITRINE (View) para os clientes do e-commerce visualizarem
+CREATE OR REPLACE VIEW public.vitrine AS
+SELECT id, codigo_barras, nome, descricao, categoria, foto_url, preco_venda, unidade_comercial, tipo_embalagem, especificacoes
+FROM public.produtos
+WHERE esta_ativo = true AND visivel_vitrine = true;
+
+GRANT SELECT ON public.vitrine TO anon, authenticated;
+
 -- ============================================================================
--- 🛒 4. MÓDULO DE FRENTE DE CAIXA (PDV) E FISCAL
+-- 🏪 [PASSO 4] FRENTE DE CAIXA (PDV) E VENDAS
 -- ============================================================================
 
--- 4.1 TERMINAIS (As máquinas físicas)
 CREATE TABLE public.pdv_terminais (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    nome TEXT NOT NULL,
-    numero_serie TEXT UNIQUE,
+    codigo_terminal TEXT UNIQUE NOT NULL,
+    descricao_localizacao TEXT,
     ativo BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- 4.2 TURNOS (Abertura e Fecho de Caixa)
 CREATE TABLE public.pdv_turnos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    terminal_id UUID NOT NULL REFERENCES public.pdv_terminais(id),
-    operador_id UUID NOT NULL REFERENCES public.entidades(id),
-    saldo_abertura NUMERIC(10, 2) NOT NULL CHECK (saldo_abertura >= 0),
+    terminal_id UUID NOT NULL REFERENCES public.pdv_terminais(id) ON DELETE RESTRICT,
+    operador_id UUID NOT NULL REFERENCES public.entidades(id) ON DELETE RESTRICT,
+    saldo_abertura NUMERIC(10, 2) NOT NULL,
     saldo_fechamento NUMERIC(10, 2),
-    status TEXT NOT NULL CHECK (status IN ('aberto', 'fechado')),
+    status TEXT NOT NULL DEFAULT 'aberto',
     aberto_em TIMESTAMPTZ NOT NULL DEFAULT now(),
     fechado_em TIMESTAMPTZ
 );
 CREATE UNIQUE INDEX idx_turno_unico ON public.pdv_turnos(terminal_id) WHERE status = 'aberto';
 
--- 4.3 VENDAS (Cabeçalho do Cupom Fiscal)
 CREATE TABLE public.pdv_vendas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     turno_id UUID NOT NULL REFERENCES public.pdv_turnos(id),
-    cliente_id UUID REFERENCES public.entidades(id),
+    cliente_id UUID REFERENCES public.entidades(id) ON DELETE SET NULL,
+    numero_pedido SERIAL,
     total_bruto NUMERIC(10, 2) NOT NULL DEFAULT 0,
     total_desconto NUMERIC(10, 2) NOT NULL DEFAULT 0,
     total_liquido NUMERIC(10, 2) GENERATED ALWAYS AS (total_bruto - total_desconto) STORED,
-    status TEXT NOT NULL CHECK (status IN ('pendente', 'concluida', 'cancelada')),
-    -- Dados Fiscais / NFe
-    cpf_na_nota TEXT,
-    chave_nfe TEXT UNIQUE,
-    numero_recibo TEXT UNIQUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    status TEXT NOT NULL DEFAULT 'pendente',
+    forma_pagamento TEXT, 
+    chave_nfce TEXT UNIQUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- 4.4 ITENS DA VENDA
 CREATE TABLE public.pdv_itens_venda (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
-    produto_id UUID NOT NULL REFERENCES public.produtos(id),
-    quantidade NUMERIC(10, 3) NOT NULL CHECK (quantidade > 0),
-    preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario >= 0),
+    produto_id UUID NOT NULL REFERENCES public.produtos(id) ON DELETE RESTRICT,
+    quantidade NUMERIC(10, 3) NOT NULL,
+    preco_unitario NUMERIC(10, 2) NOT NULL,
     subtotal NUMERIC(10, 2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED
 );
 
 -- ============================================================================
--- 💰 5. MÓDULO FINANCEIRO
+-- 💰 [PASSO 5] FINANCEIRO E ESTOQUE AVANÇADO (Módulos Restaurados)
 -- ============================================================================
 
--- 5.1 PAGAMENTOS DA VENDA
 CREATE TABLE public.fin_pagamentos_venda (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
-    turno_id UUID NOT NULL REFERENCES public.pdv_turnos(id),
+    turno_id UUID NOT NULL REFERENCES public.pdv_turnos(id) ON DELETE RESTRICT,
     metodo TEXT NOT NULL CHECK (metodo IN ('dinheiro', 'pix', 'debito', 'credito', 'fiado', 'vale_alimentacao')),
     valor_pago NUMERIC(10, 2) NOT NULL CHECK (valor_pago > 0),
+    troco NUMERIC(10, 2) DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- 5.2 CONTAS A RECEBER E PAGAR (Gestão de Fiado e Boletos)
 CREATE TABLE public.fin_contas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    entidade_id UUID NOT NULL REFERENCES public.entidades(id),
-    venda_id UUID REFERENCES public.pdv_vendas(id),
-    tipo TEXT NOT NULL CHECK (tipo IN ('pagar', 'receber')),
-    descricao TEXT NOT NULL,
-    valor NUMERIC(10, 2) NOT NULL CHECK (valor > 0),
+    entidade_id UUID NOT NULL REFERENCES public.entidades(id) ON DELETE RESTRICT,
+    tipo_conta VARCHAR NOT NULL CHECK (tipo_conta IN ('receber', 'pagar')),
+    descricao VARCHAR NOT NULL,
+    valor_nominal NUMERIC(10, 2) NOT NULL,
+    valor_pago NUMERIC(10, 2) DEFAULT 0.00,
+    data_emissao DATE NOT NULL DEFAULT CURRENT_DATE,
     data_vencimento DATE NOT NULL,
-    status TEXT NOT NULL CHECK (status IN ('aberto', 'pago', 'cancelado')),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    data_pagamento DATE,
+    status_conta VARCHAR NOT NULL DEFAULT 'aberta',
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================================
--- 🚚 6. LOGÍSTICA E ESTOQUE
--- ============================================================================
-
--- 6.1 MOVIMENTAÇÕES DE ESTOQUE (Extrato de Auditoria)
 CREATE TABLE public.est_movimentacoes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
-    produto_id UUID NOT NULL REFERENCES public.produtos(id),
-    venda_id UUID REFERENCES public.pdv_vendas(id),
+    produto_id UUID NOT NULL REFERENCES public.produtos(id) ON DELETE RESTRICT,
+    venda_id UUID REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
     tipo TEXT NOT NULL CHECK (tipo IN ('entrada_compra', 'saida_venda', 'quebra', 'ajuste')),
     quantidade NUMERIC(10, 3) NOT NULL, 
     observacao TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- 6.2 ENTREGAS (Gestão de Frota)
 CREATE TABLE public.log_entregas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id) ON DELETE CASCADE,
     venda_id UUID NOT NULL REFERENCES public.pdv_vendas(id) ON DELETE CASCADE,
-    entregador_id UUID REFERENCES public.entidades(id),
-    endereco_completo TEXT NOT NULL,
-    taxa_entrega NUMERIC(10, 2) DEFAULT 0,
-    status TEXT NOT NULL CHECK (status IN ('preparacao', 'em_rota', 'entregue', 'devolvido')),
-    hora_saida TIMESTAMPTZ,
-    hora_chegada TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    entregador_id UUID NOT NULL REFERENCES public.entidades(id) ON DELETE RESTRICT,
+    endereco_entrega TEXT NOT NULL,
+    status_entrega VARCHAR NOT NULL DEFAULT 'pendente',
+    data_hora_saida TIMESTAMPTZ,
+    data_hora_entrega TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ============================================================================
--- 🧠 7. O CÉREBRO: GATILHOS (TRIGGERS) E AUTOMAÇÃO
+-- 🧠 [PASSO 6] GATILHOS (TRIGGERS) DE AUTOMAÇÃO
 -- ============================================================================
 
--- 7.1 AUTOMAÇÃO DE ESTOQUE: A base de dados gere o stock sozinha
-CREATE OR REPLACE FUNCTION public.automacao_estoque_pdv()
-RETURNS TRIGGER AS $$
+-- 1. Auditoria de Produtos
+CREATE OR REPLACE FUNCTION public.registrar_auditoria() RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.est_movimentacoes (user_id, produto_id, venda_id, tipo, quantidade, observacao)
-    VALUES (NEW.user_id, NEW.produto_id, NEW.venda_id, 'saida_venda', -NEW.quantidade, 'Baixa automática do PDV');
-    
-    UPDATE public.produtos 
-    SET estoque_atual = estoque_atual - NEW.quantidade, updated_at = now()
-    WHERE id = NEW.produto_id;
-    
+    IF (TG_OP = 'INSERT') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_novos, usuario_id) VALUES (NEW.id, 'INSERT', row_to_json(NEW)::jsonb, auth.uid()); RETURN NEW;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_antigos, dados_novos, usuario_id) VALUES (NEW.id, 'UPDATE', row_to_json(OLD)::jsonb, row_to_json(NEW)::jsonb, auth.uid()); RETURN NEW;
+    ELSIF (TG_OP = 'DELETE') THEN
+        INSERT INTO public.auditoria_produtos (produto_id, acao, dados_antigos, usuario_id) VALUES (OLD.id, 'DELETE', row_to_json(OLD)::jsonb, auth.uid()); RETURN OLD;
+    END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+CREATE TRIGGER trigger_auditoria_produtos AFTER INSERT OR UPDATE OR DELETE ON public.produtos FOR EACH ROW EXECUTE FUNCTION public.registrar_auditoria();
+
+-- 2. Automação de Estoque
+CREATE OR REPLACE FUNCTION public.automacao_estoque_pdv() RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.est_movimentacoes (produto_id, venda_id, tipo, quantidade, observacao) VALUES (NEW.produto_id, NEW.venda_id, 'saida_venda', -NEW.quantidade, 'Baixa PDV');
+    UPDATE public.produtos SET estoque_atual = estoque_atual - NEW.quantidade, updated_at = now() WHERE id = NEW.produto_id;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+CREATE TRIGGER on_venda_item_inserido AFTER INSERT ON public.pdv_itens_venda FOR EACH ROW EXECUTE FUNCTION public.automacao_estoque_pdv();
 
-CREATE TRIGGER on_venda_item_inserido
-    AFTER INSERT ON public.pdv_itens_venda
-    FOR EACH ROW EXECUTE FUNCTION public.automacao_estoque_pdv();
-
--- 7.2 AUTOMAÇÃO DE FIDELIDADE
-CREATE OR REPLACE FUNCTION public.automacao_fidelidade()
-RETURNS TRIGGER AS $$
+-- 3. Automação de Fidelidade
+CREATE OR REPLACE FUNCTION public.automacao_fidelidade() RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.status = 'concluida' AND OLD.status != 'concluida' AND NEW.cliente_id IS NOT NULL THEN
-        UPDATE public.entidades 
-        SET pontos_fidelidade = pontos_fidelidade + FLOOR(NEW.total_liquido)
-        WHERE id = NEW.cliente_id;
+        UPDATE public.entidades SET pontos_fidelidade = pontos_fidelidade + FLOOR(NEW.total_liquido) WHERE id = NEW.cliente_id;
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+CREATE TRIGGER on_venda_concluida AFTER UPDATE ON public.pdv_vendas FOR EACH ROW EXECUTE FUNCTION public.automacao_fidelidade();
 
-CREATE TRIGGER on_venda_concluida
-    AFTER UPDATE ON public.pdv_vendas
-    FOR EACH ROW EXECUTE FUNCTION public.automacao_fidelidade();
-
--- 7.3 IMUTABILIDADE FISCAL
-CREATE OR REPLACE FUNCTION public.blindagem_fiscal_venda()
-RETURNS TRIGGER AS $$
+-- 4. Blindagem Fiscal (Não alterar venda concluída)
+CREATE OR REPLACE FUNCTION public.blindagem_fiscal_venda() RETURNS TRIGGER AS $$
 BEGIN
     IF OLD.status = 'concluida' AND NEW.status != 'cancelada' THEN
         RAISE EXCEPTION 'FRAUDE BLOQUEADA: Vendas concluídas não podem ser alteradas.';
@@ -2681,28 +2478,30 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
-CREATE TRIGGER on_alteracao_venda
-    BEFORE UPDATE ON public.pdv_vendas
-    FOR EACH ROW EXECUTE FUNCTION public.blindagem_fiscal_venda();
+CREATE TRIGGER on_alteracao_venda BEFORE UPDATE ON public.pdv_vendas FOR EACH ROW EXECUTE FUNCTION public.blindagem_fiscal_venda();
 
 -- ============================================================================
--- 🛡️ 8. SEGURANÇA ZERO TRUST (ROW LEVEL SECURITY EM TODAS AS TABELAS)
+-- 🛡️ [PASSO 7] SEGURANÇA ZERO TRUST (RLS)
 -- ============================================================================
 
--- Aplicação do RLS Dinâmico em todas as tabelas (Impede o erro 42501 e isola inquilinos)
-DO $$ 
-DECLARE
-    t_name text;
-BEGIN
-    FOR t_name IN 
-        SELECT tablename FROM pg_tables WHERE schemaname = 'public'
-    LOOP
-        EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY;', t_name);
-        EXECUTE format('DROP POLICY IF EXISTS "Acesso Total Dono" ON public.%I;', t_name);
-        EXECUTE format('CREATE POLICY "Acesso Total Dono" ON public.%I FOR ALL TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);', t_name);
-    END LOOP;
-END $$;
+ALTER TABLE public.entidades ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rh_contratos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.produtos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.auditoria_produtos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_terminais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_turnos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_vendas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_itens_venda ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.fin_pagamentos_venda ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.fin_contas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.est_movimentacoes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.log_entregas ENABLE ROW LEVEL SECURITY;
+
+-- Políticas de Acesso (Sua equipe gere, o público não vê os produtos)
+CREATE POLICY "Autenticados_Gerenciam_Produtos" ON public.produtos FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Autenticados_Gere_Vendas" ON public.pdv_vendas FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Anon_Insere_Vendas" ON public.pdv_vendas FOR INSERT TO anon WITH CHECK (true);
+
 
 
 ```
