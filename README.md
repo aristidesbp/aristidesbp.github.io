@@ -2734,7 +2734,8 @@ if (typeof supabase !== 'undefined') {
     clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
 
-
+```
+```
 
 /*🟥
 PARTE 2: GESTOR CENTRAL DE ROTAS
@@ -2751,7 +2752,8 @@ async function iniciarApp() {
         desenharLogin();
     }
 }
-
+```
+```
 
 /*🟥
 PARTE 3: ECRÃ DE LOGIN
@@ -2804,6 +2806,8 @@ function desenharLogin() {
     };
 }
 
+```
+```
 /*🟥
 PARTE 4: ECRÃ DO MENU PRINCIPAL (CENTRO DE COMANDO)
 🟥*/ 
@@ -2858,9 +2862,8 @@ function desenharMenuPrincipal(emailDoOperador) {
 }
 
 
-
-
-
+```
+```
 /*🟥 =================================================================
    PARTE 5: MÓDULO DE PRODUTOS (ARQUITETURA MODULAR)
 ================================================================= 🟥*/
@@ -3624,7 +3627,9 @@ document.addEventListener('click', async function(e) {
         }
     }
 });
-
+//fim de produtos 
+```
+```
 
 /*🟥
 6.[INÍCIO: SUBSTITUIR A FUNÇÃO 'desenharModuloEntidades' EXISTENTE POR ESTE BLOCO]
@@ -3806,7 +3811,8 @@ async function carregarListagemEntidades() {
     });
 }
 //[FIM: BLOCO DE ENTIDADES]
-
+```
+```
 
 /*🟥
 7. Componente: Utilitário de Compressão e Upload de Imagens (Supabase Storage)
@@ -3879,7 +3885,8 @@ async function comprimirEUploadImagem(arquivoOriginal, nomeBucket, caminhoNomeAr
     
     return linkPublico.publicUrl;
 }
-
+```
+```
 
 /*🟥
 8. Componente: Leitor de Código de Barras (Interface e Lógica Reutilizável)
@@ -3952,8 +3959,8 @@ function fecharScanner() {
     }
 }
 
-
-
+```
+```
 
 /*🟥
  FUNÇÕES AUXILIARES DE INTERFACE
@@ -3974,8 +3981,6 @@ function alternarAba(abaSelecionada) {
         document.getElementById('aba-conteudo-lista').classList.add('active');
     }
 }
-
-
 
 
 /*🟥
