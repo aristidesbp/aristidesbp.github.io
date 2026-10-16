@@ -2502,6 +2502,60 @@ CREATE POLICY "Autenticados_Gerenciam_Produtos" ON public.produtos FOR ALL TO au
 CREATE POLICY "Autenticados_Gere_Vendas" ON public.pdv_vendas FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Anon_Insere_Vendas" ON public.pdv_vendas FOR INSERT TO anon WITH CHECK (true);
 
+```
+
+#  CRIANDO STORAGES 
+
+```
+-- ============================================================================
+-- 📁 2. CRIAÇÃO DOS BUCKETS ORGANIZADOS (STORAGE)
+-- ============================================================================
+-- Inserimos os três novos buckets definindo-os como públicos para que as 
+-- imagens possam ser carregadas em páginas web (como a vitrine).
+INSERT INTO storage.buckets (id, name, public)
+VALUES 
+    ('foto_entidades', 'foto_entidades', true),
+    ('foto_produtos', 'foto_produtos', true),
+    ('outras_midias', 'outras_midias', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================================
+-- 🛡️ 3. POLÍTICAS DE SEGURANÇA (RLS) PARA OS 3 BUCKETS
+-- ============================================================================
+
+-- Primeiro, removemos políticas antigas caso existam, para evitar duplicação
+DROP POLICY IF EXISTS "Leitura_Publica_Fotos" ON storage.objects;
+DROP POLICY IF EXISTS "Autenticados_Sobem_Fotos" ON storage.objects;
+DROP POLICY IF EXISTS "Autenticados_Apagam_Fotos" ON storage.objects;
+DROP POLICY IF EXISTS "Autenticados_Atualizam_Fotos" ON storage.objects;
+
+-- Política A: LEITURA PÚBLICA
+-- Qualquer pessoa pode visualizar as fotos (necessário para o Front-end/Vitrine)
+CREATE POLICY "Leitura_Publica_Fotos" 
+ON storage.objects FOR SELECT 
+TO public 
+USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
+
+-- Política B: UPLOAD (INSERIR)
+-- Apenas usuários logados no sistema (authenticated) podem enviar novas fotos
+CREATE POLICY "Autenticados_Sobem_Fotos" 
+ON storage.objects FOR INSERT 
+TO authenticated 
+WITH CHECK (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
+
+-- Política C: DELETAR
+-- Apenas usuários logados podem apagar arquivos do storage
+CREATE POLICY "Autenticados_Apagam_Fotos" 
+ON storage.objects FOR DELETE 
+TO authenticated 
+USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
+
+-- Política D: ATUALIZAR (SUBSTITUIR FOTO)
+-- Apenas usuários logados podem substituir arquivos já existentes
+CREATE POLICY "Autenticados_Atualizam_Fotos" 
+ON storage.objects FOR UPDATE 
+TO authenticated 
+USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
 
 
 ```
