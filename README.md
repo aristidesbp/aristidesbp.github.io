@@ -2581,7 +2581,14 @@ USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # style.css
 ```
-/* ================= DESIGN SYSTEM (Cores e Temas) ================= */
+/* ============================================================================
+   🎨 ERP SUPERMERCADO 10K - DESIGN SYSTEM E FOLHA DE ESTILOS MODULAR
+============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. VARIÁVEIS E TEMAS (Design Tokens)
+   Aqui guardamos a nossa paleta de cores. Não coloque cores soltas no código!
+---------------------------------------------------------------------------- */
 :root {
     --bg-color: #0b1320; 
     --card-bg: #151f2b;  
@@ -2605,41 +2612,240 @@ USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
     --danger-color: #dc3545;
 }
 
-/* Estrutura Base */
-body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding-bottom: 50px; }
-#app-root { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+/* ----------------------------------------------------------------------------
+   2. BASE E ESTRUTURA GLOBAL (Reset)
+---------------------------------------------------------------------------- */
+body { 
+    font-family: 'Segoe UI', Tahoma, sans-serif; 
+    margin: 0; 
+    background-color: var(--bg-color); 
+    color: var(--text-main); 
+    transition: background-color 0.3s, color 0.3s; 
+    padding-bottom: 50px; 
+}
 
-/* Cabeçalho (Header) */
-header { background-color: var(--bg-color); padding: 15px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px;}
-.logo-area { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold; }
-.logo-icon { color: var(--accent-neon); }
-.header-actions { display: flex; gap: 15px; align-items: center; }
-.icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.5em; cursor: pointer; padding: 0; }
+#app-root { 
+    width: 100%; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px; 
+    box-sizing: border-box; 
+}
 
-/* Cartões e Elementos Visuais */
-.card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); margin-bottom: 20px; box-sizing: border-box; }
-.titulo { text-align: center; margin-bottom: 20px; color: var(--accent-neon); font-size: 1.5em; font-weight: bold;}
+/* ----------------------------------------------------------------------------
+   3. LAYOUT: CABEÇALHO (Header)
+---------------------------------------------------------------------------- */
+header { 
+    background-color: var(--bg-color); 
+    padding: 15px 0; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 1px solid var(--border-color); 
+    margin-bottom: 20px;
+}
 
-/* Formulários */
-label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--text-muted); font-size: 0.9em;}
-input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); box-sizing: border-box; outline: none; }
-input:focus { border-color: var(--accent-neon); }
+.logo-area { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size: 1.2em; 
+    font-weight: bold; 
+}
 
-/* Botões */
-.btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; margin-bottom: 15px;}
-.btn-neon:hover { background: var(--accent-hover); }
-.btn-secundario { width: 100%; padding: 14px; background: transparent; color: var(--accent-neon); border: 1px solid var(--accent-neon); border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; }
+.logo-icon { 
+    color: var(--accent-neon); 
+}
 
-/* Lista de Produtos */
-ul { list-style-type: none; padding: 0; margin: 0; }
-li { background: var(--bg-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold;}
-/* Adicionar ao final do style.css */
+.header-actions { 
+    display: flex; 
+    gap: 15px; 
+    align-items: center; 
+}
+
+/* ----------------------------------------------------------------------------
+   4. COMPONENTES: CARTÕES (Cards)
+---------------------------------------------------------------------------- */
+.card { 
+    background: var(--card-bg); 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    border: 1px solid var(--border-color); 
+    margin-bottom: 20px; 
+    box-sizing: border-box; 
+}
+
 .card.disabled {
     opacity: 0.5;
     cursor: not-allowed !important;
     filter: grayscale(100%);
     border: 1px dashed var(--text-muted);
 }
+
+.titulo { 
+    text-align: center; 
+    margin-bottom: 20px; 
+    color: var(--accent-neon); 
+    font-size: 1.5em; 
+    font-weight: bold;
+}
+
+/* ----------------------------------------------------------------------------
+   5. COMPONENTES: FORMULÁRIOS E INPUTS
+---------------------------------------------------------------------------- */
+label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    color: var(--text-muted); 
+    font-size: 0.9em;
+}
+
+input, textarea { 
+    width: 100%; 
+    padding: 12px; 
+    margin-bottom: 20px; 
+    border: 1px solid var(--border-color); 
+    border-radius: 8px; 
+    background-color: var(--bg-color); 
+    color: var(--text-main); 
+    box-sizing: border-box; 
+    outline: none; 
+}
+
+input:focus, textarea:focus { 
+    border-color: var(--accent-neon); 
+}
+
+/* Correção da Caixa de Senha (O Cadeado) */
+.input-senha-container {
+    position: relative; 
+    display: flex;
+    align-items: center; 
+    width: 100%;
+}
+
+.input-senha-container input {
+    margin-bottom: 20px; /* Mantém a margem inferior padrão */
+    padding-right: 45px; /* Espaço para não sobrepor o botão */
+}
+
+/* ----------------------------------------------------------------------------
+   6. COMPONENTES: BOTÕES
+---------------------------------------------------------------------------- */
+.btn-neon { 
+    width: 100%; 
+    padding: 14px; 
+    background: var(--accent-neon); 
+    color: #000; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 1.1em; 
+    font-weight: bold; 
+    margin-bottom: 15px;
+}
+
+.btn-neon:hover { 
+    background: var(--accent-hover); 
+}
+
+.btn-secundario { 
+    width: 100%; 
+    padding: 14px; 
+    background: transparent; 
+    color: var(--accent-neon); 
+    border: 1px solid var(--accent-neon); 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 1.1em; 
+    font-weight: bold; 
+}
+
+.icon-btn { 
+    background: none; 
+    border: none; 
+    color: var(--text-main); 
+    font-size: 1.5em; 
+    cursor: pointer; 
+    padding: 0; 
+}
+
+/* O botão do cadeado da senha */
+.btn-olho {
+    position: absolute; 
+    right: 10px; 
+    top: 50%;
+    transform: translateY(calc(-50% - 10px)); /* Centraliza perfeitamente descontando a margem do input */
+    background: transparent; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 1.2rem; 
+    padding: 0;
+    color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------------------------
+   7. COMPONENTES: NAVEGAÇÃO E ABAS (Tabs)
+---------------------------------------------------------------------------- */
+.tabs-menu { 
+    display: flex; 
+    gap: 5px; 
+    margin-bottom: 15px; 
+    border-bottom: 2px solid var(--border-color); 
+}
+
+.tab-btn { 
+    flex: 1; 
+    background: transparent; 
+    color: var(--text-muted); 
+    border: none; 
+    font-size: 1.1em; 
+    font-weight: bold; 
+    cursor: pointer; 
+    padding: 12px; 
+    transition: 0.3s; 
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover { 
+    color: var(--text-main); 
+}
+
+.tab-btn.active { 
+    color: var(--accent-neon); 
+    border-bottom: 3px solid var(--accent-neon); 
+}
+
+.tab-content { 
+    display: none; 
+}
+
+.tab-content.active { 
+    display: block; 
+}
+
+/* ----------------------------------------------------------------------------
+   8. COMPONENTES: LISTAS E BADGES
+---------------------------------------------------------------------------- */
+ul { 
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+li { 
+    background: var(--bg-color); 
+    padding: 15px; 
+    margin-bottom: 10px; 
+    border-radius: 8px; 
+    border: 1px solid var(--border-color); 
+    display: flex; 
+    justify-content: space-between; 
+    font-weight: bold;
+}
+
 .badge-fidelidade {
     padding: 2px 8px;
     border-radius: 12px;
