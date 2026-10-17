@@ -88,7 +88,242 @@ gatilho: "Ao escrever ou modificar código."    regras:      - "Organizar o cód
 HABILIDADE: "Auditoria de segurança"
 gatilho: "Quando o usuário solicitar uma auditoria de segurança."    etapas:      - "Identificar linguagem, framework, ORM, autenticação, frontend, backend e ambiente de deploy com base nas evidências fornecidas."      - "Analisar isolamento de usuário ou tenant e configuração de RLS."      - "Verificar se a autorização é imposta no backend, não apenas pela interface."      - "Procurar falhas de IDOR em operações que recebem identificadores."      - "Procurar segredos em código, arquivos de configuração, CI e histórico Git."      - "Examinar tratamento de entradas e uso de APIs do DOM, incluindo possíveis casos de XSS."      - "Registrar também controles positivos observados."    formato_dos_achados:      - "Reportar apenas achados sustentados por evidências disponíveis."      - "Para cada achado, incluir arquivo e linha quando forem fornecidos, motivo, impacto e severidade."      - "Distinguir achados confirmados de itens que precisam de verificação."    relatorio:      - >-        Se solicitado e se houver contexto suficiente, fornecer um script isolado        em docs/security-audit/ para gerar relatório PDF A4, com sumário e gráficos.      - "Incluir propostas de Issues para GitHub com título, labels, evidência, impacto e correção."      - "Não afirmar que arquivos foram criados ou executados se isso não aconteceu."
 ```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# supabase_config.js
+```
+/* ============ CONFIGURAÇÕES INICIAIS ================= */
+        
+const SUPABASE_URL = 'https://rpjtuxkfqxbpsqwihnml.supabase.co';
+        
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwanR1eGtmcXhicHNxd2lobm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNTMyNDEsImV4cCI6MjEwNjkyOTI0MX0.p71RFQIKjftxj_ERgfWIz8HqGfcq5RldOsAZ0iTWsPI';
+        
 
+const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# login.html
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Seguro - ERP Supermercado</title>
+    
+    <style>
+        /* ================= DESIGN SYSTEM ================= */
+        :root {
+            --bg-color: #0b1320; 
+            --card-bg: #151f2b;  
+            --text-main: #ffffff;
+            --text-muted: #8b9eb3;
+            --accent-neon: #a4e320; 
+            --accent-hover: #8cc21a;
+            --border-color: #2a3645;
+            --danger-color: #ff4d4d;
+            --info-color: #17a2b8;
+        }
+
+        /* Tema Claro */
+        .light-theme {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #6c757d;
+            --accent-neon: #28a745;
+            --accent-hover: #218838;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; transition: background-color 0.3s, color 0.3s; }
+        
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; margin: 20px;}
+        
+        .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
+        .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
+
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color);}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
+
+        label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; margin-bottom: 20px;}
+        input:focus { border-color: var(--accent-neon); }
+        
+        /* Modificadores do Campo de Senha */
+        .input-senha-container { position: relative; display: flex; align-items: center; width: 100%; margin-bottom: 20px; }
+        .input-senha-container input { margin-bottom: 0; padding-right: 45px; } /* Espaço reservado para o cadeado */
+        .btn-olho { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; display: flex; align-items: center; justify-content: center; height: 100%; }
+        
+        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s; }
+        .btn-neon:hover { background: var(--accent-hover); }
+
+        /* Ferramentas de Depuração Flutuantes */
+        .ferramentas-container { position: fixed; bottom: 10px; right: 10px; display: flex; gap: 10px; z-index: 10000; }
+        .btn-ferramenta { padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); }
+        .btn-tema { background: #444; color: white; border: 1px solid #666; }
+        .btn-console { background: #2980b9; color: white; }
+        .console-area { position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px; box-shadow: 0px -2px 10px rgba(0,0,0,0.5); box-sizing: border-box; }
+        .console-linha { margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 2px; }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    
+    <!-- Cartão de Login -->
+    <div class="card">
+        <h2 class="titulo">
+            <span class="logo-icon">⚡</span> 
+            Acesso Restrito
+        </h2>
+        
+        <div id="status" class="info">A verificar sessão...</div>
+
+        <!-- Formulário de Autenticação -->
+        <div id="area-login" style="display: none;">
+            <p style="font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 20px;">Insira as suas credenciais.</p>
+            
+            <label for="input-email">E-mail Administrativo:</label>
+            <input type="email" id="input-email" placeholder="admin@supermercado.com" required>
+            
+            <label for="input-senha">Palavra-passe:</label>
+            <div class="input-senha-container">
+                <input type="password" id="input-senha" placeholder="••••••••" required>
+                <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha()" id="btn-olho">🔒</button>
+            </div>
+            
+            <button id="btn-entrar" class="btn-neon">Entrar no ERP</button>
+        </div>
+    </div>
+
+    <!-- Ferramentas Globais (Depuração) -->
+    <div class="ferramentas-container">
+        <button class="btn-ferramenta btn-tema" onclick="alternarTema()">🌓 Tema</button>
+        <button class="btn-ferramenta btn-console" onclick="alternarConsole()">🛠️ Console</button>
+    </div>
+    <div class="console-area" id="console-area"></div>
+
+    <!-- Conexão com Supabase -->
+    <script src="supabase_config.js"></script>
+    
+    <script>
+        // 1. LÓGICA DO CONSOLE ESPELHO
+        const consoleArea = document.getElementById('console-area');
+        const originalLog = console.log;
+        const originalError = console.error;
+
+        function espelharNoEcra(tipo, cor, argumentos) {
+            const linha = document.createElement('div');
+            linha.className = 'console-linha';
+            linha.style.color = cor;
+            linha.textContent = `[${tipo}] ${Array.from(argumentos).map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ')}`;
+            consoleArea.appendChild(linha);
+            consoleArea.scrollTop = consoleArea.scrollHeight;
+        }
+
+        console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
+        console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
+
+        function alternarConsole() {
+            consoleArea.style.display = consoleArea.style.display === 'none' || consoleArea.style.display === '' ? 'block' : 'none';
+        }
+
+        console.log("Sistema Inicializado. Console operante!");
+
+        // 2. LÓGICA DO TEMA CLARO/ESCURO
+        if(localStorage.getItem('temaERP') === 'light') document.body.classList.add('light-theme');
+        
+        function alternarTema() {
+            document.body.classList.toggle('light-theme');
+            const temaAtual = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+            localStorage.setItem('temaERP', temaAtual);
+            console.log("Tema modificado para:", temaAtual);
+        }
+
+        // 3. LÓGICA DE VISIBILIDADE DA SENHA
+        function alternarVisibilidadeSenha() {
+            const input = document.getElementById('input-senha');
+            const btn = document.getElementById('btn-olho');
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🔓';
+            } else {
+                input.type = 'password';
+                btn.textContent = '🔒';
+            }
+        }
+
+        // 4. LÓGICA DE AUTENTICAÇÃO
+        const statusDiv = document.getElementById('status');
+        const areaLogin = document.getElementById('area-login');
+
+        // Verificação Zero Trust ao carregar a página
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log("A verificar sessão no Supabase...");
+            try {
+                const { data: { session }, error } = await clienteSupabase.auth.getSession();
+                if (session) {
+                    console.log("Sessão ativa encontrada.");
+                    sucessoRedirecionar("Sessão válida! A redirecionar...");
+                } else {
+                    statusDiv.style.display = "none";
+                    areaLogin.style.display = "block";
+                    console.log("A aguardar credenciais de login.");
+                }
+            } catch (error) {
+                mostrarErro("Erro ao verificar sessão.");
+                console.error("Falha ao comunicar com Auth:", error.message);
+            }
+        });
+
+        // Evento de Login por Senha
+        document.getElementById('btn-entrar').addEventListener('click', async () => {
+            const email = document.getElementById('input-email').value.trim();
+            const senha = document.getElementById('input-senha').value;
+            const btnEntrar = document.getElementById('btn-entrar');
+
+            if (!email || !senha) {
+                alert("Preencha e-mail e palavra-passe!");
+                console.error("Campos vazios no envio do formulário.");
+                return; 
+            }
+
+            btnEntrar.textContent = "A Autenticar..."; btnEntrar.disabled = true;
+            console.log("A processar autenticação para:", email);
+
+            const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
+            
+            if (error) {
+                mostrarErro("Credenciais incorretas.");
+                console.error("Erro do Supabase:", error.message);
+                btnEntrar.textContent = "Entrar no ERP"; btnEntrar.disabled = false;
+            } else {
+                console.log("Autenticação validada com sucesso pelo servidor.");
+                sucessoRedirecionar("Autenticado! A entrar...");
+            }
+        });
+
+        // Helpers de Notificação Visual
+        function sucessoRedirecionar(mensagem) {
+            statusDiv.style.display = "block";
+            statusDiv.textContent = "✅ " + mensagem;
+            statusDiv.className = "info sucesso";
+            setTimeout(() => { window.location.href = 'listar.html'; }, 1000);
+        }
+
+        function mostrarErro(mensagem) {
+            statusDiv.style.display = "block";
+            statusDiv.textContent = "❌ " + mensagem;
+            statusDiv.className = "info erro";
+        }
+    </script>
+</body>
+</html>
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TERMUX ( Terminal linux para android):
