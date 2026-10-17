@@ -1,7 +1,4 @@
-# ARISTIDESBP
-
-Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focado em desenvolvimento de soluções web, clareza de código e experiência do usuário. Atuo desde a concepção da ideia até a implementação, sempre buscando boas práticas, performance e escalabilidade.  | Analista de Sistemas |Desenvolvedor Web Full stack | Trafego Pago |
-
+# ARISTIDES BP
 ---
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
@@ -9,8 +6,6 @@ Dezenvolvedor raiz, gosto de de entender e ter total controle dos codigos, focad
 * 🌐 [GITHUB-PAGES](https://aristidesbp.github.io/index.html)
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-
-
 ---
 ## 📚 LISTA DE LINKS PARA ESTUDOS 
 
