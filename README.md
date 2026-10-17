@@ -30,7 +30,7 @@
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# PROJETO ERP SUPABASE E GITHUB-PAGES (EM CONSTRUÇÃO)
+# PROJETO ERP SUPABASE + GITHUB-PAGES (em contrução!)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PRONPT / HABILIDADES PARA SEU DE ASSISTENTES DE IA
 ```
