@@ -1159,9 +1159,14 @@ ip addr show wlan0
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # TRANFORMANDO ARQUIVO .MD EM PDF
+* Passo 1: Instalar os pacotes de sistema necessários
+Escreve este comando e carrega em Enter. (Se ele perguntar Do you want to continue? [Y/n], digita Y e carrega em Enter).
+``` 
+pkg install clang libxml2 libxslt
 ```
-# instalar ferramenta 
-pip install markdown pdfkit
+```
+pip install xhtml2pdf
+
 ```
 # conversor_pdf.py
 ```
