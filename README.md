@@ -1170,67 +1170,121 @@ pip install xhtml2pdf
 ```
 # conversor_pdf.py
 ```
-# Importamos as ferramentas (bibliotecas) necessárias para o nosso programa
-import markdown
-import pdfkit
-import os # Biblioteca padrão do Python para lidar com caminhos e ficheiros
+# ==========================================
+# 1. GESTÃO DE ERROS E IMPORTAÇÕES
+# ==========================================
+import sys
+import os
 
-def converter_md_para_pdf(caminho_entrada, caminho_saida):
+try:
+    import markdown
+    from xhtml2pdf import pisa
+except ModuleNotFoundError as erro:
+    print(f"\n❌ ERRO: A biblioteca '{erro.name}' não está instalada.")
+    print(f"👉 Solução: Abre o terminal e executa: pip install markdown xhtml2pdf")
+    sys.exit(1)
+
+# ==========================================
+# 2. LÓGICA DE CONVERSÃO E RENDERIZAÇÃO
+# ==========================================
+def gerar_pdf_offline(caminho_entrada, caminho_saida):
     """
-    Função principal que lê um arquivo Markdown e o transforma em PDF.
+    Lê o ficheiro de texto, converte para HTML e desenha um PDF usando xhtml2pdf.
+    O CSS foi simplificado para 'Preto no Branco' para evitar falhas de renderização
+    e blocos ilegíveis em ambientes móveis (Termux).
     """
     try:
-        # 1. Abrimos o arquivo Markdown em modo de leitura ('r') com codificação 'utf-8'
-        with open(caminho_entrada, 'r', encoding='utf-8') as arquivo_md:
-            texto_markdown = arquivo_md.read()
-            
-        # 2. Transformamos o texto Markdown em código HTML (A nossa "ponte")
-        texto_html = markdown.markdown(texto_markdown)
+        with open(caminho_entrada, 'r', encoding='utf-8') as arquivo:
+            texto_interno = arquivo.read()
+
+        # Transformamos o Markdown em HTML
+        fragmento_html = markdown.markdown(texto_interno, extensions=['fenced_code', 'tables'])
+
+        # Molde HTML rigoroso com CSS de Alto Contraste (Branco e Preto)
+        html_completo = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                @page {{
+                    margin: 1.5cm;
+                }}
+                body {{
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 11px;
+                    color: #000000;
+                    background-color: #ffffff;
+                }}
+                pre {{
+                    background-color: #f9f9f9;
+                    color: #000000;
+                    padding: 10px;
+                    border: 1px solid #cccccc;
+                    white-space: pre-wrap; 
+                    word-wrap: break-word; /* Evita que códigos longos quebrem a margem */
+                }}
+                code {{
+                    font-family: "Courier New", Courier, monospace;
+                    font-weight: bold;
+                    color: #333333;
+                }}
+                h1, h2, h3 {{
+                    color: #000000;
+                    padding-bottom: 3px;
+                    border-bottom: 2px solid #000000;
+                }}
+                table {{
+                    border-collapse: collapse;
+                    width: 100%;
+                }}
+                th, td {{
+                    border: 1px solid #000000;
+                    padding: 5px;
+                }}
+                th {{
+                    background-color: #eeeeee;
+                }}
+            </style>
+        </head>
+        <body>
+            {fragmento_html}
+        </body>
+        </html>
+        """
+
+        print(f"A compilar um PDF legível e limpo para '{caminho_entrada}'...")
         
-        # 3. Pegamos no código HTML e guardamos como um arquivo PDF usando o pdfkit
-        pdfkit.from_string(texto_html, caminho_saida)
-        
-        # Mensagem de sucesso
-        print(f"\n✅ Sucesso! O ficheiro '{caminho_entrada}' foi convertido para '{caminho_saida}'.")
-        
+        with open(caminho_saida, "w+b") as arquivo_pdf:
+            status = pisa.CreatePDF(html_completo, dest=arquivo_pdf, encoding='utf-8')
+
+        if status.err:
+            print("\n❌ Ocorreu um erro interno na renderização gráfica do PDF.")
+        else:
+            print(f"\n✅ SUCESSO! O PDF '{caminho_saida}' foi criado com design minimalista seguro!")
+
     except FileNotFoundError:
-        # Erro específico para caso o utilizador digite um nome de ficheiro que não existe
-        print(f"\n❌ Erro: O ficheiro '{caminho_entrada}' não foi encontrado. Verifica se o nome está correto e se ele está na mesma pasta que este programa.")
+        print(f"\n❌ Erro: O ficheiro '{caminho_entrada}' não foi encontrado.")
     except Exception as erro:
-        # Se ocorrer qualquer outro erro, avisamos o utilizador
-        print(f"\n❌ Ocorreu um erro inesperado durante a conversão: {erro}")
+        print(f"\n❌ Ocorreu um erro imprevisto: {erro}")
 
 # ==========================================
-# ÁREA DE EXECUÇÃO (Interativa)
+# 3. ÁREA DE INTERAÇÃO COM O UTILIZADOR
 # ==========================================
+print("=== Conversor de Documentação Segura para PDF ===")
 
-print("=== Bem-vindo ao Conversor de Markdown para PDF ===")
+nome_digitado = input("Digite o nome do ficheiro (exemplo: README.txt): ").strip()
+nome_minusculo = nome_digitado.lower()
 
-# 1. Usamos o input() para perguntar o nome do ficheiro ao utilizador
-# O que ele digitar será guardado na variável 'nome_digitado'
-nome_digitado = input("Por favor, digite o nome do ficheiro Markdown (exemplo: meu_texto.md): ")
-
-# 2. Limpamos espaços em branco que o utilizador possa ter digitado sem querer no início ou fim
-nome_digitado = nome_digitado.strip()
-
-# 3. Verificamos se o nome termina com '.md'. Se não terminar, adicionamos!
-if not nome_digitado.lower().endswith('.md'):
-    ficheiro_md = nome_digitado + ".md"
+if not nome_minusculo.endswith('.md') and not nome_minusculo.endswith('.txt'):
+    ficheiro_entrada = nome_digitado + ".txt"
 else:
-    ficheiro_md = nome_digitado
+    ficheiro_entrada = nome_digitado
 
-# 4. Criamos o nome do ficheiro PDF automaticamente
-# Substituímos o '.md' por '.pdf'
-ficheiro_pdf = ficheiro_md.replace(".md", ".pdf")
+if ficheiro_entrada.endswith('.txt'):
+    ficheiro_pdf = ficheiro_entrada.replace(".txt", ".pdf")
+else:
+    ficheiro_pdf = ficheiro_entrada.replace(".md", ".pdf")
 
-# 5. Avisamos o utilizador que o processo começou
-print(f"\nA preparar para converter '{ficheiro_md}' em '{ficheiro_pdf}'...")
-
-# 6. Chamamos a função para fazer a conversão com os nomes que acabámos de definir
-converter_md_para_pdf(ficheiro_md, ficheiro_pdf)
+gerar_pdf_offline(ficheiro_entrada, ficheiro_pdf)
 ```
-# Executar programa 
-```
-python conversor_pdf.py
-```
-
