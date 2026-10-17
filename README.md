@@ -70,367 +70,6 @@ A sua missão é ajudar-me a programar, reescrever, corrigir e entender código.
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# TERMUX ( Terminal linux para android):
- 
-## Download do aplicativo direto no github
-* Acesse o link oficial no Github não use da Play Store!
-* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
-[TERMUX](https://github.com/termux/termux-app/releases)
-
-```
-# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
-# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
-```
-```
-# comando para atualizar o termux:
-pkg update && pkg upgrade -y
-```
-```
-# comando para autorizar o uso de pastas do celular
-termux-setup-storage
-```
-```
-# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
-
-dpkg --configure -a
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# EXEMPLO DE COMO INSTALE AS FERRAMENTAS  NO TERMUX
-```
-pkg install git -y
-```
-```
-pkg install nano -y
-```
-```
-pkg install openssh -y
-```
-```
-pkg install curl -y
-```
-```
-pkg install tree -y
-```
-```
-pkg install openssh
-```
-```
-pkg install nmap
-# O principal escaneador de redes e mapeador de portas vulneráveis."
-```
-```
-pkg install tcpdump
-# "Ferramenta para capturar e analisar pacotes de rede/tráfego."
-```
-```
-pkg install tshark
-# "Versão de terminal do poderoso Wireshark."
-```
-```
-pkg install macchanger
-# "Ferramenta para camuflar o endereço MAC do adaptador de rede."
-```
-```
-pkg install openssh
-# "Instala ferramentas SSH. Permite invadir remotamente, administrar o celular pelo PC ou transferir arquivos via SCP/SFTP de forma criptografada."
-```
-```
-pkg install netcat-openbsd
-# "O 'canivete suíço' das redes, usado para abrir portas e criar Reverse Shells (Backdoors)."
-```
-```
-pkg install wget
-# Realiza downloads rápidos de arquivos direto no terminal."
-```
-```
-pkg install curl
-# Interage com páginas web, servidores e APIs pelo terminal."
-    forca_bruta:
-```
-```
-pkg install hydra
-# Ferramenta rápida para ataques de força bruta em logins de rede (FTP, SSH, etc)."
-```
-```   
-pkg install nano
-# Editor de textos simples e amigável para alterar códigos dentro do terminal."
-```
-```
-pkg install zip unzip
-# Compacta e descompacta arquivos zip."
-```
-```
-pkg install tar
-# Extrai pacotes e arquivos compactados nativos do Linux."
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CODIGOS BASICOS NO TERMUX
-```
-# limpar tela
-clear
-```
-```
-# ver as pastas do diretorio
-ls
-```
-```
-# ver as pastas ocultas (-a) do diretorio
-ls -a
-```
-```
-# ver pastas e arquivos
-tree
-```
-```
-# basta adicionar a flag -d (que significa  apenas diretórios):
-tree -d
-```
-```
-# limitar quantos níveis para baixo ela deve mostrar  -L  a 2 níveis
-tree -d -L 2
-```
-```
-# Se preferir uma listagem
-find . -type d
-```
-```
-# Limitando a profundidade
-find . -maxdepth 2 -type d
-```
-```
-# ir para o diretorio
-cd nome_do_diretorio
-```
-```
-# voltar para pasta anterior
-cd ..
-```
-```
-# voltar para pasta raiz
-cd
-```
-```
-# comando para criar pasta
-mkdir novo_projeto
-```
-``` 
-# COMO CRIAR OU ABRIR ARQUIVOS COM EDITOR DE TEXTO (nome.tipo)
-# Ctrl+S  para salvar
-# Crtl+X  para sair
-nano nome_do_arquivo.txt 
-```
-```
-mv arquivo.tipo ./pasta_destino 
-# mover pasta ou arquivo (./pasta_destino)
-```
-```
-# limpar atela
-clear
-```
-```
-# como apagar pasta/arquivos/projetos
-rm -rf nome_da_pasta
-```
-
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# BAIXANDO MÍDIAS COM TERMUX
-```
-pkg update && pkg upgrade
-pkg install python ffmpeg
-python3 -m pip install --upgrade yt-dlp
-```
-```
-yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
-```
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# GIT+ GITHUB (TERMUX)
-```
-# verificar se o git está instalado 
-git --version
-```
-```
-# vá para pasta onde ficará o repositório
-cd storage/downloads
-```
-```
-# Lista todas as configurações ativas: 
-git config --list
-```
-```
-# Configurar a pasta como segura (evita erros de segurança)
-git config --global --add safe.directory "$(pwd)"                     
-```
-```
-# Configurar nome de usuário
-git config --global user.name "nome_do_usuario"
-```
-```
-# Configurar email do GitHub
-git config --global user.email "seu@email.com"
-```
-```
-# verificar se tem chave SSH
-ls -a ~/.ssh
-```
-```
-# criar uma chave SSH
-# Aperte [Enter] (deixe tudo em branco).
-ssh-keygen -t ed25519 -C "email_cadastrado"
-```
-```
-# exibir o código que você deve copiar e colar no GitHub:
-cat ~/.ssh/id_ed25519.pub
-```
-
-* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
-* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
-* após salvar tem que confirmar por email.
-ssh criado use este comando no termux:
-```
-# testar a conexão:
-# Digite a palavra "yes" e aperte Enter.
-# DEVE APARECER:
-# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
-ssh -T git@github.com
-```
-
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-#  GIT CLONE (REPOSITO)
-
-```
-# clonar um repositório
-# exemplo:
-git clone https://github.com/aristidesbp/aristidesbp.github.io.git
-```
-```
-# entrar na pasta
-cd aristidesbp.github.io
-```
-```
-# dar permissão
-git config --global --add safe.directory "$(pwd)"
-```
-```
-# testar
-git status 
-```
-```
-# Inicializa o repositório Git local (caso não tenha vindo com o clone)
-git init
-```
-```
-# BAIXAR ATUALIZAÇÃO DO SITE:
-git pull origin main
-
-```
-```
-# iniciar o agente de chaves e registrar nova chave:
-eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
-```
-```
-# Altere a URL do repositório de HTTPS para SSH com o comando:
-git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
-```
-```
-# verifique se deu certo
-git remote -v
-```
-
----
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
-```
-# 1. Sincroniza as informações com o GitHub
-# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
-git fetch origin
-git reset --hard origin/main
-```
-# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# BUSCANDO O COMMIT ESPECÍFICO 
-```
-# buscar texto
-git log --grep="texto_a_ser_buscado" --oneline
-```
-```
-# comando para viajar no tempo (detached HEAD,observador)
-git checkout c93e2865
-```
-```
-# voltar para o presente 
-git checkout main
-```
-
----
-# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
-```
-# VERIFICAR STATUS DO REPOSITORIO LOCAL:
-git status
-
-```
-```
-# ADICIONAR REPOSITÓRIOS À LISTA:
-git add .
-
-```
-```
-# SALVAR PONTO DE ALTERAÇÃO:
-git commit -m "DESCRIÇÃO_chekPointe"
-
-```
-```
-# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
-git push origin main
-
-```
-  
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# CRIANDO UM SERVIDOR PYTHON 
-# Passo 1: Instalar o Python3
- * INSTALAR o Termux  (CONFIGURAR E ATUALIZAR)
- * Navegue até a pasta onde seus arquivos estão 
- * caso queira encerrar o processo basta apertar Ctr+C;
- * O codigo abaixo inicia um servidor web simples na porta 8080:
-   
-```
-# CODIGO PARA INICIAR O SERVIDOR:
-python3 -m http.server 8080
-```
-
-## Como Acessar o Site no Navegador
-* Abra o brawser do seu aparelho e digitar:
-  
-```
-http://localhost:8080
-```
-
-## ⚠️ Observações importantes
-* O servidor só funciona enquanto o Termux estiver aberto.
-* para trocar de porta utilize
-  
-```
-python3 -m http.server 3000
-```
-
-* Abra o brawser do seu aparelho e digitar:
-  
-```
- http://localhost:3000
-``` 
-
-## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
-* Vai aparecer algo como: inet 192.168.1.105
-* No navegador do outro dispositivo, acesse: http://192.168.1.105:8080
-  
-```
-# Descubra o IP do celular no Termux:
-ip addr show wlan0
-```
-
-
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
@@ -1157,3 +796,368 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 ```
 
 
+
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TERMUX ( Terminal linux para android):
+ 
+## Download do aplicativo direto no github
+* Acesse o link oficial no Github não use da Play Store!
+* em caso de dúvida peço ajuda ao genini (Ia do google, ou outra da sua escolha)
+[TERMUX](https://github.com/termux/termux-app/releases)
+
+```
+# Quando coloca o "jogo da velha" na frente de um texto, ele se torna comentário no TERMUX!!!
+# Por esse motivo, você pode copiar os códigos mesmo com comentários que vai funcionar!
+```
+```
+# comando para atualizar o termux:
+pkg update && pkg upgrade -y
+```
+```
+# comando para autorizar o uso de pastas do celular
+termux-setup-storage
+```
+```
+# força o gerenciador de pacotes "dpkg" a finalizar os pacotes que ficaram pendentes
+
+dpkg --configure -a
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# EXEMPLO DE COMO INSTALE AS FERRAMENTAS  NO TERMUX
+```
+pkg install git -y
+```
+```
+pkg install nano -y
+```
+```
+pkg install openssh -y
+```
+```
+pkg install curl -y
+```
+```
+pkg install tree -y
+```
+```
+pkg install openssh
+```
+```
+pkg install nmap
+# O principal escaneador de redes e mapeador de portas vulneráveis."
+```
+```
+pkg install tcpdump
+# "Ferramenta para capturar e analisar pacotes de rede/tráfego."
+```
+```
+pkg install tshark
+# "Versão de terminal do poderoso Wireshark."
+```
+```
+pkg install macchanger
+# "Ferramenta para camuflar o endereço MAC do adaptador de rede."
+```
+```
+pkg install openssh
+# "Instala ferramentas SSH. Permite invadir remotamente, administrar o celular pelo PC ou transferir arquivos via SCP/SFTP de forma criptografada."
+```
+```
+pkg install netcat-openbsd
+# "O 'canivete suíço' das redes, usado para abrir portas e criar Reverse Shells (Backdoors)."
+```
+```
+pkg install wget
+# Realiza downloads rápidos de arquivos direto no terminal."
+```
+```
+pkg install curl
+# Interage com páginas web, servidores e APIs pelo terminal."
+    forca_bruta:
+```
+```
+pkg install hydra
+# Ferramenta rápida para ataques de força bruta em logins de rede (FTP, SSH, etc)."
+```
+```   
+pkg install nano
+# Editor de textos simples e amigável para alterar códigos dentro do terminal."
+```
+```
+pkg install zip unzip
+# Compacta e descompacta arquivos zip."
+```
+```
+pkg install tar
+# Extrai pacotes e arquivos compactados nativos do Linux."
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CODIGOS BASICOS NO TERMUX
+```
+# limpar tela
+clear
+```
+```
+# ver as pastas do diretorio
+ls
+```
+```
+# ver as pastas ocultas (-a) do diretorio
+ls -a
+```
+```
+# ver pastas e arquivos
+tree
+```
+```
+# basta adicionar a flag -d (que significa  apenas diretórios):
+tree -d
+```
+```
+# limitar quantos níveis para baixo ela deve mostrar  -L  a 2 níveis
+tree -d -L 2
+```
+```
+# Se preferir uma listagem
+find . -type d
+```
+```
+# Limitando a profundidade
+find . -maxdepth 2 -type d
+```
+```
+# ir para o diretorio
+cd nome_do_diretorio
+```
+```
+# voltar para pasta anterior
+cd ..
+```
+```
+# voltar para pasta raiz
+cd
+```
+```
+# comando para criar pasta
+mkdir novo_projeto
+```
+``` 
+# COMO CRIAR OU ABRIR ARQUIVOS COM EDITOR DE TEXTO (nome.tipo)
+# Ctrl+S  para salvar
+# Crtl+X  para sair
+nano nome_do_arquivo.txt 
+```
+```
+mv arquivo.tipo ./pasta_destino 
+# mover pasta ou arquivo (./pasta_destino)
+```
+```
+# limpar atela
+clear
+```
+```
+# como apagar pasta/arquivos/projetos
+rm -rf nome_da_pasta
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# BAIXANDO MÍDIAS COM TERMUX
+```
+pkg update && pkg upgrade
+pkg install python ffmpeg
+python3 -m pip install --upgrade yt-dlp
+```
+```
+yt-dlp -f "bestvideo[height<=720]+bestaudio/best[height<=720]" "url_link"
+```
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# GIT+ GITHUB (TERMUX)
+```
+# verificar se o git está instalado 
+git --version
+```
+```
+# vá para pasta onde ficará o repositório
+cd storage/downloads
+```
+```
+# Lista todas as configurações ativas: 
+git config --list
+```
+```
+# Configurar a pasta como segura (evita erros de segurança)
+git config --global --add safe.directory "$(pwd)"                     
+```
+```
+# Configurar nome de usuário
+git config --global user.name "nome_do_usuario"
+```
+```
+# Configurar email do GitHub
+git config --global user.email "seu@email.com"
+```
+```
+# verificar se tem chave SSH
+ls -a ~/.ssh
+```
+```
+# criar uma chave SSH
+# Aperte [Enter] (deixe tudo em branco).
+ssh-keygen -t ed25519 -C "email_cadastrado"
+```
+```
+# exibir o código que você deve copiar e colar no GitHub:
+cat ~/.ssh/id_ed25519.pub
+```
+
+* Copie todo esse código que apareceu (começando em ssh-ed25519 até o final do seu e-mail) e adicione-o em **Settings > SSH and GPG keys > New SSH key** no seu GitHub.
+* exemplo: ssh-ed255...atkeWeHiX0 aristidesbp@gmail.com
+* após salvar tem que confirmar por email.
+ssh criado use este comando no termux:
+```
+# testar a conexão:
+# Digite a palavra "yes" e aperte Enter.
+# DEVE APARECER:
+# Hi aristidesbp! You've successfully authenticated, but GitHub does not provide shell access.
+ssh -T git@github.com
+```
+
+
+#  GIT CLONE (REPOSITO)
+
+```
+# clonar um repositório
+# exemplo:
+git clone https://github.com/aristidesbp/aristidesbp.github.io.git
+```
+```
+# entrar na pasta
+cd aristidesbp.github.io
+```
+```
+# dar permissão
+git config --global --add safe.directory "$(pwd)"
+```
+```
+# testar
+git status 
+```
+```
+# Inicializa o repositório Git local (caso não tenha vindo com o clone)
+git init
+```
+```
+# BAIXAR ATUALIZAÇÃO DO SITE:
+git pull origin main
+
+```
+```
+# iniciar o agente de chaves e registrar nova chave:
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
+```
+# Altere a URL do repositório de HTTPS para SSH com o comando:
+git remote set-url origin git@github.com:aristidesbp/aristidesbp.github.io.git
+```
+```
+# verifique se deu certo
+git remote -v
+```
+
+---
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# APAGAR ARQUIVO LOCAL E COLAR O REPOSITÓRIO 
+```
+# 1. Sincroniza as informações com o GitHub
+# 2. APAGA seus arquivos locais para ficarem idênticos ao servidor
+git fetch origin
+git reset --hard origin/main
+```
+# ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# BUSCANDO O COMMIT ESPECÍFICO 
+```
+# buscar texto
+git log --grep="texto_a_ser_buscado" --oneline
+```
+```
+# comando para viajar no tempo (detached HEAD,observador)
+git checkout c93e2865
+```
+```
+# voltar para o presente 
+git checkout main
+```
+
+---
+# 🖱️🗃️ FAÇA SUAS ALTERAÇOES !!!!!
+```
+# VERIFICAR STATUS DO REPOSITORIO LOCAL:
+git status
+
+```
+```
+# ADICIONAR REPOSITÓRIOS À LISTA:
+git add .
+
+```
+```
+# SALVAR PONTO DE ALTERAÇÃO:
+git commit -m "DESCRIÇÃO_chekPointe"
+
+```
+```
+# MANDAR ALTERAÇÕES PARA O REPOSITÓRIO:
+git push origin main
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# CRIANDO UM SERVIDOR PYTHON 
+# Passo 1: Instalar o Python3
+ * INSTALAR o Termux  (CONFIGURAR E ATUALIZAR)
+ * Navegue até a pasta onde seus arquivos estão 
+ * caso queira encerrar o processo basta apertar Ctr+C;
+ * O codigo abaixo inicia um servidor web simples na porta 8080:
+   
+```
+# CODIGO PARA INICIAR O SERVIDOR:
+python3 -m http.server 8080
+```
+
+## Como Acessar o Site no Navegador
+* Abra o brawser do seu aparelho e digitar:
+  
+```
+http://localhost:8080
+```
+
+## ⚠️ Observações importantes
+* O servidor só funciona enquanto o Termux estiver aberto.
+* para trocar de porta utilize
+  
+```
+python3 -m http.server 3000
+```
+
+* Abra o brawser do seu aparelho e digitar:
+  
+```
+ http://localhost:3000
+``` 
+
+## ✅ Se quiser acessar de outro dispositivo na mesma rede Wi-Fi
+* Vai aparecer algo como: inet 192.168.1.105
+* No navegador do outro dispositivo, acesse: http://192.168.1.105:8080
+  
+```
+# Descubra o IP do celular no Termux:
+ip addr show wlan0
+```
