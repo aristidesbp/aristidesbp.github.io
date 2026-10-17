@@ -1154,3 +1154,78 @@ python3 -m http.server 3000
 # Descubra o IP do celular no Termux:
 ip addr show wlan0
 ```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# TRANFORMANDO ARQUIVO .MD EM PDF
+```
+# instalar ferramenta 
+pip install markdown pdfkit
+```
+# conversor_pdf.py
+```
+# Importamos as ferramentas (bibliotecas) necessárias para o nosso programa
+import markdown
+import pdfkit
+import os # Biblioteca padrão do Python para lidar com caminhos e ficheiros
+
+def converter_md_para_pdf(caminho_entrada, caminho_saida):
+    """
+    Função principal que lê um arquivo Markdown e o transforma em PDF.
+    """
+    try:
+        # 1. Abrimos o arquivo Markdown em modo de leitura ('r') com codificação 'utf-8'
+        with open(caminho_entrada, 'r', encoding='utf-8') as arquivo_md:
+            texto_markdown = arquivo_md.read()
+            
+        # 2. Transformamos o texto Markdown em código HTML (A nossa "ponte")
+        texto_html = markdown.markdown(texto_markdown)
+        
+        # 3. Pegamos no código HTML e guardamos como um arquivo PDF usando o pdfkit
+        pdfkit.from_string(texto_html, caminho_saida)
+        
+        # Mensagem de sucesso
+        print(f"\n✅ Sucesso! O ficheiro '{caminho_entrada}' foi convertido para '{caminho_saida}'.")
+        
+    except FileNotFoundError:
+        # Erro específico para caso o utilizador digite um nome de ficheiro que não existe
+        print(f"\n❌ Erro: O ficheiro '{caminho_entrada}' não foi encontrado. Verifica se o nome está correto e se ele está na mesma pasta que este programa.")
+    except Exception as erro:
+        # Se ocorrer qualquer outro erro, avisamos o utilizador
+        print(f"\n❌ Ocorreu um erro inesperado durante a conversão: {erro}")
+
+# ==========================================
+# ÁREA DE EXECUÇÃO (Interativa)
+# ==========================================
+
+print("=== Bem-vindo ao Conversor de Markdown para PDF ===")
+
+# 1. Usamos o input() para perguntar o nome do ficheiro ao utilizador
+# O que ele digitar será guardado na variável 'nome_digitado'
+nome_digitado = input("Por favor, digite o nome do ficheiro Markdown (exemplo: meu_texto.md): ")
+
+# 2. Limpamos espaços em branco que o utilizador possa ter digitado sem querer no início ou fim
+nome_digitado = nome_digitado.strip()
+
+# 3. Verificamos se o nome termina com '.md'. Se não terminar, adicionamos!
+if not nome_digitado.lower().endswith('.md'):
+    ficheiro_md = nome_digitado + ".md"
+else:
+    ficheiro_md = nome_digitado
+
+# 4. Criamos o nome do ficheiro PDF automaticamente
+# Substituímos o '.md' por '.pdf'
+ficheiro_pdf = ficheiro_md.replace(".md", ".pdf")
+
+# 5. Avisamos o utilizador que o processo começou
+print(f"\nA preparar para converter '{ficheiro_md}' em '{ficheiro_pdf}'...")
+
+# 6. Chamamos a função para fazer a conversão com os nomes que acabámos de definir
+converter_md_para_pdf(ficheiro_md, ficheiro_pdf)
+```
+# Executar programa 
+```
+python conversor_pdf.py
+```
+
