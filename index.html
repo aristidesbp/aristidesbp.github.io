@@ -1025,10 +1025,12 @@ async function desenharModuloEntidadesCadastro(idEdicao = null) {
 }
 /*[🛠️ FIM MÓDULO ENTIDADES: LISTAGEM E CADASTRO]*/
 
-/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 1: LISTAGEM]*/
+/*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
+
+/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 1: LISTAGEM E AÇÕES]*/
 
 let paginaAtualProd = 0;
-const ITENS_POR_PAGINA_PROD = 10;
+const ITENS_POR_PAGINA_PROD = 20;
 
 function desenharModuloProdutos() {
     paginaAtualProd = 0;
@@ -1040,11 +1042,25 @@ function desenharModuloProdutos() {
                 <button id="btn-novo-produto" class="btn-neon" style="width: auto; padding: 8px 15px; margin: 0;">➕ Novo Produto</button>
             </div>
             
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <input type="text" id="prod-busca" placeholder="🔍 Buscar por Nome, EAN ou SKU..." style="flex: 1; margin-bottom: 0;">
-                <button type="button" id="btn-scan-busca" style="background: var(--info-color); color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; font-size: 1.2em;">📷</button>
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <input type="text" id="prod-busca" placeholder="🔍 Buscar por Nome, EAN ou SKU..." style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                <button type="button" id="btn-scan-busca-prod" style="background: var(--info-color); color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; font-size: 1.2em;">📷</button>
+                <div style="display: flex; align-items: center; gap: 5px; flex: 1; min-width: 120px;">
+                    <label style="margin:0; white-space: nowrap;">Qtd. Pág:</label>
+                    <input type="number" id="prod-itens-por-pagina" value="20" min="1" max="100" style="margin:0; padding: 10px;">
+                </div>
             </div>
             
+            <div id="prod-barra-lote" style="background: rgba(255, 193, 7, 0.1); border: 1px solid var(--warning-color); padding: 10px; border-radius: 8px; margin-top: 15px; display: none; align-items: center; justify-content: space-between;">
+                <strong style="color: var(--warning-color);" id="prod-texto-lote">0 selecionados</strong>
+                <button id="btn-ocultar-lote-prod" class="btn-perigo" style="width: auto; margin:0; padding: 8px 15px;">🗑️ Ocultar Selecionados</button>
+            </div>
+            
+            <div id="prod-area-selecionar-todos" style="padding: 10px; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 15px; display: none; align-items: center; border: 1px solid var(--border-color);">
+                <input type="checkbox" id="prod-chk-todos" style="transform: scale(1.5); margin-right: 15px; cursor: pointer;">
+                <label for="prod-chk-todos" style="cursor: pointer; font-weight: bold; color: var(--text-main); margin:0;">Selecionar página atual</label>
+            </div>
+
             <div id="prod-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                 <p style="text-align:center; color: var(--text-muted);">⏳ A carregar inventário...</p>
             </div>
@@ -1060,41 +1076,53 @@ function desenharModuloProdutos() {
     document.getElementById('btn-novo-produto').addEventListener('click', () => desenharModuloCadastrarProduto());
 
     const inputBusca = document.getElementById('prod-busca');
+    const inputQtd = document.getElementById('prod-itens-por-pagina');
     let timerBusca;
-    inputBusca.addEventListener('input', () => {
+    
+    const dispararBuscaProd = () => {
         clearTimeout(timerBusca);
         paginaAtualProd = 0;
-        timerBusca = setTimeout(() => carregarListaProdutos(inputBusca.value), 500);
-    });
+        timerBusca = setTimeout(() => carregarListaProdutos(inputBusca.value, inputQtd.value), 500);
+    };
 
-    document.getElementById('btn-scan-busca').addEventListener('click', () => {
+    inputBusca.addEventListener('input', dispararBuscaProd);
+    inputQtd.addEventListener('change', dispararBuscaProd);
+
+    document.getElementById('btn-scan-busca-prod').addEventListener('click', () => {
         abrirScannerGlobal((codigoLido) => {
             inputBusca.value = codigoLido;
-            paginaAtualProd = 0;
-            carregarListaProdutos(codigoLido);
+            dispararBuscaProd();
         });
     });
 
-    document.getElementById('btn-prod-ant').addEventListener('click', () => { if (paginaAtualProd > 0) { paginaAtualProd--; carregarListaProdutos(inputBusca.value); } });
-    document.getElementById('btn-prod-prox').addEventListener('click', () => { paginaAtualProd++; carregarListaProdutos(inputBusca.value); });
+    document.getElementById('btn-prod-ant').addEventListener('click', () => { if (paginaAtualProd > 0) { paginaAtualProd--; carregarListaProdutos(inputBusca.value, inputQtd.value); } });
+    document.getElementById('btn-prod-prox').addEventListener('click', () => { paginaAtualProd++; carregarListaProdutos(inputBusca.value, inputQtd.value); });
 
-    carregarListaProdutos('');
+    document.getElementById('prod-chk-todos').addEventListener('change', (e) => {
+        document.querySelectorAll('.chk-prod-item:not(#prod-chk-todos)').forEach(chk => chk.checked = e.target.checked);
+        atualizarBarraLoteProdutos();
+    });
+
+    document.getElementById('btn-ocultar-lote-prod').addEventListener('click', ocultarProdutosEmLote);
+
+    carregarListaProdutos('', 20);
 }
 
-async function carregarListaProdutos(termoBusca) {
+async function carregarListaProdutos(termoBusca, limiteStr = 20) {
     const container = document.getElementById('prod-lista-container');
     if (!container) return;
 
+    const limitePagina = parseInt(limiteStr) || 20;
     container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>⏳ A processar no Supabase...</p>";
-    const indiceInicio = paginaAtualProd * ITENS_POR_PAGINA_PROD;
-    const indiceFim = indiceInicio + ITENS_POR_PAGINA_PROD - 1;
+    const indiceInicio = paginaAtualProd * limitePagina;
+    const indiceFim = indiceInicio + limitePagina - 1;
 
     try {
         let query = clienteSupabase
             .from('produtos')
             .select('id, nome, preco_venda, estoque_atual, categoria, foto_url', { count: 'exact' })
             .eq('esta_ativo', true)
-            .order('created_at', { ascending: false })
+            .order('nome', { ascending: true }) // Ordenação Alfabética
             .range(indiceInicio, indiceFim); 
 
         if (termoBusca) {
@@ -1105,25 +1133,37 @@ async function carregarListaProdutos(termoBusca) {
         const { data, count, error } = await query;
         if (error) throw error;
 
-        // Paginação
-        const totalPaginas = Math.ceil(count / ITENS_POR_PAGINA_PROD) || 1;
+        // Paginação e Reset de Lote
+        const totalPaginas = Math.ceil(count / limitePagina) || 1;
         document.getElementById('texto-prod-paginacao').textContent = `Página ${paginaAtualProd + 1} de ${totalPaginas}`;
         document.getElementById('btn-prod-ant').disabled = paginaAtualProd === 0;
         document.getElementById('btn-prod-prox').disabled = (paginaAtualProd + 1) >= totalPaginas;
         document.getElementById('prod-paginacao').style.display = count > 0 ? "flex" : "none";
 
+        document.getElementById('prod-barra-lote').style.display = 'none';
+        document.getElementById('prod-chk-todos').checked = false;
         container.innerHTML = ""; 
 
         if (!data || data.length === 0) {
+            document.getElementById('prod-area-selecionar-todos').style.display = 'none';
             container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhum artigo encontrado.</p>";
             return;
         }
+
+        document.getElementById('prod-area-selecionar-todos').style.display = 'flex';
 
         data.forEach(eq => {
             const precoFormat = parseFloat(eq.preco_venda || 0).toFixed(2);
             const cardItem = document.createElement('div');
             cardItem.style.cssText = `background: var(--input-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; display:flex; align-items:center; gap: 15px; flex-wrap:wrap;`;
             
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'chk-prod-item';
+            checkbox.value = eq.id;
+            checkbox.style.cssText = "transform: scale(1.5); margin-right: 5px; cursor: pointer;";
+            checkbox.addEventListener('change', atualizarBarraLoteProdutos);
+
             const img = document.createElement('img');
             img.src = eq.foto_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>';
             img.style.cssText = "width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);";
@@ -1138,15 +1178,30 @@ async function carregarListaProdutos(termoBusca) {
                 <span style="color: var(--text-muted); font-size: 0.85em; display:inline-block; margin-top:5px;">Cat: ${eq.categoria || "N/A"}</span>
             `;
 
+            const acoesDiv = document.createElement('div');
+            acoesDiv.style.display = 'flex';
+            acoesDiv.style.gap = '8px';
+            acoesDiv.style.flexWrap = 'wrap';
+
             const btnEditar = document.createElement('button');
             btnEditar.textContent = "✏️ Editar";
             btnEditar.className = "btn-secundario";
-            btnEditar.style.cssText = "width: auto; padding: 10px;";
+            btnEditar.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
             btnEditar.onclick = () => desenharModuloCadastrarProduto(eq.id);
 
+            const btnExcluir = document.createElement('button');
+            btnExcluir.textContent = "🗑️ Ocultar";
+            btnExcluir.className = "btn-perigo";
+            btnExcluir.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+            btnExcluir.onclick = () => ocultarProdutoIndividual(eq.id, eq.nome);
+
+            acoesDiv.appendChild(btnEditar);
+            acoesDiv.appendChild(btnExcluir);
+
+            cardItem.appendChild(checkbox);
             cardItem.appendChild(img);
             cardItem.appendChild(infoDiv);
-            cardItem.appendChild(btnEditar);
+            cardItem.appendChild(acoesDiv);
             container.appendChild(cardItem);
         });
 
@@ -1155,88 +1210,211 @@ async function carregarListaProdutos(termoBusca) {
         container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao conectar.</p>";
     }
 }
-/*[🛠️ FIM PARTE 1]*/
-/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 2: CADASTRO]*/
+
+function atualizarBarraLoteProdutos() {
+    const checkboxes = document.querySelectorAll('.chk-prod-item:not(#prod-chk-todos):checked');
+    const barraAcoes = document.getElementById('prod-barra-lote');
+    if (checkboxes.length > 0) {
+        barraAcoes.style.display = 'flex';
+        document.getElementById('prod-texto-lote').textContent = `${checkboxes.length} selecionados`;
+    } else {
+        barraAcoes.style.display = 'none';
+    }
+}
+
+// Lógica Segura de Ocultação (Soft Delete) para proteger histórico de vendas
+async function ocultarProdutoIndividual(id, nome) {
+    if (!confirm(`Deseja enviar o produto '${nome}' para a lixeira? (O histórico de vendas não será afetado).`)) return;
+    try {
+        const { error } = await clienteSupabase.rpc('desativar_produto_seguro', { p_id: id });
+        if (error) throw error;
+        alert("✅ Produto ocultado com sucesso!");
+        carregarListaProdutos(document.getElementById('prod-busca').value, document.getElementById('prod-itens-por-pagina').value);
+    } catch (erro) {
+        console.error(erro);
+        alert("❌ Erro ao ocultar produto.");
+    }
+}
+
+async function ocultarProdutosEmLote() {
+    const chks = document.querySelectorAll('.chk-prod-item:not(#prod-chk-todos):checked');
+    const ids = Array.from(chks).map(chk => chk.value);
+    if (ids.length === 0 || !confirm(`Confirma a ocultação de ${ids.length} produtos?`)) return;
+
+    try {
+        const { error } = await clienteSupabase.rpc('ocultar_multiplos_produtos_seguro', { p_ids: ids });
+        if (error) throw error;
+        alert("✅ Produtos ocultados em lote.");
+        document.getElementById('prod-chk-todos').checked = false;
+        carregarListaProdutos(document.getElementById('prod-busca').value, document.getElementById('prod-itens-por-pagina').value);
+    } catch (erro) {
+        console.error(erro);
+        alert("❌ Falha técnica ao ocultar em lote.");
+    }
+}
+
+/*[🛠️ FIM MÓDULO PRODUTOS SPA - PARTE 1]*/
+    
+
+
+       
+/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 2: CADASTRO COMPLETO E BLINDADO]*/
 
 async function desenharModuloCadastrarProduto(idEdicao = null) {
     const appRoot = document.getElementById('app-root');
     appRoot.innerHTML = `
-        <div class="card" style="margin-top: 5vh; max-width: 800px;">
+        <div class="card" style="margin-top: 5vh; max-width: 900px;">
             <div class="titulo">${idEdicao ? '✏️ Editar Produto' : '📦 Novo Produto'}</div>
             
             <form id="form-produto">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 25px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);">
-                    <img id="prod-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'/></svg>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 2px solid var(--accent-neon); background: var(--input-bg);">
+                
+                <!-- 1. IMAGEM -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);">
+                    <img id="prod-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'/></svg>" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; border: 2px solid var(--accent-neon); background: var(--input-bg);">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                        <label for="prod-foto-arquivo" style="background: var(--info-color); color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📂 Escolher Foto</label>
+                        <label for="prod-foto-arquivo" style="background: var(--info-color); color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📂 Escolher Foto</label>
                         <input type="file" id="prod-foto-arquivo" accept="image/*" style="display:none;">
-                        <label for="prod-foto-camera" style="background: var(--warning-color); color: #000; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📸 Tirar Fotografia</label>
+                        <label for="prod-foto-camera" style="background: var(--warning-color); color: #000; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📸 Tirar Fotografia</label>
                         <input type="file" id="prod-foto-camera" accept="image/*" capture="environment" style="display:none;">
                     </div>
                 </div>
 
-                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <!-- 2. DADOS GERAIS -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="color: var(--accent-neon); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">📑 Dados Gerais</h3>
+                    
                     <label>Nome do Produto *</label>
                     <input type="text" id="prod-nome" required>
 
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 200px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px;">
                             <label>Categoria:</label>
                             <input type="text" id="prod-categoria">
                         </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Origem:</label>
+                            <select id="prod-origem">
+                                <option value="">Selecione...</option>
+                                <option value="0 - Nacional">0 - Nacional</option>
+                                <option value="1 - Estrangeira (Importação Direta)">1 - Estrangeira (Importação Direta)</option>
+                                <option value="2 - Estrangeira (Mercado Interno)">2 - Estrangeira (Mercado Interno)</option>
+                            </select>
+                        </div>
                         <div style="flex: 1; min-width: 200px;">
-                            <label>Fornecedor Principal (Chave):</label>
+                            <label>Fornecedor (Chave):</label>
                             <select id="prod-fornecedor"><option value="">A carregar fornecedores...</option></select>
                         </div>
                     </div>
                 </div>
 
-                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <!-- 3. PREÇOS E ESTOQUE -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="color: var(--accent-neon); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">💰 Preços e Estoque</h3>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 150px;">
-                            <label>Preço Custo (R$):</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Custo (R$):</label>
                             <input type="number" id="prod-preco-custo" step="any">
                         </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <label>Preço Venda (R$) *</label>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Venda (R$) *</label>
                             <input type="number" id="prod-preco-venda" step="any" required>
                         </div>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Valor Total Ref (R$):</label>
+                            <input type="number" id="prod-total" step="any">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 150px;">
                             <label>Estoque Atual *</label>
                             <input type="number" id="prod-estoque" step="any" value="0" required>
                         </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Estoque Mínimo (Alerta):</label>
+                            <input type="number" id="prod-estoque-minimo" step="any" value="0">
+                        </div>
                     </div>
                 </div>
 
-                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <!-- 4. LOGÍSTICA -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: var(--accent-neon); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">🚚 Logística</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Local Estoque:</label>
+                            <input type="text" id="prod-local-estoque">
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Local Loja:</label>
+                            <input type="text" id="prod-local-loja">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Tipo Embalagem:</label>
+                            <input type="text" id="prod-tipo-embalagem" placeholder="Caixa, Fardo...">
+                        </div>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Peso (Kg):</label>
+                            <input type="number" id="prod-peso" step="any">
+                        </div>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Dimensões:</label>
+                            <input type="text" id="prod-dimensoes" placeholder="10x20x5 cm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. FISCAL E CÓDIGOS (BLINDADO) -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="color: var(--accent-neon); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">🧾 Fiscal e Códigos</h3>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 150px;">
                             <label>SKU (Interno):</label>
                             <input type="text" id="prod-sku">
                         </div>
-                        <div style="flex: 1; min-width: 200px;">
-                            <label>Código de Barras (EAN):</label>
+                        <div style="flex: 2; min-width: 200px;">
+                            <label>Cód. Barras (EAN):</label>
                             <div style="display: flex; gap: 5px;">
                                 <input type="text" id="prod-ean" style="margin: 0;">
                                 <button type="button" id="btn-scan-ean" style="background: var(--info-color); color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer;">📷</button>
                             </div>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 100px;">
-                            <label>Unidade Com. *</label>
-                            <input type="text" id="prod-unid" placeholder="Ex: UN, CX, KG" value="UN" required>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                        <div style="flex: 1; min-width: 80px;">
+                            <!-- MAXLENGTH E JAVASCRIPT GARANTEM LIMITE EXATO DO SUPABASE -->
+                            <label>Unid. * <small>(Máx 4)</small></label>
+                            <input type="text" id="prod-unid" value="UN" maxlength="4" required class="valida-limite" data-max="4">
                         </div>
                         <div style="flex: 1; min-width: 100px;">
-                            <label>NCM:</label>
-                            <input type="text" id="prod-ncm">
+                            <label>NCM <small>(Máx 8)</small></label>
+                            <input type="text" id="prod-ncm" maxlength="8" class="valida-limite" data-max="8">
                         </div>
                         <div style="flex: 1; min-width: 100px;">
-                            <label>CFOP:</label>
-                            <input type="text" id="prod-cfop">
+                            <label>CEST <small>(Máx 7)</small></label>
+                            <input type="text" id="prod-cest" maxlength="7" class="valida-limite" data-max="7">
+                        </div>
+                        <div style="flex: 1; min-width: 80px;">
+                            <label>CFOP <small>(Máx 4)</small></label>
+                            <input type="text" id="prod-cfop" maxlength="4" class="valida-limite" data-max="4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. DATAS -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: var(--accent-neon); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">📅 Datas</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Data de Compra:</label>
+                            <input type="date" id="prod-data-compra">
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Vencimento (Validade):</label>
+                            <input type="date" id="prod-data-vencimento">
                         </div>
                     </div>
                 </div>
@@ -1247,6 +1425,20 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         </div>
     `;
 
+    // A. BLINDAGEM DE DIGITAÇÃO VIA JAVASCRIPT (Cortar textos colados gigantes)
+    document.querySelectorAll('.valida-limite').forEach(input => {
+        input.addEventListener('input', function() {
+            const max = parseInt(this.getAttribute('data-max'));
+            if (this.value.length > max) {
+                this.value = this.value.slice(0, max);
+                // Feedback visual sútil de bloqueio
+                this.style.borderColor = "var(--danger-color)";
+                setTimeout(() => this.style.borderColor = "var(--border-color)", 500);
+            }
+        });
+    });
+
+    // B. CARREGAR FORNECEDORES (Dropdown)
     try {
         const { data: fornecedores } = await clienteSupabase.from('entidades').select('id, nome_completo').eq('tipo', 'fornecedor');
         const selectFornecedor = document.getElementById('prod-fornecedor');
@@ -1258,6 +1450,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         }
     } catch (e) { console.error("Erro a carregar fornecedores."); }
 
+    // C. GESTÃO DE IMAGENS E SCANNER
     let urlFotoAntiga = null;
     let ficheiroAProcessar = null;
 
@@ -1277,22 +1470,43 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         abrirScannerGlobal((codigoLido) => { document.getElementById('prod-ean').value = codigoLido; });
     });
 
+    // D. CARREGAR DADOS SE FOR EDIÇÃO
     if (idEdicao) {
         document.getElementById('btn-salvar-produto').textContent = "⏳ A ler dados...";
         const { data, error } = await clienteSupabase.from('produtos').select('*').eq('id', idEdicao).single();
         if (data && !error) {
             document.getElementById('prod-nome').value = data.nome || '';
             document.getElementById('prod-categoria').value = data.categoria || '';
+            
+            const selectOrigem = document.getElementById('prod-origem');
+            const origemStr = data.origem_mercadoria !== null ? data.origem_mercadoria.toString() : '';
+            Array.from(selectOrigem.options).forEach(opt => {
+                if (opt.value.startsWith(origemStr)) selectOrigem.value = opt.value;
+            });
+
             document.getElementById('prod-fornecedor').value = data.fornecedor_id || '';
             document.getElementById('prod-preco-custo').value = data.preco_custo || '';
             document.getElementById('prod-preco-venda').value = data.preco_venda || '';
+            document.getElementById('prod-total').value = data.valor_total || ''; // Custom field se gerido pela app
             document.getElementById('prod-estoque').value = data.estoque_atual || 0;
+            document.getElementById('prod-estoque-minimo').value = data.estoque_minimo || 0;
+            
+            document.getElementById('prod-local-estoque').value = data.local_estoque || '';
+            document.getElementById('prod-local-loja').value = data.local_loja || '';
+            document.getElementById('prod-tipo-embalagem').value = data.tipo_embalagem || '';
+            document.getElementById('prod-peso').value = data.peso_liquido || '';
+            document.getElementById('prod-dimensoes').value = data.dimensoes || '';
+
             document.getElementById('prod-sku').value = data.sku || '';
             document.getElementById('prod-ean').value = data.codigo_barras || '';
             document.getElementById('prod-unid').value = data.unidade_comercial || 'UN';
             document.getElementById('prod-ncm').value = data.ncm || '';
+            document.getElementById('prod-cest').value = data.cest || '';
             document.getElementById('prod-cfop').value = data.cfop_padrao || '';
             
+            document.getElementById('prod-data-compra').value = data.data_compra || '';
+            document.getElementById('prod-data-vencimento').value = data.data_vencimento || '';
+
             if (data.foto_url) {
                 urlFotoAntiga = data.foto_url;
                 document.getElementById('prod-img-preview').src = data.foto_url;
@@ -1301,6 +1515,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         document.getElementById('btn-salvar-produto').textContent = "💾 Atualizar Produto";
     }
 
+    // E. GRAVAÇÃO FINAL E ROLLBACK
     document.getElementById('form-produto').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btnSalvar = document.getElementById('btn-salvar-produto');
@@ -1327,20 +1542,31 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                 urlFinalDaFoto = urlData.publicUrl;
             }
 
+            // Mapeamento EXATO para os argumentos da função adicionar_produto_seguro
             const payload = {
-                p_nome: document.getElementById('prod-nome').value,
+                p_nome: document.getElementById('prod-nome').value.trim(),
                 p_preco: parseFloat(document.getElementById('prod-preco-venda').value) || 0,
                 p_foto_url: urlFinalDaFoto,
-                p_codigo_produto: document.getElementById('prod-sku').value,
-                p_ean: document.getElementById('prod-ean').value,
+                p_codigo_produto: document.getElementById('prod-sku').value.trim(),
+                p_ean: document.getElementById('prod-ean').value.trim(),
+                p_ncm: document.getElementById('prod-ncm').value.trim() || null,
+                p_cest: document.getElementById('prod-cest').value.trim() || null,
+                p_cfop: document.getElementById('prod-cfop').value.trim() || null,
+                p_unidade_comercial: document.getElementById('prod-unid').value.trim() || 'UN',
                 p_quantidade: parseFloat(document.getElementById('prod-estoque').value) || 0,
+                p_valor_total: parseFloat(document.getElementById('prod-total').value) || 0,
                 p_fornecedor: document.getElementById('prod-fornecedor').value || null,
                 p_preco_custo: parseFloat(document.getElementById('prod-preco-custo').value) || 0,
-                p_categoria: document.getElementById('prod-categoria').value,
-                // CORREÇÃO: O campo obrigatório foi restaurado no payload
-                p_unidade_comercial: document.getElementById('prod-unid').value || 'UN',
-                p_ncm: document.getElementById('prod-ncm').value || null,
-                p_cfop: document.getElementById('prod-cfop').value || null
+                p_estoque_minimo: parseFloat(document.getElementById('prod-estoque-minimo').value) || 0,
+                p_origem: document.getElementById('prod-origem').value || null,
+                p_local_estoque: document.getElementById('prod-local-estoque').value.trim() || null,
+                p_local_loja: document.getElementById('prod-local-loja').value.trim() || null,
+                p_tipo_embalagem: document.getElementById('prod-tipo-embalagem').value.trim() || null,
+                p_categoria: document.getElementById('prod-categoria').value.trim() || null,
+                p_peso_liquido: parseFloat(document.getElementById('prod-peso').value) || 0,
+                p_dimensoes: document.getElementById('prod-dimensoes').value.trim() || null,
+                p_data_compra: document.getElementById('prod-data-compra').value || null,
+                p_data_vencimento: document.getElementById('prod-data-vencimento').value || null
             };
 
             if (idEdicao) {
@@ -1364,19 +1590,17 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
             if (nomeFicheiroRecemCarregado) {
                 await clienteSupabase.storage.from('foto_produtos').remove([nomeFicheiroRecemCarregado]);
             }
-            alert("❌ Erro: " + (erro.message || JSON.stringify(erro)));
+            alert("❌ Erro ao gravar: O servidor rejeitou os dados. Verifique os limites.");
         } finally {
             btnSalvar.textContent = "💾 Salvar Produto";
             btnSalvar.disabled = false;
         }
     });
 }
-/*[🛠️ FIM PARTE 2]*/
 
+/*[🛠️ FIM MÓDULO PRODUTOS SPA - PARTE 2]*/
 
-
-
-
+    /*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
 
 
 
