@@ -740,15 +740,10 @@ input {
 </head>
 <body>
     <!-- O palco onde o JavaScript vai injetar as telas -->
-    <div id="app-root"></div>
-    
+    <div id="app-root"></div>  
 
 <script>
-
-
 /*🟥 APP.JS - NÚCLEO SPA: AUTENTICAÇÃO E TEMA 🟥*/
-
-
 
 /* [INÍCIO: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] - Mantido para depuração mobile */
 const ferramentasContainer = document.createElement('div');
@@ -803,9 +798,6 @@ console.error = function(...args) { originalError.apply(console, args); espelhar
 console.log("🚀 Sistema Iniciado. Console operante!");
 /* [FIM: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] */
 
-
-
-
 /*⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️ cuidado com /rest/v1/ , não deve ter!*/
 /* [INÍCIO: CONFIGURAÇÃO SUPABASE] */
 const SUPABASE_URL = 'https://rpjtuxkfqxbpsqwihnml.supabase.co';
@@ -820,6 +812,150 @@ if (typeof supabase !== 'undefined') {
 }
 /* [FIM: CONFIGURAÇÃO SUPABASE] */
 
+/*🛠️ UTILITÁRIOS GLOBAIS: MOTOR DE COMPRESSÃO DE MÍDIA*/
+/**
+ * Recebe um ficheiro de imagem, redimensiona-o e converte para WebP de alta eficiência.
+ * @param {File} file - O ficheiro de imagem original.
+ * @param {number} maxWidthHeight - A medida máxima permitida (Padrão: 800px).
+ * @returns {Promise<File>} - Uma Promise que devolve o ficheiro comprimido.
+ */
+function comprimirParaWebP(file, maxWidthHeight = 800) {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            reject(new Error("Nenhum ficheiro fornecido para compressão."));
+            return;
+        }
+
+        // 1. Lemos o ficheiro original
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        
+        reader.onload = (event) => {
+            // 2. Criamos uma imagem virtual para ler as dimensões reais
+            const img = new Image();
+            img.src = event.target.result;
+            
+            img.onload = () => {
+                // 3. Lógica para recalcular as proporções sem distorcer a foto
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidthHeight) {
+                        height = Math.round(height * (maxWidthHeight / width));
+                        width = maxWidthHeight;
+                    }
+                } else {
+                    if (height > maxWidthHeight) {
+                        width = Math.round(width * (maxWidthHeight / height));
+                        height = maxWidthHeight;
+                    }
+                }
+
+                // 4. Utilizamos o Canvas HTML5 para redesenhar a imagem menor
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // 5. Convertemos a tela para o formato final (.webp a 80%)
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        // Limpamos a extensão antiga e forçamos a extensão .webp
+                        const novoNome = file.name.replace(/\.[^/.]+$/, ".webp");
+                        const ficheiroComprimido = new File([blob], novoNome, { type: 'image/webp' });
+                        resolve(ficheiroComprimido);
+                    } else {
+                        reject(new Error("Falha técnica ao converter a imagem."));
+                    }
+                }, 'image/webp', 0.8);
+            };
+            
+            img.onerror = () => reject(new Error("Ficheiro corrompido ou formato não suportado."));
+        };
+        
+        reader.onerror = () => reject(new Error("Ocorreu um erro na leitura do dispositivo."));
+    });
+}
+
+/**
+ * Função de apoio: Cria nomes padronizados para enviar para o Supabase (remove acentos e espaços).
+ */
+function gerarNomeSeguroArquivo(prefixo) {
+    let nomeLimpo = prefixo.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    nomeLimpo = nomeLimpo.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    return `${nomeLimpo}-${Date.now()}.webp`;
+}
+/*🛠️ FIM UTILITÁRIOS GLOBAIS: MOTOR DE COMPRESSÃO DE MÍDIA*/
+
+
+/*[🛠️ COMPONENTE GLOBAL: SCANNER DE CÓDIGO DE BARRAS E QR]*/
+
+// 1. Variáveis de Estado Global
+let scannerGlobalInstancia = null;
+let scannerCallbackDestino = null;
+
+// 2. Injeção Automática do Modal Global no documento (HTML Dinâmico)
+const scannerModalHTML = `
+    <div id="modal-scanner-global" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; flex-direction: column; align-items: center; justify-content: center;">
+        <h3 style="color: #fff; margin-bottom: 20px;">Aponte a câmara para o código</h3>
+        <div id="leitor-scanner-global" style="width: 100%; max-width: 500px; background: #fff; border-radius: 8px; overflow: hidden;"></div>
+        <button onclick="fecharScannerGlobal()" style="margin-top: 20px; padding: 12px 20px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">❌ Cancelar e Fechar</button>
+    </div>
+`;
+document.body.insertAdjacentHTML('beforeend', scannerModalHTML);
+
+/**
+ * Liga a câmara do dispositivo, exibe o modal e aguarda a leitura.
+ * @param {Function} callback - Função que será executada recebendo o código lido como parâmetro.
+ */
+function abrirScannerGlobal(callback) {
+    scannerCallbackDestino = callback; // Guardamos a instrução do que fazer após a leitura
+    const modal = document.getElementById('modal-scanner-global');
+    modal.style.display = 'flex';
+
+    // Cria a instância do scanner apenas se ela não existir
+    if (!scannerGlobalInstancia) {
+        scannerGlobalInstancia = new Html5Qrcode("leitor-scanner-global");
+    }
+
+    // Inicia o fluxo de vídeo forçando a câmara traseira ("environment")
+    scannerGlobalInstancia.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 250, height: 100 } },
+        (codigoLido) => {
+            // SUCESSO: Desliga a câmara primeiro, depois envia o dado para o módulo que o pediu
+            fecharScannerGlobal(); 
+            if (scannerCallbackDestino) {
+                scannerCallbackDestino(codigoLido); 
+            }
+        },
+        (erroDeOcultacao) => {
+            // Ignoramos frames não lidos para não poluir a consola do Termux
+        }
+    ).catch((err) => {
+        alert("Falha de Hardware: Verifique se permitiu o uso da câmara no navegador.");
+        fecharScannerGlobal();
+    });
+}
+
+/**
+ * Interrompe o processo de leitura, limpa a memória da câmara e oculta a janela.
+ */
+function fecharScannerGlobal() {
+    const modal = document.getElementById('modal-scanner-global');
+    if (scannerGlobalInstancia) {
+        scannerGlobalInstancia.stop().then(() => {
+            modal.style.display = 'none';
+        }).catch(() => {
+            modal.style.display = 'none'; // Oculta mesmo se a paragem atirar um erro (fallback)
+        });
+    } else {
+        modal.style.display = 'none';
+    }
+}
+/*[🛠️ FIM COMPONENTE GLOBAL: SCANNER DE CÓDIGO DE BARRAS E QR]*/
 
 /* [INÍCIO: ROTEAMENTO PRINCIPAL] */
 const appRoot = document.getElementById('app-root');
