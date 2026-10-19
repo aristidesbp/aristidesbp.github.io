@@ -542,16 +542,23 @@ USING (bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# supabase_config.js
+# manifest.json
 ```
- /* ============ CONFIGURAÇÕES INICIAIS ================= */
-        
-const SUPABASE_URL = 'https://rpjtuxkfqxbpsqwihnml.supabase.co';
-        
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwanR1eGtmcXhicHNxd2lobm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNTMyNDEsImV4cCI6MjEwNjkyOTI0MX0.p71RFQIKjftxj_ERgfWIz8HqGfcq5RldOsAZ0iTWsPI';
-        
-
-const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+{
+  "name": "ERP Supermercado",
+  "short_name": "ERP",
+  "start_url": "/index2.html",
+  "display": "standalone",
+  "background_color": "#0b1320",
+  "theme_color": "#a4e320",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2311/2311531.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
 
 ```
 
