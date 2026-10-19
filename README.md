@@ -1054,6 +1054,8 @@ window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
     }
 };
 /* [FIM: TELA DE LOGIN E REGISTRO] */
+```
+```
 
 /*⚠️⚠️⚠️⚠️ INÍCIO DOS CÓDIGOS DAS TELAS ⚠️⚠️⚠️⚠️*/
 
