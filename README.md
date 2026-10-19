@@ -1149,6 +1149,528 @@ iniciarApp();
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# MODULO ENTIDADES 
+```
+/*[🛠️ MÓDULO ENTIDADES: LISTAGEM E CADASTRO]*/
+
+// =========================================================
+// VARIÁVEIS DE ESTADO GLOBAL DAS ENTIDADES
+// =========================================================
+let paginaAtualEnt = 0;
+
+// =========================================================
+// 1. ECRÃ DE LISTAGEM DE ENTIDADES
+// =========================================================
+function desenharModuloClientes() {
+    paginaAtualEnt = 0; 
+    const appRoot = document.getElementById('app-root');
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; max-width: 800px;">
+            <div class="titulo" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <span>🏢 Gestão de Entidades</span>
+                <button id="btn-nova-entidade" class="btn-neon" style="width: auto; padding: 8px 15px; margin: 0;">➕ Novo Registo</button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <select id="ent-filtro-tipo" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                    <option value="">Todos</option>
+                    <option value="cliente">Clientes</option>
+                    <option value="fornecedor">Fornecedores</option>
+                    <option value="funcionario">Funcionários</option>
+                </select>
+                <input type="text" id="ent-busca" placeholder="🔍 Nome ou Documento..." style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                <div style="display: flex; align-items: center; gap: 5px; flex: 1; min-width: 120px;">
+                    <label style="margin:0; white-space: nowrap;">Qtd. Pág:</label>
+                    <input type="number" id="ent-itens-por-pagina" value="20" min="1" max="100" style="margin:0; padding: 10px;">
+                </div>
+            </div>
+            
+            <div id="ent-barra-lote" style="background: rgba(255, 193, 7, 0.1); border: 1px solid var(--warning-color); padding: 10px; border-radius: 8px; margin-top: 15px; display: none; align-items: center; justify-content: space-between;">
+                <strong style="color: var(--warning-color);" id="ent-texto-lote">0 selecionados</strong>
+                <button id="btn-excluir-lote-ent" class="btn-perigo" style="width: auto; margin:0; padding: 8px 15px;">🗑️ Excluir Selecionados</button>
+            </div>
+            
+            <div id="ent-area-selecionar-todos" style="padding: 10px; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 15px; display: none; align-items: center; border: 1px solid var(--border-color);">
+                <input type="checkbox" id="ent-chk-todos" style="transform: scale(1.5); margin-right: 15px; cursor: pointer;">
+                <label for="ent-chk-todos" style="cursor: pointer; font-weight: bold; color: var(--text-main); margin:0;">Selecionar todos nesta página</label>
+            </div>
+
+            <div id="ent-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <p style="text-align:center; color: var(--text-muted);">⏳ A carregar registos...</p>
+            </div>
+            
+            <div id="ent-paginacao" style="display: none; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
+                <button id="btn-ent-ant" class="btn-secundario" style="width: auto;">⬅️ Anterior</button>
+                <strong id="texto-ent-paginacao" style="color: var(--text-main);">Página 1</strong>
+                <button id="btn-ent-prox" class="btn-secundario" style="width: auto;">Próxima ➡️</button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('btn-nova-entidade').addEventListener('click', () => desenharModuloEntidadesCadastro());
+
+    let timerBusca;
+    const dispararBusca = () => {
+        clearTimeout(timerBusca);
+        paginaAtualEnt = 0; 
+        timerBusca = setTimeout(() => carregarListaEntidades(), 400);
+    };
+
+    document.getElementById('ent-busca').addEventListener('input', dispararBusca);
+    document.getElementById('ent-filtro-tipo').addEventListener('change', dispararBusca);
+    document.getElementById('ent-itens-por-pagina').addEventListener('change', dispararBusca);
+
+    document.getElementById('btn-ent-ant').addEventListener('click', () => { if (paginaAtualEnt > 0) { paginaAtualEnt--; carregarListaEntidades(); } });
+    document.getElementById('btn-ent-prox').addEventListener('click', () => { paginaAtualEnt++; carregarListaEntidades(); });
+
+    document.getElementById('ent-chk-todos').addEventListener('change', (e) => {
+        document.querySelectorAll('.chk-ent-item:not(#ent-chk-todos)').forEach(chk => chk.checked = e.target.checked);
+        atualizarBarraLoteEntidades();
+    });
+
+    document.getElementById('btn-excluir-lote-ent').addEventListener('click', excluirEntidadesEmLote);
+
+    carregarListaEntidades();
+}
+
+async function carregarListaEntidades() {
+    const container = document.getElementById('ent-lista-container');
+    if (!container) return;
+
+    const termoBusca = document.getElementById('ent-busca').value.trim();
+    const tipoFiltro = document.getElementById('ent-filtro-tipo').value;
+    const limitePagina = parseInt(document.getElementById('ent-itens-por-pagina').value) || 20;
+
+    container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>⏳ A processar no Supabase...</p>";
+    
+    const indiceInicio = paginaAtualEnt * limitePagina;
+    const indiceFim = indiceInicio + limitePagina - 1;
+
+    try {
+        let query = clienteSupabase
+            .from('entidades')
+            .select('id, nome_completo, tipo, numero_documento, telefone, email, foto_url', { count: 'exact' })
+            .order('nome_completo', { ascending: true }) 
+            .range(indiceInicio, indiceFim);
+
+        if (tipoFiltro) query = query.eq('tipo', tipoFiltro);
+        if (termoBusca) {
+            const termoLimpo = termoBusca.replace(/"/g, '');
+            query = query.or(`nome_completo.ilike.%${termoLimpo}%,numero_documento.ilike.%${termoLimpo}%`);
+        }
+
+        const { data, count, error } = await query;
+        if (error) throw error;
+
+        atualizarPaginacaoEntidades(count, limitePagina);
+        document.getElementById('ent-barra-lote').style.display = 'none';
+        document.getElementById('ent-chk-todos').checked = false;
+        container.innerHTML = "";
+
+        if (!data || data.length === 0) {
+            document.getElementById('ent-area-selecionar-todos').style.display = 'none';
+            container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhuma entidade encontrada.</p>";
+            return;
+        }
+
+        document.getElementById('ent-area-selecionar-todos').style.display = 'flex';
+
+        data.forEach(ent => {
+            const cardItem = document.createElement('div');
+            cardItem.style.cssText = `background: var(--input-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; display:flex; align-items:center; gap: 15px; flex-wrap: wrap;`;
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'chk-ent-item';
+            checkbox.value = ent.id;
+            checkbox.style.cssText = "transform: scale(1.5); margin-right: 5px; cursor: pointer;";
+            checkbox.addEventListener('change', atualizarBarraLoteEntidades);
+            
+            const img = document.createElement('img');
+            img.src = ent.foto_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            img.style.cssText = "width: 50px; height: 50px; object-fit: cover; border-radius: 25px; border: 1px solid var(--border-color); background: #333;";
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.style.flexGrow = '1';
+            infoDiv.style.minWidth = '200px';
+            const tipoFormatado = ent.tipo ? ent.tipo.toUpperCase() : 'N/A';
+            infoDiv.innerHTML = `
+                <strong style="color: var(--text-main); font-size: 1.1em;">${ent.nome_completo}</strong><br>
+                <span style="background: var(--info-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7em;">${tipoFormatado}</span>
+                <span style="color: var(--text-muted); font-size: 0.85em; margin-left: 5px;">Doc: ${ent.numero_documento || 'S/N'}</span>
+            `;
+
+            const acoesDiv = document.createElement('div');
+            acoesDiv.style.display = 'flex';
+            acoesDiv.style.gap = '8px';
+            acoesDiv.style.flexWrap = 'wrap';
+
+            if (ent.telefone) {
+                let foneLimpo = ent.telefone.replace(/\D/g, ''); 
+                if (foneLimpo.length >= 10 && !foneLimpo.startsWith('55')) foneLimpo = '55' + foneLimpo;
+                const btnWpp = document.createElement('a');
+                btnWpp.href = `https://wa.me/${foneLimpo}`;
+                btnWpp.target = "_blank";
+                btnWpp.innerHTML = "💬 WPP";
+                btnWpp.style.cssText = "background: #25D366; color: white; padding: 8px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center;";
+                acoesDiv.appendChild(btnWpp);
+            }
+
+            if (ent.email) {
+                const btnEmail = document.createElement('a');
+                btnEmail.href = `mailto:${ent.email}`;
+                btnEmail.innerHTML = "📧 Mail";
+                btnEmail.style.cssText = "background: #17a2b8; color: white; padding: 8px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center;";
+                acoesDiv.appendChild(btnEmail);
+            }
+
+            const btnCartao = document.createElement('button');
+            btnCartao.innerHTML = "🪪 Imprimir";
+            btnCartao.className = "btn-secundario";
+            btnCartao.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+            btnCartao.onclick = () => imprimirCarteirinha(ent);
+
+            const btnEditar = document.createElement('button');
+            btnEditar.textContent = "✏️ Editar";
+            btnEditar.className = "btn-secundario";
+            btnEditar.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+            btnEditar.onclick = () => desenharModuloEntidadesCadastro(ent.id);
+
+            const btnExcluir = document.createElement('button');
+            btnExcluir.textContent = "🗑️ Excluir";
+            btnExcluir.className = "btn-perigo";
+            btnExcluir.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+            // NOTA: Passamos a foto_url para a função poder apagar o ficheiro
+            btnExcluir.onclick = () => excluirEntidadeIndividual(ent.id, ent.nome_completo, ent.foto_url);
+
+            acoesDiv.appendChild(btnCartao);
+            acoesDiv.appendChild(btnEditar);
+            acoesDiv.appendChild(btnExcluir);
+
+            cardItem.appendChild(checkbox);
+            cardItem.appendChild(img);
+            cardItem.appendChild(infoDiv);
+            cardItem.appendChild(acoesDiv);
+            container.appendChild(cardItem);
+        });
+
+    } catch (erro) {
+        console.error("Erro Listagem Entidades:", erro);
+        container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao comunicar com o servidor.</p>";
+    }
+}
+
+function atualizarPaginacaoEntidades(totalItens, limitePagina) {
+    const totalPaginas = Math.ceil(totalItens / limitePagina) || 1;
+    document.getElementById('texto-ent-paginacao').textContent = `Página ${paginaAtualEnt + 1} de ${totalPaginas}`;
+    document.getElementById('btn-ent-ant').disabled = paginaAtualEnt === 0;
+    document.getElementById('btn-ent-prox').disabled = (paginaAtualEnt + 1) >= totalPaginas;
+    document.getElementById('ent-paginacao').style.display = totalItens > 0 ? "flex" : "none";
+}
+
+function atualizarBarraLoteEntidades() {
+    const checkboxes = document.querySelectorAll('.chk-ent-item:not(#ent-chk-todos):checked');
+    const barraAcoes = document.getElementById('ent-barra-lote');
+    if (checkboxes.length > 0) {
+        barraAcoes.style.display = 'flex';
+        document.getElementById('ent-texto-lote').textContent = `${checkboxes.length} selecionados`;
+    } else {
+        barraAcoes.style.display = 'none';
+    }
+}
+
+// =========================================================
+// FUNÇÕES DE EXCLUSÃO (LIMPEZA TOTAL DE BD E STORAGE)
+// =========================================================
+async function excluirEntidadeIndividual(id, nome, fotoUrl) {
+    if (!confirm(`Atenção: Tem certeza que deseja apagar ${nome} definitivamente? (Isto falhará se existirem produtos associados a este fornecedor).`)) return;
+    try {
+        // 1. Apaga a linha da base de dados
+        const { error } = await clienteSupabase.from('entidades').delete().eq('id', id);
+        if (error) throw error;
+
+        // 2. Apaga a foto do Storage (O Conceito reaproveitado do código antigo)
+        if (fotoUrl) {
+            const nomeArquivo = decodeURIComponent(fotoUrl.split('/').pop().split('?')[0]);
+            await clienteSupabase.storage.from('foto_entidades').remove([nomeArquivo]);
+            console.log("Ficheiro limpo do storage:", nomeArquivo);
+        }
+
+        alert("✅ Entidade e fotografia apagadas com sucesso!");
+        carregarListaEntidades();
+    } catch (erro) {
+        console.error(erro);
+        alert("❌ Erro ao apagar. Pode existir uma restrição no sistema (ex: produtos ligados a este fornecedor).");
+    }
+}
+
+async function excluirEntidadesEmLote() {
+    const chks = document.querySelectorAll('.chk-ent-item:not(#ent-chk-todos):checked');
+    const ids = Array.from(chks).map(chk => chk.value);
+    if (ids.length === 0 || !confirm(`Aviso: Confirma a eliminação definitiva de ${ids.length} registos e as suas fotos?`)) return;
+
+    try {
+        // 1. Resgatar as URLs das fotos ANTES de apagar os dados da tabela
+        const { data: entidadesParaApagar } = await clienteSupabase
+            .from('entidades')
+            .select('foto_url')
+            .in('id', ids);
+
+        // 2. Apagar da Base de Dados
+        const { error } = await clienteSupabase.from('entidades').delete().in('id', ids);
+        if (error) throw error;
+
+        // 3. Limpar o Storage em Lote
+        if (entidadesParaApagar && entidadesParaApagar.length > 0) {
+            const arquivosParaApagar = entidadesParaApagar
+                .filter(ent => ent.foto_url)
+                .map(ent => decodeURIComponent(ent.foto_url.split('/').pop().split('?')[0]));
+            
+            if (arquivosParaApagar.length > 0) {
+                await clienteSupabase.storage.from('foto_entidades').remove(arquivosParaApagar);
+                console.log("Ficheiros em lote limpos do storage.");
+            }
+        }
+
+        alert("✅ Registos e fotos apagados em lote com sucesso.");
+        document.getElementById('ent-chk-todos').checked = false;
+        carregarListaEntidades();
+    } catch (erro) {
+        console.error(erro);
+        alert("❌ Falha técnica ao apagar em lote.");
+    }
+}
+
+// =========================================================
+// GERAÇÃO DE CARTEIRINHA COM CÓDIGO DE BARRAS
+// =========================================================
+function imprimirCarteirinha(ent) {
+    const codigo = ent.numero_documento || ent.id.split('-')[0].toUpperCase();
+    const urlCodigoBarras = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(codigo)}&scale=3&includetext`;
+    const fotoUrl = ent.foto_url || 'https://via.placeholder.com/150/cccccc/666666?text=Foto';
+
+    const janelaPrint = window.open('', '', 'width=600,height=600');
+    janelaPrint.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <title>Carteirinha - ${ent.nome_completo}</title>
+            <style>
+                body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f0f0; }
+                .cartao { width: 320px; background: #fff; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); padding: 25px; text-align: center; border: 2px solid #333; position: relative; overflow: hidden; }
+                .cabecalho-cartao { background: #17a2b8; color: white; padding: 10px; margin: -25px -25px 20px -25px; font-weight: bold; text-transform: uppercase; font-size: 1.1em;}
+                .foto { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #17a2b8; margin-bottom: 15px; }
+                .nome { font-size: 1.3em; font-weight: bold; margin: 0 0 5px 0; color: #1a1a1a; text-transform: uppercase; }
+                .info { font-size: 0.9em; color: #555; margin: 5px 0; }
+                .barcode-container { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; }
+                .barcode { max-width: 90%; max-height: 70px; }
+                @media print { 
+                    body { background: #fff; } 
+                    .cartao { box-shadow: none; border: 1px solid #000; margin: 0; } 
+                    @page { size: auto; margin: 0mm; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="cartao">
+                <div class="cabecalho-cartao">ERP Supermercado - ${ent.tipo}</div>
+                <img src="${fotoUrl}" class="foto" alt="Foto">
+                <h2 class="nome">${ent.nome_completo}</h2>
+                <div class="info">☎️ ${ent.telefone || 'Sem contacto'}</div>
+                <div class="info">📧 ${ent.email || 'Sem email'}</div>
+                
+                <div class="barcode-container">
+                    <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">Documento / Código:</div>
+                    <img src="${urlCodigoBarras}" class="barcode" alt="Código de Barras">
+                </div>
+            </div>
+            <script>
+                setTimeout(() => { window.print(); }, 1500);
+            <\/script>
+        </body>
+        </html>
+    `);
+    janelaPrint.document.close();
+}
+```
+```
+
+// =========================================================
+// 2. ECRÃ DE CADASTRO DE ENTIDADES
+// =========================================================
+async function desenharModuloEntidadesCadastro(idEdicao = null) {
+    const appRoot = document.getElementById('app-root');
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 5vh; max-width: 600px;">
+            <div class="titulo">${idEdicao ? '✏️ Editar Entidade' : '🏢 Nova Entidade'}</div>
+            
+            <form id="form-entidade">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; border: 1px dashed var(--border-color); border-radius: 8px;">
+                    <img id="ent-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width: 120px; height: 120px; object-fit: cover; border-radius: 60px; border: 2px solid var(--accent-neon); background: var(--input-bg);">
+                    <div style="display: flex; gap: 10px;">
+                        <label for="ent-foto-arquivo" style="background: var(--info-color); color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin: 0; font-weight: bold;">📂 Escolher Foto</label>
+                        <input type="file" id="ent-foto-arquivo" accept="image/*" style="display:none;">
+                        <label for="ent-foto-camera" style="background: var(--warning-color); color: #000; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin: 0; font-weight: bold;">📸 Tirar Foto</label>
+                        <input type="file" id="ent-foto-camera" accept="image/*" capture="environment" style="display:none;">
+                    </div>
+                </div>
+
+                <label>Tipo de Relação *</label>
+                <select id="ent-tipo" required>
+                    <option value="cliente">Cliente</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="entregador">Entregador</option>
+                    <option value="empresa">Empresa</option>
+                </select>
+
+                 <label>Nome Completo *</label>
+                <input type="text" id="ent-nome" required placeholder="Ex: João da Silva / Distribuidora X">
+
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label>Tipo Doc.</label>
+                        <select id="ent-tipo-doc">
+                            <option value="">N/A</option>
+                            <option value="CPF">CPF</option>
+                            <option value="CNPJ">CNPJ</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <label>Número do Documento</label>
+                        <input type="text" id="ent-documento" placeholder="000.000.000-00">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label>Telefone</label>
+                        <input type="text" id="ent-telefone" placeholder="(91) 90000-0000">
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Email</label>
+                        <input type="email" id="ent-email" placeholder="contato@email.com">
+                    </div>
+                </div>
+
+                <label>Endereço Completo</label>
+                <input type="text" id="ent-endereco" placeholder="Rua, Número, Bairro, Cidade">
+
+                <button type="submit" id="btn-salvar-entidade" class="btn-neon" style="margin-top: 20px;">💾 Salvar Entidade</button>
+                <button type="button" class="btn-secundario" onclick="desenharModuloClientes()">❌ Cancelar</button>
+            </form>
+        </div>
+    `;
+
+    let urlFotoAntiga = null;
+    let ficheiroAProcessar = null;
+
+    const processarInputMidia = (evento) => {
+        const file = evento.target.files[0];
+        if (file) {
+            ficheiroAProcessar = file;
+            const leitor = new FileReader();
+            leitor.onload = e => document.getElementById('ent-img-preview').src = e.target.result;
+            leitor.readAsDataURL(file);
+        }
+    };
+    document.getElementById('ent-foto-arquivo').addEventListener('change', processarInputMidia);
+    document.getElementById('ent-foto-camera').addEventListener('change', processarInputMidia);
+
+    if (idEdicao) {
+        document.getElementById('btn-salvar-entidade').textContent = "⏳ A ler dados...";
+        const { data, error } = await clienteSupabase.from('entidades').select('*').eq('id', idEdicao).single();
+        if (data && !error) {
+            document.getElementById('ent-tipo').value = data.tipo || 'cliente';
+            document.getElementById('ent-nome').value = data.nome_completo || '';
+            document.getElementById('ent-tipo-doc').value = data.tipo_documento || '';
+            document.getElementById('ent-documento').value = data.numero_documento || '';
+            document.getElementById('ent-telefone').value = data.telefone || '';
+            document.getElementById('ent-email').value = data.email || '';
+            document.getElementById('ent-endereco').value = data.endereco_completo || '';
+            
+            if (data.foto_url) {
+                urlFotoAntiga = data.foto_url;
+                document.getElementById('ent-img-preview').src = data.foto_url;
+            }
+        }
+        document.getElementById('btn-salvar-entidade').textContent = "💾 Atualizar Entidade";
+    }
+
+    document.getElementById('form-entidade').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btnSalvar = document.getElementById('btn-salvar-entidade');
+        btnSalvar.textContent = "⏳ A gravar...";
+        btnSalvar.disabled = true;
+
+        let urlFinalDaFoto = urlFotoAntiga;
+        let nomeFicheiroRecemCarregado = null;
+
+        try {
+            if (ficheiroAProcessar) {
+                const imagemComprimida = await comprimirParaWebP(ficheiroAProcessar);
+                const nomeUnicoSeguro = gerarNomeSeguroArquivo(document.getElementById('ent-nome').value);
+                
+                const { error: uploadError } = await clienteSupabase.storage
+                    .from('foto_entidades')
+                    .upload(nomeUnicoSeguro, imagemComprimida);
+
+                if (uploadError) throw uploadError;
+                nomeFicheiroRecemCarregado = nomeUnicoSeguro;
+
+                const { data: urlData } = clienteSupabase.storage
+                    .from('foto_entidades').getPublicUrl(nomeUnicoSeguro);
+                urlFinalDaFoto = urlData.publicUrl;
+            }
+
+            const payload = {
+                tipo: document.getElementById('ent-tipo').value,
+                nome_completo: document.getElementById('ent-nome').value,
+                tipo_documento: document.getElementById('ent-tipo-doc').value,
+                numero_documento: document.getElementById('ent-documento').value,
+                telefone: document.getElementById('ent-telefone').value,
+                email: document.getElementById('ent-email').value,
+                endereco_completo: document.getElementById('ent-endereco').value,
+                foto_url: urlFinalDaFoto
+            };
+
+            if (idEdicao) {
+                const { error } = await clienteSupabase.from('entidades').update(payload).eq('id', idEdicao);
+                if (error) throw error;
+                if (urlFotoAntiga && nomeFicheiroRecemCarregado) {
+                    const nomeVelho = decodeURIComponent(urlFotoAntiga.split('/').pop().split('?')[0]);
+                    await clienteSupabase.storage.from('foto_entidades').remove([nomeVelho]);
+                }
+            } else {
+                const { error } = await clienteSupabase.from('entidades').insert([payload]);
+                if (error) throw error;
+            }
+
+            alert("✅ Entidade gravada com sucesso!");
+            desenharModuloClientes();
+
+        } catch (erro) {
+            console.error(erro);
+            if (nomeFicheiroRecemCarregado) {
+                await clienteSupabase.storage.from('foto_entidades').remove([nomeFicheiroRecemCarregado]);
+            }
+            alert("❌ Ocorreu um erro ao gravar a entidade.");
+        } finally {
+            btnSalvar.textContent = "💾 Salvar Entidade";
+            btnSalvar.disabled = false;
+        }
+    });
+}
+/*[🛠️ FIM MÓDULO ENTIDADES: LISTAGEM E CADASTRO]*/
+
+
+
+
+
+
+
+```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
