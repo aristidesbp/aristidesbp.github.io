@@ -556,228 +556,451 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-# login.html
+# app.html (código base com navegação)
 ```
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Seguro - ERP Supermercado</title>
-    
-    <style>
-        /* ================= DESIGN SYSTEM ================= */
-        :root {
-            --bg-color: #0b1320; 
-            --card-bg: #151f2b;  
-            --text-main: #ffffff;
-            --text-muted: #8b9eb3;
-            --accent-neon: #a4e320; 
-            --accent-hover: #8cc21a;
-            --border-color: #2a3645;
-            --danger-color: #ff4d4d;
-            --info-color: #17a2b8;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ERP SPA Autenticação</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+<style>
+:root {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent-neon: #00ffcc;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+}
 
-        /* Tema Claro */
-        .light-theme {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #6c757d;
-            --accent-neon: #28a745;
-            --accent-hover: #218838;
-            --border-color: #e0e0e0;
-            --danger-color: #dc3545;
-        }
+/* Tema Claro Dinâmico */
+body.light-theme {
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --accent-neon: #007bff;
+    --border-color: #dddddd;
+    --input-bg: #f9f9f9;
+}
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; transition: background-color 0.3s, color 0.3s; }
-        
-        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; border: 1px solid var(--border-color); box-sizing: border-box; margin: 20px;}
-        
-        .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
-        .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
 
-        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color);}
-        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
 
-        label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; margin-bottom: 20px;}
-        input:focus { border-color: var(--accent-neon); }
-        
-        /* Modificadores do Campo de Senha */
-        .input-senha-container { position: relative; display: flex; align-items: center; width: 100%; margin-bottom: 20px; }
-        .input-senha-container input { margin-bottom: 0; padding-right: 45px; } /* Espaço reservado para o cadeado */
-        .btn-olho { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; display: flex; align-items: center; justify-content: center; height: 100%; }
-        
-        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s; }
-        .btn-neon:hover { background: var(--accent-hover); }
+.titulo {
+    font-size: 1.5em;
+    color: var(--accent-neon);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
 
-        /* Ferramentas de Depuração Flutuantes */
-        .ferramentas-container { position: fixed; bottom: 10px; right: 10px; display: flex; gap: 10px; z-index: 10000; }
-        .btn-ferramenta { padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); }
-        .btn-tema { background: #444; color: white; border: 1px solid #666; }
-        .btn-console { background: #2980b9; color: white; }
-        .console-area { position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px; box-shadow: 0px -2px 10px rgba(0,0,0,0.5); box-sizing: border-box; }
-        .console-linha { margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 2px; }
-    </style>
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
+    color: var(--text-main);
+    box-sizing: border-box;
+}
+
+.btn-neon {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-neon);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.btn-secundario {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Container para alinhar input de senha e o botão de olhinho */
+.input-senha-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.btn-olho {
+    position: absolute;
+    right: 10px;
+    top: 38%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: var(--text-muted);
+}
+
+/* --- COMPONENTES DOS MÓDULOS (ABAS E TOASTS) --- */
+.tabs-menu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+.tab-btn.active {
+    background: var(--accent-neon);
+    color: #000;
+    border-color: var(--accent-neon);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.toast {
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.toast.mostrar { opacity: 1; transform: translateX(0); }
+.toast-sucesso { background: #28a745; }
+.toast-erro { background: #dc3545; }
+.toast-info { background: #17a2b8; }
+
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; font-size: 1.2em; }
+
+
+</style>
+
+<!-- Motor do Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Motor do Leitor de Código de Barras (NOVO) -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 </head>
-
 <body>
+    <!-- O palco onde o JavaScript vai injetar as telas -->
+    <div id="app-root"></div>
     
-    <!-- Cartão de Login -->
-    <div class="card">
-        <h2 class="titulo">
-            <span class="logo-icon">⚡</span> 
-            Acesso Restrito
-        </h2>
-        
-        <div id="status" class="info">A verificar sessão...</div>
 
-        <!-- Formulário de Autenticação -->
-        <div id="area-login" style="display: none;">
-            <p style="font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 20px;">Insira as suas credenciais.</p>
+<script>
+
+
+/*🟥 APP.JS - NÚCLEO SPA: AUTENTICAÇÃO E TEMA 🟥*/
+
+
+
+/* [INÍCIO: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] - Mantido para depuração mobile */
+const ferramentasContainer = document.createElement('div');
+ferramentasContainer.style.cssText = `position: fixed; bottom: 10px; right: 10px; display: flex; gap: 10px; z-index: 10000;`;
+
+// Botão Menu Global
+const btnMenuGlobal = document.createElement('button');
+btnMenuGlobal.textContent = '🏠 Menu';
+btnMenuGlobal.style.cssText = `padding: 10px 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); display: none;`;
+btnMenuGlobal.onclick = () => iniciarApp(); 
+
+const btnSairGlobal = document.createElement('button');
+btnSairGlobal.textContent = '🚪 Sair';
+btnSairGlobal.style.cssText = `padding: 10px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); display: none;`;
+
+const btnTemaGlobal = document.createElement('button');
+btnTemaGlobal.textContent = '🌓 Tema';
+btnTemaGlobal.style.cssText = `padding: 10px 15px; background: #444; color: white; border: 1px solid #666; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
+btnTemaGlobal.onclick = () => document.body.classList.toggle('light-theme');
+
+const toggleBtn = document.createElement('button');
+toggleBtn.textContent = '🛠️ Console';
+toggleBtn.style.cssText = `padding: 10px 15px; background: #2980b9; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0px 2px 5px rgba(0,0,0,0.5);`;
+
+const consoleContainer = document.createElement('div');
+consoleContainer.style.cssText = `position: fixed; bottom: 60px; left: 10px; right: 10px; height: 300px; background: rgba(0, 0, 0, 0.9); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; overflow-y: scroll; z-index: 9999; display: none; border-radius: 5px; box-shadow: 0px -2px 10px rgba(0,0,0,0.5);`;
+
+// A ordem aqui define a posição na tela (da esquerda para a direita)
+ferramentasContainer.appendChild(btnMenuGlobal); 
+ferramentasContainer.appendChild(btnSairGlobal);
+ferramentasContainer.appendChild(btnTemaGlobal);
+ferramentasContainer.appendChild(toggleBtn);
+
+document.body.appendChild(consoleContainer);
+document.body.appendChild(ferramentasContainer);
+
+toggleBtn.addEventListener('click', () => { consoleContainer.style.display = consoleContainer.style.display === 'none' ? 'block' : 'none'; });
+
+const originalLog = console.log;
+const originalError = console.error;
+function espelharNoEcra(tipo, cor, argumentos) {
+    const linha = document.createElement('div');
+    linha.style.color = cor; linha.style.marginBottom = '5px'; linha.style.borderBottom = '1px solid #333';
+    linha.textContent = `[${tipo}] ${Array.from(argumentos).map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ')}`;
+    consoleContainer.appendChild(linha);
+    consoleContainer.scrollTop = consoleContainer.scrollHeight;
+}
+console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
+console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
+
+// Teste inicial do Console
+console.log("🚀 Sistema Iniciado. Console operante!");
+/* [FIM: FERRAMENTAS GLOBAIS E CONSOLE ESPELHO] */
+
+
+
+
+/*⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️ cuidado com /rest/v1/ , não deve ter!*/
+/* [INÍCIO: CONFIGURAÇÃO SUPABASE] */
+const SUPABASE_URL = 'https://rpjtuxkfqxbpsqwihnml.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwanR1eGtmcXhicHNxd2lobm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNTMyNDEsImV4cCI6MjEwNjkyOTI0MX0.p71RFQIKjftxj_ERgfWIz8HqGfcq5RldOsAZ0iTWsPI';
+/*⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️*/
+
+let clienteSupabase;
+if (typeof supabase !== 'undefined') {
+    clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.error("Supabase não carregado. Verifique o index.html.");
+}
+/* [FIM: CONFIGURAÇÃO SUPABASE] */
+
+
+/* [INÍCIO: ROTEAMENTO PRINCIPAL] */
+const appRoot = document.getElementById('app-root');
+
+// Função mestre que decide qual tela mostrar
+async function iniciarApp() {
+    const { data: { session } } = await clienteSupabase.auth.getSession();
+    if (session) {
+        btnMenuGlobal.style.display = 'block'; // Mostra botão menu
+        btnSairGlobal.style.display = 'block'; // Mostra botão sair
+        desenharMenuPrincipal(session.user.email);
+    } else {
+        btnMenuGlobal.style.display = 'none';  // Esconde botão menu
+        btnSairGlobal.style.display = 'none';  // Esconde botão sair
+        desenharLogin();
+    }
+}
+
+// Controle do botão sair global
+btnSairGlobal.onclick = async () => {
+    if(confirm("Deseja encerrar a sessão?")) { 
+        await clienteSupabase.auth.signOut(); 
+        iniciarApp(); 
+    }
+};
+/* [FIM: ROTEAMENTO PRINCIPAL] */
+
+
+
+/* [INÍCIO: TELA DE LOGIN E REGISTRO] */
+function desenharLogin() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh;">
+            <div class="titulo">⚡ Acesso Seguro</div>
             
-            <label for="input-email">E-mail Administrativo:</label>
-            <input type="email" id="input-email" placeholder="admin@supermercado.com" required>
-            
-            <label for="input-senha">Palavra-passe:</label>
-            <div class="input-senha-container">
-                <input type="password" id="input-senha" placeholder="••••••••" required>
-                <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha()" id="btn-olho">🔒</button>
+            <div id="area-login">
+                <label>E-mail</label>
+                <input type="email" id="login-email" placeholder="seu@email.com">
+                
+                <label>Senha</label>
+                <div class="input-senha-container">
+                    <input type="password" id="login-senha" placeholder="••••••••">
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('login-senha', this)">🔒</button>
+                </div>
+
+                <button id="btn-entrar" class="btn-neon">Entrar</button>
+                <button id="btn-ir-registo" class="btn-secundario">Criar Nova Conta</button>
             </div>
-            
-            <button id="btn-entrar" class="btn-neon">Entrar no ERP</button>
+
+            <div id="area-registo" style="display: none;">
+                <label>Novo E-mail</label>
+                <input type="email" id="reg-email" placeholder="novo@email.com">
+                
+                <label>Criar Senha</label>
+                <div class="input-senha-container">
+                    <input type="password" id="reg-senha" placeholder="Mínimo 6 caracteres">
+                    <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('reg-senha', this)">🔒</button>
+                </div>
+
+                <button id="btn-registar" class="btn-neon">Concluir Registo</button>
+                <button id="btn-voltar-login" class="btn-secundario">Voltar ao Login</button>
+            </div>
         </div>
-    </div>
+    `;
 
-    <!-- Ferramentas Globais (Depuração) -->
-    <div class="ferramentas-container">
-        <button class="btn-ferramenta btn-tema" onclick="alternarTema()">🌓 Tema</button>
-        <button class="btn-ferramenta btn-console" onclick="alternarConsole()">🛠️ Console</button>
-    </div>
-    <div class="console-area" id="console-area"></div>
+    document.getElementById('btn-ir-registo').onclick = () => { document.getElementById('area-login').style.display = 'none'; document.getElementById('area-registo').style.display = 'block'; };
+    document.getElementById('btn-voltar-login').onclick = () => { document.getElementById('area-registo').style.display = 'none'; document.getElementById('area-login').style.display = 'block'; };
 
-    <!-- Conexão com Supabase -->
-    <script src="supabase_config.js"></script>
-    
-    <script>
-        // 1. LÓGICA DO CONSOLE ESPELHO
-        const consoleArea = document.getElementById('console-area');
-        const originalLog = console.log;
-        const originalError = console.error;
+    document.getElementById('btn-entrar').onclick = async () => {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-senha').value;
+        if(!email || !password) return alert("Preencha todos os campos.");
+        const { error } = await clienteSupabase.auth.signInWithPassword({ email, password });
+        if (error) alert("Erro: " + error.message);
+        else iniciarApp(); 
+    };
 
-        function espelharNoEcra(tipo, cor, argumentos) {
-            const linha = document.createElement('div');
-            linha.className = 'console-linha';
-            linha.style.color = cor;
-            linha.textContent = `[${tipo}] ${Array.from(argumentos).map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ')}`;
-            consoleArea.appendChild(linha);
-            consoleArea.scrollTop = consoleArea.scrollHeight;
-        }
+    document.getElementById('btn-registar').onclick = async () => {
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-senha').value;
+        if(!email || !password) return alert("Preencha todos os campos.");
+        const { error } = await clienteSupabase.auth.signUp({ email, password });
+        if (error) alert("Erro: " + error.message);
+        else { alert("Conta criada! Confirme o email ou faça login."); document.getElementById('btn-voltar-login').click(); }
+    };
+}
 
-        console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
-        console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
+window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
+    const input = document.getElementById(idInput);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btnOlho.textContent = '🔓';
+    } else {
+        input.type = 'password';
+        btnOlho.textContent = '🔒';
+    }
+};
+/* [FIM: TELA DE LOGIN E REGISTRO] */
 
-        function alternarConsole() {
-            consoleArea.style.display = consoleArea.style.display === 'none' || consoleArea.style.display === '' ? 'block' : 'none';
-        }
+/*⚠️⚠️⚠️⚠️ INÍCIO DOS CÓDIGOS DAS TELAS ⚠️⚠️⚠️⚠️*/
 
-        console.log("Sistema Inicializado. Console operante!");
+/* [INÍCIO: TELA LOGADA (BOAS-VINDAS)] */
+function desenharMenuPrincipal(emailDoOperador) {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">Bem-vindo!</div>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Logado como:<br><strong>${emailDoOperador}</strong></p>
 
-        // 2. LÓGICA DO TEMA CLARO/ESCURO
-        if(localStorage.getItem('temaERP') === 'light') document.body.classList.add('light-theme');
-        
-        function alternarTema() {
-            document.body.classList.toggle('light-theme');
-            const temaAtual = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-            localStorage.setItem('temaERP', temaAtual);
-            console.log("Tema modificado para:", temaAtual);
-        }
+            <!-- Menu de Módulos (Navegação SPA) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                <button class="btn-secundario" onclick="desenharModuloClientes()">👥 Clientes</button>
+                <button class="btn-secundario" onclick="desenharModuloFinanceiro()">💰 Financeiro</button>
+                <button class="btn-secundario" onclick="desenharModuloProdutos()">📦 Produtos</button>
+                <button class="btn-secundario" onclick="desenharModuloPDV()">🛒 PDV</button>
+                <button class="btn-secundario" style="grid-column: span 2;" onclick="desenharModuloRelatorios()">📊 Relatórios</button>
+            </div>
+        </div>
+    `;
+}
+/* [FIM: TELA LOGADA] */
 
-        // 3. LÓGICA DE VISIBILIDADE DA SENHA
-        function alternarVisibilidadeSenha() {
-            const input = document.getElementById('input-senha');
-            const btn = document.getElementById('btn-olho');
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🔓';
-            } else {
-                input.type = 'password';
-                btn.textContent = '🔒';
-            }
-        }
 
-        // 4. LÓGICA DE AUTENTICAÇÃO
-        const statusDiv = document.getElementById('status');
-        const areaLogin = document.getElementById('area-login');
+/* [INÍCIO: COMPONENTES DOS MÓDULOS] */
 
-        // Verificação Zero Trust ao carregar a página
-        window.addEventListener('DOMContentLoaded', async () => {
-            console.log("A verificar sessão no Supabase...");
-            try {
-                const { data: { session }, error } = await clienteSupabase.auth.getSession();
-                if (session) {
-                    console.log("Sessão ativa encontrada.");
-                    sucessoRedirecionar("Sessão válida! A redirecionar...");
-                } else {
-                    statusDiv.style.display = "none";
-                    areaLogin.style.display = "block";
-                    console.log("A aguardar credenciais de login.");
-                }
-            } catch (error) {
-                mostrarErro("Erro ao verificar sessão.");
-                console.error("Falha ao comunicar com Auth:", error.message);
-            }
-        });
+// Tela do Módulo de Clientes
+function desenharModuloClientes() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">👥 Módulo Clientes</div>
+            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
+            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de gestão de clientes.</p>
+        </div>
+    `;
+}
 
-        // Evento de Login por Senha
-        document.getElementById('btn-entrar').addEventListener('click', async () => {
-            const email = document.getElementById('input-email').value.trim();
-            const senha = document.getElementById('input-senha').value;
-            const btnEntrar = document.getElementById('btn-entrar');
+// Tela do Módulo Financeiro
+function desenharModuloFinanceiro() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">💰 Módulo Financeiro</div>
+            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
+            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de gestão financeira.</p>
+        </div>
+    `;
+}
 
-            if (!email || !senha) {
-                alert("Preencha e-mail e palavra-passe!");
-                console.error("Campos vazios no envio do formulário.");
-                return; 
-            }
+// Tela do Módulo de Produtos
+function desenharModuloProdutos() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">📦 Módulo Produtos</div>
+            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
+            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de estoque e cadastro de produtos.</p>
+        </div>
+    `;
+}
 
-            btnEntrar.textContent = "A Autenticar..."; btnEntrar.disabled = true;
-            console.log("A processar autenticação para:", email);
+// Tela do Módulo PDV
+function desenharModuloPDV() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">🛒 Módulo PDV</div>
+            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
+            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de vendas (Ponto de Venda).</p>
+        </div>
+    `;
+}
 
-            const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
-            
-            if (error) {
-                mostrarErro("Credenciais incorretas.");
-                console.error("Erro do Supabase:", error.message);
-                btnEntrar.textContent = "Entrar no ERP"; btnEntrar.disabled = false;
-            } else {
-                console.log("Autenticação validada com sucesso pelo servidor.");
-                sucessoRedirecionar("Autenticado! A entrar...");
-            }
-        });
+// Tela do Módulo de Relatórios
+function desenharModuloRelatorios() {
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 10vh; text-align: center;">
+            <div class="titulo">📊 Módulo Relatórios</div>
+            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
+            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface para visualização de relatórios.</p>
+        </div>
+    `;
+}
 
-        // Helpers de Notificação Visual
-        function sucessoRedirecionar(mensagem) {
-            statusDiv.style.display = "block";
-            statusDiv.textContent = "✅ " + mensagem;
-            statusDiv.className = "info sucesso";
-            setTimeout(() => { window.location.href = 'listar.html'; }, 1000);
-        }
+/* [FIM: COMPONENTES DOS MÓDULOS] */
 
-        function mostrarErro(mensagem) {
-            statusDiv.style.display = "block";
-            statusDiv.textContent = "❌ " + mensagem;
-            statusDiv.className = "info erro";
-        }
-    </script>
+
+/*⚠️⚠️⚠️⚠️ FIM DO CÓDIGOS DAS TELAS ⚠️⚠️⚠️⚠️*/
+// Dá a partida na aplicação
+iniciarApp();
+</script>
 </body>
 </html>
-
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
