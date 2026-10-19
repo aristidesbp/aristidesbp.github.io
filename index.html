@@ -1027,19 +1027,27 @@ async function desenharModuloEntidadesCadastro(idEdicao = null) {
 
 /*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
 
-/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 1: LISTAGEM E AÇÕES]*/
+
+/*[🛠️ MÓDULO PRODUTOS SPA - PARTE 1: LISTAGEM E LIXEIRA]*/
 
 let paginaAtualProd = 0;
 const ITENS_POR_PAGINA_PROD = 20;
+let exibindoLixeiraProd = false; // Controla se estamos no catálogo ou na lixeira
 
 function desenharModuloProdutos() {
     paginaAtualProd = 0;
+    exibindoLixeiraProd = false; 
+    
     const appRoot = document.getElementById('app-root');
     appRoot.innerHTML = `
         <div class="card" style="margin-top: 10vh; max-width: 800px;">
             <div class="titulo" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <span>📦 Catálogo de Produtos</span>
-                <button id="btn-novo-produto" class="btn-neon" style="width: auto; padding: 8px 15px; margin: 0;">➕ Novo Produto</button>
+                <span id="prod-titulo-painel">📦 Catálogo de Produtos</span>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-ver-lixeira-prod" class="btn-secundario" style="width: auto; padding: 8px 15px; margin: 0;">👁️ Ver Lixeira</button>
+                    <button id="btn-esvaziar-lixeira-prod" class="btn-perigo" style="display: none; width: auto; padding: 8px 15px; margin: 0;">🧹 Esvaziar</button>
+                    <button id="btn-novo-produto" class="btn-neon" style="width: auto; padding: 8px 15px; margin: 0;">➕ Novo</button>
+                </div>
             </div>
             
             <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
@@ -1061,9 +1069,7 @@ function desenharModuloProdutos() {
                 <label for="prod-chk-todos" style="cursor: pointer; font-weight: bold; color: var(--text-main); margin:0;">Selecionar página atual</label>
             </div>
 
-            <div id="prod-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                <p style="text-align:center; color: var(--text-muted);">⏳ A carregar inventário...</p>
-            </div>
+            <div id="prod-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;"></div>
             
             <div id="prod-paginacao" style="display: none; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
                 <button id="btn-prod-ant" class="btn-secundario" style="width: auto;">⬅️ Anterior</button>
@@ -1073,8 +1079,39 @@ function desenharModuloProdutos() {
         </div>
     `;
 
+    // Botões de Topo e Alternância de Modo
     document.getElementById('btn-novo-produto').addEventListener('click', () => desenharModuloCadastrarProduto());
+    
+    document.getElementById('btn-ver-lixeira-prod').addEventListener('click', () => {
+        exibindoLixeiraProd = !exibindoLixeiraProd;
+        paginaAtualProd = 0;
+        document.getElementById('prod-busca').value = '';
+        
+        const btnVerLixeira = document.getElementById('btn-ver-lixeira-prod');
+        const btnNovo = document.getElementById('btn-novo-produto');
+        const btnEsvaziar = document.getElementById('btn-esvaziar-lixeira-prod');
+        const titulo = document.getElementById('prod-titulo-painel');
 
+        if (exibindoLixeiraProd) {
+            btnVerLixeira.textContent = "📦 Ver Catálogo";
+            btnVerLixeira.className = "btn-neon";
+            titulo.textContent = "🗑️ Lixeira Oculta";
+            btnNovo.style.display = "none";
+            btnEsvaziar.style.display = "block";
+            carregarLixeiraProdutos('', document.getElementById('prod-itens-por-pagina').value);
+        } else {
+            btnVerLixeira.textContent = "👁️ Ver Lixeira";
+            btnVerLixeira.className = "btn-secundario";
+            titulo.textContent = "📦 Catálogo de Produtos";
+            btnNovo.style.display = "block";
+            btnEsvaziar.style.display = "none";
+            carregarListaProdutos('', document.getElementById('prod-itens-por-pagina').value);
+        }
+    });
+
+    document.getElementById('btn-esvaziar-lixeira-prod').addEventListener('click', esvaziarLixeiraProdutos);
+
+    // Eventos de Pesquisa e Paginação
     const inputBusca = document.getElementById('prod-busca');
     const inputQtd = document.getElementById('prod-itens-por-pagina');
     let timerBusca;
@@ -1082,7 +1119,9 @@ function desenharModuloProdutos() {
     const dispararBuscaProd = () => {
         clearTimeout(timerBusca);
         paginaAtualProd = 0;
-        timerBusca = setTimeout(() => carregarListaProdutos(inputBusca.value, inputQtd.value), 500);
+        timerBusca = setTimeout(() => {
+            exibindoLixeiraProd ? carregarLixeiraProdutos(inputBusca.value, inputQtd.value) : carregarListaProdutos(inputBusca.value, inputQtd.value);
+        }, 500);
     };
 
     inputBusca.addEventListener('input', dispararBuscaProd);
@@ -1095,8 +1134,17 @@ function desenharModuloProdutos() {
         });
     });
 
-    document.getElementById('btn-prod-ant').addEventListener('click', () => { if (paginaAtualProd > 0) { paginaAtualProd--; carregarListaProdutos(inputBusca.value, inputQtd.value); } });
-    document.getElementById('btn-prod-prox').addEventListener('click', () => { paginaAtualProd++; carregarListaProdutos(inputBusca.value, inputQtd.value); });
+    document.getElementById('btn-prod-ant').addEventListener('click', () => { 
+        if (paginaAtualProd > 0) { 
+            paginaAtualProd--; 
+            exibindoLixeiraProd ? carregarLixeiraProdutos(inputBusca.value, inputQtd.value) : carregarListaProdutos(inputBusca.value, inputQtd.value); 
+        } 
+    });
+    
+    document.getElementById('btn-prod-prox').addEventListener('click', () => { 
+        paginaAtualProd++; 
+        exibindoLixeiraProd ? carregarLixeiraProdutos(inputBusca.value, inputQtd.value) : carregarListaProdutos(inputBusca.value, inputQtd.value); 
+    });
 
     document.getElementById('prod-chk-todos').addEventListener('change', (e) => {
         document.querySelectorAll('.chk-prod-item:not(#prod-chk-todos)').forEach(chk => chk.checked = e.target.checked);
@@ -1105,9 +1153,13 @@ function desenharModuloProdutos() {
 
     document.getElementById('btn-ocultar-lote-prod').addEventListener('click', ocultarProdutosEmLote);
 
+    // Arranque
     carregarListaProdutos('', 20);
 }
 
+// ---------------------------------------------------------
+// REPOSITÓRIO: CATÁLOGO ATIVO
+// ---------------------------------------------------------
 async function carregarListaProdutos(termoBusca, limiteStr = 20) {
     const container = document.getElementById('prod-lista-container');
     if (!container) return;
@@ -1122,7 +1174,7 @@ async function carregarListaProdutos(termoBusca, limiteStr = 20) {
             .from('produtos')
             .select('id, nome, preco_venda, estoque_atual, categoria, foto_url', { count: 'exact' })
             .eq('esta_ativo', true)
-            .order('nome', { ascending: true }) // Ordenação Alfabética
+            .order('nome', { ascending: true })
             .range(indiceInicio, indiceFim); 
 
         if (termoBusca) {
@@ -1133,82 +1185,151 @@ async function carregarListaProdutos(termoBusca, limiteStr = 20) {
         const { data, count, error } = await query;
         if (error) throw error;
 
-        // Paginação e Reset de Lote
-        const totalPaginas = Math.ceil(count / limitePagina) || 1;
-        document.getElementById('texto-prod-paginacao').textContent = `Página ${paginaAtualProd + 1} de ${totalPaginas}`;
-        document.getElementById('btn-prod-ant').disabled = paginaAtualProd === 0;
-        document.getElementById('btn-prod-prox').disabled = (paginaAtualProd + 1) >= totalPaginas;
-        document.getElementById('prod-paginacao').style.display = count > 0 ? "flex" : "none";
-
+        atualizarPaginacaoProdutos(count, limitePagina);
         document.getElementById('prod-barra-lote').style.display = 'none';
-        document.getElementById('prod-chk-todos').checked = false;
+        
+        const chkTodos = document.getElementById('prod-chk-todos');
+        if(chkTodos) chkTodos.checked = false;
+        
         container.innerHTML = ""; 
 
         if (!data || data.length === 0) {
             document.getElementById('prod-area-selecionar-todos').style.display = 'none';
-            container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhum artigo encontrado.</p>";
+            container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhum artigo encontrado no catálogo.</p>";
             return;
         }
 
         document.getElementById('prod-area-selecionar-todos').style.display = 'flex';
 
-        data.forEach(eq => {
-            const precoFormat = parseFloat(eq.preco_venda || 0).toFixed(2);
-            const cardItem = document.createElement('div');
-            cardItem.style.cssText = `background: var(--input-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; display:flex; align-items:center; gap: 15px; flex-wrap:wrap;`;
-            
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'chk-prod-item';
-            checkbox.value = eq.id;
-            checkbox.style.cssText = "transform: scale(1.5); margin-right: 5px; cursor: pointer;";
-            checkbox.addEventListener('change', atualizarBarraLoteProdutos);
-
-            const img = document.createElement('img');
-            img.src = eq.foto_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>';
-            img.style.cssText = "width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);";
-            
-            const infoDiv = document.createElement('div');
-            infoDiv.style.flexGrow = '1';
-            infoDiv.style.minWidth = '200px';
-            infoDiv.innerHTML = `
-                <strong style="color: var(--text-main); font-size: 1.1em;">${eq.nome}</strong><br>
-                <span style="background: var(--success-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight:bold;">R$ ${precoFormat}</span>
-                <span style="background: var(--info-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight:bold; margin-left: 5px;">Qtd: ${eq.estoque_atual || 0}</span><br>
-                <span style="color: var(--text-muted); font-size: 0.85em; display:inline-block; margin-top:5px;">Cat: ${eq.categoria || "N/A"}</span>
-            `;
-
-            const acoesDiv = document.createElement('div');
-            acoesDiv.style.display = 'flex';
-            acoesDiv.style.gap = '8px';
-            acoesDiv.style.flexWrap = 'wrap';
-
-            const btnEditar = document.createElement('button');
-            btnEditar.textContent = "✏️ Editar";
-            btnEditar.className = "btn-secundario";
-            btnEditar.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
-            btnEditar.onclick = () => desenharModuloCadastrarProduto(eq.id);
-
-            const btnExcluir = document.createElement('button');
-            btnExcluir.textContent = "🗑️ Ocultar";
-            btnExcluir.className = "btn-perigo";
-            btnExcluir.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
-            btnExcluir.onclick = () => ocultarProdutoIndividual(eq.id, eq.nome);
-
-            acoesDiv.appendChild(btnEditar);
-            acoesDiv.appendChild(btnExcluir);
-
-            cardItem.appendChild(checkbox);
-            cardItem.appendChild(img);
-            cardItem.appendChild(infoDiv);
-            cardItem.appendChild(acoesDiv);
-            container.appendChild(cardItem);
-        });
+        data.forEach(eq => renderizarCartaoProduto(eq, container, false));
 
     } catch (erro) {
-        console.error("Erro Listagem SPA:", erro);
-        container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao conectar.</p>";
+        console.error("Erro Listagem Ativos:", erro);
+        container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao conectar com servidor.</p>";
     }
+}
+
+// ---------------------------------------------------------
+// REPOSITÓRIO: LIXEIRA OCULTA
+// ---------------------------------------------------------
+async function carregarLixeiraProdutos(termoBusca, limiteStr = 20) {
+    const container = document.getElementById('prod-lista-container');
+    if (!container) return;
+
+    const limitePagina = parseInt(limiteStr) || 20;
+    container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>⏳ A abrir lixeira oculta...</p>";
+    const indiceInicio = paginaAtualProd * limitePagina;
+    const indiceFim = indiceInicio + limitePagina - 1;
+
+    try {
+        let query = clienteSupabase
+            .rpc('listar_lixeira_produtos_seguro', {}, { count: 'exact' })
+            .range(indiceInicio, indiceFim);
+
+        if (termoBusca) {
+            query = query.ilike('nome', `%${termoBusca}%`);
+        }
+
+        const { data, count, error } = await query;
+        if (error) throw error;
+
+        atualizarPaginacaoProdutos(count, limitePagina);
+        
+        document.getElementById('prod-barra-lote').style.display = 'none';
+        document.getElementById('prod-area-selecionar-todos').style.display = 'none'; // Na lixeira não ocultamos em lote
+        container.innerHTML = ""; 
+
+        if (!data || data.length === 0) {
+            container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>A lixeira está vazia.</p>";
+            return;
+        }
+
+        data.forEach(eq => renderizarCartaoProduto(eq, container, true));
+
+    } catch (erro) {
+        console.error("Erro Listagem Lixeira:", erro);
+        container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao consultar lixeira.</p>";
+    }
+}
+
+// ---------------------------------------------------------
+// COMPONENTES DE INTERFACE E AÇÕES
+// ---------------------------------------------------------
+function renderizarCartaoProduto(eq, container, isLixeira) {
+    const precoFormat = parseFloat(eq.preco_venda || 0).toFixed(2);
+    const cardItem = document.createElement('div');
+    cardItem.style.cssText = `background: var(--input-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; display:flex; align-items:center; gap: 15px; flex-wrap:wrap;`;
+    
+    // Checkbox apenas se não for lixeira
+    if (!isLixeira) {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'chk-prod-item';
+        checkbox.value = eq.id;
+        checkbox.style.cssText = "transform: scale(1.5); margin-right: 5px; cursor: pointer;";
+        checkbox.addEventListener('change', atualizarBarraLoteProdutos);
+        cardItem.appendChild(checkbox);
+    }
+
+    const img = document.createElement('img');
+    img.src = eq.foto_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>';
+    img.style.cssText = "width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);";
+    
+    const infoDiv = document.createElement('div');
+    infoDiv.style.flexGrow = '1';
+    infoDiv.style.minWidth = '200px';
+    
+    const badgeEstoque = isLixeira ? `<span style="background: var(--danger-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight:bold; margin-left: 5px;">INATIVO</span>` 
+                                   : `<span style="background: var(--info-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight:bold; margin-left: 5px;">Qtd: ${eq.estoque_atual || 0}</span>`;
+    
+    infoDiv.innerHTML = `
+        <strong style="color: var(--text-main); font-size: 1.1em;">${eq.nome}</strong><br>
+        <span style="background: var(--success-color); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight:bold;">R$ ${precoFormat}</span>
+        ${badgeEstoque}<br>
+        <span style="color: var(--text-muted); font-size: 0.85em; display:inline-block; margin-top:5px;">Cat: ${eq.categoria || "N/A"}</span>
+    `;
+
+    const acoesDiv = document.createElement('div');
+    acoesDiv.style.display = 'flex';
+    acoesDiv.style.gap = '8px';
+    acoesDiv.style.flexWrap = 'wrap';
+
+    if (isLixeira) {
+        const btnRestaurar = document.createElement('button');
+        btnRestaurar.textContent = "♻️ Restaurar";
+        btnRestaurar.className = "btn-sucesso";
+        btnRestaurar.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+        btnRestaurar.onclick = () => restaurarProdutoLixeira(eq.id);
+        acoesDiv.appendChild(btnRestaurar);
+    } else {
+        const btnEditar = document.createElement('button');
+        btnEditar.textContent = "✏️ Editar";
+        btnEditar.className = "btn-secundario";
+        btnEditar.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+        btnEditar.onclick = () => desenharModuloCadastrarProduto(eq.id);
+
+        const btnExcluir = document.createElement('button');
+        btnExcluir.textContent = "🗑️ Ocultar";
+        btnExcluir.className = "btn-perigo";
+        btnExcluir.style.cssText = "width: auto; padding: 8px; font-size: 0.85em;";
+        btnExcluir.onclick = () => ocultarProdutoIndividual(eq.id, eq.nome);
+
+        acoesDiv.appendChild(btnEditar);
+        acoesDiv.appendChild(btnExcluir);
+    }
+
+    cardItem.appendChild(img);
+    cardItem.appendChild(infoDiv);
+    cardItem.appendChild(acoesDiv);
+    container.appendChild(cardItem);
+}
+
+function atualizarPaginacaoProdutos(totalItens, limitePagina) {
+    const totalPaginas = Math.ceil(totalItens / limitePagina) || 1;
+    document.getElementById('texto-prod-paginacao').textContent = `Página ${paginaAtualProd + 1} de ${totalPaginas}`;
+    document.getElementById('btn-prod-ant').disabled = paginaAtualProd === 0;
+    document.getElementById('btn-prod-prox').disabled = (paginaAtualProd + 1) >= totalPaginas;
+    document.getElementById('prod-paginacao').style.display = totalItens > 0 ? "flex" : "none";
 }
 
 function atualizarBarraLoteProdutos() {
@@ -1222,13 +1343,15 @@ function atualizarBarraLoteProdutos() {
     }
 }
 
-// Lógica Segura de Ocultação (Soft Delete) para proteger histórico de vendas
+// ---------------------------------------------------------
+// FUNÇÕES DE AÇÃO NA BASE DE DADOS (OCULTAR E PURGAR)
+// ---------------------------------------------------------
 async function ocultarProdutoIndividual(id, nome) {
-    if (!confirm(`Deseja enviar o produto '${nome}' para a lixeira? (O histórico de vendas não será afetado).`)) return;
+    if (!confirm(`Deseja enviar '${nome}' para a lixeira? (O histórico de vendas não será afetado).`)) return;
     try {
         const { error } = await clienteSupabase.rpc('desativar_produto_seguro', { p_id: id });
         if (error) throw error;
-        alert("✅ Produto ocultado com sucesso!");
+        alert("✅ Produto enviado para a lixeira.");
         carregarListaProdutos(document.getElementById('prod-busca').value, document.getElementById('prod-itens-por-pagina').value);
     } catch (erro) {
         console.error(erro);
@@ -1253,10 +1376,49 @@ async function ocultarProdutosEmLote() {
     }
 }
 
+async function restaurarProdutoLixeira(id) {
+    try {
+        const { error } = await clienteSupabase.rpc('restaurar_produto_seguro', { p_id: id });
+        if (error) throw error;
+        alert("✅ Produto restaurado para o catálogo!");
+        carregarLixeiraProdutos(document.getElementById('prod-busca').value, document.getElementById('prod-itens-por-pagina').value);
+    } catch (erro) {
+        console.error(erro);
+        alert("❌ Erro ao restaurar produto.");
+    }
+}
+
+async function esvaziarLixeiraProdutos() {
+    if (!confirm("AVISO: Esta ação irá apagar DEFINITIVAMENTE os produtos e as suas fotografias do servidor. Pretende prosseguir?")) return;
+    try {
+        // RPC que apaga as linhas inativas e devolve as URLs das fotos antigas
+        const { data: fotosApagadas, error: erroBanco } = await clienteSupabase.rpc('limpar_lixeira_produtos_seguro');
+        if (erroBanco) throw erroBanco;
+        
+        // Limpar os ficheiros órfãos do Storage de forma autónoma
+        if (fotosApagadas && fotosApagadas.length > 0) {
+            const arrayImagens = [];
+            for (const item of fotosApagadas) {
+                if (item.url_da_foto) {
+                    arrayImagens.push(decodeURIComponent(item.url_da_foto.split('/').pop().split('?')[0]));
+                }
+            }
+            if (arrayImagens.length > 0) {
+                await clienteSupabase.storage.from('foto_produtos').remove(arrayImagens);
+            }
+        }
+        
+        alert("✅ Lixeira purgada definitivamente e espaço libertado no servidor.");
+        carregarLixeiraProdutos(document.getElementById('prod-busca').value, document.getElementById('prod-itens-por-pagina').value);
+    } catch (erro) {
+        console.error("Erro na purga:", erro);
+        alert("❌ Falha técnica ao limpar a lixeira.");
+    }
+}
+
 /*[🛠️ FIM MÓDULO PRODUTOS SPA - PARTE 1]*/
     
-
-
+      
        
 /*[🛠️ MÓDULO PRODUTOS SPA - PARTE 2: CADASTRO COMPLETO E BLINDADO]*/
 
