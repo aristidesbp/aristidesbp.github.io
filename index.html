@@ -1762,8 +1762,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
 
 /*[🛠️ FIM MÓDULO PRODUTOS SPA - PARTE 2]*/
 
-    /*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
-
+/*🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥*/
 
 
 /*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 1: LISTAGEM]*/
@@ -1784,7 +1783,7 @@ function desenharModuloFinanceiro() {
             <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
                 <select id="fin-filtro-tipo" style="flex: 1; min-width: 120px; margin-bottom: 0;">
                     <option value="">Todas as Movimentações</option>
-                    <option value="receita">Entradas (Receitas)</option>
+                    <option value="receita">Entradas (Receitas / PDV)</option>
                     <option value="despesa">Saídas (Despesas)</option>
                 </select>
                 <select id="fin-filtro-status" style="flex: 1; min-width: 120px; margin-bottom: 0;">
@@ -1846,7 +1845,9 @@ async function carregarListaFinanceiro() {
             .order('data_vencimento', { ascending: true })
             .range(indiceInicio, indiceFim); 
 
-        if (tipoFiltro) query = query.eq('tipo_conta', tipoFiltro);
+        // Aceita a nova lógica de nomes da BD (Entrada/Saída)
+        if (tipoFiltro === 'receita') query = query.in('tipo_conta', ['receita', 'entrada']);
+        if (tipoFiltro === 'despesa') query = query.in('tipo_conta', ['despesa', 'saida']);
         if (statusFiltro) query = query.eq('status_conta', statusFiltro);
         if (termoBusca) {
             query = query.or(`descricao.ilike.%${termoBusca}%,nota_fiscal.ilike.%${termoBusca}%`);
@@ -1871,19 +1872,19 @@ async function carregarListaFinanceiro() {
         const hoje = new Date().toISOString().split('T')[0];
 
         data.forEach(fin => {
-            const isReceita = fin.tipo_conta === 'receita';
+            const isReceita = (fin.tipo_conta === 'receita' || fin.tipo_conta === 'entrada');
             const corTipo = isReceita ? 'var(--success-color)' : 'var(--danger-color)';
             const sinal = isReceita ? '+' : '-';
             const valorFormatado = parseFloat(fin.valor_nominal || 0).toFixed(2);
-            const nomeEntidade = fin.entidades ? fin.entidades.nome_completo : 'Sem Vínculo';
+            const nomeEntidade = fin.entidades ? fin.entidades.nome_completo : '🚨 ERRO: Sem Entidade';
             
-            let corStatus = '#17a2b8'; // Azul Pendente
+            let corStatus = '#17a2b8'; 
             let textoStatus = 'Pendente';
             if (fin.status_conta === 'quitada') {
-                corStatus = '#28a745'; // Verde Quitada
+                corStatus = '#28a745'; 
                 textoStatus = 'Quitada';
             } else if (fin.data_vencimento < hoje) {
-                corStatus = '#dc3545'; // Vermelho Atrasada
+                corStatus = '#dc3545'; 
                 textoStatus = 'Atrasada';
             }
 
@@ -1896,7 +1897,7 @@ async function carregarListaFinanceiro() {
             infoDiv.innerHTML = `
                 <strong style="color: var(--text-main); font-size: 1.1em;">${fin.descricao}</strong> 
                 <span style="font-size: 0.8em; color: var(--text-muted);">(${fin.numero_parcela}/${fin.total_parcelas})</span><br>
-                <span style="color: var(--text-muted); font-size: 0.9em;">${isReceita ? 'Cliente/Origem' : 'Fornecedor/Destino'}: ${nomeEntidade}</span><br>
+                <span style="color: var(--text-muted); font-size: 0.9em;">${isReceita ? 'Cliente/PDV' : 'Fornecedor'}: ${nomeEntidade}</span><br>
                 <div style="margin-top: 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <span style="color: ${corTipo}; font-weight:bold; font-size: 1.2em;">${sinal} R$ ${valorFormatado}</span>
                     <span style="background: ${corStatus}; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight:bold;">${textoStatus}</span>
@@ -1923,10 +1924,9 @@ async function carregarListaFinanceiro() {
     }
 }
 /*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 1]*/
-
-
-
-/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 2: CADASTRO BLINDADO]*/
+    
+    
+/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 2: CADASTRO E PARCELAMENTO]*/
 
 async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     const appRoot = document.getElementById('app-root');
@@ -1937,7 +1937,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
             <div class="titulo">${idEdicao ? '✏️ Editar Lançamento' : '💰 Novo Lançamento Financeiro'}</div>
             
             <form id="form-financeiro">
-                <!-- 1. COMPROVANTE -->
+                
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <span style="color: var(--text-muted); font-size: 0.9em;">Anexo / Comprovante</span>
                     <img id="fin-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/></svg>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg);">
@@ -1949,14 +1949,13 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                     </div>
                 </div>
 
-                <!-- 2. DADOS PRINCIPAIS -->
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
                         <div style="flex: 1; min-width: 150px;">
                             <label>Tipo de Movimento *</label>
                             <select id="fin-tipo" required>
-                                <option value="despesa">🔴 Saída (Despesa / A Pagar)</option>
-                                <option value="receita">🟢 Entrada (Receita / A Receber)</option>
+                                <option value="saida">🔴 Saída (Despesa / A Pagar)</option>
+                                <option value="entrada">🟢 Entrada (Receita / A Receber)</option>
                             </select>
                         </div>
                         <div style="flex: 1; min-width: 150px;">
@@ -1968,12 +1967,13 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                         </div>
                     </div>
                     <label>Descrição do Título *</label>
-                    <input type="text" id="fin-descricao" placeholder="Ex: Conta de Luz" required>
-                    <label>Entidade Vinculada (Cliente/Fornecedor)</label>
-                    <select id="fin-entidade"><option value="">Sem vínculo...</option></select>
+                    <input type="text" id="fin-descricao" placeholder="Ex: Compra Fornecedor X" required>
+                    
+                    <!-- PROTEÇÃO ATIVA: REQUIRED NO CAMPO DE ENTIDADE -->
+                    <label>Entidade Vinculada (Cliente/Fornecedor) *</label>
+                    <select id="fin-entidade" required><option value="">Selecione...</option></select>
                 </div>
 
-                <!-- 3. VALORES E PARCELAMENTO -->
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 120px;">
@@ -1991,7 +1991,6 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                     </div>
                 </div>
 
-                <!-- 4. DATAS E NOTA FISCAL -->
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
                         <div style="flex: 1; min-width: 140px;">
@@ -2013,7 +2012,6 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         </div>
     `;
 
-    // A. Carregar Entidades
     try {
         const { data: entidades } = await clienteSupabase.from('entidades').select('id, nome_completo, tipo').order('nome_completo');
         const selectEntidade = document.getElementById('fin-entidade');
@@ -2024,7 +2022,6 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         }
     } catch (e) { console.error("Erro a carregar entidades."); }
 
-    // B. Imagem
     let urlFotoAntiga = null;
     let ficheiroAProcessar = null;
 
@@ -2040,12 +2037,11 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     document.getElementById('fin-foto-arquivo').addEventListener('change', processarComprovante);
     document.getElementById('fin-foto-camera').addEventListener('change', processarComprovante);
 
-    // C. Carregar para Edição
     if (idEdicao) {
         document.getElementById('btn-salvar-fin').textContent = "⏳ A ler título...";
         const { data, error } = await clienteSupabase.from('fin_contas').select('*').eq('id', idEdicao).single();
         if (data && !error) {
-            document.getElementById('fin-tipo').value = data.tipo_conta || 'despesa';
+            document.getElementById('fin-tipo').value = data.tipo_conta || 'saida';
             document.getElementById('fin-status').value = data.status_conta || 'pendente';
             document.getElementById('fin-descricao').value = data.descricao || '';
             document.getElementById('fin-entidade').value = data.entidade_id || '';
@@ -2064,12 +2060,11 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         document.getElementById('btn-salvar-fin').textContent = "💾 Atualizar Lançamento";
     }
 
-    // D. FUNÇÕES DE BLINDAGEM DE DATAS (O Segredo para evitar o erro silencioso)
     const formatarDataIso = (dataString) => {
         if (!dataString) return null;
         if (dataString.includes('/')) {
             const partes = dataString.split('/');
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte DD/MM/YYYY para YYYY-MM-DD
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
         }
         return dataString;
     };
@@ -2080,7 +2075,6 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         return data.toISOString().split('T')[0];
     };
 
-    // E. GRAVAÇÃO
     document.getElementById('form-financeiro').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btnSalvar = document.getElementById('btn-salvar-fin');
@@ -2103,15 +2097,13 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
 
             const dataEmissaoHoje = new Date().toISOString().split('T')[0];
             const qtdParcelas = parseInt(document.getElementById('fin-parcelas').value) || 1;
-            
-            // Sanitização blindada das datas antes de processar
             const dataVencimentoBase = formatarDataIso(document.getElementById('fin-vencimento').value);
             const dataPagamentoSegura = formatarDataIso(document.getElementById('fin-pagamento').value);
 
             const payloadBase = {
                 tipo_conta: document.getElementById('fin-tipo').value,
                 status_conta: document.getElementById('fin-status').value,
-                entidade_id: document.getElementById('fin-entidade').value || null,
+                entidade_id: document.getElementById('fin-entidade').value, // Agora é garantido pelo 'required'
                 valor_nominal: parseFloat(document.getElementById('fin-valor').value) || 0,
                 valor_pago: parseFloat(document.getElementById('fin-valor-pago').value) || 0,
                 data_emissao: dataEmissaoHoje,
@@ -2152,14 +2144,12 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
             desenharModuloFinanceiro(); 
 
         } catch (erro) {
-            // Nova técnica forense para ler erros nativos do navegador
             const erroReal = erro.message ? erro.message : JSON.stringify(erro, Object.getOwnPropertyNames(erro));
             console.error("LOG FORENSE DE ERRO:", erroReal);
-            
             if (nomeFicheiroRecemCarregado) {
                 await clienteSupabase.storage.from('outras_midias').remove([nomeFicheiroRecemCarregado]);
             }
-            alert("❌ Erro ao gravar lançamento. Verifique a consola.");
+            alert("❌ Erro ao gravar lançamento. Selecionou uma Entidade?");
         } finally {
             btnSalvar.textContent = "💾 Gravar Lançamento";
             btnSalvar.disabled = false;
@@ -2167,14 +2157,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     });
 }
 /*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 2]*/
-              
-
-
     
-
-
-
-
 
 
 
