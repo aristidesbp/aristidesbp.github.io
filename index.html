@@ -1925,6 +1925,256 @@ async function carregarListaFinanceiro() {
 /*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 1]*/
 
 
+/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 2: CADASTRO E PARCELAMENTO]*/
+
+async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
+    const appRoot = document.getElementById('app-root');
+    
+    // Se estivermos a editar, bloqueamos a alteração da quantidade de parcelas (para não quebrar a lógica gerada)
+    const disabledParcelas = idEdicao ? 'disabled title="Não é possível alterar parcelas de um título já gerado"' : '';
+
+    appRoot.innerHTML = `
+        <div class="card" style="margin-top: 5vh; max-width: 800px;">
+            <div class="titulo">${idEdicao ? '✏️ Editar Lançamento' : '💰 Novo Lançamento Financeiro'}</div>
+            
+            <form id="form-financeiro">
+                
+                <!-- 1. COMPROVANTE (FOTO/DOCUMENTO) -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);">
+                    <span style="color: var(--text-muted); font-size: 0.9em;">Anexo / Comprovante</span>
+                    <img id="fin-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/></svg>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg);">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                        <label for="fin-foto-arquivo" style="background: var(--info-color); color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📂 Arquivo</label>
+                        <input type="file" id="fin-foto-arquivo" accept="image/*" style="display:none;">
+                        <label for="fin-foto-camera" style="background: var(--warning-color); color: #000; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; margin:0;">📸 Tirar Foto</label>
+                        <input type="file" id="fin-foto-camera" accept="image/*" capture="environment" style="display:none;">
+                    </div>
+                </div>
+
+                <!-- 2. DADOS PRINCIPAIS -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Tipo de Movimento *</label>
+                            <select id="fin-tipo" required>
+                                <option value="despesa">🔴 Saída (Despesa / A Pagar)</option>
+                                <option value="receita">🟢 Entrada (Receita / A Receber)</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>Status *</label>
+                            <select id="fin-status" required>
+                                <option value="pendente">⏳ Pendente</option>
+                                <option value="quitada">✅ Quitada (Paga/Recebida)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Descrição do Título *</label>
+                    <input type="text" id="fin-descricao" placeholder="Ex: Conta de Luz / Compra Fornecedor X" required>
+
+                    <label>Entidade Vinculada (Cliente/Fornecedor)</label>
+                    <select id="fin-entidade"><option value="">Sem vínculo...</option></select>
+                </div>
+
+                <!-- 3. VALORES E PARCELAMENTO -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Valor Nominal (R$) *</label>
+                            <input type="number" id="fin-valor" step="any" required placeholder="0.00">
+                        </div>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Valor Pago/Recebido (R$)</label>
+                            <input type="number" id="fin-valor-pago" step="any" placeholder="0.00">
+                        </div>
+                        <div style="flex: 1; min-width: 120px;">
+                            <label>Qtd. Parcelas *</label>
+                            <input type="number" id="fin-parcelas" min="1" max="60" value="1" required ${disabledParcelas}>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. DATAS E NOTA FISCAL -->
+                <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <div style="flex: 1; min-width: 140px;">
+                            <label>Data Vencimento *</label>
+                            <input type="date" id="fin-vencimento" required>
+                        </div>
+                        <div style="flex: 1; min-width: 140px;">
+                            <label>Data Pagamento</label>
+                            <input type="date" id="fin-pagamento">
+                        </div>
+                    </div>
+                    
+                    <label>Chave / Número da Nota Fiscal</label>
+                    <input type="text" id="fin-nota" placeholder="Opcional">
+                </div>
+
+                <button type="submit" id="btn-salvar-fin" class="btn-neon">💾 Gravar Lançamento</button>
+                <button type="button" class="btn-secundario" onclick="desenharModuloFinanceiro()">❌ Cancelar</button>
+            </form>
+        </div>
+    `;
+
+    // A. Carregar Entidades para o Dropdown
+    try {
+        const { data: entidades } = await clienteSupabase.from('entidades').select('id, nome_completo, tipo').order('nome_completo');
+        const selectEntidade = document.getElementById('fin-entidade');
+        if (entidades) {
+            entidades.forEach(ent => {
+                selectEntidade.innerHTML += `<option value="${ent.id}">${ent.nome_completo} (${ent.tipo})</option>`;
+            });
+        }
+    } catch (e) { console.error("Erro a carregar entidades."); }
+
+    // B. Lógica de Pré-visualização da Imagem/Comprovante
+    let urlFotoAntiga = null;
+    let ficheiroAProcessar = null;
+
+    const processarComprovante = (evento) => {
+        const file = evento.target.files[0];
+        if (file) {
+            ficheiroAProcessar = file;
+            const leitor = new FileReader();
+            leitor.onload = e => document.getElementById('fin-img-preview').src = e.target.result;
+            leitor.readAsDataURL(file);
+        }
+    };
+    document.getElementById('fin-foto-arquivo').addEventListener('change', processarComprovante);
+    document.getElementById('fin-foto-camera').addEventListener('change', processarComprovante);
+
+    // C. Carregar Dados se for Edição de um Título Existente
+    if (idEdicao) {
+        document.getElementById('btn-salvar-fin').textContent = "⏳ A ler título...";
+        const { data, error } = await clienteSupabase.from('fin_contas').select('*').eq('id', idEdicao).single();
+        if (data && !error) {
+            document.getElementById('fin-tipo').value = data.tipo_conta || 'despesa';
+            document.getElementById('fin-status').value = data.status_conta || 'pendente';
+            document.getElementById('fin-descricao').value = data.descricao || '';
+            document.getElementById('fin-entidade').value = data.entidade_id || '';
+            document.getElementById('fin-valor').value = data.valor_nominal || '';
+            document.getElementById('fin-valor-pago').value = data.valor_pago || '';
+            document.getElementById('fin-parcelas').value = data.total_parcelas || 1;
+            document.getElementById('fin-vencimento').value = data.data_vencimento || '';
+            document.getElementById('fin-pagamento').value = data.data_pagamento || '';
+            document.getElementById('fin-nota').value = data.nota_fiscal || '';
+            
+            if (data.foto_comprovante) {
+                urlFotoAntiga = data.foto_comprovante;
+                document.getElementById('fin-img-preview').src = data.foto_comprovante;
+            }
+        }
+        document.getElementById('btn-salvar-fin').textContent = "💾 Atualizar Lançamento";
+    }
+
+    // Função auxiliar para somar meses a uma data (usada no parcelamento)
+    const adicionarMeses = (dataString, meses) => {
+        const data = new Date(dataString + 'T12:00:00'); // Evita bugs de fuso horário
+        data.setMonth(data.getMonth() + meses);
+        return data.toISOString().split('T')[0];
+    };
+
+    // D. Gravação Final (Insert Lote ou Update)
+    document.getElementById('form-financeiro').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btnSalvar = document.getElementById('btn-salvar-fin');
+        btnSalvar.textContent = "⏳ A processar...";
+        btnSalvar.disabled = true;
+
+        let urlFinalComprovante = urlFotoAntiga;
+        let nomeFicheiroRecemCarregado = null;
+
+        try {
+            // 1. Upload Seguro do Comprovante para a Nuvem
+            if (ficheiroAProcessar) {
+                const imagemComprimida = await comprimirParaWebP(ficheiroAProcessar);
+                const nomeUnicoSeguro = gerarNomeSeguroArquivo("comp-" + document.getElementById('fin-descricao').value);
+                
+                const { error: uploadError } = await clienteSupabase.storage
+                    .from('outras_midias') // Bucket genérico que já existe na BD
+                    .upload(nomeUnicoSeguro, imagemComprimida);
+
+                if (uploadError) throw uploadError;
+                nomeFicheiroRecemCarregado = nomeUnicoSeguro;
+
+                const { data: urlData } = clienteSupabase.storage
+                    .from('outras_midias').getPublicUrl(nomeUnicoSeguro);
+                urlFinalComprovante = urlData.publicUrl;
+            }
+
+            const dataEmissaoHoje = new Date().toISOString().split('T')[0];
+            const qtdParcelas = parseInt(document.getElementById('fin-parcelas').value) || 1;
+            const dataVencimentoBase = document.getElementById('fin-vencimento').value;
+
+            // Template do Payload
+            const payloadBase = {
+                tipo_conta: document.getElementById('fin-tipo').value,
+                status_conta: document.getElementById('fin-status').value,
+                entidade_id: document.getElementById('fin-entidade').value || null,
+                valor_nominal: parseFloat(document.getElementById('fin-valor').value) || 0,
+                valor_pago: parseFloat(document.getElementById('fin-valor-pago').value) || 0,
+                data_emissao: dataEmissaoHoje,
+                data_pagamento: document.getElementById('fin-pagamento').value || null,
+                nota_fiscal: document.getElementById('fin-nota').value.trim() || null,
+                foto_comprovante: urlFinalComprovante,
+                total_parcelas: qtdParcelas
+            };
+
+            if (idEdicao) {
+                // EDIÇÃO DE UM TÍTULO EXISTENTE
+                payloadBase.descricao = document.getElementById('fin-descricao').value.trim();
+                payloadBase.data_vencimento = dataVencimentoBase;
+                
+                const { error } = await clienteSupabase.from('fin_contas').update(payloadBase).eq('id', idEdicao);
+                if (error) throw error;
+                
+                // Apagar foto velha se uma nova foi inserida
+                if (urlFotoAntiga && nomeFicheiroRecemCarregado) {
+                    const nomeVelho = decodeURIComponent(urlFotoAntiga.split('/').pop().split('?')[0]);
+                    await clienteSupabase.storage.from('outras_midias').remove([nomeVelho]);
+                }
+            } else {
+                // NOVO TÍTULO (LÓGICA DE RECORRÊNCIA / PARCELAS MULTIPLAS)
+                let arrayLancamentos = [];
+                const descBase = document.getElementById('fin-descricao').value.trim();
+                const valorParcela = payloadBase.valor_nominal / qtdParcelas; // Divide o valor total pelo nº de parcelas
+
+                for (let i = 1; i <= qtdParcelas; i++) {
+                    let lancamento = { ...payloadBase };
+                    lancamento.numero_parcela = i;
+                    lancamento.valor_nominal = valorParcela;
+                    // Se for mais de 1 parcela, acrescentamos a numeração na descrição
+                    lancamento.descricao = qtdParcelas > 1 ? `${descBase} (${i}/${qtdParcelas})` : descBase;
+                    // A primeira parcela vence na data base, as seguintes somam meses
+                    lancamento.data_vencimento = adicionarMeses(dataVencimentoBase, i - 1); 
+                    
+                    arrayLancamentos.push(lancamento);
+                }
+
+                // Insere todas as parcelas no Supabase de uma só vez (Bulk Insert)
+                const { error } = await clienteSupabase.from('fin_contas').insert(arrayLancamentos);
+                if (error) throw error;
+            }
+
+            alert("✅ Movimento financeiro registado com sucesso!");
+            desenharModuloFinanceiro(); // Regressa ao Dashboard
+
+        } catch (erro) {
+            console.error(erro);
+            // Rollback da imagem se o banco de dados falhar
+            if (nomeFicheiroRecemCarregado) {
+                await clienteSupabase.storage.from('outras_midias').remove([nomeFicheiroRecemCarregado]);
+            }
+            alert("❌ Erro ao gravar lançamento financeiro.");
+        } finally {
+            btnSalvar.textContent = "💾 Gravar Lançamento";
+            btnSalvar.disabled = false;
+        }
+    });
+}
+/*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 2]*/
 
 
 
