@@ -1766,37 +1766,175 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
 
 
 
+/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 1: LISTAGEM]*/
 
+let paginaAtualFin = 0;
+const ITENS_POR_PAGINA_FIN = 20;
 
-
-
-
-
-
-// Tela do Módulo Financeiro
 function desenharModuloFinanceiro() {
+    paginaAtualFin = 0;
+    const appRoot = document.getElementById('app-root');
     appRoot.innerHTML = `
-        <div class="card" style="margin-top: 10vh; text-align: center;">
-            <div class="titulo">💰 Módulo Financeiro</div>
-            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
-            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de gestão financeira.</p>
+        <div class="card" style="margin-top: 10vh; max-width: 900px;">
+            <div class="titulo" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <span>💰 Gestão Financeira</span>
+                <button id="btn-novo-financeiro" class="btn-neon" style="width: auto; padding: 8px 15px; margin: 0;">➕ Lançar Título</button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <select id="fin-filtro-tipo" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                    <option value="">Todas as Movimentações</option>
+                    <option value="receita">Entradas (Receitas)</option>
+                    <option value="despesa">Saídas (Despesas)</option>
+                </select>
+                <select id="fin-filtro-status" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                    <option value="">Todos os Status</option>
+                    <option value="pendente">Pendentes</option>
+                    <option value="quitada">Quitadas / Pagas</option>
+                </select>
+                <input type="text" id="fin-busca" placeholder="🔍 Buscar Descrição ou Nota..." style="flex: 2; min-width: 200px; margin-bottom: 0;">
+            </div>
+
+            <div id="fin-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <p style="text-align:center; color: var(--text-muted);">⏳ A carregar fluxos financeiros...</p>
+            </div>
+            
+            <div id="fin-paginacao" style="display: none; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
+                <button id="btn-fin-ant" class="btn-secundario" style="width: auto;">⬅️ Anterior</button>
+                <strong id="texto-fin-paginacao" style="color: var(--text-main);">Página 1</strong>
+                <button id="btn-fin-prox" class="btn-secundario" style="width: auto;">Próxima ➡️</button>
+            </div>
         </div>
     `;
+
+    document.getElementById('btn-novo-financeiro').addEventListener('click', () => desenharModuloCadastrarFinanceiro());
+
+    const dispararBuscaFin = () => {
+        paginaAtualFin = 0;
+        carregarListaFinanceiro();
+    };
+
+    document.getElementById('fin-busca').addEventListener('input', () => { setTimeout(dispararBuscaFin, 500); });
+    document.getElementById('fin-filtro-tipo').addEventListener('change', dispararBuscaFin);
+    document.getElementById('fin-filtro-status').addEventListener('change', dispararBuscaFin);
+
+    document.getElementById('btn-fin-ant').addEventListener('click', () => { if (paginaAtualFin > 0) { paginaAtualFin--; carregarListaFinanceiro(); } });
+    document.getElementById('btn-fin-prox').addEventListener('click', () => { paginaAtualFin++; carregarListaFinanceiro(); });
+
+    carregarListaFinanceiro();
 }
 
+async function carregarListaFinanceiro() {
+    const container = document.getElementById('fin-lista-container');
+    if (!container) return;
 
+    const termoBusca = document.getElementById('fin-busca').value.trim();
+    const tipoFiltro = document.getElementById('fin-filtro-tipo').value;
+    const statusFiltro = document.getElementById('fin-filtro-status').value;
 
-// Tela do Módulo PDV
-function desenharModuloPDV() {
-    appRoot.innerHTML = `
-        <div class="card" style="margin-top: 10vh; text-align: center;">
-            <div class="titulo">🛒 Módulo PDV</div>
-            <p style="color: var(--accent-neon); font-size: 1.2em; margin: 20px 0;">🚧 Em desenvolvimento 🚧</p>
-            <p style="color: var(--text-muted); font-size: 0.9em;">Aqui será construída a interface de vendas (Ponto de Venda).</p>
-        </div>
-    `;
+    container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>⏳ A consultar cofre...</p>";
+    const indiceInicio = paginaAtualFin * ITENS_POR_PAGINA_FIN;
+    const indiceFim = indiceInicio + ITENS_POR_PAGINA_FIN - 1;
+
+    try {
+        let query = clienteSupabase
+            .from('fin_contas')
+            .select(`
+                id, tipo_conta, descricao, valor_nominal, data_vencimento, status_conta, numero_parcela, total_parcelas,
+                entidades (nome_completo)
+            `, { count: 'exact' })
+            .order('data_vencimento', { ascending: true })
+            .range(indiceInicio, indiceFim); 
+
+        if (tipoFiltro) query = query.eq('tipo_conta', tipoFiltro);
+        if (statusFiltro) query = query.eq('status_conta', statusFiltro);
+        if (termoBusca) {
+            query = query.or(`descricao.ilike.%${termoBusca}%,nota_fiscal.ilike.%${termoBusca}%`);
+        }
+
+        const { data, count, error } = await query;
+        if (error) throw error;
+
+        const totalPaginas = Math.ceil(count / ITENS_POR_PAGINA_FIN) || 1;
+        document.getElementById('texto-fin-paginacao').textContent = `Página ${paginaAtualFin + 1} de ${totalPaginas}`;
+        document.getElementById('btn-fin-ant').disabled = paginaAtualFin === 0;
+        document.getElementById('btn-fin-prox').disabled = (paginaAtualFin + 1) >= totalPaginas;
+        document.getElementById('fin-paginacao').style.display = count > 0 ? "flex" : "none";
+
+        container.innerHTML = ""; 
+
+        if (!data || data.length === 0) {
+            container.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhum registo financeiro encontrado.</p>";
+            return;
+        }
+
+        const hoje = new Date().toISOString().split('T')[0];
+
+        data.forEach(fin => {
+            const isReceita = fin.tipo_conta === 'receita';
+            const corTipo = isReceita ? 'var(--success-color)' : 'var(--danger-color)';
+            const sinal = isReceita ? '+' : '-';
+            const valorFormatado = parseFloat(fin.valor_nominal || 0).toFixed(2);
+            const nomeEntidade = fin.entidades ? fin.entidades.nome_completo : 'Sem Vínculo';
+            
+            let corStatus = '#17a2b8'; // Azul Pendente
+            let textoStatus = 'Pendente';
+            if (fin.status_conta === 'quitada') {
+                corStatus = '#28a745'; // Verde Quitada
+                textoStatus = 'Quitada';
+            } else if (fin.data_vencimento < hoje) {
+                corStatus = '#dc3545'; // Vermelho Atrasada
+                textoStatus = 'Atrasada';
+            }
+
+            const cardItem = document.createElement('div');
+            cardItem.style.cssText = `background: var(--input-bg); border-left: 5px solid ${corTipo}; padding: 15px; border-radius: 8px; display:flex; align-items:center; gap: 15px; flex-wrap:wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);`;
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.style.flexGrow = '1';
+            infoDiv.style.minWidth = '200px';
+            infoDiv.innerHTML = `
+                <strong style="color: var(--text-main); font-size: 1.1em;">${fin.descricao}</strong> 
+                <span style="font-size: 0.8em; color: var(--text-muted);">(${fin.numero_parcela}/${fin.total_parcelas})</span><br>
+                <span style="color: var(--text-muted); font-size: 0.9em;">${isReceita ? 'Cliente/Origem' : 'Fornecedor/Destino'}: ${nomeEntidade}</span><br>
+                <div style="margin-top: 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <span style="color: ${corTipo}; font-weight:bold; font-size: 1.2em;">${sinal} R$ ${valorFormatado}</span>
+                    <span style="background: ${corStatus}; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight:bold;">${textoStatus}</span>
+                    <span style="color: var(--text-muted); font-size: 0.85em;">📅 Venc: ${fin.data_vencimento.split('-').reverse().join('/')}</span>
+                </div>
+            `;
+
+            const acoesDiv = document.createElement('div');
+            const btnEditar = document.createElement('button');
+            btnEditar.textContent = "✏️ Gerir";
+            btnEditar.className = "btn-secundario";
+            btnEditar.style.cssText = "width: auto; padding: 10px;";
+            btnEditar.onclick = () => desenharModuloCadastrarFinanceiro(fin.id);
+            acoesDiv.appendChild(btnEditar);
+
+            cardItem.appendChild(infoDiv);
+            cardItem.appendChild(acoesDiv);
+            container.appendChild(cardItem);
+        });
+
+    } catch (erro) {
+        console.error("Erro Listagem Financeira:", erro);
+        container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro de comunicação.</p>";
+    }
 }
+/*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 1]*/
 
+
+
+
+
+
+
+
+
+
+
+//🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 // Tela do Módulo de Relatórios
 function desenharModuloRelatorios() {
     appRoot.innerHTML = `
