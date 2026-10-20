@@ -1925,12 +1925,11 @@ async function carregarListaFinanceiro() {
 /*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 1]*/
 
 
-/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 2: CADASTRO E PARCELAMENTO]*/
+
+/*[🛠️ MÓDULO FINANCEIRO SPA - PARTE 2: CADASTRO BLINDADO]*/
 
 async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     const appRoot = document.getElementById('app-root');
-    
-    // Se estivermos a editar, bloqueamos a alteração da quantidade de parcelas (para não quebrar a lógica gerada)
     const disabledParcelas = idEdicao ? 'disabled title="Não é possível alterar parcelas de um título já gerado"' : '';
 
     appRoot.innerHTML = `
@@ -1938,8 +1937,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
             <div class="titulo">${idEdicao ? '✏️ Editar Lançamento' : '💰 Novo Lançamento Financeiro'}</div>
             
             <form id="form-financeiro">
-                
-                <!-- 1. COMPROVANTE (FOTO/DOCUMENTO) -->
+                <!-- 1. COMPROVANTE -->
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <span style="color: var(--text-muted); font-size: 0.9em;">Anexo / Comprovante</span>
                     <img id="fin-img-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/></svg>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg);">
@@ -1969,10 +1967,8 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                             </select>
                         </div>
                     </div>
-
                     <label>Descrição do Título *</label>
-                    <input type="text" id="fin-descricao" placeholder="Ex: Conta de Luz / Compra Fornecedor X" required>
-
+                    <input type="text" id="fin-descricao" placeholder="Ex: Conta de Luz" required>
                     <label>Entidade Vinculada (Cliente/Fornecedor)</label>
                     <select id="fin-entidade"><option value="">Sem vínculo...</option></select>
                 </div>
@@ -2007,7 +2003,6 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                             <input type="date" id="fin-pagamento">
                         </div>
                     </div>
-                    
                     <label>Chave / Número da Nota Fiscal</label>
                     <input type="text" id="fin-nota" placeholder="Opcional">
                 </div>
@@ -2018,7 +2013,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         </div>
     `;
 
-    // A. Carregar Entidades para o Dropdown
+    // A. Carregar Entidades
     try {
         const { data: entidades } = await clienteSupabase.from('entidades').select('id, nome_completo, tipo').order('nome_completo');
         const selectEntidade = document.getElementById('fin-entidade');
@@ -2029,7 +2024,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         }
     } catch (e) { console.error("Erro a carregar entidades."); }
 
-    // B. Lógica de Pré-visualização da Imagem/Comprovante
+    // B. Imagem
     let urlFotoAntiga = null;
     let ficheiroAProcessar = null;
 
@@ -2045,7 +2040,7 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     document.getElementById('fin-foto-arquivo').addEventListener('change', processarComprovante);
     document.getElementById('fin-foto-camera').addEventListener('change', processarComprovante);
 
-    // C. Carregar Dados se for Edição de um Título Existente
+    // C. Carregar para Edição
     if (idEdicao) {
         document.getElementById('btn-salvar-fin').textContent = "⏳ A ler título...";
         const { data, error } = await clienteSupabase.from('fin_contas').select('*').eq('id', idEdicao).single();
@@ -2069,14 +2064,23 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         document.getElementById('btn-salvar-fin').textContent = "💾 Atualizar Lançamento";
     }
 
-    // Função auxiliar para somar meses a uma data (usada no parcelamento)
-    const adicionarMeses = (dataString, meses) => {
-        const data = new Date(dataString + 'T12:00:00'); // Evita bugs de fuso horário
-        data.setMonth(data.getMonth() + meses);
+    // D. FUNÇÕES DE BLINDAGEM DE DATAS (O Segredo para evitar o erro silencioso)
+    const formatarDataIso = (dataString) => {
+        if (!dataString) return null;
+        if (dataString.includes('/')) {
+            const partes = dataString.split('/');
+            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte DD/MM/YYYY para YYYY-MM-DD
+        }
+        return dataString;
+    };
+
+    const adicionarMeses = (dataStringIso, meses) => {
+        const [ano, mes, dia] = dataStringIso.split('-');
+        const data = new Date(ano, parseInt(mes) - 1 + meses, dia, 12, 0, 0);
         return data.toISOString().split('T')[0];
     };
 
-    // D. Gravação Final (Insert Lote ou Update)
+    // E. GRAVAÇÃO
     document.getElementById('form-financeiro').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btnSalvar = document.getElementById('btn-salvar-fin');
@@ -2087,28 +2091,23 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         let nomeFicheiroRecemCarregado = null;
 
         try {
-            // 1. Upload Seguro do Comprovante para a Nuvem
             if (ficheiroAProcessar) {
                 const imagemComprimida = await comprimirParaWebP(ficheiroAProcessar);
-                const nomeUnicoSeguro = gerarNomeSeguroArquivo("comp-" + document.getElementById('fin-descricao').value);
-                
-                const { error: uploadError } = await clienteSupabase.storage
-                    .from('outras_midias') // Bucket genérico que já existe na BD
-                    .upload(nomeUnicoSeguro, imagemComprimida);
-
+                const nomeSeguro = gerarNomeSeguroArquivo("comp-" + document.getElementById('fin-descricao').value);
+                const { error: uploadError } = await clienteSupabase.storage.from('outras_midias').upload(nomeSeguro, imagemComprimida);
                 if (uploadError) throw uploadError;
-                nomeFicheiroRecemCarregado = nomeUnicoSeguro;
-
-                const { data: urlData } = clienteSupabase.storage
-                    .from('outras_midias').getPublicUrl(nomeUnicoSeguro);
+                nomeFicheiroRecemCarregado = nomeSeguro;
+                const { data: urlData } = clienteSupabase.storage.from('outras_midias').getPublicUrl(nomeSeguro);
                 urlFinalComprovante = urlData.publicUrl;
             }
 
             const dataEmissaoHoje = new Date().toISOString().split('T')[0];
             const qtdParcelas = parseInt(document.getElementById('fin-parcelas').value) || 1;
-            const dataVencimentoBase = document.getElementById('fin-vencimento').value;
+            
+            // Sanitização blindada das datas antes de processar
+            const dataVencimentoBase = formatarDataIso(document.getElementById('fin-vencimento').value);
+            const dataPagamentoSegura = formatarDataIso(document.getElementById('fin-pagamento').value);
 
-            // Template do Payload
             const payloadBase = {
                 tipo_conta: document.getElementById('fin-tipo').value,
                 status_conta: document.getElementById('fin-status').value,
@@ -2116,58 +2115,51 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
                 valor_nominal: parseFloat(document.getElementById('fin-valor').value) || 0,
                 valor_pago: parseFloat(document.getElementById('fin-valor-pago').value) || 0,
                 data_emissao: dataEmissaoHoje,
-                data_pagamento: document.getElementById('fin-pagamento').value || null,
+                data_pagamento: dataPagamentoSegura || null,
                 nota_fiscal: document.getElementById('fin-nota').value.trim() || null,
                 foto_comprovante: urlFinalComprovante,
                 total_parcelas: qtdParcelas
             };
 
             if (idEdicao) {
-                // EDIÇÃO DE UM TÍTULO EXISTENTE
                 payloadBase.descricao = document.getElementById('fin-descricao').value.trim();
                 payloadBase.data_vencimento = dataVencimentoBase;
-                
                 const { error } = await clienteSupabase.from('fin_contas').update(payloadBase).eq('id', idEdicao);
                 if (error) throw error;
-                
-                // Apagar foto velha se uma nova foi inserida
                 if (urlFotoAntiga && nomeFicheiroRecemCarregado) {
                     const nomeVelho = decodeURIComponent(urlFotoAntiga.split('/').pop().split('?')[0]);
                     await clienteSupabase.storage.from('outras_midias').remove([nomeVelho]);
                 }
             } else {
-                // NOVO TÍTULO (LÓGICA DE RECORRÊNCIA / PARCELAS MULTIPLAS)
                 let arrayLancamentos = [];
                 const descBase = document.getElementById('fin-descricao').value.trim();
-                const valorParcela = payloadBase.valor_nominal / qtdParcelas; // Divide o valor total pelo nº de parcelas
+                const valorParcela = payloadBase.valor_nominal / qtdParcelas; 
 
                 for (let i = 1; i <= qtdParcelas; i++) {
                     let lancamento = { ...payloadBase };
                     lancamento.numero_parcela = i;
                     lancamento.valor_nominal = valorParcela;
-                    // Se for mais de 1 parcela, acrescentamos a numeração na descrição
                     lancamento.descricao = qtdParcelas > 1 ? `${descBase} (${i}/${qtdParcelas})` : descBase;
-                    // A primeira parcela vence na data base, as seguintes somam meses
                     lancamento.data_vencimento = adicionarMeses(dataVencimentoBase, i - 1); 
-                    
                     arrayLancamentos.push(lancamento);
                 }
 
-                // Insere todas as parcelas no Supabase de uma só vez (Bulk Insert)
                 const { error } = await clienteSupabase.from('fin_contas').insert(arrayLancamentos);
                 if (error) throw error;
             }
 
             alert("✅ Movimento financeiro registado com sucesso!");
-            desenharModuloFinanceiro(); // Regressa ao Dashboard
+            desenharModuloFinanceiro(); 
 
         } catch (erro) {
-            console.error(erro);
-            // Rollback da imagem se o banco de dados falhar
+            // Nova técnica forense para ler erros nativos do navegador
+            const erroReal = erro.message ? erro.message : JSON.stringify(erro, Object.getOwnPropertyNames(erro));
+            console.error("LOG FORENSE DE ERRO:", erroReal);
+            
             if (nomeFicheiroRecemCarregado) {
                 await clienteSupabase.storage.from('outras_midias').remove([nomeFicheiroRecemCarregado]);
             }
-            alert("❌ Erro ao gravar lançamento financeiro.");
+            alert("❌ Erro ao gravar lançamento. Verifique a consola.");
         } finally {
             btnSalvar.textContent = "💾 Gravar Lançamento";
             btnSalvar.disabled = false;
@@ -2175,7 +2167,10 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
     });
 }
 /*[🛠️ FIM MÓDULO FINANCEIRO SPA - PARTE 2]*/
+              
 
+
+    
 
 
 
