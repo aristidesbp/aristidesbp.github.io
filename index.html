@@ -1637,8 +1637,18 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                     </div>
                 </div>
 
+
+
+
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4 style="margin-top:0; color: var(--accent-neon);">📑 Identificação e Categoria</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 10px;">
+                        <h4 style="margin: 0; color: var(--accent-neon);">📑 Identificação e Categoria</h4>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--success-color); font-weight: bold; margin: 0;">
+                            <input type="checkbox" id="prod-visivel-vitrine" style="width: 20px; height: 20px; margin: 0; cursor: pointer;" checked>
+                            Exibir na Vitrine Online
+                        </label>
+                    </div>
+                    
                     <label>Nome do Produto *</label>
                     <input type="text" id="prod-nome" required placeholder="Ex: Arroz Tio João 1kg">
                     
@@ -1653,7 +1663,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                         </div>
                     </div>
                 </div>
-
+                
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                     <h4 style="margin-top:0; color: var(--accent-neon);">💰 Preços e Stock</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
