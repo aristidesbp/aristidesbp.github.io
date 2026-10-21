@@ -1749,6 +1749,11 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         abrirScannerGlobal(c => document.getElementById('prod-ean').value = c);
     });
 
+
+
+
+
+    // (A) Código para preencher o checkbox ao Editar um produto
     if (idEdicao) {
         document.getElementById('btn-salvar-prod').textContent = "⏳ A carregar...";
         const { data, error } = await clienteSupabase.from('produtos').select('*').eq('id', idEdicao).single();
@@ -1765,6 +1770,10 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
             document.getElementById('prod-ncm').value = data.ncm || '';
             document.getElementById('prod-cest').value = data.cest || '';
             document.getElementById('prod-cfop').value = data.cfop_padrao || '';
+            
+            // ✅ Atribui o estado do checkbox vindo da base de dados
+            document.getElementById('prod-visivel-vitrine').checked = data.visivel_vitrine === true;
+
             if (data.foto_url) {
                 fotoAntiga = data.foto_url;
                 document.getElementById('prod-img-preview').src = data.foto_url;
@@ -1773,6 +1782,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         document.getElementById('btn-salvar-prod').textContent = "💾 Atualizar Produto";
     }
 
+    // (B) Código atualizado para Salvar e forçar o estado da Vitrine
     document.getElementById('form-produto').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-salvar-prod');
@@ -1781,6 +1791,8 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
 
         let urlFoto = fotoAntiga;
         let novoArq = null;
+        // ✅ Capturar o valor do checkbox
+        const isVisivel = document.getElementById('prod-visivel-vitrine').checked;
 
         try {
             if (ficheiroNovo) {
@@ -1807,13 +1819,20 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                 p_fornecedor: document.getElementById('prod-fornecedor').value || null
             };
 
+            // ✅ Truque Monolítico: Como a função RPC não foi criada para receber o "visivel_vitrine", 
+            // fazemos um update imediato à tabela após a criação/edição.
             if (idEdicao) {
                 payload.p_id = idEdicao;
                 const { error } = await clienteSupabase.rpc('atualizar_produto_seguro', payload);
                 if (error) throw error;
+                
+                await clienteSupabase.from('produtos').update({ visivel_vitrine: isVisivel }).eq('id', idEdicao);
             } else {
-                const { error } = await clienteSupabase.rpc('adicionar_produto_seguro', payload);
+                // Recupera o ID gerado pelo novo produto
+                const { data: novoId, error } = await clienteSupabase.rpc('adicionar_produto_seguro', payload);
                 if (error) throw error;
+                
+                await clienteSupabase.from('produtos').update({ visivel_vitrine: isVisivel }).eq('id', novoId);
             }
 
             mostrarToast("Produto guardado com sucesso!", "sucesso");
@@ -1825,8 +1844,9 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
             btn.disabled = false;
         }
     });
-}
+    
 
+    
 /* --- MÓDULO INTELIGENTE DE IMPORTAÇÃO DE XML (NF-e) --- */
 function desenharModuloImportarXml() {
     appRoot.innerHTML = `
