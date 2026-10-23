@@ -1333,15 +1333,18 @@ async function desenharModuloEntidadesCadastro(idEdicao = null) {
     });
 }
 </script>
-
+    
+<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <script>
 /* =========================================================
-   🟥 BLOCO 4: MÓDULO DE PRODUTOS, LIXEIRA E IMPORTADOR XML (NF-e) 🟥
+   🟥 BLOCO 4 - PARTE 1: MÓDULO DE PRODUTOS E LIXEIRA 🟥
    ========================================================= */
 
+// Variáveis de controlo de estado (Paginação e Modo Lixeira)
 let paginaAtualProd = 0;
 let exibindoLixeiraProd = false;
 
+// Função principal que desenha a interface do catálogo de produtos
 function desenharModuloProdutos() {
     paginaAtualProd = 0;
     exibindoLixeiraProd = false;
@@ -1358,6 +1361,7 @@ function desenharModuloProdutos() {
                 </div>
             </div>
             
+            <!-- Barra de pesquisa e controlos -->
             <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
                 <input type="text" id="prod-busca" placeholder="🔍 Buscar por Nome, EAN ou SKU..." style="flex: 2; min-width: 200px; margin-bottom: 0;">
                 <button type="button" id="btn-scan-busca-prod" style="background: var(--info-color); color: white; border: none; border-radius: 8px; padding: 0 14px; cursor: pointer; font-size: 1.1em;">📷</button>
@@ -1367,10 +1371,12 @@ function desenharModuloProdutos() {
                 </div>
             </div>
 
+            <!-- Recipiente onde os cartões de produtos serão injetados -->
             <div id="prod-lista-container" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                 <p style="text-align:center; color: var(--text-muted);">⏳ A carregar catálogo...</p>
             </div>
             
+            <!-- Controlos de paginação -->
             <div id="prod-paginacao" style="display: none; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
                 <button id="btn-prod-ant" class="btn-secundario" style="width: auto;">⬅️ Anterior</button>
                 <strong id="texto-prod-paginacao" style="color: var(--text-main);">Página 1</strong>
@@ -1379,9 +1385,11 @@ function desenharModuloProdutos() {
         </div>
     `;
 
+    // Conectando os botões de ação às funções
     document.getElementById('btn-novo-produto').addEventListener('click', () => desenharModuloCadastrarProduto());
     document.getElementById('btn-importar-xml').addEventListener('click', () => desenharModuloImportarXml());
 
+    // Alternar entre Catálogo Ativo e Lixeira
     document.getElementById('btn-ver-lixeira-prod').addEventListener('click', () => {
         exibindoLixeiraProd = !exibindoLixeiraProd;
         paginaAtualProd = 0;
@@ -1414,6 +1422,7 @@ function desenharModuloProdutos() {
 
     document.getElementById('btn-esvaziar-lixeira-prod').addEventListener('click', esvaziarLixeiraProdutosDefinitivo);
 
+    // Sistema de busca em tempo real com delay (debounce) para poupar requisições
     let timerBusca;
     const dispararBuscaProd = () => {
         clearTimeout(timerBusca);
@@ -1426,6 +1435,7 @@ function desenharModuloProdutos() {
     document.getElementById('prod-busca').addEventListener('input', dispararBuscaProd);
     document.getElementById('prod-itens-por-pagina').addEventListener('change', dispararBuscaProd);
 
+    // Scanner de câmara para buscar código de barras
     document.getElementById('btn-scan-busca-prod').addEventListener('click', () => {
         abrirScannerGlobal((codigoLido) => {
             document.getElementById('prod-busca').value = codigoLido;
@@ -1436,9 +1446,11 @@ function desenharModuloProdutos() {
     document.getElementById('btn-prod-ant').addEventListener('click', () => { if (paginaAtualProd > 0) { paginaAtualProd--; dispararBuscaProd(); } });
     document.getElementById('btn-prod-prox').addEventListener('click', () => { paginaAtualProd++; dispararBuscaProd(); });
 
+    // Carregamento inicial ao abrir o módulo
     carregarListaProdutosAtivos();
 }
 
+// Consulta ao Supabase para listar produtos ativos
 async function carregarListaProdutosAtivos() {
     const container = document.getElementById('prod-lista-container');
     if (!container) return;
@@ -1480,6 +1492,7 @@ async function carregarListaProdutosAtivos() {
     }
 }
 
+// Consulta ao Supabase para listar produtos na lixeira (inativos)
 async function carregarListaProdutosLixeira() {
     const container = document.getElementById('prod-lista-container');
     if (!container) return;
@@ -1519,6 +1532,7 @@ async function carregarListaProdutosLixeira() {
     }
 }
 
+// Cria visualmente o cartão do produto e os seus botões
 function renderizarCartaoProduto(prod, container, isLixeira) {
     const card = document.createElement('div');
     card.style.cssText = `background: var(--input-bg); border: 1px solid var(--border-color); padding: 14px; border-radius: 10px; display:flex; align-items:center; gap: 14px; flex-wrap: wrap;`;
@@ -1570,6 +1584,7 @@ function renderizarCartaoProduto(prod, container, isLixeira) {
     container.appendChild(card);
 }
 
+// Atualiza o contador de páginas
 function atualizarPaginacaoProdutos(total, limite) {
     const paginas = Math.ceil(total / limite) || 1;
     document.getElementById('texto-prod-paginacao').textContent = `Página ${paginaAtualProd + 1} de ${paginas}`;
@@ -1578,6 +1593,7 @@ function atualizarPaginacaoProdutos(total, limite) {
     document.getElementById('prod-paginacao').style.display = total > 0 ? "flex" : "none";
 }
 
+// Envia suavemente um produto para a lixeira (Soft Delete)
 async function enviarProdutoParaLixeira(id, nome) {
     if (!confirm(`Deseja enviar '${nome}' para a lixeira?`)) return;
     try {
@@ -1590,6 +1606,7 @@ async function enviarProdutoParaLixeira(id, nome) {
     }
 }
 
+// Devolve um produto oculto ao catálogo principal
 async function restaurarProduto(id) {
     try {
         const { error } = await clienteSupabase.from('produtos').update({ esta_ativo: true }).eq('id', id);
@@ -1601,6 +1618,7 @@ async function restaurarProduto(id) {
     }
 }
 
+// Apaga definitivamente da base de dados (Hard Delete)
 async function esvaziarLixeiraProdutosDefinitivo() {
     if (!confirm("AVISO: Esta ação irá apagar definitivamente os produtos inativos e as respetivas fotos do servidor. Deseja continuar?")) return;
     try {
@@ -1608,6 +1626,7 @@ async function esvaziarLixeiraProdutosDefinitivo() {
         const { error } = await clienteSupabase.from('produtos').delete().eq('esta_ativo', false);
         if (error) throw error;
 
+        // Limpeza de imagens armazenadas (Bucket)
         if (fotos && fotos.length > 0) {
             const arr = fotos.filter(f => f.foto_url).map(f => decodeURIComponent(f.foto_url.split('/').pop().split('?')[0]));
             if (arr.length > 0) await clienteSupabase.storage.from('foto_produtos').remove(arr);
@@ -1619,8 +1638,13 @@ async function esvaziarLixeiraProdutosDefinitivo() {
         tratarErroSupabase(e, "Purgar Lixeira Produtos");
     }
 }
+    
 
-/* --- FORMULÁRIO DE CADASTRO DE PRODUTO --- */
+/* =========================================================
+   🟥 BLOCO 4 - PARTE 2: CADASTRO MANUAL E IMPORTAÇÃO XML 🟥
+   ========================================================= */
+
+// Função de criação do formulário (com a falha de chaves corrigida!)
 async function desenharModuloCadastrarProduto(idEdicao = null) {
     appRoot.innerHTML = `
         <div class="card" style="margin-top: 3vh; max-width: 850px;">
@@ -1637,16 +1661,9 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                     </div>
                 </div>
 
-
-
-
                 <div style="background: rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 10px;">
                         <h4 style="margin: 0; color: var(--accent-neon);">📑 Identificação e Categoria</h4>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--success-color); font-weight: bold; margin: 0;">
-                            <input type="checkbox" id="prod-visivel-vitrine" style="width: 20px; height: 20px; margin: 0; cursor: pointer;" checked>
-                            Exibir na Vitrine Online
-                        </label>
                     </div>
                     
                     <label>Nome do Produto *</label>
@@ -1717,8 +1734,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                     </div>
                 </div>
 
-
-                                <!-- NOVO BLOCO: Controlo de Vitrine -->
+                <!-- BLOCO: Controlo de Vitrine -->
                 <div style="background: rgba(0,229,255,0.05); border: 1px solid var(--accent-neon); padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                     <input type="checkbox" id="prod-visivel-vitrine" checked style="width: 22px; height: 22px; margin: 0; cursor: pointer;">
                     <div>
@@ -1726,10 +1742,6 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                         <span style="font-size: 0.8em; color: var(--text-muted);">Desmarca se o produto for exclusivo do PDV físico.</span>
                     </div>
                 </div>
-                <!-- FIM DO NOVO BLOCO -->
-
-
-                
 
                 <button type="submit" id="btn-salvar-prod" class="btn-neon">💾 Salvar Produto</button>
                 <button type="button" class="btn-secundario" onclick="desenharModuloProdutos()">❌ Cancelar</button>
@@ -1737,6 +1749,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         </div>
     `;
 
+    // Carregar fornecedores na combobox
     try {
         const { data: forn } = await clienteSupabase.from('entidades').select('id, nome_completo').eq('tipo', 'fornecedor').neq('status', 'lixeira');
         const sel = document.getElementById('prod-fornecedor');
@@ -1747,6 +1760,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
     let fotoAntiga = null;
     let ficheiroNovo = null;
 
+    // Gestor de alteração de imagem (Visualização ao vivo)
     const lerImg = (e) => {
         const f = e.target.files[0];
         if (f) {
@@ -1759,15 +1773,12 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
     document.getElementById('prod-foto-arquivo').addEventListener('change', lerImg);
     document.getElementById('prod-foto-camera').addEventListener('change', lerImg);
 
+    // Botão Scanner
     document.getElementById('btn-scan-prod').addEventListener('click', () => {
         abrirScannerGlobal(c => document.getElementById('prod-ean').value = c);
     });
 
-
-
-
-
-    // (A) Código para preencher o checkbox ao Editar um produto
+    // Se estiver em modo edição, carrega os dados
     if (idEdicao) {
         document.getElementById('btn-salvar-prod').textContent = "⏳ A carregar...";
         const { data, error } = await clienteSupabase.from('produtos').select('*').eq('id', idEdicao).single();
@@ -1784,8 +1795,6 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
             document.getElementById('prod-ncm').value = data.ncm || '';
             document.getElementById('prod-cest').value = data.cest || '';
             document.getElementById('prod-cfop').value = data.cfop_padrao || '';
-            
-            // ✅ Atribui o estado do checkbox vindo da base de dados
             document.getElementById('prod-visivel-vitrine').checked = data.visivel_vitrine === true;
 
             if (data.foto_url) {
@@ -1796,7 +1805,7 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
         document.getElementById('btn-salvar-prod').textContent = "💾 Atualizar Produto";
     }
 
-    // (B) Código atualizado para Salvar e forçar o estado da Vitrine
+    // Comportamento de envio de formulário
     document.getElementById('form-produto').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-salvar-prod');
@@ -1805,7 +1814,6 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
 
         let urlFoto = fotoAntiga;
         let novoArq = null;
-        // ✅ Capturar o valor do checkbox
         const isVisivel = document.getElementById('prod-visivel-vitrine').checked;
 
         try {
@@ -1833,19 +1841,14 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
                 p_fornecedor: document.getElementById('prod-fornecedor').value || null
             };
 
-            // ✅ Truque Monolítico: Como a função RPC não foi criada para receber o "visivel_vitrine", 
-            // fazemos um update imediato à tabela após a criação/edição.
             if (idEdicao) {
                 payload.p_id = idEdicao;
                 const { error } = await clienteSupabase.rpc('atualizar_produto_seguro', payload);
                 if (error) throw error;
-                
                 await clienteSupabase.from('produtos').update({ visivel_vitrine: isVisivel }).eq('id', idEdicao);
             } else {
-                // Recupera o ID gerado pelo novo produto
                 const { data: novoId, error } = await clienteSupabase.rpc('adicionar_produto_seguro', payload);
                 if (error) throw error;
-                
                 await clienteSupabase.from('produtos').update({ visivel_vitrine: isVisivel }).eq('id', novoId);
             }
 
@@ -1858,9 +1861,9 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
             btn.disabled = false;
         }
     });
-    
+} // <--- ESTA ERA A CHAVE QUE ESTAVA EM FALTA NA SUA VERSÃO!
 
-    
+/* --- MÓDULO INTELIGENTE DE IMPORTAÇÃO DE XML (NF-e) --- */
 /* --- MÓDULO INTELIGENTE DE IMPORTAÇÃO DE XML (NF-e) --- */
 function desenharModuloImportarXml() {
     appRoot.innerHTML = `
@@ -1903,18 +1906,15 @@ function desenharModuloImportarXml() {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(event.target.result, "text/xml");
 
-                // 1. Ler dados do Emitente (Fornecedor)
                 const emit = xmlDoc.getElementsByTagName("emit")[0] || xmlDoc.getElementsByTagName("TNFE.emit")[0];
                 if (!emit) throw new Error("Estrutura de emitente não encontrada no XML.");
 
                 const nomeForn = emit.getElementsByTagName("xNome")[0]?.textContent || "Fornecedor Desconhecido";
                 const cnpjForn = emit.getElementsByTagName("CNPJ")[0]?.textContent || "";
 
-                // 2. Ler Chave da NFe
                 const infNFe = xmlDoc.getElementsByTagName("infNFe")[0];
                 const chaveNFe = infNFe ? infNFe.getAttribute("Id") : "";
 
-                // 3. Ler Itens (Produtos)
                 const dets = xmlDoc.getElementsByTagName("det");
                 if (dets.length === 0) throw new Error("Nenhum item detetado na nota fiscal.");
 
@@ -1930,7 +1930,6 @@ function desenharModuloImportarXml() {
                     const qCom = parseFloat(prod.getElementsByTagName("qCom")[0]?.textContent || 1);
                     const vUnCom = parseFloat(prod.getElementsByTagName("vUnCom")[0]?.textContent || 0);
 
-                    // Calcula preço de venda aplicando a margem cadastrada nas configurações da empresa
                     const margem = (dadosEmpresaGlobal.margem_padrao_xml || 30) / 100;
                     const precoVendaSugerido = vUnCom * (1 + margem);
 
@@ -1974,7 +1973,6 @@ function desenharModuloImportarXml() {
         btn.disabled = true;
 
         try {
-            // 1. Verifica ou cadastra o fornecedor automaticamente
             let fornecedorId = null;
             if (dadosXmlProcessados.fornecedor.cnpj) {
                 const { data: fornExistente } = await clienteSupabase
@@ -2001,10 +1999,8 @@ function desenharModuloImportarXml() {
                 }
             }
 
-            // 2. Processa cada item do XML usando a função RPC existente no Supabase
             let itensImportados = 0;
             for (const item of dadosXmlProcessados.itens) {
-                // Tenta encontrar produto existente por EAN ou SKU
                 let produtoExistente = null;
                 if (item.ean) {
                     const { data } = await clienteSupabase.from('produtos').select('*').eq('codigo_barras', item.ean).maybeSingle();
@@ -2016,7 +2012,6 @@ function desenharModuloImportarXml() {
                 }
 
                 if (produtoExistente) {
-                    // Produto existe: atualiza stock somando a quantidade e atualiza custos
                     const novoEstoque = parseFloat(produtoExistente.estoque_atual || 0) + item.quantidade;
                     await clienteSupabase.rpc('atualizar_produto_seguro', {
                         p_id: produtoExistente.id,
@@ -2031,7 +2026,6 @@ function desenharModuloImportarXml() {
                         p_fornecedor: fornecedorId
                     });
                 } else {
-                    // Produto novo: insere utilizando a função RPC segura
                     await clienteSupabase.rpc('adicionar_produto_seguro', {
                         p_nome: item.nome,
                         p_preco: item.preco_venda,
@@ -2056,8 +2050,15 @@ function desenharModuloImportarXml() {
         }
     });
 }
-</script>
+                        
 
+    
+  
+
+
+
+
+<!-- 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥 -->
 <script>
 /* =========================================================
    🟥 BLOCO 5: MÓDULO FINANCEIRO E MÓDULO PDV (FRENTE DE CAIXA) 🟥
