@@ -562,7 +562,7 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Seguro - ERP Supermercado</title>
+    <title>Acesso e Registo - ERP Supermercado</title>
     
     <style>
         /* ================= DESIGN SYSTEM ================= */
@@ -578,7 +578,6 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             --info-color: #17a2b8;
         }
 
-        /* Tema Claro */
         .light-theme {
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
@@ -597,23 +596,25 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         .titulo { text-align: center; margin-bottom: 20px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 10px;}
         .logo-icon { color: var(--accent-neon); font-size: 1.5em; }
 
-        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color);}
-        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
-        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); }
+        .info { background-color: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; border: 1px solid var(--info-color); display: none;}
+        .erro { background-color: rgba(255, 77, 77, 0.1); color: var(--danger-color); border-color: var(--danger-color); display: block;}
+        .sucesso { background-color: rgba(164, 227, 32, 0.1); color: var(--accent-neon); border-color: var(--accent-neon); display: block;}
 
         label { font-size: 0.9em; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
         input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; outline: none; margin-bottom: 20px;}
         input:focus { border-color: var(--accent-neon); }
         
-        /* Modificadores do Campo de Senha */
         .input-senha-container { position: relative; display: flex; align-items: center; width: 100%; margin-bottom: 20px; }
-        .input-senha-container input { margin-bottom: 0; padding-right: 45px; } /* Espaço reservado para o cadeado */
+        .input-senha-container input { margin-bottom: 0; padding-right: 45px; } 
         .btn-olho { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; display: flex; align-items: center; justify-content: center; height: 100%; }
         
-        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s; }
+        .btn-neon { width: 100%; padding: 14px; background: var(--accent-neon); color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: transform 0.1s; margin-bottom: 10px;}
         .btn-neon:hover { background: var(--accent-hover); }
 
-        /* Ferramentas de Depuração Flutuantes */
+        .btn-link { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: color 0.3s; }
+        .btn-link:hover { color: var(--text-main); border-color: var(--text-muted); }
+
+        /* Ferramentas de Depuração Flutuantes (Remover em Produção) */
         .ferramentas-container { position: fixed; bottom: 10px; right: 10px; display: flex; gap: 10px; z-index: 10000; }
         .btn-ferramenta { padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; box-shadow: 0px 2px 5px rgba(0,0,0,0.5); }
         .btn-tema { background: #444; color: white; border: 1px solid #666; }
@@ -626,8 +627,6 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </head>
 
 <body>
-    
-    <!-- Cartão de Login -->
     <div class="card">
         <h2 class="titulo">
             <span class="logo-icon">⚡</span> 
@@ -636,20 +635,38 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         <div id="status" class="info">A verificar sessão...</div>
 
-        <!-- Formulário de Autenticação -->
+        <!-- Formulário de Autenticação (Login) -->
         <div id="area-login" style="display: none;">
             <p style="font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 20px;">Insira as suas credenciais.</p>
             
-            <label for="input-email">E-mail Administrativo:</label>
-            <input type="email" id="input-email" placeholder="admin@supermercado.com" required>
+            <label for="input-email-login">E-mail Administrativo:</label>
+            <input type="email" id="input-email-login" placeholder="admin@supermercado.com" required>
             
-            <label for="input-senha">Palavra-passe:</label>
+            <label for="input-senha-login">Palavra-passe:</label>
             <div class="input-senha-container">
-                <input type="password" id="input-senha" placeholder="••••••••" required>
-                <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha()" id="btn-olho">🔒</button>
+                <input type="password" id="input-senha-login" placeholder="••••••••" required>
+                <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('input-senha-login', this)">🔒</button>
             </div>
             
             <button id="btn-entrar" class="btn-neon">Entrar no ERP</button>
+            <button type="button" class="btn-link" onclick="alternarFormularios('registo')">Criar uma nova conta</button>
+        </div>
+
+        <!-- Formulário de Criação de Conta (Registo) -->
+        <div id="area-registo" style="display: none;">
+            <p style="font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 20px;">Registe um novo administrador.</p>
+            
+            <label for="input-email-registo">Novo E-mail:</label>
+            <input type="email" id="input-email-registo" placeholder="novo@supermercado.com" required>
+            
+            <label for="input-senha-registo">Nova Palavra-passe:</label>
+            <div class="input-senha-container">
+                <input type="password" id="input-senha-registo" placeholder="Mínimo 6 caracteres" required>
+                <button type="button" class="btn-olho" onclick="alternarVisibilidadeSenha('input-senha-registo', this)">🔒</button>
+            </div>
+            
+            <button id="btn-registar" class="btn-neon">Criar Conta</button>
+            <button type="button" class="btn-link" onclick="alternarFormularios('login')">Já tenho conta. Fazer Login</button>
         </div>
     </div>
 
@@ -664,7 +681,7 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     <script src="supabase_config.js"></script>
     
     <script>
-        // 1. LÓGICA DO CONSOLE ESPELHO
+        // Lógica do Console Espelho
         const consoleArea = document.getElementById('console-area');
         const originalLog = console.log;
         const originalError = console.error;
@@ -677,30 +694,21 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             consoleArea.appendChild(linha);
             consoleArea.scrollTop = consoleArea.scrollHeight;
         }
-
         console.log = function(...args) { originalLog.apply(console, args); espelharNoEcra('LOG', '#00ff00', args); };
         console.error = function(...args) { originalError.apply(console, args); espelharNoEcra('ERRO', '#ff4444', args); };
 
-        function alternarConsole() {
-            consoleArea.style.display = consoleArea.style.display === 'none' || consoleArea.style.display === '' ? 'block' : 'none';
-        }
-
-        console.log("Sistema Inicializado. Console operante!");
-
-        // 2. LÓGICA DO TEMA CLARO/ESCURO
-        if(localStorage.getItem('temaERP') === 'light') document.body.classList.add('light-theme');
+        function alternarConsole() { consoleArea.style.display = consoleArea.style.display === 'none' || consoleArea.style.display === '' ? 'block' : 'none'; }
         
+        // Tema Claro/Escuro
+        if(localStorage.getItem('temaERP') === 'light') document.body.classList.add('light-theme');
         function alternarTema() {
             document.body.classList.toggle('light-theme');
-            const temaAtual = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-            localStorage.setItem('temaERP', temaAtual);
-            console.log("Tema modificado para:", temaAtual);
+            localStorage.setItem('temaERP', document.body.classList.contains('light-theme') ? 'light' : 'dark');
         }
 
-        // 3. LÓGICA DE VISIBILIDADE DA SENHA
-        function alternarVisibilidadeSenha() {
-            const input = document.getElementById('input-senha');
-            const btn = document.getElementById('btn-olho');
+        // Visibilidade da Senha Adaptada para múltiplos campos
+        function alternarVisibilidadeSenha(inputId, btn) {
+            const input = document.getElementById(inputId);
             if (input.type === 'password') {
                 input.type = 'text';
                 btn.textContent = '🔓';
@@ -710,62 +718,27 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         }
 
-        // 4. LÓGICA DE AUTENTICAÇÃO
+        // Helpers de Notificação Visual e Alternância de Telas
         const statusDiv = document.getElementById('status');
         const areaLogin = document.getElementById('area-login');
+        const areaRegisto = document.getElementById('area-registo');
 
-        // Verificação Zero Trust ao carregar a página
-        window.addEventListener('DOMContentLoaded', async () => {
-            console.log("A verificar sessão no Supabase...");
-            try {
-                const { data: { session }, error } = await clienteSupabase.auth.getSession();
-                if (session) {
-                    console.log("Sessão ativa encontrada.");
-                    sucessoRedirecionar("Sessão válida! A redirecionar...");
-                } else {
-                    statusDiv.style.display = "none";
-                    areaLogin.style.display = "block";
-                    console.log("A aguardar credenciais de login.");
-                }
-            } catch (error) {
-                mostrarErro("Erro ao verificar sessão.");
-                console.error("Falha ao comunicar com Auth:", error.message);
-            }
-        });
-
-        // Evento de Login por Senha
-        document.getElementById('btn-entrar').addEventListener('click', async () => {
-            const email = document.getElementById('input-email').value.trim();
-            const senha = document.getElementById('input-senha').value;
-            const btnEntrar = document.getElementById('btn-entrar');
-
-            if (!email || !senha) {
-                alert("Preencha e-mail e palavra-passe!");
-                console.error("Campos vazios no envio do formulário.");
-                return; 
-            }
-
-            btnEntrar.textContent = "A Autenticar..."; btnEntrar.disabled = true;
-            console.log("A processar autenticação para:", email);
-
-            const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
-            
-            if (error) {
-                mostrarErro("Credenciais incorretas.");
-                console.error("Erro do Supabase:", error.message);
-                btnEntrar.textContent = "Entrar no ERP"; btnEntrar.disabled = false;
+        function alternarFormularios(alvo) {
+            statusDiv.style.display = "none";
+            if(alvo === 'registo') {
+                areaLogin.style.display = "none";
+                areaRegisto.style.display = "block";
             } else {
-                console.log("Autenticação validada com sucesso pelo servidor.");
-                sucessoRedirecionar("Autenticado! A entrar...");
+                areaRegisto.style.display = "none";
+                areaLogin.style.display = "block";
             }
-        });
+        }
 
-        // Helpers de Notificação Visual
-        function sucessoRedirecionar(mensagem) {
+        function sucessoAcao(mensagem, redirecionar = false) {
             statusDiv.style.display = "block";
             statusDiv.textContent = "✅ " + mensagem;
             statusDiv.className = "info sucesso";
-            setTimeout(() => { window.location.href = 'listar.html'; }, 1000);
+            if(redirecionar) setTimeout(() => { window.location.href = 'index.html'; }, 1000);
         }
 
         function mostrarErro(mensagem) {
@@ -773,10 +746,76 @@ const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             statusDiv.textContent = "❌ " + mensagem;
             statusDiv.className = "info erro";
         }
+
+        // Verificação Zero Trust ao carregar
+        window.addEventListener('DOMContentLoaded', async () => {
+            statusDiv.style.display = "block";
+            statusDiv.textContent = "A verificar sessão...";
+            try {
+                const { data: { session }, error } = await clienteSupabase.auth.getSession();
+                if (session) {
+                    sucessoAcao("Sessão válida! A redirecionar...", true);
+                } else {
+                    statusDiv.style.display = "none";
+                    areaLogin.style.display = "block";
+                }
+            } catch (error) {
+                mostrarErro("Erro ao verificar sessão.");
+            }
+        });
+
+        // Evento de Login
+        document.getElementById('btn-entrar').addEventListener('click', async () => {
+            const email = document.getElementById('input-email-login').value.trim();
+            const senha = document.getElementById('input-senha-login').value;
+            const btnEntrar = document.getElementById('btn-entrar');
+
+            if (!email || !senha) return mostrarErro("Preencha e-mail e palavra-passe!");
+
+            btnEntrar.textContent = "A Autenticar..."; btnEntrar.disabled = true;
+            statusDiv.style.display = "none";
+
+            const { error } = await clienteSupabase.auth.signInWithPassword({ email, password: senha });
+            
+            if (error) {
+                mostrarErro("Credenciais incorretas ou erro: " + error.message);
+                btnEntrar.textContent = "Entrar no ERP"; btnEntrar.disabled = false;
+            } else {
+                sucessoAcao("Autenticado! A entrar...", true);
+            }
+        });
+
+        // Evento de Registo (Supabase signUp)
+        document.getElementById('btn-registar').addEventListener('click', async () => {
+            const email = document.getElementById('input-email-registo').value.trim();
+            const senha = document.getElementById('input-senha-registo').value;
+            const btnRegistar = document.getElementById('btn-registar');
+
+            if (!email || !senha) return mostrarErro("Preencha e-mail e palavra-passe para registo!");
+            if (senha.length < 6) return mostrarErro("A palavra-passe deve ter no mínimo 6 caracteres.");
+
+            btnRegistar.textContent = "A Criar Conta..."; btnRegistar.disabled = true;
+            statusDiv.style.display = "none";
+
+            const { data, error } = await clienteSupabase.auth.signUp({ email, password: senha });
+            
+            if (error) {
+                mostrarErro("Erro no registo: " + error.message);
+                btnRegistar.textContent = "Criar Conta"; btnRegistar.disabled = false;
+            } else {
+                // Supabase pode exigir confirmação de e-mail dependendo das configurações do teu painel
+                if (data.user && data.user.identities && data.user.identities.length === 0) {
+                     mostrarErro("Este e-mail já está em uso.");
+                     btnRegistar.textContent = "Criar Conta"; btnRegistar.disabled = false;
+                } else {
+                     sucessoAcao("Conta criada! Confere o teu e-mail (se ativado) ou faz login.");
+                     setTimeout(() => alternarFormularios('login'), 3000);
+                }
+            }
+        });
     </script>
 </body>
 </html>
-
 
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
