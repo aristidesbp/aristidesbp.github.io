@@ -1648,6 +1648,8 @@ async function esvaziarLixeiraProdutosDefinitivo() {
     }
 }
 ```
+
+⚠️⚠️⚠️⚠️
 ```
 /* --- FORMULÁRIO DE CADASTRO DE PRODUTO --- */
 async function desenharModuloCadastrarProduto(idEdicao = null) {
@@ -1889,6 +1891,10 @@ async function desenharModuloCadastrarProduto(idEdicao = null) {
     });
     
 }
+
+```
+⚠️⚠️⚠️⚠️⚠️
+```
     
 /* --- MÓDULO INTELIGENTE DE IMPORTAÇÃO DE XML (NF-e) --- */
 function desenharModuloImportarXml() {
