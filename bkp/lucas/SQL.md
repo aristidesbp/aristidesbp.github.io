@@ -1,3 +1,5 @@
+# tabela produtos 
+```
 -- =======================================================================================
 -- 1. CRIAÇÃO DA TABELA PRINCIPAL (ESTRUTURA DEFINITIVA)
 -- =======================================================================================
@@ -30,7 +32,8 @@ CREATE TABLE public.produtos (
     esta_ativo boolean DEFAULT true,
     criado_em timestamp with time zone DEFAULT now()
 );
-
+```
+```
 -- =======================================================================================
 -- 2. POLÍTICAS DE SEGURANÇA (RLS - ZERO TRUST)
 -- =======================================================================================
@@ -45,6 +48,9 @@ CREATE POLICY "Autenticados_Delete" ON public.produtos FOR DELETE TO authenticat
 -- Clientes na Loja Pública (anon) só podem ver o que está ativo
 CREATE POLICY "Loja_Select" ON public.produtos FOR SELECT TO anon USING (esta_ativo = true);
 
+
+```
+```
 -- =======================================================================================
 -- 3. STORAGE E BLINDAGEM DE UPLOADS
 -- =======================================================================================
@@ -68,6 +74,8 @@ WITH CHECK (
     AND (length(COALESCE(metadata->>'size', '0')::text) < 2097152)
 );
 
+```
+```
 -- =======================================================================================
 -- 4. TABELA E GATILHO DE AUDITORIA (LOG DE ATIVIDADES)
 -- =======================================================================================
@@ -107,6 +115,8 @@ $$;
 CREATE TRIGGER trigger_auditoria_produtos
 AFTER INSERT OR UPDATE OR DELETE ON public.produtos
 FOR EACH ROW EXECUTE FUNCTION public.registrar_auditoria();
+```
+```
 
 -- =======================================================================================
 -- 5. RPCs DO BACKEND (SECURITY INVOKER - EXIGE AUTENTICAÇÃO E RLS)
@@ -201,6 +211,9 @@ BEGIN
 END;
 $$;
 
+
+```
+```
 -- 5.8. IMPORTAÇÃO XML COM LÓGICA DE UPSERT E MATEMÁTICA PROTEGIDA
 CREATE OR REPLACE FUNCTION public.inserir_produtos_lote_seguro(p_itens jsonb)
 RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
@@ -251,6 +264,9 @@ BEGIN
 END;
 $$;
 
+
+```
+```
 -- =======================================================================================
 -- 6. GARANTIA DE DIREITOS (GRANTS) E ATUALIZAÇÃO DA API
 -- =======================================================================================
@@ -418,7 +434,8 @@ GRANT EXECUTE ON FUNCTION public.cancelar_pedido_seguro TO authenticated;
 
 NOTIFY pgrst, 'reload schema';
 
-
+```
+```
 
 /* [INÍCIO: SQL_CRIACAO_PROFILES_E_STORAGE] */
 
@@ -509,7 +526,8 @@ NOTIFY pgrst, 'reload schema';
 
 /* [FIM: SQL_CRIACAO_PROFILES_E_STORAGE] */
 
-
+```
+```
 
 
 
@@ -529,6 +547,7 @@ NOTIFY pgrst, 'reload schema';
 
 /* [FIM: ADICIONAR COLUNAS AOS DADOS DA EMPRESA] */
 
+```
 
 
 
