@@ -1357,6 +1357,10 @@ async function desenharModuloEntidadesCadastro(idEdicao = null) {
 }
 </script>
 
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
+
 <script>
 /* =========================================================
    🟥 BLOCO 4: MÓDULO DE PRODUTOS, LIXEIRA E IMPORTADOR XML (NF-e) 🟥
@@ -2080,7 +2084,9 @@ function desenharModuloImportarXml() {
     });
 }
 </script>
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+```
 <script>
 /* =========================================================
    🟥 BLOCO 5: MÓDULO FINANCEIRO E MÓDULO PDV (FRENTE DE CAIXA) 🟥
