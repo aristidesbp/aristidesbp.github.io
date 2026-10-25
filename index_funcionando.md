@@ -2344,7 +2344,8 @@ async function desenharModuloCadastrarFinanceiro(idEdicao = null) {
         }
     });
 }
-
+```
+```
 /* =========================================================
    MÓDULO PDV (FRENTE DE CAIXA + CONTROLO DE TURNO)
    ========================================================= */
@@ -2440,7 +2441,8 @@ function desenharTelaAberturaCaixa(userId) {
         }
     });
 }
-
+```
+```
 function desenharTelaCaixaOperacao() {
     carrinhoPdv = [];
     appRoot.innerHTML = `
@@ -2743,7 +2745,8 @@ async function fecharTurnoPdv() {
     }
 }
 </script>
-
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 <script>
 /* =========================================================
    🟥 BLOCO 6: MÓDULO DE ENTREGAS (DELIVERY) E VITRINE ONLINE 🟥
