@@ -290,6 +290,13 @@ body.light-theme .btn-neon {
     
   
 ```
+
+
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
+
+
 ```
 <script>
 /* =========================================================
@@ -690,6 +697,8 @@ window.alternarVisibilidadeSenha = function(idInput, btnOlho) {
     if (input.type === 'password') { input.type = 'text'; btnOlho.textContent = '🔓'; }
     else { input.type = 'password'; btnOlho.textContent = '🔒'; }
 };
+```
+```
 
 /* --- 8. MENU PRINCIPAL DO SISTEMA --- */
 function desenharMenuPrincipal(emailDoOperador) {
@@ -847,6 +856,9 @@ async function desenharModuloConfiguracoes() {
     </script>
 
 ```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+
 ```
         
    <script>
