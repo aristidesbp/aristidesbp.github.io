@@ -1,3 +1,6 @@
+
+# HTML
+```
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ERP Pro - Sistema de Gestão & Vitrine</title>
     <link rel="manifest" href="manifest.json">
+
+```
+```
 <style>
 /* =========================================================
    1. VARIÁVEIS DE CORES E TEMAS (ESCURO E CLARO)
@@ -268,7 +274,8 @@ body.light-theme .btn-neon {
     text-transform: uppercase;
 }
 </style>
-
+```
+```
 <!-- Bibliotecas Externas: Supabase e Leitor de Código de Barras -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -282,7 +289,8 @@ body.light-theme .btn-neon {
     <div id="app-root"></div>
     
   
-
+```
+```
 <script>
 /* =========================================================
    🟥 BLOCO 2: NÚCLEO SPA, SEGURANÇA BANCÁRIA E CONFIGURAÇÕES 🟥
@@ -3080,6 +3088,10 @@ async function desenharModuloRelatorios() {
    INICIALIZAÇÃO OFICIAL DO SISTEMA
    ========================================================= */
 iniciarApp();
+
 </script>
+```
+``` 
 </body>
 </html>
+```
