@@ -3,7 +3,7 @@
 ## 📌 CONTATOS
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
-* 🌐 [GITHUB-PAGES](https://aristidesbp.github.io/index.html)
+* 🌐 [MONOLITICO](https://aristidesbp.github.io/index_funcionando.html)
 
 
 ---
