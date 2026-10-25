@@ -1003,7 +1003,8 @@ async function carregarListaEntidadesAtivas() {
         container.innerHTML = "<p style='text-align:center; color: var(--danger-color);'>❌ Erro ao carregar dados.</p>";
     }
 }
-
+```
+```
 async function carregarListaEntidadesLixeira() {
     const container = document.getElementById('ent-lista-container');
     if (!container) return;
