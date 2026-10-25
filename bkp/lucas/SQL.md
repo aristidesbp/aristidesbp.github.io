@@ -50,6 +50,7 @@ CREATE POLICY "Loja_Select" ON public.produtos FOR SELECT TO anon USING (esta_at
 
 
 ```
+# STORAGE 
 ```
 -- =======================================================================================
 -- 3. STORAGE E BLINDAGEM DE UPLOADS
@@ -116,6 +117,8 @@ CREATE TRIGGER trigger_auditoria_produtos
 AFTER INSERT OR UPDATE OR DELETE ON public.produtos
 FOR EACH ROW EXECUTE FUNCTION public.registrar_auditoria();
 ```
+
+# adicionar produto
 ```
 
 -- =======================================================================================
@@ -150,6 +153,10 @@ BEGIN
 END;
 $$;
 
+```
+# atualizar produto 
+```
+
 CREATE OR REPLACE FUNCTION public.atualizar_produto_seguro(
     p_id uuid, p_nome text, p_preco numeric, p_foto_url text DEFAULT NULL, p_codigo_produto text DEFAULT NULL,
     p_ean text DEFAULT NULL, p_ncm text DEFAULT NULL, p_cest text DEFAULT NULL, p_cfop text DEFAULT NULL,
@@ -175,6 +182,9 @@ BEGIN
 END;
 $$;
 
+```
+# desativar produto 
+```
 CREATE OR REPLACE FUNCTION public.desativar_produto_seguro(p_id uuid)
 RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
 BEGIN
@@ -182,12 +192,19 @@ BEGIN
 END;
 $$;
 
+```
+# restaurar produto 
+```
 CREATE OR REPLACE FUNCTION public.restaurar_produto_seguro(p_id uuid)
 RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
 BEGIN
     UPDATE public.produtos SET esta_ativo = true WHERE id = p_id;
 END;
 $$;
+
+```
+# limpar lixeira 
+```
 
 CREATE OR REPLACE FUNCTION public.limpar_lixeira_produtos_seguro()
 RETURNS TABLE(url_da_foto text) LANGUAGE plpgsql SECURITY INVOKER AS $$
@@ -196,6 +213,9 @@ BEGIN
 END;
 $$;
 
+```
+# listar lixeira 
+```
 CREATE OR REPLACE FUNCTION public.listar_lixeira_produtos_seguro()
 RETURNS TABLE (id uuid, nome text, preco numeric, foto_url text, criado_em timestamp with time zone) 
 LANGUAGE plpgsql SECURITY INVOKER AS $$
@@ -203,7 +223,10 @@ BEGIN
     RETURN QUERY SELECT p.id, p.nome, p.preco, p.foto_url, p.criado_em FROM public.produtos p WHERE p.esta_ativo = false ORDER BY p.criado_em DESC;
 END;
 $$;
+```
 
+#  ocultar múltiplos
+```
 CREATE OR REPLACE FUNCTION public.ocultar_multiplos_produtos_seguro(p_ids uuid[])
 RETURNS void LANGUAGE plpgsql SECURITY INVOKER AS $$
 BEGIN
@@ -213,6 +236,8 @@ $$;
 
 
 ```
+
+# importação XML
 ```
 -- 5.8. IMPORTAÇÃO XML COM LÓGICA DE UPSERT E MATEMÁTICA PROTEGIDA
 CREATE OR REPLACE FUNCTION public.inserir_produtos_lote_seguro(p_itens jsonb)
@@ -266,6 +291,7 @@ $$;
 
 
 ```
+# atualização de estoque
 ```
 -- =======================================================================================
 -- 6. GARANTIA DE DIREITOS (GRANTS) E ATUALIZAÇÃO DA API
@@ -282,7 +308,9 @@ GRANT EXECUTE ON FUNCTION public.inserir_produtos_lote_seguro TO authenticated;
 NOTIFY pgrst, 'reload schema';
 
 
-
+```
+# tabela vendas 
+```
 -- =======================================================================================
 -- TABELA DE CONTROLE DE VENDAS E PEDIDOS
 -- =======================================================================================
@@ -307,6 +335,9 @@ CREATE POLICY "Anon_Insere_Vendas" ON public.vendas FOR INSERT TO anon WITH CHEC
 -- Apenas funcionários logados (authenticated) podem gerir/ver o controle de vendas
 CREATE POLICY "Autenticados_Gere_Vendas" ON public.vendas FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
+```
+# finalizar pedido 
+```
 -- =======================================================================================
 -- RPC SEGURA PARA FINALIZAR PEDIDO (Gera o pedido e abate o estoque do produto)
 -- =======================================================================================
@@ -373,7 +404,9 @@ GRANT EXECUTE ON FUNCTION public.finalizar_pedido_seguro TO anon, authenticated;
 NOTIFY pgrst, 'reload schema';
 
 
-
+```
+# entregar pedido 
+```
 -- =======================================================================================
 -- RPC SEGURA: MARCAR PEDIDO COMO ENTREGUE
 -- =======================================================================================
@@ -389,6 +422,10 @@ BEGIN
     WHERE id = p_pedido_id AND status = 'Pendente';
 END;
 $$;
+
+```
+# cancelar pedido 
+```
 
 -- =======================================================================================
 -- RPC SEGURA: CANCELAR PEDIDO E DEVOLVER ESTOQUE (ROLLBACK)
@@ -435,6 +472,9 @@ GRANT EXECUTE ON FUNCTION public.cancelar_pedido_seguro TO authenticated;
 NOTIFY pgrst, 'reload schema';
 
 ```
+
+
+# tabela profile
 ```
 
 /* [INÍCIO: SQL_CRIACAO_PROFILES_E_STORAGE] */
