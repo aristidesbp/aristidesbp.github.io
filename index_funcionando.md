@@ -1647,7 +1647,8 @@ async function esvaziarLixeiraProdutosDefinitivo() {
         tratarErroSupabase(e, "Purgar Lixeira Produtos");
     }
 }
-
+```
+```
 /* --- FORMULÁRIO DE CADASTRO DE PRODUTO --- */
 async function desenharModuloCadastrarProduto(idEdicao = null) {
     appRoot.innerHTML = `
