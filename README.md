@@ -345,7 +345,146 @@ FOR UPDATE USING (auth.role() = 'authenticated' AND bucket_id IN ('foto_entidade
 -- Permitir apagar ficheiros para utilizadores autenticados
 CREATE POLICY "Autenticados_Apagam_Fotos" ON storage.objects
 FOR DELETE USING (auth.role() = 'authenticated' AND bucket_id IN ('foto_entidades', 'foto_produtos', 'outras_midias'));
-``
+```
+```
+-- =========================================================================
+-- 📦 CRIAÇÃO DAS FUNÇÕES RPC PARA GESTÃO DE PRODUTOS
+-- =========================================================================
+
+-- 1. Função para ADICIONAR um novo produto
+CREATE OR REPLACE FUNCTION public.adicionar_produto_seguro(
+    p_nome text,
+    p_preco numeric,
+    p_foto_url text DEFAULT NULL::text,
+    p_codigo_produto text DEFAULT NULL::text,
+    p_ean text DEFAULT NULL::text,
+    p_ncm text DEFAULT NULL::text,
+    p_cest text DEFAULT NULL::text,
+    p_cfop text DEFAULT NULL::text,
+    p_unidade_comercial text DEFAULT NULL::text,
+    p_quantidade numeric DEFAULT 1,
+    p_valor_total numeric DEFAULT 0,
+    p_fornecedor text DEFAULT NULL::text, 
+    p_preco_custo numeric DEFAULT 0,
+    p_estoque_minimo numeric DEFAULT 0,
+    p_origem text DEFAULT NULL::text,
+    p_local_estoque text DEFAULT NULL::text,
+    p_local_loja text DEFAULT NULL::text,
+    p_tipo_embalagem text DEFAULT NULL::text,
+    p_categoria text DEFAULT NULL::text,
+    p_peso_liquido numeric DEFAULT 0,
+    p_dimensoes text DEFAULT NULL::text,
+    p_data_compra date DEFAULT NULL::date,
+    p_data_vencimento date DEFAULT NULL::date
+) RETURNS uuid -- A função vai devolver o ID (UUID) do produto acabado de criar
+LANGUAGE plpgsql
+SECURITY DEFINER -- Permite que a função execute com os privilégios de quem a criou
+AS $$
+DECLARE
+    v_novo_id uuid;
+    v_forn_uuid uuid := NULL;
+BEGIN
+    -- Validação: Se o fornecedor foi enviado (não está vazio), convertemos de texto para UUID
+    IF p_fornecedor IS NOT NULL AND p_fornecedor <> '' THEN
+        v_forn_uuid := p_fornecedor::uuid;
+    END IF;
+
+    -- Inserimos os dados na tabela produtos
+    INSERT INTO public.produtos (
+        nome, 
+        preco_venda, 
+        foto_url, 
+        sku, 
+        codigo_barras,
+        ncm, 
+        cest, 
+        cfop_padrao, 
+        unidade_comercial, 
+        estoque_atual,
+        preco_custo, 
+        categoria, 
+        fornecedor_id
+    ) VALUES (
+        p_nome, 
+        p_preco, 
+        p_foto_url, 
+        p_codigo_produto, 
+        p_ean,
+        p_ncm, 
+        p_cest, 
+        p_cfop, 
+        p_unidade_comercial, 
+        p_quantidade,
+        p_preco_custo, 
+        p_categoria, 
+        v_forn_uuid
+    ) RETURNING id INTO v_novo_id; -- Captura o ID gerado automaticamente
+
+    -- Devolve o ID para o teu JavaScript (produtos.js)
+    RETURN v_novo_id;
+END;
+$$;
+
+
+-- 2. Função para ATUALIZAR um produto existente
+CREATE OR REPLACE FUNCTION public.atualizar_produto_seguro(
+    p_id uuid,
+    p_nome text,
+    p_preco numeric,
+    p_foto_url text DEFAULT NULL::text,
+    p_codigo_produto text DEFAULT NULL::text,
+    p_ean text DEFAULT NULL::text,
+    p_ncm text DEFAULT NULL::text,
+    p_cest text DEFAULT NULL::text,
+    p_cfop text DEFAULT NULL::text,
+    p_unidade_comercial text DEFAULT NULL::text,
+    p_quantidade numeric DEFAULT 1,
+    p_valor_total numeric DEFAULT 0,
+    p_fornecedor text DEFAULT NULL::text,
+    p_preco_custo numeric DEFAULT 0,
+    p_estoque_minimo numeric DEFAULT 0,
+    p_origem text DEFAULT NULL::text,
+    p_local_estoque text DEFAULT NULL::text,
+    p_local_loja text DEFAULT NULL::text,
+    p_tipo_embalagem text DEFAULT NULL::text,
+    p_categoria text DEFAULT NULL::text,
+    p_peso_liquido numeric DEFAULT 0,
+    p_dimensoes text DEFAULT NULL::text,
+    p_data_compra date DEFAULT NULL::date,
+    p_data_vencimento date DEFAULT NULL::date
+) RETURNS void -- Esta função não precisa devolver nada (void), apenas atualiza
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_forn_uuid uuid := NULL;
+BEGIN
+    -- Validação do fornecedor
+    IF p_fornecedor IS NOT NULL AND p_fornecedor <> '' THEN
+        v_forn_uuid := p_fornecedor::uuid;
+    END IF;
+
+    -- Atualizamos o registo que tenha o ID correspondente
+    UPDATE public.produtos
+    SET
+        nome = p_nome,
+        preco_venda = p_preco,
+        foto_url = COALESCE(p_foto_url, foto_url), -- Mantém a foto antiga se nenhuma nova for enviada
+        sku = p_codigo_produto,
+        codigo_barras = p_ean,
+        ncm = p_ncm,
+        cest = p_cest,
+        cfop_padrao = p_cfop,
+        unidade_comercial = p_unidade_comercial,
+        estoque_atual = p_quantidade,
+        preco_custo = p_preco_custo,
+        categoria = p_categoria,
+        fornecedor_id = v_forn_uuid,
+        updated_at = now() -- Atualiza a data de modificação
+    WHERE id = p_id;
+END;
+$$;
+``` 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL PARA VERIFICAR SE EXISTE TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
