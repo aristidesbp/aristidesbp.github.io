@@ -7,5 +7,9 @@
 ]
 ```
 ```
-
+[
+  {
+    "relatorio_seguranca_storage": "[\n    {\n        \"acao\": \"DELETE\",\n        \"roles\": [\n            \"authenticated\"\n        ],\n        \"condicao\": \"(bucket_id = ANY (ARRAY['foto_entidades'::text, 'foto_produtos'::text, 'outras_midias'::text]))\",\n        \"politica\": \"Autenticados_Apagam_Fotos\"\n    },\n    {\n        \"acao\": \"UPDATE\",\n        \"roles\": [\n            \"authenticated\"\n        ],\n        \"condicao\": \"(bucket_id = ANY (ARRAY['foto_entidades'::text, 'foto_produtos'::text, 'outras_midias'::text]))\",\n        \"politica\": \"Autenticados_Atualizam_Fotos\"\n    },\n    {\n        \"acao\": \"INSERT\",\n        \"roles\": [\n            \"authenticated\"\n        ],\n        \"condicao\": null,\n        \"politica\": \"Autenticados_Sobem_Fotos\"\n    },\n    {\n        \"acao\": \"SELECT\",\n        \"roles\": [\n            \"public\"\n        ],\n        \"condicao\": \"(bucket_id = ANY (ARRAY['foto_entidades'::text, 'foto_produtos'::text, 'outras_midias'::text]))\",\n        \"politica\": \"Leitura_Publica_Fotos\"\n    }\n]"
+  }
+]
 ```
