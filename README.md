@@ -6,6 +6,7 @@
 
 # PROJETOS:
 * 🌐 [MONOLITICO](https://aristidesbp.github.io/index_funcionando.html)
+* 🌐 [ERP](https://aristidesbp.github.io/erp/index_funcionando.html)
 * 🌐 [lucas](https://aristidesbp.github.io/bkp/lucas/index.html)
 
 
