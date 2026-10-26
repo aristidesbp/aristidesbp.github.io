@@ -485,6 +485,35 @@ BEGIN
 END;
 $$;
 ``` 
+```
+
+-- =========================================================================
+-- 🔐 POLÍTICAS DE SEGURANÇA (RLS) PARA O MÓDULO DE CAIXA (PDV)
+-- =========================================================================
+
+-- 1. Ativar o RLS nas tabelas do PDV (garantindo que estão protegidas por padrão)
+ALTER TABLE public.pdv_terminais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_turnos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pdv_itens_venda ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.fin_pagamentos_venda ENABLE ROW LEVEL SECURITY;
+
+-- 2. Criar política para Terminais (Permite ao sistema criar o "CAIXA-01")
+CREATE POLICY "Autenticados_Gerenciam_Terminais" ON public.pdv_terminais
+FOR ALL USING (auth.role() = 'authenticated');
+
+-- 3. Criar política para Turnos (Permite ao operador abrir e fechar o seu caixa)
+CREATE POLICY "Autenticados_Gerenciam_Turnos" ON public.pdv_turnos
+FOR ALL USING (auth.role() = 'authenticated');
+
+-- 4. Criar política para Itens da Venda (Permite adicionar produtos ao talão)
+CREATE POLICY "Autenticados_Gerenciam_Itens_Venda" ON public.pdv_itens_venda
+FOR ALL USING (auth.role() = 'authenticated');
+
+-- 5. Criar política para Pagamentos (Permite registar dinheiro, cartão ou PIX)
+CREATE POLICY "Autenticados_Gerenciam_Pagamentos_Venda" ON public.fin_pagamentos_venda
+FOR ALL USING (auth.role() = 'authenticated');
+
+```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # SQL PARA VERIFICAR SE EXISTE TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
