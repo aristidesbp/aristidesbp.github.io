@@ -4,10 +4,9 @@
 * 📧 **Email:** [aristidesbp@gmail.com](mailto:aristidesbp@gmail.com)
 * 📱 **WhatsApp:** +55 (91) 99242-0981
 
-# PROJETOS:
-* 🌐 [MONOLITICO](https://aristidesbp.github.io/index_funcionando.html)
+# PROJETO:
 * 🌐 [ERP](https://aristidesbp.github.io/bkp/erp/index.html)
-* 🌐 [lucas](https://aristidesbp.github.io/bkp/lucas/index.html)
+
 
 
 
