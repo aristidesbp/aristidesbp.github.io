@@ -1,0 +1,434 @@
+-- =====================================================================
+-- SCRIPT SQL: RECRIAÇÃO COMPLETA DO ZERO COM ISOLAMENTO MULTI-TENANT (ZERO TRUST)
+-- =====================================================================
+
+-- 1. REMOÇÃO DE OBSTÁCULOS EXISTENTES (CASCADE PARA LIMPAR DEPENDÊNCIAS)
+DROP VIEW IF EXISTS vitrine CASCADE;
+DROP TABLE IF EXISTS auditoria_produtos CASCADE;
+DROP TABLE IF EXISTS est_movimentacoes CASCADE;
+DROP TABLE IF EXISTS fin_pagamentos_venda CASCADE;
+DROP TABLE IF EXISTS pdv_itens_venda CASCADE;
+DROP TABLE IF EXISTS pdv_vendas CASCADE;
+DROP TABLE IF EXISTS pdv_turnos CASCADE;
+DROP TABLE IF EXISTS pdv_terminais CASCADE;
+DROP TABLE IF EXISTS log_entregas CASCADE;
+DROP TABLE IF EXISTS fin_contas CASCADE;
+DROP TABLE IF EXISTS rh_contratos CASCADE;
+DROP TABLE IF EXISTS produtos CASCADE;
+DROP TABLE IF EXISTS entidades CASCADE;
+
+DROP FUNCTION IF EXISTS adicionar_produto_seguro CASCADE;
+DROP FUNCTION IF EXISTS atualizar_produto_seguro CASCADE;
+
+-- =====================================================================
+-- 2. CRIAÇÃO DAS TABELAS COM COLUNA user_id VINCULADA AO auth.uid()
+-- =====================================================================
+
+-- Tabela de Entidades (Clientes, Fornecedores, Funcionários, Entregadores, Empresa)
+CREATE TABLE entidades (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    tipo text NOT NULL, -- 'cliente', 'fornecedor', 'funcionario', 'entregador', 'empresa'
+    nome_completo text NOT NULL,
+    tipo_documento varchar(10),
+    numero_documento text,
+    telefone text,
+    email text,
+    endereco_completo text,
+    foto_url text,
+    pontos_fidelidade integer DEFAULT 0,
+    status varchar(20) DEFAULT 'ativo',
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Tabela de Produtos do Catálogo
+CREATE TABLE produtos (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    codigo_barras text,
+    sku text,
+    nome text NOT NULL,
+    descricao text,
+    categoria text,
+    foto_url text,
+    preco_venda numeric(10,2) NOT NULL DEFAULT 0.00,
+    preco_custo numeric(10,2) DEFAULT 0.00,
+    estoque_atual numeric(10,3) DEFAULT 0.000,
+    estoque_minimo numeric(10,3) DEFAULT 0.000,
+    unidade_comercial varchar(10) DEFAULT 'UN',
+    tipo_embalagem text,
+    peso_liquido numeric(10,3) DEFAULT 0.000,
+    dimensoes text,
+    local_estoque text,
+    local_loja text,
+    data_compra date,
+    data_vencimento date,
+    ncm varchar(10),
+    cest varchar(10),
+    cfop_padrao varchar(10),
+    origem_mercadoria integer,
+    aliquota_icms numeric(5,2),
+    fornecedor_id uuid REFERENCES entidades(id) ON DELETE SET NULL,
+    especificacoes jsonb,
+    esta_ativo boolean DEFAULT true,
+    visivel_vitrine boolean DEFAULT true,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Terminais do PDV
+CREATE TABLE pdv_terminais (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    codigo_terminal text NOT NULL,
+    descricao_localizacao text,
+    ativo boolean DEFAULT true,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Turnos do Caixa (PDV)
+CREATE TABLE pdv_turnos (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    terminal_id uuid REFERENCES pdv_terminais(id) ON DELETE CASCADE,
+    operador_id uuid DEFAULT auth.uid(),
+    saldo_abertura numeric(10,2) DEFAULT 0.00,
+    saldo_fechamento numeric(10,2) DEFAULT 0.00,
+    status text DEFAULT 'aberto', -- 'aberto', 'fechado'
+    aberto_em timestamp with time zone DEFAULT now(),
+    fechado_em timestamp with time zone
+);
+
+-- Vendas do PDV
+CREATE TABLE pdv_vendas (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    turno_id uuid REFERENCES pdv_turnos(id) ON DELETE SET NULL,
+    cliente_id uuid REFERENCES entidades(id) ON DELETE SET NULL,
+    numero_pedido serial,
+    total_bruto numeric(10,2) DEFAULT 0.00,
+    total_desconto numeric(10,2) DEFAULT 0.00,
+    total_liquido numeric(10,2) DEFAULT 0.00,
+    status text DEFAULT 'concluida',
+    forma_pagamento text,
+    chave_nfce text,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Itens da Venda
+CREATE TABLE pdv_itens_venda (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    venda_id uuid REFERENCES pdv_vendas(id) ON DELETE CASCADE,
+    produto_id uuid REFERENCES produtos(id) ON DELETE SET NULL,
+    quantidade numeric(10,3) NOT NULL,
+    preco_unitario numeric(10,2) NOT NULL,
+    subtotal numeric(10,2) NOT NULL
+);
+
+-- Pagamentos da Venda
+CREATE TABLE fin_pagamentos_venda (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    venda_id uuid REFERENCES pdv_vendas(id) ON DELETE CASCADE,
+    turno_id uuid REFERENCES pdv_turnos(id) ON DELETE SET NULL,
+    metodo text NOT NULL,
+    valor_pago numeric(10,2) NOT NULL,
+    troco numeric(10,2) DEFAULT 0.00,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Contas Financeiras (Entradas e Saídas / Contas a Pagar e Receber)
+CREATE TABLE fin_contas (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    entidade_id uuid REFERENCES entidades(id) ON DELETE SET NULL,
+    tipo_conta varchar(20) NOT NULL, -- 'entrada', 'saida'
+    descricao varchar(255) NOT NULL,
+    valor_nominal numeric(10,2) NOT NULL,
+    valor_pago numeric(10,2) DEFAULT 0.00,
+    data_emissao date DEFAULT CURRENT_DATE,
+    data_vencimento date NOT NULL,
+    data_pagamento date,
+    status_conta varchar(20) DEFAULT 'pendente', -- 'pendente', 'quitada'
+    nota_fiscal text,
+    foto_comprovante text,
+    numero_parcela integer DEFAULT 1,
+    total_parcelas integer DEFAULT 1,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Log de Entregas (Delivery)
+CREATE TABLE log_entregas (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    venda_id uuid REFERENCES pdv_vendas(id) ON DELETE CASCADE,
+    entregador_id uuid REFERENCES entidades(id) ON DELETE SET NULL,
+    endereco_entrega text NOT NULL,
+    status_entrega varchar(20) DEFAULT 'pendente', -- 'pendente', 'em_rota', 'entregue'
+    data_hora_saida timestamp with time zone,
+    data_hora_entrega timestamp with time zone,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Movimentações de Stock
+CREATE TABLE est_movimentacoes (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    produto_id uuid REFERENCES produtos(id) ON DELETE CASCADE,
+    venda_id uuid REFERENCES pdv_vendas(id) ON DELETE SET NULL,
+    tipo text NOT NULL, -- 'entrada', 'saida', 'ajuste'
+    quantidade numeric(10,3) NOT NULL,
+    observacao text,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Contratos de RH
+CREATE TABLE rh_contratos (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    entidade_id uuid REFERENCES entidades(id) ON DELETE CASCADE,
+    auth_user_id uuid,
+    cargo text,
+    salario_base numeric(10,2),
+    data_admissao date,
+    status text DEFAULT 'ativo',
+    created_at timestamp with time zone DEFAULT now()
+);
+
+-- Auditoria de Produtos
+CREATE TABLE auditoria_produtos (
+    id_auditoria uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    produto_id uuid,
+    acao text,
+    dados_antigos jsonb,
+    dados_novos jsonb,
+    usuario_id uuid DEFAULT auth.uid(),
+    data_hora timestamp with time zone DEFAULT now()
+);
+
+-- =====================================================================
+-- 3. ATIVAÇÃO DE ROW LEVEL SECURITY (RLS) EM TODAS AS TABELAS
+-- =====================================================================
+ALTER TABLE entidades ENABLE ROW LEVEL SECURITY;
+ALTER TABLE produtos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pdv_terminais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pdv_turnos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pdv_vendas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pdv_itens_venda ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fin_pagamentos_venda ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fin_contas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE log_entregas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE est_movimentacoes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rh_contratos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE auditoria_produtos ENABLE ROW LEVEL SECURITY;
+
+-- =====================================================================
+-- 4. POLÍTICAS DE SEGURANÇA: ISOLAMENTO ESTRITO POR UTILIZADOR (ZERO TRUST)
+-- =====================================================================
+
+-- ENTIDADES
+CREATE POLICY "Isolamento_Entidades_Dono" ON entidades
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- PRODUTOS: Dono gere os seus produtos
+CREATE POLICY "Isolamento_Produtos_Dono" ON produtos
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- TERMINAIS PDV
+CREATE POLICY "Isolamento_Terminais_Dono" ON pdv_terminais
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- TURNOS PDV
+CREATE POLICY "Isolamento_Turnos_Dono" ON pdv_turnos
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- VENDAS PDV
+CREATE POLICY "Isolamento_Vendas_Dono" ON pdv_vendas
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- ITENS DE VENDA (Vinculados à venda do dono)
+CREATE POLICY "Isolamento_ItensVenda_Dono" ON pdv_itens_venda
+    FOR ALL TO public
+    USING (EXISTS (SELECT 1 FROM pdv_vendas WHERE pdv_vendas.id = pdv_itens_venda.venda_id AND pdv_vendas.user_id = auth.uid()))
+    WITH CHECK (EXISTS (SELECT 1 FROM pdv_vendas WHERE pdv_vendas.id = pdv_itens_venda.venda_id AND pdv_vendas.user_id = auth.uid()));
+
+-- PAGAMENTOS DE VENDA (Vinculados à venda do dono)
+CREATE POLICY "Isolamento_PagamentosVenda_Dono" ON fin_pagamentos_venda
+    FOR ALL TO public
+    USING (EXISTS (SELECT 1 FROM pdv_vendas WHERE pdv_vendas.id = fin_pagamentos_venda.venda_id AND pdv_vendas.user_id = auth.uid()))
+    WITH CHECK (EXISTS (SELECT 1 FROM pdv_vendas WHERE pdv_vendas.id = fin_pagamentos_venda.venda_id AND pdv_vendas.user_id = auth.uid()));
+
+-- FINANCEIRO (FIN_CONTAS)
+CREATE POLICY "Isolamento_FinContas_Dono" ON fin_contas
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- LOG DE ENTREGAS
+CREATE POLICY "Isolamento_Entregas_Dono" ON log_entregas
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- MOVIMENTAÇÕES DE STOCK
+CREATE POLICY "Isolamento_Estoque_Dono" ON est_movimentacoes
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- CONTRATOS RH
+CREATE POLICY "Isolamento_RH_Dono" ON rh_contratos
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- AUDITORIA
+CREATE POLICY "Isolamento_Auditoria_Dono" ON auditoria_produtos
+    FOR ALL TO public
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- =====================================================================
+-- 5. CRIAÇÃO DA VIEW PÚBLICA DA VITRINE (E-COMMERCE)
+-- =====================================================================
+-- Permite que clientes vejam produtos ativos e visíveis de qualquer loja para comprar via WhatsApp
+CREATE VIEW vitrine AS
+SELECT 
+    id,
+    user_id,
+    codigo_barras,
+    nome,
+    descricao,
+    categoria,
+    foto_url,
+    preco_venda,
+    unidade_comercial,
+    tipo_embalagem,
+    especificacoes
+FROM produtos
+WHERE esta_ativo = true AND visivel_vitrine = true;
+
+GRANT SELECT ON vitrine TO public;
+
+-- =====================================================================
+-- 6. FUNÇÕES RPC SEGURAS PARA ADICIONAR E ATUALIZAR PRODUTOS (COM user_id)
+-- =====================================================================
+
+CREATE OR REPLACE FUNCTION adicionar_produto_seguro(
+    p_nome text, 
+    p_preco numeric, 
+    p_foto_url text DEFAULT NULL::text, 
+    p_codigo_produto text DEFAULT NULL::text, 
+    p_ean text DEFAULT NULL::text, 
+    p_ncm text DEFAULT NULL::text, 
+    p_cest text DEFAULT NULL::text, 
+    p_cfop text DEFAULT NULL::text, 
+    p_unidade_comercial text DEFAULT NULL::text, 
+    p_quantidade numeric DEFAULT 1, 
+    p_valor_total numeric DEFAULT 0, 
+    p_fornecedor text DEFAULT NULL::text, 
+    p_preco_custo numeric DEFAULT 0, 
+    p_estoque_minimo numeric DEFAULT 0, 
+    p_origem text DEFAULT NULL::text, 
+    p_local_estoque text DEFAULT NULL::text, 
+    p_local_loja text DEFAULT NULL::text, 
+    p_tipo_embalagem text DEFAULT NULL::text, 
+    p_categoria text DEFAULT NULL::text, 
+    p_peso_liquido numeric DEFAULT 0, 
+    p_dimensoes text DEFAULT NULL::text, 
+    p_data_compra date DEFAULT NULL::date, 
+    p_data_vencimento date DEFAULT NULL::date
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_produto_id uuid;
+BEGIN
+    INSERT INTO produtos (
+        nome, preco_venda, foto_url, sku, codigo_barras, ncm, cest, cfop_padrao,
+        unidade_comercial, estoque_atual, fornecedor_id, preco_custo, estoque_minimo,
+        origem_mercadoria, local_estoque, local_loja, tipo_embalagem, categoria,
+        peso_liquido, dimensoes, data_compra, data_vencimento, user_id
+    ) VALUES (
+        p_nome, p_preco, p_foto_url, p_codigo_produto, p_ean, p_ncm, p_cest, p_cfop,
+        p_unidade_comercial, p_quantidade, NULLIF(p_fornecedor, '')::uuid, p_preco_custo, p_estoque_minimo,
+        NULLIF(p_origem, '')::integer, p_local_estoque, p_local_loja, p_tipo_embalagem, p_categoria,
+        p_peso_liquido, p_dimensoes, p_data_compra, p_data_vencimento, auth.uid()
+    )
+    RETURNING id INTO v_produto_id;
+
+    RETURN v_produto_id;
+END;
+$$;
+
+
+CREATE OR REPLACE FUNCTION atualizar_produto_seguro(
+    p_id uuid,
+    p_nome text, 
+    p_preco numeric, 
+    p_foto_url text DEFAULT NULL::text, 
+    p_codigo_produto text DEFAULT NULL::text, 
+    p_ean text DEFAULT NULL::text, 
+    p_ncm text DEFAULT NULL::text, 
+    p_cest text DEFAULT NULL::text, 
+    p_cfop text DEFAULT NULL::text, 
+    p_unidade_comercial text DEFAULT NULL::text, 
+    p_quantidade numeric DEFAULT 1, 
+    p_valor_total numeric DEFAULT 0, 
+    p_fornecedor text DEFAULT NULL::text, 
+    p_preco_custo numeric DEFAULT 0, 
+    p_estoque_minimo numeric DEFAULT 0, 
+    p_origem text DEFAULT NULL::text, 
+    p_local_estoque text DEFAULT NULL::text, 
+    p_local_loja text DEFAULT NULL::text, 
+    p_tipo_embalagem text DEFAULT NULL::text, 
+    p_categoria text DEFAULT NULL::text, 
+    p_peso_liquido numeric DEFAULT 0, 
+    p_dimensoes text DEFAULT NULL::text, 
+    p_data_compra date DEFAULT NULL::date, 
+    p_data_vencimento date DEFAULT NULL::date
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    UPDATE produtos SET
+        nome = p_nome,
+        preco_venda = p_preco,
+        foto_url = COALESCE(p_foto_url, foto_url),
+        sku = p_codigo_produto,
+        codigo_barras = p_ean,
+        ncm = p_ncm,
+        cest = p_cest,
+        cfop_padrao = p_cfop,
+        unidade_comercial = p_unidade_comercial,
+        estoque_atual = p_quantidade,
+        fornecedor_id = NULLIF(p_fornecedor, '')::uuid,
+        preco_custo = p_preco_custo,
+        estoque_minimo = p_estoque_minimo,
+        origem_mercadoria = NULLIF(p_origem, '')::integer,
+        local_estoque = p_local_estoque,
+        local_loja = p_local_loja,
+        tipo_embalagem = p_tipo_embalagem,
+        categoria = p_categoria,
+        peso_liquido = p_peso_liquido,
+        dimensoes = p_dimensoes,
+        data_compra = p_data_compra,
+        data_vencimento = p_data_vencimento,
+        updated_at = now()
+    WHERE id = p_id AND user_id = auth.uid();
+END;
+$$;
