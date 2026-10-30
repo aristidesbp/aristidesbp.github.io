@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supermercado</title>
+<style>
+:root{color-scheme:light dark;--bg:#f6f7f5;--c:#fff;--t:#1d2521;--m:#68736d;--p:#1f8a4c;--b:#dfe4e0;--bad:#c0392b}
+@media(prefers-color-scheme:dark){:root{--bg:#121513;--c:#1c211e;--t:#e8ece9;--m:#98a39d;--p:#2f9e5d;--b:#2b332e}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,sans-serif;background:var(--bg);color:var(--t)}
+header{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--p);color:#fff;position:sticky;top:0;z-index:5}
+header a{color:#fff;text-decoration:none;margin-left:12px;cursor:pointer}header .brand{font-weight:700;margin:0}
+main{max-width:980px;margin:0 auto;padding:14px}h2{margin:.3em 0 .6em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card,.box{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:4px;margin-bottom:8px}.grid .card{margin:0}
+.card img,.ph{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;background:var(--b);display:grid;place-items:center;font-size:32px}
+button{font:inherit;padding:9px 12px;border:0;border-radius:8px;background:var(--p);color:#fff;cursor:pointer}button:disabled{opacity:.5}
+.ghost{background:none;color:var(--p);border:1px solid var(--p)}
+input,select,textarea{font:inherit;padding:9px;border:1px solid var(--b);border-radius:8px;background:var(--c);color:var(--t);width:100%}
+form{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}form.row{flex-direction:row}
+.chips,.tabs{display:flex;gap:6px;overflow:auto;margin:10px 0}
+.chips a,.tabs a{white-space:nowrap;padding:6px 12px;border:1px solid var(--b);border-radius:99px;cursor:pointer;color:inherit;text-decoration:none}.on{background:var(--p);color:#fff!important}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0}
+.tag{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--b)}small{color:var(--m)}.ok{border-color:var(--p)}.warn{color:var(--bad)}
+#toast{position:fixed;bottom:16px;left:50%;transform:translate(-50%,90px);background:#222;color:#fff;padding:10px 16px;border-radius:10px;transition:.2s;max-width:90%;z-index:9}
+#toast.show{transform:translate(-50%,0)}#toast.bad{background:var(--bad)}
+</style>
+</head>
+<body>
+<header id="top"></header>
+<main id="app">Carregando…</main>
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// ===== CONFIGURE AQUI (Supabase > Project Settings > API). A anon key é pública por design;
+// quem protege os dados é o RLS do banco. NUNCA use a service_role no front-end.
+const SB_URL = 'COLE_A_URL_DO_PROJETO', SB_KEY = 'COLE_A_ANON_KEY';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const R = n => Number(n || 0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const D = d => d ? new Date(d).toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'}) : '';
+const r2 = n => Math.round(n * 100) / 100;
+const url = u => /^https?:\/\//i.test(u || '') ? esc(u) : '';
+const ok = async p => { const {data, error} = await p; if (error) throw error; return data; };
+const app = h => { $('#app').innerHTML = h; };
+function toast(m, bad) { const t = $('#toast'); t.textContent = m; t.className = bad ? 'bad show' : 'show'; clearTimeout(toast.t); toast.t = setTimeout(() => t.className = '', 3500); }
+const ST = {aguardando_pagamento:'Aguardando pagamento', paga:'Paga', em_separacao:'Em separação', pronto:'Pronto', em_rota:'Em rota', entregue:'Entregue', concluida:'Concluída', cancelada:'Cancelada', devolvida:'Devolvida'};
+
+const S = {u:null, cli:null, fn:null, loja:{}, cat:'', q:'', pc:{}, t:null};
+try { S.cart = JSON.parse(localStorage.getItem('cart') || '{}'); } catch { S.cart = {}; }
+const saveCart = () => { try { localStorage.setItem('cart', JSON.stringify(S.cart)); } catch {} nav(); };
+const nCart = () => Object.keys(S.cart).length;
+const isCaixa = () => ['admin','gerente','caixa'].includes(S.fn?.cargo);
+
+// ---------- ações e formulários (delegação: nenhum onclick inline com dados) ----------
+const A = {}, F = {};
+const guard = fn => async (...a) => { try { await fn(...a); } catch (e) { toast(e.message || 'Erro inesperado', 1); } };
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (b && A[b.dataset.a]) guard(A[b.dataset.a])(b); });
+document.addEventListener('submit', e => { const f = e.target.closest('[data-f]'); if (f && F[f.dataset.f]) { e.preventDefault(); guard(F[f.dataset.f])(f); } });
+
+// ---------- navegação ----------
+function nav() {
+  $('#top').innerHTML = `<a href="#loja" class="brand">${esc(S.loja.nome_fantasia || 'Supermercado')}</a><nav>
+    <a href="#loja">Loja</a><a href="#carrinho">🛒 ${nCart()}</a>${isCaixa() ? '<a href="#pdv">Caixa</a>' : ''}
+    ${S.u ? '<a href="#conta">Minha conta</a><a data-a="sair">Sair</a>' : '<a href="#entrar">Entrar</a>'}</nav>`;
+}
+const routes = {loja, carrinho, entrar, conta, pdv};
+async function go() {
+  const r = (location.hash.slice(1) || 'loja').split('/')[0];
+  nav();
+  try { await (routes[r] || loja)(); } catch (e) { toast(e.message || 'Erro', 1); }
+}
+addEventListener('hashchange', go);
+A.sair = async () => { await sb.auth.signOut(); location.hash = 'loja'; };
+
+async function prof() {
+  const {data: {session}} = await sb.auth.getSession();
+  S.u = session?.user || null; S.fn = S.cli = null;
+  if (S.u) [S.fn, S.cli] = await Promise.all([
+    ok(sb.from('funcionarios').select('id,cargo,nome_completo').eq('user_id', S.u.id).eq('ativo', true).maybeSingle()),
+    ok(sb.from('clientes').select('id,nome_completo').eq('user_id', S.u.id).maybeSingle())]);
+}
+sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') setTimeout(async () => { await prof(); go(); }, 0); });
+
+// ---------- LOJA (vitrine) ----------
+const card = p => `<div class="card">${url(p.foto_url) ? `<img loading="lazy" alt="" src="${url(p.foto_url)}">` : '<div class="ph">🛒</div>'}
+  <b>${esc(p.nome)}</b><small>${esc(p.marca || '')} ${esc(p.unidade)}</small>
+  <div>${p.em_promocao ? `<s><small>${R(p.preco_venda)}</small></s> ` : ''}<strong>${R(p.preco_atual)}</strong></div>
+  <button data-a="add" data-id="${esc(p.id)}" data-n="${esc(p.nome)}" data-p="${p.preco_atual}" data-w="${p.vendido_por_peso}" ${p.disponivel ? '' : 'disabled'}>${p.disponivel ? 'Adicionar' : 'Indisponível'}</button></div>`;
+async function loja() {
+  let q = sb.from('vitrine_produtos').select('*').order('destaque', {ascending:false}).order('nome').limit(60);
+  if (S.cat) q = q.eq('categoria_id', S.cat);
+  if (S.q) q = q.ilike('nome', '%' + S.q.replace(/[%_\\]/g, '\\$&') + '%');
+  const [cats, ps] = await Promise.all([ok(sb.from('vitrine_categorias').select('id,nome').order('ordem')), ok(q)]);
+  app(`${S.loja.loja_aberta_ecommerce === false ? '<p class="warn">Loja online fechada no momento.</p>' : ''}
+    <form data-f="busca" class="row"><input name="q" placeholder="Buscar produtos" value="${esc(S.q)}"><button>Buscar</button></form>
+    <div class="chips"><a data-a="cat" data-id="" class="${S.cat ? '' : 'on'}">Todos</a>${cats.map(c => `<a data-a="cat" data-id="${esc(c.id)}" class="${S.cat === c.id ? 'on' : ''}">${esc(c.nome)}</a>`).join('')}</div>
+    <div class="grid">${ps.map(card).join('') || '<p>Nenhum produto encontrado.</p>'}</div>`);
+}
+F.busca = f => { S.q = f.q.value.trim(); return loja(); };
+A.cat = b => { S.cat = b.dataset.id; return loja(); };
+A.add = b => {
+  const {id, n, p, w} = b.dataset;
+  const c = S.cart[id] || (S.cart[id] = {n, p: +p, q: 0, s: w === 'true' ? .5 : 1});
+  c.q = +(c.q + c.s).toFixed(3); c.p = +p; saveCart(); toast(n + ' adicionado');
+};
+
+// ---------- CARRINHO / CHECKOUT (o servidor recalcula preço, frete e estoque) ----------
+async function carrinho() {
+  const it = Object.entries(S.cart), sub = r2(it.reduce((s, [, c]) => s + r2(c.p * c.q), 0));
+  let out = `<h2>Carrinho</h2>` + (it.map(([id, c]) => `<div class="li"><span>${esc(c.n)}</span>
+    <span><button class="ghost" data-a="qty" data-id="${esc(id)}" data-d="-1">−</button> ${c.q} <button class="ghost" data-a="qty" data-id="${esc(id)}" data-d="1">+</button></span><b>${R(c.p * c.q)}</b></div>`).join('') || '<p>Seu carrinho está vazio.</p>');
+  if (!it.length) return app(out);
+  out += `<div class="li"><b>Subtotal</b><b>${R(sub)}</b></div><small>Frete e total final são confirmados ao fazer o pedido.</small>`;
+  if (!S.cli) return app(out + `<p><a href="#entrar">Entre ou cadastre-se</a> para finalizar.</p>`);
+  const ends = await ok(sb.from('enderecos_cliente').select('id,apelido,logradouro,numero,bairro').eq('ativo', true));
+  app(out + `<h2>Finalizar</h2><form data-f="pedido">
+    <select name="tipo"><option value="entrega">Entrega</option><option value="retirada">Retirar na loja</option></select>
+    <select name="ender">${ends.map(e => `<option value="${esc(e.id)}">${esc(e.apelido)}: ${esc(e.logradouro)}, ${esc(e.numero)} (${esc(e.bairro)})</option>`).join('') || '<option value="">Cadastre um endereço abaixo</option>'}</select>
+    <select name="pag"><option value="pix">Pix</option><option value="cartao_online">Cartão (online)</option><option value="dinheiro_entrega">Dinheiro na entrega/retirada</option><option value="cartao_entrega">Cartão na entrega/retirada</option></select>
+    <textarea name="obs" maxlength="300" placeholder="Observações (opcional)"></textarea><button>Fazer pedido</button></form>
+    <details><summary>Novo endereço</summary><form data-f="end"><input name="apelido" placeholder="Apelido (Casa, Trabalho)"><input name="logradouro" placeholder="Rua" required>
+    <input name="numero" placeholder="Número" required><input name="bairro" placeholder="Bairro" required><input name="cidade" placeholder="Cidade" required>
+    <input name="uf" maxlength="2" placeholder="UF" required><input name="cep" placeholder="CEP (só números)" inputmode="numeric"><button>Salvar endereço</button></form></details>`);
+}
+A.qty = b => { const c = S.cart[b.dataset.id]; if (!c) return; c.q = +(c.q + b.dataset.d * c.s).toFixed(3); if (c.q <= 0) delete S.cart[b.dataset.id]; saveCart(); return carrinho(); };
+F.end = async f => {
+  const d = Object.fromEntries(new FormData(f));
+  await ok(sb.from('enderecos_cliente').insert({cliente_id: S.cli.id, apelido: d.apelido || 'Casa', logradouro: d.logradouro, numero: d.numero, bairro: d.bairro,
+    cidade: d.cidade, uf: d.uf.toUpperCase(), cep: d.cep.replace(/\D/g, '') || null}));
+  toast('Endereço salvo'); return carrinho();
+};
+F.pedido = async f => {
+  const itens = Object.entries(S.cart).map(([produto_id, c]) => ({produto_id, quantidade: c.q}));
+  const r = await ok(sb.rpc('criar_pedido_ecommerce', {p_itens: itens, p_tipo_entrega: f.tipo.value, p_endereco_id: f.tipo.value === 'entrega' ? (f.ender.value || null) : null,
+    p_forma_pagamento: f.pag.value, p_observacao: f.obs.value.trim() || null}));
+  S.cart = {}; saveCart(); S.novo = r; location.hash = 'conta';
+};
+
+// ---------- LOGIN / CADASTRO ----------
+function entrar() {
+  app(`<h2>Entrar</h2><form data-f="login"><input name="email" type="email" placeholder="E-mail" required autocomplete="email"><input name="password" type="password" placeholder="Senha" required autocomplete="current-password"><button>Entrar</button></form>
+    <h2>Criar conta de cliente</h2><form data-f="signup"><input name="nome" placeholder="Nome completo" required><input name="tel" placeholder="Telefone" inputmode="tel"><input name="doc" placeholder="CPF/CNPJ (só números)" inputmode="numeric">
+    <input name="email" type="email" placeholder="E-mail" required autocomplete="email"><input name="password" type="password" minlength="8" placeholder="Senha (mín. 8)" required autocomplete="new-password">
+    <label><input type="checkbox" name="termos" required style="width:auto"> Aceito os termos de uso e a política de privacidade</label><button>Cadastrar</button></form>`);
+}
+F.login = async f => { await ok(sb.auth.signInWithPassword({email: f.email.value.trim(), password: f.password.value})); location.hash = 'loja'; };
+F.signup = async f => {
+  const r = await ok(sb.auth.signUp({email: f.email.value.trim(), password: f.password.value,
+    options: {data: {nome: f.nome.value.trim(), telefone: f.tel.value.trim(), documento: f.doc.value.replace(/\D/g, ''), aceitou_termos: 'true'}}}));
+  toast(r.session ? 'Conta criada!' : 'Conta criada! Confirme seu e-mail para entrar.'); if (r.session) location.hash = 'loja';
+};
+
+// ---------- MINHA CONTA ----------
+const TABS = {pedidos:'Pedidos', financeiro:'Financeiro', reclamacoes:'Reclamações'};
+async function conta() {
+  if (!S.u) { location.hash = 'entrar'; return; }
+  if (!S.cli) return app('<p>Esta conta não possui cadastro de cliente.</p>');
+  const t = location.hash.split('/')[1] || 'pedidos';
+  const body = await ({pedidos: cPedidos, financeiro: cFin, reclamacoes: cRecl}[t] || cPedidos)();
+  app(`<h2>Olá, ${esc(S.cli.nome_fantasia || S.cli.nome_completo)}</h2><div class="tabs">${Object.entries(TABS).map(([k, v]) => `<a href="#conta/${k}" class="${k === t ? 'on' : ''}">${v}</a>`).join('')}</div>${body}`);
+}
+async function cPedidos() {
+  let ban = '';
+  if (S.novo) {
+    const n = S.novo, wa = (S.loja.whatsapp || '').replace(/\D/g, '');
+    ban = `<div class="box ok"><b>Pedido #${esc(n.numero_pedido)} criado · ${R(n.total)}</b>${n.status === 'aguardando_pagamento'
+      ? `<span>Para confirmar, pague via ${S.loja.chave_pix ? `Pix na chave <b>${esc(S.loja.chave_pix)}</b>` : 'a forma combinada com a loja'}.${wa ? ` Envie o comprovante: <a href="https://wa.me/${wa}">WhatsApp</a>.` : ''}</span>` : '<span>Estamos separando seu pedido.</span>'}</div>`;
+    S.novo = null;
+  }
+  const v = await ok(sb.from('vendas').select('id,numero_pedido,status,total_liquido,tipo_entrega,created_at').order('created_at', {ascending: false}).limit(30));
+  return ban + (v.map(x => `<div class="box"><div class="li"><b>#${x.numero_pedido}</b><span class="tag">${esc(ST[x.status] || x.status)}</span><b>${R(x.total_liquido)}</b></div>
+    <small>${D(x.created_at)} · ${esc(x.tipo_entrega)}</small><div id="d${esc(x.id)}"></div>
+    <div class="li"><button class="ghost" data-a="det" data-id="${esc(x.id)}">Detalhes</button>${['aguardando_pagamento','paga','em_separacao'].includes(x.status) ? `<button class="ghost" data-a="cancel" data-id="${esc(x.id)}">Cancelar</button>` : ''}</div></div>`).join('') || '<p>Você ainda não fez pedidos.</p>');
+}
+A.det = async b => {
+  const id = b.dataset.id;
+  const [it, en] = await Promise.all([ok(sb.from('venda_itens').select('descricao,quantidade,subtotal').eq('venda_id', id)),
+    ok(sb.from('entregas').select('id,status,previsao_entrega,entrega_eventos(descricao,created_at)').eq('venda_id', id).maybeSingle())]);
+  let h = it.map(i => `<div class="li"><span>${esc(i.quantidade)} × ${esc(i.descricao)}</span><span>${R(i.subtotal)}</span></div>`).join('');
+  if (en) {
+    h += `<hr><b>Acompanhe a entrega</b>` + (en.entrega_eventos || []).sort((a, c) => a.created_at < c.created_at ? -1 : 1).map(e => `<div><small>${D(e.created_at)}</small> ${esc(e.descricao)}</div>`).join('');
+    if (!['entregue', 'cancelada'].includes(en.status)) {
+      const c = await ok(sb.from('entrega_codigos').select('codigo').eq('entrega_id', en.id).maybeSingle());
+      if (c) h += `<p>Código de entrega: <b>${esc(c.codigo)}</b> <small>(informe só ao entregador)</small></p>`;
+    }
+  }
+  $('#d' + id).innerHTML = h;
+};
+A.cancel = async b => { if (!confirm('Cancelar este pedido?')) return; await ok(sb.rpc('cancelar_meu_pedido', {p_venda_id: b.dataset.id})); toast('Pedido cancelado'); return conta(); };
+
+async function cFin() {
+  const [t, nf] = await Promise.all([ok(sb.from('v_titulos_cliente').select('*').neq('status', 'cancelado').order('data_vencimento')),
+    ok(sb.from('notas_fiscais').select('id,tipo,numero,status,valor_total,emitida_em,pdf_path').order('created_at', {ascending: false}).limit(30))]);
+  const ab = t.filter(x => ['aberto', 'parcial'].includes(x.status)), dev = r2(ab.reduce((s, x) => s + +x.saldo, 0)), venc = r2(ab.filter(x => x.situacao === 'vencido').reduce((s, x) => s + +x.saldo, 0));
+  return `<div class="box"><div class="li"><span>Em aberto</span><b>${R(dev)}</b></div><div class="li"><span>Vencido</span><b class="${venc ? 'warn' : ''}">${R(venc)}</b></div></div>
+    ${t.map(x => `<div class="box"><div class="li"><b>${esc(x.descricao)}</b><span class="tag ${x.situacao === 'vencido' ? 'warn' : ''}">${esc(x.situacao)}</span></div>
+      <small>Vence em ${esc(x.data_vencimento)}${x.dias_atraso > 0 && x.status !== 'pago' ? ` · ${x.dias_atraso} dias de atraso` : ''}</small><div>Saldo: <b>${R(x.saldo)}</b></div>
+      ${x.boleto_linha_digitavel ? `<small>Linha digitável: ${esc(x.boleto_linha_digitavel)}</small>` : ''}${url(x.boleto_url) ? `<a href="${url(x.boleto_url)}" target="_blank" rel="noopener">Abrir boleto</a>` : ''}
+      ${x.pix_copia_cola ? `<small>Pix copia e cola: ${esc(x.pix_copia_cola)}</small>` : ''}</div>`).join('') || '<p>Nenhuma conta em aberto.</p>'}
+    <h2>Notas fiscais</h2>${nf.map(n => `<div class="li"><span>${esc(n.tipo.toUpperCase())} ${esc(n.numero || '')} · ${esc(n.status)}<br><small>${D(n.emitida_em)} · ${R(n.valor_total)}</small></span>
+      ${n.pdf_path ? `<button class="ghost" data-a="nf" data-p="${esc(n.pdf_path)}">PDF</button>` : ''}</div>`).join('') || '<p>Nenhuma nota ainda.</p>'}`;
+}
+A.nf = async b => { const d = await ok(sb.storage.from('documentos-fiscais').createSignedUrl(b.dataset.p, 120)); window.open(d.signedUrl, '_blank', 'noopener'); };
+
+async function cRecl() {
+  const [r, v] = await Promise.all([ok(sb.from('reclamacoes').select('id,protocolo,assunto,status,created_at').order('created_at', {ascending: false}).limit(30)),
+    ok(sb.from('vendas').select('id,numero_pedido').order('created_at', {ascending: false}).limit(10))]);
+  return `<form data-f="recl"><select name="tipo"><option value="reclamacao">Reclamação</option><option value="troca_devolucao">Troca/devolução</option><option value="duvida">Dúvida</option><option value="sugestao">Sugestão</option><option value="elogio">Elogio</option></select>
+    <select name="venda"><option value="">Sem pedido relacionado</option>${v.map(x => `<option value="${esc(x.id)}">Pedido #${x.numero_pedido}</option>`).join('')}</select>
+    <input name="assunto" placeholder="Assunto" minlength="3" maxlength="200" required><textarea name="desc" placeholder="Conte o que aconteceu" minlength="3" maxlength="5000" required></textarea><button>Enviar ao SAC</button></form>
+    ${r.map(x => `<div class="box"><div class="li"><b>${esc(x.protocolo)} · ${esc(x.assunto)}</b><span class="tag">${esc(x.status)}</span></div><div id="t${esc(x.id)}"></div>
+      <button class="ghost" data-a="thread" data-id="${esc(x.id)}">Abrir conversa</button></div>`).join('')}`;
+}
+F.recl = async f => { const r = await ok(sb.rpc('abrir_reclamacao', {p_tipo: f.tipo.value, p_assunto: f.assunto.value, p_descricao: f.desc.value, p_venda_id: f.venda.value || null})); toast('Protocolo ' + r.protocolo); return conta(); };
+A.thread = async b => {
+  const id = b.dataset.id;
+  const [r, m] = await Promise.all([ok(sb.from('reclamacoes').select('descricao,status').eq('id', id).single()), ok(sb.from('reclamacao_mensagens').select('autor_tipo,mensagem,created_at').eq('reclamacao_id', id).order('created_at'))]);
+  $('#t' + id).innerHTML = `<p>${esc(r.descricao)}</p>` + m.map(x => `<div><small>${x.autor_tipo === 'cliente' ? 'Você' : 'Loja'} · ${D(x.created_at)}</small><br>${esc(x.mensagem)}</div>`).join('') +
+    (r.status === 'fechada' ? '' : `<form data-f="msg" data-id="${esc(id)}"><textarea name="m" required maxlength="5000" placeholder="Escreva sua resposta"></textarea><button>Responder</button></form>`) +
+    (r.status === 'resolvida' ? `<form data-f="nota" data-id="${esc(id)}"><select name="n"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select><input name="c" placeholder="Comentário (opcional)"><button>Avaliar e encerrar</button></form>` : '');
+};
+F.msg = async f => { await ok(sb.from('reclamacao_mensagens').insert({reclamacao_id: f.dataset.id, autor_tipo: 'cliente', mensagem: f.m.value.trim()})); toast('Enviado'); return conta(); };
+F.nota = async f => { await ok(sb.rpc('avaliar_reclamacao', {p_id: f.dataset.id, p_nota: +f.n.value, p_comentario: f.c.value || null})); toast('Obrigado!'); return conta(); };
+
+// ---------- CAIXA / PDV (somente admin, gerente e caixa) ----------
+async function pdv() {
+  if (!isCaixa()) return app('<p>Acesso restrito à equipe do caixa.</p>');
+  const t = await ok(sb.from('pdv_turnos').select('id,saldo_abertura').eq('status', 'aberto').eq('operador_id', S.fn.id).maybeSingle());
+  if (!t) {
+    const terms = await ok(sb.from('pdv_terminais').select('id,codigo,descricao').eq('ativo', true));
+    return app(`<h2>Abrir caixa</h2><form data-f="abrir"><select name="t">${terms.map(x => `<option value="${esc(x.id)}">${esc(x.codigo)} ${esc(x.descricao || '')}</option>`).join('')}</select>
+      <input name="s" type="number" step="0.01" min="0" value="0" placeholder="Troco inicial (R$)"><button>Abrir turno</button></form>`);
+  }
+  S.t = t.id; pdvView();
+}
+function pdvView() {
+  const it = Object.entries(S.pc), tot = r2(it.reduce((s, [, c]) => s + r2(c.p * c.q), 0));
+  app(`<h2>Caixa</h2><form data-f="pbusca" class="row"><input name="q" id="pq" autofocus autocomplete="off" placeholder="Código de barras ou nome"><button>Buscar</button></form><div id="pres"></div>
+    <div class="box">${it.map(([id, c]) => `<div class="li"><span>${esc(c.n)} × ${c.q}</span><span>${R(c.p * c.q)} <button class="ghost" data-a="pdel" data-id="${esc(id)}">✕</button></span></div>`).join('') || '<small>Carrinho vazio</small>'}
+      <div class="li"><b>Total</b><b>${R(tot)}</b></div></div>
+    <form data-f="ppag"><select name="m"><option value="dinheiro">Dinheiro</option><option value="pix">Pix</option><option value="debito">Débito</option><option value="credito">Crédito</option><option value="vale_alimentacao">Vale-alimentação</option></select>
+    <input name="v" type="number" step="0.01" min="0" placeholder="Valor recebido (só dinheiro)"><button ${it.length ? '' : 'disabled'}>Finalizar venda</button></form>
+    <button class="ghost" data-a="fechar">Fechar caixa</button>`);
+  $('#pq')?.focus();
+}
+F.abrir = async f => { await ok(sb.rpc('abrir_turno', {p_terminal_id: f.t.value, p_saldo_abertura: +f.s.value || 0})); return pdv(); };
+const padd = (id, n, p, w) => {
+  let q = 1;
+  if (w) { q = parseFloat(String(prompt('Peso (kg):', '1') || '').replace(',', '.')); if (!(q > 0)) return; }
+  const c = S.pc[id] || (S.pc[id] = {n, p: +p, q: 0}); c.q = +(c.q + q).toFixed(3); c.p = +p; pdvView();
+};
+F.pbusca = async f => {
+  const q = f.q.value.trim(); if (!q) return;
+  const r = await ok(sb.rpc('buscar_produtos_pdv', {p_termo: q}));
+  if (r.length === 1 && r[0].codigo_barras === q) return padd(r[0].produto_id, r[0].nome, r[0].preco, r[0].vendido_por_peso);
+  $('#pres').innerHTML = r.map(p => `<div class="li"><span>${esc(p.nome)}<br><small>${R(p.preco)} · estoque ${esc(p.estoque_atual)}</small></span>
+    <button data-a="padd" data-id="${esc(p.produto_id)}" data-n="${esc(p.nome)}" data-p="${p.preco}" data-w="${p.vendido_por_peso}">+</button></div>`).join('') || '<small>Nada encontrado</small>';
+};
+A.padd = b => padd(b.dataset.id, b.dataset.n, b.dataset.p, b.dataset.w === 'true');
+A.pdel = b => { delete S.pc[b.dataset.id]; pdvView(); };
+F.ppag = async f => {
+  const it = Object.entries(S.pc), tot = r2(it.reduce((s, [, c]) => s + r2(c.p * c.q), 0)), m = f.m.value;
+  const v = m === 'dinheiro' ? (+f.v.value || tot) : tot;
+  const r = await ok(sb.rpc('finalizar_venda_pdv', {p_turno_id: S.t, p_itens: it.map(([produto_id, c]) => ({produto_id, quantidade: c.q})), p_pagamentos: [{metodo: m, valor: v}]}));
+  S.pc = {}; toast(`Venda #${r.numero_pedido} · total ${R(r.total)} · troco ${R(r.troco)}`); pdvView();
+};
+A.fechar = async () => {
+  const v = parseFloat(String(prompt('Dinheiro contado na gaveta (R$):') || '').replace(',', '.')); if (isNaN(v)) return;
+  const r = await ok(sb.rpc('fechar_turno', {p_turno_id: S.t, p_saldo_informado: v}));
+  S.pc = {}; alert(`Esperado ${R(r.saldo_esperado)} · Informado ${R(r.saldo_informado)} · Diferença ${R(r.diferenca)}`); return pdv();
+};
+
+// ---------- início ----------
+(async () => {
+  try { S.loja = (await ok(sb.from('loja_publica').select('*').maybeSingle())) || {}; await prof(); } catch (e) { toast('Configure SB_URL e SB_KEY no início do arquivo.', 1); }
+  go();
+})();
+</script>
+</body>
+</html>
