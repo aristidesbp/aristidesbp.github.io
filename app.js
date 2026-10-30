@@ -486,6 +486,7 @@ function desenharMenuPrincipal(emailDoOperador) {
 
 <button class="btn-secundario" style="margin:0; padding: 18px 10px;" onclick="desenharModuloPDV()">🛒 PDV (Caixa)</button>
 
+
          
 
                   
