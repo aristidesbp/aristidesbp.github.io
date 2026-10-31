@@ -102,20 +102,182 @@ historico_contexto:
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
+---
+# O que é Supabase?
+* É um Baas (Backend as a Service)
+* Ele usa o recurso de um Backend tradiciona ,poderoso, cuidando do banco de dados (PostgreSQL)
+* Realiza autenticação, armazenamento e muito mais.
+
+---
 # CRIAR UMA CONTA E PROJETO NO SUPABASE:
+## Criar conta e projeto:
 
-Criar conta e projeto
+* Acesse: https://supabase.com
+* Crie uma conta
+* Clique em New Project
 
-    Acesse: https://supabase.com
-    Crie uma conta
-    Clique em New Project
+## Escolha:(exemplo)
 
-Escolha:(exemplo)
+* Nome do projeto: ``` aristidesbp_indica ```
+* Senha do banco: ``` anote_sua_senha_para_nao_perder ```
+* Região: ``` Brasil_se_possivel ```
+* Enable automatic RLS: ```marcado```
 
-    Nome do projeto: erp_abp
-    Senha do banco: ***********
-    Região: brasil
+---
+# Alguns conceitos:
+## Tabelas:
+* Onde os dados são gravados.
+
+## Colunas:
+* Definem: Atributos/Tipo de cada dado.
+* Exemplo: (nome = text,altura = doble)
+
+## Relacionamento:
+* Ligações entre tabelas que compartilham dados em comum.
+
+### EXEMPLO:
+#### TABELAS PRINCIPAIS
+
+
+---
+.........................................
+|Tabela: clientes_limite                |
+.........................................
+| CAMPO      | TIPO    | RELACIONAMENTO |
+.........................................
+| id_cliente | integer |    1-1         | PK: Primary Key (Chave primaria)
+| limite     | float   |                |
+.........................................
+
+---
+.........................................
+|Tabela: clientes                       |
+.........................................
+| CAMPO      | TIPO    | RELACIONAMENTO |
+.........................................
+| id_cliente | integer |    1-1         | PK: Primary Key (Chave primaria)
+| nome       | text    |                |
+| cpf        | text    |                |
+| rg         | text    |                |
+.........................................
+
+---
+...........................................
+|Tabela: produtos                         |
+...........................................
+| CAMPO        | TIPO    | RELACIONAMENTO |
+...........................................
+| id_produto   | integer |                |  PK: Primary Key (Chave primaria)
+| nome_produto | text    |                |
+| valor_unit   | float   |                |
+| peso         | float   |                |
+...........................................
+
+
+#### TABELAS TRANSACIONAIS
+
+---
+..........................................
+|Tabela: pedidos                         |
+..........................................
+| CAMPO       | TIPO    | RELACIONAMENTO |
+..........................................
+| id_pedido   | integer |                | PK: Primary Key (Chave primaria)
+| id_cliente  | integer |                | FK: Foreign Key (Chave Estrangeira)
+| data_pedido | text    |                |
+| total       | float   |                |
+..........................................
+
+---
+..........................................
+|Tabela: detalfes_pedido                 |
+..........................................
+| CAMPO       | TIPO    | RELACIONAMENTO |
+..........................................
+| id_cliente  | integer |                | FK: Foreign Key (Chave Estrangeira)
+| id_produto  | integer |                | FK: Foreign Key (Chave Estrangeira)
+| qtd_produto | float   |                |
+| valor_unit  | float   |                |
+..........................................
+
+
+---
+# Criar banco de dados (usar editor)
+* CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
+```
+-- CRIE AS TABELA categoria:
+CREATE TABLE public.categoria (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+categoria text,
+created_at timestamp with time zone NOT NULL DEFAULT now(),
+CONSTRAINT categoria_pkey PRIMARY KEY (id)
+);
+
+-- CRIE AS TABELA usuarios:
+CREATE TABLE public.usuarios (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,user_id uuid NOT NULL UNIQUE,
+nome_completo text,
+unidade text,
+bio text,
+avatar_url text,
+created_at timestamp with time zone DEFAULT now(),
+CONSTRAINT usuarios_pkey PRIMARY KEY (id),
+CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES
+auth.users(id)
+);
+
+-- CRIE AS TABELA servicos:
+CREATE TABLE public.servicos (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+criado_por bigint NOT NULL,
+titulo text NOT NULL,
+descricao text NOT NULL,
+categoria bigint NOT NULL,
+preco_estimado text,
+foto_url text,
+created_at timestamp with time zone DEFAULT now(),
+terceiro boolean DEFAULT true,
+eu_mesmo boolean DEFAULT false,
+whatsapp text,
+preco_detalhe text,
+CONSTRAINT servicos_pkey PRIMARY KEY (id),
+CONSTRAINT servicos_categoria_fkey FOREIGN KEY (categoria) REFERENCES
+public.categoria(id),
+CONSTRAINT servicos_criado_por_fkey FOREIGN KEY (criado_por) REFERENCES
+public.usuarios(id)
+);
+
+-- CRIE AS TABELA avaliacoes:
+CREATE TABLE public.avaliacoes (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+servico_id bigint NOT NULL,
+autor_id bigint NOT NULL,
+nota integer CHECK (nota >= 1 AND nota <= 5),
+comentario text,
+created_at timestamp with time zone DEFAULT now(),
+CONSTRAINT avaliacoes_pkey PRIMARY KEY (id),
+CONSTRAINT avaliacoes_servico_id_fkey FOREIGN KEY (servico_id)
+REFERENCES public.servicos(id),
+CONSTRAINT avaliacoes_autor_id_fkey FOREIGN KEY (autor_id) REFERENCES
+public.usuarios(id)
+);
+
+-- CRIE AS TABELA favoritos:
+CREATE TABLE public.favoritos (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+usuario_id bigint NOT NULL,
+servico_id bigint NOT NULL,
+created_at timestamp with time zone DEFAULT now(),
+CONSTRAINT favoritos_pkey PRIMARY KEY (id),
+CONSTRAINT favoritos_usuario_id_fkey FOREIGN KEY (usuario_id)
+REFERENCES public.usuarios(id),
+CONSTRAINT favoritos_servico_id_fkey FOREIGN KEY (servico_id)
+REFERENCES public.servicos(id)
+);
+
+```
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
