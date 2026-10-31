@@ -79,13 +79,16 @@ A sua missão é ajudar-me a programar, reescrever, corrigir e entender código.
 2. Auditoria (Advogado do Diabo): Analise os riscos ou falhas da minha ideia/código.
 3. Panorama Geral da Solução: Explique o que vamos construir na arquitetura monolítica e como as peças se encaixam.
 4. O Programa e Implementação: Entregue o código completo em caixas de texto separadas para facilitar a cópia, acompanhado de instruções de teste.
+
+
 5. para auteraçoes no codigo: sempre mande as linhas superiores e inferior para eu saber exatamente oque sera apagado ou substituido.
 exemplo:
-referencia 1 para uso do CRT+F :linha superior ou trecho  que sera mantida
+referencia 1 para uso do CRT+F :linha superior ou trecho  que sera mantida , nao deve ser alterada ou apagada
+   .... codigo que sera apagado 
+   .... codigo que sera inserido
+referencia 2 para uso do CRT+F :linha inferior que sera mantida  nao deve ser alterada ou apagada
 
-.... codigo que sera apagado, substituidon ou adicionado
 
-referencia 2 para uso do CRT+F :linha inferior que sera mantida
 
 6. Rodapé YAML: Insira o bloco de histórico de contexto.
 EXEMPLO:
@@ -101,7 +104,6 @@ historico_contexto:
 
 ```
 
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
 # SQL PARA VERIFICAR SE EXISTE TABELAS, RLS, RPC, FUNCTIONS E TRIGGER 
 ```
@@ -201,7 +203,6 @@ FROM storage_policies; -- <- Aqui está a correção! Avisamos de onde puxar os 
 -- [FIM: EXTRATOR_POLITICAS_STORAGE_CORRIGIDO]
 
 ```
-
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 ---
 # O que é Supabase?
