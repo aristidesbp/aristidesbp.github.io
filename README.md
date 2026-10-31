@@ -315,8 +315,23 @@ CREATE TRIGGER on_auth_user_created
 * Crie um usuario pelo supabase e verifique se ele foi replicado na tabela usuarios!
 
 
+# criando rls 
+```
+Cria um sql para criação das rls abaixo:
 
+Use options above to edit
+alter policy "todo_usuario_pode_ver_os_demais"
+on "public"."usuarios"
+to authenticated
+using (true);
 
+create policy "User Propietario"
+on "public"."usuario"
+as PERMISSIVE
+for ALL
+using ((user_id = auth.uid()))with check((user_id = auth.uid()));
+```
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 
 
@@ -471,22 +486,6 @@ GROUP BY
 /* Agrupa todas as colunas que não participaram das funções matemáticas (AVG e COUNT) para o banco saber condensar as linhas */
 ```
 
-# criando rls
-```
-Use options above to edit
-alter policy "todo_usuario_pode_ver_os_demais"
-on "public"."usuarios"
-to authenticated
-using (true);
-
-
-create policy "User Propietario"
-on "public"."usuario"
-as PERMISSIVE
-for ALL
-using ((user_id = auth.uid()))with check((user_id = auth.uid()));
-
-```
 
 
 # Criando o front-and
