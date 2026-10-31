@@ -105,6 +105,7 @@ historico_contexto:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
 ---
+---
 # O que é Supabase?
 * É um Baas (Backend as a Service)
 * Ele usa o recurso de um Backend tradiciona ,poderoso, cuidando do banco de dados (PostgreSQL)
@@ -136,18 +137,18 @@ historico_contexto:
 
 ## Relacionamento:
 * Ligações entre tabelas que compartilham dados em comum.
+* 1-N: um cliente para muitos (Exemplo: um cliente para muitos pedidos)
 
 ### EXEMPLO:
 #### TABELAS PRINCIPAIS
 
-
 ```
 .........................................
-|Tabela: clientes_limite                |
+|Tabela: limite_credito                 |
 .........................................
 | CAMPO      | TIPO    | RELACIONAMENTO |
 .........................................
-| id_cliente | integer |    1-1         | PK: Primary Key (Chave primaria)
+| id_cliente | integer | 1-1 (cliente)  | PK: Primary Key (Chave primaria)
 | limite     | float   |                |
 .........................................
 ```
@@ -157,7 +158,7 @@ historico_contexto:
 .........................................
 | CAMPO      | TIPO    | RELACIONAMENTO |
 .........................................
-| id_cliente | integer |    1-1         | PK: Primary Key (Chave primaria)
+| id_cliente | integer | 1-N            | PK: Primary Key (Chave primaria/ 1 para MUITO)
 | nome       | text    |                |
 | cpf        | text    |                |
 | rg         | text    |                |
@@ -169,7 +170,7 @@ historico_contexto:
 ...........................................
 | CAMPO        | TIPO    | RELACIONAMENTO |
 ...........................................
-| id_produto   | integer |                |  PK: Primary Key (Chave primaria)
+| id_produto   | integer | 1-N            |  PK: Primary Key (Chave primaria)
 | nome_produto | text    |                |
 | valor_unit   | float   |                |
 | peso         | float   |                |
@@ -185,8 +186,8 @@ historico_contexto:
 ..........................................
 | CAMPO       | TIPO    | RELACIONAMENTO |
 ..........................................
-| id_pedido   | integer |                | PK: Primary Key (Chave primaria)
-| id_cliente  | integer |                | FK: Foreign Key (Chave Estrangeira)
+| id_pedido   | integer | 1-N            | PK: Primary Key (Chave primaria)
+| id_cliente  | integer | N_clientes     | FK: Foreign Key (Chave Estrangeira)
 | data_pedido | text    |                |
 | total       | float   |                |
 ..........................................
@@ -194,17 +195,18 @@ historico_contexto:
 ```
 ```
 ..........................................
-|Tabela: detalfes_pedido                 |
+|Tabela: detalhes_pedido                 |
 ..........................................
 | CAMPO       | TIPO    | RELACIONAMENTO |
 ..........................................
-| id_cliente  | integer |                | FK: Foreign Key (Chave Estrangeira)
-| id_produto  | integer |                | FK: Foreign Key (Chave Estrangeira)
+| id_cliente  | integer |  N_pedido      | FK: Foreign Key (Chave Estrangeira)
+| id_produto  | integer |  N_produto     | FK: Foreign Key (Chave Estrangeira)
 | qtd_produto | float   |                |
 | valor_unit  | float   |                |
 ..........................................
 ```
 
+---
 # Criar banco de dados (usar editor)
 * CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
 ```
@@ -279,6 +281,15 @@ REFERENCES public.servicos(id)
 );
 
 ```
+# Crianndo funções e trigger 
+* Prompt:
+```
+Crie uma função trigger para ser implementada no Supabase com o seguinte objetivo:
+- A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+
+```
+
+
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥   
