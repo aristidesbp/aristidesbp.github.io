@@ -109,71 +109,126 @@ historico_contexto:
 ```
 /*🟥INICIO BLOCO 1: EXTRATOR_DE_SCHEMA_UNIFICADO_V2 🟥*/
 WITH tables_info AS (
-/* Extrai informações das tabelas públicas */
+/* Inicia a expressão comum de tabela (CTE) criando a primeira consulta temporária chamada tables_info */
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    /* Agrupa os resultados em um array JSONB de objetos, usando COALESCE para evitar um retorno nulo */
         'tabela', t.table_name,
+        /* Cria a chave 'tabela' no JSON, que recebe o nome da tabela atual iterada */
         'colunas', (
+        /* Cria a chave 'colunas' que receberá o resultado da subconsulta abaixo */
             SELECT COALESCE(jsonb_agg(c.column_name || ' (' || c.data_type || ')'), '[]'::jsonb)
+            /* Concatena o nome da coluna e seu tipo, agrupa num array JSONB e previne nulos devolvendo '[]' */
             FROM information_schema.columns c
+            /* Consulta a visão padrão do PostgreSQL que armazena os metadados de todas as colunas */
             WHERE c.table_name = t.table_name AND c.table_schema = 'public'
+            /* Filtra para trazer apenas colunas pertencentes à tabela específica do schema public */
         )
+        /* Encerra a subconsulta das colunas daquela tabela */
     )), '[]'::jsonb) AS dados
+    /* Finaliza o objeto da CTE e nomeia a coluna de saída como 'dados' */
     FROM information_schema.tables t
+    /* Consulta a visão padrão do PostgreSQL que armazena os metadados de tabelas */
     WHERE t.table_schema = 'public'
+    /* Filtra para buscar apenas as tabelas pertencentes ao schema public */
 ),
+/* Vírgula para separar esta consulta temporária da próxima */
 rls_info AS (
-/* Extrai políticas RLS do schema public */
+/* Inicia a segunda CTE para mapear as políticas de RLS */
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    /* Agrupa as políticas encontradas num array JSONB de objetos */
         'tabela', tablename,
+        /* Registra o nome da tabela onde a política de segurança está aplicada */
         'politica', policyname,
+        /* Registra o nome atribuído à política de segurança */
         'comando', cmd,
+        /* Registra qual ação é protegida pela política (SELECT, INSERT, ALL, etc.) */
         'roles', roles,
+        /* Registra os papéis de usuário afetados (authenticated, anon, public) */
         'condicao', qual
+        /* Registra a expressão lógica da política (ex: auth.uid() = user_id) */
     )), '[]'::jsonb) AS dados
+    /* Trata ausência de políticas retornando array vazio e nomeia a saída */
     FROM pg_policies
+    /* Consulta o catálogo nativo do banco de dados que guarda regras de RLS */
     WHERE schemaname = 'public'
+    /* Filtra exclusivamente pelas políticas do schema public */
 ),
+/* Vírgula para separar a consulta temporária atual da próxima */
 rpc_info AS (
-/* Extrai funções RPC do schema public */
+/* Inicia a terceira CTE focada nas funções customizadas (RPCs) */
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    /* Agrupa as funções num array JSONB de objetos */
         'funcao', p.proname,
+        /* Registra o nome da função/procedimento */
         'argumentos', pg_get_function_arguments(p.oid),
+        /* Usa uma função nativa para extrair e formatar a lista de argumentos necessários para usar a RPC */
         'retorno', pg_get_function_result(p.oid)
+        /* Usa uma função nativa para extrair o tipo de dado que esta RPC devolverá ao final */
     )), '[]'::jsonb) AS dados
+    /* Protege o formato contra valores nulos e nomeia a coluna */
     FROM pg_proc p
+    /* Consulta o catálogo interno que armazena todos os procedimentos e funções */
     JOIN pg_namespace n ON p.pronamespace = n.oid
+    /* Faz um Join (cruzamento) com a tabela de schemas para descobrir a qual pasta a função pertence */
     WHERE n.nspname = 'public'
+    /* Limita o resultado às funções que residem no schema public */
 ),
+/* Vírgula para separar a consulta temporária atual da próxima */
 triggers_info AS (
-/* Extrai gatilhos (triggers) das tabelas */
+/* Inicia a quarta CTE para monitorar os gatilhos atrelados às tabelas */
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    /* Agrupa os dados dos gatilhos num array JSONB */
         'tabela', event_object_table,
+        /* Identifica a tabela monitorada pelo gatilho */
         'trigger', trigger_name,
+        /* Identifica o nome de identificação do gatilho */
         'evento', event_manipulation,
+        /* Mostra se o gatilho "escuta" eventos de INSERT, UPDATE ou DELETE */
         'tempo', action_timing
+        /* Mostra se o gatilho executa sua ação ANTES (BEFORE) ou DEPOIS (AFTER) do evento */
     )), '[]'::jsonb) AS dados
+    /* Trata resultados vazios e define a saída como 'dados' */
     FROM information_schema.triggers
+    /* Consulta a visão de sistema que relata os gatilhos cadastrados */
     WHERE trigger_schema = 'public'
+    /* Restringe a busca apenas às tabelas do schema public */
 ),
+/* Vírgula para separar a CTE do public da CTE específica de Storage */
 storage_policies AS (
-/* Extrai políticas RLS exclusivas dos buckets de storage */
+/* Inicia a quinta e última CTE dedicada à auditoria dos arquivos guardados */
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    /* Prepara um array JSONB com as regras de segurança dos buckets */
         'politica', policyname,
+        /* O nome da regra de segurança do arquivo */
         'acao', cmd,
+        /* A ação avaliada (ler, baixar, subir, apagar) */
         'roles', roles,
+        /* Quem é verificado antes de executar a ação */
         'condicao', qual
+        /* A lógica de autorização (ex: pertencer ao bucket X ou ser dono Y) */
     )), '[]'::jsonb) AS dados
+    /* Assegura retorno formatado JSONB vazio caso não existam regras */
     FROM pg_policies
+    /* Consulta a tabela mestre de políticas globais do PostgreSQL */
     WHERE schemaname = 'storage' AND tablename = 'objects'
+    /* Filtra pontualmente pelo schema 'storage' e pela tabela 'objects' onde o Supabase gerencia arquivos */
 )
+/* Encerra a declaração e o agrupamento de todas as consultas WITH */
 /* Consolida todas as subconsultas em um único objeto JSON final */
 SELECT jsonb_pretty(jsonb_build_object(
+/* Inicia o SELECT mestre que vai moldar e formatar com indentação bonita as 5 gavetas geradas acima */
     '1_tabelas', (SELECT dados FROM tables_info),
+    /* Cria a chave "1_tabelas" e embute o array processado pela CTE tables_info */
     '2_rls_politicas_public', (SELECT dados FROM rls_info),
+    /* Cria a chave "2_rls_politicas_public" e embute o array da CTE rls_info */
     '3_funcoes_rpc', (SELECT dados FROM rpc_info),
+    /* Cria a chave "3_funcoes_rpc" e embute o array da CTE rpc_info */
     '4_gatilhos_triggers', (SELECT dados FROM triggers_info),
+    /* Cria a chave "4_gatilhos_triggers" e embute o array da CTE triggers_info */
     '5_rls_politicas_storage', (SELECT dados FROM storage_policies)
+    /* Cria a chave "5_rls_politicas_storage" e embute o array da CTE storage_policies */
 )) AS relatorio_completo;
+/* Conclui a consulta final e exige que a resposta chegue nomeada unicamente como 'relatorio_completo' */
 /*🟥FIM BLOCO 1: EXTRATOR_DE_SCHEMA_UNIFICADO_V2 🟥*/
 
 ```
