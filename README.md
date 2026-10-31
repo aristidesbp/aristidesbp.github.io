@@ -141,7 +141,7 @@ historico_contexto:
 #### TABELAS PRINCIPAIS
 
 
----
+```
 .........................................
 |Tabela: clientes_limite                |
 .........................................
@@ -150,7 +150,7 @@ historico_contexto:
 | id_cliente | integer |    1-1         | PK: Primary Key (Chave primaria)
 | limite     | float   |                |
 .........................................
-
+```
 ---
 .........................................
 |Tabela: clientes                       |
