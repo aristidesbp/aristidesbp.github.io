@@ -227,7 +227,22 @@ CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES
 auth.users(id)
 );
 ```
+* resposta (definition)
+```
+create table public.usuarios (
+  id bigint generated always as identity not null,
+  user_id uuid not null,
+  nome_completo text null,
+  unidade text null,
+  bio text null,
+  avatar_url text null,
+  created_at timestamp with time zone null default now(),
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_user_id_key unique (user_id),
+  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
+) TABLESPACE pg_default;
 
+```
 
 # Crianndo funções e trigger para usuarios
 * Prompt:
