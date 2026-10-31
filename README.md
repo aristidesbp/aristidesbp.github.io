@@ -151,7 +151,7 @@ historico_contexto:
 | limite     | float   |                |
 .........................................
 ```
----
+```
 .........................................
 |Tabela: clientes                       |
 .........................................
@@ -162,8 +162,8 @@ historico_contexto:
 | cpf        | text    |                |
 | rg         | text    |                |
 .........................................
-
----
+```
+```
 ...........................................
 |Tabela: produtos                         |
 ...........................................
@@ -174,11 +174,12 @@ historico_contexto:
 | valor_unit   | float   |                |
 | peso         | float   |                |
 ...........................................
+```
 
 
 #### TABELAS TRANSACIONAIS
 
----
+```
 ..........................................
 |Tabela: pedidos                         |
 ..........................................
@@ -190,7 +191,8 @@ historico_contexto:
 | total       | float   |                |
 ..........................................
 
----
+```
+```
 ..........................................
 |Tabela: detalfes_pedido                 |
 ..........................................
@@ -201,9 +203,8 @@ historico_contexto:
 | qtd_produto | float   |                |
 | valor_unit  | float   |                |
 ..........................................
+```
 
-
----
 # Criar banco de dados (usar editor)
 * CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
 ```
