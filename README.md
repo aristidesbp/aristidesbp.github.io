@@ -102,9 +102,7 @@ historico_contexto:
 ```
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
----
 ---
 # O que é Supabase?
 * É um Baas (Backend as a Service)
@@ -208,6 +206,7 @@ historico_contexto:
 
 ---
 # Criar banco de dados (usar editor)
+
 * CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
 ```
 -- CRIE AS TABELA categoria:
@@ -282,13 +281,230 @@ REFERENCES public.servicos(id)
 
 ```
 # Crianndo funções e trigger 
+
+
 * Prompt:
 ```
-Crie uma função trigger para ser implementada no Supabase com o seguinte objetivo:
+Crie uma função e uma trigger para ser implementada no Supabase com o seguinte objetivo:
 - A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+
+create table public.usuarios (
+  id bigint generated always as identity not null,
+  user_id uuid not null,
+  nome_completo text null,
+  unidade text null,
+  bio text null,
+  avatar_url text null,
+  created_at timestamp with time zone null default now(),
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_user_id_key unique (user_id),
+  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
+) TABLESPACE pg_default;
 
 ```
 
+
+* Resposta para function
+```
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+/* Cria ou substitui a função responsável por espelhar o novo usuário no schema public */
+RETURNS trigger AS $$
+/* Define que o tipo de retorno desta rotina é um gatilho (trigger) */
+BEGIN
+/* Inicia o bloco de execução principal da função SQL */
+  INSERT INTO public.usuarios (user_id, nome_completo, avatar_url)
+  /* Comando de inserção apontando para a sua tabela e especificando as colunas alvo */
+  VALUES (
+  /* Declaração dos valores que preencherão as respectivas colunas acima */
+    new.id,
+    /* Captura o ID do usuário recém-criado na auth.users (tipo UUID) e injeta em user_id */
+    new.raw_user_meta_data->>'nome_completo',
+    /* (Opcional) Extrai a chave 'nome_completo' do JSON de metadados caso seja enviada no cadastro */
+    new.raw_user_meta_data->>'avatar_url'
+    /* (Opcional) Extrai a chave 'avatar_url' do JSON de metadados para preencher o perfil */
+  );
+  /* Finaliza o comando de inserção de dados */
+  RETURN new;
+  /* Retorna a nova linha intacta para que o fluxo natural do banco não seja interrompido */
+END;
+/* Encerra o bloco de execução da função */
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+/* Define a linguagem, força a execução com permissão de dono e protege o contexto contra injeções */
+
+CREATE TRIGGER on_auth_user_created
+/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
+  AFTER INSERT ON auth.users
+  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  /* Garante que, para cada linha inserida, a função criada acima seja processada individualmente */
+```
+* reposta para trigger
+
+```
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+/* Remove o gatilho caso você já tenha tentado criá-lo antes, evitando erros de duplicidade */
+
+CREATE TRIGGER on_auth_user_created
+/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
+  AFTER INSERT ON auth.users
+  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  /* Garante que, para cada linha inserida, a função já existente seja processada individualmente */
+```
+* Crie um usuario pelo supabase e verifique se ele foi replicado na tabela usuarios!
+
+# Criando uma view
+* Prompt:
+```
+Crie uma view chamada v_servico_destaque que liste os serviços com o nome de categoria e os detelhes do autor que esta na tabela de usuarios. calcule a media das notas (use 0 se nao houver) e o total de avaliações recebidas por cada serviço, conforme o shema do meu banco de dados:
+   Obsevação: utilize with (security_invoker)!
+
+
+[subistitua_pelo_shema_do_banco]
+
+```
+
+* Resposta:
+```
+
+CREATE OR REPLACE VIEW public.v_servico_destaque WITH (security_invoker = on) AS
+/* Cria a view garantindo que ela respeite as políticas de RLS das tabelas base para o usuário logado */
+SELECT 
+  s.id AS servico_id,
+  s.titulo,
+  s.descricao,
+  s.preco_estimado,
+  s.preco_detalhe,
+  s.foto_url,
+  s.whatsapp,
+  s.terceiro,
+  s.eu_mesmo,
+  s.created_at AS servico_criado_em,
+  /* Seleciona e renomeia as colunas base do serviço */
+  
+  c.categoria AS nome_categoria,
+  /* Traz o nome textual da categoria atrelada ao serviço */
+  
+  u.id AS autor_id,
+  u.nome_completo AS autor_nome,
+  u.avatar_url AS autor_avatar,
+  u.unidade AS autor_unidade,
+  u.bio AS autor_bio,
+  /* Traz os metadados públicos do prestador de serviço (autor) */
+  
+  COALESCE(ROUND(AVG(a.nota), 1), 0) AS media_notas,
+  /* Calcula a média, arredonda para 1 casa decimal e transforma valores nulos em 0 */
+  
+  COUNT(a.id) AS total_avaliacoes
+  /* Conta o volume absoluto de comentários/notas que aquele serviço recebeu */
+
+FROM public.servicos s
+/* Tabela raiz da nossa vitrine */
+
+LEFT JOIN public.categoria c ON s.categoria = c.id
+/* Junta a categoria preservando os serviços, mesmo se houver falha de FK */
+
+LEFT JOIN public.usuarios u ON s.criado_por = u.id
+/* Junta os dados do autor (espelho da auth.users) */
+
+LEFT JOIN public.avaliacoes a ON s.id = a.servico_id
+/* LEFT JOIN crucial: garante que serviços com 0 avaliações NÃO sumam da listagem final */
+
+GROUP BY 
+  s.id,
+  c.categoria,
+  u.id,
+  u.nome_completo,
+  u.avatar_url,
+  u.unidade,
+  u.bio;
+/* Agrupa todas as colunas que não participaram das funções matemáticas (AVG e COUNT) para o banco saber condensar as linhas */
+```
+
+# criando rls
+```
+Use options above to edit
+alter policy "todo_usuario_pode_ver_os_demais"
+on "public"."usuarios"
+to authenticated
+using (true);
+
+
+create policy "User Propietario"
+on "public"."usuario"
+as PERMISSIVE
+for ALL
+using ((user_id = auth.uid()))with check((user_id = auth.uid()));
+
+```
+
+
+# Criando o front-and
+* Prompt - Lovable
+
+```
+Crie a arquitetura full-stack (frontend e backend) para a plataforma
+"Vizinho Indica", um marketplace de serviços comunitário. O design deve
+ser Light Mode, moderno e acolhedor, utilizando a biblioteca Shadcn/UI e
+Tailwind CSS. O backend já está configurado no Supabase.
+
+Paleta de Cores e Estilo Visual:
+Fundo Principal (Light Mode): #F8FAFC (Slate 50 - cinza muito suave para
+conforto visual).
+Destaque Primário (Botões/Links): #059669 (Emerald 600 - verde que
+transmite confiança e vizinhança).
+Destaque Secundário (Avaliações/Alertas): #F59E0B (Amber 500 - cor de
+ouro para as estrelas e destaques).
+Texto Principal/Cabeçalhos: #1E293B (Slate 800 - contraste forte para
+leitura).
+Texto Secundário/Corpo: #64748B (Slate 500).
+Card Background: #FFFFFF (Branco puro com sombras suaves shadow-sm).
+Gradiente: Use o gradiente linear-gradient(135deg, #059669, #34D399) para
+o Hero Section ou botões de destaque máximo.
+Estrutura de Páginas (Layouts): Gere o layout e o scaffolding conectando
+os componentes às tabelas do Supabase já existentes.
+A. Home (Vitrine de Serviços - Pública/Híbrida):
+Hero Section: Título grande "Encontre profissionais de confiança no seu
+condomínio", com uma barra de busca centralizada grande (Input com ícone
+de lupa) e filtros rápidos (Pills/Badges) para categorias (Reformas,
+Aulas, Culinária).
+Grid de Destaques: Utilize a View SQL v_servicos_destaque para renderizar
+cards.
+Componente do Card: Deve conter a foto do serviço (aspect-ratio 16/9),
+foto do prestador (avatar circular pequeno), título, preço estimado e,
+obrigatoriamente, a média de estrelas (ícone ⭐ + nota) que vem da View.
+Floating Action Button (Mobile): Um botão flutuante para "Anunciar" no
+canto inferior direito.
+B. Detalhes do Serviço (/servico/:id - Onde :id é Int8):
+Layout de Coluna Dupla (Desktop):
+Esquerda: Galeria de fotos do serviço e descrição detalhada.
+Direita (Sticky): Card do perfil do prestador (tabela profiles) com botão
+"Chamar no Chat" (CTA Primário) e botão "Favoritar" (ícone de coração
+outline/fill).
+Seção de Prova Social: Lista de comentários vindos da tabela avaliacoes,
+exibindo nome do vizinho e a nota dada.
+C. Dashboard do Usuário (Área Protegida):
+Sidebar ou Menu Superior: Links para "Meus Anúncios", "Favoritos" e
+"Mensagens".
+Meus Anúncios: Tabela ou Lista de cards mostrando os serviços que o
+usuário cadastrou (tabela servicos), com opções de Editar/Excluir.
+Chat Interno: Interface tipo WhatsApp Web. Lista de conversas à esquerda
+e área de chat à direita. Deve ler da tabela mensagens.
+Requisitos Arquiteturais e de Dados:
+Conexão Supabase: O projeto DEVE respeitar o schema existente onde os IDs
+são numéricos (int8), não UUIDs nas rotas (ex: /servico/42).
+Autenticação: Telas de Login/Registro limpas e centralizadas, usando o
+componente Auth do Supabase.
+Componentização:
+Use Card, Badge, Avatar, Button e Dialog do Shadcn/UI.
+Crie um componente StarRating reutilizável para exibir as notas.
+Linguagem: O código-fonte gerado deve usar TypeScript e Tailwind CSS.
+
+ProjectID:
+Anon Key:
+Data api:
+
+```
 
 
 
