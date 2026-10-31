@@ -204,19 +204,15 @@ historico_contexto:
 ..........................................
 ```
 
+
 ---
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Criar banco de dados (usar editor)
-
 * CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+  
+### Criar Tabela usuarios
 ```
--- CRIE AS TABELA categoria:
-CREATE TABLE public.categoria (
-id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-categoria text,
-created_at timestamp with time zone NOT NULL DEFAULT now(),
-CONSTRAINT categoria_pkey PRIMARY KEY (id)
-);
-
 -- CRIE AS TABELA usuarios:
 CREATE TABLE public.usuarios (
 id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,user_id uuid NOT NULL UNIQUE,
@@ -229,6 +225,116 @@ CONSTRAINT usuarios_pkey PRIMARY KEY (id),
 CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES
 auth.users(id)
 );
+```
+
+
+# Crianndo funções e trigger para usuarios
+* Prompt:
+```
+Crie uma função e uma trigger para ser implementada no Supabase com o seguinte objetivo:
+- A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+
+create table public.usuarios (
+  id bigint generated always as identity not null,
+  user_id uuid not null,
+  nome_completo text null,
+  unidade text null,
+  bio text null,
+  avatar_url text null,
+  created_at timestamp with time zone null default now(),
+  constraint usuarios_pkey primary key (id),
+  constraint usuarios_user_id_key unique (user_id),
+  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
+) TABLESPACE pg_default;
+
+```
+
+* Resposta para function
+```
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+/* Cria ou substitui a função responsável por espelhar o novo usuário no schema public */
+RETURNS trigger AS $$
+/* Define que o tipo de retorno desta rotina é um gatilho (trigger) */
+BEGIN
+/* Inicia o bloco de execução principal da função SQL */
+  INSERT INTO public.usuarios (user_id, nome_completo, avatar_url)
+  /* Comando de inserção apontando para a sua tabela e especificando as colunas alvo */
+  VALUES (
+  /* Declaração dos valores que preencherão as respectivas colunas acima */
+    new.id,
+    /* Captura o ID do usuário recém-criado na auth.users (tipo UUID) e injeta em user_id */
+    new.raw_user_meta_data->>'nome_completo',
+    /* (Opcional) Extrai a chave 'nome_completo' do JSON de metadados caso seja enviada no cadastro */
+    new.raw_user_meta_data->>'avatar_url'
+    /* (Opcional) Extrai a chave 'avatar_url' do JSON de metadados para preencher o perfil */
+  );
+  /* Finaliza o comando de inserção de dados */
+  RETURN new;
+  /* Retorna a nova linha intacta para que o fluxo natural do banco não seja interrompido */
+END;
+/* Encerra o bloco de execução da função */
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+/* Define a linguagem, força a execução com permissão de dono e protege o contexto contra injeções */
+
+CREATE TRIGGER on_auth_user_created
+/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
+  AFTER INSERT ON auth.users
+  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  /* Garante que, para cada linha inserida, a função criada acima seja processada individualmente */
+```
+* reposta para trigger
+
+```
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+/* Remove o gatilho caso você já tenha tentado criá-lo antes, evitando erros de duplicidade */
+
+CREATE TRIGGER on_auth_user_created
+/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
+  AFTER INSERT ON auth.users
+  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  /* Garante que, para cada linha inserida, a função já existente seja processada individualmente */
+```
+* Crie um usuario pelo supabase e verifique se ele foi replicado na tabela usuarios!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### TABELA categoria:
+```
+-- CRIE AS TABELA categoria:
+CREATE TABLE public.categoria (
+id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+categoria text,
+created_at timestamp with time zone NOT NULL DEFAULT now(),
+CONSTRAINT categoria_pkey PRIMARY KEY (id)
+);
+```
+
+
+
+
+
+```
+
 
 -- CRIE AS TABELA servicos:
 CREATE TABLE public.servicos (
@@ -280,78 +386,6 @@ REFERENCES public.servicos(id)
 );
 
 ```
-# Crianndo funções e trigger 
-
-
-* Prompt:
-```
-Crie uma função e uma trigger para ser implementada no Supabase com o seguinte objetivo:
-- A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
-
-create table public.usuarios (
-  id bigint generated always as identity not null,
-  user_id uuid not null,
-  nome_completo text null,
-  unidade text null,
-  bio text null,
-  avatar_url text null,
-  created_at timestamp with time zone null default now(),
-  constraint usuarios_pkey primary key (id),
-  constraint usuarios_user_id_key unique (user_id),
-  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
-) TABLESPACE pg_default;
-
-```
-
-
-* Resposta para function
-```
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-/* Cria ou substitui a função responsável por espelhar o novo usuário no schema public */
-RETURNS trigger AS $$
-/* Define que o tipo de retorno desta rotina é um gatilho (trigger) */
-BEGIN
-/* Inicia o bloco de execução principal da função SQL */
-  INSERT INTO public.usuarios (user_id, nome_completo, avatar_url)
-  /* Comando de inserção apontando para a sua tabela e especificando as colunas alvo */
-  VALUES (
-  /* Declaração dos valores que preencherão as respectivas colunas acima */
-    new.id,
-    /* Captura o ID do usuário recém-criado na auth.users (tipo UUID) e injeta em user_id */
-    new.raw_user_meta_data->>'nome_completo',
-    /* (Opcional) Extrai a chave 'nome_completo' do JSON de metadados caso seja enviada no cadastro */
-    new.raw_user_meta_data->>'avatar_url'
-    /* (Opcional) Extrai a chave 'avatar_url' do JSON de metadados para preencher o perfil */
-  );
-  /* Finaliza o comando de inserção de dados */
-  RETURN new;
-  /* Retorna a nova linha intacta para que o fluxo natural do banco não seja interrompido */
-END;
-/* Encerra o bloco de execução da função */
-$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
-/* Define a linguagem, força a execução com permissão de dono e protege o contexto contra injeções */
-
-CREATE TRIGGER on_auth_user_created
-/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
-  AFTER INSERT ON auth.users
-  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-  /* Garante que, para cada linha inserida, a função criada acima seja processada individualmente */
-```
-* reposta para trigger
-
-```
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-/* Remove o gatilho caso você já tenha tentado criá-lo antes, evitando erros de duplicidade */
-
-CREATE TRIGGER on_auth_user_created
-/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
-  AFTER INSERT ON auth.users
-  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-  /* Garante que, para cada linha inserida, a função já existente seja processada individualmente */
-```
-* Crie um usuario pelo supabase e verifique se ele foi replicado na tabela usuarios!
 
 # Criando uma view
 * Prompt:
