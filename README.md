@@ -289,122 +289,90 @@ SELECT jsonb_pretty(jsonb_build_object(
   
 ### Criar Tabela usuarios
 ```
--- CRIE AS TABELA usuarios:
+/*🟥INICIO BLOCO 1: RECRIACAO_USUARIOS_ZERO_TRUST 🟥*/
+
+DROP TABLE IF EXISTS public.usuarios CASCADE;
+/* Remove a tabela existente e suas amarras (views, dependências) para garantir uma recriação limpa e segura */
+
 CREATE TABLE public.usuarios (
-id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,user_id uuid NOT NULL UNIQUE,
-nome_completo text,
-unidade text,
-bio text,
-avatar_url text,
-created_at timestamp with time zone DEFAULT now(),
-CONSTRAINT usuarios_pkey PRIMARY KEY (id),
-CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES
-auth.users(id)
+/* Inicia a criação da tabela no schema público */
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    /* Substitui o bigint vulnerável por UUID v4, impossibilitando adivinhação de IDs (Prevenção IDOR) */
+    user_id uuid NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+    /* Vincula o perfil diretamente ao motor de autenticação. Se o auth for deletado, o perfil é destruído (Cascade) */
+    nome_completo text,
+    /* Armazena o nome do morador/utilizador */
+    unidade text,
+    /* Armazena a identificação do apartamento, lote ou casa (requisito do vizinho_indica) */
+    bio text,
+    /* Armazena a descrição profissional ou pessoal do utilizador */
+    avatar_url text,
+    /* Armazena o link de referência da imagem hospedada no bucket de storage */
+    created_at timestamp with time zone DEFAULT now()
+    /* Registra automaticamente a data e hora da criação sob a proteção do banco */
 );
-```
-* resposta (definition)
-```
-create table public.usuarios (
-  id bigint generated always as identity not null,
-  user_id uuid not null,
-  nome_completo text null,
-  unidade text null,
-  bio text null,
-  avatar_url text null,
-  created_at timestamp with time zone null default now(),
-  constraint usuarios_pkey primary key (id),
-  constraint usuarios_user_id_key unique (user_id),
-  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
-) TABLESPACE pg_default;
+/* Finaliza a estrutura da tabela de usuários */
 
-```
+ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
+/* Ativa a barreira Zero Trust: por padrão, ninguém (nem anon, nem authenticated) consegue ler ou gravar nada */
 
-# Crianndo funções e trigger para usuarios
-* Prompt:
-```
-Crie uma função e uma trigger para ser implementada no Supabase com o seguinte objetivo:
-- A cada novo usuario que for criado no schema auth, deve ser criado o mesmo usuario no schema public na tabela abaixo:
+CREATE POLICY "Usuarios_Podem_Ver_Todos" ON public.usuarios FOR SELECT USING (true);
+/* Permite que o front-end carregue os dados dos prestadores de serviço livremente para a vitrine (regra de leitura pública) */
 
-create table public.usuarios (
-  id bigint generated always as identity not null,
-  user_id uuid not null,
-  nome_completo text null,
-  unidade text null,
-  bio text null,
-  avatar_url text null,
-  created_at timestamp with time zone null default now(),
-  constraint usuarios_pkey primary key (id),
-  constraint usuarios_user_id_key unique (user_id),
-  constraint profiles_user_id_fkey foreign KEY (user_id) references auth.users (id)
-) TABLESPACE pg_default;
+CREATE POLICY "Dono_Pode_Editar_Seu_Perfil" ON public.usuarios FOR UPDATE TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+/* Segurança nível bancário: O update só ocorre se o ID do token de quem clica no front-end for idêntico ao dono da linha */
 
-```
-
-* Resposta para function
-```
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-/* Cria ou substitui a função responsável por espelhar o novo usuário no schema public */
+/* Cria a função (RPC) que espelha os dados no momento do cadastro */
 RETURNS trigger AS $$
-/* Define que o tipo de retorno desta rotina é um gatilho (trigger) */
+/* Define que esta rotina funciona como um gatilho de banco de dados */
 BEGIN
-/* Inicia o bloco de execução principal da função SQL */
+/* Inicia a lógica de execução isolada */
   INSERT INTO public.usuarios (user_id, nome_completo, avatar_url)
-  /* Comando de inserção apontando para a sua tabela e especificando as colunas alvo */
+  /* Comando que insere o novo morador no schema público */
   VALUES (
-  /* Declaração dos valores que preencherão as respectivas colunas acima */
+  /* Mapeia os dados de origem para as colunas destino */
     new.id,
-    /* Captura o ID do usuário recém-criado na auth.users (tipo UUID) e injeta em user_id */
+    /* Captura o ID inviolável gerado pelo motor auth.users */
     new.raw_user_meta_data->>'nome_completo',
-    /* (Opcional) Extrai a chave 'nome_completo' do JSON de metadados caso seja enviada no cadastro */
+    /* Tenta extrair o nome do payload JSON de metadados, se vier no cadastro */
     new.raw_user_meta_data->>'avatar_url'
-    /* (Opcional) Extrai a chave 'avatar_url' do JSON de metadados para preencher o perfil */
+    /* Tenta extrair a URL da foto do payload JSON, se houver */
   );
-  /* Finaliza o comando de inserção de dados */
+  /* Finaliza o comando de inserção */
   RETURN new;
-  /* Retorna a nova linha intacta para que o fluxo natural do banco não seja interrompido */
+  /* Devolve a linha original para não interromper a transação do Supabase */
 END;
-/* Encerra o bloco de execução da função */
+/* Encerra a lógica da função */
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
-/* Define a linguagem, força a execução com permissão de dono e protege o contexto contra injeções */
+/* SECURITY DEFINER garante que a função execute como "super admin", essencial já que o usuário ainda não tem permissões no public */
 
-CREATE TRIGGER on_auth_user_created
-/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
-  AFTER INSERT ON auth.users
-  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-  /* Garante que, para cada linha inserida, a função criada acima seja processada individualmente */
-```
-* reposta para trigger
-
-```
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-/* Remove o gatilho caso você já tenha tentado criá-lo antes, evitando erros de duplicidade */
+/* Remove o gatilho antigo para evitar duplicação de chamadas ao criar usuário */
 
 CREATE TRIGGER on_auth_user_created
-/* Instancia e nomeia o gatilho como 'on_auth_user_created' */
+/* Cria o mecanismo automático no motor do banco */
   AFTER INSERT ON auth.users
-  /* Determina que ele será ativado EXATAMENTE APÓS um novo registro entrar na auth.users */
+  /* Fica escutando exclusivamente eventos de inserção na tabela nativa de autenticação */
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-  /* Garante que, para cada linha inserida, a função já existente seja processada individualmente */
-```
-* Crie um usuario pelo supabase e verifique se ele foi replicado na tabela usuarios!
+  /* A cada linha criada, dispara a função segura que codificamos acima */
 
+INSERT INTO storage.buckets (id, name, public) VALUES ('avatares', 'avatares', true) ON CONFLICT (id) DO NOTHING;
+/* Cria a "pasta" segura para arquivos. Marcada como public=true para que a tag <img src> do HTML consiga renderizar sem tokens complexos */
 
-# criando rls 
-```
-Cria um sql para criação das rls abaixo:
+CREATE POLICY "Leitura_Publica_Avatares" ON storage.objects FOR SELECT USING (bucket_id = 'avatares');
+/* Regra do Storage: Permite que os arquivos de foto sejam lidos por qualquer pessoa visitando a página */
 
-Use options above to edit
-alter policy "todo_usuario_pode_ver_os_demais"
-on "public"."usuarios"
-to authenticated
-using (true);
+CREATE POLICY "Dono_Insere_Seu_Avatar" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'avatares' AND auth.uid() = owner);
+/* Regra do Storage (Zero Trust): Você só pode enviar arquivo se estiver logado E o arquivo for registrado sob sua autoria */
 
-create policy "User Propietario"
-on "public"."usuario"
-as PERMISSIVE
-for ALL
-using ((user_id = auth.uid()))with check((user_id = auth.uid()));
+CREATE POLICY "Dono_Atualiza_Seu_Avatar" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'avatares' AND auth.uid() = owner);
+/* Regra do Storage (Zero Trust): Impede que hackers sobrescrevam arquivos trocando apenas o ID da imagem na requisição */
+
+CREATE POLICY "Dono_Deleta_Seu_Avatar" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'avatares' AND auth.uid() = owner);
+/* Regra do Storage (Zero Trust): Impede que um vizinho apague a foto do outro através do console do navegador */
+
+/*🟥FIM BLOCO 1: RECRIACAO_USUARIOS_ZERO_TRUST 🟥*/
 ```
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 
