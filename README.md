@@ -209,6 +209,7 @@ historico_contexto:
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # Criar banco de dados (usar editor)
 * CRIE AS TABELAS NAS SEGUINTES ORDEM POIS ALGUMAS UTILIZAM "bigint" (Chave estrangeira).
+  
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
   
 ### Criar Tabela usuarios
