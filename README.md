@@ -276,7 +276,9 @@
     }
   </script>
 </body>
-<!--
+</html>
+```
+```
 /*
 manifest.json
 Este arquivo diz ao Android/iOS que o site é um aplicativo instalável.
@@ -297,8 +299,8 @@ Este arquivo diz ao Android/iOS que o site é um aplicativo instalável.
     }
   ]
 }
--->
-<!--
+```
+```
 /*
 sw.js (Service Worker)
 Este arquivo permite que o aplicativo funcione offline e seja
@@ -324,9 +326,6 @@ self.addEventListener('fetch', event => {
       .then(response => response || fetch(event.request))
   );
 });
-
--->
-</html>
 
 ```
 
