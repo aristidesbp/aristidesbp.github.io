@@ -276,6 +276,56 @@
     }
   </script>
 </body>
+<!--
+/*
+manifest.json
+Este arquivo diz ao Android/iOS que o site é um aplicativo instalável.
+ Coloque na mesma pasta do index.html.
+*/
+{
+  "name": "Editor Mobile PWA",
+  "short_name": "Editor",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1e1e1e",
+  "theme_color": "#1e1e1e",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230e639c'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>E</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+-->
+<!--
+/*
+sw.js (Service Worker)
+Este arquivo permite que o aplicativo funcione offline e seja
+instalado na sua tela inicial
+*/
+const CACHE_NAME = 'editor-pwa-v1';
+const urlsToCache = [
+  './',
+  './index.html',
+  './manifest.json'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+
+-->
 </html>
 
 ```
