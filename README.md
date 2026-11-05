@@ -48,6 +48,239 @@
 
 
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+# MEU EDITOR DE TEXTO PWA (Criar PDF)
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Code Editor PWA</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e1e1e">
+  
+  <!-- Biblioteca jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    
+    body { 
+      margin: 0; 
+      display: flex; 
+      flex-direction: column; 
+      height: 100dvh; 
+      background-color: #1e1e1e; 
+      color: #d4d4d4;
+      font-family: sans-serif;
+      overflow: hidden; 
+    }
+
+    .toolbar {
+      flex-shrink: 0; 
+      padding: 10px;
+      background: #252526;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: 1px solid #333;
+      z-index: 10;
+    }
+    
+    .row { 
+      display: flex; 
+      gap: 8px; /* Espaço ligeiramente reduzido para telas pequenas */
+      align-items: center; /* Mantém os itens alinhados verticalmente */
+    }
+    
+    button {
+      padding: 10px;
+      background: #0e639c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap; /* Impede que o texto do botão quebre em duas linhas */
+      cursor: pointer;
+    }
+    
+    #pdfBtn { background: #b32a2a; }
+    
+    input[type="file"] { 
+      padding: 10px;
+      background: #333; 
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      flex: 1; 
+      min-width: 0; /* ESSENCIAL: Permite que o campo encolha no celular, evitando empurrar os botões para fora */
+    }
+    
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      background: #3c3c3c;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 4px;
+      min-width: 0;
+    }
+
+    textarea {
+      flex-grow: 1; 
+      width: 100%;
+      padding: 15px;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      font-family: monospace;
+      font-size: 16px;
+      border: none;
+      resize: none;
+      outline: none;
+      white-space: pre;
+      overflow-wrap: normal;
+      overflow-y: auto; 
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="row">
+      <input type="file" id="fileInput" accept=".txt,.js,.html,.css,.json,.md">
+      <button id="downloadBtn">.txt</button>
+      <button id="pdfBtn">.pdf</button>
+    </div>
+    <div class="row">
+      <input type="text" id="searchInput" placeholder="Buscar texto...">
+      <button id="searchBtn">Próxima</button>
+    </div>
+  </div>
+
+  <textarea id="editor" spellcheck="false" placeholder="Cole ou digite seu código aqui..."></textarea>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const fileInput = document.getElementById('fileInput');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const pdfBtn = document.getElementById('pdfBtn');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    let lastSearchIndex = 0;
+    let lastSearchTerm = "";
+
+    // Upload
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => { editor.value = ev.target.result; };
+      reader.readAsText(file);
+    });
+
+    // Download TXT
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([editor.value], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'codigo_editado.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Download PDF (CORRIGIDO)
+    pdfBtn.addEventListener('click', () => {
+      if (!window.jspdf) {
+        alert("A biblioteca de PDF ainda está carregando.");
+        return;
+      }
+      
+      // Feedback visual: O botão muda para avisar que está trabalhando
+      const originalText = pdfBtn.innerText;
+      pdfBtn.innerText = "Gerando...";
+      pdfBtn.disabled = true;
+
+      // O setTimeout dá tempo ao navegador para renderizar a palavra "Gerando..." antes de travar processando o PDF
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // Fonte de código (monospace) para alinhar os espaçamentos
+          doc.setFont("courier", "normal");
+          doc.setFontSize(10);
+          
+          // Filtro: Mantém letras, números e acentos (Latin-1), mas remove emojis que quebram o PDF
+          const textoLimpo = editor.value.replace(/[^\x00-\xFF\n\r\t]/g, '');
+
+          // Quebra as linhas longas baseando-se na largura (180mm)
+          const linhas = doc.splitTextToSize(textoLimpo, 180); 
+          
+          // Paginação manual para evitar o corte no fim da folha
+          const alturaPagina = doc.internal.pageSize.height;
+          let y = 15;
+          
+          for (let i = 0; i < linhas.length; i++) {
+            if (y > alturaPagina - 15) { // Se chegou na margem de baixo
+              doc.addPage();             // Cria nova folha
+              y = 15;                    // Volta o ponteiro para o topo
+            }
+            doc.text(linhas[i], 15, y);
+            y += 5; // Pula para a próxima linha
+          }
+
+          doc.save('codigo_editado.pdf');
+        } catch (erro) {
+          alert("Erro ao gerar: " + erro.message);
+        } finally {
+          // Devolve o botão ao estado normal
+          pdfBtn.innerText = originalText;
+          pdfBtn.disabled = false;
+        }
+      }, 100);
+    });
+
+    // Busca (Ctrl+F)
+    searchBtn.addEventListener('click', () => {
+      const term = searchInput.value;
+      if (!term) return;
+
+      if (term !== lastSearchTerm) {
+        lastSearchTerm = term;
+        lastSearchIndex = 0;
+      }
+
+      const content = editor.value;
+      const index = content.toLowerCase().indexOf(term.toLowerCase(), lastSearchIndex);
+
+      if (index !== -1) {
+        editor.focus();
+        editor.setSelectionRange(index, index + term.length);
+        lastSearchIndex = index + term.length;
+      } else {
+        alert('Fim das ocorrências. A busca voltará ao início.');
+        lastSearchIndex = 0;
+      }
+    });
+
+    // PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
+
+```
+
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PROJETO ERP SUPABASE + GITHUB-PAGES (em contrução!)
 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
 # PRONPT / HABILIDADES PARA SEU DE ASSISTENTES DE IA
