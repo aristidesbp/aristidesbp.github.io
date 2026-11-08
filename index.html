@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#05060f">
+<meta name="description" content="Catálogo, PDV, estoque, entregas e financeiro num app que funciona offline, sem servidor.">
+<title>Cardápio ADM • Seu comércio inteiro no bolso</title>
+
+  
+ <script src="bt_console.js"></script>
+  
+  
+<style>
+:root{--bg:#05060f;--fg:#e9edff;--mut:#97a0c8;--a:#ff3b4e;--b:#ffb347;--c:#7c5cff;--glass:rgba(255,255,255,.06);--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-2}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(600px circle at var(--mx,50%) var(--my,30%),rgba(255,59,78,.16),transparent 60%),radial-gradient(900px 500px at 80% 100%,rgba(124,92,255,.14),transparent 60%)}
+#prog{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--a),var(--b),var(--c));z-index:50}
+section{padding:96px 20px;max-width:1100px;margin:auto;position:relative}
+h2{font-size:clamp(28px,6vw,48px);line-height:1.1;letter-spacing:-.03em;margin-bottom:12px}
+.sub{color:var(--mut);max-width:620px;margin-bottom:40px}
+.grad{background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--a));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.rev{opacity:0;transform:translateY(46px) scale(.97);filter:blur(10px);transition:all .9s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.rev.in{opacity:1;transform:none;filter:none}
+
+/* HERO */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding-top:60px}
+.tag{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(10px);padding:6px 14px;border-radius:99px;font-size:13px;color:var(--mut);margin-bottom:22px}
+.tag i{width:8px;height:8px;border-radius:50%;background:#35e08a;box-shadow:0 0 0 0 #35e08a;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px transparent}}
+h1{font-size:clamp(40px,10.5vw,104px);line-height:.98;letter-spacing:-.05em;font-weight:800}
+h1 .l{display:inline-block;opacity:0;transform:translateY(80px) rotateX(-90deg);animation:up .9s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:calc(var(--i)*40ms + .2s)}
+@keyframes up{to{opacity:1;transform:none}}
+.lead{font-size:clamp(17px,3.6vw,24px);color:var(--mut);max-width:640px;margin:26px 0 34px}
+.lead b{color:var(--fg)}#rot{color:var(--b);border-right:3px solid var(--b);padding-right:4px;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{border-color:transparent}}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 28px;border-radius:99px;font-weight:700;text-decoration:none;color:#fff;background:linear-gradient(120deg,var(--a),#ff7a3b);position:relative;overflow:hidden;box-shadow:0 10px 40px -8px var(--a);transition:transform .2s}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55),transparent 70%);transform:translateX(-120%);animation:shine 3s infinite}
+@keyframes shine{40%,100%{transform:translateX(120%)}}
+.ghost{background:var(--glass);border:1px solid var(--line);box-shadow:none;margin-left:10px}
+.scroll{position:absolute;bottom:26px;left:50%;translate:-50% 0;width:26px;height:42px;border:2px solid var(--line);border-radius:14px}
+.scroll::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:var(--b);animation:dot 1.6s infinite}
+@keyframes dot{60%{transform:translateY(14px);opacity:0}}
+
+/* NÚMEROS */
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.num{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);border-radius:20px;padding:26px;text-align:center}
+.num b{display:block;font-size:clamp(38px,7vw,60px);letter-spacing:-.04em}.num span{color:var(--mut);font-size:14px}
+
+/* FLUXO */
+.flow{position:relative;padding-left:46px}
+.flow::before,.flow::after{content:"";position:absolute;left:15px;top:0;width:3px;border-radius:3px}
+.flow::before{bottom:0;background:var(--line)}
+.flow::after{height:calc(var(--p,0)*100%);background:linear-gradient(var(--a),var(--b),var(--c));box-shadow:0 0 18px var(--a)}
+.step{position:relative;margin-bottom:34px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:var(--glass);backdrop-filter:blur(10px)}
+.step::before{content:attr(data-n);position:absolute;left:-46px;top:18px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--bg);border:2px solid var(--line);transition:.5s}
+.step.in::before{border-color:var(--a);background:var(--a);box-shadow:0 0 24px var(--a)}
+.step h3{margin-bottom:4px}.step p{color:var(--mut);font-size:15px}
+
+/* DEMO CELULAR */
+.demo{display:grid;gap:40px;align-items:center}
+@media(min-width:820px){.demo{grid-template-columns:1fr 360px}}
+.phone{width:min(330px,100%);margin:auto;border-radius:38px;padding:12px;background:linear-gradient(160deg,#242846,#0b0d1c);border:1px solid var(--line);box-shadow:0 40px 100px -20px rgba(124,92,255,.5);animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px) rotate(.6deg)}}
+.screen{height:440px;border-radius:28px;background:#0b141a;padding:14px 12px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.m{max-width:88%;padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.4;opacity:0;transform:translateY(14px) scale(.9);transition:.45s cubic-bezier(.2,.9,.3,1.3)}
+.m.show{opacity:1;transform:none}
+.m.c{align-self:flex-end;background:#005c4b}.m.s{align-self:flex-start;background:#1e2a44;border:1px solid var(--line)}
+.m.ok{background:rgba(53,224,138,.16);border:1px solid #35e08a;color:#9dffc9}
+.m small{opacity:.6;display:block;font-size:10px;word-break:break-all}
+
+/* TABS */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{cursor:pointer;border:1px solid var(--line);background:var(--glass);color:var(--fg);border-radius:99px;padding:10px 18px;font:inherit;font-size:14px;transition:.3s}
+.tabs button.on{background:linear-gradient(120deg,var(--a),#ff7a3b);border-color:transparent;box-shadow:0 8px 28px -6px var(--a)}
+.panel{display:none;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);border-radius:22px;padding:26px;animation:fade .5s}
+.panel.on{display:block}.panel li{margin:8px 0 8px 18px;color:var(--mut)}.panel li b{color:var(--fg)}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;perspective:900px}
+.card{--rx:0deg;--ry:0deg;position:relative;padding:26px;border-radius:22px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .15s,border-color .3s}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(300px circle at var(--x,50%) var(--y,0%),rgba(255,120,80,.22),transparent 60%);opacity:0;transition:.3s}
+.card:hover::before{opacity:1}.card:hover{border-color:rgba(255,120,80,.5)}
+.card .ic{font-size:34px;display:block;margin-bottom:10px;filter:drop-shadow(0 6px 14px rgba(255,59,78,.5))}
+.card h3{margin-bottom:6px}.card p{color:var(--mut);font-size:14.5px}
+
+/* TRANSPARÊNCIA + CTA */
+.honest{border:1px dashed rgba(255,179,71,.5);border-radius:22px;padding:24px;background:rgba(255,179,71,.05)}
+.honest li{margin:8px 0 8px 18px;color:var(--mut);font-size:15px}.honest li b{color:var(--b)}
+.final{text-align:center;padding:130px 20px 150px}
+.final h2{font-size:clamp(34px,8vw,76px)}
+.cta{font-size:clamp(18px,4vw,24px);padding:22px 46px;margin-top:22px;will-change:transform}
+.burst{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:99}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rev{opacity:1;transform:none;filter:none}h1 .l{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><div id="prog"></div>
+
+<section class="hero">
+  <div class="tag"><i></i> Funciona offline • sem servidor • instalável</div>
+  <h1 id="h1"></h1>
+  <p class="lead">Catálogo, <b>PDV</b>, <b>estoque</b>, <b>entregas</b> e <b>financeiro</b> num só app. Do jeito que você já vende: pelo WhatsApp. Perfeito para <span id="rot"></span></p>
+  <div>
+
+
+<a class="btn" href="adm_v11.html">Abrir o ADM →</a>
+  <a class="btn ghost" href="#como">Ver como funciona</a></div>
+<a class="btn" href="meu_catalogo.html">Meu Catalogo →</a>
+
+
+
+ <div class="scroll"></div>
+</section>
+
+<section>
+  <div class="nums">
+    <div class="num rev"><b class="grad" data-to="0">0</b><span>servidores para pagar</span></div>
+    <div class="num rev" style="--d:.1s"><b class="grad" data-to="5000" data-plus="+">0</b><span>produtos testados com fotos</span></div>
+    <div class="num rev" style="--d:.2s"><b class="grad" data-to="9">0</b><span>áreas num só lugar</span></div>
+    <div class="num rev" style="--d:.3s"><b class="grad" data-to="100" data-suf="%">0</b><span>seus dados, no seu aparelho</span></div>
+  </div>
+</section>
+
+<section id="como">
+  <h2 class="rev">Do produto ao <span class="grad">dinheiro no caixa</span></h2>
+  <p class="sub rev">O caminho completo de um pedido, sem planilha, sem caderno e sem copiar e colar.</p>
+  <div class="flow" id="flow">
+    <div class="step rev" data-n="1"><h3>Cadastre ou importe</h3><p>Fotos pela câmera, código de barras lido pela câmera e importação de XML de NF-e com tabela para conferir antes de gravar. O estoque já entra junto.</p></div>
+    <div class="step rev" data-n="2"><h3>Gere o catalogo.html</h3><p>Um clique cria o cardápio do cliente: público, rápido e sem custo, margem ou dados fiscais.</p></div>
+    <div class="step rev" data-n="3"><h3>O cliente pede pelo WhatsApp</h3><p>Ele monta a sacola, informa endereço e CEP e envia. A mensagem leva só código e quantidade dos itens.</p></div>
+    <div class="step rev" data-n="4"><h3>Você valida</h3><p>Compartilhe a mensagem direto para o app. O preço vem do SEU banco, nunca da mensagem, e produto desconhecido ou estoque curto geram alerta.</p></div>
+    <div class="step rev" data-n="5"><h3>Entrega e recebimento</h3><p>Confirme a entrega (estoque baixa) e depois o recebimento. Só então o pedido conta no financeiro. Imprima o cupom para o motoboy.</p></div>
+    <div class="step rev" data-n="6"><h3>Feche o turno</h3><p>Sangrias, conferência do dinheiro, filtro por período, impressão e XML para emitir a NF-e.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="demo">
+    <div><h2 class="rev">Veja um pedido <span class="grad">acontecendo</span></h2>
+    <p class="sub rev">Do clique do cliente ao financeiro atualizado, em segundos. Esta animação roda em loop: é exatamente o fluxo do app.</p></div>
+    <div class="phone rev"><div class="screen" id="chat"></div></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="rev">Tudo que cabe <span class="grad">no seu dia</span></h2>
+  <p class="sub rev">Passe o dedo ou o mouse sobre os cards.</p>
+  <div class="grid">
+    <div class="card rev"><span class="ic">📋</span><h3>Catálogo e estoque</h3><p>Categorias livres, tamanho, código de barras, estoque mínimo com alerta e item esgotado no catálogo do cliente.</p></div>
+    <div class="card rev" style="--d:.08s"><span class="ic">📄</span><h3>NF-e de compra</h3><p>Importe o XML, edite numa tabela, aplique margem e dê entrada no estoque. Campos fiscais no cadastro.</p></div>
+    <div class="card rev" style="--d:.16s"><span class="ic">🧾</span><h3>PDV de balcão</h3><p>Busca por nome ou código, leitor de código de barras, troco automático e sangria de caixa.</p></div>
+    <div class="card rev"><span class="ic">🔐</span><h3>Validação de pedidos</h3><p>Checksum, preço do seu banco, duplicidade e estoque conferidos antes de você aceitar.</p></div>
+    <div class="card rev" style="--d:.08s"><span class="ic">📦</span><h3>Entregas</h3><p>Pendente, entregue, recebido. O dinheiro só vira receita quando você confirma.</p></div>
+    <div class="card rev" style="--d:.16s"><span class="ic">💰</span><h3>Financeiro</h3><p>Turnos, entradas, saídas, filtro por data e tipo, busca, cupom e impressão do período.</p></div>
+    <div class="card rev"><span class="ic">🔄</span><h3>Sincronização por ficha</h3><p>Vários caixas trabalham offline e depois mesclam os backups. Vendas e estoque somam, nada é sobrescrito.</p></div>
+    <div class="card rev" style="--d:.08s"><span class="ic">📲</span><h3>App instalável</h3><p>Ícone na tela, funciona sem internet e recebe o texto do WhatsApp pelo botão Compartilhar.</p></div>
+    <div class="card rev" style="--d:.16s"><span class="ic">🎨</span><h3>A sua marca</h3><p>Banner, logo, nome, WhatsApp, endereço e tema claro/escuro no catálogo.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="rev">Comece em <span class="grad">5 passos</span></h2>
+  <p class="sub rev">Toque em cada etapa.</p>
+  <div class="tabs rev" id="tabs"><button class="on">1 · Configurar</button><button>2 · Cadastrar</button><button>3 · Publicar</button><button>4 · Vender</button><button>5 · Fechar o dia</button></div>
+  <div class="panels rev">
+    <div class="panel on"><ul><li>Abra o ADM e vá em <b>⚙️ Configuração</b>: nome, WhatsApp, endereço, banner e logo.</li><li>Preencha CNPJ, IE, UF e CRT se for emitir nota.</li><li>Instale como app pelo menu <b>📲 Instalar aplicativo</b>.</li></ul></div>
+    <div class="panel"><ul><li>Em <b>Catálogo</b>, toque em <b>+ Adicionar produtos</b> e use a câmera para a foto e o código de barras.</li><li>Ou importe o <b>XML da nota de compra</b>: confira a tabela e salve.</li><li>Ative <b>Controlar estoque</b> nos itens que quiser acompanhar.</li></ul></div>
+    <div class="panel"><ul><li>No menu, toque em <b>🚀 Gerar Site (catalogo.html)</b>.</li><li>Hospede o arquivo (ex.: GitHub Pages) e divulgue o link.</li><li>Refaça o processo sempre que mudar preços ou fotos.</li></ul></div>
+    <div class="panel"><ul><li>Pedido chegou? <b>Compartilhe a mensagem</b> do WhatsApp com o app: ele valida na hora.</li><li>Registre, confirme a <b>entrega</b> e depois o <b>recebimento</b>.</li><li>Venda no balcão? Use o <b>PDV</b>, com leitor de código de barras.</li></ul></div>
+    <div class="panel"><ul><li>Registre <b>sangrias</b> durante o turno e confira o dinheiro ao fechar.</li><li>No <b>Financeiro</b>, filtre por período, imprima ou exporte o XML.</li><li>Faça o <b>backup</b> e, com vários caixas, use <b>Sincronizar</b>.</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="honest rev"><h3 style="margin-bottom:6px">🔎 Transparência, sem letrinha miúda</h3><ul>
+    <li><b>Seus dados ficam no aparelho.</b> Faça backups com frequência; limpar o navegador apaga tudo.</li>
+    <li><b>O catálogo público não leva custo, dados fiscais nem Pix.</b> O preço do pedido sempre vem do seu banco.</li>
+    <li><b>O XML de venda é para conferência:</b> sem assinatura, em homologação. A emissão oficial da NF-e é feita no emissor autorizado.</li>
+    <li><b>Instalar como app exige HTTPS</b> (como o GitHub Pages).</li></ul></div>
+</section>
+
+<section class="final">
+  <h2 class="rev">Pronto para <span class="grad">vender melhor</span>?</h2>
+  <p class="sub rev" style="margin:0 auto">Abra o ADM, cadastre o primeiro produto e veja o seu catálogo nascer.</p>
+  
+
+<a class="btn cta rev" id="cta" href="adm_v11.html">🚀 Abrir o adm_v11</a>
+<br>
+<a class="btn cta rev" id="cta" href="meu_catalogo.html">🛒 Abrir o meu Catálogo</a>
+
+
+</section>
+<footer>Feito para o pequeno comércio que vende pelo WhatsApp.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))},rm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Título letra por letra */
+var t="Seu comércio inteiro no bolso",h=$("#h1"),i=0;
+t.split(" ").forEach(function(w,wi,a){var s=document.createElement("span");s.style.whiteSpace="nowrap";s.style.display="inline-block";w.split("").forEach(function(c){var l=document.createElement("span");l.className="l"+(wi>2?" grad":"");l.style.setProperty("--i",i++);l.textContent=c;s.appendChild(l)});h.appendChild(s);if(wi<a.length-1)h.appendChild(document.createTextNode(" "))});
+
+/* Palavras que se digitam */
+var ws=["pizzarias","mercadinhos","lojas de roupa","lanchonetes","padarias","qualquer comércio"],wi=0,ci=0,del=false,rot=$("#rot");
+(function tick(){var w=ws[wi];ci+=del?-1:1;rot.textContent=w.slice(0,ci);var d=del?35:75;if(!del&&ci==w.length){del=true;d=1400}else if(del&&ci==0){del=false;wi=(wi+1)%ws.length;d=300}setTimeout(tick,d)})();
+
+/* Revelar ao rolar + contadores + fluxo */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");var b=e.target.querySelector&&e.target.querySelector("[data-to]");if(b&&!b.done)cont(b);io.unobserve(e.target)}})},{threshold:.15});
+$$(".rev").forEach(function(e){io.observe(e)});
+function cont(b){b.done=1;var to=+b.dataset.to,s=performance.now();(function f(n){var p=Math.min((n-s)/1600,1),v=Math.round(to*(1-Math.pow(1-p,4)));b.textContent=v.toLocaleString("pt-BR")+(b.dataset.plus&&p==1?"+":"")+(b.dataset.suf||"");if(p<1)requestAnimationFrame(f)})(s)}
+
+/* Scroll: barra, linha do fluxo, cena 3D */
+var sp=0,flow=$("#flow");
+function onScroll(){var m=document.documentElement.scrollHeight-innerHeight;sp=m>0?scrollY/m:0;$("#prog").style.transform="scaleX("+sp+")";var r=flow.getBoundingClientRect();flow.style.setProperty("--p",Math.max(0,Math.min(1,(innerHeight*.6-r.top)/r.height)))}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+/* Brilho do cursor e inclinação dos cards */
+var mx=0,my=0;
+addEventListener("pointermove",function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;document.body.style.setProperty("--mx",e.clientX+"px");document.body.style.setProperty("--my",e.clientY+"px")});
+$$(".card").forEach(function(c){c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty("--x",x*100+"%");c.style.setProperty("--y",y*100+"%");c.style.setProperty("--ry",(x-.5)*14+"deg");c.style.setProperty("--rx",(.5-y)*14+"deg")});c.addEventListener("pointerleave",function(){c.style.setProperty("--rx","0deg");c.style.setProperty("--ry","0deg")})});
+
+/* Abas */
+var tb=$$("#tabs button"),pn=$$(".panel");
+tb.forEach(function(b,k){b.onclick=function(){tb.forEach(function(x,j){x.classList.toggle("on",j==k);pn[j].classList.toggle("on",j==k)})}});
+
+/* Celular: o pedido acontecendo, em loop */
+var chat=$("#chat"),z=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+async function msg(cls,html,w){var d=document.createElement("div");d.className="m "+cls;d.innerHTML=html;chat.appendChild(d);await z(60);d.classList.add("show");await z(w||1100);return d}
+(async function loop(){while(true){chat.innerHTML="";
+ await msg("c","🛒 <b>NOVO PEDIDO</b><br>👤 Aris • 📮 66080-471<br>2× Margarina 250g<br><b>TOTAL R$ 134,94</b>");
+ await msg("c","<small>🔐 PED: mw6l9x9t|6LB7D6|1794…x2|KN1A…</small>",900);
+ await msg("s","📲 Compartilhado com o ADM…",900);
+ var v=await msg("s","⏳ Conferindo com o seu banco…",1200);v.remove();
+ await msg("ok","✅ <b>Íntegro</b> • total pelo seu banco: R$ 134,94<br>📦 estoque suficiente");
+ await msg("s","🚚 Entrega confirmada • estoque −2");
+ await msg("ok","💰 Recebido no Pix<br>📊 <b>Financeiro atualizado</b>",3200);
+ chat.querySelectorAll(".m").forEach(function(m){m.classList.remove("show")});await z(700)}})();
+
+/* Botão magnético + explosão de partículas */
+var cta=$("#cta");
+cta.addEventListener("pointermove",function(e){var r=cta.getBoundingClientRect();cta.style.transform="translate("+(e.clientX-r.left-r.width/2)*.2+"px,"+(e.clientY-r.top-r.height/2)*.3+"px) scale(1.05)"});
+cta.addEventListener("pointerleave",function(){cta.style.transform=""});
+$$(".btn").forEach(function(b){b.addEventListener("click",function(e){if(rm)return;for(var k=0;k<24;k++){var p=document.createElement("i");p.className="burst";p.style.left=e.clientX+"px";p.style.top=e.clientY+"px";p.style.background=["#ff3b4e","#ffb347","#7c5cff"][k%3];document.body.appendChild(p);var a=Math.random()*6.28,d=60+Math.random()*90;p.animate([{transform:"translate(0,0)",opacity:1},{transform:"translate("+Math.cos(a)*d+"px,"+Math.sin(a)*d+"px) scale(0)",opacity:0}],{duration:700,easing:"ease-out"}).onfinish=function(){this.effect.target.remove()}}})});
+
+/* Cena 3D: galáxia de partículas + poliedro que reage ao scroll e ao mouse */
+if(window.THREE&&!rm){
+ var cv=$("#bg"),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+ var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(60,1,.1,300);C.position.z=30;
+ var N=innerWidth<700?2400:5200,P=new Float32Array(N*3),K=new Float32Array(N*3),col=new THREE.Color();
+ for(var n=0;n<N;n++){var rad=Math.pow(Math.random(),.6)*70,an=Math.random()*6.283+rad*.13+(n%3)*2.094;
+  P[n*3]=Math.cos(an)*rad+(Math.random()-.5)*5;P[n*3+1]=(Math.random()-.5)*(8+rad*.18);P[n*3+2]=Math.sin(an)*rad-25+(Math.random()-.5)*5;
+  col.setHSL(.99-rad/220,.9,.62);K[n*3]=col.r;K[n*3+1]=col.g;K[n*3+2]=col.b}
+ var G=new THREE.BufferGeometry();G.setAttribute("position",new THREE.BufferAttribute(P,3));G.setAttribute("color",new THREE.BufferAttribute(K,3));
+ var pts=new THREE.Points(G,new THREE.PointsMaterial({size:.4,vertexColors:true,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false}));S.add(pts);
+ var ico=new THREE.Mesh(new THREE.IcosahedronGeometry(7,1),new THREE.MeshBasicMaterial({color:0xff3b4e,wireframe:true,transparent:true,opacity:.3}));S.add(ico);
+ var ring=new THREE.Mesh(new THREE.TorusGeometry(11,.05,8,120),new THREE.MeshBasicMaterial({color:0x7c5cff,transparent:true,opacity:.5}));ring.rotation.x=1.2;S.add(ring);
+ function fit(){R.setSize(innerWidth,innerHeight,false);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()}fit();addEventListener("resize",fit);
+ var tm=0;(function loop3(){tm+=.01;pts.rotation.y=tm*.12+sp*3;ico.rotation.x=tm*.5+sp*6;ico.rotation.y=tm*.35;ring.rotation.z=tm*.4;
+  var s=1+Math.sin(tm*2)*.06+sp*1.6;ico.scale.set(s,s,s);ico.position.y=-sp*14;ico.position.x=Math.sin(sp*9)*9;ico.material.color.setHSL((.99+sp*.7)%1,.9,.6);
+  C.position.x+=(mx*8-C.position.x)*.05;C.position.y+=(-my*5-sp*6-C.position.y)*.05;C.lookAt(0,-sp*6,0);R.render(S,C);requestAnimationFrame(loop3)})();
+}
+})();
+</script>
+</body>
+</html>
