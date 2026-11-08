@@ -255,7 +255,7 @@ tb.forEach(function(b,k){b.onclick=function(){tb.forEach(function(x,j){x.classLi
 var chat=$("#chat"),z=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
 async function msg(cls,html,w){var d=document.createElement("div");d.className="m "+cls;d.innerHTML=html;chat.appendChild(d);await z(60);d.classList.add("show");await z(w||1100);return d}
 (async function loop(){while(true){chat.innerHTML="";
- await msg("c","🛒 <b>NOVO PEDIDO</b><br>👤 Aris • 📮 66080-471<br>2× Margarina 250g<br><b>TOTAL R$ 134,94</b>");
+ await msg("c","🛒 <b>NOVO PEDIDO</b><br>👤 Aris • 📮 66080-471<br>2× Camisa polo<br><b>TOTAL R$ 134,94</b>");
  await msg("c","<small>🔐 PED: mw6l9x9t|6LB7D6|1794…x2|KN1A…</small>",900);
  await msg("s","📲 Compartilhado com o ADM…",900);
  var v=await msg("s","⏳ Conferindo com o seu banco…",1200);v.remove();
