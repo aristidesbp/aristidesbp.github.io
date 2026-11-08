@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meu Estabelecimento</title>
+    
+    <script>function hashPedido(str, salt) { /* hash de 2x53 bits (cyrb53) com sal da loja */
+            function c(s, seed) {
+                let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+                for (let i = 0; i < s.length; i++) { const ch = s.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+                h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+                h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+                return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+            }
+            const t = salt + "|" + str;
+            return (c(t, 1).toString(36) + c(t, 7).toString(36)).toUpperCase().slice(0, 14);
+        }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { ifoodRed: '#ea1d2c', ifoodBg: '#f7f7f7' } } } }</script>
+    <style>html.dark body{background:#0f172a;color:#e2e8f0}html.dark .bg-white{background:#1e293b!important}html.dark .bg-gray-50,html.dark .bg-gray-100{background:#334155!important}html.dark .text-gray-800,html.dark .text-gray-700{color:#f1f5f9!important}html.dark .text-gray-500,html.dark .text-gray-600{color:#94a3b8!important}html.dark input,html.dark textarea{background:#334155!important;color:#f1f5f9!important;border-color:#475569!important}.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style>
+</head>
+<body class="bg-ifoodBg text-gray-800 font-sans pb-24 antialiased">
+
+    <div class="relative w-full h-40 bg-gradient-to-br from-ifoodRed to-red-900">
+        <img id="img-banner" class="hidden absolute inset-0 w-full h-full object-cover" alt="Capa">
+        <button id="btn-tema" class="hidden absolute top-3 left-3 bg-black/40 text-white rounded-full w-10 h-10 z-10">🌙</button>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 flex items-center gap-3 w-full pr-4">
+            <div class="w-16 h-16 rounded-full border-2 border-white bg-white overflow-hidden shadow-lg flex-shrink-0 flex items-center justify-center text-3xl">
+                <img id="img-logo" class="hidden w-full h-full object-cover" alt="Logo">
+                <span id="logo-padrao">🛍️</span>
+            </div>
+            <div class="text-white">
+                <h1 id="txt-nome" class="text-2xl font-extrabold drop-shadow-md"></h1>
+                <p id="txt-subtitulo" class="text-xs font-medium text-gray-200 drop-shadow-md"></p>
+                <p id="txt-end" class="text-[11px] text-gray-300"></p>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white sticky top-0 z-40 shadow-sm flex flex-col w-full">
+        <div class="px-4 pt-3 pb-2">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">🔍</span>
+                <input type="text" id="campo-busca" placeholder="Busque por item..." class="w-full bg-gray-100 text-gray-700 rounded-lg py-2.5 pl-10 pr-4 focus:outline-none focus:ring-1 focus:ring-ifoodRed transition-all">
+            </div>
+        </div>
+        <nav id="container-filtros" class="flex gap-3 px-4 py-2 overflow-x-auto no-scrollbar bg-white border-b border-gray-100"></nav>
+    </header>
+
+    <main class="container mx-auto max-w-2xl px-4 mt-4">
+        <div id="vitrine-produtos" class="space-y-4"></div>
+    </main>
+
+    <div id="container-carrinho-flutuante" class="fixed bottom-0 left-0 right-0 p-4 bg-transparent z-40 hidden">
+        <button id="btn-abrir-carrinho" class="w-full max-w-2xl mx-auto bg-ifoodRed text-white flex items-center justify-between px-6 py-4 rounded-lg shadow-lg font-medium active:scale-95 transition-transform">
+            <span id="txt-qtd-carrinho" class="bg-white/20 px-2 py-1 rounded text-sm">0</span>
+            <span class="font-bold">Ver sacola</span>
+            <span id="txt-total-carrinho">R$ 0,00</span>
+        </button>
+    </div>
+
+    <div id="modal-carrinho" class="fixed inset-0 bg-black/60 z-50 hidden flex-col justify-end">
+        <div class="bg-white w-full max-w-2xl mx-auto rounded-t-2xl p-6 max-h-[90vh] overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h2 class="text-xl font-bold">Sua Sacola</h2>
+                <button id="btn-fechar-carrinho" class="text-gray-500 font-bold text-xl p-2">✕</button>
+            </div>
+            <div id="lista-carrinho" class="flex-1 overflow-y-auto space-y-4 mb-4"></div>
+            <div class="border-t pt-4 mb-6"><div class="flex justify-between text-lg font-bold"><span>Total</span><span id="modal-total-carrinho">R$ 0,00</span></div></div>
+            <div id="area-pagamento" class="mb-4 space-y-2"></div>
+            <div class="space-y-3 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wider mb-2">Dados de Entrega</h3>
+                <input type="text" id="cli-nome" placeholder="Seu nome completo" class="w-full bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-ifoodRed">
+                <input type="text" id="cli-cep" inputmode="numeric" maxlength="9" placeholder="CEP * (00000-000)" class="w-full bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-ifoodRed">
+                <input type="text" id="cli-endereco" maxlength="200" autocomplete="street-address" autocapitalize="sentences" placeholder="Endereço (Rua, Número, Bairro)" class="w-full bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-ifoodRed">
+                <input type="number" id="cli-troco" placeholder="Troco para? (Opcional)" class="w-full bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-ifoodRed">
+            </div>
+            <button id="btn-whatsapp" class="w-full bg-green-500 text-white font-bold py-4 rounded-lg shadow active:scale-95 transition-transform flex justify-center items-center gap-2"><span>💬</span> Fechar Pedido no WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        const DADOS = {"versao":"mw7zwa0g","produtos":[{"id":1794152131478,"nome":"MARGARINA DELINE COM SAL - 250G","categoria":"Importados NF-e","descricao":"Fornecedor: BRF S.A. • NF 1781348","imagem":"","preco":67.47,"tamanho":"","codigo":"17893000979939","esgotado":false},{"id":1794152131479,"nome":"COXA CONG FGO C/OP 1KG SADIA","categoria":"Importados NF-e","descricao":"Fornecedor: BRF S.A. • NF 1781348","imagem":"","preco":132.13,"tamanho":"","codigo":"17893000005966","esgotado":false},{"id":1794152131480,"nome":"MARGARINA VEG.CREM.C/SAL QUALY 500G","categoria":"Importados NF-e","descricao":"Fornecedor: BRF S.A. • NF 1781348","imagem":"","preco":72.7,"tamanho":"","codigo":"27893000394203","esgotado":false}],"config":{"nomeLoja":"Meu Estabelecimento","subtitulo":"","whatsapp":"","cep":"","endereco":"","banner":"","logo":"","temaToggle":false,"mpAtivo":false,"mpLink":""}};
+                const produtos = Array.isArray(DADOS.produtos) ? DADOS.produtos : [];
+        const config = DADOS.config || {};
+        const numeroWhatsApp = String(config.whatsapp || '').replace(/\D/g, '');
+        let carrinho = lerCarrinho();
+        let categoriaAtual = 'Todas';
+
+        const $ = function (id) { return document.getElementById(id); };
+        const moeda = function (v) { return 'R$ ' + Number(v).toFixed(2).replace('.', ','); };
+
+        function lerCarrinho() {
+            try { const c = JSON.parse(localStorage.getItem('cardapio_carrinho')); return Array.isArray(c) ? c : []; }
+            catch (e) { return []; }
+        }
+        function salvarCarrinho() {
+            try { localStorage.setItem('cardapio_carrinho', JSON.stringify(carrinho)); } catch (e) {}
+        }
+
+        /* ---------- Aparência ---------- */
+        function aplicarAparencia() {
+            document.title = config.nomeLoja || 'Cardápio';
+            $('txt-nome').textContent = config.nomeLoja || 'Cardápio';
+            $('txt-subtitulo').textContent = config.subtitulo || '';
+            $('txt-end').textContent = [config.endereco, config.cep].filter(Boolean).join(' • ');
+            if (config.banner) { $('img-banner').src = config.banner; $('img-banner').classList.remove('hidden'); }
+            if (config.logo) { $('img-logo').src = config.logo; $('img-logo').classList.remove('hidden'); $('logo-padrao').classList.add('hidden'); }
+        }
+
+        /* ---------- Filtros ---------- */
+        function listaCategorias() {
+            const cats = [];
+            produtos.forEach(function (p) { if (cats.indexOf(p.categoria) === -1) cats.push(p.categoria); });
+            return cats;
+        }
+
+        function marcarFiltro() {
+            document.querySelectorAll('.btn-filtro').forEach(function (b) {
+                const ativo = b.dataset.cat === categoriaAtual;
+                b.classList.toggle('bg-ifoodRed', ativo);
+                b.classList.toggle('text-white', ativo);
+                b.classList.toggle('bg-gray-100', !ativo);
+                b.classList.toggle('text-gray-600', !ativo);
+            });
+        }
+
+        function renderizarFiltros() {
+            const cont = $('container-filtros');
+            cont.innerHTML = '';
+            ['Todas'].concat(listaCategorias()).forEach(function (cat) {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.dataset.cat = cat;
+                b.textContent = cat;
+                b.className = 'btn-filtro px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap';
+                b.addEventListener('click', function () {
+                    categoriaAtual = cat;
+                    $('campo-busca').value = '';
+                    marcarFiltro();
+                    executarFiltro();
+                });
+                cont.appendChild(b);
+            });
+            marcarFiltro();
+        }
+
+        function executarFiltro() {
+            const termo = $('campo-busca').value.toLowerCase().trim();
+            let lista = produtos;
+            if (categoriaAtual !== 'Todas') lista = lista.filter(function (p) { return p.categoria === categoriaAtual; });
+            if (termo) lista = lista.filter(function (p) {
+                return String(p.nome || '').toLowerCase().indexOf(termo) !== -1 ||
+                       String(p.descricao || '').toLowerCase().indexOf(termo) !== -1;
+            });
+            renderizarProdutos(lista);
+        }
+
+        /* ---------- Vitrine ---------- */
+        function criarPlaceholderFoto() {
+            const d = document.createElement('div');
+            d.className = 'w-24 h-24 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center text-3xl';
+            d.textContent = '🛍️';
+            return d;
+        }
+
+        function renderizarProdutos(lista) {
+            const vitrine = $('vitrine-produtos');
+            vitrine.innerHTML = '';
+            if (!lista.length) {
+                vitrine.innerHTML = '<div class="text-center py-12"><span class="text-4xl">🛍️</span><p class="text-gray-500 mt-4">Nenhum produto encontrado.</p></div>';
+                return;
+            }
+
+            lista.forEach(function (prod) {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4';
+
+                let foto;
+                if (prod.imagem) {
+                    foto = document.createElement('img');
+                    foto.src = prod.imagem;
+                    foto.alt = prod.nome || '';
+                    foto.className = 'w-24 h-24 object-cover rounded-lg bg-gray-100 flex-shrink-0';
+                    foto.addEventListener('error', function () { foto.replaceWith(criarPlaceholderFoto()); });
+                } else {
+                    foto = criarPlaceholderFoto();
+                }
+
+                const col = document.createElement('div');
+                col.className = 'flex-1 flex flex-col justify-between min-w-0';
+
+                const topo = document.createElement('div');
+                const h3 = document.createElement('h3');
+                h3.className = 'font-medium text-gray-800';
+                h3.textContent = prod.nome || '';
+                const desc = document.createElement('p');
+                desc.className = 'text-xs text-gray-500 line-clamp-2 mt-1 mb-2';
+                desc.textContent = prod.descricao || '';
+                topo.appendChild(h3);
+                topo.appendChild(desc);
+
+                const base = document.createElement('div');
+                base.className = 'flex items-center justify-between gap-2 mt-auto';
+                const precoBox = document.createElement('div');
+                const preco = document.createElement('p');
+                preco.className = 'font-bold text-gray-800 text-sm';
+                preco.textContent = moeda(prod.preco);
+                precoBox.appendChild(preco);
+                if (prod.tamanho) {
+                    const tam = document.createElement('p');
+                    tam.className = 'text-xs text-gray-500';
+                    tam.textContent = prod.tamanho;
+                    precoBox.appendChild(tam);
+                }
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-ifoodRed font-medium text-sm px-3 py-1.5 rounded hover:bg-red-50 transition-colors';
+                btn.textContent = 'Adicionar';
+                btn.addEventListener('click', function () { adicionarAoCarrinho(prod); });
+                if (prod.esgotado) { btn.disabled = true; btn.textContent = 'Esgotado'; btn.className += ' opacity-50'; }
+                base.appendChild(precoBox);
+                base.appendChild(btn);
+
+                col.appendChild(topo);
+                col.appendChild(base);
+                card.appendChild(foto);
+                card.appendChild(col);
+                vitrine.appendChild(card);
+            });
+        }
+
+        /* ---------- Carrinho ---------- */
+        function totalCarrinho() { return carrinho.reduce(function (acc, i) { return acc + i.preco; }, 0); }
+
+        function adicionarAoCarrinho(prod) {
+            carrinho.push({ id: Date.now() + Math.random(), idProduto: prod.id, nome: prod.nome, tamanho: prod.tamanho || '', preco: Number(prod.preco) || 0 });
+            salvarCarrinho();
+            atualizarBotaoCarrinho();
+        }
+
+        function removerDoCarrinho(id) {
+            carrinho = carrinho.filter(function (i) { return i.id !== id; });
+            salvarCarrinho();
+            renderizarItensCarrinho();
+            atualizarBotaoCarrinho();
+        }
+
+        function atualizarBotaoCarrinho() {
+            const box = $('container-carrinho-flutuante');
+            if (carrinho.length) {
+                $('txt-qtd-carrinho').textContent = carrinho.length;
+                $('txt-total-carrinho').textContent = moeda(totalCarrinho());
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+                fecharCarrinho();
+            }
+        }
+
+        function abrirCarrinho() {
+            $('modal-carrinho').classList.remove('hidden');
+            $('modal-carrinho').classList.add('flex');
+            renderizarItensCarrinho();
+        }
+        function fecharCarrinho() {
+            $('modal-carrinho').classList.add('hidden');
+            $('modal-carrinho').classList.remove('flex');
+        }
+
+        function renderizarItensCarrinho() {
+            const lista = $('lista-carrinho');
+            lista.innerHTML = '';
+            carrinho.forEach(function (item) {
+                const linha = document.createElement('div');
+                linha.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100';
+                const info = document.createElement('div');
+                const nome = document.createElement('p');
+                nome.className = 'font-medium text-gray-800 text-sm';
+                nome.textContent = item.nome;
+                const det = document.createElement('p');
+                det.className = 'text-xs text-gray-500';
+                det.textContent = (item.tamanho ? item.tamanho + ' • ' : '') + moeda(item.preco);
+                info.appendChild(nome);
+                info.appendChild(det);
+                const rm = document.createElement('button');
+                rm.type = 'button';
+                rm.className = 'text-red-400 px-3 py-1';
+                rm.textContent = 'Excluir';
+                rm.addEventListener('click', function () { removerDoCarrinho(item.id); });
+                linha.appendChild(info);
+                linha.appendChild(rm);
+                lista.appendChild(linha);
+            });
+            $('modal-total-carrinho').textContent = moeda(totalCarrinho());
+            renderPagamento();
+        }
+
+        function enviarWhatsApp() {
+            const nome = $('cli-nome').value.trim();
+            const end = $('cli-endereco').value.trim();
+            const troco = $('cli-troco').value.trim();
+            if (!carrinho.length) return alert('Sua sacola está vazia.');
+            const cep = $('cli-cep').value.replace(/\D/g, '');
+            if (!nome || !end) return alert('Preencha Nome e Endereço.');
+            if (end.length < 8) return alert('Endereço muito curto: informe rua, número e bairro.');
+            if (cep.length !== 8) return alert('Informe um CEP válido (8 dígitos).');
+            if (!numeroWhatsApp) return alert('WhatsApp do estabelecimento não configurado.');
+
+            const codigo = Date.now().toString(36).toUpperCase().slice(-6);
+            let msg = '*🛒 NOVO PEDIDO - ' + (config.nomeLoja || 'CARDÁPIO').toUpperCase() + '*\n*CÓDIGO:* #' + codigo + '\n\n*👤 Cliente:* ' + nome + '\n*📍 Entrega:* ' + end + '\n*📮 CEP:* ' + cep.slice(0, 5) + '-' + cep.slice(5) + '\n\n*🛒 ITENS:*\n';
+            carrinho.forEach(function (i) { msg += '- ' + i.nome + (i.tamanho ? ' (' + i.tamanho + ')' : '') + ' = ' + moeda(i.preco) + '\n'; });
+            msg += '\n*💰 TOTAL: ' + moeda(totalCarrinho()) + '*';
+            if (troco) msg += '\n💵 Troco para: ' + moeda(parseFloat(troco));
+            /* linha de máquina: versão | código | itens (id x qtd) | checksum. Sem preço: o ADM usa o preço do banco dele */
+            const cont = {}; carrinho.forEach(function (i) { cont[i.idProduto] = (cont[i.idProduto] || 0) + 1; });
+            const itensTxt = Object.keys(cont).map(function (id) { return id + 'x' + cont[id]; }).join(';'), ver = String(DADOS.versao || '0');
+            msg += '\n\n🔐 *PED:* ' + ver + '|' + codigo + '|' + itensTxt + '|' + hashPedido(ver + '|' + codigo + '|' + itensTxt, '');
+
+            if (!confirm('Confirme seus dados:\n\nCliente: ' + nome + '\nEndereço: ' + end + '\nCEP: ' + cep.slice(0, 5) + '-' + cep.slice(5) + '\n\nEstá correto?')) return;
+            window.open('https://api.whatsapp.com/send?phone=' + numeroWhatsApp + '&text=' + encodeURIComponent(msg), '_blank');
+            carrinho = [];
+            salvarCarrinho();
+            fecharCarrinho();
+            atualizarBotaoCarrinho();
+        }
+
+        /* ---------- Pagamento: Pix copia e cola + Mercado Pago (link) ---------- */
+        function renderPagamento() {
+            const a = $('area-pagamento'), total = totalCarrinho();
+            a.innerHTML = '';
+            if (config.mpAtivo && config.mpLink) {
+                const l = document.createElement('a');
+                l.href = config.mpLink; l.target = '_blank'; l.rel = 'noopener'; l.textContent = '💳 Pagar com Mercado Pago';
+                l.className = 'block text-center w-full bg-sky-600 text-white font-bold py-2 rounded';
+                a.appendChild(l);
+            }
+        }
+
+        /* ---------- Tema claro/escuro ---------- */
+        function iniciarTema() {
+            if (!config.temaToggle) return;
+            const b = $('btn-tema'); let t = null;
+            try { t = localStorage.getItem('cardapio_tema'); } catch (e) {}
+            if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const set = function (v) { t = v; document.documentElement.classList.toggle('dark', v === 'dark'); b.textContent = v === 'dark' ? '☀️' : '🌙'; try { localStorage.setItem('cardapio_tema', v); } catch (e) {} };
+            b.classList.remove('hidden'); b.addEventListener('click', function () { set(t === 'dark' ? 'light' : 'dark'); }); set(t);
+        }
+
+        /* ---------- Início ---------- */
+        function iniciar() {
+            console.log('Cardápio iniciado com', produtos.length, 'produto(s).');
+            aplicarAparencia();
+            iniciarTema();
+            renderizarFiltros();
+            renderizarProdutos(produtos);
+            atualizarBotaoCarrinho();
+            $('campo-busca').addEventListener('input', function () {
+                categoriaAtual = 'Todas';
+                marcarFiltro();
+                executarFiltro();
+            });
+            $('btn-abrir-carrinho').addEventListener('click', abrirCarrinho);
+            $('btn-fechar-carrinho').addEventListener('click', fecharCarrinho);
+            $('btn-whatsapp').addEventListener('click', enviarWhatsApp);
+            $('cli-cep').addEventListener('input', function () { const d = this.value.replace(/\D/g, '').slice(0, 8); this.value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d; });
+        }
+
+        try { iniciar(); } catch (e) { console.error('Erro ao iniciar o cardápio:', e); }
+    </script>
+</body>
+</html>
