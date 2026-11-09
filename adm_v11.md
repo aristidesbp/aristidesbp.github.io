@@ -1,3 +1,7 @@
+
+# ADM.html
+```
+
 <!DOCTYPE html>
 <!--🟥INICIO BLOCO 1: adm_v3.html (Gerador de Cardápio v3)🟥-->
 <html lang="pt-BR">
@@ -9,7 +13,8 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="theme-color" content="#1e293b">
     <script src="install_app_pwa.js" defer></script>
-
+```
+```
     <!-- CONSOLE MOBILE (embutido: não precisa mais do arquivo console.js) -->
     <script>
         /* Esta função é copiada como texto para dentro do index.html gerado
@@ -96,11 +101,15 @@
         }
         const consoleAdmin = criarConsoleMobile();
     </script>
+```
+```
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { theme: { extend: { colors: { adminDark: '#1e293b', adminRed: '#ea1d2c' } } } }
     </script>
+```
+```
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased pb-20 pt-12">
 
@@ -108,6 +117,8 @@
         <button onclick="alternarMenu()" class="text-2xl leading-none px-2" aria-label="Menu">☰</button>
         <span id="nav-nome" class="font-bold truncate">Gerador de Cardápio</span>
     </header>
+```
+```
     <div id="menu-fundo" onclick="alternarMenu()" class="hidden fixed inset-0 bg-black/50" style="z-index:45"></div>
     <aside id="menu-lateral" class="fixed top-0 left-0 bottom-0 w-72 bg-adminDark text-white z-50 p-4 space-y-2 -translate-x-full transition-transform overflow-y-auto">
         <button id="tab-avisos" onclick="mostrarAba('avisos')" class="w-full text-left px-3 py-3 rounded font-bold text-sm bg-adminRed text-white">⚠️ Avisos importantes</button>
@@ -132,7 +143,8 @@
     </div>
 
     </nav>
-
+```
+```
     <main id="aba-avisos" class="max-w-4xl mx-auto px-4 mt-6">
         <h2 class="text-2xl font-extrabold text-gray-800">⚠️ Avisos importantes</h2>
         <p class="text-sm text-gray-600 mb-4">Leia com atenção antes de usar com dados reais.</p>
