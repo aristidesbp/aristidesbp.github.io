@@ -1,1 +1,0 @@
-content://com.whatsapp.provider.media/item/fb6824ec-3c26-4e23-b3e1-11a4069128a6
